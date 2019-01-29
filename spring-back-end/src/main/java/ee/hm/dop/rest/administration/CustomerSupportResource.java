@@ -7,14 +7,14 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.useractions.CustomerSupportService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.util.Arrays;
 import java.util.List;
 
@@ -29,12 +29,11 @@ public class CustomerSupportResource extends BaseResource {
     @Autowired
     private CustomerSupportService customerSupportService;
 
-    @PostMapping(produces = MediaType.APPLICATION_JSON,consumes = MediaType.APPLICATION_JSON)
+    @PostMapping
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public CustomerSupport saveCustomerSupportRequest(CustomerSupport customerSupport) {
-
+    public CustomerSupport saveCustomerSupportRequest(@RequestBody CustomerSupport customerSupport) {
         if (invalidForm(customerSupport)) {
-            throw new WebApplicationException("contains invalid files", Response.Status.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "contains invalid files");
         }
         return customerSupportService.save(customerSupport, getLoggedInUser());
     }
