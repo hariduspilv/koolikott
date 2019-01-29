@@ -41,6 +41,11 @@
                     })
                 }
             }
+
+            document.addEventListener('textInput', (evt) => {
+                if (!NUMBERS.includes(evt.data))
+                    evt.preventDefault();
+            });
         }
 
         setResponse() {

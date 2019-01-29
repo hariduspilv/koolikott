@@ -27,6 +27,7 @@ const EDITOR_ALLOWED_TAGS_AND_ATTRIBUTES = {
     EM: [],
     BR: []
 }
+const NUMBERS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 const VALID_EMAIL = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const EDITOR_ALLOWED_TAGS = Object.keys(EDITOR_ALLOWED_TAGS_AND_ATTRIBUTES)
 const EDITOR_FORBIDDEN_TAGS = ['meta', 'script', 'link', 'style', 'img', 'map', 'audio', 'video', 'track', 'applet', 'embed', 'object', 'param', 'source', 'canvas', 'noscript']
