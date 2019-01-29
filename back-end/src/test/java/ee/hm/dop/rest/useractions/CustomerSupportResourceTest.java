@@ -1,10 +1,13 @@
 package ee.hm.dop.rest.useractions;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.AttachedFile;
 import ee.hm.dop.model.CustomerSupport;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -22,6 +25,22 @@ public class CustomerSupportResourceTest extends ResourceIntegrationTestBase {
         assertNotNull(cs.getSubject());
         assertNotNull(cs.getEmail());
         assertNotNull(cs.getName());
+    }
+
+    @Test
+    public void validate_image_files() {
+        login(USER_ADMIN);
+
+        CustomerSupport supportCorrect = make("     test@test.ee    ", "test 666", "Testsõnum", " Test    McTestface");
+        supportCorrect.setFiles(Lists.newArrayList(makeFile("correct.jpg", "correctContent")));
+        Response response = doPost(SEND_MAIL, supportCorrect);
+        assertEquals(Response.Status.OK.getStatusCode(), response.getStatus());
+
+        CustomerSupport supportIncorrect = make("     test@test.ee    ", "test 666", "Testsõnum", " Test    McTestface");
+        supportIncorrect.setFiles(Lists.newArrayList(makeFile("incorrect.exe", "incorrectContent")));
+        Response response2 = doPost(SEND_MAIL, supportIncorrect);
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response2.getStatus());
+        assertEquals("contains invalid files", Response.Status.BAD_REQUEST.getStatusCode(), response2.getStatus());
     }
 
     @Test
@@ -52,5 +71,22 @@ public class CustomerSupportResourceTest extends ResourceIntegrationTestBase {
         customerSupport.setMessage(message);
         customerSupport.setName(name);
         return customerSupport;
+    }
+
+    public CustomerSupport makeWithFiles(String email, String subject, String message, String name, ArrayList<AttachedFile> files) {
+        CustomerSupport customerSupport = new CustomerSupport();
+        customerSupport.setEmail(email);
+        customerSupport.setSubject(subject);
+        customerSupport.setMessage(message);
+        customerSupport.setName(name);
+        customerSupport.setFiles(files);
+        return customerSupport;
+    }
+
+    private AttachedFile makeFile(String name, String content) {
+        AttachedFile attachedFile = new AttachedFile();
+        attachedFile.setName(name);
+        attachedFile.setContent(content);
+        return attachedFile;
     }
 }
