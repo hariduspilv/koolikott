@@ -222,8 +222,8 @@ function isHomePage(path) {
     return path === '/';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService','$cookies',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies) {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
         $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
