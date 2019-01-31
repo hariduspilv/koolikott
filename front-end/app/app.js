@@ -21,6 +21,8 @@ let app = angular.module('koolikottApp', [
     'monospaced.qrcode',
     'vcRecaptcha',
     'auto-tab',
+    'ngCookies'
+
 ]);
 
 let provideProvider = null;
@@ -220,8 +222,8 @@ function isHomePage(path) {
     return path === '/';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService','$cookies',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies) {
         $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
