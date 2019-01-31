@@ -1,3 +1,9 @@
-screenshots/
-lib/
-/target/
+target
+
+# IDE specific files and folders
+.classpath
+.project
+.idea
+.settings
+*.iml
+build
