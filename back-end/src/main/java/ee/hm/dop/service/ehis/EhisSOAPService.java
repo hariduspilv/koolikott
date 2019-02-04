@@ -43,24 +43,30 @@ public class EhisSOAPService implements IEhisSOAPService {
                 message = ehisV5RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
             }
 
-
             if (logger.isInfoEnabled()) {
-                ByteArrayOutputStream out = new ByteArrayOutputStream();
-                message.writeTo(out);
-                String strMsg = new String(out.toByteArray(), StandardCharsets.UTF_8);
-                logger.info(format("Sending message to EHIS: %s", strMsg));
+                log(message, "Sending message to EHIS: %s");
             }
 
             SOAPMessage response = sendSOAPMessage(message);
+
+            if (logger.isInfoEnabled()) {
+                log(response, "Received response from EHIS: %s");
+            }
+
             String xmlResponse = parseSOAPResponse(response);
-
             logger.info(format("Received response from EHIS: %s", xmlResponse));
-
             return ehisParser.parse(xmlResponse);
         } catch (Exception e) {
             logger.error("Error getting User information from EHIS.", e);
             return null;
         }
+    }
+
+    private void log(SOAPMessage message, String msg) throws SOAPException, IOException {
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        message.writeTo(out);
+        String strMsg = new String(out.toByteArray(), StandardCharsets.UTF_8);
+        logger.info(format(msg, strMsg));
     }
 
     private SOAPMessage sendSOAPMessage(SOAPMessage message) throws SOAPException, IOException {
