@@ -42,7 +42,7 @@
                          data-ng-click="toggleFullScreen()"
                          id="faq-edit"
                          class="md-icon-button hide-on-mobile">
-                <md-icon md-menu-align-target>fullscreen</md-icon>
+                <md-icon md-menu-align-target>{{$root.isFullScreen ? 'close' : 'fullscreen'}}</md-icon>
                 <md-tooltip>
                   <span data-translate="{{$root.isFullScreen ? 'FULL_SCREEN_OFF' : 'FULL_SCREEN_ON'}}"></span>
                 </md-tooltip>
