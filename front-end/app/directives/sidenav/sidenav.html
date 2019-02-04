@@ -60,6 +60,17 @@
             <span class="sidenav__count" data-ng-bind="userManualsCount"></span>
           </a>
         </li>
+        <li class="sidenav__item" layout="column">
+          <a id="terms" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/terms')}"
+             data-ng-href="/terms"
+          >
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">assignment</md-icon>
+              <span data-translate="TERMS_TAB" class="sidenav__name"></span>
+            </div>
+          </a>
+        </li>
       </ul>
     </div>
     <!-- BEGIN Admin -->

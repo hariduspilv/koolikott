@@ -21,8 +21,8 @@ let app = angular.module('koolikottApp', [
     'monospaced.qrcode',
     'vcRecaptcha',
     'auto-tab',
-    'ngCookies'
-
+    'ngCookies',
+    'angularTrix',
 ]);
 
 let provideProvider = null;
@@ -51,7 +51,7 @@ app.config([
             taOptions.forceTextAngularSanitize = true;
 
             taOptions.toolbar = [
-                ['bold', 'italics', 'ul', 'ol', 'insertLink', 'pre', 'quote']
+                ['h2', 'h3', 'bold', 'italics', 'ul', 'ol', 'insertLink', 'pre']
             ];
 
             taOptions.classes = {

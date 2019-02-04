@@ -20,6 +20,7 @@
   <!-- endbuild -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic,300italic">
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/trix/0.9.2/trix.css">
   <!-- build:css(.tmp) /styles/main.css -->
   <link rel="stylesheet" href="/styles/main.css">
   <!-- endbuild -->
@@ -73,6 +74,8 @@
 <script src="libs/medium-editor/dist/js/medium-editor.min.js"></script>
 <script src="libs/angular-recaptcha/release/angular-recaptcha.js"></script>
 <script src="libs/angular-cookies/angular-cookies.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/trix/0.9.2/trix.js"></script>
+<script src="libs/angular-trix/dist/angular-trix.min.js"></script>
 
 <script>
   window.___gcfg = {
@@ -159,6 +162,7 @@
 <script src="services/userManualsAdmin.service.js"></script>
 <script src="services/faq.service.js"></script>
 <script src="services/userEmail.service.js"></script>
+<script src="services/terms.service.js"></script>
 <!-- endbuild -->
 
 <!-- build:js js/controllers.js -->
@@ -186,6 +190,7 @@
 <script src="views/userManual/userManual.js"></script>
 <script src="views/emailValidation/emailValidationDialog.js"></script>
 <script src="views/faq/faq.js"></script>
+<script src="views/terms/terms.js"></script>
 <script src="views/locationDialog/locationDialog.js"></script>
 <script src="views/sessionDialog/sessionDialog.js"></script>
 <script src="views/sessionDialog/sessionExpiredDialog.js"></script>
@@ -215,6 +220,7 @@
 <script src="directives/card/cardXS/cardXS.component.js"></script>
 <script src="directives/chapter/chapter.component.js"></script>
 <script src="directives/faqBlock/faqBlock.component.js"></script>
+<script src="directives/termsBlock/termsBlock.component.js"></script>
 <script src="directives/detailedSearch/detailedSearch.component.js"></script>
 <script src="directives/embed/embed.component.js"></script>
 <script src="directives/embedFooter/embedFooter.component.js"></script>
