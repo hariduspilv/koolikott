@@ -10,9 +10,12 @@
         }
 
         hasCookie() {
-            if (!angular.equals({}, (this.$cookies.getAll()))) {
+            if (!!this.$cookies.get('userAgent'))
                 this.$scope.hasCookie = true
-            }
+            else
+                this.$scope.hasCookie = false
+
+            return this.$scope.hasCookie;
         }
 
         backupFuncToGetUserIp() {

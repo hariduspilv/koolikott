@@ -173,8 +173,11 @@
         }
 
         isSendDisabled() {
-            const {name, email, subject, message} = this.$scope.customerSupport;
-            return !(name && email && subject && message && this.$scope.captchaSuccess && !this.$scope.tooManyFiles && !this.$scope.fileSizeTooLarge)
+            const {name, email, subject, message, title} = this.$scope.customerSupport;
+            if (this.$scope.showCustomerSupportTitle)
+                return !(name && email && subject && title && message && this.$scope.captchaSuccess && !this.$scope.tooManyFiles && !this.$scope.fileSizeTooLarge)
+            else
+                return !(name && email && subject && message && this.$scope.captchaSuccess && !this.$scope.tooManyFiles && !this.$scope.fileSizeTooLarge)
         }
 
         back() {
