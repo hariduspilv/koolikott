@@ -124,19 +124,19 @@
         }
 
         saveCustomerSupportRequest() {
-
+            let subject
             this.$scope.isSaving = true
 
             this.setResponse()
 
-            if(!!this.$scope.customerSupport.title) {
+            if (!!this.$scope.customerSupport.title)
+                subject = this.$scope.customerSupport.title
+            else
+                subject = this.$scope.customerSupport.subject
 
-                this.$scope.customerSupport.subject = this.$scope.customerSupport.title
-            }
+            const {name, email, message} = this.$scope.customerSupport
 
-            this.$scope.customerSupport.files = this.$scope.files
-
-            this.serverCallService.makePost('/rest/admin/customerSupport', this.$scope.customerSupport)
+            this.serverCallService.makePost('/rest/admin/customerSupport',  {name: name, email: email, message: message, subject: subject, files: this.$scope.files})
                 .then(response => {
                         this.$scope.isSaving = false
                         if (response.status === 200) {
@@ -214,8 +214,9 @@
 
             if (this.$scope.showCustomerSupportInput) {
                 this.$scope.showCustomerSupportTitle = true
-            }
-            else{
+                setTimeout(this.resetCaptcha, 1000);
+
+            } else {
                 this.$scope.showCustomerSupportTitle = false
             }
         }
@@ -241,11 +242,16 @@
         getLanguage() {
             let language = this.translationService.getLanguage();
             return language === 'est' ? 'et' : language === 'rus' ? 'ru' : 'en';
-
         }
 
         captchaExpired() {
             this.$scope.captchaSuccess = false
+        }
+
+        resetCaptcha() {
+            if (this.grecaptcha.getResponse() !== '') {
+                this.grecaptcha.reset();
+            }
         }
     }
 
