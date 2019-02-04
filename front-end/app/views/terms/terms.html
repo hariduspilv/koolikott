@@ -1,0 +1,29 @@
+<div data-layout="row" data-layout-align="space-between center">
+  <h1 class="md-headline" data-translate="TERMS_HEADER"></h1>
+  <md-button style="min-width: 0px"
+             data-ng-if="$ctrl.isAdmin() && !editMode"
+             data-ng-click="$ctrl.editTermsPage()"
+             id="term-edit">
+    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+    <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
+  </md-button>
+  <md-button class="md-button md-ink-ripple"
+             data-ng-click="$ctrl.createTerm()"
+             aria-label="Add Term"
+             data-ng-if="$ctrl.isAdmin() && editMode"
+             ng-disabled="$ctrl.createDialogOpen"
+             id="termsEditButton"
+  >
+    <md-icon>add_circle</md-icon>
+    <span data-translate="ADD_FAQ"></span>
+  </md-button>
+</div>
+<div>
+  <dop-terms-block
+    data-create-dialog-open="$ctrl.createDialogOpen"
+    data-edit-mode="editMode"
+    data-terms="terms"
+    data-remove-term="$ctrl.removeTerm()"
+    data-get-terms="$ctrl.getTerms()">
+  </dop-terms-block>
+</div>
