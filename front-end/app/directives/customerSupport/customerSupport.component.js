@@ -175,9 +175,13 @@
         isSendDisabled() {
             const {name, email, subject, message, title} = this.$scope.customerSupport;
             if (this.$scope.showCustomerSupportTitle)
-                return !(name && email && subject && title && message && this.$scope.captchaSuccess && !this.$scope.tooManyFiles && !this.$scope.fileSizeTooLarge)
+                return !(this.check(name, email, subject, message) && title)
             else
-                return !(name && email && subject && message && this.$scope.captchaSuccess && !this.$scope.tooManyFiles && !this.$scope.fileSizeTooLarge)
+                return !(this.check(name, email, subject, message))
+        }
+
+        check(name, email, subject, message) {
+            return name && email && subject && message && this.$scope.captchaSuccess && !this.$scope.tooManyFiles && !this.$scope.fileSizeTooLarge;
         }
 
         back() {

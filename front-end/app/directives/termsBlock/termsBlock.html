@@ -28,7 +28,7 @@
           </md-button>
         </div>
         <div>
-          <span
+          <span class="term-block"
             data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? term.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? term.contentEng : term.contentRus"></span>
         </div>
       </md-card-content>
@@ -76,7 +76,7 @@
             </div>
             <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" data-flex="100">
               <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                <label data-translate="TERM_QUESTION"></label>
+                <label data-translate="TERM_TITLE"></label>
                 <input
                   name="title"
                   id="add-title-rus"
@@ -99,7 +99,7 @@
               class="button-material-language"
               data-ng-repeat="_lang in term.termLanguages track by $index"
               data-ng-class="{'is-selected': lang === _lang}"
-              data-ng-click="$ctrl.toggleFaqLanguageInputs(term, _lang)"
+              data-ng-click="$ctrl.toggleTermsLanguageInputs(term, _lang)"
               flex-gt-xs="{{ term.activeTermLanguage === _lang ? '40' : '30' }}"
               aria-label="{{ _lang }} button"
             >
@@ -112,7 +112,7 @@
           <div data-flex-order="3" flex="100" class="flex flex-col">
           </div>
         </div>
-        <div class="md-padding" flex="50" flex-gt-sm="20" data-ng-if="$index === 0">
+        <div class="md-padding" flex="50" data-ng-if="$index === 0">
           <md-checkbox class="md-primary checkbox--material-author" ng-click="$ctrl.notifyOfGDPRUpdate()"
                        data-ng-checked="notifyOfGDPRUpdate" aria-label="{{ 'TERM_NOTIFY_GDPR' | translate }}">
             <span data-translate="TERM_NOTIFY_GDPR"></span>

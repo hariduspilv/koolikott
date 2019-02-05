@@ -9,6 +9,9 @@ angular.module('koolikottApp')
             showDeleteConfirmationDialog: function(title, content, onConfirm, onCancel) {
                 this.showConfirmationDialog(title, content, 'BUTTON_REMOVE', 'LOOBU', onConfirm, onCancel)
             },
+            showCancelConfirmationDialog: function(title, content, onConfirm, onCancel) {
+                this.showConfirmationDialog(title, content, 'BUTTON_CANCEL', 'LOOBU', onConfirm, onCancel)
+            },
             showConfirmationDialog: function(title, content, ok, cancel, onConfirm, onCancel) {
                 let confirm = $mdDialog.confirm()
                 .title($filter('translate')(title))
