@@ -1,0 +1,7 @@
+curl http://oxygen.netgroupdigital.com:8983/solr/dop/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'
+curl http://oxygen.netgroupdigital.com:8983/solr/dop/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'
+curl http://oxygen.netgroupdigital.com:8983/solr/dop/dataimport?command=full-import
+
+curl http://localhost:8983/solr/dop/update --data '<delete><query>*:*</query></delete>' -H 'Content-type:text/xml; charset=utf-8'
+curl http://localhost:8983/solr/dop/update --data '<commit/>' -H 'Content-type:text/xml; charset=utf-8'
+curl http://localhost:8983/solr/dop/dataimport?command=full-import

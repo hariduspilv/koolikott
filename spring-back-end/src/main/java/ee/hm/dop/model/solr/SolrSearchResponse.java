@@ -1,7 +1,10 @@
 package ee.hm.dop.model.solr;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class SolrSearchResponse {
 
     private Response response;
