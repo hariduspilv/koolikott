@@ -36,13 +36,13 @@ public class TranslationService {
             return null;
         }
 
-        if (LanguageC.ENG.equals(language.getCode()) || LanguageC.RUS.equals(language.getCode())) {
-            Map<String, String> map = getDomainsAndSubjectsInEstonian();
-            if (map != null) {
-                map.putAll(translationGroupFor.getTranslations());
-                return map;
-            }
-        }
+        //if (LanguageC.ENG.equals(language.getCode()) || LanguageC.RUS.equals(language.getCode())) {
+        //    Map<String, String> map = getDomainsAndSubjectsInEstonian();
+        //    if (map != null) {
+        //        map.putAll(translationGroupFor.getTranslations());
+        //        return map;
+        //    }
+        //}
 
         return translationGroupFor.getTranslations();
     }
