@@ -104,8 +104,8 @@
 
         isSubmitDisabled(term) {
             return !(term.titleEst && term.titleEng &&
-                term.titleRus && term.contentEst &&
-                term.contentEng && term.contentRus)
+                term.titleRus && (term.contentEst && term.contentEst !== '<br>') &&
+                (term.contentEng && term.contentEng !== '<br>') && (term.contentRus && term.contentRus !== '<br>'))
 
         }
 
@@ -141,6 +141,7 @@
             removeTerm: '&',
             getTerms: '&',
             createDialogOpen: '='
+
         },
         templateUrl: 'directives/termsBlock/termsBlock.html',
         controller

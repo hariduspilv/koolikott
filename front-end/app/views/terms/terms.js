@@ -48,6 +48,9 @@
             this.$scope.terms.push(this.$scope.newTerm)
             this.initNewTerm()
             this.createDialogOpen = true
+            this.$timeout(() => {
+                window.scrollTo(0, document.body.scrollHeight);
+            }, 50)
         }
 
         removeTerm() {
@@ -63,6 +66,7 @@
         'serverCallService',
         'authenticatedUserService',
         'termsService',
+        '$timeout'
     ]
     angular.module('koolikottApp').controller('termsController', controller)
 }
