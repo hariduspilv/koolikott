@@ -205,6 +205,7 @@
     <copyField source="tag" dest="text"/>
     <copyField source="summary" dest="text"/>
     <copyField source="portfolioTitle" dest="text"/>
+    <copyField source="portfolio_creator" dest="text"/>
     <copyField source="publisher" dest="text"/>
 
     <!--<copyField source="educational_context" dest="text"/>-->
@@ -227,6 +228,7 @@
     <copyField source="tag" dest="suggest_phrase"/>
     <copyField source="summary" dest="suggest_phrase"/>
     <copyField source="portfolioTitle" dest="suggest_phrase"/>
+    <copyField source="portfolio_creator" dest="suggest_phrase"/>
     <copyField source="publisher" dest="suggest_phrase"/>
 
     <!--<copyField source="educational_context" dest="suggest_phrase"/>-->
