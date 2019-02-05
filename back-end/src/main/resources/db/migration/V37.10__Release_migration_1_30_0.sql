@@ -22,7 +22,7 @@ SELECT t.id                 as taxon,
        null                 as module,
        null                 as specialization
 FROM Taxon t
-       join Domain D on S.domain = D.id;
+       join Domain D on t.id = D.id;
 
 insert into TaxonPosition(taxon, educationalContext, domain, subject, topic, subtopic, module, specialization)
 SELECT t.id                 as taxon,
