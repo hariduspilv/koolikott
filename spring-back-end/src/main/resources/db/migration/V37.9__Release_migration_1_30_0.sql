@@ -2,6 +2,7 @@ SET foreign_key_checks = 0;
 
 CREATE TABLE TaxonPosition
 (
+  id                 BIGINT AUTO_INCREMENT,
   taxon              BIGINT NOT NULL,
   educationalContext BIGINT NOT NULL,
   domain             BIGINT NULL,
