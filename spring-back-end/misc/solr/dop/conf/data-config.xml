@@ -449,6 +449,14 @@
                     </entity>
                 </entity>
 
+                <entity name="Material_Creator"
+                        query="select concat(u.name, ' ', u.surName) as material_creator
+                                from Material m
+                                       join LearningObject LO on m.id = LO.id
+                                       join User u on LO.creator = u.id
+                                where LO.id = '${Material.id}'">
+                </entity>
+
                 <entity name="Material_Publisher"
                         query="select publisher as publisher_id from Material_Publisher
                         where material='${Material.id}'">
@@ -545,6 +553,15 @@
                         union
                         select P.title as portfolioTitle from Portfolio P
                         where P.id = '${Portfolio.id}'"/>
+
+                <entity name="Portfolio_Creator"
+                        query="select concat(u.name, ' ', u.surName) as portfolio_creator
+                                from Portfolio p
+                                            join LearningObject LO on p.id = LO.id
+                                            join User u on LO.creator = u.id
+                                where LO.id = '${Portfolio.id}'">
+                </entity>
+
             </entity>
         </entity>
     </document>

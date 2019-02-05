@@ -9,17 +9,30 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.solr.SearchService.PORTFOLIO_TYPE;
 import static java.lang.String.format;
 import static java.nio.charset.StandardCharsets.UTF_8;
+import static java.util.Arrays.asList;
 
 public class SearchCommandBuilder {
 
+    public static final String PORTFOLIO_TITLE = "portfolioTitle";
+    public static final String PORTFOLIO_CREATOR = "portfolio_creator";
+    public static final String MATERIAL_AUTHOR = "author";
+    public static final String MATERIAL_TITLE = "title";
+    public static final String PORTFOLIO_SUMMARY = "summary";
+    public static final String MATERIAL_DESCRIPTION = "description";
+    public static final String DESCRIPTION = MATERIAL_DESCRIPTION;
+    public static final String COMMON_PUBLISHER = "publisher";
+    public static final String COMMON_TAG = "tag";
+    public static final String RECOMMENDED = "recommended";
     public static final List<String> UNIQUE_KEYS =
-            Arrays.asList("title", "portfolioTitle", "tag", "description", "summary", "author", "publisher", "recommended");
+            asList(MATERIAL_TITLE, PORTFOLIO_TITLE, COMMON_TAG, DESCRIPTION, PORTFOLIO_SUMMARY,
+                    MATERIAL_AUTHOR, PORTFOLIO_CREATOR, COMMON_PUBLISHER, RECOMMENDED);
     private static final List<String> PORTFOLIO_KEYS =
-            Arrays.asList("portfolioTitle", "tag", "summary", "author", "publisher");
+            asList(PORTFOLIO_TITLE, COMMON_TAG, PORTFOLIO_SUMMARY, PORTFOLIO_CREATOR, COMMON_PUBLISHER);
     private static final List<String> MATERIAL_KEYS =
-            Arrays.asList("title", "tag", "description", "author", "publisher");
+            asList(MATERIAL_TITLE, COMMON_TAG, MATERIAL_DESCRIPTION, MATERIAL_AUTHOR, COMMON_PUBLISHER);
 
     private static final String SEARCH_PATH = "select?q=%1$s" +
             "&sort=%2$s" +
@@ -41,6 +54,19 @@ public class SearchCommandBuilder {
             return searchCommand(searchRequest, itemLimit, SEARCH_PATH);
         }
         return searchCommand(searchRequest, itemLimit, SEARCH_PATH + SEARCH_PATH_GROUPING) + getGroupingCommand(searchRequest);
+    }
+
+    static String keyMapper(String groupType, String key) {
+        if (!groupType.equals(PORTFOLIO_TYPE)) {
+            return key;
+        } else if (key.equals(PORTFOLIO_TITLE)) {
+            return MATERIAL_TITLE;
+        } else if (key.equals(PORTFOLIO_SUMMARY)) {
+            return DESCRIPTION;
+        } else if (key.equals(PORTFOLIO_CREATOR)) {
+            return MATERIAL_AUTHOR;
+        }
+        return key;
     }
 
     static String getCountCommand(SolrSearchRequest searchRequest) {
@@ -82,7 +108,7 @@ public class SearchCommandBuilder {
     }
 
     private static String getSearchQuery(String query, String field) {
-        return query.substring(field.length() + 1);
+        return query.substring(field.length()+1);
     }
 
     static String quotify(String query) {

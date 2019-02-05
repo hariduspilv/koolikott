@@ -20,14 +20,12 @@ import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 public class SearchService {
 
-    public static final String SEARCH_RECOMMENDED_PREFIX = "recommended:";
-    public static final String SEARCH_BY_AUTHOR_PREFIX = "author:";
     public static final String AND = " AND ";
     public static final String OR = " OR ";
     static final String ALL_TYPE = "all";
     static final String EMPTY = "";
     private static final String MATERIAL_TYPE = "material";
-    private static final String PORTFOLIO_TYPE = "portfolio";
+    public static final String PORTFOLIO_TYPE = "portfolio";
     static final List<String> SEARCH_TYPES = Arrays.asList(MATERIAL_TYPE, PORTFOLIO_TYPE, ALL_TYPE);
     private static final String SIMILAR_RESULT = "similar";
     private static final String EXACT_RESULT = "exact";
@@ -125,13 +123,6 @@ public class SearchService {
         key = keyMapper(groupType, key);
         resultGroups.get(groupType).getGroups().put(key, singleGroup);
         resultGroups.get(groupType).setTotalResults(resultsInType + resultsInGroup);
-    }
-
-    private String keyMapper(String groupType, String key) {
-        if (!groupType.equals("portfolio")) return key;
-        if (key.equals("portfolioTitle")) key = "title";
-        else if (key.equals("summary")) key = "description";
-        return key;
     }
 
     private void addResultsTogether(SearchResult searchResult,
