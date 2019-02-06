@@ -101,9 +101,9 @@ class controller extends Controller {
             this.toggleExpandableChanges.bind(this)
         )
 
-        this.$scope.$on('dashboard:adminCountsUpdated', () => this.init())
-        this.$scope.$on('errorMessage:reported', () => this.init())
-        this.$scope.$on('portfolioChanged', () => this.init());
+        this.$rootScope.$on('dashboard:adminCountsUpdated', () => this.init())
+        this.$rootScope.$on('errorMessage:reported', () => this.init())
+        this.$rootScope.$on('portfolioChanged', () => this.init());
         this.$rootScope.$watch('learningObjectChanged', (newValue, oldValue) => {
             if (newValue != oldValue)
                 this.init()
