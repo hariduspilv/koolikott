@@ -30,7 +30,7 @@ import java.io.File;
 
 @Slf4j
 @RestController
-@RequestMapping("admin/statistics/")
+@RequestMapping("admin/statistics")
 public class StatisticsAdminResource extends BaseResource {
 
     private static final String TEMP_FOLDER = CsvUtil.TEMP_FOLDER;

@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @RestController
-@RequestMapping("admin/restrictedUser/")
+@RequestMapping("admin/restrictedUser")
 public class RestrictedUserAdminResource extends BaseResource{
 
     @Inject
