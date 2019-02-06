@@ -7,6 +7,16 @@
             this.getTerms()
             this.initNewTerm()
             this.$scope.editMode = false
+            this.refreshOnFirstLoad()
+        }
+
+        refreshOnFirstLoad() {
+            if (!localStorage.getItem('firstLoad')) {
+                localStorage['firstLoad'] = true;
+                window.location.reload();
+            }
+            else
+                localStorage.removeItem('firstLoad');
         }
 
         initNewTerm() {
@@ -66,7 +76,8 @@
         'serverCallService',
         'authenticatedUserService',
         'termsService',
-        '$timeout'
+        '$timeout',
+        '$route'
     ]
     angular.module('koolikottApp').controller('termsController', controller)
 }
