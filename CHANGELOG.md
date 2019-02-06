@@ -1,3 +1,12 @@
+## e-Koolikott [1.30.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703)
+
+### Muutunud
+* Kasutajatoes teema 'Muu' korral pealkirja sisestamine [EK-197](https://projektid.hitsa.ee/jira/browse/EK-197)
+* Kasutustingimuste salvestamise ja muutmise funktsionaalsus [EK-223](https://projektid.hitsa.ee/jira/browse/EK-223)
+* Kasutaja küpsiste kasutamisest teavitamine [EK-227](https://projektid.hitsa.ee/jira/browse/EK-227)
+* Kasutaja küpsiste salvestamine brauserisse [EK-260](https://projektid.hitsa.ee/jira/browse/EK-260)
+* Täisekraani sulgemine X nupust [EK-270](https://projektid.hitsa.ee/jira/browse/EK-270)
+
 ## e-Koolikott [1.29.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10727)
 
 ### Muutunud
