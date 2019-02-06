@@ -13,7 +13,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @RestController
-@RequestMapping("/admin/moderator/")
+@RequestMapping("/admin/moderator")
 public class ModeratorAdminResource extends BaseResource {
 
     @Inject

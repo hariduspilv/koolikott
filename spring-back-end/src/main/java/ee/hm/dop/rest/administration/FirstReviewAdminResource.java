@@ -20,7 +20,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @RestController
-@RequestMapping("admin/firstReview/")
+@RequestMapping("admin/firstReview")
 public class FirstReviewAdminResource extends BaseResource {
 
     @Inject

@@ -25,7 +25,7 @@ import javax.inject.Inject;
 import java.util.List;
 
 @RestController
-@RequestMapping("admin/changed/")
+@RequestMapping("admin/changed")
 public class ReviewableChangeAdminResource extends BaseResource {
 
     @Inject
