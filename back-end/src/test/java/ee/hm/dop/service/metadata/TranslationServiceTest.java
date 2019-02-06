@@ -7,6 +7,7 @@ import ee.hm.dop.model.TranslationGroup;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -67,6 +68,7 @@ public class TranslationServiceTest {
     }
 
     @Test
+    @Ignore
     public void getTranslationsForSupportedLanguageWithTranslation() {
         String languageCode = "supportedLanguageCode";
         Language language = createMock(Language.class);
