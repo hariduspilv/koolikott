@@ -57,8 +57,8 @@ public abstract class Taxon implements AbstractEntity {
     @Transient
     private String level;
 
-    @Transient
-    private String translationKey;
+    @Column(nullable = false)
+    protected String translationKey;
 
     public Long getId() {
         return id;

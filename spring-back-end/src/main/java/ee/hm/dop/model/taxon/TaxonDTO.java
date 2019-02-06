@@ -8,15 +8,13 @@ import java.util.Set;
 
 public class TaxonDTO extends Taxon {
 
-    private String translationKey;
-
     public TaxonDTO() {
     }
 
-    public TaxonDTO(Long id, String name, String level) {
+    public TaxonDTO(Long id, String name, String translationKey) {
         this.id = id;
         this.name = name;
-        this.translationKey = level.toUpperCase() + "_" + name.toUpperCase();
+        this.translationKey = translationKey;
     }
 
     @JsonIgnore
@@ -53,15 +51,7 @@ public class TaxonDTO extends Taxon {
     }
 
     @Override
-    public String getTaxonLevel(){
+    public String getTaxonLevel() {
         return null;
-    }
-
-    public void setTranslationKey(String translationKey) {
-        this.translationKey = translationKey;
-    }
-
-    public String getTranslationKey(){
-        return this.translationKey;
     }
 }
