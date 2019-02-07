@@ -10,13 +10,14 @@ import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.User_Agreement;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
-import org.joda.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
+
+import java.time.LocalDateTime;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang.StringUtils.isBlank;
@@ -40,6 +41,7 @@ public class UserEmailService {
         if (userEmail.getUser() == null) {
             throw badRequest("User is null");
         }
+
         UserEmail dbUserEmail = userEmailDao.findByUserId(userEmail.getUser());
         if (dbUserEmail != null && dbUserEmail.getUser().getId().equals(userEmail.getUser().getId())) {
             return userEmailDao.createOrUpdate(setUserAndSendMail(dbUserEmail, userEmail));
