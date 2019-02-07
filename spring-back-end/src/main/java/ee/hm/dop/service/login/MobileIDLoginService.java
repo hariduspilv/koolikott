@@ -39,7 +39,7 @@ public class MobileIDLoginService {
             return null;
         }
         AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
-        logger.info("state", authenticationState);
+        logger.info("state {}", authenticationState);
         return login(authenticationState, LoginFrom.MOB_ID);
     }
 
@@ -52,6 +52,7 @@ public class MobileIDLoginService {
             authenticationStateDao.delete(authenticationState);
             return null;
         }
+        logger.info("{} {} {} {}", authenticationState.getIdCode(), authenticationState.getName(), authenticationState.getSurname(), loginFrom);
 
         UserStatus authenticatedUser = loginService.login(authenticationState.getIdCode(), authenticationState.getName(), authenticationState.getSurname(), loginFrom);
         authenticationStateDao.delete(authenticationState);
