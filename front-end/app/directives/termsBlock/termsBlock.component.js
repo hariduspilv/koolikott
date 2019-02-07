@@ -36,8 +36,10 @@
         save(term) {
             this.$scope.isSaving = true
 
-            if (this.$scope.notifyOfGDPRUpdate)
+            if (this.$scope.notifyOfGDPRUpdate) {
                 this.createAgreement()
+                this.$scope.notifyOfGDPRUpdate = false
+            }
 
             this.termsService.saveTerm(term)
                 .then(response => {
@@ -86,6 +88,7 @@
                 term.edit = !term.edit;
             }
             this.createDialogOpen = false
+            this.$scope.notifyOfGDPRUpdate = false
             this.getTerms()
         }
 

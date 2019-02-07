@@ -40,6 +40,10 @@ public class EhisSOAPService implements IEhisSOAPService {
     private EhisV5RequestBuilder ehisV5RequestBuilder;
     @Inject
     private EhisV6RequestBuilder ehisV6RequestBuilder;
+    @Inject
+    private EhisV5ResponseAnalyzer ehisV5ResponseAnalyzer;
+    @Inject
+    private EhisV6ResponseAnalyzer ehisV6ResponseAnalyzer;
 
     @Override
     public Person getPersonInformation(String idCode) {
@@ -62,8 +66,11 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(response, "Received response from EHIS: %s");
             }
 
-            if (environment.acceptsProfiles(Profiles.of("it")) && response == null){
-                return null;
+            String xmlResponse;
+            if (useV6) {
+                xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
+            } else {
+                xmlResponse = ehisV5ResponseAnalyzer.parseSOAPResponse(response);
             }
 
             String xmlResponse = parseSOAPResponse(response);
@@ -113,26 +120,5 @@ public class EhisSOAPService implements IEhisSOAPService {
                         return (connection);
                     }
                 });
-    }
-
-    private String parseSOAPResponse(SOAPMessage message) throws Exception {
-        SOAPPart soapPart = message.getSOAPPart();
-        SOAPEnvelope envelope = soapPart.getEnvelope();
-        SOAPBody body = envelope.getBody();
-
-        if (body.hasFault()) {
-            SOAPFault fault = body.getFault();
-            String faultString = fault.getFaultString();
-            Detail detail = fault.getDetail();
-            String detailMessage = detail.getFirstChild().getTextContent();
-
-            throw new RuntimeException("Error retrieving information from EHIS: " + faultString + ": " + detailMessage);
-        }
-
-        Node person = body.getElementsByTagName("isik").item(0);
-        DOMSource source = new DOMSource(person);
-        StringWriter stringResult = new StringWriter();
-        TransformerFactory.newInstance().newTransformer().transform(source, new StreamResult(stringResult));
-        return stringResult.toString();
     }
 }
