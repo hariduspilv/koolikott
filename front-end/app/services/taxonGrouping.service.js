@@ -4,23 +4,6 @@ angular.module('koolikottApp')
 
 function TaxonGroupingService(taxonService, translationService) {
 
-
-    function getDomainNameHelperTranslation(domainKey) {
-        return translationService.instant('HELPER_' + domainKey);
-    }
-
-    function getSubjectNameHelperTranslation(subjectKey) {
-        return translationService.instant('HELPER_' + subjectKey)
-    }
-
-    function getDomainNameTranslation(domain) {
-        return translationService.instant('DOMAIN_' + domain.name.toUpperCase())
-    }
-
-    function getSubjectNameTranslation(subject) {
-        return translationService.instant('SUBJECT_' + subject.name.toUpperCase())
-    }
-
     function getDomainNameTranslationKey(domain) {
         return 'DOMAIN_' + domain.name.toUpperCase()
     }
@@ -95,7 +78,6 @@ function TaxonGroupingService(taxonService, translationService) {
 
         let domains = taxons.map(taxon => taxonService.getDomain(taxon)).filter(item => {return item !== null});
         let subjects = taxons.map(taxon => taxonService.getSubject(taxon)).filter(item => {return item !== null});
-        let allSubjects = _.flatten(domains.map(dom => dom.subjects));
 
         subjects.forEach(subject => {
             let tmp = domains.filter(domain => domain.id === taxonService.getDomain(subject).id);
@@ -103,35 +85,6 @@ function TaxonGroupingService(taxonService, translationService) {
                 subjects.push(...tmp[0].subjects);
             }
         });
-
-        const lang = translationService.getLanguageCode();
-        for (let i = 0; i < domains.length; i++) {
-            for (let j = 0; j < allSubjects.length; j++) {
-
-                // No need to compare parent with its own children
-                if (domains[i].id === allSubjects[j].parentId) continue;
-
-                // Check if domain and subject have same translation
-                // Estonian translations are compared at the moment
-                if (lang === "et" && getDomainNameTranslation(domains[i]) !== getSubjectNameTranslation(allSubjects[j])) {
-                    continue;
-                } else if (lang !== "et" && getDomainNameHelperTranslation(getDomainNameTranslationKey(domains[i])) !== getSubjectNameHelperTranslation(getSubjectNameTranslationKey(allSubjects[j]))) {
-                    continue;
-                }
-
-                // Remove domain and add corresponding subject to subject list
-                if (_.findIndex(subjects, allSubjects[j]) === -1) {
-                    domains.splice(i, 1);
-                    subjects.push(allSubjects[j]);
-                    i--;
-                    break;
-                } else {
-                    domains.splice(i, 1);
-                    i--;
-                    break;
-                }
-            }
-        }
 
         let result = {};
         domains.forEach(domain => {
@@ -169,23 +122,6 @@ function TaxonGroupingService(taxonService, translationService) {
         if (translationService.getLanguageCode() === "et") {
             return _.uniq(list.map(item => translationService.instant(item)))
         }
-
-        // Workaround for taxons with missing translations
-        // "HELPER_" items can be removed once all taxons are translated
-        let translatedList = [];
-        let cleanedResult = [];
-
-        list.forEach(item => {
-            let translated = translationService.instant("HELPER_" + item);
-            if (translated.startsWith("HELPER_")) translated = translationService.instant(item);
-
-            if (item && !translatedList.includes(translated)) {
-                translatedList.push(translated);
-                cleanedResult.push(item)
-            }
-        });
-
-        return cleanedResult;
     }
 
     function getDomainSubjectList(taxons) {
