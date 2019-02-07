@@ -3,17 +3,13 @@ package ee.hm.dop.service.metadata;
 import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.LanguageC;
 
 import javax.inject.Inject;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 public class TranslationService {
 
-    public static final String DOMAIN = "DOMAIN_";
-    public static final String SUBJECT = "SUBJECT";
     public static final String LANDING_PAGE_DESCRIPTION = "LANDING_PAGE_DESCRIPTION";
     public static final String LANDING_PAGE_NOTICE = "LANDING_PAGE_NOTICE";
     @Inject
@@ -34,8 +30,6 @@ public class TranslationService {
         if (translationGroupFor == null) {
             return null;
         }
-
-
         return translationGroupFor.getTranslations();
     }
 
