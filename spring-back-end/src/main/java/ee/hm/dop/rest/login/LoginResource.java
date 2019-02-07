@@ -94,7 +94,7 @@ public class LoginResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("stuudium")
-    public RedirectView stuudiumAuthenticate(@RequestParam("token") String token) throws URISyntaxException {
+    public RedirectView stuudiumAuthenticate(@RequestParam(value = "token", required = false) String token) throws URISyntaxException {
         return token != null ? authenticateWithStuudiumToken(token) : redirectToStuudium();
     }
 
