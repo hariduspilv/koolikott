@@ -20,6 +20,6 @@ public class TaxonSerializer extends JsonSerializer<Taxon> {
 
     @Override
     public void serializeWithType(Taxon value, JsonGenerator gen, SerializerProvider serializers, TypeSerializer typeSer) throws IOException {
-        gen.writeObject(new TaxonDTO(value.getId(), value.getName(), value.getTaxonLevel()));
+        gen.writeObject(new TaxonDTO(value.getId(), value.getName(), value.getTranslationKey()));
     }
 }
