@@ -108,12 +108,13 @@ public class LoginResource extends BaseResource {
 
     @GetMapping("/mobileId/isValid")
     public UserStatus mobileIDAuthenticate(@RequestParam("token") String token) throws SOAPException {
-        return mobileIDLoginService.validateMobileIDAuthentication(token);
+        UserStatus userStatus = mobileIDLoginService.validateMobileIDAuthentication(token);
+        logger.info("userstatus is {}", userStatus);
+        return userStatus;
     }
 
     @GetMapping
     @RequestMapping("/getAuthenticatedUser")
-
     public AuthenticatedUser getAuthenticatedUser(@RequestParam("token") String token) {
         return authenticatedUserService.getAuthenticatedUserByToken(token);
     }

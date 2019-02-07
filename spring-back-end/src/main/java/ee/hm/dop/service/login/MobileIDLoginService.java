@@ -39,6 +39,7 @@ public class MobileIDLoginService {
             return null;
         }
         AuthenticationState authenticationState = authenticationStateDao.findAuthenticationStateByToken(token);
+        logger.info("state", authenticationState);
         return login(authenticationState, LoginFrom.MOB_ID);
     }
 

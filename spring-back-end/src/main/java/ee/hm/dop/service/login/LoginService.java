@@ -3,18 +3,18 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.Agreement;
+import ee.hm.dop.model.AuthenticatedUser;
+import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.User_Agreement;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.useractions.SessionService;
 import ee.hm.dop.service.useractions.UserService;
-
-import java.time.LocalDateTime;
-
 import org.joda.time.DateTime;
-import org.joda.time.Duration;
 import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
@@ -29,7 +30,6 @@ import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.now;
 
 @Service
 @Transactional
@@ -159,9 +159,8 @@ public class LoginService {
     }
 
     public boolean hasExpired(AuthenticationState state) {
-        java.time.Duration between = java.time.Duration.between(state.getCreated(), LocalDateTime.now());
-        //todo check this logic
-        return between.minusMillis(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR).isNegative();
+        Duration between = Duration.between(state.getCreated(), LocalDateTime.now());
+        return !between.minusMillis(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR).isNegative();
     }
 
     private User_Agreement createUserAgreement(User user, Agreement agreement) {
