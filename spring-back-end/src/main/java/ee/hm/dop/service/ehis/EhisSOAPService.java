@@ -66,7 +66,7 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(response, "Received response from EHIS: %s");
             }
 
-            if (environment.acceptsProfiles(Profiles.of("it")) && response == null){
+            if (response == null){
                 return null;
             }
 
