@@ -66,7 +66,7 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(response, "Received response from EHIS: %s");
             }
 
-            if (response == null){
+            if (environment.acceptsProfiles(Profiles.of("it")) && response == null) {
                 return null;
             }
 
@@ -80,14 +80,18 @@ public class EhisSOAPService implements IEhisSOAPService {
             logger.info(format("Received response from EHIS: %s", xmlResponse));
             return ehisParser.parse(xmlResponse);
         } catch (Exception e) {
-            logger.error("Error getting User information from EHIS.", e);
+            if (environment.acceptsProfiles(Profiles.of("it", "test"))) {
+                logger.error("Error getting User information from EHIS. {}", e.getMessage());
+                return null;
+            }
+            logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
             return null;
         }
     }
 
     private void log(SOAPMessage message, String msg) throws SOAPException, IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        if (message != null){
+        if (message != null) {
             message.writeTo(out);
         }
         String strMsg = new String(out.toByteArray(), StandardCharsets.UTF_8);

@@ -30,7 +30,7 @@ public class EhisV5ResponseAnalyzer {
             Detail detail = fault.getDetail();
             String detailMessage = detail.getFirstChild().getTextContent();
 
-            throw new RuntimeException("Error retrieving information from EHIS: " + faultString + ": " + detailMessage);
+            throw new Exception("Error retrieving information from EHIS: " + faultString + ": " + detailMessage);
         }
 
         Node person = body.getElementsByTagName("isik").item(0);
