@@ -62,11 +62,11 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(response, "Received response from EHIS: %s");
             }
 
-            String xmlResponse = parseSOAPResponse(response);
-
-            if (environment.acceptsProfiles(Profiles.of("it")) && xmlResponse == null){
+            if (environment.acceptsProfiles(Profiles.of("it")) && response == null){
                 return null;
             }
+
+            String xmlResponse = parseSOAPResponse(response);
 
             logger.info(format("Received response from EHIS: %s", xmlResponse));
             return ehisParser.parse(xmlResponse);
@@ -78,7 +78,9 @@ public class EhisSOAPService implements IEhisSOAPService {
 
     private void log(SOAPMessage message, String msg) throws SOAPException, IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        message.writeTo(out);
+        if (message != null){
+            message.writeTo(out);
+        }
         String strMsg = new String(out.toByteArray(), StandardCharsets.UTF_8);
         logger.info(format(msg, strMsg));
     }
