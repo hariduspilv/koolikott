@@ -28,10 +28,10 @@
     </md-icon>
 
     <img data-ng-if="learningObject.picture"
-         data-ng-src="rest/picture/thumbnail/sm_xs_xl/{{learningObject.picture.name}}"
-         sizes="(max-width: 600px) 300px, (min-width: 1920px) 300px, 200px"
-         data-ng-srcset="rest/picture/thumbnail/sm_xs_xl/{{learningObject.picture.name}} 300w,
-                         rest/picture/thumbnail/sm/{{learningObject.picture.name}} 200w"
+      data-ng-src="rest/picture/thumbnail/lg/{{learningObject.picture.name}}"
+      sizes="(max-width: 600) 600px, 300px"
+      data-ng-srcset="rest/picture/thumbnail/lg/{{learningObject.picture.name}} 300w,
+                      rest/picture/thumbnail/lg_xs/{{learningObject.picture.name}} 600w"
          class="md-card-image"/>
 
     <div class="card-hover {{learningObjectType}} {{materialType}}">
