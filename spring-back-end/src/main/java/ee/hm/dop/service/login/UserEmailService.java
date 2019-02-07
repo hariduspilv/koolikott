@@ -37,10 +37,10 @@ public class UserEmailService {
     private SendMailService sendMailService;
 
     public UserEmail save(UserEmail userEmail) {
-        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
-        if (userEmail.getUser() == null)
+        if (userEmail.getUser() == null) {
             throw badRequest("User is null");
-
+        }
+        UserEmail dbUserEmail = userEmailDao.findByUserId(userEmail.getUser());
         if (dbUserEmail != null && dbUserEmail.getUser().getId().equals(userEmail.getUser().getId())) {
             return userEmailDao.createOrUpdate(setUserAndSendMail(dbUserEmail, userEmail));
         }
@@ -57,7 +57,7 @@ public class UserEmailService {
     }
 
     public UserEmail validatePin(UserEmail userEmail) {
-        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
+        UserEmail dbUserEmail = userEmailDao.findByUserId(userEmail.getUser());
         User_Agreement dbUserAgreement = userAgreementDao.getLatestAgreementForUser(userEmail.getUser().getId());
         if (dbUserEmail == null)
             throw notFound("User not found");
