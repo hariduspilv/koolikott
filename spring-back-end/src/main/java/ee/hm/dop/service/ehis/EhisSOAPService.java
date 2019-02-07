@@ -66,14 +66,16 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(response, "Received response from EHIS: %s");
             }
 
+            if (environment.acceptsProfiles(Profiles.of("it")) && response == null){
+                return null;
+            }
+
             String xmlResponse;
             if (useV6) {
                 xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
             } else {
                 xmlResponse = ehisV5ResponseAnalyzer.parseSOAPResponse(response);
             }
-
-            String xmlResponse = parseSOAPResponse(response);
 
             logger.info(format("Received response from EHIS: %s", xmlResponse));
             return ehisParser.parse(xmlResponse);
