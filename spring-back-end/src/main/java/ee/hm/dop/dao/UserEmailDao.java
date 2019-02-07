@@ -18,7 +18,7 @@ public class UserEmailDao extends AbstractDao<UserEmail> {
         if (user.getId() == null) return null;
         List<UserEmail> emails = (List<UserEmail>) getEntityManager().createNativeQuery(
                 "SELECT * FROM UserEmail e " +
-                        "where e.user = : user", entity())
+                        "where e.user = :user", entity())
                 .setParameter("user", user.getId())
                 .getResultList();
         return !emails.isEmpty() ? emails.get(0) : null;
