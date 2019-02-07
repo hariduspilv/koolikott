@@ -13,6 +13,7 @@ import ee.hm.dop.service.SendMailService;
 import org.joda.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
@@ -21,6 +22,7 @@ import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang.StringUtils.isBlank;
 
 @Service
+@Transactional
 public class UserEmailService {
 
     @Inject
