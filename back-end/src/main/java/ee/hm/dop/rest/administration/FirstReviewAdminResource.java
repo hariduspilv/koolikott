@@ -12,10 +12,7 @@ import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -34,6 +31,25 @@ public class FirstReviewAdminResource extends BaseResource {
     public List<AdminLearningObject> getUnReviewed() {
         return firstReviewAdminService.getUnReviewed(getLoggedInUser());
     }
+
+    @GET
+    @Path("unReviewed/{sortOrder}")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AdminLearningObject> getUnReviewed(@PathParam("sortOrder") String sortingOrder) {
+        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), sortingOrder);
+    }
+
+
+
+    @GET
+    @Path("unReviewed/{direction}/{page}")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<AdminLearningObject> getUnReviewed(@PathParam("direction") String direction,@PathParam("page") String page) {
+        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), direction,page);
+    }
+
 
     @GET
     @Path("unReviewed/count")

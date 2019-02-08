@@ -31,6 +31,24 @@ public class FirstReviewAdminService {
         }
     }
 
+    public List<AdminLearningObject> getUnReviewed(User user,String sortingOrder) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
+            return firstReviewDao.findAllUnreviewed(sortingOrder);
+        } else {
+            return firstReviewDao.findAllUnreviewed(user,sortingOrder);
+        }
+    }
+
+    public List<AdminLearningObject> getUnReviewed(User user, String direction, String page) {
+        UserUtil.mustBeModeratorOrAdmin(user);
+        if (UserUtil.isAdmin(user)) {
+            return firstReviewDao.findAllUnreviewed(direction, page);
+        } else {
+            return firstReviewDao.findAllUnreviewed(user, direction, page);
+        }
+    }
+
     public long getUnReviewedCount(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {

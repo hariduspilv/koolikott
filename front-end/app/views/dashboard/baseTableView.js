@@ -43,14 +43,20 @@ class controller extends Controller {
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
         const [ titleTranslationKey, ...rest ] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
 
+         this.serverCallService.makeGet('rest/admin/count')
+            .then(result =>{
+                this.$scope.totalCountOfUnreviewed = result;
+            })
+
         this.$scope.itemsCount = 0
         this.$scope.filter = { options: { debounce: 500 } }
         this.$scope.query = {
             filter: '',
             order: 'bySubmittedAt',
-            limit: 10,
+            limit: this.$scope.totalCountOfUnreviewed,
             page: 1
         }
+
         this.$scope.onPaginate = this.onPaginate.bind(this)
         this.$scope.onSort = this.onSort.bind(this)
         this.$scope.titleTranslationKey = titleTranslationKey
@@ -95,9 +101,18 @@ class controller extends Controller {
     getUsernamePlaceholder() {
         return this.$filter('translate')('USERNAME')
     }
+
+    //byType,byTitle,byCreatedAt,byCreatedBy
+
     getData(restUri, sortBy) {
+        let howToSort = 'asc'
+        if (sortBy.charAt(0) === '-')
+            howToSort = 'desc';
+
+        
         this.serverCallService
-            .makeGet('rest/admin/'+restUri)
+            .makeGet('rest/admin/' + restUri + '/' + howToSort + '/' + (this.$scope.query.page) * 200,{} )
+            // .makeGet('rest/admin/'+restUri )
             .then(({ data }) => {
                 if (data) {
                     if (sortBy)
