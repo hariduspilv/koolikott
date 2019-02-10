@@ -40,12 +40,12 @@ public class FirstReviewAdminService {
         }
     }
 
-    public List<AdminLearningObject> getUnReviewed(User user, String direction, String page) {
+    public List<AdminLearningObject> getUnReviewed(User user, String direction, String page,String itemToSortedBy) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findAllUnreviewed(direction, page);
+            return firstReviewDao.findAllUnreviewed(direction, page, itemToSortedBy);
         } else {
-            return firstReviewDao.findAllUnreviewed(user, direction, page);
+            return firstReviewDao.findAllUnreviewed(user, direction, page,itemToSortedBy);
         }
     }
 

@@ -16,9 +16,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     @Inject
     private AdminLearningObjectDao adminLearningObjectDao;
 
-
-    private final int pageSize = 201;
-
+    private final int pageSize = 200;
 
     public List<AdminLearningObject> findAllUnreviewed() {
         List<BigInteger> resultList = getEntityManager()
@@ -62,8 +60,14 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         return adminLearningObjectDao.findById(collect);
     }
 
+    public List<AdminLearningObject> findAllUnreviewed(String direction,String page,String itemToSortedBy) {
 
-    public List<AdminLearningObject> findAllUnreviewed(String direction,String page) {
+        if ( itemToSortedBy.equals("byCreatedAt") || itemToSortedBy.equals("-byCreatedAt")){
+            itemToSortedBy = "ORDER BY min(r.createdAt)";
+        }
+        else if (itemToSortedBy.equals("byCreatedBy") || itemToSortedBy.equals("-byCreatedBy")){
+            itemToSortedBy = "ORDER BY min(lo.creator)";
+        }
 
         List<BigInteger> resultList = getEntityManager()
                 .createNativeQuery("SELECT\n" +
@@ -78,13 +82,10 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
                         "GROUP BY lo.id\n" +
-                        "ORDER BY min(r.createdAt) " + direction)
+                        itemToSortedBy + direction)
                 .setFirstResult(Integer.parseInt(page))
                 .setMaxResults(pageSize)
                 .getResultList();
-
-//        totalCount = resultList.size();
-//        int pageNumber= (int)( totalCount / pageSize) +1;
 
         List<Long> collect = resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
         return adminLearningObjectDao.findById(collect);
@@ -138,8 +139,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         return adminLearningObjectDao.findById(collect);
     }
 
-
-    public List<AdminLearningObject> findAllUnreviewed(User user,String direction,String page) {
+    public List<AdminLearningObject> findAllUnreviewed(User user,String direction,String page,String itemToSortedBy) {
 
         List<BigInteger> resultList =  getEntityManager()
                 .createNativeQuery("SELECT\n" +
@@ -165,8 +165,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         List<Long> collect = resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
         return adminLearningObjectDao.findById(collect);
     }
-
-
 
     public long findCountOfUnreviewed() {
         return ((BigInteger) getEntityManager()

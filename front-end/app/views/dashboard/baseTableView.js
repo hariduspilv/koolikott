@@ -43,20 +43,14 @@ class controller extends Controller {
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
         const [ titleTranslationKey, ...rest ] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
 
-         this.serverCallService.makeGet('rest/admin/count')
-            .then(result =>{
-                this.$scope.totalCountOfUnreviewed = result;
-            })
-
-        this.$scope.itemsCount = 0
-        this.$scope.filter = { options: { debounce: 500 } }
+        this.getMaximumUnreviewed();
+        this.$scope.filter = { options: { debounce: 500 } };
         this.$scope.query = {
             filter: '',
             order: 'bySubmittedAt',
-            limit: this.$scope.totalCountOfUnreviewed,
+            limit: 200,
             page: 1
         }
-
         this.$scope.onPaginate = this.onPaginate.bind(this)
         this.$scope.onSort = this.onSort.bind(this)
         this.$scope.titleTranslationKey = titleTranslationKey
@@ -75,6 +69,13 @@ class controller extends Controller {
             if (newValue !== oldValue)
                 this.filterItems()
         })
+    }
+    getMaximumUnreviewed(){
+        this.serverCallService
+            .makeGet('rest/admin/firstReview/unReviewed/count')
+            .then(result => {
+                this.$scope.totalCountOfUnreviewed = result.data;
+            })
     }
     getTranslation(key) {
         return this.$filter('translate')(key)
@@ -101,17 +102,15 @@ class controller extends Controller {
     getUsernamePlaceholder() {
         return this.$filter('translate')('USERNAME')
     }
-
     //byType,byTitle,byCreatedAt,byCreatedBy
-
     getData(restUri, sortBy) {
-        let howToSort = 'asc'
+
+        let howToSort = 'asc';
         if (sortBy.charAt(0) === '-')
             howToSort = 'desc';
 
-        
         this.serverCallService
-            .makeGet('rest/admin/' + restUri + '/' + howToSort + '/' + (this.$scope.query.page) * 200,{} )
+            .makeGet('rest/admin/' + restUri + '/' + howToSort + '/' + (this.$scope.query.page) * 200 +'/' + sortBy,{} )
             // .makeGet('rest/admin/'+restUri )
             .then(({ data }) => {
                 if (data) {
@@ -131,10 +130,10 @@ class controller extends Controller {
                         })
 
                     this.collection = data
-                    this.$scope.itemsCount = data.length
-
+                    this.$scope.itemsCount =   this.$scope.totalCountOfUnreviewed;
                     this.sortService.orderItems(data, this.$scope.query.order)
-                    this.$scope.data = data.slice(0, this.$scope.query.limit)
+                    // this.$scope.data = data.slice(0, this.$scope.query.limit)
+                    this.$scope.data = data;
                 }
             })
     }
@@ -158,9 +157,10 @@ class controller extends Controller {
 
     onSort(order) {
         this.sortService.orderItems(
-            this.filteredCollection !== null
-                ? this.filteredCollection
-                : this.collection,
+            // this.filteredCollection !== null
+            //     ? this.filteredCollection
+            //     : this.collection,
+            this.getData('firstReview/unReviewed',order),
             order,
             this.unmergedData
         )
@@ -180,8 +180,11 @@ class controller extends Controller {
             ? taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase()
             : taxon.name.toUpperCase()
     }
+
     onPaginate(page, limit) {
+
         this.$scope.data = this.paginate(page, limit)
+        // this.$scope.data =
     }
     clearFilter() {
         this.$scope.query.filter = ''

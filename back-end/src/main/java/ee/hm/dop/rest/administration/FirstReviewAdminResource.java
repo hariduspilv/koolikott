@@ -40,16 +40,15 @@ public class FirstReviewAdminResource extends BaseResource {
         return firstReviewAdminService.getUnReviewed(getLoggedInUser(), sortingOrder);
     }
 
-
-
     @GET
-    @Path("unReviewed/{direction}/{page}")
+    @Path("unReviewed/{direction}/{page}/{itemSortedBy}")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AdminLearningObject> getUnReviewed(@PathParam("direction") String direction,@PathParam("page") String page) {
-        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), direction,page);
+    public List<AdminLearningObject> getUnReviewed(@PathParam("direction") String direction,
+                                                   @PathParam("page") String page,
+                                                   @PathParam("itemSortedBy") String itemSortedBy) {
+        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), direction,page,itemSortedBy);
     }
-
 
     @GET
     @Path("unReviewed/count")
