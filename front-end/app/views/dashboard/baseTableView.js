@@ -44,10 +44,14 @@ class controller extends Controller {
         const [ titleTranslationKey, ...rest ] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
 
         this.getMaximumUnreviewed();
+        this.sortedBy = 'byCreatedAt';
+        this.isSorting = false
+        this.isFiltering = false
+
         this.$scope.filter = { options: { debounce: 500 } };
         this.$scope.query = {
             filter: '',
-            order: 'bySubmittedAt',
+            order: this.sortedBy,
             limit: 200,
             page: 1
         }
@@ -102,16 +106,19 @@ class controller extends Controller {
     getUsernamePlaceholder() {
         return this.$filter('translate')('USERNAME')
     }
-    //byType,byTitle,byCreatedAt,byCreatedBy
     getData(restUri, sortBy) {
 
-        let howToSort = 'asc';
-        if (sortBy.charAt(0) === '-')
-            howToSort = 'desc';
+        if (restUri === 'firstReview/unReviewed') {
 
-        this.serverCallService
-            .makeGet('rest/admin/' + restUri + '/' + howToSort + '/' + (this.$scope.query.page) * 200 +'/' + sortBy,{} )
-            // .makeGet('rest/admin/'+restUri )
+            this.serverCallService
+                .makeGet('rest/admin/' + restUri + '/' +
+                    '?page=' + this.$scope.query.page +
+                    '&itemSortedBy=' + sortBy)
+        }
+        else
+            this.serverCallService
+                .makeGet('rest/admin/' + restUri )
+
             .then(({ data }) => {
                 if (data) {
                     if (sortBy)
@@ -156,6 +163,10 @@ class controller extends Controller {
     }
 
     onSort(order) {
+        this.isSorting = true
+        this.sortedBy = order;
+        this.$scope.query.page = 1;
+
         this.sortService.orderItems(
             // this.filteredCollection !== null
             //     ? this.filteredCollection
@@ -164,7 +175,7 @@ class controller extends Controller {
             order,
             this.unmergedData
         )
-        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit,order,this.isSorting)
     }
     getTaxonTranslation(taxon) {
         if (!taxon)
@@ -184,7 +195,7 @@ class controller extends Controller {
     onPaginate(page, limit) {
 
         this.$scope.data = this.paginate(page, limit)
-        // this.$scope.data =
+
     }
     clearFilter() {
         this.$scope.query.filter = ''
@@ -241,7 +252,12 @@ class controller extends Controller {
             : this.unmergedData.filter(r => r.id == item.id)
     }
     filterItems() {
-        const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1
+
+        this.isFiltering = true
+        this.isSorting = false
+        const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1;
+
+
 
         this.filteredCollection = this.collection.filter(data => {
             if (data) {
@@ -271,15 +287,20 @@ class controller extends Controller {
         })
 
         this.$scope.itemsCount = this.filteredCollection.length
-        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit,this.isSorting )
     }
-    paginate(page, limit) {
+
+    paginate(page, limit, isSorting) {
         const start = (page - 1) * limit
         const end = start + limit
 
-        return this.filteredCollection !== null
-            ? this.filteredCollection.slice(start, end)
-            : this.collection.slice(start, end)
+        if (isSorting === false) {
+            return this.filteredCollection !== null
+                ? this.filteredCollection.slice(start, end)
+                : this.collection.slice(start, end)
+        } else
+            return this.getData('firstReview/unReviewed', this.sortedBy)
+
     }
     getImproperReportLabelKey(item) {
         if (!Array.isArray(item.__reports))

@@ -3,6 +3,7 @@ package ee.hm.dop.rest.administration;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -41,13 +42,17 @@ public class FirstReviewAdminResource extends BaseResource {
     }
 
     @GET
-    @Path("unReviewed/{direction}/{page}/{itemSortedBy}")
+    @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AdminLearningObject> getUnReviewed(@PathParam("direction") String direction,
-                                                   @PathParam("page") String page,
-                                                   @PathParam("itemSortedBy") String itemSortedBy) {
-        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), direction,page,itemSortedBy);
+    public List<AdminLearningObject> getUnReviewed(@QueryParam("page") int page,
+                                                   @QueryParam("itemSortedBy") String itemSortedBy) {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy);
+        if (!pageableQuery.isValid()) {
+            throw badRequest("Query parameters invalid");
+        }
+        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), pageableQuery);
+
     }
 
     @GET

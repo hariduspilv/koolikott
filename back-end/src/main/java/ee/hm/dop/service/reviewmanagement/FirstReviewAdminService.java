@@ -1,18 +1,14 @@
 package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.FirstReviewDao;
-import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.FirstReview;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.utils.UserUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
-import java.util.Arrays;
 import java.util.List;
 
 import static org.joda.time.DateTime.now;
@@ -31,21 +27,13 @@ public class FirstReviewAdminService {
         }
     }
 
-    public List<AdminLearningObject> getUnReviewed(User user,String sortingOrder) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findAllUnreviewed(sortingOrder);
-        } else {
-            return firstReviewDao.findAllUnreviewed(user,sortingOrder);
-        }
-    }
 
-    public List<AdminLearningObject> getUnReviewed(User user, String direction, String page,String itemToSortedBy) {
+    public List<AdminLearningObject> getUnReviewed(User user, PageableQuery pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findAllUnreviewed(direction, page, itemToSortedBy);
+            return firstReviewDao.findAllUnreviewed(pageableQuery);
         } else {
-            return firstReviewDao.findAllUnreviewed(user, direction, page,itemToSortedBy);
+            return firstReviewDao.findAllUnreviewed(user, pageableQuery);
         }
     }
 
