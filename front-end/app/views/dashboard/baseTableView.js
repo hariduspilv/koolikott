@@ -47,10 +47,11 @@ class controller extends Controller {
         this.sortedBy = 'byCreatedAt';
         this.isSorting = false
         this.isFiltering = false
+        this.isUnreviewed = false;
 
         this.$scope.filter = { options: { debounce: 500 } };
         this.$scope.query = {
-            filter: '',
+            filter: "",
             order: this.sortedBy,
             limit: 200,
             page: 1
@@ -108,28 +109,33 @@ class controller extends Controller {
     }
     getData(restUri, sortBy) {
 
-        if (restUri === 'firstReview/unReviewed') {
+        let query;
 
-            this.serverCallService
-                .makeGet('rest/admin/' + restUri + '/' +
+        if (restUri === 'firstReview/unReviewed') {
+            query = this.serverCallService
+                .makeGet(
+                    'rest/admin/' + restUri + '/' +
                     '?page=' + this.$scope.query.page +
-                    '&itemSortedBy=' + sortBy)
+                    '&itemSortedBy=' + sortBy +
+                    '&query=' + this.$scope.query.filter)
         }
         else
-            this.serverCallService
+            query = this.serverCallService
                 .makeGet('rest/admin/' + restUri )
 
-            .then(({ data }) => {
+                query
+                .then(({ data }) => {
                 if (data) {
+                    console.log("data", data)
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
-                    if (restUri == 'changed')
+                    if (restUri === 'changed')
                         data.forEach(o => {
                             o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
                             o.__changers = this.getChangers(o)
                         })
-                    if (restUri == 'improper')
+                    if (restUri === 'improper')
                         data.forEach(o => {
                             o.__reports = o.improperContents.filter(c => !c.reviewed)
                             o.__reporters = this.getReporters(o)
@@ -137,12 +143,18 @@ class controller extends Controller {
                         })
 
                     this.collection = data
-                    this.$scope.itemsCount =   this.$scope.totalCountOfUnreviewed;
+
+                    if (this.viewPath === 'unReviewed') {
+                        this.$scope.itemsCount = this.$scope.totalCountOfUnreviewed;
+                        this.$scope.data = data;
+                    } else {
+                        this.$scope.itemsCount = data.length;
+                        this.$scope.data = data.slice(0, this.$scope.query.limit)
+                    }
+
                     this.sortService.orderItems(data, this.$scope.query.order)
-                    // this.$scope.data = data.slice(0, this.$scope.query.limit)
-                    this.$scope.data = data;
                 }
-            })
+        })
     }
     openLearningObject(learningObject) {
         this.$location.url(
@@ -157,26 +169,32 @@ class controller extends Controller {
                 ? '/portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
                 : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
     }
-
     formatTitleForUrl(learningObject) {
         return this.replaceSpacesAndCharacters(this.getUserDefinedLanguageString(learningObject.titles, this.currentLanguage, language));
     }
 
     onSort(order) {
-        this.isSorting = true
+        // this.isSorting = true
         this.sortedBy = order;
         this.$scope.query.page = 1;
 
-        this.sortService.orderItems(
-            // this.filteredCollection !== null
-            //     ? this.filteredCollection
-            //     : this.collection,
-            this.getData('firstReview/unReviewed',order),
-            order,
-            this.unmergedData
-        )
-        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit,order,this.isSorting)
+        if (this.viewPath === 'unReviewed'){
+            this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order)
+            )
+            // this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit,order)
+        }
+        else{
+            this.sortService.orderItems(
+                this.filteredCollection !== null
+                    ? this.filteredCollection
+                    : this.collection,
+                order,
+                this.unmergedData
+            )
+            this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+        }
     }
+
     getTaxonTranslation(taxon) {
         if (!taxon)
             return
@@ -255,53 +273,66 @@ class controller extends Controller {
 
         this.isFiltering = true
         this.isSorting = false
-        const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1;
+
+        if (this.viewPath === 'unReviewed' ) {
+            return this.getData('firstReview/unReviewed', this.sortedBy)
+        }
+
+        else {
+
+            const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1;
+
+            this.filteredCollection = this.collection.filter(data => {
+                if (data) {
+                    const query = this.$scope.query.filter.toLowerCase()
 
 
+                    if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
+                        return (
+                            isFilterMatch(data.name + ' ' + data.surname, query) ||
+                            isFilterMatch(data.name, query) ||
+                            isFilterMatch(data.surname, query) ||
+                            isFilterMatch(data.username, query)
+                        )
 
-        this.filteredCollection = this.collection.filter(data => {
-            if (data) {
-                const query = this.$scope.query.filter.toLowerCase()
+                    const text = data.learningObject
+                        ? (this.isMaterial(data.learningObject)
+                            ? this.getCorrectLanguageTitle(data.learningObject)
+                            : data.learningObject.title)
+                        : data.material
+                            ? this.getCorrectLanguageTitle(data.material)
+                            : this.isMaterial(data)
+                                ? this.getCorrectLanguageTitle(data)
+                                : data.title
 
-                if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
-                    return (
-                        isFilterMatch(data.name+' '+data.surname, query) ||
-                        isFilterMatch(data.name, query) ||
-                        isFilterMatch(data.surname, query) ||
-                        isFilterMatch(data.username, query)
-                    )
+                    if (text)
+                        return isFilterMatch(text, query)
+                }
+            })
 
-                const text = data.learningObject
-                    ? (this.isMaterial(data.learningObject)
-                        ? this.getCorrectLanguageTitle(data.learningObject)
-                        : data.learningObject.title)
-                    : data.material
-                        ? this.getCorrectLanguageTitle(data.material)
-                        : this.isMaterial(data)
-                            ? this.getCorrectLanguageTitle(data)
-                            : data.title
+            this.$scope.itemsCount = this.filteredCollection.length
+            this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
 
-                if (text)
-                    return isFilterMatch(text, query)
-            }
-        })
+        }
 
-        this.$scope.itemsCount = this.filteredCollection.length
-        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit,this.isSorting )
     }
 
-    paginate(page, limit, isSorting) {
+    paginate(page, limit) {
         const start = (page - 1) * limit
         const end = start + limit
 
-        if (isSorting === false) {
+        if (this.viewPath === 'unReviewed'){
+            // this.collection =  this.getData('firstReview/unReviewed', this.sortedBy)
+            return this.getData('firstReview/unReviewed', this.sortedBy);
+
+        }
+        else {
             return this.filteredCollection !== null
                 ? this.filteredCollection.slice(start, end)
                 : this.collection.slice(start, end)
-        } else
-            return this.getData('firstReview/unReviewed', this.sortedBy)
-
+        }
     }
+
     getImproperReportLabelKey(item) {
         if (!Array.isArray(item.__reports))
             return ''

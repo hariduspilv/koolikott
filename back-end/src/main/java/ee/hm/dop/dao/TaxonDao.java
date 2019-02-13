@@ -3,6 +3,7 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
 import org.slf4j.Logger;
@@ -17,6 +18,20 @@ import java.util.stream.Collectors;
 
 public class TaxonDao extends AbstractDao<Taxon> {
     private final Logger logger = LoggerFactory.getLogger(TaxonDao.class);
+
+
+    public List<Taxon>findTaxonDomainAndSubject(Taxon taxon){
+        return getEntityManager()
+                .createNativeQuery("" +
+                        "  SELECT tp.domain as t_id FROM TaxonPosition tp\n" +
+                        "  WHERE tp.taxon= :taxonId\n" +
+                        "  UNION ALL\n" +
+                        "  SELECT tp.subject as t_id FROM TaxonPosition tp\n" +
+                        "  WHERE tp.taxon= :taxonId ")
+                .setParameter("taxonId",taxon.getId())
+                .getResultList();
+    }
+
 
     public List<EducationalContext> findAllEducationalContext() {
         return getEntityManager()

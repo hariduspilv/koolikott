@@ -25,29 +25,23 @@ public class FirstReviewAdminResource extends BaseResource {
     @Inject
     private ReviewManager reviewManager;
 
-    @GET
-    @Path("unReviewed")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AdminLearningObject> getUnReviewed() {
-        return firstReviewAdminService.getUnReviewed(getLoggedInUser());
-    }
-
-    @GET
-    @Path("unReviewed/{sortOrder}")
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<AdminLearningObject> getUnReviewed(@PathParam("sortOrder") String sortingOrder) {
-        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), sortingOrder);
-    }
+//    @GET
+//    @Path("unReviewed")
+//    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<AdminLearningObject> getUnReviewed() {
+//        return firstReviewAdminService.getUnReviewed(getLoggedInUser());
+//    }
 
     @GET
     @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<AdminLearningObject> getUnReviewed(@QueryParam("page") int page,
-                                                   @QueryParam("itemSortedBy") String itemSortedBy) {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy);
+                                                   @QueryParam("itemSortedBy") String itemSortedBy,
+                                                   @QueryParam("query") String query)
+    {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }

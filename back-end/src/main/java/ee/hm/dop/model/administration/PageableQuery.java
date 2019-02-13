@@ -1,5 +1,7 @@
 package ee.hm.dop.model.administration;
 
+import org.apache.commons.lang3.StringUtils;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -13,17 +15,19 @@ public class PageableQuery {
     private int size;
     private String itemSortedBy;
     private boolean valid;
+    private String query;
 
     public PageableQuery() {
     }
 
-    public PageableQuery(int page, String itemSortedBy) {
+    public PageableQuery(int page, String itemSortedBy, String query) {
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
             this.itemSortedBy = itemSortedBy;
             this.page = page;
-            this.size = 200;
+            this.size = 20;
+            this.query = query;
         }
     }
 
@@ -69,5 +73,17 @@ public class PageableQuery {
 
     public void setSize(int size) {
         this.size = size;
+    }
+
+    public String getQuery() {
+        return query;
+    }
+
+    public void setQuery(String query) {
+        this.query = query;
+    }
+
+    public boolean existsQuery() {
+        return !StringUtils.isBlank(query);
     }
 }

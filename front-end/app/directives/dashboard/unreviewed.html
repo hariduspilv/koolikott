@@ -3,6 +3,7 @@
     <tr md-row>
       <th md-column md-order-by="byType"><span data-translate="TYPE"></span></th>
       <th md-column md-order-by="byTitle"><span data-translate="TITLE"></span></th>
+      <th md-column md-order-by="bySubject"><span data-translate="NEW_TO_ADD"></span></th>
       <th md-column md-order-by="byCreatedAt"><span data-translate="ADDED_AT"></span></th>
       <th md-column md-order-by="byCreatedBy"><span data-translate="ADDED_BY"></span></th>
     </tr>
@@ -18,6 +19,15 @@
           data-ng-href="{{$ctrl.getLearningObjectUrl(item)}}"
           data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"
         ></a>
+      </td>
+      <td md-cell class="dashboard-cell dashboard-cell--date">
+        <span data-ng-repeat="taxon in item.firstReviewTaxons">
+          <span ng-if="!$first">&nbsp;</span>
+          <strong data-translate="{{taxon.domain.translationKey}}"></strong>
+          <span data-translate="{{taxon.subject.translationKey}}"></span>
+          <span ng-if="!$last">;</span>
+        </span>
+
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToDayMonthYear(item.firstReviews[0].createdAt)"></td>
       <td md-cell class="dashboard-cell dashboard-cell--user" data-ng-if="!item.creator" data-translate="UNKNOWN"></td>
