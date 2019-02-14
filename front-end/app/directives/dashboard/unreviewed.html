@@ -1,3 +1,48 @@
+<md-input-container class="statistics-filter__experts-container"
+                    data-flex data-layout="column"
+                    data-ng-show="isExpertsSelectVisible"
+>
+  <md-select
+    data-placeholder="{{'EXPERT' | translate}}"
+    data-ng-model="filter.user"
+    data-ng-model-options="{trackBy: '$value.id'}"
+    aria-label="Vali ekspert"
+  >
+    <md-option
+      data-ng-repeat="user in moderators"
+      data-ng-value="user"
+      data-ng-bind="user.name + ' ' + user.surname"
+    ></md-option>
+  </md-select>
+</md-input-container>
+
+<dop-taxon-selector
+  flex
+  class="statistics-filter__taxon-container"
+  data-taxon="educationalContext"
+  data-is-statistics-select="true"
+  data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
+  data-ng-show="isTaxonSelectVisible"
+></dop-taxon-selector>
+<md-button
+  class="statistics-filter__clear"
+  data-translate="CLEAR_FORM"
+  data-ng-click="$ctrl.clear()"
+  aria-label="Tühjenda filtriväljad"
+></md-button>
+<md-button
+  class="md-raised md-primary statistics-filter__submit"
+  data-ng-class="{fetching: fetching}"
+  data-ng-click="$ctrl.getFilterResults()"
+  data-ng-disabled="$ctrl.isDisabled()"
+  aria-label="Käivita filter"
+>
+  <div class="spinner"><md-progress-circular data-md-diameter="20"></md-progress-circular></div>
+  <span data-translate="DO_FILTER"></span>
+  <md-icon>arrow_forward</md-icon>
+</md-button>
+
+
 <table md-table>
   <thead md-head md-order="query.order" md-on-reorder="onSort">
     <tr md-row>

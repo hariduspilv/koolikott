@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -38,11 +39,12 @@ public class FirstReviewAdminService {
         }
     }
 
-    public List<AdminLearningObject> getUnReviewed(User user, PageableQuery pageableQuery) {
+    public SearchResult getUnReviewed(User user, PageableQuery pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
 
             List<AdminLearningObject> allUnreviewed = firstReviewDao.findAllUnreviewed(pageableQuery);
+
             for (AdminLearningObject learningObject : allUnreviewed) {
                 for (Taxon taxon : learningObject.getTaxons()) {
                     TaxonPosition dao = taxonPositionDao.findByTaxon(taxon);
@@ -53,9 +55,20 @@ public class FirstReviewAdminService {
                 learningObject.setFirstReviewTaxons(collect);
 
             }
-            return allUnreviewed;
-        } else {
-            return firstReviewDao.findAllUnreviewed(user, pageableQuery);
+
+            SearchResult searchResult = new SearchResult();
+            searchResult.setItems(allUnreviewed);
+            searchResult.setTotalResults(allUnreviewed.size());
+
+            return searchResult;
+        }
+
+        else {
+
+            SearchResult result = new SearchResult();
+            result.setItems(firstReviewDao.findAllUnreviewed(user, pageableQuery));
+            result.setTotalResults((firstReviewDao.findAllUnreviewed(user, pageableQuery)).size());
+            return result;
         }
     }
 

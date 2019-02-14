@@ -7,8 +7,8 @@ import java.util.List;
 
 public class PageableQuery {
 
-    private static List<String> SORT_TYPES = Arrays.asList("bySubject", "byCreatedAt", "byCreatedBy", "byCreatedBy", "byTitle",
-            "-bySubject", "-byCreatedAt", "-byCreatedBy", "-byCreatedBy", "-byTitle");
+    private static List<String> SORT_TYPES = Arrays.asList("bySubject", "byCreatedAt", "byCreatedBy", "byTitle",
+            "-bySubject", "-byCreatedAt", "-byCreatedBy", "-byTitle");
 
     private Sort sort;
     private int page;
@@ -16,18 +16,25 @@ public class PageableQuery {
     private String itemSortedBy;
     private boolean valid;
     private String query;
+    private List<String> taxons;
 
     public PageableQuery() {
     }
 
-    public PageableQuery(int page, String itemSortedBy, String query) {
+    public PageableQuery(String query, List<String> taxons) {
+        this.query = query;
+        this.taxons = taxons;
+    }
+
+    public PageableQuery(int page, String itemSortedBy, String query, List<String> taxons) {
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
             this.itemSortedBy = itemSortedBy;
             this.page = page;
-            this.size = 20;
+            this.size = 200;
             this.query = query;
+            this.taxons = taxons;
         }
     }
 
@@ -85,5 +92,17 @@ public class PageableQuery {
 
     public boolean existsQuery() {
         return !StringUtils.isBlank(query);
+    }
+
+    public List<String> getTaxons() {
+
+        return taxons;
+    }
+
+    public void setTaxons(List<String> taxons) {
+        this.taxons = taxons;
+    }
+    public boolean existsTaxons(){
+        return taxons.size() > 0;
     }
 }
