@@ -50,9 +50,10 @@ class controller extends Controller {
         this.$scope.isUserSelected = false
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
+        this.$scope.selectedUser = null
+        this.$scope.selectedTaxons = ''
 
         this.$scope.filter = { options: { debounce: 500 } };
-
 
         this.$scope.query = {
             filter: "",
@@ -108,23 +109,35 @@ class controller extends Controller {
         }
 
         this.$scope.params = params
-        this.$scope.selectedusers = params.users
-        console.log("users",this.$scope.selectedusers)
+        if (this.$scope.isUserSelected)
+            this.$scope.filter.taxons = params.users
     }
+
     getFilterResults(){
         this.$scope.isFiltering = true
+        if(this.$scope.isUserSelected)
+            this.getSelectedUserTaxonsCount();
+
         this.getData('firstReview/unReviewed', this.sortedBy)
+
     }
 
-    onParamsChange({ taxons }) {
+    onParamsChange({ users, taxons }) {
         this.$scope.isSubmitButtonEnabled =  taxons
+        this.$scope.isTaxonSelectVisible = !users
     }
 
-    clear() {
+    clearFields() {
         this.$scope.filter = {}
+        this.$scope.filterTaxons = {}
         this.$scope.educationalContext = undefined
         this.$scope.data = {}
-    }
+        this.$scope.isUserSelected = false
+        this.$scope.isSubmitButtonEnabled = false
+        this.$scope.filter.taxons = {}
+        this.$scope.queryTaxons.filter = ''
+        this.$scope.filter.taxons = {}
+        this.$scope.params.taxons = {}
 
 
     getPostParams() {
@@ -150,7 +163,7 @@ class controller extends Controller {
     }
 
     isDisabled(){
-         return !(this.$scope.filter && this.$scope.filter.taxons || this.$scope.isUserSelected);
+         return !((this.$scope.filter && this.$scope.filter.taxons) || (this.$scope.isUserSelected));
     }
 
     getMaximumUnreviewed(){
@@ -159,6 +172,23 @@ class controller extends Controller {
             .then(result => {
                 this.$scope.totalCountOfUnreviewed = result.data;
             })
+    }
+
+    getSelectedUserTaxonsCount(){
+
+        this.$scope.isUserSelected = true
+
+        let strings = this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
+
+        this.serverCallService
+            .makeGet('rest/admin/firstReview/unReviewed/count' +
+                '?isUserTaxon=' + this.$scope.isUserSelected +
+                strings)
+
+            .then(result => {
+                this.$scope.totalCountOfUnreviewed = result.data;
+            })
+
     }
     getTranslation(key) {
         return this.$filter('translate')(key)
@@ -195,9 +225,6 @@ class controller extends Controller {
             if (this.$scope.filter && this.$scope.filter.taxons){
                 strings = this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
             }
-            // else if (this.$scope.params.users){
-            //     strings = this.$scope.params.users.map(t => '&taxon=' + t.id);
-            // }
             else {
                 strings = ""
             }
@@ -207,7 +234,8 @@ class controller extends Controller {
                     '?page=' + this.$scope.query.page +
                     '&itemSortedBy=' + sortBy +
                     '&query=' + this.$scope.query.filter +
-                    strings)
+                    strings +
+                    '&isUserTaxon=' + this.$scope.isUserSelected)
         }
         else
             query = this.serverCallService
@@ -216,7 +244,6 @@ class controller extends Controller {
                 query
                 .then(({ data }) => {
                 if (data) {
-                    console.log("data", data)
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
@@ -236,16 +263,16 @@ class controller extends Controller {
 
                     if (this.viewPath === 'unReviewed') {
 
-                        if (this.$scope.isFiltering) {
+                        if (this.$scope.isFiltering && !this.$scope.isUserSelected) {
                             this.$scope.data = data.items;
                             this.$scope.itemsCount = data.items.length;
-
-                        } else {
+                        }
+                        else {
                             this.$scope.data = data.items;
                             this.$scope.itemsCount = this.$scope.totalCountOfUnreviewed;
                         }
                     } else {
-                        this.$scope.itemsCount = data.items.length;
+                        this.$scope.itemsCount = data.length;
                         this.$scope.data = data.slice(0, this.$scope.query.limit)
                     }
 
@@ -329,6 +356,7 @@ class controller extends Controller {
     }
     clearFilter() {
         this.$scope.query.filter = ''
+
         this.$scope.itemsCount = this.collection.length
         this.filteredCollection = null
 
@@ -434,7 +462,6 @@ class controller extends Controller {
             this.$scope.itemsCount = this.filteredCollection.length
             this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
         }
-
     }
 
     paginate(page, limit) {

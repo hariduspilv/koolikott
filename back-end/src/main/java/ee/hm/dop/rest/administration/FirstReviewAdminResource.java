@@ -41,8 +41,9 @@ public class FirstReviewAdminResource extends BaseResource {
     public SearchResult getUnReviewed(@QueryParam("page") int page,
                                       @QueryParam("itemSortedBy") String itemSortedBy,
                                       @QueryParam("query") String query,
-                                      @QueryParam("taxon") List<String> taxons){
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons);
+                                      @QueryParam("taxon") List<String> taxons,
+                                      @QueryParam("isUserTaxon") boolean isUserTaxon) {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons,isUserTaxon);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }
@@ -54,8 +55,12 @@ public class FirstReviewAdminResource extends BaseResource {
     @Path("unReviewed/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public Long getUnReviewedCount() {
-        return firstReviewAdminService.getUnReviewedCount(getLoggedInUser());
+    public Long getUnReviewedCount(@QueryParam("taxon") List<String> taxons,
+                                   @QueryParam("isUserTaxon") boolean isUserTaxon) {
+
+        PageableQuery pageableQuery = new PageableQuery(taxons,isUserTaxon);
+
+        return firstReviewAdminService.getUnReviewedCount(getLoggedInUser(),pageableQuery);
     }
 
     @POST

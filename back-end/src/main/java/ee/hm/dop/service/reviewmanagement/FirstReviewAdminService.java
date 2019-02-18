@@ -77,12 +77,12 @@ public class FirstReviewAdminService {
         return new TaxonDTO(taxon.getId(), taxon.getName(), taxon.getTranslationKey());
     }
 
-    public long getUnReviewedCount(User user) {
+    public long getUnReviewedCount(User user,PageableQuery query) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findCountOfUnreviewed();
+            return firstReviewDao.findCountOfUnreviewed(query);
         } else {
-            return firstReviewDao.findCountOfUnreviewed(user);
+            return firstReviewDao.findCountOfUnreviewed(user,query);
         }
     }
 

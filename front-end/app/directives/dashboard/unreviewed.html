@@ -27,12 +27,12 @@
 <md-button
   class="statistics-filter__clear"
   data-translate="CLEAR_FORM"
-  data-ng-click="$ctrl.clear()"
+  data-ng-click="$ctrl.clearFields()"
+  data-ng-show="filter.taxons || this.$scope.isTaxonSelectVisible"
   aria-label="Tühjenda filtriväljad"
 ></md-button>
 <md-button
   class="md-raised md-primary statistics-filter__submit"
-  data-ng-class="{fetching: fetching}"
   data-ng-click="$ctrl.getFilterResults()"
   data-ng-disabled="$ctrl.isDisabled()"
   aria-label="Käivita filter"

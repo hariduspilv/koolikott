@@ -17,8 +17,15 @@ public class PageableQuery {
     private boolean valid;
     private String query;
     private List<String> taxons;
+    private boolean isUserTaxon;
+
 
     public PageableQuery() {
+    }
+
+    public PageableQuery(List<String> taxons, boolean isUserTaxon) {
+        this.taxons = taxons;
+        this.isUserTaxon = isUserTaxon;
     }
 
     public PageableQuery(String query, List<String> taxons) {
@@ -26,7 +33,7 @@ public class PageableQuery {
         this.taxons = taxons;
     }
 
-    public PageableQuery(int page, String itemSortedBy, String query, List<String> taxons) {
+    public PageableQuery(int page, String itemSortedBy, String query, List<String> taxons,boolean isUserTaxon) {
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
@@ -35,6 +42,7 @@ public class PageableQuery {
             this.size = 200;
             this.query = query;
             this.taxons = taxons;
+            this.isUserTaxon = isUserTaxon;
         }
     }
 
@@ -102,7 +110,17 @@ public class PageableQuery {
     public void setTaxons(List<String> taxons) {
         this.taxons = taxons;
     }
-    public boolean existsTaxons(){
+
+    public boolean existsTaxons() {
         return taxons.size() > 0;
     }
+
+    public boolean isUserTaxon() {
+        return isUserTaxon;
+    }
+
+    public void setUserTaxon(boolean userTaxon) {
+        isUserTaxon = userTaxon;
+    }
+
 }
