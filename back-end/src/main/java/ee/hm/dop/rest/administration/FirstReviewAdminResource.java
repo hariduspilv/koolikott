@@ -3,6 +3,8 @@ package ee.hm.dop.rest.administration;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -12,10 +14,7 @@ import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -27,20 +26,41 @@ public class FirstReviewAdminResource extends BaseResource {
     @Inject
     private ReviewManager reviewManager;
 
+//    @GET
+//    @Path("unReviewed")
+//    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public List<AdminLearningObject> getUnReviewed() {
+//        return firstReviewAdminService.getUnReviewed(getLoggedInUser());
+//    }
+
     @GET
     @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<AdminLearningObject> getUnReviewed() {
-        return firstReviewAdminService.getUnReviewed(getLoggedInUser());
+    public SearchResult getUnReviewed(@QueryParam("page") int page,
+                                      @QueryParam("itemSortedBy") String itemSortedBy,
+                                      @QueryParam("query") String query,
+                                      @QueryParam("taxon") List<String> taxons,
+                                      @QueryParam("isUserTaxon") boolean isUserTaxon) {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons,isUserTaxon);
+        if (!pageableQuery.isValid()) {
+            throw badRequest("Query parameters invalid");
+        }
+        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), pageableQuery);
+
     }
 
     @GET
     @Path("unReviewed/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public Long getUnReviewedCount() {
-        return firstReviewAdminService.getUnReviewedCount(getLoggedInUser());
+    public Long getUnReviewedCount(@QueryParam("taxon") List<String> taxons,
+                                   @QueryParam("isUserTaxon") boolean isUserTaxon) {
+
+        PageableQuery pageableQuery = new PageableQuery(taxons,isUserTaxon);
+
+        return firstReviewAdminService.getUnReviewedCount(getLoggedInUser(),pageableQuery);
     }
 
     @POST

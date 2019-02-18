@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class SearchResult {
 
-    private List<Searchable> items;
+    private List<? extends Searchable> items;
     private Map<String, SearchResult> groups;
     private long totalResults;
     private long start;
@@ -18,7 +18,7 @@ public class SearchResult {
         totalResults = 0L;
     }
 
-    public SearchResult(List<Searchable> items, long totalResults, long start) {
+    public SearchResult(List<? extends Searchable> items, long totalResults, long start) {
         this.items = items;
         this.totalResults = totalResults;
         this.start = start;
@@ -49,11 +49,11 @@ public class SearchResult {
         this.groups = groups;
     }
 
-    public List<Searchable> getItems() {
+    public List<? extends Searchable> getItems() {
         return items;
     }
 
-    public void setItems(List<Searchable> items) {
+    public void setItems(List<? extends Searchable> items) {
         this.items = items;
     }
 

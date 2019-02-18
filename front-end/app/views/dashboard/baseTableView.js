@@ -43,14 +43,33 @@ class controller extends Controller {
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
         const [ titleTranslationKey, ...rest ] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
 
-        this.$scope.itemsCount = 0
-        this.$scope.filter = { options: { debounce: 500 } }
+        this.getModerators();
+        this.getMaximumUnreviewed();
+        this.sortedBy = 'byCreatedAt';
+        this.$scope.isFiltering = false
+        this.$scope.isUserSelected = false
+        this.$scope.isTaxonSelectVisible = true
+        this.$scope.isSubmitButtonEnabled = false
+        this.$scope.selectedUser = null
+        this.$scope.selectedTaxons = ''
+
+        this.$scope.filter = { options: { debounce: 500 } };
+
         this.$scope.query = {
-            filter: '',
-            order: 'bySubmittedAt',
-            limit: 10,
+            filter: "",
+            order: this.sortedBy,
+            limit: 20,
             page: 1
         }
+
+        this.$scope.filterTaxons = { options: { debounce: 500 } };
+        this.$scope.queryTaxons = {
+            filter: "",
+            order: this.sortedBy,
+            limit: 20,
+            page: 1
+        }
+
         this.$scope.onPaginate = this.onPaginate.bind(this)
         this.$scope.onSort = this.onSort.bind(this)
         this.$scope.titleTranslationKey = titleTranslationKey
@@ -69,6 +88,107 @@ class controller extends Controller {
             if (newValue !== oldValue)
                 this.filterItems()
         })
+
+        this.$scope.$watch('queryTaxons.filter',(newVal, oldVal) => {
+            if (newVal !== oldVal)
+                this.filterByTaxons()
+        })
+
+        this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
+        this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
+
+    }
+
+    onFilterChange(filter) {
+        const params = Object.assign({}, filter)
+
+        if (params.user) {
+            this.$scope.isUserSelected = true
+            params.users = [params.user]
+            delete params.user
+        }
+
+        this.$scope.params = params
+        if (this.$scope.isUserSelected)
+            this.$scope.filter.taxons = params.users
+    }
+
+    getFilterResults(){
+        this.$scope.isFiltering = true
+        if(this.$scope.isUserSelected)
+            this.getSelectedUserTaxonsCount();
+
+        this.getData('firstReview/unReviewed', this.sortedBy)
+
+    }
+
+    onParamsChange({ users, taxons }) {
+        this.$scope.isSubmitButtonEnabled =  taxons
+        this.$scope.isTaxonSelectVisible = !users
+    }
+
+    clearFields() {
+        this.$scope.filter = {}
+        this.$scope.filterTaxons = {}
+        this.$scope.educationalContext = undefined
+        this.$scope.data = {}
+        this.$scope.isUserSelected = false
+        this.$scope.isSubmitButtonEnabled = false
+        this.$scope.filter.taxons = {}
+        this.$scope.queryTaxons.filter = ''
+        this.$scope.filter.taxons = {}
+        this.$scope.params.taxons = {}
+
+
+    getPostParams() {
+        const params = Object.assign({}, this.$scope.params)
+
+        if (params.taxons) {
+            params.taxons = params.taxons.map(({ id, level }) => ({ id, level }))
+        }
+
+        this.$scope.paramsForDownload = params;
+        return params
+    }
+
+    onSelectTaxons(taxons) {
+        this.$scope.filter.taxons = taxons
+
+    }
+
+    onEducationalContextChange(educationalContext) {
+        this.$scope.isExpertsSelectVisible = !educationalContext
+        // this.$scope.sortBy = educationalContext ? 'byDomainOrSubject' : 'byEducationalContext'
+        this.onParamsChange({});
+    }
+
+    isDisabled(){
+         return !((this.$scope.filter && this.$scope.filter.taxons) || (this.$scope.isUserSelected));
+    }
+
+    getMaximumUnreviewed(){
+        this.serverCallService
+            .makeGet('rest/admin/firstReview/unReviewed/count')
+            .then(result => {
+                this.$scope.totalCountOfUnreviewed = result.data;
+            })
+    }
+
+    getSelectedUserTaxonsCount(){
+
+        this.$scope.isUserSelected = true
+
+        let strings = this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
+
+        this.serverCallService
+            .makeGet('rest/admin/firstReview/unReviewed/count' +
+                '?isUserTaxon=' + this.$scope.isUserSelected +
+                strings)
+
+            .then(result => {
+                this.$scope.totalCountOfUnreviewed = result.data;
+            })
+
     }
     getTranslation(key) {
         return this.$filter('translate')(key)
@@ -95,34 +215,78 @@ class controller extends Controller {
     getUsernamePlaceholder() {
         return this.$filter('translate')('USERNAME')
     }
+
     getData(restUri, sortBy) {
-        this.serverCallService
-            .makeGet('rest/admin/'+restUri)
-            .then(({ data }) => {
+
+        let query;
+
+        if (restUri === 'firstReview/unReviewed') {
+            let strings;
+            if (this.$scope.filter && this.$scope.filter.taxons){
+                strings = this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
+            }
+            else {
+                strings = ""
+            }
+            query = this.serverCallService
+                .makeGet(
+                    'rest/admin/' + restUri + '/' +
+                    '?page=' + this.$scope.query.page +
+                    '&itemSortedBy=' + sortBy +
+                    '&query=' + this.$scope.query.filter +
+                    strings +
+                    '&isUserTaxon=' + this.$scope.isUserSelected)
+        }
+        else
+            query = this.serverCallService
+                .makeGet('rest/admin/' + restUri )
+
+                query
+                .then(({ data }) => {
                 if (data) {
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
-                    if (restUri == 'changed')
+                    if (restUri === 'changed')
                         data.forEach(o => {
                             o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
                             o.__changers = this.getChangers(o)
                         })
-                    if (restUri == 'improper')
+                    if (restUri === 'improper')
                         data.forEach(o => {
                             o.__reports = o.improperContents.filter(c => !c.reviewed)
                             o.__reporters = this.getReporters(o)
                             o.__reportLabelKey = this.getImproperReportLabelKey(o)
                         })
 
-                    this.collection = data
-                    this.$scope.itemsCount = data.length
+                    this.collection = data.items
+
+                    if (this.viewPath === 'unReviewed') {
+
+                        if (this.$scope.isFiltering && !this.$scope.isUserSelected) {
+                            this.$scope.data = data.items;
+                            this.$scope.itemsCount = data.items.length;
+                        }
+                        else {
+                            this.$scope.data = data.items;
+                            this.$scope.itemsCount = this.$scope.totalCountOfUnreviewed;
+                        }
+                    } else {
+                        this.$scope.itemsCount = data.length;
+                        this.$scope.data = data.slice(0, this.$scope.query.limit)
+                    }
 
                     this.sortService.orderItems(data, this.$scope.query.order)
-                    this.$scope.data = data.slice(0, this.$scope.query.limit)
                 }
-            })
+        })
     }
+
+    getModerators() {
+        this.serverCallService
+            .makeGet('rest/admin/moderator')
+            .then(res => this.$scope.moderators = res.data)
+    }
+
     openLearningObject(learningObject) {
         this.$location.url(
             this.getLearningObjectUrl(learningObject)
@@ -136,21 +300,40 @@ class controller extends Controller {
                 ? '/portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
                 : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
     }
-
     formatTitleForUrl(learningObject) {
         return this.replaceSpacesAndCharacters(this.getUserDefinedLanguageString(learningObject.titles, this.currentLanguage, language));
     }
 
     onSort(order) {
-        this.sortService.orderItems(
-            this.filteredCollection !== null
-                ? this.filteredCollection
-                : this.collection,
-            order,
-            this.unmergedData
-        )
-        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+        // this.isSorting = true
+        this.sortedBy = order;
+        this.$scope.query.page = 1;
+
+        if (this.viewPath === 'unReviewed'){
+
+            if (order === 'bySubject' || order === '-bySubject'){
+
+                this.$scope.data = this.getData('firstReview/unReviewed',order);
+
+            } else {
+
+                this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
+
+            }
+
+        }
+        else{
+            this.sortService.orderItems(
+                this.filteredCollection !== null
+                    ? this.filteredCollection
+                    : this.collection,
+                order,
+                this.unmergedData
+            )
+            this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+        }
     }
+
     getTaxonTranslation(taxon) {
         if (!taxon)
             return
@@ -165,11 +348,15 @@ class controller extends Controller {
             ? taxon.level.toUpperCase().substr(1) + "_" + taxon.name.toUpperCase()
             : taxon.name.toUpperCase()
     }
+
     onPaginate(page, limit) {
+
         this.$scope.data = this.paginate(page, limit)
+
     }
     clearFilter() {
         this.$scope.query.filter = ''
+
         this.$scope.itemsCount = this.collection.length
         this.filteredCollection = null
 
@@ -222,47 +409,77 @@ class controller extends Controller {
             ? this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
             : this.unmergedData.filter(r => r.id == item.id)
     }
-    filterItems() {
-        const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1
 
-        this.filteredCollection = this.collection.filter(data => {
-            if (data) {
-                const query = this.$scope.query.filter.toLowerCase()
+    filterByTaxons(){
 
-                if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
-                    return (
-                        isFilterMatch(data.name+' '+data.surname, query) ||
-                        isFilterMatch(data.name, query) ||
-                        isFilterMatch(data.surname, query) ||
-                        isFilterMatch(data.username, query)
-                    )
-
-                const text = data.learningObject
-                    ? (this.isMaterial(data.learningObject)
-                        ? this.getCorrectLanguageTitle(data.learningObject)
-                        : data.learningObject.title)
-                    : data.material
-                        ? this.getCorrectLanguageTitle(data.material)
-                        : this.isMaterial(data)
-                            ? this.getCorrectLanguageTitle(data)
-                            : data.title
-
-                if (text)
-                    return isFilterMatch(text, query)
-            }
-        })
-
-        this.$scope.itemsCount = this.filteredCollection.length
-        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+        if (this.viewPath === 'unReviewed' ) {
+            this.$scope.query.filter = this.$scope.queryTaxons.filter;
+            return this.getData('firstReview/unReviewed', this.sortedBy)
+        }
     }
+
+    filterItems() {
+
+        this.isFiltering = true
+        this.isSorting = false
+
+        if (this.viewPath === 'unReviewed' ) {
+            return this.getData('firstReview/unReviewed', this.sortedBy)
+        }
+
+        else {
+
+            const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1;
+
+            this.filteredCollection = this.collection.filter(data => {
+                if (data) {
+                    const query = this.$scope.query.filter.toLowerCase()
+
+
+                    if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
+                        return (
+                            isFilterMatch(data.name + ' ' + data.surname, query) ||
+                            isFilterMatch(data.name, query) ||
+                            isFilterMatch(data.surname, query) ||
+                            isFilterMatch(data.username, query)
+                        )
+
+                    const text = data.learningObject
+                        ? (this.isMaterial(data.learningObject)
+                            ? this.getCorrectLanguageTitle(data.learningObject)
+                            : data.learningObject.title)
+                        : data.material
+                            ? this.getCorrectLanguageTitle(data.material)
+                            : this.isMaterial(data)
+                                ? this.getCorrectLanguageTitle(data)
+                                : data.title
+
+                    if (text)
+                        return isFilterMatch(text, query)
+                }
+            })
+
+            this.$scope.itemsCount = this.filteredCollection.length
+            this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+        }
+    }
+
     paginate(page, limit) {
         const start = (page - 1) * limit
         const end = start + limit
 
-        return this.filteredCollection !== null
-            ? this.filteredCollection.slice(start, end)
-            : this.collection.slice(start, end)
+        if (this.viewPath === 'unReviewed' && !this.$scope.isFiltering){
+            // this.collection =  this.getData('firstReview/unReviewed', this.sortedBy)
+            return this.getData('firstReview/unReviewed', this.sortedBy);
+
+        }
+        else {
+            return this.filteredCollection !== null
+                ? this.filteredCollection.slice(start, end)
+                : this.collection.slice(start, end)
+        }
     }
+
     getImproperReportLabelKey(item) {
         if (!Array.isArray(item.__reports))
             return ''

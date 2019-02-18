@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
@@ -7,14 +8,20 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
+import ee.hm.dop.model.taxon.FirstReviewTaxon;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @JsonTypeInfo(
@@ -62,6 +69,31 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime updated;
+
+
+    @ManyToMany(fetch = EAGER)
+    @Fetch(FetchMode.SELECT)
+    @JoinTable(
+            name = "LearningObject_Taxon",
+            joinColumns = {@JoinColumn(name = "learningObject")},
+            inverseJoinColumns = {@JoinColumn(name = "taxon")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"learningObject", "taxon"}))
+    @JsonIgnore
+    private List<Taxon> taxons;
+
+    @Transient
+    private List<FirstReviewTaxon> firstReviewTaxons = new ArrayList<>();
+
+    public List<String> getTaxonDomainAndSubject() {
+        return taxonDomainAndSubject;
+    }
+
+    public void setTaxonDomainAndSubject(List<String> taxonDomainAndSubject) {
+        this.taxonDomainAndSubject = taxonDomainAndSubject;
+    }
+
+    @Transient
+    private List<String>taxonDomainAndSubject;
 
     public Long getId() {
         return id;
@@ -133,5 +165,21 @@ public abstract class AdminLearningObject implements Searchable, ILearningObject
 
     public void setUpdated(DateTime updated) {
         this.updated = updated;
+    }
+
+    public List<Taxon> getTaxons() {
+        return taxons;
+    }
+
+    public void setTaxons(List<Taxon> taxons) {
+        this.taxons = taxons;
+    }
+
+    public List<FirstReviewTaxon> getFirstReviewTaxons() {
+        return firstReviewTaxons;
+    }
+
+    public void setFirstReviewTaxons(List<FirstReviewTaxon> firstReviewTaxons) {
+        this.firstReviewTaxons = firstReviewTaxons;
     }
 }
