@@ -139,7 +139,7 @@ class controller extends Controller {
         this.$scope.filter.taxons = {}
         this.$scope.params.taxons = {}
 
-
+    }
     getPostParams() {
         const params = Object.assign({}, this.$scope.params)
 
