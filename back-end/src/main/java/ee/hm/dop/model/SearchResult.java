@@ -49,8 +49,8 @@ public class SearchResult {
         this.groups = groups;
     }
 
-    public List<? extends Searchable> getItems() {
-        return items;
+    public List<Searchable> getItems() {
+        return (List<Searchable>) items;
     }
 
     public void setItems(List<? extends Searchable> items) {
