@@ -7,13 +7,15 @@
   box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 13px 19px 2px rgba(0, 0, 0, 0.14), 0px 5px 24px 4px rgba(0, 0, 0, 0.12);
   overflow: auto;
 
-  @media screen and (max-height: $layout-height-sm) and (max-width: $layout-breakpoint-sm){
+  @media screen and (max-height: $layout-height-sm) {
     height: 100vh;
     width: 320px;
     overflow: scroll;
   }
   @media screen and (max-width: $layout-breakpoint-xs) {
+    height: 100vh;
     width: 100vw;
+    overflow: scroll;
   }
 }
 
