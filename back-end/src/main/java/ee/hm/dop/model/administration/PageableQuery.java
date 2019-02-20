@@ -47,6 +47,38 @@ public class PageableQuery {
         }
     }
 
+    public boolean byAnySubject() {
+        return bySubject() || byNSubject();
+    }
+
+    public boolean bySubject() {
+        return this.getItemSortedBy().equals("bySubject");
+    }
+
+    public boolean byNSubject() {
+        return this.getItemSortedBy().equals("-bySubject");
+    }
+
+    public String order() {
+        PageableQuery pageableQuery = this;
+        String sortedBy = pageableQuery.getItemSortedBy();
+        if (sortedBy.equals("byCreatedAt")) {
+            return "ORDER BY min(r.createdAt)" + pageableQuery.getSort().name();
+        } else if (sortedBy.equals("-byCreatedAt")) {
+            return "ORDER BY max(r.createdAt)" + pageableQuery.getSort().name();
+        } else if (sortedBy.equals("byCreatedBy")) {
+            return "ORDER BY min(u.surName)" + pageableQuery.getSort().name();
+        } else if (sortedBy.equals("-byCreatedBy")) {
+            return "ORDER BY max(u.surName)" + pageableQuery.getSort().name();
+        } else if (sortedBy.equals("bySubject")) {
+            return "ORDER BY min(tr.translation) " + pageableQuery.getSort().name();
+        } else if (sortedBy.equals("-bySubject")) {
+            return "ORDER BY max(tr.translation) " + pageableQuery.getSort().name();
+        } else {
+            throw new UnsupportedOperationException("unknown sort");
+        }
+    }
+
     public Sort getSort() {
         return sort;
     }

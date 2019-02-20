@@ -28,6 +28,7 @@ public class EhisSOAPConnection implements SOAPConnectionMockI {
 
     private SOAPMessage getSoapMessageFromFile(String fileName) {
         try (InputStream soapMessageIS = EhisSOAPConnection.class.getResourceAsStream(fileName)) {
+            if (soapMessageIS == null) return null;
             return MessageFactory.newInstance().createMessage(new MimeHeaders(), soapMessageIS);
         } catch (Exception e) {
             return null;

@@ -4,6 +4,7 @@ import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.service.files.enums.FileDirectory;
 import org.apache.commons.configuration2.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -25,16 +26,19 @@ import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 @RequestMapping("uploadedFile")
 public class UploadedFileResource extends BaseResource {
 
-    public static final String REST_UPLOADED_FILE = "/rest" + "/uploadedFile/"; //todo was constant
+    public static final String REST_UPLOADED_FILE = "/uploadedFile/";
     @Inject
     private Configuration configuration;
     @Inject
     private UploadedFileService uploadedFileService;
+    @Inject
+    private Environment environment;
 
     @PostMapping
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public ResponseEntity<?> uploadFile(@RequestParam("file") MultipartFile review) throws UnsupportedEncodingException {
-        return uploadedFileService.uploadFile(review, FileDirectory.UPDATE, REST_UPLOADED_FILE);
+        String property = environment.getProperty("server.servlet.contextPath");
+        return uploadedFileService.uploadFile(review, FileDirectory.UPDATE, property + REST_UPLOADED_FILE);
     }
 
     @GetMapping(value = "{id}/{filename:.*}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

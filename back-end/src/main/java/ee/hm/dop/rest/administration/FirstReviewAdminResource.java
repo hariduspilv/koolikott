@@ -1,6 +1,5 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.SearchResult;
@@ -14,7 +13,11 @@ import ee.hm.dop.service.reviewmanagement.ReviewManager;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -35,9 +38,8 @@ public class FirstReviewAdminResource extends BaseResource {
                                       @QueryParam("query") String query,
                                       @QueryParam("taxon") List<String> taxons,
                                       @QueryParam("isUserTaxon") boolean isUserTaxon,
-                                      @QueryParam("lang") int lang)
-    {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, isUserTaxon,lang);
+                                      @QueryParam("lang") int lang) {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, isUserTaxon, lang);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }
@@ -50,10 +52,9 @@ public class FirstReviewAdminResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Long getUnReviewedCount(@QueryParam("taxon") List<String> taxons,
                                    @QueryParam("isUserTaxon") boolean isUserTaxon) {
-
-        PageableQuery pageableQuery = new PageableQuery(taxons,isUserTaxon);
-
-        return firstReviewAdminService.getUnReviewedCount(getLoggedInUser(),pageableQuery);
+        //todo why is this here?
+        PageableQuery pageableQuery = new PageableQuery(taxons, isUserTaxon);
+        return firstReviewAdminService.getUnReviewedCount(getLoggedInUser(), pageableQuery);
     }
 
     @POST

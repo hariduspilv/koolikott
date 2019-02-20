@@ -1,8 +1,9 @@
 package ee.hm.dop.service.reviewmanagement;
 
-import ee.hm.dop.dao.FirstReviewDao;
+import ee.hm.dop.dao.firstreview.FirstReviewDao;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.TaxonPositionDao;
+import ee.hm.dop.dao.firstreview.FirstReviewOldDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -16,6 +17,7 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,50 +28,48 @@ public class FirstReviewAdminService {
     @Inject
     private FirstReviewDao firstReviewDao;
     @Inject
-    private TaxonDao taxonDao;
+    private FirstReviewOldDao firstReviewOldDao;
     @Inject
     private TaxonPositionDao taxonPositionDao;
 
+    @Deprecated
     public List<AdminLearningObject> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findAllUnreviewed();
+            return firstReviewOldDao.findAllUnreviewed();
         } else {
-            return firstReviewDao.findAllUnreviewed(user);
+            return firstReviewOldDao.findAllUnreviewed(user);
         }
     }
 
     public SearchResult getUnReviewed(User user, PageableQuery pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
-
-            List<AdminLearningObject> allUnreviewed = firstReviewDao.findAllUnreviewed(pageableQuery);
-
-            return getSearchResult(allUnreviewed);
+            return getSearchResult(firstReviewDao.findAllUnreviewed(pageableQuery));
         } else {
-
-            List<AdminLearningObject> allUnreviewedForUser = firstReviewDao.findAllUnreviewed(user, pageableQuery);
-
-            return getSearchResult(allUnreviewedForUser);
+            return getSearchResult(firstReviewDao.findAllUnreviewed(user, pageableQuery));
         }
     }
 
     private SearchResult getSearchResult(List<AdminLearningObject> allUnreviewed) {
         for (AdminLearningObject learningObject : allUnreviewed) {
-            for (Taxon taxon : learningObject.getTaxons()) {
-                TaxonPosition dao = taxonPositionDao.findByTaxon(taxon);
-                FirstReviewTaxon firstReviewTaxon = new FirstReviewTaxon(toDto(dao.getEducationalContext()), toDto(dao.getDomain()), toDto(dao.getSubject()));
-                learningObject.getFirstReviewTaxons().add(firstReviewTaxon);
-            }
-            List<FirstReviewTaxon> collect = learningObject.getFirstReviewTaxons().stream().distinct().collect(Collectors.toList());
-            learningObject.setFirstReviewTaxons(collect);
+            List<FirstReviewTaxon> firstReviewTaxons = learningObject.getTaxons().stream()
+                    .map(this::convert)
+                    .distinct()
+                    .collect(Collectors.toList());
+            learningObject.setFirstReviewTaxons(firstReviewTaxons);
         }
 
         SearchResult searchResult = new SearchResult();
         searchResult.setItems(allUnreviewed);
+        //todo totalresults is wrong
         searchResult.setTotalResults(allUnreviewed.size());
-
         return searchResult;
+    }
+
+    private FirstReviewTaxon convert(Taxon taxon) {
+        TaxonPosition tp = taxonPositionDao.findByTaxon(taxon);
+        return new FirstReviewTaxon(toDto(tp.getEducationalContext()), toDto(tp.getDomain()), toDto(tp.getSubject()));
     }
 
     private TaxonDTO toDto(Taxon taxon) {
@@ -82,7 +82,7 @@ public class FirstReviewAdminService {
         if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findCountOfUnreviewed(query);
         } else {
-            return firstReviewDao.findCountOfUnreviewed(user);
+            return firstReviewDao.findCountOfUnreviewed(Arrays.asList(user.getId().toString()));
         }
     }
 
@@ -92,7 +92,6 @@ public class FirstReviewAdminService {
         firstReview.setLearningObject(learningObject);
         firstReview.setReviewed(false);
         firstReview.setCreatedAt(now());
-
         return firstReviewDao.createOrUpdate(firstReview);
     }
 

@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.service.files.enums.FileDirectory;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -22,14 +23,17 @@ import java.io.UnsupportedEncodingException;
 @RequestMapping("review")
 public class ReviewFileResource extends BaseResource {
 
-    public static final String REST_REVIEW = "/rest" + "/review/"; //todo was constant
+    public static final String REST_REVIEW = "/review/";
     @Inject
     private UploadedFileService uploadedFileService;
+    @Inject
+    private Environment environment;
 
     @PostMapping
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public ResponseEntity<?> uploadReview(@RequestParam("review") MultipartFile review) throws UnsupportedEncodingException {
-        return uploadedFileService.uploadFile(review, FileDirectory.REVIEW, REST_REVIEW);
+        String property = environment.getProperty("server.servlet.contextPath");
+        return uploadedFileService.uploadFile(review, FileDirectory.REVIEW, property + REST_REVIEW);
     }
 
     @GetMapping(produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)

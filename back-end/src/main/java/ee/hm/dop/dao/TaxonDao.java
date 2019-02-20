@@ -157,4 +157,26 @@ public class TaxonDao extends AbstractDao<Taxon> {
 
         return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
     }
+
+    /**
+     * when user is assigned high level taxon
+     * then they can access all of its children
+     */
+    public List<Long> getUserTaxonWithChildren(List<Long> users) {
+        List<BigInteger> resultList = (List<BigInteger>) getEntityManager()
+                .createNativeQuery("SELECT TP1.taxon \n" +
+                        " FROM User_Taxon ut,TaxonPosition TP1\n" +
+                        " WHERE ut.user = :users \n" +
+                        " AND (ut.taxon = TP1.educationalContext\n" +
+                        "OR ut.taxon = TP1.domain\n" +
+                        "OR ut.taxon = TP1.subject\n" +
+                        "OR ut.taxon = TP1.module\n" +
+                        "OR ut.taxon = TP1.specialization\n" +
+                        "OR ut.taxon = TP1.topic\n" +
+                        "OR ut.taxon = TP1.subtopic)\n" +
+                        "GROUP BY taxon")
+                .setParameter("users", users)
+                .getResultList();
+        return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+    }
 }
