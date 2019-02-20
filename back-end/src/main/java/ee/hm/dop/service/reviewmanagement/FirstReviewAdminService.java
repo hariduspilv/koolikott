@@ -45,31 +45,31 @@ public class FirstReviewAdminService {
 
             List<AdminLearningObject> allUnreviewed = firstReviewDao.findAllUnreviewed(pageableQuery);
 
-            for (AdminLearningObject learningObject : allUnreviewed) {
-                for (Taxon taxon : learningObject.getTaxons()) {
-                    TaxonPosition dao = taxonPositionDao.findByTaxon(taxon);
-                    FirstReviewTaxon firstReviewTaxon = new FirstReviewTaxon(toDto(dao.getEducationalContext()), toDto(dao.getDomain()), toDto(dao.getSubject()));
-                    learningObject.getFirstReviewTaxons().add(firstReviewTaxon);
-                }
-                List<FirstReviewTaxon> collect = learningObject.getFirstReviewTaxons().stream().distinct().collect(Collectors.toList());
-                learningObject.setFirstReviewTaxons(collect);
+            return getSearchResult(allUnreviewed);
+        } else {
 
+            List<AdminLearningObject> allUnreviewedForUser = firstReviewDao.findAllUnreviewed(user, pageableQuery);
+
+            return getSearchResult(allUnreviewedForUser);
+        }
+    }
+
+    private SearchResult getSearchResult(List<AdminLearningObject> allUnreviewed) {
+        for (AdminLearningObject learningObject : allUnreviewed) {
+            for (Taxon taxon : learningObject.getTaxons()) {
+                TaxonPosition dao = taxonPositionDao.findByTaxon(taxon);
+                FirstReviewTaxon firstReviewTaxon = new FirstReviewTaxon(toDto(dao.getEducationalContext()), toDto(dao.getDomain()), toDto(dao.getSubject()));
+                learningObject.getFirstReviewTaxons().add(firstReviewTaxon);
             }
-
-            SearchResult searchResult = new SearchResult();
-            searchResult.setItems(allUnreviewed);
-            searchResult.setTotalResults(allUnreviewed.size());
-
-            return searchResult;
+            List<FirstReviewTaxon> collect = learningObject.getFirstReviewTaxons().stream().distinct().collect(Collectors.toList());
+            learningObject.setFirstReviewTaxons(collect);
         }
 
-        else {
+        SearchResult searchResult = new SearchResult();
+        searchResult.setItems(allUnreviewed);
+        searchResult.setTotalResults(allUnreviewed.size());
 
-            SearchResult result = new SearchResult();
-            result.setItems(firstReviewDao.findAllUnreviewed(user, pageableQuery));
-            result.setTotalResults((firstReviewDao.findAllUnreviewed(user, pageableQuery)).size());
-            return result;
-        }
+        return searchResult;
     }
 
     private TaxonDTO toDto(Taxon taxon) {
@@ -82,7 +82,7 @@ public class FirstReviewAdminService {
         if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findCountOfUnreviewed(query);
         } else {
-            return firstReviewDao.findCountOfUnreviewed(user,query);
+            return firstReviewDao.findCountOfUnreviewed(user);
         }
     }
 
