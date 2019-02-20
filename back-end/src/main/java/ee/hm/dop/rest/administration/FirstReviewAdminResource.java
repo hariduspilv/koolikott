@@ -26,14 +26,6 @@ public class FirstReviewAdminResource extends BaseResource {
     @Inject
     private ReviewManager reviewManager;
 
-//    @GET
-//    @Path("unReviewed")
-//    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public List<AdminLearningObject> getUnReviewed() {
-//        return firstReviewAdminService.getUnReviewed(getLoggedInUser());
-//    }
-
     @GET
     @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
@@ -43,7 +35,7 @@ public class FirstReviewAdminResource extends BaseResource {
                                       @QueryParam("query") String query,
                                       @QueryParam("taxon") List<String> taxons,
                                       @QueryParam("isUserTaxon") boolean isUserTaxon) {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons,isUserTaxon);
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, isUserTaxon);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }

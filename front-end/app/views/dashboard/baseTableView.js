@@ -39,6 +39,7 @@ class controller extends Controller {
 
         this.collection = null
         this.filteredCollection = null
+        this.$scope.moderators = null
 
         this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
         const [ titleTranslationKey, ...rest ] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
@@ -52,13 +53,14 @@ class controller extends Controller {
         this.$scope.isSubmitButtonEnabled = false
         this.$scope.selectedUser = null
         this.$scope.selectedTaxons = ''
+        this.$scope.isExpertsSelectVisible = true
 
         this.$scope.filter = { options: { debounce: 500 } };
 
         this.$scope.query = {
             filter: "",
             order: this.sortedBy,
-            limit: 20,
+            limit: 200,
             page: 1
         }
 
@@ -138,7 +140,7 @@ class controller extends Controller {
         this.$scope.queryTaxons.filter = ''
         this.$scope.filter.taxons = {}
         this.$scope.params.taxons = {}
-
+    }
 
     getPostParams() {
         const params = Object.assign({}, this.$scope.params)
@@ -166,7 +168,7 @@ class controller extends Controller {
          return !((this.$scope.filter && this.$scope.filter.taxons) || (this.$scope.isUserSelected));
     }
 
-    getMaximumUnreviewed(){
+    getMaximumUnreviewed() {
         this.serverCallService
             .makeGet('rest/admin/firstReview/unReviewed/count')
             .then(result => {
@@ -174,7 +176,7 @@ class controller extends Controller {
             })
     }
 
-    getSelectedUserTaxonsCount(){
+    getSelectedUserTaxonsCount() {
 
         this.$scope.isUserSelected = true
 
@@ -282,6 +284,7 @@ class controller extends Controller {
     }
 
     getModerators() {
+
         this.serverCallService
             .makeGet('rest/admin/moderator')
             .then(res => this.$scope.moderators = res.data)
@@ -420,7 +423,7 @@ class controller extends Controller {
 
     filterItems() {
 
-        this.isFiltering = true
+        this.$scope.isFiltering = true
         this.isSorting = false
 
         if (this.viewPath === 'unReviewed' ) {
@@ -471,7 +474,6 @@ class controller extends Controller {
         if (this.viewPath === 'unReviewed' && !this.$scope.isFiltering){
             // this.collection =  this.getData('firstReview/unReviewed', this.sortedBy)
             return this.getData('firstReview/unReviewed', this.sortedBy);
-
         }
         else {
             return this.filteredCollection !== null
