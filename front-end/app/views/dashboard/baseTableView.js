@@ -58,7 +58,7 @@ class controller extends Controller {
         this.$scope.query = {
             filter: "",
             order: this.sortedBy,
-            limit: 20,
+            limit: 200,
             page: 1
         }
 
@@ -276,7 +276,7 @@ class controller extends Controller {
                         this.$scope.data = data.slice(0, this.$scope.query.limit)
                     }
 
-                    this.sortService.orderItems(data, this.$scope.query.order)
+                    // this.sortService.orderItems(data, this.$scope.query.order)
                 }
         })
     }
