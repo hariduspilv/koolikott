@@ -34,13 +34,14 @@ public class FirstReviewAdminResource extends BaseResource {
                                       @QueryParam("itemSortedBy") String itemSortedBy,
                                       @QueryParam("query") String query,
                                       @QueryParam("taxon") List<String> taxons,
-                                      @QueryParam("isUserTaxon") boolean isUserTaxon) {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, isUserTaxon);
+                                      @QueryParam("isUserTaxon") boolean isUserTaxon,
+                                      @QueryParam("lang") int lang)
+    {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, isUserTaxon,lang);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }
         return firstReviewAdminService.getUnReviewed(getLoggedInUser(), pageableQuery);
-
     }
 
     @GET

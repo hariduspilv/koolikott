@@ -216,6 +216,10 @@ class controller extends Controller {
         return this.$filter('translate')('USERNAME')
     }
 
+    getLanguage() {
+        return this.translationService.getLanguageCode() === 'et' ? 1 : this.translationService.getLanguageCode() === 'ru' ? 2 : 3
+    }
+
     getData(restUri, sortBy) {
 
         let query;
@@ -235,7 +239,8 @@ class controller extends Controller {
                     '&itemSortedBy=' + sortBy +
                     '&query=' + this.$scope.query.filter +
                     strings +
-                    '&isUserTaxon=' + this.$scope.isUserSelected)
+                    '&isUserTaxon=' + this.$scope.isUserSelected +
+                    '&lang=' + this.getLanguage());
         }
         else
             query = this.serverCallService
@@ -312,15 +317,10 @@ class controller extends Controller {
         if (this.viewPath === 'unReviewed'){
 
             if (order === 'bySubject' || order === '-bySubject'){
-
                 this.$scope.data = this.getData('firstReview/unReviewed',order);
-
             } else {
-
                 this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
-
             }
-
         }
         else{
             this.sortService.orderItems(

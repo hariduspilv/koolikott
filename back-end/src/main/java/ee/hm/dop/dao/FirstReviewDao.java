@@ -74,7 +74,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         String userTaxonQuery2 = params.isUserTaxon() ?
                 "left join TaxonPosition tp on lt.taxon = tp.taxon\n" +
                         " left JOIN Taxon t ON t.id = tp.domain\n" +
-                        " left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup = 1" : "";
+                        " left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup =" + params.getLang() : "";
 
         String userTaxonQuery3 = params.existsTaxons() && params.isUserTaxon() ? "  " +
                 "AND lt.taxon in (select TP1.taxon\n" +
@@ -95,11 +95,12 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         " JOIN TaxonPosition tp on tp.taxon = lt.taxon\n" +
                         " JOIN Taxon t ON t.id = tp.domain\n" +
                         " JOIN Translation tr ON t.translationKey = tr.translationKey" : "";
-        String sortByDomain2 = params.getItemSortedBy().equals("bySubject") || params.getItemSortedBy().equals("-bySubject") ? " AND tr.translationGroup = 1" : "";
+        String sortByDomain2 = params.getItemSortedBy().equals("bySubject") || params.getItemSortedBy().equals("-bySubject") ? " AND tr.translationGroup =" + params.getLang() : "";
 
         String sqlString = "SELECT lo.id\n" +
                 "FROM LearningObject lo\n" +
                 "  JOIN FirstReview r ON r.learningObject = lo.id\n" +
+                "  LEFT JOIN User u on lo.creator = u.id\n" +
                 taxonsQuery1 +
                 userTaxonQuery2 +
                 sortByDomain1 +
@@ -146,9 +147,9 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         } else if (sortedBy.equals("-byCreatedAt")) {
             return "ORDER BY max(r.createdAt)" + pageableQuery.getSort().name();
         } else if (sortedBy.equals("byCreatedBy")) {
-            return "ORDER BY min(lo.creator)" + pageableQuery.getSort().name();
+            return "ORDER BY min(u.surName)" + pageableQuery.getSort().name();
         } else if (sortedBy.equals("-byCreatedBy")) {
-            return "ORDER BY max(lo.creator)" + pageableQuery.getSort().name();
+            return "ORDER BY max(u.surName)" + pageableQuery.getSort().name();
         } else if (sortedBy.equals("bySubject")) {
             return "ORDER BY min(tr.translation) " + pageableQuery.getSort().name();
         } else if (sortedBy.equals("-bySubject")) {
@@ -204,7 +205,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         String userTaxonQuery2 = params.isUserTaxon() ?
                 "left join TaxonPosition tp on lt.taxon = tp.taxon\n" +
                         " left JOIN Taxon t ON t.id = tp.domain\n" +
-                        " left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup = 1" : "";
+                        " left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup =" + params.getLang() : "";
 
         String userTaxonQuery3 = params.existsTaxons() && params.isUserTaxon() ? "  " +
                 "AND lt.taxon in (select TP1.taxon\n" +
@@ -225,11 +226,12 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         " JOIN TaxonPosition tp on tp.taxon = lt.taxon\n" +
                         " JOIN Taxon t ON t.id = tp.domain\n" +
                         " JOIN Translation tr ON t.translationKey = tr.translationKey" : "";
-        String sortByDomain2 = params.getItemSortedBy().equals("bySubject") || params.getItemSortedBy().equals("-bySubject") ? " AND tr.translationGroup = 1" : "";
+        String sortByDomain2 = params.getItemSortedBy().equals("bySubject") || params.getItemSortedBy().equals("-bySubject") ? " AND tr.translationGroup =" + params.getLang() : "";
 
         String sqlString = "SELECT lo.id\n" +
                 "FROM LearningObject lo\n" +
                 "  JOIN FirstReview r ON r.learningObject = lo.id\n" +
+                "  LEFT JOIN User u on lo.creator = u.id\n" +
                 taxonsQuery1 +
                 userTaxonQuery2 +
                 sortByDomain1 +
@@ -275,7 +277,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         String fromListToString = String.join("", params.getTaxons());
 
         if (params.getTaxons().size() > 0 && params.isUserTaxon()) {
-
 
             String sqlString = "select count(a.id) as lo_count\n" +
                     "from (SELECT lo.id\n" +
