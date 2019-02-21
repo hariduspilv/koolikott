@@ -12,14 +12,14 @@
         <md-input-container>
           <label></label>
           <md-icon data-md-colors="{ color: 'grey-400' }">search</md-icon>
-          <input
+          <input id="search-input"
             type="text"
             data-ng-model="query.filter"
             data-ng-model-options="filter.options"
             placeholder="{{'SEARCH' | translate}}"
             class="search-learning-objects"
           >
-          <md-button
+          <md-button id="clear-filter"
             class="md-icon-button md-ink-ripple"
             data-ng-click="$ctrl.clearFilter()"
             data-ng-if="query.filter"

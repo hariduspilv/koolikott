@@ -96,6 +96,7 @@ class controller extends Controller {
     }
 
     getFilterResults(){
+        this.$scope.query.filter = ''
         this.$scope.isFiltering = true
         this.getData('firstReview/unReviewed', this.sortedBy)
 
@@ -111,6 +112,7 @@ class controller extends Controller {
         this.$scope.isSubmitButtonEnabled = false
         this.$scope.filter = {}
         this.$scope.clearFields = true
+        this.$scope.query.filter = ''
     }
 
     clearFilter() {
@@ -370,7 +372,7 @@ class controller extends Controller {
 
     filterItems() {
 
-        this.isFiltering = true
+        this.$scope.isFiltering = true
         this.isSorting = false
 
         if (this.viewPath === 'unReviewed' ) {

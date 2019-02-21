@@ -3,7 +3,7 @@
                       data-flex data-layout="column"
                       data-ng-show="isExpertsSelectVisible"
   >
-    <md-select
+    <md-select id="expert-select"
       data-placeholder="{{'EXPERT' | translate}}"
       data-ng-model="filter.user"
       data-ng-model-options="{trackBy: '$value.id'}"
@@ -26,9 +26,7 @@
     data-clear-selection="clearFields"
   ></dop-taxon-selector>
 </div>
-
-
-<md-button
+<md-button id="clear-button"
   class="statistics-filter__clear"
   data-translate="CLEAR_FORM"
   data-ng-click="$ctrl.clearFields()"
@@ -55,9 +53,9 @@
   <tr md-row>
     <th><span data-translate="TYPE"></span></th>
     <th><span data-translate="TITLE"></span></th>
-    <th md-column md-order-by="bySubject"><span data-translate="NEW_TO_ADD"></span></th>
-    <th md-column md-order-by="byCreatedAt"><span data-translate="ADDED_AT"></span></th>
-    <th md-column md-order-by="byCreatedBy"><span data-translate="ADDED_BY"></span></th>
+    <th id="by-subject-column-sort" md-column md-order-by="bySubject"><span data-translate="NEW_TO_ADD"></span></th>
+    <th id="by-createdAt-column-sort" md-column md-order-by="byCreatedAt"><span data-translate="ADDED_AT"></span></th>
+    <th id="by-createdBy-column-sort" md-column md-order-by="byCreatedBy"><span data-translate="ADDED_BY"></span></th>
   </tr>
   </thead>
   <tbody md-body>
