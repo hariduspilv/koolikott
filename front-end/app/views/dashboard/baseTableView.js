@@ -58,7 +58,7 @@ class controller extends Controller {
         this.$scope.query = {
             filter: "",
             order: this.sortedBy,
-            limit: 200,
+            limit: 20,
             page: 1
         }
 
@@ -102,15 +102,13 @@ class controller extends Controller {
     onFilterChange(filter) {
         const params = Object.assign({}, filter)
 
-        if (params.user) {
-            this.$scope.isUserSelected = true
-            params.users = [params.user]
-            delete params.user
+        if (params.taxons) {
+            this.$scope.filter.taxons = params.taxons;
         }
 
-        this.$scope.params = params
-        if (this.$scope.isUserSelected)
-            this.$scope.filter.taxons = params.users
+        if (params.user) {
+            this.$scope.filter.user = params.user;
+        }
     }
 
     getFilterResults(){
@@ -225,20 +223,14 @@ class controller extends Controller {
         let query;
 
         if (restUri === 'firstReview/unReviewed') {
-            let strings;
-            if (this.$scope.filter && this.$scope.filter.taxons){
-                strings = this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
-            }
-            else {
-                strings = ""
-            }
             query = this.serverCallService
                 .makeGet(
                     'rest/admin/' + restUri + '/' +
                     '?page=' + this.$scope.query.page +
                     '&itemSortedBy=' + sortBy +
                     '&query=' + this.$scope.query.filter +
-                    strings +
+                    this.selectTaxons() +
+                    this.selectUsers() +
                     '&isUserTaxon=' + this.$scope.isUserSelected +
                     '&lang=' + this.getLanguage());
         }
@@ -264,26 +256,33 @@ class controller extends Controller {
                             o.__reportLabelKey = this.getImproperReportLabelKey(o)
                         })
 
+                    console.log(data);
                     this.collection = data.items
 
                     if (this.viewPath === 'unReviewed') {
-
-                        if (this.$scope.isFiltering && !this.$scope.isUserSelected) {
-                            this.$scope.data = data.items;
-                            this.$scope.itemsCount = data.items.length;
-                        }
-                        else {
-                            this.$scope.data = data.items;
-                            this.$scope.itemsCount = this.$scope.totalCountOfUnreviewed;
-                        }
+                        this.$scope.data = data.items;
+                        this.$scope.itemsCount = data.totalResults;
                     } else {
                         this.$scope.itemsCount = data.length;
                         this.$scope.data = data.slice(0, this.$scope.query.limit)
                     }
-
                     // this.sortService.orderItems(data, this.$scope.query.order)
                 }
         })
+    }
+
+    selectUsers() {
+        if (this.$scope.filter && this.$scope.filter.user) {
+            return "&user=" + this.$scope.filter.user.id;
+        }
+        return ""
+    }
+
+    selectTaxons() {
+        if (this.$scope.filter && this.$scope.filter.taxons) {
+            return this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
+        }
+        return ""
     }
 
     getModerators() {

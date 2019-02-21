@@ -7,8 +7,14 @@ import java.util.List;
 
 public class PageableQuery {
 
-    private static List<String> SORT_TYPES = Arrays.asList("bySubject", "byCreatedAt", "byCreatedBy", "byTitle",
-            "-bySubject", "-byCreatedAt", "-byCreatedBy", "-byTitle");
+    public static final String FR_CREATED_AT = "byCreatedAt";
+    public static final String FR_CREATED_AT_DESC = "-byCreatedAt";
+    public static final String LO_CREATED_BY = "byCreatedBy";
+    public static final String LO_CREATED_BY_DESC = "-byCreatedBy";
+    public static final String BY_SUBJECT_TRANS = "bySubject";
+    public static final String BY_SUBJECT_TRANS_DESC = "-bySubject";
+    private static List<String> SORT_TYPES = Arrays.asList(BY_SUBJECT_TRANS, FR_CREATED_AT, LO_CREATED_BY, "byTitle",
+            BY_SUBJECT_TRANS_DESC, FR_CREATED_AT_DESC, LO_CREATED_BY_DESC, "-byTitle");
 
     private Sort sort;
     private int page;
@@ -16,64 +22,94 @@ public class PageableQuery {
     private String itemSortedBy;
     private boolean valid;
     private String query;
-    private List<String> taxons;
+    private List<Long> taxons;
+    private List<Long> users;
+    @Deprecated
     private boolean isUserTaxon;
     private int lang;
 
     public PageableQuery() {
     }
 
-    public PageableQuery(List<String> taxons, boolean isUserTaxon) {
-        this.taxons = taxons;
-        this.isUserTaxon = isUserTaxon;
-    }
-
-    public PageableQuery(String query, List<String> taxons) {
-        this.query = query;
-        this.taxons = taxons;
-    }
-
-    public PageableQuery(int page, String itemSortedBy, String query, List<String> taxons,boolean isUserTaxon, int lang) {
+    public PageableQuery(int page, String itemSortedBy, String query,
+                         List<Long> taxons,
+                         List<Long> users,
+                         boolean isUserTaxon, int lang) {
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
             this.itemSortedBy = itemSortedBy;
             this.page = page;
-            this.size = 200;
+            this.size = 20;
             this.query = query;
             this.taxons = taxons;
+            this.users = users;
             this.isUserTaxon = isUserTaxon;
             this.lang = lang;
         }
     }
 
-    public boolean byAnySubject() {
-        return bySubject() || byNSubject();
+    public boolean hasSubjectOrder() {
+        return orderBySubject() || orderBySubjectDesc();
     }
 
-    public boolean bySubject() {
-        return this.getItemSortedBy().equals("bySubject");
+    public boolean orderBySubject() {
+        return itemSortedBy.equals(BY_SUBJECT_TRANS);
     }
 
-    public boolean byNSubject() {
-        return this.getItemSortedBy().equals("-bySubject");
+    public boolean orderBySubjectDesc() {
+        return itemSortedBy.equals(BY_SUBJECT_TRANS_DESC);
+    }
+
+    public boolean hasCreatorOrder() {
+        return orderByCreatorDesc() || orderByCreator();
+    }
+
+    private boolean orderByCreatorDesc() {
+        return itemSortedBy.equals(LO_CREATED_BY_DESC);
+    }
+
+    private boolean orderByCreator() {
+        return itemSortedBy.equals(LO_CREATED_BY);
+    }
+
+    public boolean hasCreatedAtOrder() {
+        return orderByFrCreatedAtDesc() || orderByFrCreatedAt();
+    }
+
+    private boolean orderByFrCreatedAtDesc() {
+        return itemSortedBy.equals(FR_CREATED_AT_DESC);
+    }
+
+    private boolean orderByFrCreatedAt() {
+        return itemSortedBy.equals(FR_CREATED_AT);
+    }
+
+    public boolean hasTaxonsOrUsers() {
+        return hasTaxons() || hasUsers();
+    }
+
+    public boolean hasTaxons() {
+        return taxons.size() > 0;
+    }
+
+    public boolean hasUsers() {
+        return users.size() > 0;
     }
 
     public String order() {
-        PageableQuery pageableQuery = this;
-        String sortedBy = pageableQuery.getItemSortedBy();
-        if (sortedBy.equals("byCreatedAt")) {
-            return "ORDER BY min(r.createdAt)" + pageableQuery.getSort().name();
-        } else if (sortedBy.equals("-byCreatedAt")) {
-            return "ORDER BY max(r.createdAt)" + pageableQuery.getSort().name();
-        } else if (sortedBy.equals("byCreatedBy")) {
-            return "ORDER BY min(u.surName)" + pageableQuery.getSort().name();
-        } else if (sortedBy.equals("-byCreatedBy")) {
-            return "ORDER BY max(u.surName)" + pageableQuery.getSort().name();
-        } else if (sortedBy.equals("bySubject")) {
-            return "ORDER BY min(tr.translation) " + pageableQuery.getSort().name();
-        } else if (sortedBy.equals("-bySubject")) {
-            return "ORDER BY max(tr.translation) " + pageableQuery.getSort().name();
+        if (orderByFrCreatedAt()) {
+            return "ORDER BY min(r.createdAt)" + sort.name();
+        } else if (orderByFrCreatedAtDesc()) {
+            return "ORDER BY max(r.createdAt)" + sort.name();
+        } else if (orderByCreator()) {
+            return "ORDER BY min(u.surName)" + sort.name();
+        } else if (orderByCreatorDesc()) {
+            return "ORDER BY max(u.surName)" + sort.name();
+        } else if (orderBySubject()) {
+            return "ORDER BY min(tr.translation) " + sort.name();
+        } else if (orderBySubjectDesc()) {
+            return "ORDER BY max(tr.translation) " + sort.name();
         } else {
             throw new UnsupportedOperationException("unknown sort");
         }
@@ -131,18 +167,8 @@ public class PageableQuery {
         this.query = query;
     }
 
-    public boolean existsQuery() {
-        return !StringUtils.isBlank(query);
-    }
-
-    public List<String> getTaxons() { return taxons; }
-
-    public void setTaxons(List<String> taxons) {
-        this.taxons = taxons;
-    }
-
-    public boolean existsTaxons() {
-        return taxons.size() > 0;
+    public boolean hasSearch() {
+        return !StringUtils.isBlank(query) && query.trim().length() >= 3;
     }
 
     public boolean isUserTaxon() {
@@ -153,7 +179,27 @@ public class PageableQuery {
         isUserTaxon = userTaxon;
     }
 
-    public int getLang() { return lang; }
+    public int getLang() {
+        return lang;
+    }
 
-    public void setLang(int lang) { this.lang = lang; }
+    public void setLang(int lang) {
+        this.lang = lang;
+    }
+
+    public List<Long> getTaxons() {
+        return taxons;
+    }
+
+    public void setTaxons(List<Long> taxons) {
+        this.taxons = taxons;
+    }
+
+    public List<Long> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Long> users) {
+        this.users = users;
+    }
 }

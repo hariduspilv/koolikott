@@ -1,10 +1,13 @@
 package ee.hm.dop.service.reviewmanagement;
 
-import ee.hm.dop.dao.firstreview.FirstReviewDao;
-import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.TaxonPositionDao;
+import ee.hm.dop.dao.firstreview.FirstReviewDao;
 import ee.hm.dop.dao.firstreview.FirstReviewOldDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.AdminLearningObject;
+import ee.hm.dop.model.FirstReview;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.FirstReviewTaxon;
@@ -15,8 +18,6 @@ import ee.hm.dop.utils.UserUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -44,14 +45,15 @@ public class FirstReviewAdminService {
 
     public SearchResult getUnReviewed(User user, PageableQuery pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
-            return getSearchResult(firstReviewDao.findAllUnreviewed(pageableQuery));
-        } else {
-            return getSearchResult(firstReviewDao.findAllUnreviewed(user, pageableQuery));
+        if (UserUtil.isModerator(user)) {
+            pageableQuery.setUsers(Arrays.asList(user.getId()));
         }
+        List<AdminLearningObject> unreviewed = firstReviewDao.findAllUnreviewed(pageableQuery);
+        Long unreviewedCount = firstReviewDao.findCoundOfAllUnreviewed(pageableQuery);
+        return getSearchResult(unreviewed, unreviewedCount);
     }
 
-    private SearchResult getSearchResult(List<AdminLearningObject> allUnreviewed) {
+    private SearchResult getSearchResult(List<AdminLearningObject> allUnreviewed, Long unreviewedCount) {
         for (AdminLearningObject learningObject : allUnreviewed) {
             List<FirstReviewTaxon> firstReviewTaxons = learningObject.getTaxons().stream()
                     .map(this::convert)
@@ -62,8 +64,7 @@ public class FirstReviewAdminService {
 
         SearchResult searchResult = new SearchResult();
         searchResult.setItems(allUnreviewed);
-        //todo totalresults is wrong
-        searchResult.setTotalResults(allUnreviewed.size());
+        searchResult.setTotalResults(unreviewedCount);
         return searchResult;
     }
 
@@ -77,12 +78,12 @@ public class FirstReviewAdminService {
         return new TaxonDTO(taxon.getId(), taxon.getName(), taxon.getTranslationKey());
     }
 
-    public long getUnReviewedCount(User user,PageableQuery query) {
+    public Long getUnReviewedCount(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findCountOfUnreviewed(query);
+            return firstReviewOldDao.findCountOfUnreviewed();
         } else {
-            return firstReviewDao.findCountOfUnreviewed(Arrays.asList(user.getId().toString()));
+            return firstReviewOldDao.findCountOfUnreviewed(user);
         }
     }
 
