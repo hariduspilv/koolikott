@@ -192,7 +192,6 @@ class controller extends Controller {
     }
 
     getData(restUri, sortBy) {
-
         let query;
 
         if (restUri === 'firstReview/unReviewed') {
@@ -206,6 +205,14 @@ class controller extends Controller {
                     this.selectUsers() +
                     '&isUserTaxon=' + this.$scope.isUserSelected +
                     '&lang=' + this.getLanguage());
+            console.log('GET URL:::   ' + 'rest/admin/' + restUri + '/' +
+                '?page=' + this.$scope.query.page +
+                '&itemSortedBy=' + sortBy +
+                '&query=' + this.$scope.query.filter +
+                this.selectTaxons() +
+                this.selectUsers() +
+                '&isUserTaxon=' + this.$scope.isUserSelected +
+                '&lang=' + this.getLanguage())
         }
         else
             query = this.serverCallService
@@ -375,7 +382,7 @@ class controller extends Controller {
         this.$scope.isFiltering = true
         this.isSorting = false
 
-        if (this.viewPath === 'unReviewed' ) {
+        if (this.viewPath === 'unReviewed') {
             return this.getData('firstReview/unReviewed', this.sortedBy)
         }
 
@@ -419,7 +426,7 @@ class controller extends Controller {
         const start = (page - 1) * limit
         const end = start + limit
 
-        if (this.viewPath === 'unReviewed' && this.$scope.isFiltering){
+        if (this.viewPath === 'unReviewed'){
             return this.getData('firstReview/unReviewed', this.sortedBy);
         }
         else {
