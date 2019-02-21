@@ -47,7 +47,6 @@ public class FirstReviewAdminResource extends BaseResource {
         return firstReviewAdminService.getUnReviewed(getLoggedInUser(), pageableQuery);
     }
 
-    //todo restore method
     @GET
     @Path("unReviewed/count")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
