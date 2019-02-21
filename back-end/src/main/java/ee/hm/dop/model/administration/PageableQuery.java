@@ -13,8 +13,11 @@ public class PageableQuery {
     public static final String LO_CREATED_BY_DESC = "-byCreatedBy";
     public static final String BY_SUBJECT_TRANS = "bySubject";
     public static final String BY_SUBJECT_TRANS_DESC = "-bySubject";
-    private static List<String> SORT_TYPES = Arrays.asList(BY_SUBJECT_TRANS, FR_CREATED_AT, LO_CREATED_BY, "byTitle",
-            BY_SUBJECT_TRANS_DESC, FR_CREATED_AT_DESC, LO_CREATED_BY_DESC, "-byTitle");
+    public static final String BY_TYPE = "byType";
+    public static final String BY_TYPE_DESC = "-byType";
+    private static List<String> SORT_TYPES = Arrays.asList(BY_SUBJECT_TRANS, FR_CREATED_AT,
+            LO_CREATED_BY, BY_TYPE,
+            BY_SUBJECT_TRANS_DESC, FR_CREATED_AT_DESC, LO_CREATED_BY_DESC, BY_TYPE_DESC);
 
     private Sort sort;
     private int page;
@@ -86,6 +89,18 @@ public class PageableQuery {
         return itemSortedBy.equals(FR_CREATED_AT);
     }
 
+    public boolean hasOrderByType() {
+        return orderByTypeDesc() || orderByType();
+    }
+
+    private boolean orderByTypeDesc() {
+        return itemSortedBy.equals(BY_TYPE_DESC);
+    }
+
+    private boolean orderByType() {
+        return itemSortedBy.equals(BY_TYPE);
+    }
+
     public boolean hasTaxonsOrUsers() {
         return hasTaxons() || hasUsers();
     }
@@ -111,6 +126,10 @@ public class PageableQuery {
             return "ORDER BY min(tr.translation) " + sort.name();
         } else if (orderBySubjectDesc()) {
             return "ORDER BY max(tr.translation) " + sort.name();
+        } else if (orderByType()) {
+            return "ORDER BY m.id " + sort.name();
+        } else if (orderByTypeDesc()) {
+            return "ORDER BY m.id " + sort.name();
         } else {
             throw new UnsupportedOperationException("unknown sort");
         }
