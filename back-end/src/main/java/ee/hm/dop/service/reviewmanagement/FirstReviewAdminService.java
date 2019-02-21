@@ -29,19 +29,7 @@ public class FirstReviewAdminService {
     @Inject
     private FirstReviewDao firstReviewDao;
     @Inject
-    private FirstReviewOldDao firstReviewOldDao;
-    @Inject
     private TaxonPositionDao taxonPositionDao;
-
-    @Deprecated
-    public List<AdminLearningObject> getUnReviewed(User user) {
-        UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
-            return firstReviewOldDao.findAllUnreviewed();
-        } else {
-            return firstReviewOldDao.findAllUnreviewed(user);
-        }
-    }
 
     public SearchResult getUnReviewed(User user, PageableQuery pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -81,9 +69,9 @@ public class FirstReviewAdminService {
     public Long getUnReviewedCount(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
-            return firstReviewOldDao.findCountOfUnreviewed();
+            return firstReviewDao.findCountOfUnreviewed();
         } else {
-            return firstReviewOldDao.findCountOfUnreviewed(user);
+            return firstReviewDao.findCountOfUnreviewed(user);
         }
     }
 

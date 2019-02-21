@@ -5,6 +5,7 @@ import ee.hm.dop.dao.AdminLearningObjectDao;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.persistence.Query;
 import java.math.BigInteger;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -95,29 +97,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         return adminLearningObjectDao.findById(toLongs(resultList));
     }
 
-    private List<Long> toLongs(List<BigInteger> resultList) {
-        return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
-    }
-
-    private Query addUserTaxons(PageableQuery params, Query query) {
-        return query.setParameter("usertaxons", taxonDao.getUserTaxonWithChildren(params.getUsers()));
-    }
-
-    private Query addTaxons(PageableQuery params, Query query) {
-        return query.setParameter("taxons", params.getTaxons());
-    }
-
-    private Query addLanguageGroup(PageableQuery params, Query query) {
-        return query.setParameter("transgroup", params.getLang());
-    }
-
-    private Query addTitle(PageableQuery params, Query query) {
-        if (params.hasSearch()) {
-            return query.setParameter("title", "%" + params.getQuery() + "%");
-        }
-        return query;
-    }
-
     public Long findCoundOfAllUnreviewed(PageableQuery params) {
         String sqlString2 = " select count(a.id) from (\n" +
                 SELECT_LO_ID_B +
@@ -140,5 +119,62 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         query2 = params.hasSubjectOrder() || params.hasSearch() ? addLanguageGroup(params, query2) : query2;
 
         return ((BigInteger) query2.getSingleResult()).longValue();
+    }
+
+    public long findCountOfUnreviewed() {
+        return ((BigInteger) getEntityManager()
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
+                        "FROM FirstReview f\n" +
+                        "   JOIN LearningObject lo ON f.learningObject = lo.id\n" +
+                        "WHERE f.reviewed = 0\n" +
+                        "   AND lo.deleted = 0\n" +
+                        "   AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "   AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM ImproperContent ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n"
+                )
+                .getSingleResult()).longValue();
+    }
+
+    public long findCountOfUnreviewed(User user) {
+        return ((BigInteger) getEntityManager()
+                .createNativeQuery("SELECT count(DISTINCT lo.id) AS c\n" +
+                        "FROM LearningObject lo\n" +
+                        "   JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n" +
+                        "   JOIN FirstReview r on r.learningObject = lo.id " +
+                        "WHERE (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
+                        "  AND r.reviewed = 0\n" +
+                        "  AND lo.deleted = 0\n" +
+                        "  AND lo.id NOT IN (SELECT ic.learningObject\n" +
+                        "                        FROM ImproperContent ic\n" +
+                        "                        WHERE ic.learningObject = lo.id\n" +
+                        "                              AND ic.reviewed = 0)\n" +
+                        "  AND lt.taxon IN (:taxonIds)")
+                .setParameter("taxonIds", taxonDao.getUserTaxonWithChildren(Arrays.asList(user.getId())))
+                .getSingleResult()).longValue();
+    }
+
+    private List<Long> toLongs(List<BigInteger> resultList) {
+        return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+    }
+
+    private Query addUserTaxons(PageableQuery params, Query query) {
+        return query.setParameter("usertaxons", taxonDao.getUserTaxonWithChildren(params.getUsers()));
+    }
+
+    private Query addTaxons(PageableQuery params, Query query) {
+        return query.setParameter("taxons", params.getTaxons());
+    }
+
+    private Query addLanguageGroup(PageableQuery params, Query query) {
+        return query.setParameter("transgroup", params.getLang());
+    }
+
+    private Query addTitle(PageableQuery params, Query query) {
+        if (params.hasSearch()) {
+            return query.setParameter("title", "%" + params.getQuery() + "%");
+        }
+        return query;
     }
 }
