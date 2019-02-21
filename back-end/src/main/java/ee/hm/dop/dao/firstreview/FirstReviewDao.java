@@ -102,9 +102,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     public Long findCoundOfAllUnreviewed(PageableQuery params) {
         String sqlString2 = " select count(a.id) from (\n" +
                 SELECT_LO_ID_B +
-                (params.hasCreatorOrder() ? JOIN_USER : "") +
                 (params.hasTaxonsOrUsers() || params.hasSubjectOrder() ? JOIN_LO_TAXON : "") +
-                (params.hasSubjectOrder() ? JOIN_DOMAIN_TRANSLATION : "") +
                 FIRST_REVIEW_WHERE +
                 (params.hasTaxons() ? LT_TAXON_IN : "") +
                 (params.hasUsers() ? LT_TAXON_USER_CONDITION : "") +
@@ -174,9 +172,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     }
 
     private Query addTitle(PageableQuery params, Query query) {
-        if (params.hasSearch()) {
-            return query.setParameter("title", "%" + params.getQuery() + "%");
-        }
-        return query;
+        return query.setParameter("title", "%" + params.getQuery() + "%");
     }
 }
