@@ -47,13 +47,19 @@ class controller extends Controller {
         this.getMaximumUnreviewed();
         this.sortedBy = 'byCreatedAt';
         this.$scope.isFiltering = false
-        this.$scope.isUserSelected = false
         this.$scope.isTaxonSelectVisible = true
+        this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
         this.$scope.selectedUser = null
-        this.$scope.selectedTaxons = ''
 
-        this.$scope.filter = { options: { debounce: 500 } };
+        this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
+        this.$scope.$watch('query.filter', (newValue, oldValue) => {
+            if (newValue !== oldValue && newValue.length >=3)
+                this.filterItems()
+        })
+        this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
+
+        this.$scope.filter = { };
 
         this.$scope.query = {
             filter: "",
@@ -62,41 +68,19 @@ class controller extends Controller {
             page: 1
         }
 
-        this.$scope.filterTaxons = { options: { debounce: 500 } };
-        this.$scope.queryTaxons = {
-            filter: "",
-            order: this.sortedBy,
-            limit: 20,
-            page: 1
-        }
-
         this.$scope.onPaginate = this.onPaginate.bind(this)
         this.$scope.onSort = this.onSort.bind(this)
+
         this.$scope.titleTranslationKey = titleTranslationKey
 
         rest.length
             ? this.getData(...rest)
             : console.error(new Error(`Could not find ${this.viewPath} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`))
-
-        // Get all users for the autocomplete
-        if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
+        if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers') {
             this.serverCallService
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data)
-
-        this.$scope.$watch('query.filter', (newValue, oldValue) => {
-            if (newValue !== oldValue)
-                this.filterItems()
-        })
-
-        this.$scope.$watch('queryTaxons.filter',(newVal, oldVal) => {
-            if (newVal !== oldVal)
-                this.filterByTaxons()
-        })
-
-        this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
-        this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
-
+        }
     }
 
     onFilterChange(filter) {
@@ -113,31 +97,34 @@ class controller extends Controller {
 
     getFilterResults(){
         this.$scope.isFiltering = true
-        if(this.$scope.isUserSelected)
-            this.getSelectedUserTaxonsCount();
-
         this.getData('firstReview/unReviewed', this.sortedBy)
 
     }
 
     onParamsChange({ users, taxons }) {
-        this.$scope.isSubmitButtonEnabled =  taxons
+        this.$scope.isSubmitButtonEnabled =  users || taxons;
         this.$scope.isTaxonSelectVisible = !users
     }
 
     clearFields() {
-        this.$scope.filter = {}
-        this.$scope.filterTaxons = {}
         this.$scope.educationalContext = undefined
-        this.$scope.data = {}
-        this.$scope.isUserSelected = false
         this.$scope.isSubmitButtonEnabled = false
-        this.$scope.filter.taxons = {}
-        this.$scope.queryTaxons.filter = ''
-        this.$scope.filter.taxons = {}
-        this.$scope.params.taxons = {}
-
+        this.$scope.filter = {}
+        this.$scope.clearFields = true
     }
+
+    clearFilter() {
+        this.$scope.query.filter = ''
+
+        this.$scope.itemsCount = this.collection.length
+        this.filteredCollection = null
+
+        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+
+        if (this.$scope.filter.form.$dirty)
+            this.$scope.filter.form.$setPristine()
+    }
+
     getPostParams() {
         const params = Object.assign({}, this.$scope.params)
 
@@ -151,17 +138,17 @@ class controller extends Controller {
 
     onSelectTaxons(taxons) {
         this.$scope.filter.taxons = taxons
+        this.$scope.clearFields = false
 
     }
 
     onEducationalContextChange(educationalContext) {
         this.$scope.isExpertsSelectVisible = !educationalContext
-        // this.$scope.sortBy = educationalContext ? 'byDomainOrSubject' : 'byEducationalContext'
         this.onParamsChange({});
     }
 
     isDisabled(){
-         return !((this.$scope.filter && this.$scope.filter.taxons) || (this.$scope.isUserSelected));
+         return !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user);
     }
 
     getMaximumUnreviewed(){
@@ -172,22 +159,6 @@ class controller extends Controller {
             })
     }
 
-    getSelectedUserTaxonsCount(){
-
-        this.$scope.isUserSelected = true
-
-        let strings = this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
-
-        this.serverCallService
-            .makeGet('rest/admin/firstReview/unReviewed/count' +
-                '?isUserTaxon=' + this.$scope.isUserSelected +
-                strings)
-
-            .then(result => {
-                this.$scope.totalCountOfUnreviewed = result.data;
-            })
-
-    }
     getTranslation(key) {
         return this.$filter('translate')(key)
     }
@@ -266,7 +237,6 @@ class controller extends Controller {
                         this.$scope.itemsCount = data.length;
                         this.$scope.data = data.slice(0, this.$scope.query.limit)
                     }
-                    // this.sortService.orderItems(data, this.$scope.query.order)
                 }
         })
     }
@@ -309,7 +279,6 @@ class controller extends Controller {
     }
 
     onSort(order) {
-        // this.isSorting = true
         this.sortedBy = order;
         this.$scope.query.page = 1;
 
@@ -353,17 +322,7 @@ class controller extends Controller {
         this.$scope.data = this.paginate(page, limit)
 
     }
-    clearFilter() {
-        this.$scope.query.filter = ''
 
-        this.$scope.itemsCount = this.collection.length
-        this.filteredCollection = null
-
-        this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
-
-        if (this.$scope.filter.form.$dirty)
-            this.$scope.filter.form.$setPristine()
-    }
     getNumCreatorsLabel(item, translationKey) {
         return this.sprintf(
             this.$translate.instant(translationKey),
@@ -409,14 +368,6 @@ class controller extends Controller {
             : this.unmergedData.filter(r => r.id == item.id)
     }
 
-    filterByTaxons(){
-
-        if (this.viewPath === 'unReviewed' ) {
-            this.$scope.query.filter = this.$scope.queryTaxons.filter;
-            return this.getData('firstReview/unReviewed', this.sortedBy)
-        }
-    }
-
     filterItems() {
 
         this.isFiltering = true
@@ -433,7 +384,6 @@ class controller extends Controller {
             this.filteredCollection = this.collection.filter(data => {
                 if (data) {
                     const query = this.$scope.query.filter.toLowerCase()
-
 
                     if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
                         return (
@@ -467,10 +417,8 @@ class controller extends Controller {
         const start = (page - 1) * limit
         const end = start + limit
 
-        if (this.viewPath === 'unReviewed' && !this.$scope.isFiltering){
-            // this.collection =  this.getData('firstReview/unReviewed', this.sortedBy)
+        if (this.viewPath === 'unReviewed' && this.$scope.isFiltering){
             return this.getData('firstReview/unReviewed', this.sortedBy);
-
         }
         else {
             return this.filteredCollection !== null

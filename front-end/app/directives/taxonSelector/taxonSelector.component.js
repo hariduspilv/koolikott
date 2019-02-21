@@ -25,6 +25,11 @@ class controller extends Controller {
             this.$scope.$watch(() => this.taxonPath && this.taxonPath.domainSubject, onMultiSelect, true)
         }
     }
+
+    $onChanges(changes) {
+        if (changes.clearSelection.currentValue)
+            this.taxon = {}
+    }
     $doCheck() {
         const taxonChanged =
             (this.taxon && !this._previousTaxon) ||
@@ -167,6 +172,7 @@ component('dopTaxonSelector', {
         markRequired: '=',
         isStatisticsSelect: '<',
         onStatisticsMultiselect: '&',
+        clearSelection: '<'
     },
     templateUrl: 'directives/taxonSelector/taxonSelector.html',
     controller
