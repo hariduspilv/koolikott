@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
 public class FirstReviewDao extends AbstractDao<FirstReview> {
 
     public static final String JOIN_USER = " LEFT JOIN User u ON lo.creator = u.id\n";
+    public static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
     private final Logger logger = LoggerFactory.getLogger(FirstReviewDao.class);
 
     public static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
@@ -72,6 +73,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     public List<AdminLearningObject> findAllUnreviewed(PageableQuery params) {
         String sqlString2 = "\n" +
                 SELECT_LO_ID_B +
+                (params.hasOrderByType() ? JOIN_MATERIAL : "") +
                 (params.hasCreatorOrder() ? JOIN_USER : "") +
                 (params.hasTaxonsOrUsers() || params.hasSubjectOrder() ? JOIN_LO_TAXON : "") +
                 (params.hasSubjectOrder() ? JOIN_DOMAIN_TRANSLATION : "") +
