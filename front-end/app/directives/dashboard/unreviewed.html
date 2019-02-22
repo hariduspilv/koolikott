@@ -33,7 +33,7 @@
   data-ng-show="filter.user || filter.taxons || educationalContext"
   aria-label="Tühjenda filtriväljad"
 ></md-button>
-<md-button
+<md-button id="filter-button"
   class="md-raised md-primary statistics-filter__submit"
   data-ng-class="{fetching: fetching}"
   data-ng-click="$ctrl.getFilterResults()"
@@ -53,7 +53,7 @@
   <tr md-row>
     <th md-column md-order-by="byType"><span data-translate="TYPE"></span></th>
     <th><span data-translate="TITLE"></span></th>
-    <th id="by-subject-column-sort" md-column md-order-by="bySubject"><span data-translate="NEW_TO_ADD"></span></th>
+    <th id="by-subject-column-sort" md-column md-order-by="bySubject"><span data-translate="TAXON_PATH_DOMAIN_AND_SUBJECT"></span></th>
     <th id="by-createdAt-column-sort" md-column md-order-by="byCreatedAt"><span data-translate="ADDED_AT"></span></th>
     <th id="by-createdBy-column-sort" md-column md-order-by="byCreatedBy"><span data-translate="ADDED_BY"></span></th>
   </tr>
