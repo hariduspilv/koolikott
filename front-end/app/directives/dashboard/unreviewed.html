@@ -4,15 +4,17 @@
                       data-ng-show="isExpertsSelectVisible"
   >
     <md-select id="expert-select"
-      data-placeholder="{{'EXPERT' | translate}}"
-      data-ng-model="filter.user"
-      data-ng-model-options="{trackBy: '$value.id'}"
-      aria-label="Vali ekspert"
+               data-placeholder="{{'EXPERT' | translate}}"
+               data-ng-model="filter.user"
+               data-ng-model-options="{trackBy: '$value.id'}"
+               aria-label="Vali ekspert"
+               data-ng-disabled="$ctrl.isModerator()"
     >
       <md-option
         data-ng-repeat="user in moderators"
         data-ng-value="user"
         data-ng-bind="user.name + ' ' + user.surname"
+        ng-selected="$ctrl.isModerator()"
       ></md-option>
     </md-select>
   </md-input-container>

@@ -241,6 +241,10 @@ class controller extends Controller {
         })
     }
 
+    isModerator() {
+        return this.authenticatedUserService.isModerator();
+    }
+
     selectUsers() {
         if (this.$scope.filter && this.$scope.filter.user) {
             return "&user=" + this.$scope.filter.user.id;
@@ -475,7 +479,8 @@ controller.$inject = [
     'sortService',
     'taxonService',
     'iconService',
-    'translationService'
+    'translationService',
+    'authenticatedUserService'
 ]
 angular.module('koolikottApp').controller('baseTableViewController', controller)
 }
