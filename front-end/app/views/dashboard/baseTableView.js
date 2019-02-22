@@ -195,24 +195,15 @@ class controller extends Controller {
         let query;
 
         if (restUri === 'firstReview/unReviewed') {
-            query = this.serverCallService
-                .makeGet(
-                    'rest/admin/' + restUri + '/' +
-                    '?page=' + this.$scope.query.page +
-                    '&itemSortedBy=' + sortBy +
-                    '&query=' + this.$scope.query.filter +
-                    this.selectTaxons() +
-                    this.selectUsers() +
-                    '&isUserTaxon=' + this.$scope.isUserSelected +
-                    '&lang=' + this.getLanguage());
-            console.log('GET URL:::   ' + 'rest/admin/' + restUri + '/' +
+            let url = 'rest/admin/' + restUri + '/' +
                 '?page=' + this.$scope.query.page +
                 '&itemSortedBy=' + sortBy +
                 '&query=' + this.$scope.query.filter +
                 this.selectTaxons() +
                 this.selectUsers() +
-                '&isUserTaxon=' + this.$scope.isUserSelected +
-                '&lang=' + this.getLanguage())
+                '&lang=' + this.getLanguage();
+                query = this.serverCallService
+                .makeGet(url);
         }
         else
             query = this.serverCallService
@@ -259,7 +250,7 @@ class controller extends Controller {
 
     selectTaxons() {
         if (this.$scope.filter && this.$scope.filter.taxons) {
-            return this.$scope.filter.taxons.map(t => '&taxon=' + t.id);
+            return this.$scope.filter.taxons.map(t => '&taxon=' + t.id).join("");
         }
         return ""
     }
@@ -380,7 +371,6 @@ class controller extends Controller {
     filterItems() {
 
         this.$scope.isFiltering = true
-        this.isSorting = false
 
         if (this.viewPath === 'unReviewed') {
             return this.getData('firstReview/unReviewed', this.sortedBy)

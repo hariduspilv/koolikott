@@ -116,7 +116,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         query2 = params.hasSearch() ? addTitle(params, query2) : query2;
         query2 = params.hasUsers() ? addUserTaxons(params, query2) : query2;
         query2 = params.hasTaxons() ? addTaxons(params, query2) : query2;
-        query2 = params.hasSubjectOrder() || params.hasSearch() ? addLanguageGroup(params, query2) : query2;
+        query2 = params.hasSearch() ? addLanguageGroup(params, query2) : query2;
 
         return ((BigInteger) query2.getSingleResult()).longValue();
     }
