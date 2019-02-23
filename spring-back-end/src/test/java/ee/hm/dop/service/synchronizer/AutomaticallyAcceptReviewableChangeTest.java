@@ -6,16 +6,14 @@ import ee.hm.dop.model.AdminMaterial;
 import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
 import org.apache.commons.configuration2.Configuration;
-import org.easymock.EasyMock;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
-import java.time.LocalDateTime;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.LocalDateTime;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
 
 import static ee.hm.dop.utils.ConfigurationProperties.AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES;
 import static org.easymock.EasyMock.expect;
@@ -93,7 +91,6 @@ public class AutomaticallyAcceptReviewableChangeTest {
         expect(reviewableChangeDao.createOrUpdate(reviewableChange1)).andReturn(reviewableChange1);
 
         replay(reviewableChangeDao, configuration);
-        automaticallyAcceptReviewableChange.scheduleExecution(1);
 
         waitingTestFix();
 
@@ -116,38 +113,10 @@ public class AutomaticallyAcceptReviewableChangeTest {
     }
 
 
-    @Test
-    public void accepting_reviewableChanges_automatically_can_be_stopped() {
-        ScheduledFuture<?> acceptReviewableChangeHandle = EasyMock.createMock(ScheduledFuture.class);
-        expect(acceptReviewableChangeHandle.cancel(false)).andReturn(true);
-        automaticallyAcceptReviewableChange.setReviewableChangeHandle(acceptReviewableChangeHandle);
-
-        replay(reviewableChangeDao, acceptReviewableChangeHandle);
-        automaticallyAcceptReviewableChange.stop();
-        verify(reviewableChangeDao, acceptReviewableChangeHandle);
-    }
-
     private class AutomaticallyAcceptReviewableChangeMock extends AutomaticallyAcceptReviewableChange {
         @Override
         protected ReviewableChangeDao newReviewableChangeDao() {
             return reviewableChangeDao;
-        }
-
-        @Override
-        public long getInitialDelay(int hourOfDayToExecute) {
-            return 1;
-        }
-
-        @Override
-        protected void beginTransaction() {
-        }
-
-        @Override
-        protected void closeTransaction() {
-        }
-
-        @Override
-        protected void closeEntityManager() {
         }
     }
 }
