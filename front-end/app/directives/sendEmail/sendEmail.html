@@ -1,0 +1,53 @@
+<md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-sm="75" flex id="add-portfolio-modal"
+           class="fullscreen-dialog">
+  <form name="addPortfolioForm">
+    <md-toolbar class="md-accent">
+      <div class="md-toolbar-tools" flex>
+        <span flex></span>
+        <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
+                   aria-label="Sulge kogumiku lisamise modaalaken">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <md-content class="md-padding">
+      <div layout="row" layout-align="center center" layout-align-xs="start center">
+
+      </div>
+      <!-- Description -->
+      <span data-translate="SAADA_OMA_TÄPSUSTAV_KÜSIMUS"></span>
+      <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
+           flex-order-gt-sm="2" flex="100">
+        <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+          <label data-translate="SISU"></label>
+          <textarea ng-model="emailContent" id="email-content-description" autofocus="autofocus" rows="10" maxlength="500"></textarea>
+        </md-input-container>
+      </div>
+    </md-content>
+    <div class="recaptcha"
+         vc-recaptcha
+         key="captchaKey"
+         on-success="$ctrl.captchaSuccess()"
+         on-expire="$ctrl.captchaExpired()"
+         lang="$ctrl.getLanguage()"
+    ></div>
+    <md-dialog-actions>
+      <span flex></span>
+
+      <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button" data-ng-disabled="isSaving"
+                 data-ng-click="cancel()">
+        <span data-translate="BUTTON_CANCEL"></span>
+      </md-button>
+      <md-button class="md-raised md-primary"
+                 data-ng-click="$ctrl.saveCustomerSupportRequest()"
+                 data-ng-disabled="$ctrl.isSendButtonDisabled() || isSaving"
+                 aria-label="Customer support send mail"
+      >
+        <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
+      </md-button>
+      <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                            data-ng-show="isSaving"></md-progress-circular>
+    </md-dialog-actions>
+  </form>
+</md-dialog>
+
