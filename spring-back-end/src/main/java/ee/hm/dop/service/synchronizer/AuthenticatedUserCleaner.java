@@ -6,28 +6,23 @@ import java.time.LocalDateTime;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import static java.util.concurrent.TimeUnit.DAYS;
 
 @Service
 @Transactional
-public class AuthenticatedUserCleaner extends DopDaemonProcess {
+public class AuthenticatedUserCleaner {
 
     @Inject
     private AuthenticatedUserDao authenticatedUserDao;
 
     private static final Logger logger = LoggerFactory.getLogger(AuthenticatedUserCleaner.class);
 
-    @Override
     public synchronized void run() {
         try {
-            beginTransaction();
             AuthenticatedUserDao authenticationStateDao = newAuthenticationStateDao();
             LocalDateTime _3hoursBefore = LocalDateTime.now().minusHours(3);
             long allNeededToRemove = authenticationStateDao.findCountOfOlderThan(_3hoursBefore);
@@ -36,11 +31,9 @@ public class AuthenticatedUserCleaner extends DopDaemonProcess {
             int deleted = authenticationStateDao.deleteOlderThan(_3hoursBefore);
 
             logger.info(String.format("Authentication State Cleaner deleted %s rows", deleted));
-            closeTransaction();
         } catch (Exception e) {
             logger.error("Unexpected error while cleaning Authentication State", e);
         } finally {
-            closeEntityManager();
         }
     }
 
@@ -48,21 +41,8 @@ public class AuthenticatedUserCleaner extends DopDaemonProcess {
         return authenticatedUserDao;
     }
 
-    public void scheduleExecution(int hourOfDayToExecute) {
-        TimerTask timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                try {
-                    logger.info("Starting authentication state cleaner");
-                    AuthenticatedUserCleaner.this.run();
-                } catch (Exception e) {
-                    logger.error("Unexpected error while cleaning authentication state", e);
-                }
-                logger.info("Finished authentication state cleaner");
-            }
-        };
-
-        Timer timer = new Timer();
-        timer.scheduleAtFixedRate(timerTask, getInitialDelay(hourOfDayToExecute), DAYS.toMillis(1));
+    @Async
+    public synchronized void runAsync() {
+        run();
     }
 }

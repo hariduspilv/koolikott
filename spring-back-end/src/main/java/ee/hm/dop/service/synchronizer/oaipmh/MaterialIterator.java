@@ -2,8 +2,7 @@ package ee.hm.dop.service.synchronizer.oaipmh;
 
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Repository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -15,10 +14,10 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.buildDele
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.getFirst;
 import static java.lang.String.format;
 
+@Slf4j
 @Component
 public class MaterialIterator implements Iterator<Material> {
 
-    private static final Logger logger = LoggerFactory.getLogger(MaterialIterator.class);
     @Inject
     private ListIdentifiersConnector listIdentifiersConnector;
     @Inject
@@ -45,7 +44,7 @@ public class MaterialIterator implements Iterator<Material> {
     public Material next() {
         Element header = identifierIterator.next();
         String identifier = getFirst(header, "identifier").getTextContent();
-        logger.info("Next material identifier is: " + identifier);
+        log.info("Next material identifier is: " + identifier);
 
         if (isDeleted(header)) {
             return buildDeletedMaterial(identifier);
@@ -56,7 +55,7 @@ public class MaterialIterator implements Iterator<Material> {
             return materialParser.parse(doc);
         } catch (Exception e) {
             String message = "Error getting material (id = %s) from repository (url = %s).";
-            logger.error(format(message, identifier, repository.getBaseURL()), e);
+            log.error(format(message, identifier, repository.getBaseURL()), e);
             throw new RuntimeException(e);
         }
     }

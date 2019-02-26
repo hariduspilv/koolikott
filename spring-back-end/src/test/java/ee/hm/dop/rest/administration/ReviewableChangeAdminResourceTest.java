@@ -11,13 +11,11 @@ import ee.hm.dop.model.ReviewableChange;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.service.content.dto.TagDTO;
-import ee.hm.dop.utils.DbUtils;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityTransaction;
 import javax.ws.rs.core.GenericType;
 import java.util.ArrayList;
 import java.util.List;

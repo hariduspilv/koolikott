@@ -40,12 +40,6 @@ public class SynchronizeMaterialsExecutorTest {
 
     private Object lock = new Object();
 
-    @Before
-    @After
-    public void stopExecutor() {
-        synchronizeMaterialsExecutor.stop();
-    }
-
     @Test
     public void synchronizeMaterials() {
         Repository repository1 = createMock(Repository.class);
@@ -70,9 +64,6 @@ public class SynchronizeMaterialsExecutorTest {
 
         verify(repositoryService, repository1, repository2);
 
-        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
-        assertTrue(mockExecutor.transactionWasStarted);
-        assertFalse(mockExecutor.transactionStarted);
     }
 
     @Test
@@ -107,15 +98,10 @@ public class SynchronizeMaterialsExecutorTest {
 
         replay(repositoryService, repository1, repository2, solrEngineService);
 
-        synchronizeMaterialsExecutor.scheduleExecution(1);
-
         waitingTestFix();
 
         verify(repositoryService, repository1, repository2, solrEngineService);
 
-        SynchronizeMaterialsExecutorMock mockExecutor = (SynchronizeMaterialsExecutorMock) synchronizeMaterialsExecutor;
-        assertTrue(mockExecutor.transactionWasStarted);
-        assertFalse(mockExecutor.transactionStarted);
     }
 
     @Test
@@ -125,99 +111,19 @@ public class SynchronizeMaterialsExecutorTest {
 
         replay(repositoryService, solrEngineService);
 
-        synchronizeMaterialsExecutor.scheduleExecution(1);
-
         waitingTestFix();
 
         verify(repositoryService, solrEngineService);
     }
 
-    @Test
-    public void stop() {
-        ScheduledFuture<?> synchronizeMaterialHandle = EasyMock.createMock(ScheduledFuture.class);
-        expect(synchronizeMaterialHandle.cancel(false)).andReturn(true);
-        synchronizeMaterialsExecutor.setSynchronizeMaterialHandle(synchronizeMaterialHandle);
-
-        replay(repositoryService, synchronizeMaterialHandle);
-
-        synchronizeMaterialsExecutor.stop();
-
-        verify(repositoryService, synchronizeMaterialHandle);
-    }
-
-    @Test
-    public void stopFailsInFirstAttempt() {
-        ScheduledFuture<?> synchronizeMaterialHandle = createMock(ScheduledFuture.class);
-        expect(synchronizeMaterialHandle.cancel(false)).andReturn(false);
-        expect(synchronizeMaterialHandle.cancel(false)).andReturn(true);
-        synchronizeMaterialsExecutor.setSynchronizeMaterialHandle(synchronizeMaterialHandle);
-
-        replay(repositoryService, synchronizeMaterialHandle);
-
-        synchronizeMaterialsExecutor.stop();
-
-        verify(repositoryService, synchronizeMaterialHandle);
-    }
-
-    //todo delete, probably not needed
-    @Ignore
-    @Test
-    public void getInitialDelay() {
-        int hourOfDayToExecute = 1;
-
-        SynchronizeMaterialsExecutor executor = new SynchronizeMaterialsExecutor();
-        int delay = (int) executor.getInitialDelay(hourOfDayToExecute);
-
-        LocalDateTime now = now();
-
-        LocalDateTime expectedExecutionTime = now.withHourOfDay(hourOfDayToExecute).withMinuteOfHour(0)
-                .withSecondOfMinute(0).withMillisOfSecond(0);
-        if (now.getHourOfDay() >= hourOfDayToExecute) {
-            expectedExecutionTime = expectedExecutionTime.plusDays(1);
-        }
-
-        LocalDateTime firstExecution = now.plusMillis(delay);
-
-        assertTrue(Math.abs(firstExecution.toDate().getTime() - expectedExecutionTime.toDate().getTime()) < 100);
-    }
 
     private class SynchronizeMaterialsExecutorMock extends SynchronizeMaterialsExecutor {
-        private boolean transactionStarted;
-        private boolean transactionWasStarted;
-
-        @Override
-        public long getInitialDelay(int hourOfDayToExecute) {
-            return 1;
-        }
-
-        @Override
-        protected void beginTransaction() {
-/*            if (transactionStarted) {
-                fail("Transaction already started");
-            }*/
-
-            transactionStarted = true;
-            transactionWasStarted = true;
-        }
 
         @Override
         protected RepositoryService newRepositoryService() {
             return repositoryService;
         }
 
-        @Override
-        protected void closeTransaction() {
-/*            if (!transactionStarted) {
-                fail("Transaction not started");
-            }*/
-
-            transactionStarted = false;
-        }
-
-        @Override
-        protected void closeEntityManager(){
-
-        }
     }
 
     private void waitingTestFix() {

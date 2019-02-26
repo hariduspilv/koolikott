@@ -45,7 +45,7 @@ class controller extends Controller {
 
         this.getModerators();
         this.getMaximumUnreviewed();
-        this.sortedBy = '-byCreatedAt';
+        this.sortedBy = 'byCreatedAt';
         this.$scope.isFiltering = false
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
@@ -80,13 +80,6 @@ class controller extends Controller {
             this.serverCallService
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data)
-        }
-    }
-    onUserChange() {
-        if (!this.$scope.filter.user) {
-            this.$scope.filter.user = JSON.parse(this.$window.localStorage.getItem('user'))
-        } else if (this.$scope.filter.user) {
-            this.$window.localStorage.setItem('user', JSON.stringify(this.$scope.filter.user))
         }
     }
 
@@ -154,7 +147,8 @@ class controller extends Controller {
     }
 
     isDisabled() {
-        return this.isModerator() ? !(this.$scope.filter && this.$scope.filter.taxons) : !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user);
+        return this.isModerator() ? !(this.$scope.filter && this.$scope.filter.taxons) : !((this.$scope.filter && this.$scope.filter.taxons) ||
+            this.$scope.filter.user);
     }
 
     getMaximumUnreviewed(){
@@ -197,6 +191,7 @@ class controller extends Controller {
 
     getData(restUri, sortBy) {
         let query;
+        this.$scope.isLoading = true
 
         if (restUri === 'firstReview/unReviewed') {
             let url = 'rest/admin/' + restUri + '/' +
@@ -216,6 +211,8 @@ class controller extends Controller {
                 query
                 .then(({ data }) => {
                 if (data) {
+                    this.$scope.isLoading = false
+
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
@@ -292,7 +289,7 @@ class controller extends Controller {
         if (this.viewPath === 'unReviewed'){
 
             // if (order === 'bySubject' || order === '-bySubject'){
-                this.$scope.data = this.getData('firstReview/unReviewed',order);
+                this.getData('firstReview/unReviewed',order);
             // }
             // else {
             //     this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
@@ -326,8 +323,10 @@ class controller extends Controller {
     }
 
     onPaginate(page, limit) {
-
-        this.$scope.data = this.paginate(page, limit)
+        if (this.viewPath === 'unReviewed')
+            this.paginate(page, limit)
+        else
+            this.$scope.data = this.paginate(page, limit)
 
     }
 

@@ -1,8 +1,7 @@
 package ee.hm.dop.service.synchronizer.oaipmh;
 
 import ORG.oclc.oai.harvester2.verb.ListIdentifiers;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -11,9 +10,8 @@ import javax.xml.transform.TransformerException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+@Slf4j
 public class IdentifierIterator implements Iterator<Element> {
-
-    private static final Logger logger = LoggerFactory.getLogger(IdentifierIterator.class);
 
     private String baseURL;
     private NodeList headers;
@@ -74,7 +72,7 @@ public class IdentifierIterator implements Iterator<Element> {
             return newListIdentifier(baseURL, resumptionToken);
         } catch (Exception e) {
             String msg = "Error in getting more identifiers from repo %s with token %s";
-            logger.error(String.format(msg, baseURL, resumptionToken), e);
+            log.error(String.format(msg, baseURL, resumptionToken), e);
         }
 
         return null;
