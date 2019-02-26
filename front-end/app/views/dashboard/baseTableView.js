@@ -226,9 +226,7 @@ class controller extends Controller {
                             o.__reporters = this.getReporters(o)
                             o.__reportLabelKey = this.getImproperReportLabelKey(o)
                         })
-
-                    console.log(data);
-                    this.collection = data.items
+                    this.collection = data
 
                     if (this.viewPath === 'unReviewed') {
                         this.$scope.data = data.items;
