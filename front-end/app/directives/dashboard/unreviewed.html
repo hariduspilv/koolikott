@@ -6,6 +6,7 @@
     <md-select id="expert-select"
                data-placeholder="{{'EXPERT' | translate}}"
                data-ng-model="filter.user"
+               data-ng-change="$ctrl.onUserChange()"
                data-ng-model-options="{trackBy: '$value.id'}"
                aria-label="Vali ekspert"
                data-ng-disabled="$ctrl.isModerator()"
