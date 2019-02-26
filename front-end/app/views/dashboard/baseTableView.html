@@ -1,5 +1,6 @@
 <data-dop-cookie-notice class="cookie-parent"></data-dop-cookie-notice>
-<md-progress-linear data-ng-if="!data"></md-progress-linear>
+<md-progress-linear data-ng-if="!data || isLoading"></md-progress-linear>
+
 <md-card class="md-data-table" data-ng-if="data">
   <!-- BEGIN Search learning objects -->
   <md-toolbar
