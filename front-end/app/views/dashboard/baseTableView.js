@@ -50,14 +50,14 @@ class controller extends Controller {
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
-        this.$scope.selectedUser = null
 
         this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
             if (newValue !== oldValue && newValue.length >=3)
                 this.filterItems()
         })
-        this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
+
+        this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true)
 
         this.$scope.filter = { };
 
@@ -82,16 +82,19 @@ class controller extends Controller {
                 .then(r => this.$scope.users = r.data)
         }
     }
+    onUserChange() {
+        if (!this.$scope.filter.user) {
+            this.$scope.filter.user = JSON.parse(this.$window.localStorage.getItem('user'))
+        } else if (this.$scope.filter.user) {
+            this.$window.localStorage.setItem('user', JSON.stringify(this.$scope.filter.user))
+        }
+    }
 
     onFilterChange(filter) {
         const params = Object.assign({}, filter)
 
-        if (params.taxons) {
+        if (params.taxons && !this.$scope.isPaginating) {
             this.$scope.filter.taxons = params.taxons;
-        }
-
-        if (params.user) {
-            this.$scope.filter.user = params.user;
         }
     }
 
@@ -418,6 +421,7 @@ class controller extends Controller {
     }
 
     paginate(page, limit) {
+        this.$scope.isPaginating = true
         const start = (page - 1) * limit
         const end = start + limit
 
@@ -482,7 +486,8 @@ controller.$inject = [
     'taxonService',
     'iconService',
     'translationService',
-    'authenticatedUserService'
+    'authenticatedUserService',
+    '$window'
 ]
 angular.module('koolikottApp').controller('baseTableViewController', controller)
 }
