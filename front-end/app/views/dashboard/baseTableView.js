@@ -113,7 +113,7 @@ class controller extends Controller {
         this.$scope.filter = {}
         this.$scope.clearFields = true
         this.$scope.query.filter = ''
-        window.location.reload(true);
+        this.$route.reload()
     }
 
     clearFilter() {
@@ -227,9 +227,7 @@ class controller extends Controller {
                             o.__reporters = this.getReporters(o)
                             o.__reportLabelKey = this.getImproperReportLabelKey(o)
                         })
-
-                    console.log(data);
-                    this.collection = data.items
+                    this.collection = data
 
                     if (this.viewPath === 'unReviewed') {
                         this.$scope.data = data.items;
