@@ -98,9 +98,11 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
 
         List<BigInteger> resultList = query2.getResultList();
 
-//        return adminLearningObjectDao.findById(toLongs(resultList));
-
-        return adminLearningObjectDao.findLOById(toLongs(resultList),params.getSort().name());
+        if (params.hasCreatedAtOrder() && !params.hasSearch() && !params.hasTaxonsOrUsers()) {
+            return adminLearningObjectDao.findLOById(toLongs(resultList), params.getSort().name());
+        } else {
+            return adminLearningObjectDao.findById(toLongs(resultList));
+        }
     }
 
     public Long findCoundOfAllUnreviewed(PageableQuery params) {
