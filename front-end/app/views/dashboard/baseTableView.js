@@ -45,7 +45,7 @@ class controller extends Controller {
 
         this.getModerators();
         this.getMaximumUnreviewed();
-        this.sortedBy = 'byCreatedAt';
+        this.sortedBy = '-byCreatedAt';
         this.$scope.isFiltering = false
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
@@ -153,8 +153,8 @@ class controller extends Controller {
         this.onParamsChange({});
     }
 
-    isDisabled(){
-         return !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user);
+    isDisabled() {
+        return this.isModerator() ? !(this.$scope.filter && this.$scope.filter.taxons) : !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user);
     }
 
     getMaximumUnreviewed(){
