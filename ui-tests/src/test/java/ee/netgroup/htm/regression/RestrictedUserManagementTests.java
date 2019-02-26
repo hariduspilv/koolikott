@@ -1,16 +1,16 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.api.EkoolikottApi;
 import ee.netgroup.htm.components.LeftMenu;
 import ee.netgroup.htm.page.LandingPage;
 import ee.netgroup.htm.page.MyPortfoliosPage;
-import ee.netgroup.htm.BaseTest;
 import org.testng.annotations.Test;
 
 import static ee.netgroup.htm.api.UserRole.USER;
 import static org.testng.Assert.assertFalse;
 
-public class RestrictedUserManagementTests extends BaseTest {
+public class RestrictedUserManagementTests extends DriverConf {
 
     private static final String USER_USERNAME = "peeter.paan";
     private static final String USER_ID_CODE = "38011550077";

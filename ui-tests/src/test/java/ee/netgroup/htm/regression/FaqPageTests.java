@@ -1,14 +1,14 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.components.LeftMenu;
 import ee.netgroup.htm.page.FaqPage;
 import ee.netgroup.htm.page.LandingPage;
-import ee.netgroup.htm.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.Test;
 
-public class FaqPageTests extends BaseTest {
+public class FaqPageTests extends DriverConf {
 
     private static final String englishQuestion = "Is this real life or is it just Fanta sea?";
     private static final String estonianQuestion = "Kus kulgeb Kuu?";

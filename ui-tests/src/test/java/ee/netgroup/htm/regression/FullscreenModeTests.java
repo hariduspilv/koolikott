@@ -1,10 +1,10 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.components.FabButton;
+import ee.netgroup.htm.framework.listeners.SeleniumTestListener;
 import ee.netgroup.htm.page.LandingPage;
 import ee.netgroup.htm.page.LearningObjectPage;
-import ee.netgroup.htm.BaseTest;
-import ee.netgroup.htm.framework.listeners.SeleniumTestListener;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -12,7 +12,7 @@ import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 @Listeners({SeleniumTestListener.class})
-public class FullscreenModeTests extends BaseTest {
+public class FullscreenModeTests extends DriverConf {
 
     @BeforeClass
     public void setup() {

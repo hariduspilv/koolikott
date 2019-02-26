@@ -1,10 +1,9 @@
 package ee.netgroup.htm.regression;
 
 import com.google.zxing.NotFoundException;
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.components.UserMenu;
-import ee.netgroup.htm.helpers.Helpers;
 import ee.netgroup.htm.page.PortfolioPage;
-import ee.netgroup.htm.BaseTest;
 import ee.netgroup.htm.util.QRCodeUtil;
 import ee.netgroup.htm.util.ScreenshotUtils;
 import org.openqa.selenium.WebElement;
@@ -23,7 +22,7 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.testng.Assert.assertTrue;
 
-public class QRCodeTests extends BaseTest {
+public class QRCodeTests extends DriverConf {
 
     @BeforeClass
     public void login_as_registered_user() {

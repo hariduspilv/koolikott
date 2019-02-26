@@ -1,6 +1,6 @@
 package ee.netgroup.htm.regression;
 
-import ee.netgroup.htm.BaseTest;
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.framework.listeners.SeleniumTestListener;
 import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
@@ -11,7 +11,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
 @Listeners({SeleniumTestListener.class})
-public class TagTests extends BaseTest {
+public class TagTests extends DriverConf {
 
     @Test
     public void material_should_inherit_opened_portfolio_tags() {

@@ -1,7 +1,6 @@
 package ee.netgroup.htm.regression;
 
-import ee.netgroup.htm.helpers.Helpers;
-import ee.netgroup.htm.BaseTest;
+import ee.netgroup.htm.DriverConf;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.DataProvider;
@@ -17,7 +16,7 @@ import static ee.netgroup.htm.page.MaterialPage.getMaterialPage;
 import static ee.netgroup.htm.page.SearchResultsPage.getSearchResultsPage;
 import static org.testng.Assert.assertTrue;
 
-public class VocationalEducationTests extends BaseTest {
+public class VocationalEducationTests extends DriverConf {
 
     @BeforeClass
     public void setupLoginAsUser() {

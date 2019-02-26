@@ -5,16 +5,12 @@ import ee.netgroup.htm.helpers.Helpers;
 import ee.netgroup.htm.page.*;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.WebDriverRunner.getWebDriver;
 import static ee.netgroup.htm.util.JSWaiter.waitForJQueryAndAngularToFinishRendering;
 
 public class LeftMenu {
-
-    private static Logger logger = LoggerFactory.getLogger(LeftMenu.class);
 
     private static By improperLearningObjects = By.id("improper");
     private static By preschoolEducation = By.xpath("//div/span[text()='Alusharidus']");
@@ -79,10 +75,7 @@ public class LeftMenu {
     public LeftMenu expandMyProfileMenu() {
         Helpers.waitForClickable(myThings);
         if(!$(myThings).attr("class").contains("is-opened")){
-            logger.info("My profile menu is closed... expanding");
             $(myThings).click();
-        }else {
-            logger.info("My profile menu already expanded");
         }
         return this;
     }

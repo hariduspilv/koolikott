@@ -1,11 +1,11 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.api.EkoolikottApi;
 import ee.netgroup.htm.components.LeftMenu;
 import ee.netgroup.htm.page.LandingPage;
 import ee.netgroup.htm.page.MyPortfoliosPage;
 import ee.netgroup.htm.page.PortfolioPage;
-import ee.netgroup.htm.BaseTest;
 import org.testng.annotations.Test;
 
 import static ee.netgroup.htm.api.UserRole.MODERATOR;
@@ -15,7 +15,7 @@ import static ee.netgroup.htm.page.NewLearningObjectsPage.getNewLearningObjectsP
 import static org.testng.Assert.assertFalse;
 import static org.testng.Assert.assertTrue;
 
-public class ModeratorManagementTests extends BaseTest {
+public class ModeratorManagementTests extends DriverConf {
 
     private static final String USER_USERNAME = "peeter.paan";
     private static final String USER_ID_CODE = "38011550077";

@@ -1,6 +1,6 @@
 package ee.netgroup.htm.login;
 
-import com.codeborne.selenide.Configuration;
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.components.LoginModal;
 import ee.netgroup.htm.helpers.Constants;
 import ee.netgroup.htm.page.LandingPage;
@@ -16,13 +16,10 @@ import static ee.netgroup.htm.page.LandingPage.getLandingPage;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class RegisteredUserContentRequiresLoginTests {
+public class RegisteredUserContentRequiresLoginTests extends DriverConf {
 
     @BeforeClass
     public void navigateToFrontPage() {
-        Configuration.startMaximized = true;
-        Configuration.browser = "chrome";
-
         open(EKOOLIKOTT_HOME_PAGE_URL);
     }
 

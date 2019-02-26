@@ -1,7 +1,7 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.helpers.Constants;
-import ee.netgroup.htm.BaseTest;
 import org.testng.annotations.Test;
 
 import static ee.netgroup.htm.page.LandingPage.goToLandingPage;
@@ -9,7 +9,7 @@ import static ee.netgroup.htm.page.MaterialPage.getMaterialPage;
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertTrue;
 
-public class AdminDashboardTests extends BaseTest {
+public class AdminDashboardTests extends DriverConf {
 
     @Test
     public void LearningObjectReportedByUser_CanBeMarkedAsProper_ByModerator() {

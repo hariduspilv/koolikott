@@ -1,8 +1,8 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.page.EditPortfolioPage;
 import ee.netgroup.htm.page.LandingPage;
-import ee.netgroup.htm.BaseTest;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterMethod;
@@ -11,7 +11,7 @@ import org.testng.annotations.Test;
 import static com.codeborne.selenide.Selenide.switchTo;
 import static ee.netgroup.htm.enums.VocationalEducationSubjectArea.ARTS;
 
-public class FullscreenEdgeTests extends BaseTest {
+public class FullscreenEdgeTests extends DriverConf {
 
     @AfterMethod
     public void switchBackToFirstTab() {

@@ -1,7 +1,7 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.helpers.Constants;
-import ee.netgroup.htm.BaseTest;
 import org.testng.annotations.Test;
 
 import static ee.netgroup.htm.page.LandingPage.goToLandingPage;
@@ -9,7 +9,7 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.containsString;
 import static org.testng.Assert.assertEquals;
 
-public class SearchTests extends BaseTest {
+public class SearchTests extends DriverConf {
 
     @Test
     public void SearchTests_ByTagName_TagIsFound() {

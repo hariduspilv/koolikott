@@ -1,7 +1,7 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.components.LeftMenu;
-import ee.netgroup.htm.BaseTest;
 import org.testng.annotations.Test;
 
 import static ee.netgroup.htm.components.LeftMenu.getLeftMenu;
@@ -9,7 +9,7 @@ import static ee.netgroup.htm.page.LandingPage.goToLandingPage;
 import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class NewUserTests extends BaseTest {
+public class NewUserTests extends DriverConf {
     private static final String NEW_USER_DEV_LOGIN_IDCODE = "6456456";
 
     @Test

@@ -1,8 +1,8 @@
 package ee.netgroup.htm.regression;
 
+import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.api.EkoolikottApi;
 import ee.netgroup.htm.helpers.Constants;
-import ee.netgroup.htm.BaseTest;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
@@ -13,7 +13,7 @@ import static ee.netgroup.htm.page.LandingPage.goToLandingPage;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class ReportLearningObjectTests extends BaseTest {
+public class ReportLearningObjectTests extends DriverConf {
     @BeforeClass
     public void openHomePage() {
         goToLandingPage().logoutIfLoggedIn();
