@@ -13,9 +13,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.persistence.Query;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class FirstReviewDao extends AbstractDao<FirstReview> {
 
@@ -97,7 +97,10 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         query2 = params.hasSubjectOrder() || params.hasSearch() ? addLanguageGroup(params, query2) : query2;
 
         List<BigInteger> resultList = query2.getResultList();
-        return adminLearningObjectDao.findById(toLongs(resultList));
+
+//        return adminLearningObjectDao.findById(toLongs(resultList));
+
+        return adminLearningObjectDao.findLOById(toLongs(resultList),params.getSort().name());
     }
 
     public Long findCoundOfAllUnreviewed(PageableQuery params) {
@@ -157,7 +160,13 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     }
 
     private List<Long> toLongs(List<BigInteger> resultList) {
-        return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+        List<Long> listOfLOngs = new ArrayList<>();
+        for (BigInteger b:resultList) {
+            listOfLOngs.add(b.longValue());
+        }
+        return listOfLOngs;
+
+//        return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
     }
 
     private Query addUserTaxons(PageableQuery params, Query query) {
