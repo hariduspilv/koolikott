@@ -58,6 +58,9 @@ public class FirstReviewAdminService {
 
     private FirstReviewTaxon convert(Taxon taxon) {
         TaxonPosition tp = taxonPositionDao.findByTaxon(taxon);
+        if (tp == null){
+            return null;
+        }
         return new FirstReviewTaxon(toDto(tp.getEducationalContext()), toDto(tp.getDomain()), toDto(tp.getSubject()));
     }
 

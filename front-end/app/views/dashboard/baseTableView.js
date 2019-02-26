@@ -113,6 +113,7 @@ class controller extends Controller {
         this.$scope.filter = {}
         this.$scope.clearFields = true
         this.$scope.query.filter = ''
+        window.location.reload(true);
     }
 
     clearFilter() {
@@ -284,15 +285,17 @@ class controller extends Controller {
 
     onSort(order) {
         this.sortedBy = order;
+        this.$scope.query.order = order;
         this.$scope.query.page = 1;
 
         if (this.viewPath === 'unReviewed'){
 
-            if (order === 'bySubject' || order === '-bySubject'){
+            // if (order === 'bySubject' || order === '-bySubject'){
                 this.$scope.data = this.getData('firstReview/unReviewed',order);
-            } else {
-                this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
-            }
+            // }
+            // else {
+            //     this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
+            // }
         }
         else{
             this.sortService.orderItems(
@@ -421,6 +424,7 @@ class controller extends Controller {
         const end = start + limit
 
         if (this.viewPath === 'unReviewed'){
+            this.$scope.query.page = page;
             return this.getData('firstReview/unReviewed', this.sortedBy);
         }
         else {

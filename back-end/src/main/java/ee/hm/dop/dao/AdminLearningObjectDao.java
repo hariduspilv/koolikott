@@ -21,4 +21,11 @@ public class AdminLearningObjectDao extends AbstractDao<AdminLearningObject> {
                 "and lo.visibility in ('PUBLIC', 'NOT_LISTED')")
                 .getSingleResult();
     }
+
+    public List<AdminLearningObject> findLOById(List<Long> list, String ordering) {
+        return getEntityManager().createQuery(
+                "select lo from AdminLearningObject lo where lo.id in (:list) order by lo.added " + ordering)
+                .setParameter("list", list)
+                .getResultList();
+    }
 }
