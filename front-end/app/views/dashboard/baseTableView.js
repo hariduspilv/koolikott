@@ -113,6 +113,7 @@ class controller extends Controller {
         this.$scope.filter = {}
         this.$scope.clearFields = true
         this.$scope.query.filter = ''
+        this.$route.reload()
     }
 
     clearFilter() {
