@@ -45,7 +45,7 @@ class controller extends Controller {
 
         this.getModerators();
         this.getMaximumUnreviewed();
-        this.sortedBy = 'byCreatedAt';
+        this.sortedBy = '-byCreatedAt';
         this.$scope.isFiltering = false
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
