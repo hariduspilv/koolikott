@@ -8,6 +8,10 @@ import java.util.List;
 
 public class UserDao extends AbstractDao<User> {
 
+    public User findUserById(Long id){
+        return findById(id);
+    }
+
     public User findUserByIdCode(String idCode) {
         return findByField("idCode", idCode);
     }
@@ -42,4 +46,6 @@ public class UserDao extends AbstractDao<User> {
     public Long getUsersCountByRole(Role role) {
         return (Long) getCountByField("role", role);
     }
+
+
 }

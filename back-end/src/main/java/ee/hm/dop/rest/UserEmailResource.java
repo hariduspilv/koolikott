@@ -42,11 +42,11 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.validatePin(userEmail);
     }
 
-    @POST
-    @Path("/exists")
+    @GET
+    @Path("exists")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean userHasEmail(User userId)
+    public boolean userHasEmail(@QueryParam("userId") int userId)
     {
         return userEmailService.userHasEmail(userId);
     }

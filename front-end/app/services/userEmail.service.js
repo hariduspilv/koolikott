@@ -20,9 +20,9 @@
                 .makePost('rest/userEmail/validate', {user: user, pin: pin, email: email})
         }
 
-        userHasEmail(user) {
+        userHasEmail(userId) {
             return this.serverCallService
-                .makePost('rest/userEmail/exists', {user: user})
+                .makeGet('rest/userEmail/exists/?userId=' + userId)
         }
     }
 

@@ -37,12 +37,9 @@ public class UserEmailService {
     @Inject
     private SendMailService sendMailService;
 
-    public boolean userHasEmail(User id) {
-
-        UserEmail userEmail = userEmailDao.findByUser(id);
-
+    public boolean userHasEmail(long id) {
+        UserEmail userEmail = userEmailDao.findByUser(userDao.findUserById(id));
         return userEmail != null ? true : false;
-
     }
 
     public UserEmail save(UserEmail userEmail) {
