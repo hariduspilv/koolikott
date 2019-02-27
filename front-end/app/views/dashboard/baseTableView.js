@@ -94,6 +94,7 @@ class controller extends Controller {
     getFilterResults(){
         this.$scope.query.filter = ''
         this.$scope.isFiltering = true
+        this.$scope.query.page = 1
         this.getData('firstReview/unReviewed', this.sortedBy)
 
     }
