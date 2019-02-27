@@ -33,6 +33,8 @@ public class EhisSOAPService implements IEhisSOAPService {
     @Inject
     private Configuration configuration;
     @Inject
+    private Environment environment;
+    @Inject
     private SOAPConnection connection;
     @Inject
     private EhisV5RequestBuilder ehisV5RequestBuilder;
@@ -64,23 +66,34 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(response, "Received response from EHIS: %s");
             }
 
+            if (environment.acceptsProfiles(Profiles.of("it")) && response == null) {
+                return null;
+            }
+
             String xmlResponse;
             if (useV6) {
                 xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
             } else {
                 xmlResponse = ehisV5ResponseAnalyzer.parseSOAPResponse(response);
             }
+
             logger.info(format("Received response from EHIS: %s", xmlResponse));
             return ehisParser.parse(xmlResponse);
         } catch (Exception e) {
-            logger.error("Error getting User information from EHIS.", e);
+            if (environment.acceptsProfiles(Profiles.of("it", "test"))) {
+                logger.error("Error getting User information from EHIS. {}", e.getMessage());
+                return null;
+            }
+            logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
             return null;
         }
     }
 
     private void log(SOAPMessage message, String msg) throws SOAPException, IOException {
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        message.writeTo(out);
+        if (message != null) {
+            message.writeTo(out);
+        }
         String strMsg = new String(out.toByteArray(), StandardCharsets.UTF_8);
         logger.info(format(msg, strMsg));
     }

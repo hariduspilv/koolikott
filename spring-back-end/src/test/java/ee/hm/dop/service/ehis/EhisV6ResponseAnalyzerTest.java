@@ -1,5 +1,6 @@
 package ee.hm.dop.service.ehis;
 
+import ee.hm.dop.common.test.DatabaseTestBase;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -15,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
-public class EhisV6ResponseAnalyzerTest {
+public class EhisV6ResponseAnalyzerTest extends DatabaseTestBase {
 
     @Inject
     private EhisV6ResponseAnalyzer ehisV6ResponseAnalyzer;

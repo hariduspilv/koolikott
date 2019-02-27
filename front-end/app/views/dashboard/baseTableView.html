@@ -1,29 +1,29 @@
 <data-dop-cookie-notice class="cookie-parent"></data-dop-cookie-notice>
-<md-progress-linear data-ng-if="!data"></md-progress-linear>
+<md-progress-linear data-ng-if="!data || isLoading"></md-progress-linear>
 <md-card class="md-data-table" data-ng-if="data">
   <!-- BEGIN Search learning objects -->
   <md-toolbar
     class="md-table-toolbar md-default"
     data-ng-if="$ctrl.viewPath != 'moderators' && $ctrl.viewPath != 'restrictedUsers'"
-    >
+  >
     <div class="md-toolbar-tools">
       <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
       <form data-flex name="filter.form">
         <md-input-container>
           <label></label>
           <md-icon data-md-colors="{ color: 'grey-400' }">search</md-icon>
-          <input
-            type="text"
-            data-ng-model="query.filter"
-            data-ng-model-options="filter.options"
-            placeholder="{{'SEARCH' | translate}}"
-            class="search-learning-objects"
+          <input id="search-input"
+                 type="text"
+                 data-ng-model="query.filter"
+                 data-ng-model-options="filter.options"
+                 placeholder="{{'SEARCH' | translate}}"
+                 class="search-learning-objects"
           >
-          <md-button
-            class="md-icon-button md-ink-ripple"
-            data-ng-click="$ctrl.clearFilter()"
-            data-ng-if="query.filter"
-            >
+          <md-button id="clear-filter"
+                     class="md-icon-button md-ink-ripple"
+                     data-ng-click="$ctrl.clearFilter()"
+                     data-ng-if="query.filter"
+          >
             <md-icon data-md-colors="{ color: 'grey-400' }">close</md-icon>
           </md-button>
         </md-input-container>
@@ -35,7 +35,7 @@
   <md-toolbar
     class="md-table-toolbar md-default"
     data-ng-if="$ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'"
-    >
+  >
     <div layout-margin>
       <h2 class="md-title" data-translate="SEARCH_USERS"></h2>
     </div>
@@ -49,7 +49,7 @@
         md-items="user in $ctrl.filterUsers(filterUsersInput)"
         md-item-text="user.username"
         placeholder="{{$ctrl.getUsernamePlaceholder()}}"
-        >
+      >
         <md-item-template>
           <span md-highlight-text="filterUsersInput">{{user.username}}</span>
         </md-item-template>
@@ -63,6 +63,58 @@
     </div>
   </md-toolbar>
   <!-- END Search users -->
+  <div layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
+    <md-input-container class="statistics-filter__experts-container"
+                        data-flex data-layout="column"
+                        data-ng-show="isExpertsSelectVisible"
+    >
+      <md-select id="expert-select"
+                 data-placeholder="{{'EXPERT' | translate}}"
+                 data-ng-model="filter.user"
+                 data-ng-model-options="{trackBy: '$value.id'}"
+                 aria-label="Vali ekspert"
+                 data-ng-disabled="$ctrl.isModerator()"
+      >
+        <md-option
+          data-ng-repeat="user in moderators"
+          data-ng-value="user"
+          data-ng-bind="user.name + ' ' + user.surname"
+          ng-selected="$ctrl.isModerator()"
+        ></md-option>
+      </md-select>
+    </md-input-container>
+    <dop-taxon-selector
+      flex
+      class="statistics-filter__taxon-container"
+      data-taxon="educationalContext"
+      data-is-statistics-select="true"
+      data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
+      data-ng-show="isTaxonSelectVisible"
+      data-clear-selection="clearFields"
+    ></dop-taxon-selector>
+  </div>
+  <div data-ng-if="$ctrl.viewPath == 'unReviewed'">
+    <md-button id="clear-button"
+               class="statistics-filter__clear"
+               data-translate="CLEAR_FORM"
+               data-ng-click="$ctrl.clearFields()"
+               data-ng-show="filter.user || filter.taxons || educationalContext"
+               aria-label="Tühjenda filtriväljad"
+    ></md-button>
+    <md-button id="filter-button"
+               class="md-raised md-primary statistics-filter__submit"
+               data-ng-class="{fetching: fetching}"
+               data-ng-click="$ctrl.getFilterResults()"
+               data-ng-disabled="$ctrl.isDisabled()"
+               aria-label="Käivita filter"
+    >
+      <div class="spinner">
+        <md-progress-circular data-md-diameter="20"></md-progress-circular>
+      </div>
+      <span data-translate="DO_FILTER"></span>
+      <md-icon>arrow_forward</md-icon>
+    </md-button>
+  </div>
   <md-table-container class="table-container">
     <div data-ng-show="itemsCount" class="md-data-table">
       <dop-unreviewed data-ng-if="$ctrl.viewPath == 'unReviewed'"></dop-unreviewed>
@@ -78,7 +130,7 @@
       data-layout="row"
       data-layout-align="center center"
       data-layout-padding
-      >
+    >
       <h4 data-translate="{{
         $ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'
           ? 'ERROR_USERS_NOT_FOUND'

@@ -3,32 +3,23 @@ package ee.hm.dop.dao;
 import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.common.test.TestLayer;
-import ee.hm.dop.model.Language;
-import ee.hm.dop.model.LanguageString;
 import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.ResourceType;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
-import ee.hm.dop.utils.DbUtils;
 
 import java.time.LocalDateTime;
 
 import org.junit.Test;
-import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import javax.inject.Inject;
-import javax.persistence.RollbackException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 

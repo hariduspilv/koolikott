@@ -35,9 +35,7 @@ public class SessionService {
 
     public AuthenticatedUser startSession(User user, Person person, LoginFrom loginFrom) {
         LocalDateTime now = now();
-        //todo time
-        return startSession(new AuthenticatedUser(user, person, loginFrom, now, now.plusHours(2)));
-//        return startSession(new AuthenticatedUser(user, person, loginFrom, now, sessionTime(now)));
+        return startSession(new AuthenticatedUser(user, person, loginFrom, now, sessionTime(now)));
     }
 
     public AuthenticatedUser updateSession(UserSession userSession, AuthenticatedUser authenticatedUser) {

@@ -26,6 +26,9 @@ class controller extends Controller {
                         this.authenticatedUserService.removeAuthenticatedUser()
                         break
                     case 401:
+                        if (window.location.hostname === 'spring.oxygen.netgroupdigital.com'){
+                            this.authenticatedUserService.removeAuthenticatedUser()
+                        }
                     case 403:
                         this.$location.url('/')
                 }

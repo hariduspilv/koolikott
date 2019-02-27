@@ -1,16 +1,5 @@
 package ee.hm.dop.model.taxon;
 
-import static javax.persistence.InheritanceType.JOINED;
-
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.DiscriminatorColumn;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.Transient;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.NoClass;
@@ -18,9 +7,12 @@ import ee.hm.dop.model.AbstractEntity;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+
+import static javax.persistence.InheritanceType.JOINED;
 
 @Entity
 @Cacheable

@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 {
     class controller extends Controller {

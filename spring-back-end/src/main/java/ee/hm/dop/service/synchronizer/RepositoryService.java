@@ -10,7 +10,6 @@ import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
-import ee.hm.dop.utils.DbUtils;
 import ee.hm.dop.utils.UrlUtil;
 import org.apache.commons.lang.StringUtils;
 
@@ -19,6 +18,7 @@ import java.time.LocalDateTime;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
@@ -52,6 +52,7 @@ public class RepositoryService {
         return repositoryDao.findByFieldList("used", true);
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public SynchronizationAudit synchronize(Repository repository) {
         logStart(repository);
 
@@ -119,7 +120,7 @@ public class RepositoryService {
 
     private int incrementCountAndFlush(int count) {
         if (++count >= BATCH_SIZE) {
-            DbUtils.emptyCache();
+            repositoryDao.flush();
             count = 0;
         }
         return count;

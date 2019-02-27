@@ -1,5 +1,6 @@
 package ee.hm.dop.service.ehis;
 
+import ee.hm.dop.common.test.DatabaseTestBase;
 import org.junit.Test;
 
 import javax.inject.Inject;
@@ -13,7 +14,7 @@ import java.nio.charset.Charset;
 
 import static org.junit.Assert.assertEquals;
 
-public class EhisV5ResponseAnalyzerTest {
+public class EhisV5ResponseAnalyzerTest extends DatabaseTestBase {
 
     @Inject
     private EhisV5ResponseAnalyzer ehisV5ResponseAnalyzer;

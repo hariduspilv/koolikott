@@ -2,27 +2,30 @@ package ee.hm.dop.utils;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public class UserDataValidationUtil {
 
-    public static String validateEmail (String email) {
-        if (isNotBlank(email)) {
-            email = StringUtils.trim(email);
-            if (EmailValidator.getInstance().isValid(email)) {
-                return email;
-            }
+    public static String validateEmail(String email) {
+        if (isBlank(email)) {
+            throw badRequest("Email is empty");
+        }
+        String trimmedEmail = StringUtils.trim(email);
+        if (!EmailValidator.getInstance().isValid(trimmedEmail)) {
             throw badRequest("Invalid email address");
         }
-        throw badRequest("Email is empty");
+        return trimmedEmail;
     }
 
-    private static WebApplicationException badRequest(String s) {
-        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
+    private static ResponseStatusException badRequest(String s) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
     }
 
 }

@@ -4,10 +4,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.w3c.dom.Node;
 
-import javax.xml.soap.Detail;
 import javax.xml.soap.SOAPBody;
 import javax.xml.soap.SOAPEnvelope;
-import javax.xml.soap.SOAPFault;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import javax.xml.transform.TransformerFactory;
@@ -34,8 +32,8 @@ public class EhisV6ResponseAnalyzer {
 
         Node errorCode = body.getElementsByTagName("veakood").item(0);
         if (errorCode != null) {
-            throw new RuntimeException("Error retrieving information from EHIS: " + errorCode.getNodeName() + ": " + errorCode.getTextContent());
+            throw new Exception("Error retrieving information from EHIS: " + errorCode.getNodeName() + ": " + errorCode.getTextContent());
         }
-        throw new RuntimeException("Unknown error from ehis");
+        throw new Exception("Unknown error from ehis");
     }
 }

@@ -9,7 +9,7 @@ import java.util.TimeZone;
 @SpringBootApplication
 public class KoolikottApplication {
 
-	@PostConstruct
+    @PostConstruct
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
 	}

@@ -5,15 +5,18 @@ class controller extends Controller {
     orderItems(data, sortBy) {
         this.language = this.translationService.getLanguage()
 
-        const isDescending = sortBy.startsWith('-')
-        const methodName = sortBy.replace(/^-/, '')
-        const canSort = typeof this[methodName] === 'function'
+        if (data) {
+            var isDescending = sortBy.startsWith('-')
+            var methodName = sortBy.replace(/^-/, '')
+            var canSort = typeof this[methodName] === 'function'
+            data = data.sort((a, b) =>
+                a && b && canSort
+                    ? this[methodName].apply(this, isDescending ? [b, a] : [a, b])
+                    : 0
+            )
+        }
 
-        data = data.sort((a, b) =>
-            a && b && canSort
-                ? this[methodName].apply(this, isDescending ? [b, a] : [a, b])
-                : 0
-        )
+
     }
     compareStrings(a, b) {
         return a.toLowerCase().localeCompare(b.toLowerCase(), this.translationService.getLanguageCode())

@@ -2,11 +2,7 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.model.AuthenticatedUser;
 
-import java.time.LocalDateTime;
-
-import org.joda.time.Instant;
-import org.joda.time.Minutes;
-
+import java.time.Duration;
 import java.time.LocalDateTime;
 
 public class SessionUtil {
@@ -20,8 +16,6 @@ public class SessionUtil {
     }
 
     public static int minRemaining(AuthenticatedUser authenticatedUser) {
-        return 12;
-        //todo
-//        return Minutes.minutesBetween(new Instant(), authenticatedUser.getSessionTime().toInstant()).getMinutes();
+        return (int) (Duration.between(LocalDateTime.now(), authenticatedUser.getSessionTime()).getSeconds() / 60);
     }
 }

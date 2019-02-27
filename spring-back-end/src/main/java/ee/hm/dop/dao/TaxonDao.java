@@ -7,7 +7,6 @@ import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -16,9 +15,22 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Repository
 public class TaxonDao extends AbstractDao<Taxon> {
     private final Logger logger = LoggerFactory.getLogger(TaxonDao.class);
+
+
+    public List<Taxon>findTaxonDomainAndSubject(Taxon taxon){
+        return getEntityManager()
+                .createNativeQuery("" +
+                        "  SELECT tp.domain as t_id FROM TaxonPosition tp\n" +
+                        "  WHERE tp.taxon= :taxonId\n" +
+                        "  UNION ALL\n" +
+                        "  SELECT tp.subject as t_id FROM TaxonPosition tp\n" +
+                        "  WHERE tp.taxon= :taxonId ")
+                .setParameter("taxonId",taxon.getId())
+                .getResultList();
+    }
+
 
     public List<EducationalContext> findAllEducationalContext() {
         return getEntityManager()
@@ -142,6 +154,28 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .setParameter("levels", levels)
                 .getResultList();
 
+        return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+    }
+
+    /**
+     * when user is assigned high level taxon
+     * then they can access all of its children
+     */
+    public List<Long> getUserTaxonWithChildren(List<Long> users) {
+        List<BigInteger> resultList = (List<BigInteger>) getEntityManager()
+                .createNativeQuery("SELECT TP1.taxon \n" +
+                        " FROM User_Taxon ut,TaxonPosition TP1\n" +
+                        " WHERE ut.user = :users \n" +
+                        " AND (ut.taxon = TP1.educationalContext\n" +
+                        "OR ut.taxon = TP1.domain\n" +
+                        "OR ut.taxon = TP1.subject\n" +
+                        "OR ut.taxon = TP1.module\n" +
+                        "OR ut.taxon = TP1.specialization\n" +
+                        "OR ut.taxon = TP1.topic\n" +
+                        "OR ut.taxon = TP1.subtopic)\n" +
+                        "GROUP BY taxon")
+                .setParameter("users", users)
+                .getResultList();
         return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
     }
 }
