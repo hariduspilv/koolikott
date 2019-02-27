@@ -14,6 +14,7 @@ import org.apache.solr.client.solrj.response.Suggestion;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,12 +54,14 @@ public class SolrService implements SolrEngineService {
     private Client client;
     @Inject
     private Configuration configuration;
+    @Inject
+    private Environment environment;
     private SolrClient solrClient;
     private SolrIndexThread indexThread;
 
     @Inject
     public void postConstruct() {
-        postConstruct(configuration.getString(SEARCH_SERVER));
+        postConstruct(environment.getProperty(SEARCH_SERVER));
     }
 
     void postConstruct(String url) {

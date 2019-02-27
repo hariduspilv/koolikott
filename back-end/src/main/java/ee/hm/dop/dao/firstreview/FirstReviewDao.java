@@ -14,6 +14,7 @@ import javax.inject.Inject;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,10 +62,12 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     public static final String SELECT_LO_ID_B = "SELECT lo.id\n" +
             "FROM LearningObject lo\n" +
             "       JOIN FirstReview r ON r.learningObject = lo.id\n";
-    public static final String JOIN_DOMAIN_TRANSLATION = "" +
+    public static final String JOIN_TAXON_TRANSLATIONS = "" +
             "       left join TaxonPosition tp on lt.taxon = tp.taxon\n" +
             "       left JOIN Taxon t ON t.id = tp.domain\n" +
-            "       left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup = :transgroup\n";
+            "       left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup = :transgroup\n" +
+            "left JOIN Taxon t2 ON t2.id = tp.subject\n" +
+            "       left JOIN Translation tr2 ON t2.translationKey = tr2.translationKey and tr2.translationGroup = :transgroup\n";
     @Inject
     private AdminLearningObjectDao adminLearningObjectDao;
     @Inject
@@ -76,7 +79,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                 (params.hasOrderByType() ? JOIN_MATERIAL : "") +
                 (params.hasCreatorOrder() ? JOIN_USER : "") +
                 (params.hasTaxonsOrUsers() || params.hasSubjectOrder() ? JOIN_LO_TAXON : "") +
-                (params.hasSubjectOrder() ? JOIN_DOMAIN_TRANSLATION : "") +
+                (params.hasSubjectOrder() ? JOIN_TAXON_TRANSLATIONS : "") +
                 FIRST_REVIEW_WHERE +
                 (params.hasTaxons() ? LT_TAXON_IN : "") +
                 (params.hasUsers() ? LT_TAXON_USER_CONDITION : "") +
@@ -96,8 +99,10 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         query2 = params.hasSearch() ? addLanguageGroup(params, query2) : query2;
         query2 = params.hasSubjectOrder() || params.hasSearch() ? addLanguageGroup(params, query2) : query2;
 
-        List<BigInteger> resultList = query2.getResultList();
-        return adminLearningObjectDao.findById(toLongs(resultList));
+        List<Long> orderedLongs = toLongs(query2.getResultList());
+        List<AdminLearningObject> learningObjects = adminLearningObjectDao.findById(orderedLongs);
+        learningObjects.sort(Comparator.comparing(v -> orderedLongs.indexOf(v.getId())));
+        return learningObjects;
     }
 
     public Long findCoundOfAllUnreviewed(PageableQuery params) {
@@ -109,8 +114,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                 (params.hasUsers() ? LT_TAXON_USER_CONDITION : "") +
                 (params.hasSearch() ? TITLE_SEARCH_CONDITION : "") +
                 GROUP_BY_LO_ID + " ) a";
-
-        logger.info(sqlString2);
 
         Query query2 = getEntityManager()
                 .createNativeQuery(sqlString2);

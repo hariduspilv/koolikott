@@ -45,19 +45,19 @@ class controller extends Controller {
 
         this.getModerators();
         this.getMaximumUnreviewed();
-        this.sortedBy = 'byCreatedAt';
+        this.sortedBy = '-byCreatedAt';
         this.$scope.isFiltering = false
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
-        this.$scope.selectedUser = null
 
         this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
             if (newValue !== oldValue && newValue.length >=3)
                 this.filterItems()
         })
-        this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
+
+        this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true)
 
         this.$scope.filter = { };
 
@@ -86,12 +86,8 @@ class controller extends Controller {
     onFilterChange(filter) {
         const params = Object.assign({}, filter)
 
-        if (params.taxons) {
+        if (params.taxons && !this.$scope.isPaginating) {
             this.$scope.filter.taxons = params.taxons;
-        }
-
-        if (params.user) {
-            this.$scope.filter.user = params.user;
         }
     }
 
@@ -113,6 +109,7 @@ class controller extends Controller {
         this.$scope.filter = {}
         this.$scope.clearFields = true
         this.$scope.query.filter = ''
+        this.$route.reload()
     }
 
     clearFilter() {
@@ -149,8 +146,9 @@ class controller extends Controller {
         this.onParamsChange({});
     }
 
-    isDisabled(){
-         return !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user);
+    isDisabled() {
+        return this.isModerator() ? !(this.$scope.filter && this.$scope.filter.taxons) : !((this.$scope.filter && this.$scope.filter.taxons) ||
+            this.$scope.filter.user);
     }
 
     getMaximumUnreviewed(){
@@ -193,6 +191,7 @@ class controller extends Controller {
 
     getData(restUri, sortBy) {
         let query;
+        this.$scope.isLoading = true
 
         if (restUri === 'firstReview/unReviewed') {
             let url = 'rest/admin/' + restUri + '/' +
@@ -212,6 +211,8 @@ class controller extends Controller {
                 query
                 .then(({ data }) => {
                 if (data) {
+                    this.$scope.isLoading = false
+
                     if (sortBy)
                         this.$scope.query.order = sortBy
 
@@ -226,9 +227,7 @@ class controller extends Controller {
                             o.__reporters = this.getReporters(o)
                             o.__reportLabelKey = this.getImproperReportLabelKey(o)
                         })
-
-                    console.log(data);
-                    this.collection = data.items
+                    this.collection = data
 
                     if (this.viewPath === 'unReviewed') {
                         this.$scope.data = data.items;
@@ -284,15 +283,17 @@ class controller extends Controller {
 
     onSort(order) {
         this.sortedBy = order;
+        this.$scope.query.order = order;
         this.$scope.query.page = 1;
 
         if (this.viewPath === 'unReviewed'){
 
-            if (order === 'bySubject' || order === '-bySubject'){
-                this.$scope.data = this.getData('firstReview/unReviewed',order);
-            } else {
-                this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
-            }
+            // if (order === 'bySubject' || order === '-bySubject'){
+                this.getData('firstReview/unReviewed',order);
+            // }
+            // else {
+            //     this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
+            // }
         }
         else{
             this.sortService.orderItems(
@@ -322,8 +323,10 @@ class controller extends Controller {
     }
 
     onPaginate(page, limit) {
-
-        this.$scope.data = this.paginate(page, limit)
+        if (this.viewPath === 'unReviewed')
+            this.paginate(page, limit)
+        else
+            this.$scope.data = this.paginate(page, limit)
 
     }
 
@@ -417,10 +420,12 @@ class controller extends Controller {
     }
 
     paginate(page, limit) {
+        this.$scope.isPaginating = true
         const start = (page - 1) * limit
         const end = start + limit
 
         if (this.viewPath === 'unReviewed'){
+            this.$scope.query.page = page;
             return this.getData('firstReview/unReviewed', this.sortedBy);
         }
         else {
@@ -480,7 +485,8 @@ controller.$inject = [
     'taxonService',
     'iconService',
     'translationService',
-    'authenticatedUserService'
+    'authenticatedUserService',
+    '$window'
 ]
 angular.module('koolikottApp').controller('baseTableViewController', controller)
 }

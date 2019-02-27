@@ -123,9 +123,9 @@ public class PageableQuery {
         } else if (orderByCreatorDesc()) {
             return "ORDER BY max(u.surName)" + sort.name();
         } else if (orderBySubject()) {
-            return "ORDER BY min(tr.translation) " + sort.name();
+            return "ORDER BY min(tr.translation) " + sort.name() + ", min(tr2.translation) " + sort.name();
         } else if (orderBySubjectDesc()) {
-            return "ORDER BY max(tr.translation) " + sort.name();
+            return "ORDER BY max(tr.translation) " + sort.name() + ", max(tr2.translation) " + sort.name();
         } else if (orderByType()) {
             return "ORDER BY m.id " + sort.name();
         } else if (orderByTypeDesc()) {

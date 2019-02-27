@@ -51,7 +51,7 @@ public class SolrServiceTest {
 
     @Before
     public void setUp() throws Exception {
-        solrService.postConstruct("http://localhost:8983/solr/dop/");
+        solrService.postConstruct();
     }
 
     @Test

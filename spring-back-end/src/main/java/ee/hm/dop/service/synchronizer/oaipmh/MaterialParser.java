@@ -28,14 +28,13 @@ import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ezvcard.Ezvcard;
 import ezvcard.VCard;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 
 import java.time.LocalDateTime;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.CharacterData;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -66,9 +65,9 @@ import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.notEmpty;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.value;
 import static ee.hm.dop.service.synchronizer.oaipmh.MaterialParserUtil.valueToUpper;
 
+@Slf4j
 public abstract class MaterialParser {
 
-    protected final Logger logger = LoggerFactory.getLogger(this.getClass());
     public static final String NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE = "No such language for '%s'. LanguageString will have no Language";
     public static final String MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED = "Material has more or less than one source, can't be mapped.";
     public static final String ERROR_PARSING_DOCUMENT_INVALID_URL_S = "Error parsing document. Invalid URL %s";
@@ -128,7 +127,7 @@ public abstract class MaterialParser {
             setAuthors(doc, material);
             setPublishersData(doc, material);
         } catch (Exception e) {
-            logger.debug("Error while setting authors or publishers.", e.getMessage());
+            log.debug("Error while setting authors or publishers.", e.getMessage());
         }
     }
 
@@ -223,7 +222,7 @@ public abstract class MaterialParser {
         if (language != null) {
             return language;
         }
-        logger.warn(String.format(NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE, languageCode));
+        log.warn(String.format(NO_SUCH_LANGUAGE_FOR_S_LANGUAGE_STRING_WILL_HAVE_NO_LANGUAGE, languageCode));
         return null;
     }
 
@@ -327,13 +326,13 @@ public abstract class MaterialParser {
     private String getSource(Document doc) throws ParseException, URISyntaxException {
         NodeList nodeList = getNodeList(doc, getPathToLocation());
         if (nodeList.getLength() != 1) {
-            logger.error(MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED);
+            log.error(MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED);
             throw new ParseException(MATERIAL_HAS_MORE_OR_LESS_THAN_ONE_SOURCE_CAN_T_BE_MAPPED);
         }
         String source = getInitialSource(nodeList);
 
         if (!URL_VALIDATOR.isValid(source)) {
-            logger.error(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
+            log.error(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
             throw new ParseException(String.format(ERROR_PARSING_DOCUMENT_INVALID_URL_S, source));
         }
 
@@ -576,7 +575,7 @@ public abstract class MaterialParser {
     }
 
     private void logFail(RuntimeException e) {
-        logger.error("Unexpected error while parsing document. Document may not"
+        log.error("Unexpected error while parsing document. Document may not"
                 + " match mapping or XML structure - " + e.getMessage(), e);
     }
 }
