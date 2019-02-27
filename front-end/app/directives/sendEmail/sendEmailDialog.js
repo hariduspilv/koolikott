@@ -8,8 +8,10 @@
             this.$scope.emailObject = {}
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
+            this.checkUserEmail()
             this.$scope.isSendBtnVisible = false
 
+            this.$scope.userHasEmail = false
             this.$scope.emailContent = ''
             this.$scope.isSaving = false
 
@@ -18,17 +20,26 @@
             };
         }
 
-        isSendButtonDisabled(){
+        isSendButtonDisabled() {
 
-            // const {emailContent} = this.$scope.emailObject;
-            if (this.$scope.emailContent.length > 1)
-                return true
+            const {emailContent} = this.$scope.emailObject;
 
-            // return this.emailContent.length > 1;
-            // return !this.$scope.captchaSuccess || this.emailContent.length < 1;
+            if (this.$scope.emailContent.length < 1 || !this.$scope.captchaSuccess())
+                return true;
         }
 
-        // check()
+        checkUserEmail() {
+
+            let portfolioCreator = this.$rootScope.portfolioCreator;
+
+            this.userEmailService.userHasEmail(portfolioCreator)
+                .then(({data}) => {
+                        if (data) {
+                            this.$scope.userHasEmail = data;
+                        }
+                    }
+                );
+        }
 
         sendEmail(){
             let content;
@@ -51,9 +62,6 @@
                     }, () =>
                         this.$scope.isSaving = false
                 )
-
-
-
         }
 
         captchaSuccess() {
@@ -92,6 +100,10 @@
         '$interval',
         'vcRecaptchaService',
         'serverCallService',
+        'translationService',
+        'userEmailService',
+        'authenticatedUserService',
+        '$rootScope'
     ]
     angular.module('koolikottApp').controller('sendEmailDialogController', controller)
 }

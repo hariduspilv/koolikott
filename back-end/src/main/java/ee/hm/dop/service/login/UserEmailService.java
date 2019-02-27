@@ -18,6 +18,7 @@ import javax.ws.rs.core.Response;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.remove;
 
 public class UserEmailService {
 
@@ -35,6 +36,14 @@ public class UserEmailService {
 
     @Inject
     private SendMailService sendMailService;
+
+    public boolean userHasEmail(User id) {
+
+        UserEmail userEmail = userEmailDao.findByUser(id);
+
+        return userEmail != null ? true : false;
+
+    }
 
     public UserEmail save(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());

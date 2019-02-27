@@ -9,6 +9,7 @@
                 this.$mdDialog.show({
                     templateUrl: 'directives/sendEmail/sendEmail.html',
                     controller: 'sendEmailDialogController',
+                    controllerAs: '$ctrl',
                     fullscreen: true,
                     locals: {
                         location,

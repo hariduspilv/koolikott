@@ -20,14 +20,17 @@
            flex-order-gt-sm="2" flex="100">
         <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
           <label data-translate="SISU"></label>
-          <textarea ng-model="emailContent" id="email-content-description" autofocus="autofocus" rows="10" maxlength="500"></textarea>
+          <textarea ng-model="emailContent"
+                    id="email-content-description"
+                    autofocus="autofocus" rows="10"
+                    maxlength="500"></textarea>
         </md-input-container>
         <p>{{500 - emailContent.length}}</p>
       </div>
     </md-content>
     <div class="recaptcha"
          vc-recaptcha
-         key="captchaKey"
+         key="$ctrl.captchaKey"
          on-success="$ctrl.captchaSuccess()"
          on-expire="$ctrl.captchaExpired()"
          lang="$ctrl.getLanguage()"

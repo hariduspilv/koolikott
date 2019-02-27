@@ -20,6 +20,10 @@
                 .makePost('rest/userEmail/validate', {user: user, pin: pin, email: email})
         }
 
+        userHasEmail(user) {
+            return this.serverCallService
+                .makePost('rest/userEmail/exists', {user: user})
+        }
     }
 
     controller.$inject = [

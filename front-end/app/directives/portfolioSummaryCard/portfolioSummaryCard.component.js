@@ -83,10 +83,18 @@ class controller extends Controller {
             this.showEditMetadataDialog()
             this.$rootScope.openMetadataDialog = null
         }
+        this.getPortfolioCreator()
     }
     $doCheck() {
         if (this.$scope.portfolio !== this.portfolio)
             this.$scope.portfolio = this.portfolio
+    }
+
+    getPortfolioCreator(){
+        this.$rootScope.portfolioCreator = this.portfolio.creator;
+        // this.$rootScope.portfolioCreator = this.portfolio.creator.id;
+        return this.$rootScope.portfolioCreator;
+
     }
     canEdit() {
         return !this.authenticatedUserService.isRestricted() && (

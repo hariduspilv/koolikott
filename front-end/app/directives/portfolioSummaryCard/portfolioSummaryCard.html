@@ -17,7 +17,7 @@
               id="qr-code"
               data-location="{{pageUrl}}"></dop-qr>
           </div>
-          <dop-send-email
+          <dop-send-email ng-if="isAdminOrModerator()"
             id="send-email"
             data-location="{{pageUrl}}">
           </dop-send-email>
