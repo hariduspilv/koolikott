@@ -1,8 +1,9 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -10,13 +11,10 @@ import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -31,8 +29,17 @@ public class FirstReviewAdminResource extends BaseResource {
     @GetMapping
     @RequestMapping("unReviewed")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<AdminLearningObject> getUnReviewed() {
-        return firstReviewAdminService.getUnReviewed(getLoggedInUser());
+    public SearchResult getUnReviewed(@QueryParam("page") int page,
+                                      @QueryParam("itemSortedBy") String itemSortedBy,
+                                      @QueryParam("query") String query,
+                                      @QueryParam("taxon") List<Long> taxons,
+                                      @QueryParam("user") List<Long> user,
+                                      @QueryParam("lang") int lang) {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, user, lang);
+        if (!pageableQuery.isValid()) {
+            throw badRequest("Query parameters invalid");
+        }
+        return firstReviewAdminService.getUnReviewed(getLoggedInUser(), pageableQuery);
     }
 
     @GetMapping
