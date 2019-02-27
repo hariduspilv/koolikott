@@ -1,43 +1,67 @@
 package ee.hm.dop.service.reviewmanagement;
 
-import ee.hm.dop.dao.FirstReviewDao;
-import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.FirstReview;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.User;
+import ee.hm.dop.dao.TaxonPositionDao;
+import ee.hm.dop.dao.firstreview.FirstReviewDao;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
-import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
+import ee.hm.dop.model.taxon.FirstReviewTaxon;
+import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.TaxonDTO;
+import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.utils.UserUtil;
-
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.time.LocalDateTime.now;
+import java.util.stream.Collectors;
 
 @Service
-@Transactional
 public class FirstReviewAdminService {
 
     @Inject
     private FirstReviewDao firstReviewDao;
+    @Inject
+    private TaxonPositionDao taxonPositionDao;
 
-    public List<AdminLearningObject> getUnReviewed(User user) {
+    public SearchResult getUnReviewed(User user, PageableQuery pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
-        if (UserUtil.isAdmin(user)) {
-            return firstReviewDao.findAllUnreviewed();
-        } else {
-            return firstReviewDao.findAllUnreviewed(user);
+        if (UserUtil.isModerator(user)) {
+            pageableQuery.setUsers(Arrays.asList(user.getId()));
         }
+        List<AdminLearningObject> unreviewed = firstReviewDao.findAllUnreviewed(pageableQuery);
+        Long unreviewedCount = firstReviewDao.findCoundOfAllUnreviewed(pageableQuery);
+        return getSearchResult(unreviewed, unreviewedCount);
     }
 
-    public long getUnReviewedCount(User user) {
+    private SearchResult getSearchResult(List<AdminLearningObject> allUnreviewed, Long unreviewedCount) {
+        for (AdminLearningObject learningObject : allUnreviewed) {
+            List<FirstReviewTaxon> firstReviewTaxons = learningObject.getTaxons().stream()
+                    .map(this::convert)
+                    .distinct()
+                    .collect(Collectors.toList());
+            learningObject.setFirstReviewTaxons(firstReviewTaxons);
+        }
+
+        SearchResult searchResult = new SearchResult();
+        searchResult.setItems(allUnreviewed);
+        searchResult.setTotalResults(unreviewedCount);
+        return searchResult;
+    }
+
+    private FirstReviewTaxon convert(Taxon taxon) {
+        TaxonPosition tp = taxonPositionDao.findByTaxon(taxon);
+        return new FirstReviewTaxon(toDto(tp.getEducationalContext()), toDto(tp.getDomain()), toDto(tp.getSubject()));
+    }
+
+    private TaxonDTO toDto(Taxon taxon) {
+        if (taxon == null) return null;
+        return new TaxonDTO(taxon.getId(), taxon.getName(), taxon.getTranslationKey());
+    }
+
+    public Long getUnReviewedCount(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findCountOfUnreviewed();
@@ -51,8 +75,7 @@ public class FirstReviewAdminService {
         FirstReview firstReview = new FirstReview();
         firstReview.setLearningObject(learningObject);
         firstReview.setReviewed(false);
-        firstReview.setCreatedAt(now());
-
+        firstReview.setCreatedAt(LocalDateTime.now());
         return firstReviewDao.createOrUpdate(firstReview);
     }
 
