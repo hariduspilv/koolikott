@@ -266,8 +266,8 @@ class controller extends Controller {
     }
 
     openLearningObject(learningObject) {
-        this.$location.url(
-            this.getLearningObjectUrl(learningObject)
+        this.$window.open(
+            this.getLearningObjectUrl(learningObject), '_blank'
         )
     }
     getLearningObjectUrl(learningObject) {
