@@ -22,6 +22,7 @@
           <label data-translate="SISU"></label>
           <textarea ng-model="emailContent" id="email-content-description" autofocus="autofocus" rows="10" maxlength="500"></textarea>
         </md-input-container>
+        <p>{{500 - emailContent.length}}</p>
       </div>
     </md-content>
     <div class="recaptcha"
@@ -34,14 +35,15 @@
     <md-dialog-actions>
       <span flex></span>
 
-      <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button" data-ng-disabled="isSaving"
+      <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button"
+                 data-ng-disabled="isSaving"
                  data-ng-click="cancel()">
         <span data-translate="BUTTON_CANCEL"></span>
       </md-button>
       <md-button class="md-raised md-primary"
-                 data-ng-click="$ctrl.saveCustomerSupportRequest()"
-                 data-ng-disabled="$ctrl.isSendButtonDisabled() || isSaving"
-                 aria-label="Customer support send mail"
+                 data-ng-click="$ctrl.sendEmail()"
+                 data-ng-disabled="$ctrl.isSendButtonDisabled()"
+                 aria-label="Send mail"
       >
         <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
       </md-button>
