@@ -39,7 +39,6 @@ class controller extends Controller {
         this.$scope.portfolio = this.portfolio
         this.$scope.pageUrl = this.$location.absUrl()
 
-
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
@@ -83,16 +82,23 @@ class controller extends Controller {
             this.showEditMetadataDialog()
             this.$rootScope.openMetadataDialog = null
         }
-        this.$rootScope.portfolioCreator = this.getPortfolioCreator()
+
+        // this.$rootScope.portfolioCreator = this.getPortfolioCreator()
+        this.$rootScope.portfolioCreator = this.portfolio.creator.id
+
+        // this.$scope.creatorHasEmail = () => {
+        //     this.checkUserEmail();
+        // }
     }
     $doCheck() {
         if (this.$scope.portfolio !== this.portfolio)
             this.$scope.portfolio = this.portfolio
     }
 
-    getPortfolioCreator(){
-        return this.portfolio.creator.id;
-    }
+    // getPortfolioCreator(){
+    //     return this.portfolio.creator.id;
+    // }
+
 
     canEdit() {
         return !this.authenticatedUserService.isRestricted() && (
@@ -178,6 +184,7 @@ class controller extends Controller {
             this.deletePortfolio
         )
     }
+
     restorePortfolio() {
         this.serverCallService
             .makePost('rest/admin/deleted/restore', this.portfolio)

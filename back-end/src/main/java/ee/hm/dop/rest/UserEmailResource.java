@@ -1,9 +1,10 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserEmail;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.login.UserEmailService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -43,11 +44,25 @@ public class UserEmailResource extends BaseResource {
     }
 
     @GET
-    @Path("exists")
+    @Path("getEmail")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public boolean userHasEmail(@QueryParam("userId") int userId)
+    public UserEmail userHasEmail(@QueryParam("userId") int userId)
     {
-        return userEmailService.userHasEmail(userId);
+        return userEmailService.getUserEmail(userId);
+    }
+
+    @POST
+    @Path("saveEmailForCreator")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response saveEmailForCreator(String emailContent) {
+
+        if (userEmailService.saveEmailForCreator(emailContent,getLoggedInUser()))
+            return Response.status(HttpURLConnection.HTTP_OK).build();
+        else
+            return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
+
     }
 }

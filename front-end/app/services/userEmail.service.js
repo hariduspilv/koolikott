@@ -22,7 +22,13 @@
 
         userHasEmail(userId) {
             return this.serverCallService
-                .makeGet('rest/userEmail/exists/?userId=' + userId)
+                .makeGet('rest/userEmail/getEmail/?userId=' + userId)
+        }
+
+        saveEmailForCreator(emailContent) {
+            return this.serverCallService
+                .makePost('rest/userEmail/saveEmailForCreator', emailContent)
+
         }
     }
 

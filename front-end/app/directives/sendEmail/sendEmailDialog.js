@@ -8,7 +8,7 @@
             this.$scope.emailObject = {}
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
-            this.checkUserEmail()
+
             this.$scope.isSendBtnVisible = false
 
             this.$scope.userHasEmail = false
@@ -21,47 +21,21 @@
         }
 
         isSendButtonDisabled() {
-
-            const {emailContent} = this.$scope.emailObject;
-
-            if (this.$scope.emailContent.length < 1 || !this.$scope.captchaSuccess())
-                return true;
+            return (this.$scope.emailContent.length < 3 || !this.$scope.captchaSuccess)
         }
 
-        checkUserEmail() {
-
-            let portfolioCreator = this.$rootScope.portfolioCreator;
-
-            this.userEmailService.userHasEmail(portfolioCreator)
-                .then(({data}) => {
-                        if (data) {
-                            this.$scope.userHasEmail = data;
-                        }
-                    }
-                );
-        }
-
-        sendEmail(){
-            let content;
+        sendEmail() {
 
             this.$scope.isSaving = true
 
-            if (this.$scope.emailContent.length > 0)
-                content = this.$scope.emailContent
-
-            const {emailcontent} = this.$scope.emailObject
-
-            this.serverCallService.makePost('/rest/admin/???',  {})
+            this.userEmailService.saveEmailForCreator(this.$scope.emailContent)
                 .then(response => {
-                        this.$scope.isSaving = false
-                        if (response.status === 200) {
-                            this.$scope.captchaSuccess = false
-                        } else {
-                            this.$scope.captchaSuccess = false
-                        }
-                    }, () =>
-                        this.$scope.isSaving = false
-                )
+                    this.$scope.isSaving = false
+                    if (response.status === 200) {
+                        alert('töötab')
+                        this.setTimeout(this.showSentEmailDialog(), 2000)
+                    }
+                })
         }
 
         captchaSuccess() {
@@ -88,6 +62,31 @@
                 this.grecaptcha.reset();
             }
         }
+        showSentEmailDialog(){
+            this.$mdDialog.show({
+                template: `<md-dialog aria-label="Email edukalt saadetud modaalaken" class="login-dialog">
+                    <md-toolbar class="md-accent">
+                      <div class="md-toolbar-tools" flex>
+                        <span flex></span>
+                        <md-button ng-click="cancel()" id="email-sent class="md-icon-button"
+                                   aria-label="Email edukalt saadetud modaalaken">
+                          <md-icon>close</md-icon>
+                        </md-button>
+                      </div>
+                    </md-toolbar>
+                    <md-dialog-content>
+                      <md-content data-layout-padding>
+                        <p><span id="location-restore-text" data-translate="SEND_EMAIL_SENT"></span></p>
+                      </md-content>
+                    </md-dialog-content>
+                   </md-dialog>`,
+                controller: 'sendEmailDialogController',
+                controllerAs: '$ctrl',
+                clickOutsideToClose: true,
+
+            })
+
+        }
     }
 
     controller.$inject = [
@@ -96,7 +95,6 @@
         '$window',
         '$mdDialog',
         '$location',
-        'locals',
         '$interval',
         'vcRecaptchaService',
         'serverCallService',

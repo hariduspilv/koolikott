@@ -1,6 +1,7 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.model.CustomerSupport;
+import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.utils.DateUtils;
 import org.apache.commons.configuration2.Configuration;
@@ -117,6 +118,32 @@ public class SendMailService {
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
                         "Pane tähele, et kood on personaalne, ära saada seda teistele kasutajatele edasi." + BREAK +
                         "Küsimuste korral kirjuta: e-koolikott@hitsa.ee")
+                .buildEmail();
+    }
+//    "Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
+//                + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK
+//                + "Sisuga: " + customerSupport.getMessage() + BREAK
+//                + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt())
+//
+
+    public Email sendEmailToExpertSelf(EmailToCreator emailToCreator) {
+        return EmailBuilder.startingBlank()
+                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .to(emailToCreator.getSender(), emailToCreator.getEmail())
+                .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
+                .withHTMLText("See on koopia mille saatsid materjali või kogumiku loojale" + BREAK +
+                        emailToCreator.getText())
+                .buildEmail();
+
+    }
+
+    public Email sendEmailToCreator(EmailToCreator emailToCreator) {
+
+        return EmailBuilder.startingBlank()
+                .from(emailToCreator.getSender(), emailToCreator.getEmail())
+                .to(emailToCreator.getSender(), emailToCreator.getEmail()) //TODO
+                .withSubject("e-Koolikott: Aineeksperdi küsimus")
+                .withHTMLText(emailToCreator.getText())
                 .buildEmail();
     }
 }

@@ -4,10 +4,7 @@ import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.dao.UserEmailDao;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserEmail;
-import ee.hm.dop.model.User_Agreement;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.joda.time.DateTime;
@@ -37,9 +34,43 @@ public class UserEmailService {
     @Inject
     private SendMailService sendMailService;
 
-    public boolean userHasEmail(long id) {
-        UserEmail userEmail = userEmailDao.findByUser(userDao.findUserById(id));
-        return userEmail != null ? true : false;
+    public UserEmail getUserEmail(long id) {
+
+        User user = userDao.findUserById(id);
+        if (user == null) {
+            throw notFound("User not found");
+        }
+        UserEmail userEmail = userEmailDao.findByUser(user);
+        if (userEmail == null) {
+            throw notFound("User email not found");
+        }
+        return userEmail;
+    }
+
+    public boolean saveEmailForCreator(String emailContent, User user) {
+
+        if (isBlank(emailContent))
+            throw badRequest("Email Empty");
+
+        UserEmail userEmail = userEmailDao.findByUser(user);
+        String senderEmail = userEmail.getEmail();
+
+        EmailToCreator emailToCreator = new EmailToCreator();
+        emailToCreator.setSender(user.getFullName());
+        emailToCreator.setEmail(senderEmail);
+        emailToCreator.setText(emailContent);
+        emailToCreator.setUser(user);
+
+        if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator)))
+            sendMailService.sendEmail(sendMailService.sendEmailToExpertSelf(emailToCreator));
+//        emailToCreator.setSentAt(DateTime.now());
+//        emailToCreator.setSentSuccessfully(true);
+//        emailToCreator.setSentTries(1);
+//        emailToCreator.setErrorMessage("Sent successfully");
+//
+//
+
+
     }
 
     public UserEmail save(UserEmail userEmail) {

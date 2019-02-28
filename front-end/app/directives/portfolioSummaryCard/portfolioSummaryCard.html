@@ -17,9 +17,9 @@
               id="qr-code"
               data-location="{{pageUrl}}"></dop-qr>
           </div>
-          <dop-send-email ng-if="isAdminOrModerator()"
-            id="send-email"
-            data-location="{{pageUrl}}">
+          <dop-send-email
+            ng-if="isAdminOrModerator()"
+            id="send-email">
           </dop-send-email>
           <md-button ng-if="!$root.isEditPortfolioMode && !$root.isFullScreen"
                      data-ng-click="toggleFullScreen()"

@@ -15,7 +15,7 @@
 
       </div>
       <!-- Description -->
-      <span data-translate="SAADA_OMA_TÄPSUSTAV_KÜSIMUS"></span>
+      <span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span>
       <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
            flex-order-gt-sm="2" flex="100">
         <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
@@ -30,7 +30,7 @@
     </md-content>
     <div class="recaptcha"
          vc-recaptcha
-         key="$ctrl.captchaKey"
+         key="captchaKey"
          on-success="$ctrl.captchaSuccess()"
          on-expire="$ctrl.captchaExpired()"
          lang="$ctrl.getLanguage()"
