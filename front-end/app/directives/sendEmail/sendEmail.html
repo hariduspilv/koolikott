@@ -1,8 +1,11 @@
 <md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-sm="75" flex id="add-portfolio-modal"
-           class="fullscreen-dialog">
-  <form name="addPortfolioForm">
+           class="fullscreen-dialog creator-email-dialog">
+  <form name="sendEmailToCreator">
     <md-toolbar class="md-accent">
       <div class="md-toolbar-tools" flex>
+        <div>
+          <h2 data-translate="SEND_EMAIL_SPECIFY_QUESTION"></h2>
+        </div>
         <span flex></span>
         <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
                    aria-label="Sulge kogumiku lisamise modaalaken">
@@ -16,20 +19,21 @@
 
         </div>
         <!-- Description -->
-        <span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span>
+        <!--<span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span>-->
         <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
              flex-order-gt-sm="2" flex="100">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-            <label data-translate="SEND_EMAIL_CONTENT"></label>
-            <textarea name="emailContent"
+            <textarea
+                      placeholder="{{'SEND_EMAIL_CONTENT' | translate}}"
+                      name="emailContent"
                       ng-model="emailToCreator.emailContent"
                       id="email-content-description"
-                      autofocus="autofocus" rows="10"
+                      autofocus="autofocus"
+                      rows="5"
                       maxlength="500"
             ></textarea>
           </md-input-container>
         </div>
-        <div>{{500 - emailToCreator.emailContent.length}}</div>
       </md-content>
       <div class="recaptcha"
            vc-recaptcha
