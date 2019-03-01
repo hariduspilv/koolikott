@@ -53,7 +53,7 @@ class controller extends Controller {
 
         this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
-            if (newValue !== oldValue && newValue.length >=3)
+            if (newValue !== oldValue && (newValue.length >=3 || !newValue))
                 this.filterItems()
         })
 
