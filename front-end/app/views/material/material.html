@@ -34,9 +34,13 @@
                 data-title="getCorrectLanguageString(material.titles)"
                 data-object="material"></dop-share>
               <div data-ng-if="!material.deleted">
-              <dop-qr
-                id="qr-code"
-                data-location="{{location}}"></dop-qr>
+                <dop-send-email
+                  ng-if="isAdminOrModerator"
+                  id="send-email">
+                </dop-send-email>
+                <dop-qr
+                  id="qr-code"
+                  data-location="{{location}}"></dop-qr>
               </div>
               <md-button style="min-width: 0px"
                          data-ng-click="toggleFullScreen()"

@@ -8,22 +8,16 @@
 
             this.showLoEmailCodeDialog = () => {
 
-                this.userEmailService.userHasEmail(this.$rootScope.portfolioCreator)
-                    .then(data => {
-                        if ({data}) {
-                            if (data.email !== '')
-                                this.$scope.userEmail = data.data.email;
-                            else
+                this.userEmailService.userHasEmail(this.$rootScope.creator.id)
+                    .then(response => {
+                            if (response.status === 200) {
+                                this.showDialog();
+                            } else {
                                 this.showNoCreatorEmailDialog()
-
-                            this.showDialog();
-                        } else if (!{data}) {
-
-                            this.showNoCreatorEmailDialog()
-                        }
-                    })
-                    .catch((err) => {
-                        console.log(err);
+                            }
+                        })
+                    .catch(() => {
+                        this.showNoCreatorEmailDialog()
                     });
             };
         }
@@ -43,7 +37,7 @@
                     </md-toolbar>
                     <md-dialog-content>
                       <md-content data-layout-padding>
-                        <p><span id="location-restore-text" data-translate="KEY"></span></p>
+                        <p><span id="location-restore-text" data-translate="SEND_EMAIL_NO_CREATOR_EMAIL"></span></p>
                       </md-content>
                     </md-dialog-content>
                    </md-dialog>`,
@@ -78,11 +72,10 @@ component('dopSendEmail', {
     controller,
     template: `
             <div ng-click="$ctrl.showLoEmailCodeDialog()">
-                <md-tooltip><span data-translate="TOOLTIP_SHOW_QR_CODE"></span></md-tooltip>
                 <md-button
                   class="md-icon-button">
                   <md-icon md-menu-align-target>email</md-icon>
-                  <md-tooltip><span data-translate="FULL_SCREEN_ON"></span></md-tooltip>
+                  <md-tooltip><span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span></md-tooltip>
                 </md-button>
               </div>
         `

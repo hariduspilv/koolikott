@@ -10,49 +10,57 @@
         </md-button>
       </div>
     </md-toolbar>
-    <md-content class="md-padding">
-      <div layout="row" layout-align="center center" layout-align-xs="start center">
+    <div data-ng-if="!emailSent">
+      <md-content class="md-padding">
+        <div layout="row" layout-align="center center" layout-align-xs="start center">
 
-      </div>
-      <!-- Description -->
-      <span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span>
-      <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
-           flex-order-gt-sm="2" flex="100">
-        <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-          <label data-translate="SISU"></label>
-          <textarea ng-model="emailContent"
-                    id="email-content-description"
-                    autofocus="autofocus" rows="10"
-                    maxlength="500"></textarea>
-        </md-input-container>
-        <p>{{500 - emailContent.length}}</p>
-      </div>
-    </md-content>
-    <div class="recaptcha"
-         vc-recaptcha
-         key="captchaKey"
-         on-success="$ctrl.captchaSuccess()"
-         on-expire="$ctrl.captchaExpired()"
-         lang="$ctrl.getLanguage()"
-    ></div>
-    <md-dialog-actions>
-      <span flex></span>
+        </div>
+        <!-- Description -->
+        <span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span>
+        <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
+             flex-order-gt-sm="2" flex="100">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+            <label data-translate="SEND_EMAIL_CONTENT"></label>
+            <textarea name="emailContent"
+                      ng-model="emailToCreator.emailContent"
+                      id="email-content-description"
+                      autofocus="autofocus" rows="10"
+                      maxlength="500"
+            ></textarea>
+          </md-input-container>
+        </div>
+        <div>{{500 - emailToCreator.emailContent.length}}</div>
+      </md-content>
+      <div class="recaptcha"
+           vc-recaptcha
+           key="captchaKey"
+           on-success="$ctrl.captchaSuccess()"
+           on-expire="$ctrl.captchaExpired()"
+           lang="$ctrl.getLanguage()"
+      ></div>
+      <md-dialog-actions>
+        <span flex></span>
 
-      <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button"
-                 data-ng-disabled="isSaving"
-                 data-ng-click="cancel()">
-        <span data-translate="BUTTON_CANCEL"></span>
-      </md-button>
-      <md-button class="md-raised md-primary"
-                 data-ng-click="$ctrl.sendEmail()"
-                 data-ng-disabled="$ctrl.isSendButtonDisabled()"
-                 aria-label="Send mail"
-      >
-        <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
-      </md-button>
-      <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
-                            data-ng-show="isSaving"></md-progress-circular>
-    </md-dialog-actions>
+        <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button"
+                   data-ng-disabled="isSaving"
+                   data-ng-click="cancel()">
+          <span data-translate="BUTTON_CANCEL"></span>
+        </md-button>
+        <md-button class="md-raised md-primary"
+                   data-ng-click="$ctrl.sendEmail()"
+                   data-ng-disabled="isSendButtonDisabled()"
+                   aria-label="Send mail"
+        >
+          <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
+        </md-button>
+        <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                              data-ng-show="isSaving"></md-progress-circular>
+      </md-dialog-actions>
+    </div>
+    <div layout-align="center center" data-ng-if="emailSent">
+      <span data-translate="SEND_EMAIL_MESSAGE_SENT"></span>
+    </div>
   </form>
+
 </md-dialog>
 

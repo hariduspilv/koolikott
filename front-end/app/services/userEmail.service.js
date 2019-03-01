@@ -24,12 +24,6 @@
             return this.serverCallService
                 .makeGet('rest/userEmail/getEmail/?userId=' + userId)
         }
-
-        saveEmailForCreator(emailContent) {
-            return this.serverCallService
-                .makePost('rest/userEmail/saveEmailForCreator', emailContent)
-
-        }
     }
 
     controller.$inject = [

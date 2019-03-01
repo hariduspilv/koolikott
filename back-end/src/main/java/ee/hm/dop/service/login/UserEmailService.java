@@ -1,9 +1,6 @@
 package ee.hm.dop.service.login;
 
-import ee.hm.dop.dao.AuthenticationStateDao;
-import ee.hm.dop.dao.UserAgreementDao;
-import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.dao.UserEmailDao;
+import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
@@ -15,7 +12,6 @@ import javax.ws.rs.core.Response;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.remove;
 
 public class UserEmailService {
 
@@ -34,6 +30,9 @@ public class UserEmailService {
     @Inject
     private SendMailService sendMailService;
 
+    @Inject
+    private EmailToCreatorDao emailToCreatorDao;
+
     public UserEmail getUserEmail(long id) {
 
         User user = userDao.findUserById(id);
@@ -47,30 +46,39 @@ public class UserEmailService {
         return userEmail;
     }
 
-    public boolean saveEmailForCreator(String emailContent, User user) {
+    public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
 
-        if (isBlank(emailContent))
-            throw badRequest("Email Empty");
+        if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
 
-        UserEmail userEmail = userEmailDao.findByUser(user);
-        String senderEmail = userEmail.getEmail();
+        UserEmail userSenderEmail = userEmailDao.findByUser(userSender);
 
-        EmailToCreator emailToCreator = new EmailToCreator();
-        emailToCreator.setSender(user.getFullName());
-        emailToCreator.setEmail(senderEmail);
-        emailToCreator.setText(emailContent);
-        emailToCreator.setUser(user);
+        User userCreator = userDao.findUserById(emailToCreator.getCreatorId());
+        UserEmail creatorEmail = userEmailDao.findByUser(userCreator);
 
-        if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator)))
+        emailToCreator.setCreatorEmail(creatorEmail.getEmail());
+        emailToCreator.setSenderName(userSender.getFullName());
+        emailToCreator.setSenderEmail(userSenderEmail.getEmail());
+        emailToCreator.setUser(userCreator);
+        emailToCreator.setCreatedAt(DateTime.now());
+        emailToCreator.setSentTries(0);
+
+        if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
             sendMailService.sendEmail(sendMailService.sendEmailToExpertSelf(emailToCreator));
-//        emailToCreator.setSentAt(DateTime.now());
-//        emailToCreator.setSentSuccessfully(true);
-//        emailToCreator.setSentTries(1);
-//        emailToCreator.setErrorMessage("Sent successfully");
-//
-//
+            emailToCreator.setSentAt(DateTime.now());
+            emailToCreator.setSentSuccessfully(true);
+            emailToCreator.setSentTries(1);
+            emailToCreator.setErrorMessage("Sent successfully");
 
-
+        } else {
+            emailToCreator.setSentTries(2);
+            emailToCreator.setSentAt(DateTime.now());
+            emailToCreator.setErrorMessage("Failed to send email to creator");
+            if (!sendMailService.sendEmail(sendMailService.sendEmailToSupportWhenSendEmailToCreatorFailed(emailToCreator))) {
+                emailToCreator.setErrorMessage("Failed to send email to creator");
+                emailToCreator.setSentTries(3);
+            }
+        }
+        return emailToCreatorDao.createOrUpdate(emailToCreator);
     }
 
     public UserEmail save(UserEmail userEmail) {

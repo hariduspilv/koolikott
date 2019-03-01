@@ -1,7 +1,6 @@
 package ee.hm.dop.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -19,19 +18,16 @@ public class EmailToCreator implements AbstractEntity {
     @GeneratedValue
     private Long id;
 
-    @Column(unique = true, nullable = false)
-    private String sender;
+    @Column(nullable = false)
+    private String senderName;
 
     @Column(nullable = false)
-    private String email;
+    private String senderEmail;
 
-    @Column(nullable = false)
-    private String subject;
+    @Column(columnDefinition = "TEXT", nullable = false)
+    private String message;
 
-    @Column(nullable = false)
-    private String text;
-
-    @Column(nullable = false)
+    @Column
     private boolean sentSuccessfully;
 
     @Column
@@ -46,47 +42,56 @@ public class EmailToCreator implements AbstractEntity {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime sentAt;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "user")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User user;
 
-    @Column(nullable = false)
+    @Column
     private String errorMessage;
 
     @Column(nullable = false)
-    private int unsuccessfull;
+    private int sentTries;
 
-    public String getSender() {
-        return sender;
+    @Transient
+    private String creatorEmail;
+
+
+    @Transient
+    private Long creatorId;
+
+    public EmailToCreator() {
     }
 
-    public void setSender(String sender) {
-        this.sender = sender;
+    public Long getId() {
+        return id;
     }
 
-    public String getEmail() {
-        return email;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public String getSenderName() {
+        return senderName;
     }
 
-    public String getSubject() {
-        return subject;
+    public void setSenderName(String senderName) {
+        this.senderName = senderName;
     }
 
-    public void setSubject(String subject) {
-        this.subject = subject;
+    public String getSenderEmail() {
+        return senderEmail;
     }
 
-    public String getText() {
-        return text;
+    public void setSenderEmail(String senderEmail) {
+        this.senderEmail = senderEmail;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
     }
 
     public boolean isSentSuccessfully() {
@@ -129,52 +134,28 @@ public class EmailToCreator implements AbstractEntity {
         this.errorMessage = errorMessage;
     }
 
-    public int getUnsuccessfull() {
-        return unsuccessfull;
+    public int getSentTries() {
+        return sentTries;
     }
 
-    public void setUnsuccessfull(int unsuccessfull) {
-        this.unsuccessfull = unsuccessfull;
+    public void setSentTries(int sentTries) {
+        this.sentTries = sentTries;
     }
 
-
-    @Override
-    public Long getId() {
-        return null;
+    public String getCreatorEmail() {
+        return creatorEmail;
     }
 
-//    @JsonIgnore
-//    @Column(unique = true, nullable = false)
-//    private String idCode;
-//
-//    @Column(columnDefinition = "TEXT")
-//    private String location;
+    public void setCreatorEmail(String creatorEmail) {
+        this.creatorEmail = creatorEmail;
+    }
 
-//    @Enumerated(EnumType.STRING)
-//    private Role role;
-//
-//    @ManyToOne
-//    @JoinColumn(name = "publisher")
-//    private Publisher publisher;
-//
-//    @OneToMany
-//    @JoinTable(
-//            name = "User_Taxon",
-//            joinColumns = {@JoinColumn(name = "user")},
-//            inverseJoinColumns = {@JoinColumn(name = "taxon")},
-//            uniqueConstraints = @UniqueConstraint(columnNames = {"user", "taxon"}))
-//    @JsonIgnoreProperties(ignoreUnknown = true)
-//    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
-//    @JsonSerialize(contentUsing = TaxonSerializer.class)
-//    private List<Taxon> userTaxons;
-//
-//    @JsonIgnore
-//    @OneToMany(mappedBy = "user", fetch = LAZY)
-//    private List<User_Agreement> userAgreements;
-//
-//    @Transient
-//    @JsonIgnore
-//    private boolean newUser;
+    public Long getCreatorId() {
+        return creatorId;
+    }
 
-
+    public void setCreatorId(Long creatorId) {
+        this.creatorId = creatorId;
+    }
 }
+

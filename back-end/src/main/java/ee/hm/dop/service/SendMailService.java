@@ -120,30 +120,35 @@ public class SendMailService {
                         "Küsimuste korral kirjuta: e-koolikott@hitsa.ee")
                 .buildEmail();
     }
-//    "Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
-//                + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK
-//                + "Sisuga: " + customerSupport.getMessage() + BREAK
-//                + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt())
-//
 
     public Email sendEmailToExpertSelf(EmailToCreator emailToCreator) {
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
-                .to(emailToCreator.getSender(), emailToCreator.getEmail())
+                .to(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
                 .withHTMLText("See on koopia mille saatsid materjali või kogumiku loojale" + BREAK +
-                        emailToCreator.getText())
+                        emailToCreator.getMessage())
                 .buildEmail();
-
     }
 
     public Email sendEmailToCreator(EmailToCreator emailToCreator) {
 
         return EmailBuilder.startingBlank()
-                .from(emailToCreator.getSender(), emailToCreator.getEmail())
-                .to(emailToCreator.getSender(), emailToCreator.getEmail()) //TODO
+                .from(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
+                .to(emailToCreator.getUser().getFullName(), emailToCreator.getCreatorEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimus")
-                .withHTMLText(emailToCreator.getText())
+                .withHTMLText(emailToCreator.getMessage())
+                .buildEmail();
+    }
+
+    public Email sendEmailToSupportWhenSendEmailToCreatorFailed(EmailToCreator emailToCreator) {
+        return EmailBuilder.startingBlank()
+                .from("e-Koolikott", emailToCreator.getSenderEmail())
+                .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
+                .withSubject("Aineeksperdi küsimus ebaõnnestunud ekirja saatmine")
+                .withHTMLText("Kasutaja: " + emailToCreator.getSenderName() + ", " + emailToCreator.getSenderEmail() + BREAK
+                        + BREAK + "Sisuga: " + emailToCreator.getMessage() + BREAK
+                        + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(emailToCreator.getSentAt()))
                 .buildEmail();
     }
 }

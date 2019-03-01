@@ -17,6 +17,8 @@ angular.module('koolikottApp')
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
 
+            $scope.isAdminOrModerator = isAdminOrModerator();
+
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
                     $scope.toggleFullScreen();
@@ -170,6 +172,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
+                $rootScope.creator = $scope.material.creator;
 
                 if ($scope.material)
                     materialService.increaseViewCount($scope.material);
@@ -351,6 +354,13 @@ angular.module('koolikottApp')
                 if (Array.isArray($scope.material.targetGroups) && $scope.material.targetGroups.length) {
                     return targetGroupService.getConcentratedLabelByTargetGroups($scope.material.targetGroups);
                 }
+            }
+
+            function isAdminOrModerator() {
+                return (
+                    authenticatedUserService.isAdmin() ||
+                    authenticatedUserService.isModerator()
+                )
             }
 
 
