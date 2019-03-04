@@ -82,8 +82,6 @@ class controller extends Controller {
             this.showEditMetadataDialog()
             this.$rootScope.openMetadataDialog = null
         }
-
-        this.$rootScope.creator = this.portfolio.creator
     }
     $doCheck() {
         if (this.$scope.portfolio !== this.portfolio)

@@ -54,11 +54,11 @@ public class UserEmailResource extends BaseResource {
     }
 
     @POST
-    @Path("sendEmailForCreator")
+    @Path("sendEmailToCreator")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public EmailToCreator saveEmailForCreator(EmailToCreator emailToCreator) {
+    public EmailToCreator sendEmailToCreator(EmailToCreator emailToCreator) {
 
         return userEmailService.sendEmailForCreator(emailToCreator, getLoggedInUser());
 

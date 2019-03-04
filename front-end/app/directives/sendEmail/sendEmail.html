@@ -1,7 +1,7 @@
 <md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-sm="75" flex id="add-portfolio-modal"
            class="fullscreen-dialog creator-email-dialog">
   <form name="sendEmailToCreator">
-    <md-toolbar class="md-accent">
+    <md-toolbar data-ng-if="!emailSent" class="md-accent">
       <div class="md-toolbar-tools" flex>
         <div>
           <h2 data-translate="SEND_EMAIL_SPECIFY_QUESTION"></h2>
@@ -13,13 +13,24 @@
         </md-button>
       </div>
     </md-toolbar>
+    <md-toolbar data-ng-if="emailSent" class="md-accent">
+      <div class="md-toolbar-tools" flex>
+        <div>
+          <h2 data-translate="CUSTOMER_SUPPORT_THANK_YOU"></h2>
+        </div>
+        <span flex></span>
+        <md-button ng-click="cancel()" id="add2-portfolio-close" class="md-icon-button"
+                   aria-label="Sulge kogumiku lisamise modaalaken">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
     <div data-ng-if="!emailSent">
       <md-content class="md-padding">
         <div layout="row" layout-align="center center" layout-align-xs="start center">
 
         </div>
         <!-- Description -->
-        <!--<span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span>-->
         <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
              flex-order-gt-sm="2" flex="100">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
@@ -61,7 +72,7 @@
                               data-ng-show="isSaving"></md-progress-circular>
       </md-dialog-actions>
     </div>
-    <div layout-align="center center" data-ng-if="emailSent">
+    <div layout-align="center center" style="margin: 20px" data-ng-if="emailSent">
       <span data-translate="SEND_EMAIL_MESSAGE_SENT"></span>
     </div>
   </form>

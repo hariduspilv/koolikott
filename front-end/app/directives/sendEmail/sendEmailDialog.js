@@ -28,7 +28,7 @@
 
             this.$scope.isSaving = true
 
-            this.serverCallService.makePost('rest/userEmail/sendEmailForCreator',
+            this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
                 {
                     message: this.$scope.emailToCreator.emailContent,
                     creatorId: this.$rootScope.creator.id,

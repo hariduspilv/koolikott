@@ -1,48 +1,93 @@
 package ee.hm.dop.service.login;
 
-import ee.hm.dop.dao.AuthenticationStateDao;
-import ee.hm.dop.dao.UserAgreementDao;
-import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.dao.UserEmailDao;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserEmail;
-import ee.hm.dop.model.User_Agreement;
+import ee.hm.dop.dao.*;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
-@Transactional
 public class UserEmailService {
 
     @Inject
     private UserEmailDao userEmailDao;
+
     @Inject
     private UserAgreementDao userAgreementDao;
+
     @Inject
     private AuthenticationStateDao authenticationStateDao;
+
     @Inject
     private UserDao userDao;
+
     @Inject
     private SendMailService sendMailService;
 
-    public UserEmail save(UserEmail userEmail) {
-        if (userEmail.getUser() == null) {
-            throw badRequest("User is null");
-        }
+    @Inject
+    private EmailToCreatorDao emailToCreatorDao;
 
-        UserEmail dbUserEmail = userEmailDao.findByUserId(userEmail.getUser());
+    public UserEmail getUserEmail(long id) {
+
+        User user = userDao.findUserById(id);
+        if (user == null) {
+            throw notFound("User not found");
+        }
+        UserEmail userEmail = userEmailDao.findByUser(user);
+        if (userEmail == null) {
+            throw notFound("User email not found");
+        }
+        return userEmail;
+    }
+
+    public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
+
+        if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
+
+        UserEmail userSenderEmail = userEmailDao.findByUser(userSender);
+
+        User userCreator = userDao.findUserById(emailToCreator.getCreatorId());
+        UserEmail creatorEmail = userEmailDao.findByUser(userCreator);
+
+        emailToCreator.setCreatorEmail(creatorEmail.getEmail());
+        emailToCreator.setSenderName(userSender.getFullName());
+        emailToCreator.setSenderEmail(userSenderEmail.getEmail());
+        emailToCreator.setUser(userCreator);
+        emailToCreator.setCreatedAt(LocalDateTime.now());
+        emailToCreator.setSentTries(0);
+
+        if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
+            sendMailService.sendEmail(sendMailService.sendEmailToExpertSelf(emailToCreator));
+            emailToCreator.setSentAt(LocalDateTime.now());
+            emailToCreator.setSentSuccessfully(true);
+            emailToCreator.setSentTries(1);
+            emailToCreator.setErrorMessage("Sent successfully");
+
+        } else {
+            emailToCreator.setSentTries(2);
+            emailToCreator.setSentAt(LocalDateTime.now());
+            emailToCreator.setErrorMessage("Failed to send email to creator");
+            if (!sendMailService.sendEmail(sendMailService.sendEmailToSupportWhenSendEmailToCreatorFailed(emailToCreator))) {
+                emailToCreator.setErrorMessage("Failed to send email to creator");
+                emailToCreator.setSentTries(3);
+            }
+        }
+        return emailToCreatorDao.createOrUpdate(emailToCreator);
+    }
+
+    public UserEmail save(UserEmail userEmail) {
+        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
+        if (userEmail.getUser() == null)
+            throw badRequest("User is null");
+
         if (dbUserEmail != null && dbUserEmail.getUser().getId().equals(userEmail.getUser().getId())) {
             return userEmailDao.createOrUpdate(setUserAndSendMail(dbUserEmail, userEmail));
         }
@@ -59,7 +104,7 @@ public class UserEmailService {
     }
 
     public UserEmail validatePin(UserEmail userEmail) {
-        UserEmail dbUserEmail = userEmailDao.findByUserId(userEmail.getUser());
+        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         User_Agreement dbUserAgreement = userAgreementDao.getLatestAgreementForUser(userEmail.getUser().getId());
         if (dbUserEmail == null)
             throw notFound("User not found");
@@ -98,11 +143,11 @@ public class UserEmailService {
         return userEmail;
     }
 
-    private ResponseStatusException badRequest(String s) {
-        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
+    private WebApplicationException badRequest(String s) {
+        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
     }
 
-    private ResponseStatusException notFound(String s) {
-        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
+    private WebApplicationException notFound(String s) {
+        return new WebApplicationException(s, Response.Status.NOT_FOUND);
     }
 }
