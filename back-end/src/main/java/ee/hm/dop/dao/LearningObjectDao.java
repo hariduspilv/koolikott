@@ -18,6 +18,13 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         return LearningObject.class;
     }
 
+    public List<Long> getAllCreatorLearningObjects(long creatorId) {
+        return getEntityManager()
+                .createQuery("SELECT lo.id FROM LearningObject lo WHERE lo.creator.id = :creatorId")
+                .setParameter("creatorId", creatorId)
+                .getResultList();
+    }
+
     public LearningObject findByIdNotDeleted(long objectId) {
         TypedQuery<LearningObject> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", entity()) //
@@ -76,14 +83,6 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         learningObject.setUpdated(now());
         createOrUpdate(learningObject);
     }
-
-//    public LearningObject verifyCreatorForLO(long objectId){
-//        TypedQuery<LearningObject> findById = getEntityManager()
-//                .createQuery("SELECT lo FROM LearningObject lo WHERE lo.creator.id",entity())
-//                .setParameter("id",objectId);
-//        return getSingleResult(findById);
-//
-//    }
 
     protected List<LearningObject> findByCreatorInner(User creator, int start, int maxResults, String queryString) {
         TypedQuery<LearningObject> typedQuery = getEntityManager()

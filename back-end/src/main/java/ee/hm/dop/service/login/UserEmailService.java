@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import java.util.List;
+
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -46,13 +48,9 @@ public class UserEmailService {
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
 
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
-
-        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
-
-
+        verifyLOCreator(emailToCreator);
 
         UserEmail userSenderEmail = userEmailDao.findByUser(userSender);
-
         User userCreator = userDao.findUserById(emailToCreator.getCreatorId());
         UserEmail creatorEmail = userEmailDao.findByUser(userCreator);
 
@@ -140,6 +138,19 @@ public class UserEmailService {
         sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
         userEmail.setEmail("");
         return userEmail;
+    }
+
+    private void verifyLOCreator(EmailToCreator emailToCreator) {
+        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
+        List<Long> creatorLearningObjectsIds = learningObjectDao.getAllCreatorLearningObjects(emailToCreator.getCreatorId());
+
+        if (!creatorLearningObjectsIds.stream().filter(lo -> learningObject.getId() == lo).findFirst().isPresent()){
+            throw forbidden("This creator is not creator of this LO");
+        }
+    }
+
+    private WebApplicationException forbidden(String s) {
+        return new WebApplicationException(s, Response.Status.FORBIDDEN);
     }
 
     private WebApplicationException badRequest(String s) {
