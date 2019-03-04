@@ -1,4 +1,4 @@
-<md-dialog aria-label="Kogumiku lisamise modaalaken" flex-gt-sm="75" flex id="add-portfolio-modal"
+<md-dialog aria-label="Ekirja saatmise modaalaken" flex-gt-sm="75" flex id="send-email-modal"
            class="fullscreen-dialog creator-email-dialog">
   <form name="sendEmailToCreator">
     <md-toolbar data-ng-if="!emailSent" class="md-accent">
@@ -7,8 +7,8 @@
           <h2 data-translate="SEND_EMAIL_SPECIFY_QUESTION"></h2>
         </div>
         <span flex></span>
-        <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
-                   aria-label="Sulge kogumiku lisamise modaalaken">
+        <md-button ng-click="cancel()" id="send-email-close" class="md-icon-button"
+                   aria-label="Sulge ekirja saatmise modaalaken">
           <md-icon>close</md-icon>
         </md-button>
       </div>
@@ -19,8 +19,8 @@
           <h2 data-translate="CUSTOMER_SUPPORT_THANK_YOU"></h2>
         </div>
         <span flex></span>
-        <md-button ng-click="cancel()" id="add2-portfolio-close" class="md-icon-button"
-                   aria-label="Sulge kogumiku lisamise modaalaken">
+        <md-button ng-click="cancel()" id="send2-email-close"" class="md-icon-button"
+                   aria-label="Sulge ekirja  modaalaken">
           <md-icon>close</md-icon>
         </md-button>
       </div>
@@ -28,7 +28,6 @@
     <div data-ng-if="!emailSent">
       <md-content class="md-padding">
         <div layout="row" layout-align="center center" layout-align-xs="start center">
-
         </div>
         <!-- Description -->
         <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
@@ -55,7 +54,6 @@
       ></div>
       <md-dialog-actions>
         <span flex></span>
-
         <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button"
                    data-ng-disabled="isSaving"
                    data-ng-click="cancel()">
@@ -76,6 +74,5 @@
       <span data-translate="SEND_EMAIL_MESSAGE_SENT"></span>
     </div>
   </form>
-
 </md-dialog>
 

@@ -17,21 +17,18 @@ public class UserEmailService {
 
     @Inject
     private UserEmailDao userEmailDao;
-
     @Inject
     private UserAgreementDao userAgreementDao;
-
     @Inject
     private AuthenticationStateDao authenticationStateDao;
-
     @Inject
     private UserDao userDao;
-
     @Inject
     private SendMailService sendMailService;
-
     @Inject
     private EmailToCreatorDao emailToCreatorDao;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     public UserEmail getUserEmail(long id) {
 
@@ -49,6 +46,10 @@ public class UserEmailService {
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
 
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
+
+        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
+
+
 
         UserEmail userSenderEmail = userEmailDao.findByUser(userSender);
 

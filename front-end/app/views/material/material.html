@@ -32,11 +32,13 @@
               <dop-share
                 id="share"
                 data-title="getCorrectLanguageString(material.titles)"
-                data-object="material"></dop-share>
+                data-object="material">
+              </dop-share>
               <div data-ng-if="!material.deleted">
                 <dop-send-email
-                  ng-if="isAdminOrModerator"
-                  id="send-email">
+                  ng-if="isAdminOrModerator()"
+                  id="send-email-in-material"
+                  data-learning-object="learningObject">
                 </dop-send-email>
                 <dop-qr
                   id="qr-code"

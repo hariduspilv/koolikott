@@ -17,8 +17,6 @@ angular.module('koolikottApp')
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
 
-            $scope.isAdminOrModerator = isAdminOrModerator();
-
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
                     $scope.toggleFullScreen();
@@ -172,7 +170,8 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
-                $rootScope.creator = $scope.material.creator;
+                $scope.creator = $scope.material.creator;
+                $scope.learningObject= $scope.material;
 
                 if ($scope.material)
                     materialService.increaseViewCount($scope.material);
@@ -356,14 +355,12 @@ angular.module('koolikottApp')
                 }
             }
 
-            function isAdminOrModerator() {
+            $scope.isAdminOrModerator = function () {
                 return (
                     authenticatedUserService.isAdmin() ||
                     authenticatedUserService.isModerator()
                 )
             }
-
-
 
             $scope.setRecommendation = (recommendation) => {
                 if ($scope.material)

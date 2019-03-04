@@ -8,7 +8,7 @@
 
             this.showLoEmailCodeDialog = () => {
 
-                this.userEmailService.userHasEmail(this.$rootScope.creator.id)
+                this.userEmailService.userHasEmail(this.learningObject.creator.id)
                     .then(response => {
                             if (response.status === 200) {
                                 this.showDialog();
@@ -25,12 +25,12 @@
     showNoCreatorEmailDialog() {
 
     this.$mdDialog.show({
-        template: `<md-dialog aria-label="Sessiooni lõppemise modaalaken" class="login-dialog">
+        template: `<md-dialog aria-label="Ekirja saatmise lõpu modaalaken" class="login-dialog">
                     <md-toolbar class="md-accent">
                       <div class="md-toolbar-tools" flex>
                         <span flex></span>
-                        <md-button ng-click="cancel()" id="add-portfolio-close" class="md-icon-button"
-                                   aria-label="Sulge kogumiku lisamise modaalaken">
+                        <md-button ng-click="cancel()" id="email-send-close" class="md-icon-button"
+                                   aria-label="Sulge ekirja saatmise modaalaken">
                           <md-icon>close</md-icon>
                         </md-button>
                       </div>
@@ -47,15 +47,19 @@
 
     })
 }
-    showDialog(){
 
-        this.$mdDialog.show({
-            templateUrl: 'directives/sendEmail/sendEmail.html',
-            controller: 'sendEmailDialogController',
-            controllerAs: '$ctrl',
-            clickOutsideToClose: true,
-        })
-    }
+        showDialog() {
+
+            this.$mdDialog.show({
+                templateUrl: 'directives/sendEmail/sendEmail.html',
+                controller: 'sendEmailDialogController',
+                controllerAs: '$ctrl',
+                clickOutsideToClose: true,
+                locals: {
+                    learningObject: this.learningObject
+                }
+            })
+        }
 }
 
 controller.$inject = [
@@ -65,7 +69,6 @@ controller.$inject = [
     '$mdDialog',
     'userEmailService',
     'dialogService',
-
 ]
 
 component('dopSendEmail', {
@@ -78,6 +81,9 @@ component('dopSendEmail', {
                   <md-tooltip><span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span></md-tooltip>
                 </md-button>
               </div>
-        `
+        `,
+    bindings : {
+        learningObject: '<'
+    }
 })
 }

@@ -139,7 +139,7 @@ class controller extends Controller {
         this.$scope.portfolio = portfolio
         this.storageService.setPortfolio(portfolio)
 
-        this.$rootScope.creator = portfolio.creator
+        this.$scope.learningObject= portfolio
 
         this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
         this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0

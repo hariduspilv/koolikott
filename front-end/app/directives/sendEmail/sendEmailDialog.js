@@ -8,12 +8,7 @@
             this.$scope.emailObject = {}
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
-
-            this.$scope.isSendBtnVisible = false
-
-            this.$scope.userHasEmail = false
             this.$scope.emailToCreator = {}
-            this.$scope.emailSent = false
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide();
@@ -27,11 +22,11 @@
         sendEmail() {
 
             this.$scope.isSaving = true
-
             this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
                 {
                     message: this.$scope.emailToCreator.emailContent,
-                    creatorId: this.$rootScope.creator.id,
+                    creatorId:this.locals.learningObject.creator.id,
+                    learningObjectId:this.locals.learningObject.id
                 })
                 .then(response => {
                         this.$scope.isSaving = false
@@ -85,7 +80,8 @@
         'translationService',
         'userEmailService',
         'authenticatedUserService',
-        '$rootScope'
+        '$rootScope',
+        'locals'
     ]
     angular.module('koolikottApp').controller('sendEmailDialogController', controller)
 }

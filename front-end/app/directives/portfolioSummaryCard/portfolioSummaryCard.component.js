@@ -82,6 +82,8 @@ class controller extends Controller {
             this.showEditMetadataDialog()
             this.$rootScope.openMetadataDialog = null
         }
+
+        this.$scope.learningObject = this.portfolio
     }
     $doCheck() {
         if (this.$scope.portfolio !== this.portfolio)
@@ -244,7 +246,8 @@ controller.$inject = [
 ]
 component('dopPortfolioSummaryCard', {
     bindings: {
-        portfolio: '='
+        portfolio: '=',
+        learningObject: '<'
     },
     templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller

@@ -14,7 +14,9 @@
           ></dop-share>
           <dop-send-email
             ng-if="isAdminOrModerator()"
-            id="send-email">
+            id="send-email"
+            data-creator="creator"
+          data-learning-object="learningObject">
           </dop-send-email>
           <div data-ng-if="!$root.isEditPortfolioMode">
             <dop-qr
