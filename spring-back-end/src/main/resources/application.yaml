@@ -4,7 +4,8 @@ server:
   port: 8100
 
 logging:
-  path: ./spring-logs
+  config:
+    src/main/resources/log4j2.yaml
 
 spring:
   profiles:

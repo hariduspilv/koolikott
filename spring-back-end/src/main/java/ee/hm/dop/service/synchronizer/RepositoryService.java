@@ -11,6 +11,7 @@ import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import ee.hm.dop.utils.UrlUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang.StringUtils;
 
 import java.time.LocalDateTime;
@@ -28,12 +29,12 @@ import java.util.Objects;
 import static ee.hm.dop.service.synchronizer.MergeUtil.mergeTwoObjects;
 import static java.lang.String.format;
 
+@Slf4j
 @Service
 @Transactional
 public class RepositoryService {
 
     private static final int BATCH_SIZE = 50;
-    private static final Logger logger = LoggerFactory.getLogger(RepositoryService.class);
 
     @Inject
     private RepositoryDao repositoryDao;
@@ -75,7 +76,7 @@ public class RepositoryService {
             MaterialIterator materials = repositoryManager.getMaterialsFrom(repository);
             return new MaterialIteratorAndDate(materials, LocalDateTime.now());
         } catch (Exception e) {
-            logger.error(format("Error while getting material from %s. No material will be updated.", repository), e);
+            log.error(format("Error while getting material from %s. No material will be updated.", repository), e);
             return null;
         }
     }
@@ -88,7 +89,7 @@ public class RepositoryService {
                 Material material = materials.next();
 
                 if (material != null) {
-                    logger.info("Trying to update or create next material with repo id: " + material.getRepositoryIdentifier());
+                    log.info("Trying to update or create next material with repo id: " + material.getRepositoryIdentifier());
 
                     handleMaterial(repository, material, audit);
                     audit.successfullyDownloaded();
@@ -98,7 +99,7 @@ public class RepositoryService {
                     }
                 }
             } catch (Exception e) {
-                logger.error("An error occurred while getting the next material from repository.", e);
+                log.error("An error occurred while getting the next material from repository.", e);
                 audit.failedToDownload();
             }
             count = incrementCountAndFlush(count);
@@ -107,15 +108,15 @@ public class RepositoryService {
     }
 
     private void logStart(Repository repository) {
-        logger.info(format("Updating materials for %s", repository));
+        log.info(format("Updating materials for %s", repository));
     }
 
     private void logEnd(SynchronizationAudit audit, long start) {
         long end = System.currentTimeMillis();
-        logger.info(format("Updating materials took %s milliseconds. Successfully downloaded %s"
+        log.info(format("Updating materials took %s milliseconds. Successfully downloaded %s"
                         + " materials (of which %s are deleted materials) and %s materials failed to download of total %s", end - start, audit.getSuccessfullyDownloaded(), audit.getDeletedMaterialsDownloaded(),
                 audit.getFailedToDownload(), audit.getSuccessfullyDownloaded() + audit.getFailedToDownload()));
-        logger.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted", audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
+        log.info(format("%s new materials were created, %s existing materials were updated and %s existing materials were deleted", audit.getNewMaterialsCreated(), audit.getExistingMaterialsUpdated(), audit.getExistingMaterialsDeleted()));
     }
 
     private int incrementCountAndFlush(int count) {
@@ -138,10 +139,10 @@ public class RepositoryService {
         } else if (!material.isDeleted()) {
             createMaterial(material, audit);
         } else {
-            logger.error("Material set as deleted, not updating or creating, repository id: " + material.getRepositoryIdentifier());
+            log.error("Material set as deleted, not updating or creating, repository id: " + material.getRepositoryIdentifier());
         }
 
-        logger.info("Material handled, repository id: " + material.getRepositoryIdentifier());
+        log.info("Material handled, repository id: " + material.getRepositoryIdentifier());
     }
 
     private MaterialHandlingStrategy materialHandlingStrategy(Repository repository, Material existentMaterial) {
@@ -159,7 +160,7 @@ public class RepositoryService {
     }
 
     private void createMaterial(Material material, SynchronizationAudit audit) {
-        logger.info("Creating material, with repo id: " + material.getRepositoryIdentifier());
+        log.info("Creating material, with repo id: " + material.getRepositoryIdentifier());
         createPicture(material);
         materialService.createMaterialBySystemUser(material, SearchIndexStrategy.SKIP_UPDATE);
         audit.newMaterialCreated();
@@ -173,19 +174,19 @@ public class RepositoryService {
 
     Material updateMaterial(Material newMaterial, Material existentMaterial, SynchronizationAudit audit, MaterialHandlingStrategy strategy) {
         if (strategy.isOtherRepo()) {
-            logger.info("Updating material with external link - updating all fields that are currently null in DB");
+            log.info("Updating material with external link - updating all fields that are currently null in DB");
             createPicture(newMaterial);
             return update(existentMaterial, newMaterial, audit);
         }
 
         if (strategy.isSameRepo()) {
             if (newMaterial.isDeleted()) {
-                logger.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
+                log.info("Deleting material, as it was deleted in it's repository and is owned by the repo (has repo baseLink)");
                 materialService.delete(existentMaterial);
                 audit.existingMaterialDeleted();
                 return null;
             }
-            logger.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
+            log.info("Updating material with repository link - updating all fields, that are not null in the new imported material");
             createPicture(newMaterial);
             return update(newMaterial, existentMaterial, audit);
         }
