@@ -143,8 +143,9 @@ public class UserEmailService {
     private void verifyLOCreator(EmailToCreator emailToCreator) {
         LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
         List<Long> creatorLearningObjectsIds = learningObjectDao.getAllCreatorLearningObjects(emailToCreator.getCreatorId());
+        Long learningObjectId = creatorLearningObjectsIds.stream().filter(lo -> learningObject.getId().equals(lo)).findAny().orElse(null);
 
-        if (!creatorLearningObjectsIds.stream().filter(lo -> learningObject.getId() == lo).findFirst().isPresent()){
+        if (learningObjectId == null) {
             throw forbidden("This creator is not creator of this LO");
         }
     }

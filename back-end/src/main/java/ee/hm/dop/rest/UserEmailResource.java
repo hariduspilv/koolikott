@@ -59,8 +59,6 @@ public class UserEmailResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public EmailToCreator sendEmailToCreator(EmailToCreator emailToCreator) {
-
         return userEmailService.sendEmailForCreator(emailToCreator, getLoggedInUser());
-
     }
 }
