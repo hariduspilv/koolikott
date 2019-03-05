@@ -1,6 +1,7 @@
 package ee.hm.dop.service;
 
 import ee.hm.dop.model.CustomerSupport;
+import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.utils.DateUtils;
 import org.apache.commons.configuration2.Configuration;
@@ -117,6 +118,37 @@ public class SendMailService {
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
                         "Pane tähele, et kood on personaalne, ära saada seda teistele kasutajatele edasi." + BREAK +
                         "Küsimuste korral kirjuta: e-koolikott@hitsa.ee")
+                .buildEmail();
+    }
+
+    public Email sendEmailToExpertSelf(EmailToCreator emailToCreator) {
+        return EmailBuilder.startingBlank()
+                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .to(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
+                .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
+                .withHTMLText("See on koopia mille saatsid materjali või kogumiku loojale" + BREAK +
+                        emailToCreator.getMessage())
+                .buildEmail();
+    }
+
+    public Email sendEmailToCreator(EmailToCreator emailToCreator) {
+
+        return EmailBuilder.startingBlank()
+                .from(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
+                .to(emailToCreator.getUser().getFullName(), emailToCreator.getCreatorEmail())
+                .withSubject("e-Koolikott: Aineeksperdi küsimus")
+                .withHTMLText(emailToCreator.getMessage())
+                .buildEmail();
+    }
+
+    public Email sendEmailToSupportWhenSendEmailToCreatorFailed(EmailToCreator emailToCreator) {
+        return EmailBuilder.startingBlank()
+                .from("e-Koolikott", emailToCreator.getSenderEmail())
+                .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
+                .withSubject("Aineeksperdi küsimus ebaõnnestunud ekirja saatmine")
+                .withHTMLText("Kasutaja: " + emailToCreator.getSenderName() + ", " + emailToCreator.getSenderEmail() + BREAK
+                        + BREAK + "Sisuga: " + emailToCreator.getMessage() + BREAK
+                        + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(emailToCreator.getSentAt()))
                 .buildEmail();
     }
 }

@@ -1,13 +1,13 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.login.UserEmailService;
 
+import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
@@ -44,5 +44,21 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.validatePin(userEmail);
     }
 
+    @GET
+    @Path("getEmail")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserEmail userHasEmail(@QueryParam("userId") int userId) {
+        return userEmailService.getUserEmail(userId);
+    }
 
+    @POST
+    @Path("sendEmailToCreator")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public EmailToCreator sendEmailToCreator(EmailToCreator emailToCreator) {
+        return userEmailService.sendEmailForCreator(emailToCreator, getLoggedInUser());
+    }
 }

@@ -12,6 +12,12 @@
             data-title="portfolio.title"
             data-object="portfolio"
           ></dop-share>
+          <dop-send-email
+            ng-if="isAdminOrModerator()"
+            id="send-email"
+            data-creator="creator"
+          data-learning-object="learningObject">
+          </dop-send-email>
           <div data-ng-if="!$root.isEditPortfolioMode">
             <dop-qr
               id="qr-code"
@@ -31,7 +37,6 @@
             <md-icon md-menu-align-target>close</md-icon>
             <md-tooltip><span data-translate="FULL_SCREEN_OFF"></span></md-tooltip>
           </md-button>
-
           <md-menu ng-if="dotsAreShowing() || $root.isEditPortfolioMode && canEdit()" id="dots-menu">
             <md-button class="md-icon-button" ng-click="$mdMenu.open($event)" id="material-menu">
               <md-icon md-menu-origin>more_vert</md-icon>

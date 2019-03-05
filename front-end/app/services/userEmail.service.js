@@ -20,6 +20,10 @@
                 .makePost('rest/userEmail/validate', {user: user, pin: pin, email: email})
         }
 
+        userHasEmail(userId) {
+            return this.serverCallService
+                .makeGet('rest/userEmail/getEmail/?userId=' + userId)
+        }
     }
 
     controller.$inject = [
