@@ -137,7 +137,6 @@ public class SendMailService {
     }
 
     public Email sendEmailToCreator(EmailToCreator emailToCreator) {
-
         return EmailBuilder.startingBlank()
                 .from(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .to(emailToCreator.getUser().getFullName(), emailToCreator.getCreatorEmail())

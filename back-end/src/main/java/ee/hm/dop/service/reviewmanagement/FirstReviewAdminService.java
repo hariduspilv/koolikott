@@ -2,12 +2,7 @@ package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.dao.firstreview.FirstReviewDao;
-import ee.hm.dop.dao.firstreview.FirstReviewOldDao;
-import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.FirstReview;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.FirstReviewTaxon;

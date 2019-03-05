@@ -93,6 +93,26 @@
       data-clear-selection="clearFields"
     ></dop-taxon-selector>
   </div>
+  <div layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
+    <md-input-container class="statistics-filter__experts-container"
+                        data-flex data-layout="column"
+    >
+      <md-select id="materialtype-select"
+                 data-placeholder="{{'TYPE' | translate}}"
+                 data-ng-model="filter.materialType"
+                 aria-label="Vali materialitüüp"
+                 data-ng-model-options="{trackBy: '$value'}"
+                 data-ng-disabled="$ctrl.isModerator()"
+                 data-ng-change="$ctrl.selectType(type)"
+      >
+        <md-option
+          data-ng-repeat="type in types"
+          data-ng-value="type"
+          data-translate="TYPE_{{type.toUpperCase()}}"
+        ></md-option>
+      </md-select>
+    </md-input-container>
+  </div>
   <div data-ng-if="$ctrl.viewPath == 'unReviewed'">
     <md-button id="clear-button"
                class="statistics-filter__clear"

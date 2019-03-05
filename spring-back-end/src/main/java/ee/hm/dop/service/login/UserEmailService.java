@@ -19,21 +19,18 @@ public class UserEmailService {
 
     @Inject
     private UserEmailDao userEmailDao;
-
     @Inject
     private UserAgreementDao userAgreementDao;
-
     @Inject
     private AuthenticationStateDao authenticationStateDao;
-
     @Inject
     private UserDao userDao;
-
     @Inject
     private SendMailService sendMailService;
-
     @Inject
     private EmailToCreatorDao emailToCreatorDao;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     public UserEmail getUserEmail(long id) {
 
@@ -49,11 +46,10 @@ public class UserEmailService {
     }
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
-
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
+        verifyLOCreator(emailToCreator);
 
         UserEmail userSenderEmail = userEmailDao.findByUser(userSender);
-
         User userCreator = userDao.findUserById(emailToCreator.getCreatorId());
         UserEmail creatorEmail = userEmailDao.findByUser(userCreator);
 
@@ -141,6 +137,18 @@ public class UserEmailService {
         sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
         userEmail.setEmail("");
         return userEmail;
+    }
+
+    private void verifyLOCreator(EmailToCreator emailToCreator) {
+        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
+        User creator = learningObject.getCreator();
+        if (!creator.getId().equals(emailToCreator.getCreatorId())) {
+            throw forbidden("This creator is not creator of this LO");
+        }
+    }
+
+    private WebApplicationException forbidden(String s) {
+        return new WebApplicationException(s, Response.Status.FORBIDDEN);
     }
 
     private WebApplicationException badRequest(String s) {

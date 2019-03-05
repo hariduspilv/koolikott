@@ -18,13 +18,6 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         return LearningObject.class;
     }
 
-    public List<Long> getAllCreatorLearningObjects(long creatorId) {
-        return getEntityManager()
-                .createQuery("SELECT lo.id FROM LearningObject lo WHERE lo.creator.id = :creatorId")
-                .setParameter("creatorId", creatorId)
-                .getResultList();
-    }
-
     public LearningObject findByIdNotDeleted(long objectId) {
         TypedQuery<LearningObject> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM LearningObject lo WHERE lo.id = :id AND lo.deleted = false", entity()) //

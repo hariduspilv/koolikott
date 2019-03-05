@@ -51,6 +51,8 @@ class controller extends Controller {
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
 
+        this.$scope.types = ['Portfolio','Material','All']
+
         this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
             if (newValue !== oldValue && (newValue.length >=3 || !newValue))
@@ -58,6 +60,7 @@ class controller extends Controller {
         })
 
         this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true)
+        this.$scope.$watch('filter.materialType', this.onFilterChange.bind(this), true)
 
         this.$scope.filter = { };
 
@@ -81,6 +84,12 @@ class controller extends Controller {
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data)
         }
+    }
+
+    selectType(type){
+
+        this.$scope.materialType = type;
+
     }
 
     onFilterChange(filter) {
@@ -149,7 +158,7 @@ class controller extends Controller {
 
     isDisabled() {
         return this.isModerator() ? !(this.$scope.filter && this.$scope.filter.taxons) : !((this.$scope.filter && this.$scope.filter.taxons) ||
-            this.$scope.filter.user);
+            this.$scope.filter.user || this.$scope.filter.materialType);
     }
 
     getMaximumUnreviewed(){
@@ -201,7 +210,9 @@ class controller extends Controller {
                 '&query=' + this.$scope.query.filter +
                 this.selectTaxons() +
                 this.selectUsers() +
-                '&lang=' + this.getLanguage();
+                '&lang=' + this.getLanguage() +
+                '&materialtype=' + this.$scope.filter.materialType;
+
                 query = this.serverCallService
                 .makeGet(url);
         }
