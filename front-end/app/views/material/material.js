@@ -170,8 +170,6 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
-                $scope.creator = $scope.material.creator;
-                $scope.learningObject= $scope.material;
 
                 if ($scope.material)
                     materialService.increaseViewCount($scope.material);

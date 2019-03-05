@@ -43,7 +43,10 @@
                    </md-dialog>`,
         controller: 'sendEmailDialogController',
         controllerAs: '$ctrl',
-        clickOutsideToClose: true,
+        clickOutsideToClose: false,
+        locals: {
+            learningObject: this.learningObject
+        }
 
     })
 }
@@ -54,7 +57,7 @@
                 templateUrl: 'directives/sendEmail/sendEmail.html',
                 controller: 'sendEmailDialogController',
                 controllerAs: '$ctrl',
-                clickOutsideToClose: true,
+                clickOutsideToClose: false,
                 locals: {
                     learningObject: this.learningObject
                 }

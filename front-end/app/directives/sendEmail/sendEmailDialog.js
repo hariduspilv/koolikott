@@ -80,8 +80,8 @@
         'translationService',
         'userEmailService',
         'authenticatedUserService',
+        'locals',
         '$rootScope',
-        'locals'
     ]
     angular.module('koolikottApp').controller('sendEmailDialogController', controller)
 }

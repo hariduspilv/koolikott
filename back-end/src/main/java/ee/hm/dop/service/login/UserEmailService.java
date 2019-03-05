@@ -46,7 +46,6 @@ public class UserEmailService {
     }
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
-
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
         verifyLOCreator(emailToCreator);
 
@@ -142,10 +141,8 @@ public class UserEmailService {
 
     private void verifyLOCreator(EmailToCreator emailToCreator) {
         LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
-        List<Long> creatorLearningObjectsIds = learningObjectDao.getAllCreatorLearningObjects(emailToCreator.getCreatorId());
-        Long learningObjectId = creatorLearningObjectsIds.stream().filter(lo -> learningObject.getId().equals(lo)).findAny().orElse(null);
-
-        if (learningObjectId == null) {
+        User creator = learningObject.getCreator();
+        if (!creator.getId().equals(emailToCreator.getCreatorId())) {
             throw forbidden("This creator is not creator of this LO");
         }
     }

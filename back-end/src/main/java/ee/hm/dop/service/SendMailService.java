@@ -15,6 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.mail.util.ByteArrayDataSource;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -42,16 +43,20 @@ public class SendMailService {
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
 
-        List<AttachmentResource> collect = customerSupport.getFiles().stream()
-                .map(a -> {
-                    try {
-                        return new AttachmentResource(a.getName(), new ByteArrayDataSource(decodeBase64(a.getContent().substring(a.getContent().indexOf(',')+1)), "image/*"));
-                    } catch (Exception e) {
-                        return null;
-                    }
-                })
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
+        List<AttachmentResource> collect = new ArrayList<>();
+
+        if (customerSupport.getFiles() != null) {
+            collect = customerSupport.getFiles().stream()
+                            .map(a -> {
+                                try {
+                                    return new AttachmentResource(a.getName(), new ByteArrayDataSource(decodeBase64(a.getContent().substring(a.getContent().indexOf(',')+1)), "image/*"));
+                                } catch (Exception e) {
+                                    return null;
+                                }
+                            })
+                            .filter(Objects::nonNull)
+                            .collect(Collectors.toList());
+        }
 
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
