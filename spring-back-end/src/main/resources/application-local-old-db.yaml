@@ -4,6 +4,8 @@ server:
   port: 8100
 
 spring:
+  profiles:
+    active: default, test
   jpa:
     hibernate:
       naming:
@@ -27,3 +29,6 @@ spring:
 
 search:
   server: http://localhost:8983/solr/dop/
+
+app:
+  devLogin: true

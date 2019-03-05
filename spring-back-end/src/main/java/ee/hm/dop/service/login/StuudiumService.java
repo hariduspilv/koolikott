@@ -7,7 +7,7 @@ import ee.hm.dop.model.stuudium.StuudiumUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

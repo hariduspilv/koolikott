@@ -4,6 +4,8 @@ server:
   port: 8100
 
 spring:
+  profiles:
+    active: default, test
   jpa:
     hibernate:
       naming:
@@ -20,10 +22,13 @@ spring:
     outOfOrder: true
     baselineOnMigrate: true
     placeholderReplacement: false
-    locations: classpath:db/migration
+    locations: classpath:db/migration, classpath:db/initdb, classpath:db/initdata, classpath:db/users
   jackson:
     deserialization:
       fail-on-unknown-properties: false
 
 search:
   server: http://localhost:8983/solr/dop/
+
+app:
+  devLogin: true

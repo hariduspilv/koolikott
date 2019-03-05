@@ -13,7 +13,7 @@ import ee.hm.dop.utils.exceptions.DuplicateTokenException;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import lombok.AllArgsConstructor;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 
 import java.time.LocalDateTime;
 

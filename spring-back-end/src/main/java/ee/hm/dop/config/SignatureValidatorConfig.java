@@ -1,7 +1,7 @@
 package ee.hm.dop.config;
 
 import ee.hm.dop.utils.security.MetadataUtils;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.xml.security.x509.X509Credential;
 import org.opensaml.xml.signature.SignatureValidator;

@@ -29,7 +29,7 @@ import org.apache.abdera.Abdera;
 import org.apache.abdera.factory.Factory;
 import org.apache.abdera.model.Entry;
 import org.apache.abdera.model.Feed;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 
 import java.time.LocalDateTime;
 

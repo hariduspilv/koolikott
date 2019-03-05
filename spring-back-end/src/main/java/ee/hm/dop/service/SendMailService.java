@@ -4,7 +4,7 @@ import ee.hm.dop.model.CustomerSupport;
 import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.utils.DateUtils;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.simplejavamail.MailException;
 import org.simplejavamail.email.AttachmentResource;
 import org.simplejavamail.email.Email;

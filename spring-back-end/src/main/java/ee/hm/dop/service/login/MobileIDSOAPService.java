@@ -32,7 +32,7 @@ import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.soap.GetMobileAuthenticateStatusResponse;
 import ee.hm.dop.model.mobileid.soap.MobileAuthenticateResponse;
 import ee.hm.dop.service.metadata.LanguageService;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;

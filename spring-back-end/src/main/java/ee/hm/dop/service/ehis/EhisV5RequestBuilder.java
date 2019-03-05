@@ -1,6 +1,6 @@
 package ee.hm.dop.service.ehis;
 
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

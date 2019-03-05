@@ -8,7 +8,7 @@ import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.files.UploadedFileService;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;

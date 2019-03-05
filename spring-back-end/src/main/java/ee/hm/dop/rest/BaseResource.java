@@ -6,7 +6,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.ConfigurationProperties;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;

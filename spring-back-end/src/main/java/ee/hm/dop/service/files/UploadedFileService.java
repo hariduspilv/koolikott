@@ -7,7 +7,7 @@ import ee.hm.dop.service.files.enums.FileDirectory;
 import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.io.LimitedSizeInputStream;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.io.InputStreamResource;
