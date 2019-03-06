@@ -1,5 +1,12 @@
 version: ${project.version}
 
+cron:
+  executor:
+    corePoolSize: 2
+    maxPoolSize: 2
+    queueCapacity: 500
+    threadNamePrefix: KottCron-
+
 taat:
   sso: https://reos.taat.edu.ee/saml2/idp/SSOService.php
   connectionId: https://oxygen.netgroupdigital.com/sp
