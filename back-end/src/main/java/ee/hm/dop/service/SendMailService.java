@@ -141,7 +141,8 @@ public class SendMailService {
                 .from(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .to(emailToCreator.getUser().getFullName(), emailToCreator.getCreatorEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimus")
-                .withHTMLText(emailToCreator.getMessage())
+                .withHTMLText("Aineekspert on esitanud küsimuse Teie õppevara kohta: " + emailToCreator.getLearningObjectTitle() + BREAK
+                        + BREAK + emailToCreator.getMessage())
                 .buildEmail();
     }
 

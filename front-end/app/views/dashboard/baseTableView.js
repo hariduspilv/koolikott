@@ -51,7 +51,7 @@ class controller extends Controller {
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
 
-        this.$scope.types = ['Portfolio','Material','All']
+        this.$scope.types = ['All','Material','Portfolio']
 
         this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
@@ -62,6 +62,7 @@ class controller extends Controller {
         this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true)
 
         this.$scope.filter = { };
+        this.$scope.filter.materialType = 'All'
 
         this.$scope.query = {
             filter: "",
@@ -85,9 +86,8 @@ class controller extends Controller {
         }
     }
 
-    selectType(type){
-
-        this.$scope.filter.materialType = type;
+    selectType(type) {
+        this.$scope.filter.materialType = type
     }
 
     onFilterChange(filter) {
@@ -200,6 +200,8 @@ class controller extends Controller {
     getData(restUri, sortBy) {
         let query;
         this.$scope.isLoading = true
+        if (!this.$scope.filter.materialType)
+            this.$scope.filter.materialType
 
         if (restUri === 'firstReview/unReviewed') {
             let url = 'rest/admin/' + restUri + '/' +

@@ -26,7 +26,8 @@
                 {
                     message: this.$scope.emailToCreator.emailContent,
                     creatorId:this.locals.learningObject.creator.id,
-                    learningObjectId:this.locals.learningObject.id
+                    learningObjectId:this.locals.learningObject.id,
+                    learningObjectTitle:this.locals.learningObject.title
                 })
                 .then(response => {
                         this.$scope.isSaving = false
