@@ -20,7 +20,6 @@ import java.util.stream.Collectors;
 public class TaxonDao extends AbstractDao<Taxon> {
     private final Logger logger = LoggerFactory.getLogger(TaxonDao.class);
 
-
     public List<Taxon>findTaxonDomainAndSubject(Taxon taxon){
         return getEntityManager()
                 .createNativeQuery("" +

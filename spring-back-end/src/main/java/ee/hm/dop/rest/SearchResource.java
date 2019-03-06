@@ -46,7 +46,6 @@ public class SearchResource extends BaseResource {
     private TargetGroupService targetGroupService;
 
     @GetMapping
-
     public SearchResult search(@RequestParam(value = "q", required = false) String query,
                                @RequestParam(value = "start", required = false) Long start,
                                @RequestParam(value = "taxon", required = false) List<Long> taxonIds,

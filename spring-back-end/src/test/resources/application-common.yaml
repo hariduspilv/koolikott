@@ -8,27 +8,27 @@ cron:
     threadNamePrefix: KottCron-
 
 taat:
-  sso: https://reos.taat.edu.ee/saml2/idp/SSOService.php
-  connectionId: https://oxygen.netgroupdigital.com/sp
-  assertionConsumerServiceIndex: 0
+  sso: https://test.taat.ee/notrealurl
+  connectionId: https://app.website/sp
+  assertionConsumerServiceIndex: 3
 
   metadata:
     filepath: reos_metadata.xml
     entityID: https://reos.taat.edu.ee/saml2/idp/metadata.php
 
 keystore:
-  filename: server.keystore
-  password: password
-  signingEntityID: keyAlias
-  signingEntityPassword: password
+  filename: test.keystore
+  password: newKeyStorePass
+  signingEntityID: testAlias
+  signingEntityPassword: newKeyPass
 
 mobileID:
-  endpoint: https://tsp.demo.sk.ee
-  serviceName: Testimine
+  endpoint: https://www.example.com:4444/Service
+  serviceName: TestServiceName
   namespace:
-    prefix: dig
-    uri: http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl
-  messageToDisplay: eKoolikott
+    prefix: pre
+    uri: http://www.example.com/Service/Service.wsdl
+  messageToDisplay: Authentication message
 
 ehis:
   xroad:
@@ -45,49 +45,50 @@ xtee:
     prefix: xtee
     uri: http://x-tee.riik.ee/xsd/xtee.xsd
 
+
 xroad:
   ehis:
+    v6:
+      namespace:
+        xtee:
+          uri: http://x-tee.riik.ee/xsd/xtee.xsd
+          prefix: xtee
+        xro:
+          uri: http://x-road.eu/xsd/xroad.xsd
+          prefix: xro
+        iden:
+          uri: http://x-road.eu/xsd/identifiers
+          prefix: iden
+        ehis:
+          uri: http://producers.ehis.xtee.riik.ee/producer/ehis
+          prefix: ehis
+      endpoint: http://10.151.25.40/cgi-bin/consumer_proxy/
+      header:
+        protocol: 4.0
+        issue: ehis
+      service:
+        instance: ee
+        member:
+          class: gov
+          code: 70000740
+        subsystem:
+          code: ehis
+        service:
+          name: isiku_rollid
+        version: v1
+      subsystem:
+        instance: ee
+        member:
+          class: gov
+          code: 10585438
+        subsystem:
+          code: 10585438
     use:
       v6: false
   # timeouts are in ms
   timeout:
     connect: 5000
     read: 10000
-  v6:
-    namespace:
-      xtee:
-        uri: http://x-tee.riik.ee/xsd/xtee.xsd
-        prefix: xtee
-      xro:
-        uri: http://x-road.eu/xsd/xroad.xsd
-        prefix: xro
-      iden:
-        uri: http://x-road.eu/xsd/identifiers
-        prefix: iden
-      ehis:
-        uri: http://producers.ehis.xtee.riik.ee/producer/ehis
-        prefix: ehis
-    endpoint: http://10.151.25.40/cgi-bin/consumer_proxy/
-    header:
-      protocol: 4.0
-      issue: ehis
-    service:
-      instance: ee
-      member:
-        class: gov
-        code: 70000740
-      subsystem:
-        code: ehis
-      service:
-        name: isiku_rollid
-      version: v1
-    subsystem:
-      instance: ee
-      member:
-        class: gov
-        code: 10585438
-      subsystem:
-        code: 10585438
 
 ekool:
   extra:
@@ -104,23 +105,23 @@ stuudium:
   extra:
     logging: false
   client:
-    id: 511d21de7352ba8c03df
-    secret: 05e6ab586c33e5b1ac9673212de79b
+    id: 123456789CLIENTID123456789
+    secret: 999888777TEST666555444
     url:
-      authorize: https://api.ope.ee/v1/authenticate?subdomain=demo&
-      generaldata: https://api.ope.ee/v1/authenticate/verify
+      authorize: https://www.example.com/stuudium/auth?subdomain=blabla&
+      generaldata: https://www.example.com/stuudium/auth/verify
 
 file:
   upload:
     max:
-      size: 10
-    directory: uploads/
+      size: 23
+    directory: src/test/resources/uploads/
   document:
     upload:
       max:
         size: 500
   review:
-    directory: reviews/
+    directory: src/test/resources/reviews/
 
 request:
   extra:

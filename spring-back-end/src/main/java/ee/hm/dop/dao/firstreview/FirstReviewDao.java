@@ -166,7 +166,11 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     }
 
     private Query addUserTaxons(PageableQuery params, Query query) {
-        return query.setParameter("usertaxons", taxonDao.getUserTaxonWithChildren(params.getUsers()));
+        List<Long> children = taxonDao.getUserTaxonWithChildren(params.getUsers());
+        if (children.isEmpty()){
+            children = Arrays.asList(-1L);
+        }
+        return query.setParameter("usertaxons", children);
     }
 
     private Query addTaxons(PageableQuery params, Query query) {

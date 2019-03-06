@@ -9,6 +9,7 @@ import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -266,6 +267,7 @@ public class SolrServiceTest {
     }
 
     @Test
+    @Ignore
     public void updateIndex() throws Exception {
         ResponseHeader responseHeader = new ResponseHeader();
         responseHeader.setStatus(0);

@@ -47,47 +47,47 @@ xtee:
 
 xroad:
   ehis:
+    v6:
+      namespace:
+        xtee:
+          uri: http://x-tee.riik.ee/xsd/xtee.xsd
+          prefix: xtee
+        xro:
+          uri: http://x-road.eu/xsd/xroad.xsd
+          prefix: xro
+        iden:
+          uri: http://x-road.eu/xsd/identifiers
+          prefix: iden
+        ehis:
+          uri: http://producers.ehis.xtee.riik.ee/producer/ehis
+          prefix: ehis
+      endpoint: http://10.151.25.40/cgi-bin/consumer_proxy/
+      header:
+        protocol: 4.0
+        issue: ehis
+      service:
+        instance: ee
+        member:
+          class: gov
+          code: 70000740
+        subsystem:
+          code: ehis
+        service:
+          name: isiku_rollid
+        version: v1
+      subsystem:
+        instance: ee
+        member:
+          class: gov
+          code: 10585438
+        subsystem:
+          code: 10585438
     use:
       v6: false
   # timeouts are in ms
   timeout:
     connect: 5000
     read: 10000
-  v6:
-    namespace:
-      xtee:
-        uri: http://x-tee.riik.ee/xsd/xtee.xsd
-        prefix: xtee
-      xro:
-        uri: http://x-road.eu/xsd/xroad.xsd
-        prefix: xro
-      iden:
-        uri: http://x-road.eu/xsd/identifiers
-        prefix: iden
-      ehis:
-        uri: http://producers.ehis.xtee.riik.ee/producer/ehis
-        prefix: ehis
-    endpoint: http://10.151.25.40/cgi-bin/consumer_proxy/
-    header:
-      protocol: 4.0
-      issue: ehis
-    service:
-      instance: ee
-      member:
-        class: gov
-        code: 70000740
-      subsystem:
-        code: ehis
-      service:
-        name: isiku_rollid
-      version: v1
-    subsystem:
-      instance: ee
-      member:
-        class: gov
-        code: 10585438
-      subsystem:
-        code: 10585438
 
 ekool:
   extra:
