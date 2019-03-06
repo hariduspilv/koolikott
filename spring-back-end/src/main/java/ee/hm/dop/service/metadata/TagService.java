@@ -42,14 +42,14 @@ public class TagService {
 
     public LearningObject addRegularTag(Long learningObjectId, Tag tag, User loggedInUser) {
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
-        ValidatorUtil.mustHaveEntity(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         return addTag(learningObject, tag, loggedInUser);
     }
 
     public TagDTO addSystemTag(Long learningObjectId, Tag tag, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
-        ValidatorUtil.mustHaveEntity(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         LearningObject newLearningObject = addTag(learningObject, tag, user);
         return tagConverter.addChangeReturnTagDto(tag.getName(), newLearningObject, user);

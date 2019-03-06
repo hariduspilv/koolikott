@@ -45,7 +45,7 @@ public class UserFavoriteService {
 
     public void removeUserFavorite(Long id, User loggedInUser) {
         LearningObject learningObject = learningObjectDao.findById(id);
-        ValidatorUtil.mustHaveId(learningObject);
+        ValidatorUtil.mustHaveId(learningObject, id);
         userFavoriteDao.deleteByLearningObjectAndUser(learningObject, loggedInUser);
         solrEngineService.updateIndex();
     }

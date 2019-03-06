@@ -77,7 +77,7 @@ public class ReviewableChangeAdminService {
     public LearningObject revertAllChanges(Long learningObjectId, User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
-        ValidatorUtil.mustHaveEntity(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         for (ReviewableChange change : learningObject.getReviewableChanges()) {
             revertOneChange(learningObject, change);
@@ -90,7 +90,7 @@ public class ReviewableChangeAdminService {
     public LearningObject revertOneChange(Long learningObjectId, Long changeId, User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
-        ValidatorUtil.mustHaveEntity(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         ReviewableChange change = reviewableChangeDao.findById(changeId);
         revertOneChange(learningObject, change);
@@ -102,7 +102,7 @@ public class ReviewableChangeAdminService {
     public LearningObject acceptOneChange(Long learningObjectId, Long changeId, User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
         LearningObject learningObject = learningObjectService.get(learningObjectId, user);
-        ValidatorUtil.mustHaveEntity(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         ReviewableChange change = reviewableChangeDao.findById(changeId);
         setReviewed(change, user, ReviewStatus.ACCEPTED);
