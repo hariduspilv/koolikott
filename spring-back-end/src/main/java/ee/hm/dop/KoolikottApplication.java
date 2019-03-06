@@ -14,7 +14,6 @@ public class KoolikottApplication {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
     }
 
-
 	public static void main(String[] args) {
 		SpringApplication.run(KoolikottApplication.class, args);
 	}
