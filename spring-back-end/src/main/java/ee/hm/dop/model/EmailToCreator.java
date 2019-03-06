@@ -59,6 +59,9 @@ public class EmailToCreator implements AbstractEntity {
     @Transient
     private Long learningObjectId;
 
+    @Transient
+    private String learningObjectTitle;
+
     public EmailToCreator() {
     }
 
@@ -164,6 +167,14 @@ public class EmailToCreator implements AbstractEntity {
 
     public void setLearningObjectId(Long learningObjectId) {
         this.learningObjectId = learningObjectId;
+    }
+
+    public String getLearningObjectTitle() {
+        return learningObjectTitle;
+    }
+
+    public void setLearningObjectTitle(String learningObjectTitle) {
+        this.learningObjectTitle = learningObjectTitle;
     }
 }
 

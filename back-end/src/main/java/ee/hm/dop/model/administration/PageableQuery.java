@@ -105,10 +105,6 @@ public class PageableQuery {
         return orderByTypeDesc() || orderByType();
     }
 
-    public boolean hasFilterByType(){
-        return hasFilterByTypeMaterial() || hasFilterByTypePortfolio();
-    }
-
     public boolean hasFilterByTypeMaterial() {
         return materialType.equals(BY_MATERIAL_TYPE_MATERIAL);
     }

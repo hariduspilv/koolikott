@@ -1,5 +1,6 @@
 package ee.hm.dop.service;
 
+import ee.hm.dop.model.AttachedFile;
 import ee.hm.dop.model.CustomerSupport;
 import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
@@ -13,13 +14,8 @@ import org.simplejavamail.mailer.MailerBuilder;
 import org.simplejavamail.mailer.config.TransportStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import javax.inject.Inject;
 import javax.mail.util.ByteArrayDataSource;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -28,8 +24,6 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
-@Service
-@Transactional
 public class SendMailService {
 
     @Inject
@@ -49,21 +43,8 @@ public class SendMailService {
     }
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
-
         List<AttachmentResource> collect = new ArrayList<>();
-
-        if (customerSupport.getFiles() != null) {
-            collect = customerSupport.getFiles().stream()
-                    .map(a -> {
-                        try {
-                            return new AttachmentResource(a.getName(), new ByteArrayDataSource(decodeBase64(a.getContent().substring(a.getContent().indexOf(',') + 1)), "image/*"));
-                        } catch (Exception e) {
-                            return null;
-                        }
-                    })
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
-        }
+        collect = getAttachmentResources(customerSupport, collect);
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
@@ -74,12 +55,34 @@ public class SendMailService {
                 .buildEmail();
     }
 
+    private List<AttachmentResource> getAttachmentResources(CustomerSupport customerSupport, List<AttachmentResource> collect) {
+        if (customerSupport.getFiles() != null) {
+            collect = customerSupport.getFiles().stream()
+                    .map(a -> decodeAttachment(a))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+        return collect;
+    }
+
+    private AttachmentResource decodeAttachment(AttachedFile a) {
+        try {
+            return new AttachmentResource(a.getName(), new ByteArrayDataSource(decodeBase64(getContent(a)), "image/*"));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String getContent(AttachedFile a) {
+        return a.getContent().substring(a.getContent().indexOf(',') + 1);
+    }
+
     public Email composeEmailToSupportWhenSendFailed(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("Kasutaja ebaõnnestunud pöördumine")
-                .withHTMLText("Kasutaja: " + customerSupport.getName() + ", " + customerSupport.getEmail() + BREAK
+                .withHTMLText("Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
                         + "On saatnud pöördumise teemaga: " + customerSupport.getSubject() + BREAK
                         + "Sisuga: " + customerSupport.getMessage() + BREAK
                         + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt()))
@@ -137,18 +140,18 @@ public class SendMailService {
                 .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
-                .withHTMLText("See on koopia mille saatsid materjali või kogumiku loojale" + BREAK +
-                        emailToCreator.getMessage())
+                .withHTMLText("See on emaili koopia, mille saatsid õppevara loojale." + BREAK
+                        + BREAK + emailToCreator.getMessage())
                 .buildEmail();
     }
 
     public Email sendEmailToCreator(EmailToCreator emailToCreator) {
-
         return EmailBuilder.startingBlank()
                 .from(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .to(emailToCreator.getUser().getFullName(), emailToCreator.getCreatorEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimus")
-                .withHTMLText(emailToCreator.getMessage())
+                .withHTMLText("Aineekspert on esitanud küsimuse Teie õppevara kohta: " + emailToCreator.getLearningObjectTitle() + BREAK
+                        + BREAK + emailToCreator.getMessage())
                 .buildEmail();
     }
 

@@ -15,9 +15,14 @@ public class PageableQuery {
     public static final String BY_SUBJECT_TRANS_DESC = "-bySubject";
     public static final String BY_TYPE = "byType";
     public static final String BY_TYPE_DESC = "-byType";
+    public static final String BY_MATERIAL_TYPE_MATERIAL = "Material";
+    public static final String BY_MATERIAL_TYPE_PORTFOLIO = "Portfolio";
+    public static final String BY_MATERIAL_TYPE_ALL= "All";
     private static List<String> SORT_TYPES = Arrays.asList(BY_SUBJECT_TRANS, FR_CREATED_AT,
             LO_CREATED_BY, BY_TYPE,
             BY_SUBJECT_TRANS_DESC, FR_CREATED_AT_DESC, LO_CREATED_BY_DESC, BY_TYPE_DESC);
+    private static List<String> MATERIAL_TYPES = Arrays.asList(BY_MATERIAL_TYPE_MATERIAL,BY_MATERIAL_TYPE_PORTFOLIO, BY_MATERIAL_TYPE_ALL);
+
 
     private Sort sort;
     private int page;
@@ -28,6 +33,7 @@ public class PageableQuery {
     private List<Long> taxons;
     private List<Long> users;
     private int lang;
+    private String materialType;
 
     public PageableQuery() {
     }
@@ -35,7 +41,14 @@ public class PageableQuery {
     public PageableQuery(int page, String itemSortedBy, String query,
                          List<Long> taxons,
                          List<Long> users,
-                         int lang) {
+                         int lang,
+                         String materialType) {
+
+        if (materialType != null && MATERIAL_TYPES.contains(materialType)) {
+            this.materialType = materialType.equalsIgnoreCase("All") ? "" : materialType;
+        } else {
+            valid = false;
+        }
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
@@ -91,6 +104,14 @@ public class PageableQuery {
 
     public boolean hasOrderByType() {
         return orderByTypeDesc() || orderByType();
+    }
+
+    public boolean hasFilterByTypeMaterial() {
+        return materialType.equals(BY_MATERIAL_TYPE_MATERIAL);
+    }
+
+    public boolean hasFilterByTypePortfolio() {
+        return materialType.equals(BY_MATERIAL_TYPE_PORTFOLIO);
     }
 
     private boolean orderByTypeDesc() {
