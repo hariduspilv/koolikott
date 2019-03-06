@@ -60,7 +60,6 @@ class controller extends Controller {
         })
 
         this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true)
-        this.$scope.$watch('filter.materialType', this.onFilterChange.bind(this), true)
 
         this.$scope.filter = { };
 
@@ -88,8 +87,7 @@ class controller extends Controller {
 
     selectType(type){
 
-        this.$scope.materialType = type;
-
+        this.$scope.filter.materialType = type;
     }
 
     onFilterChange(filter) {
@@ -298,14 +296,8 @@ class controller extends Controller {
         this.$scope.query.order = order;
         this.$scope.query.page = 1;
 
-        if (this.viewPath === 'unReviewed'){
-
-            // if (order === 'bySubject' || order === '-bySubject'){
-                this.getData('firstReview/unReviewed',order);
-            // }
-            // else {
-            //     this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
-            // }
+        if (this.viewPath === 'unReviewed') {
+            this.getData('firstReview/unReviewed', order);
         }
         else{
             this.sortService.orderItems(

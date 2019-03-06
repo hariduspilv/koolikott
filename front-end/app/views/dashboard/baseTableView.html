@@ -103,7 +103,8 @@
                  aria-label="Vali materialitüüp"
                  data-ng-model-options="{trackBy: '$value'}"
                  data-ng-disabled="$ctrl.isModerator()"
-                 data-ng-change="$ctrl.selectType(type)"
+                 data-ng-change="$ctrl.selectType(filter.materialType)"
+                 data-ng-selected = "true"
       >
         <md-option
           data-ng-repeat="type in types"
@@ -118,7 +119,7 @@
                class="statistics-filter__clear"
                data-translate="CLEAR_FORM"
                data-ng-click="$ctrl.clearFields()"
-               data-ng-show="filter.user || filter.taxons || educationalContext"
+               data-ng-show="filter.user || filter.taxons || educationalContext || filter.materialType"
                aria-label="Tühjenda filtriväljad"
     ></md-button>
     <md-button id="filter-button"
