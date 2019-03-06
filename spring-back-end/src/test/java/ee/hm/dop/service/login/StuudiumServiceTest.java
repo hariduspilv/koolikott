@@ -5,7 +5,7 @@ import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.stuudium.StuudiumUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

@@ -239,7 +239,7 @@ public class LearningObjectAdministrationServiceTest {
         try {
             learningObjectAdministrationService.restore(material, user);
         } catch (RuntimeException e) {
-            assertEquals(String.format("403 FORBIDDEN  \"%s\"", UserUtil.MUST_BE_ADMIN_OR_MODERATOR), e.getMessage());
+            assertEquals(String.format("403 FORBIDDEN \"%s\"", UserUtil.MUST_BE_ADMIN_OR_MODERATOR), e.getMessage());
         }
 
         verifyAll();

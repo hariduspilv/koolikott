@@ -108,4 +108,10 @@ public interface ConfigurationProperties {
 
     //Captcha
     String CAPTCHA_KEY = "captcha.key";
+
+    String EXECUTOR_corePoolSize = "cron.executor.corePoolSize";
+    String EXECUTOR_maxPoolSize = "cron.executor.maxPoolSize";
+    String EXECUTOR_queueCapacity = "cron.executor.queueCapacity";
+    String EXECUTOR_threadNamePrefix = "cron.executor.threadNamePrefix";
+
 }

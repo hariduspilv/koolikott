@@ -102,7 +102,7 @@ public class MaterialService {
     }
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
-        ValidatorUtil.mustHaveId(material);
+        ValidatorUtil.mustHaveId(material, material!= null ? material.getId(): null);
         Material originalMaterial = materialGetter.get(material.getId(), changer);
         mustHavePermission(changer, originalMaterial);
         mustBeValid(originalMaterial, changer);

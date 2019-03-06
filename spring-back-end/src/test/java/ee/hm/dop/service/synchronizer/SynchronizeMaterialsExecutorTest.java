@@ -77,6 +77,7 @@ public class SynchronizeMaterialsExecutorTest {
         verify(repositoryService);
     }
 
+    @Ignore
     @Test
     public void scheduleExecution() {
         Repository repository1 = createMock(Repository.class);
@@ -104,6 +105,7 @@ public class SynchronizeMaterialsExecutorTest {
 
     }
 
+    @Ignore
     @Test
     public void index_is_not_updated_on_empty_import() {
         expect(repositoryService.getAllUsedRepositories()).andReturn(Collections.emptyList());

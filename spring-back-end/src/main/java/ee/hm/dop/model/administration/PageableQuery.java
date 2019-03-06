@@ -2,6 +2,7 @@ package ee.hm.dop.model.administration;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class PageableQuery {
     private List<Long> users;
     private int lang;
     private String materialType;
+    private Integer lang;
 
     public PageableQuery() {
     }
@@ -41,7 +43,7 @@ public class PageableQuery {
     public PageableQuery(int page, String itemSortedBy, String query,
                          List<Long> taxons,
                          List<Long> users,
-                         int lang,
+                         Integer lang,
                          String materialType) {
 
         if (materialType != null && MATERIAL_TYPES.contains(materialType)) {
@@ -49,6 +51,7 @@ public class PageableQuery {
         } else {
             valid = false;
         }
+                         Integer lang) {
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
@@ -56,8 +59,8 @@ public class PageableQuery {
             this.page = page;
             this.size = 20;
             this.query = query;
-            this.taxons = taxons;
-            this.users = users;
+            this.taxons = taxons != null ? taxons : new ArrayList<>();
+            this.users = taxons != null ? taxons : new ArrayList<>();
             this.lang = lang;
         }
     }
@@ -136,13 +139,13 @@ public class PageableQuery {
 
     public String order() {
         if (orderByFrCreatedAt()) {
-            return "ORDER BY min(r.createdAt)" + sort.name();
+            return "ORDER BY min(r.createdAt) " + sort.name();
         } else if (orderByFrCreatedAtDesc()) {
-            return "ORDER BY max(r.createdAt)" + sort.name();
+            return "ORDER BY max(r.createdAt) " + sort.name();
         } else if (orderByCreator()) {
-            return "ORDER BY min(u.surName)" + sort.name();
+            return "ORDER BY min(u.surName) " + sort.name();
         } else if (orderByCreatorDesc()) {
-            return "ORDER BY max(u.surName)" + sort.name();
+            return "ORDER BY max(u.surName) " + sort.name();
         } else if (orderBySubject()) {
             return "ORDER BY min(tr.translation) " + sort.name() + ", min(tr2.translation) " + sort.name();
         } else if (orderBySubjectDesc()) {
@@ -208,11 +211,11 @@ public class PageableQuery {
         this.query = query;
     }
 
-    public int getLang() {
+    public Integer getLang() {
         return lang;
     }
 
-    public void setLang(int lang) {
+    public void setLang(Integer lang) {
         this.lang = lang;
     }
 

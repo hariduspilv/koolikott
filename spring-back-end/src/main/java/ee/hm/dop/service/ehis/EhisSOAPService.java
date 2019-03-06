@@ -1,26 +1,31 @@
 package ee.hm.dop.service.ehis;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.ehis.Person;
-import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.env.Environment;
 import org.springframework.core.env.Profiles;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.w3c.dom.Node;
 
 import javax.inject.Inject;
-import javax.xml.soap.*;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import java.io.*;
-import java.net.*;
+import javax.xml.soap.SOAPConnection;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.net.URLStreamHandler;
 import java.nio.charset.StandardCharsets;
 
-import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static ee.hm.dop.utils.ConfigurationProperties.EHIS_ENDPOINT;
+import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_CONNECT;
+import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_READ;
+import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_USE_V6;
+import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_V6_ENDPOINT;
 import static java.lang.String.format;
 
 @Service

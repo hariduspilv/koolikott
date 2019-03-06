@@ -8,7 +8,7 @@ import ee.hm.dop.model.ehis.Role;
 import ee.hm.dop.utils.EncryptionUtils;
 import ee.hm.dop.utils.security.KeyStoreUtils;
 import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;

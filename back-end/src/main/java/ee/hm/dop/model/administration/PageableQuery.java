@@ -135,13 +135,13 @@ public class PageableQuery {
 
     public String order() {
         if (orderByFrCreatedAt()) {
-            return "ORDER BY min(r.createdAt)" + sort.name();
+            return "ORDER BY min(r.createdAt) " + sort.name();
         } else if (orderByFrCreatedAtDesc()) {
-            return "ORDER BY max(r.createdAt)" + sort.name();
+            return "ORDER BY max(r.createdAt) " + sort.name();
         } else if (orderByCreator()) {
-            return "ORDER BY min(u.surName)" + sort.name();
+            return "ORDER BY min(u.surName) " + sort.name();
         } else if (orderByCreatorDesc()) {
-            return "ORDER BY max(u.surName)" + sort.name();
+            return "ORDER BY max(u.surName) " + sort.name();
         } else if (orderBySubject()) {
             return "ORDER BY min(tr.translation) " + sort.name() + ", min(tr2.translation) " + sort.name();
         } else if (orderBySubjectDesc()) {
