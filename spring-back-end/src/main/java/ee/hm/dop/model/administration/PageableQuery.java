@@ -59,7 +59,7 @@ public class PageableQuery {
             this.size = 20;
             this.query = query;
             this.taxons = taxons != null ? taxons : new ArrayList<>();
-            this.users = taxons != null ? taxons : new ArrayList<>();
+            this.users = users != null ? users : new ArrayList<>();
             this.lang = lang;
         }
     }
