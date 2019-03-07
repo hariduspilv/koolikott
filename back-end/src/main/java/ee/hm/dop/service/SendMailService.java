@@ -117,17 +117,19 @@ public class SendMailService {
                 .to(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
                 .withHTMLText("See on emaili koopia, mille saatsid õppevara loojale." + BREAK
-                        + BREAK + emailToCreator.getMessage())
+                        + BREAK + emailToCreator.getLearningObjectTitle() + BREAK + BREAK +emailToCreator.getMessage())
                 .buildEmail();
     }
 
     public Email sendEmailToCreator(EmailToCreator emailToCreator) {
         return EmailBuilder.startingBlank()
-                .from(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
+                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(emailToCreator.getUser().getFullName(), emailToCreator.getCreatorEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimus")
-                .withHTMLText("Aineekspert on esitanud küsimuse Teie õppevara kohta: " + emailToCreator.getLearningObjectTitle() + BREAK
-                        + BREAK + emailToCreator.getMessage())
+                .withHTMLText("Aineekspert " +  emailToCreator.getSenderName() + " on esitanud küsimuse Teie õppevara kohta: " + emailToCreator.getLearningObjectTitle() + BREAK
+                        + BREAK + emailToCreator.getMessage() + BREAK + BREAK +
+                         "Aineeksperdile vastamiseks kirjutage e-posti aadressile:" + "<a href=\"mailto:" + emailToCreator.getSenderName() +
+                        "\">" + emailToCreator.getSenderEmail() + "</a>")
                 .buildEmail();
     }
 
