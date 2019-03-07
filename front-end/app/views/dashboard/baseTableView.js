@@ -155,7 +155,7 @@ class controller extends Controller {
     }
 
     isDisabled() {
-        return this.isModerator() ? !(this.$scope.filter && this.$scope.filter.taxons) : !((this.$scope.filter && this.$scope.filter.taxons) ||
+        return this.isModerator() ? !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType)  : !((this.$scope.filter && this.$scope.filter.taxons) ||
             this.$scope.filter.user || this.$scope.filter.materialType);
     }
 
