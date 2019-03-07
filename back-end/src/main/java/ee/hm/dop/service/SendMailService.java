@@ -43,38 +43,14 @@ public class SendMailService {
     }
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
-        List<AttachmentResource> collect = new ArrayList<>();
-        collect = getAttachmentResources(customerSupport, collect);
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("e-Koolikott: " + customerSupport.getSubject())
                 .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
                         "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
-                .withAttachments(collect)
+                .withAttachments(attachments(customerSupport))
                 .buildEmail();
-    }
-
-    private List<AttachmentResource> getAttachmentResources(CustomerSupport customerSupport, List<AttachmentResource> collect) {
-        if (customerSupport.getFiles() != null) {
-            collect = customerSupport.getFiles().stream()
-                            .map(a -> decodeAttachment(a))
-                            .filter(Objects::nonNull)
-                            .collect(Collectors.toList());
-        }
-        return collect;
-    }
-
-    private AttachmentResource decodeAttachment(AttachedFile a) {
-        try {
-            return new AttachmentResource(a.getName(), new ByteArrayDataSource(decodeBase64(getContent(a)), "image/*"));
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private String getContent(AttachedFile a) {
-        return a.getContent().substring(a.getContent().indexOf(',') + 1);
     }
 
     public Email composeEmailToSupportWhenSendFailed(CustomerSupport customerSupport) {
@@ -164,5 +140,27 @@ public class SendMailService {
                         + BREAK + "Sisuga: " + emailToCreator.getMessage() + BREAK
                         + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(emailToCreator.getSentAt()))
                 .buildEmail();
+    }
+
+    private List<AttachmentResource> attachments(CustomerSupport customerSupport) {
+        if (customerSupport.getFiles() != null) {
+            return customerSupport.getFiles().stream()
+                    .map(a -> decodeAttachment(a))
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+        }
+        return new ArrayList<>();
+    }
+
+    private AttachmentResource decodeAttachment(AttachedFile a) {
+        try {
+            return new AttachmentResource(a.getName(), new ByteArrayDataSource(decodeBase64(getContent(a)), "image/*"));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private String getContent(AttachedFile a) {
+        return a.getContent().substring(a.getContent().indexOf(',') + 1);
     }
 }
