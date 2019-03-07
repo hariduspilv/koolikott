@@ -33,7 +33,6 @@ public class PageableQuery {
     private String query;
     private List<Long> taxons;
     private List<Long> users;
-    private int lang;
     private String materialType;
     private Integer lang;
 
@@ -51,7 +50,7 @@ public class PageableQuery {
         } else {
             valid = false;
         }
-                         Integer lang) {
+
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;

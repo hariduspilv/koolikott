@@ -14,6 +14,8 @@ import org.simplejavamail.mailer.MailerBuilder;
 import org.simplejavamail.mailer.config.TransportStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+
 import javax.inject.Inject;
 import javax.mail.util.ByteArrayDataSource;
 import java.util.ArrayList;
@@ -24,6 +26,7 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
+@Service
 public class SendMailService {
 
     @Inject
