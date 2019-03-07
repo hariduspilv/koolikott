@@ -1,4 +1,4 @@
-## e-Koolikott [1.31.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703)
+## e-Koolikott [1.31.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703) (Testi paigaldatud 28.02.2019)
 
 ### Muutunud
 * Menüüpunkt "Uus õppevara" universaalne komponent, filtreerimine, pagineerimine, otsing, uute veergude lisamine, sortimine [EK-157](https://projektid.hitsa.ee/jira/browse/EK-157)
@@ -7,7 +7,7 @@
 * Dropdown menüü kuvamise parandus [EK-299](https://projektid.hitsa.ee/jira/browse/EK-299)
 * "Uus õppevara" tabeli algseisu taastamine filtrite tühjendamisel [EK-309](https://projektid.hitsa.ee/jira/browse/EK-309)
 
-## e-Koolikott [1.30.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703)
+## e-Koolikott [1.30.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703) (Toodangusse paigaldatud 21.02.2019)
 
 ### Muutunud
 * Kasutajatoes teema 'Muu' korral pealkirja sisestamine [EK-197](https://projektid.hitsa.ee/jira/browse/EK-197)
@@ -16,7 +16,7 @@
 * Kasutaja küpsiste salvestamine brauserisse [EK-260](https://projektid.hitsa.ee/jira/browse/EK-260)
 * Täisekraani sulgemine X nupust [EK-270](https://projektid.hitsa.ee/jira/browse/EK-270)
 
-## e-Koolikott [1.29.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10727)
+## e-Koolikott [1.29.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10727) (Toodangusse paigaldatud 21.02.2019)
 
 ### Muutunud
 * Failide üleslaadimise teavitusteksti parandused [EK-247](https://projektid.hitsa.ee/jira/browse/EK-247)
@@ -26,7 +26,7 @@
 * PIN koodi saatmise parandus [EK-255](https://projektid.hitsa.ee/jira/browse/EK-255)
 * Mobiilvaate parandused [EK-257](https://projektid.hitsa.ee/jira/browse/EK-257)
 
-## e-Koolikott [1.29.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10701)
+## e-Koolikott [1.29.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10701) (Toodangusse paigaldatud 21.02.2019)
 
 ### Muutunud
 * Õppevara detailvaates täisekraan vaate funktsionaalsus [EK-14](https://projektid.hitsa.ee/jira/browse/EK-14)
@@ -35,7 +35,7 @@
 * Kasutajatoe tagasiside vormile faili üleslaadmise funktsionaalsus [EK-144](https://projektid.hitsa.ee/jira/browse/EK-144)
 
 
-## e-Koolikott [1.28.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10700)
+## e-Koolikott [1.28.1](https://projektid.hitsa.ee/jira/projects/EK/versions/10700) (Toodangusse paigaldatud 22.01.2019)
 
 ### Muutunud
 * constants.js eemaldatud minifitseerimisest [EK-203](https://projektid.hitsa.ee/jira/browse/EK-203)
