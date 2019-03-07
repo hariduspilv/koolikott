@@ -16,6 +16,7 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import static ee.hm.dop.utils.ValidatorUtil.permissionError;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -87,7 +88,7 @@ public class PortfolioService {
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
         if (!portfolioPermission.canUpdate(loggedInUser, originalPortfolio)) {
-            throw ValidatorUtil.permissionError();
+            throw permissionError();
         }
         validateTitle(portfolio);
         return originalPortfolio;
@@ -96,7 +97,7 @@ public class PortfolioService {
     private Portfolio validateCopy(Portfolio portfolio, User loggedInUser) {
         Portfolio originalPortfolio = portfolioDao.findByIdNotDeleted(portfolio.getId());
         if (!portfolioPermission.canView(loggedInUser, originalPortfolio)) {
-            throw ValidatorUtil.permissionError();
+            throw permissionError();
         }
         validateTitle(portfolio);
         return originalPortfolio;

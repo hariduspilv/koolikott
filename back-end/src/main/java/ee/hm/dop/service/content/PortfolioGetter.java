@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.utils.ValidatorUtil.permissionError;
+
 public class PortfolioGetter {
 
     @Inject
@@ -28,7 +30,7 @@ public class PortfolioGetter {
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
         if (!portfolioPermission.canView(loggedInUser, portfolio)) {
-            throw ValidatorUtil.permissionError();
+            throw permissionError();
         }
         return portfolio;
     }

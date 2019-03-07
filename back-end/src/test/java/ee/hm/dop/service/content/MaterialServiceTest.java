@@ -133,7 +133,7 @@ public class MaterialServiceTest {
         material.setFirstReviews(null);
         material.setImproperContents(null);
         material.setReviewableChanges(null);
-        expect(material.getId()).andReturn(materialId).times(4);
+        expect(material.getId()).andReturn(materialId).times(5);
         expect(material.getAuthors()).andReturn(null);
         expect(material.getPublishers()).andReturn(null);
         expect(material.getSource()).andReturn(SOURCE).times(3);
@@ -195,7 +195,7 @@ public class MaterialServiceTest {
     public void updateWhenMaterialDoesNotExist() {
         long materialId = 1;
         Material material = createMock(Material.class);
-        expect(material.getId()).andReturn(materialId).times(2);
+        expect(material.getId()).andReturn(materialId).times(3);
         expect(materialGetter.get(materialId, null)).andReturn(null);
 
         replay(materialDao, material, materialGetter);
@@ -219,7 +219,7 @@ public class MaterialServiceTest {
         long materialId = 1;
         Material material = createMock(Material.class);
 
-        expect(material.getId()).andReturn(materialId).times(4);
+        expect(material.getId()).andReturn(materialId).times(5);
         expect(material.getRepositoryIdentifier()).andReturn(REPO_ID).times(2);
 
         material.setRecommendation(null);
