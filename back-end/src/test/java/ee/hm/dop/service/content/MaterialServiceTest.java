@@ -298,7 +298,7 @@ public class MaterialServiceTest {
             materialService.update(null, user, SearchIndexStrategy.UPDATE_INDEX);
             fail("Exception expected.");
         } catch (RuntimeException ex) {
-            assertEquals("Material not found", ex.getMessage());
+            assertEquals("Material not found null", ex.getMessage());
         }
 
         verify(user);
