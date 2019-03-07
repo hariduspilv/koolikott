@@ -7,14 +7,9 @@ import ee.hm.dop.service.login.UserEmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
 
 @RestController
 @RequestMapping("/userEmail")
@@ -41,25 +36,16 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.validatePin(userEmail);
     }
 
-    @GET
-    @Path("getEmail")
+
+    @GetMapping("getEmail")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public UserEmail userHasEmail(@QueryParam("userId") int userId) {
+    public UserEmail userHasEmail(@RequestParam("userId") int userId) {
         return userEmailService.getUserEmail(userId);
     }
 
-    @POST
-    @Path("sendEmailForCreator")
-    @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
+    @PostMapping("sendEmailToCreator")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public EmailToCreator saveEmailForCreator(EmailToCreator emailToCreator) {
-
+    public EmailToCreator saveEmailForCreator(@RequestBody EmailToCreator emailToCreator) {
         return userEmailService.sendEmailForCreator(emailToCreator, getLoggedInUser());
-
     }
-
-
 }
