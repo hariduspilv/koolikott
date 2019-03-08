@@ -10,8 +10,6 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
-import java.util.List;
-
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -47,6 +45,9 @@ public class UserEmailService {
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
+        if(emailToCreator.getMessage().length() > 500){
+            throw badRequest("Message is too long");
+        }
         verifyLOCreator(emailToCreator);
 
         UserEmail userSenderEmail = userEmailDao.findByUser(userSender);

@@ -15,9 +15,15 @@ md-dialog md-dialog-actions {
 }
 
 .creator-email-dialog {
-  @media screen and (min-width: $layout-breakpoint-sm)  {
-    max-width: 50% !important;
+  @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
+    max-width: 51% !important;
   }
+  @media screen and (min-width: $layout-breakpoint-md) {
+    max-width: 35% !important;
+  }
+}
+.margin-bottom {
+  margin-bottom: 10px;
 }
 
 md-dialog.login-dialog {
