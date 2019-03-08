@@ -89,7 +89,7 @@ class controller extends Controller {
     selectType(type) {
         this.$scope.filter.materialType = type
         if (type !== 'All')
-            this.sortedBy = 'byCreatedAt';
+            this.sortedBy = '-byCreatedAt';
     }
 
     onFilterChange(filter) {
