@@ -34,13 +34,14 @@
              flex-order-gt-sm="2" flex="100">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
             <textarea
-                      placeholder="{{'SEND_EMAIL_CONTENT' | translate}}"
+                      placeholder="{{placeholder}}"
                       name="emailContent"
                       ng-model="emailToCreator.emailContent"
                       id="email-content-description"
                       autofocus="autofocus"
                       rows="5"
                       maxlength="500"
+                      ng-change="$ctrl.setPlaceholder()"
                       class="final-step margin-bottom creator-email-overflow-auto"
             ></textarea>
             <div layout="row" layout-align="space-between center" layout-xs="column" layout-align-xs="end center">
