@@ -1,5 +1,5 @@
 <md-dialog aria-label="Ekirja saatmise modaalaken" flex-gt-sm="75" flex id="send-email-modal"
-           class="fullscreen-dialog creator-email-dialog">
+           class=" creator-email-dialog creator-email-full-screen">
   <form name="sendEmailToCreator">
     <md-toolbar data-ng-if="!emailSent" class="md-accent">
       <div class="md-toolbar-tools" flex>
@@ -34,41 +34,46 @@
              flex-order-gt-sm="2" flex="100">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
             <textarea
-                      placeholder="{{'SEND_EMAIL_CONTENT' | translate}}"
+                      placeholder="{{placeholder}}"
                       name="emailContent"
                       ng-model="emailToCreator.emailContent"
                       id="email-content-description"
                       autofocus="autofocus"
                       rows="5"
                       maxlength="500"
+                      ng-change="$ctrl.setPlaceholder()"
+                      class="final-step margin-bottom creator-email-overflow-auto"
             ></textarea>
+            <div layout="row" layout-align="space-between center" layout-xs="column" layout-align-xs="end center">
+              <div class="recaptcha no-margin"
+                   vc-recaptcha
+                   key="captchaKey"
+                   on-success="$ctrl.captchaSuccess()"
+                   on-expire="$ctrl.captchaExpired()"
+                   lang="$ctrl.getLanguage()"
+              ></div>
+              <md-dialog-actions style="padding: 0px">
+                <span flex></span>
+                <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button"
+                           data-ng-disabled="isSaving"
+                           data-ng-click="cancel()">
+                  <span data-translate="BUTTON_CANCEL"></span>
+                </md-button>
+                <md-button class="md-raised md-primary"
+                           data-ng-click="$ctrl.sendEmail()"
+                           data-ng-disabled="isSendButtonDisabled()"
+                           aria-label="Send mail"
+                >
+                  <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
+                </md-button>
+                <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                                      data-ng-show="isSaving"></md-progress-circular>
+              </md-dialog-actions>
+            </div>
           </md-input-container>
         </div>
       </md-content>
-      <div class="recaptcha"
-           vc-recaptcha
-           key="captchaKey"
-           on-success="$ctrl.captchaSuccess()"
-           on-expire="$ctrl.captchaExpired()"
-           lang="$ctrl.getLanguage()"
-      ></div>
-      <md-dialog-actions>
-        <span flex></span>
-        <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button"
-                   data-ng-disabled="isSaving"
-                   data-ng-click="cancel()">
-          <span data-translate="BUTTON_CANCEL"></span>
-        </md-button>
-        <md-button class="md-raised md-primary"
-                   data-ng-click="$ctrl.sendEmail()"
-                   data-ng-disabled="isSendButtonDisabled()"
-                   aria-label="Send mail"
-        >
-          <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
-        </md-button>
-        <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
-                              data-ng-show="isSaving"></md-progress-circular>
-      </md-dialog-actions>
+
     </div>
     <div layout-align="center center" style="margin: 20px" data-ng-if="emailSent">
       <span data-translate="SEND_EMAIL_MESSAGE_SENT"></span>

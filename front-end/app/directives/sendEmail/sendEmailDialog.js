@@ -9,6 +9,7 @@
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
             this.$scope.emailToCreator = {}
+            this.setPlaceholder()
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide();
@@ -17,6 +18,19 @@
             this.$scope.isSendButtonDisabled = () => {
                 return (!this.$scope.emailToCreator.emailContent || !this.$scope.captchaSuccess)
             }
+        }
+
+        setPlaceholder() {
+            if (!this.$scope.emailToCreator.emailContent || this.$scope.emailToCreator.emailContent.length <= 0) {
+                this.$translate('SEND_EMAIL_CONTENT').then(value => {
+                    this.$scope.placeholder = value
+                })
+            } else {
+                this.$translate('SEND_EMAIL_CONTENT_COUNTER').then(value => {
+                    this.$scope.placeholder = (value.replace('${counter}', 500 - this.$scope.emailToCreator.emailContent.length))
+                })
+            }
+
         }
 
         sendEmail() {
@@ -83,6 +97,7 @@
         'authenticatedUserService',
         'locals',
         '$rootScope',
+        '$translate'
     ]
     angular.module('koolikottApp').controller('sendEmailDialogController', controller)
 }

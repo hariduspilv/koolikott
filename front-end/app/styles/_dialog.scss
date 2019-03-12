@@ -15,9 +15,15 @@ md-dialog md-dialog-actions {
 }
 
 .creator-email-dialog {
-  @media screen and (min-width: $layout-breakpoint-sm)  {
-    max-width: 50% !important;
+  @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
+    max-width: 51% !important;
   }
+  @media screen and (min-width: $layout-breakpoint-md) {
+    max-width: 40% !important;
+  }
+}
+.margin-bottom {
+  margin-bottom: 10px;
 }
 
 md-dialog.login-dialog {
@@ -140,6 +146,27 @@ md-dialog.login-dialog {
         left: 0;
         border-radius: 0;
     }
+}
+
+.creator-email-full-screen {
+  width: 100%;
+  max-height: 100%;
+
+  @media screen and (max-width: $layout-breakpoint-xs) {
+    height: fit-content;
+    max-height: 92.5%;
+    max-width: 100%;
+    position: absolute;
+    top: initial;
+    left: 0;
+    border-radius: 0;
+  }
+}
+
+.creator-email-overflow-auto {
+  resize: none;
+  max-height: 135px;
+  overflow: auto;
 }
 
 .qr-code {

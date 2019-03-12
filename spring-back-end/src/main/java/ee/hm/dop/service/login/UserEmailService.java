@@ -47,6 +47,9 @@ public class UserEmailService {
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
+        if(emailToCreator.getMessage().length() > 500){
+            throw badRequest("Message is too long");
+        }
         verifyLOCreator(emailToCreator);
 
         UserEmail userSenderEmail = userEmailDao.findByUser(userSender);
