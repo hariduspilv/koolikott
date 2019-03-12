@@ -1,9 +1,6 @@
 package ee.hm.dop;
 
-import ee.hm.dop.service.synchronizer.AuthenticatedUserCleaner;
-import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
-import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
-import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
+import ee.hm.dop.service.synchronizer.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
@@ -19,6 +16,7 @@ public class ApplicationInit {
     private AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
     private AuthenticationStateCleaner authenticationStateCleaner;
     private AuthenticatedUserCleaner authenticatedUserCleaner;
+    private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
@@ -26,5 +24,6 @@ public class ApplicationInit {
         automaticallyAcceptReviewableChange.runAsync();
         authenticationStateCleaner.runAsync();
         authenticatedUserCleaner.runAsync();
+        ehisInstitutionUpdateExecutor.runAsync();
     }
 }
