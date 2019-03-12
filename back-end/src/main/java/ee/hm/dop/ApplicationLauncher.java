@@ -3,10 +3,7 @@ package ee.hm.dop;
 import com.google.inject.Singleton;
 import ee.hm.dop.config.EmbeddedJetty;
 import ee.hm.dop.config.guice.GuiceInjector;
-import ee.hm.dop.service.synchronizer.AuthenticatedUserCleaner;
-import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
-import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
-import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
+import ee.hm.dop.service.synchronizer.*;
 import org.apache.commons.configuration2.Configuration;
 import org.opensaml.DefaultBootstrap;
 import org.opensaml.xml.ConfigurationException;
@@ -30,6 +27,7 @@ public class ApplicationLauncher {
     private static final int AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY = 2;
     private static final int AUTHENTICATION_STATE_CLEANER_HOUR_OF_DAY = 3;
     private static final int AUTHENTICATED_USER_CLEANER_HOUR_OF_DAY = 4;
+    private static final int EHIS_INSTITUTION_SYNCHRONIZATION_HOUR_OF_DAY = 1;
 
     @Inject
     private static Configuration configuration;
@@ -41,6 +39,9 @@ public class ApplicationLauncher {
     private static AuthenticationStateCleaner authenticationStateCleaner;
     @Inject
     private static AuthenticatedUserCleaner authenticatedUserCleaner;
+    @Inject
+    private static EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
+
 
     public static void startApplication() {
         GuiceInjector.init();
@@ -57,6 +58,7 @@ public class ApplicationLauncher {
             acceptReviewableChange();
             authenticatedUserCleaner();
             authenticationStateCleaner();
+            ehisInstitutionUpdateExecutor();
         }
     }
 
@@ -76,11 +78,17 @@ public class ApplicationLauncher {
         Executors.newSingleThreadExecutor().submit(() -> authenticatedUserCleaner.run());
     }
 
+    private static void ehisInstitutionUpdateExecutor() {
+        Executors.newSingleThreadExecutor().submit(() -> ehisInstitutionUpdateExecutor.run());
+    }
+
+
     private static void startExecutors() {
         synchronizeMaterialsExecutor.scheduleExecution(MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY);
         automaticallyAcceptReviewableChange.scheduleExecution(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY);
         authenticationStateCleaner.scheduleExecution(AUTHENTICATION_STATE_CLEANER_HOUR_OF_DAY);
         authenticatedUserCleaner.scheduleExecution(AUTHENTICATED_USER_CLEANER_HOUR_OF_DAY);
+        ehisInstitutionUpdateExecutor.scheduleExecution(EHIS_INSTITUTION_SYNCHRONIZATION_HOUR_OF_DAY);
     }
 
     private static void startCommandListener() {
