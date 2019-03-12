@@ -25,12 +25,15 @@ public class EhisInstitutionUpdateExecutor extends DopDaemonProcess {
     public synchronized void run() {
 
         try {
+            beginTransaction();
             logger.info(format("EHIS institutions updating started"));
             ehisInstitutionService.getInstitutionsAndUpdateDb();
+            closeTransaction();
             logger.info(format("EHIS institutions updating ended"));
         } catch (Exception e) {
             logger.error("Unexpected error while updating EHIS institutions.", e);
         }
+//        closeEntityManager();
     }
 
     public void scheduleExecution(int hourOfDayToExecute) {

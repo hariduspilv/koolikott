@@ -82,7 +82,6 @@ public class ApplicationLauncher {
         Executors.newSingleThreadExecutor().submit(() -> ehisInstitutionUpdateExecutor.run());
     }
 
-
     private static void startExecutors() {
         synchronizeMaterialsExecutor.scheduleExecution(MATERIAL_SYNCHRONIZATION_HOUR_OF_DAY);
         automaticallyAcceptReviewableChange.scheduleExecution(AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY);

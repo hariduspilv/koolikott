@@ -8,7 +8,7 @@ import javax.persistence.*;
 public class InstitutionEhis implements AbstractEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
 
     @Column(nullable = false)
