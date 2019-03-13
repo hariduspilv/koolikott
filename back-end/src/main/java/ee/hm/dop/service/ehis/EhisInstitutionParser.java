@@ -38,14 +38,14 @@ class EhisInstitutionParser {
         Document document = new DOMWriter().write(saxReader.read(url));
 
         List<InstitutionEhis> institutionsFromXml = getEhisInstitutions(document);
-        logger.info("EHIS institution. Found -" + institutionsFromXml.size() + " institutions");
+        logger.info("EHIS institution. Found - " + institutionsFromXml.size() + " institutions");
 
         int addCounter = 0;
         int removeCounter = 0;
 
         for (InstitutionEhis ie : institutionsFromXml) {
             if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) == null && !(ie.getType().equalsIgnoreCase(instType))
-                    && !(ie.getStatus().equalsIgnoreCase(statusClosed))) {
+                    && !(ie.getStatus().equalsIgnoreCase(statusClosed)) && !(ie.getArea().equalsIgnoreCase("") || ie.getArea() == null)) {
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter ++;
             } else {
@@ -69,36 +69,16 @@ class EhisInstitutionParser {
         return institutions;
     }
 
-    private InstitutionEhis getInstitution(Node institutionNode) {
-        InstitutionEhis institution = new InstitutionEhis();
-        institution.setEhisId(getInstitutionId((Element) institutionNode));
-        institution.setName(getInstitutionName((Element) institutionNode));
-        institution.setStatus(getInstitutionStatus((Element) institutionNode));
-        institution.setType(getInstitutionType((Element) institutionNode));
-        institution.setArea(getInstitutionArea((Element) institutionNode));
-
-        return institution;
-    }
-
-    private Long getInstitutionId(Element institutionElement) {
-        return Long.valueOf(institutionElement.getElementsByTagName("koolId").item(0).getTextContent());
-    }
+     private InstitutionEhis getInstitution(Node institutionNode) {
+        return new InstitutionEhis(Long.valueOf(getInstitutionAttr((Element) institutionNode, "koolId")),
+                getInstitutionAttr((Element) institutionNode, "nimetus"),
+                getInstitutionAttr((Element) institutionNode, "maakond"),
+                getInstitutionAttr((Element) institutionNode, "staatus"),
+                getInstitutionAttr((Element) institutionNode, "tyyp"));
+  }
 
     private String getInstitutionAttr(Element institutionElement,String attr) {
         return institutionElement.getElementsByTagName(attr).item(0).getTextContent();
-    }
-
-    private String getInstitutionName(Element institutionElement) {
-        return institutionElement.getElementsByTagName("nimetus").item(0).getTextContent();
-    }
-    private String getInstitutionStatus(Element institutionElement) {
-        return institutionElement.getElementsByTagName("staatus").item(0).getTextContent();
-    }
-    private String getInstitutionType(Element institutionElement) {
-        return institutionElement.getElementsByTagName("tyyp").item(0).getTextContent();
-    }
-    private String getInstitutionArea(Element institutionElement) {
-        return institutionElement.getElementsByTagName("maakond").item(0).getTextContent();
     }
 
     private NodeList getNodeList(Object item, String path) {

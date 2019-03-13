@@ -37,9 +37,12 @@ public class InstitutionEhis implements AbstractEntity {
     public InstitutionEhis() {
     }
 
-    public InstitutionEhis(Long ehisId, String name) {
+    public InstitutionEhis(Long ehisId, String name, String area, String status, String type) {
         this.ehisId = ehisId;
         this.name = name;
+        this.area = area;
+        this.status = status;
+        this.type = type;
     }
 
     @Override
