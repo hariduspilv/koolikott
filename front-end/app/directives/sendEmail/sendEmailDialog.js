@@ -36,6 +36,9 @@
         sendEmail() {
 
             this.$scope.isSaving = true
+            if (this.locals.learningObject.type === '.Material')
+                this.locals.learningObject.title = this.locals.learningObject.titles[0].text;
+
             this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
                 {
                     message: this.$scope.emailToCreator.emailContent,
