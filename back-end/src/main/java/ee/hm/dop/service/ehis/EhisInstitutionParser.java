@@ -19,10 +19,10 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
-
-import static java.lang.String.format;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 class EhisInstitutionParser {
 
@@ -38,7 +38,7 @@ class EhisInstitutionParser {
         Document document = new DOMWriter().write(saxReader.read(url));
 
         List<InstitutionEhis> institutionsFromXml = getEhisInstitutions(document);
-        logger.info("EHIS institution. Found - " + institutionsFromXml.size() + " institutions");
+        logger.info("EHIS institution.Found - " + institutionsFromXml.size() + " institutions");
 
         int addCounter = 0;
         int removeCounter = 0;
@@ -47,7 +47,7 @@ class EhisInstitutionParser {
             if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) == null && !(ie.getType().equalsIgnoreCase(instType))
                     && !(ie.getStatus().equalsIgnoreCase(statusClosed)) && !(ie.getArea().equalsIgnoreCase("") || ie.getArea() == null)) {
                 institutionEhisDao.createOrUpdate(ie);
-                addCounter ++;
+                addCounter++;
             } else {
                 if (ie.getStatus().equalsIgnoreCase(statusClosed)) {
                     institutionEhisDao.remove(ie);
@@ -56,28 +56,25 @@ class EhisInstitutionParser {
             }
         }
         logger.info("EHIS institution.Added " + addCounter + " institutions into DB");
-        logger.info("EHIS institution.Removed " + removeCounter + " institutions from DB");
+        logger.info("EHIS institution.Removed/not added " + removeCounter + " institutions");
     }
 
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
-        List<InstitutionEhis> institutions = new ArrayList<>();
         NodeList institutionsNode = getNodeList(document, "//*[local-name()='oppeasutus']");
-        for (int i = 0; i < institutionsNode.getLength(); i++) {
-            InstitutionEhis institution = getInstitution(institutionsNode.item(i));
-            institutions.add(institution);
-        }
-        return institutions;
+        Stream<Node> nodeStream = IntStream.range(0, institutionsNode.getLength()).mapToObj(institutionsNode::item);
+        return nodeStream.map(this::getInstitution)
+                .collect(Collectors.toList());
     }
 
-     private InstitutionEhis getInstitution(Node institutionNode) {
+    private InstitutionEhis getInstitution(Node institutionNode) {
         return new InstitutionEhis(Long.valueOf(getInstitutionAttr((Element) institutionNode, "koolId")),
                 getInstitutionAttr((Element) institutionNode, "nimetus"),
                 getInstitutionAttr((Element) institutionNode, "maakond"),
                 getInstitutionAttr((Element) institutionNode, "staatus"),
                 getInstitutionAttr((Element) institutionNode, "tyyp"));
-  }
+    }
 
-    private String getInstitutionAttr(Element institutionElement,String attr) {
+    private String getInstitutionAttr(Element institutionElement, String attr) {
         return institutionElement.getElementsByTagName(attr).item(0).getTextContent();
     }
 

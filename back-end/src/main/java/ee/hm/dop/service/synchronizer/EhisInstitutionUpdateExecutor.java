@@ -5,9 +5,7 @@ import ee.hm.dop.service.ehis.EhisInstitutionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
-
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -23,11 +21,11 @@ public class EhisInstitutionUpdateExecutor extends DopDaemonProcess {
     public synchronized void run() {
         try {
             beginTransaction();
-            logger.info(format("EHIS institutions updating started"));
+            logger.info("EHIS institutions updating started");
             EhisInstitutionService ehisInstitutionService = newEhisInstitutionService();
             ehisInstitutionService.getInstitutionsAndUpdateDb();
             closeTransaction();
-            logger.info(format("EHIS institutions updating ended"));
+            logger.info("EHIS institutions updating ended");
         } catch (Exception e) {
             logger.error("Unexpected error while updating EHIS institutions.", e);
         } finally {
