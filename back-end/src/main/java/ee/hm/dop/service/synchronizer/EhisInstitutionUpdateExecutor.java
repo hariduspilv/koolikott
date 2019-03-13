@@ -1,5 +1,6 @@
 package ee.hm.dop.service.synchronizer;
 
+import ee.hm.dop.config.guice.GuiceInjector;
 import ee.hm.dop.service.ehis.EhisInstitutionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,24 +17,22 @@ import static java.util.concurrent.TimeUnit.DAYS;
 @Singleton
 public class EhisInstitutionUpdateExecutor extends DopDaemonProcess {
 
-    @Inject
-    private EhisInstitutionService ehisInstitutionService;
-
     private static final Logger logger = LoggerFactory.getLogger(EhisInstitutionUpdateExecutor.class);
 
     @Override
     public synchronized void run() {
-
         try {
             beginTransaction();
             logger.info(format("EHIS institutions updating started"));
+            EhisInstitutionService ehisInstitutionService = newEhisInstitutionService();
             ehisInstitutionService.getInstitutionsAndUpdateDb();
             closeTransaction();
             logger.info(format("EHIS institutions updating ended"));
         } catch (Exception e) {
             logger.error("Unexpected error while updating EHIS institutions.", e);
+        } finally {
+            closeEntityManager();
         }
-//        closeEntityManager();
     }
 
     public void scheduleExecution(int hourOfDayToExecute) {
@@ -55,5 +54,9 @@ public class EhisInstitutionUpdateExecutor extends DopDaemonProcess {
         long initialDelay = getInitialDelay(hourOfDayToExecute);
 
         timer.scheduleAtFixedRate(timerTask, initialDelay, DAYS.toMillis(1));
+    }
+
+    private EhisInstitutionService newEhisInstitutionService() {
+        return GuiceInjector.getInjector().getInstance(EhisInstitutionService.class);
     }
 }
