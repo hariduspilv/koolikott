@@ -44,7 +44,8 @@ class EhisInstitutionParser {
         int removeCounter = 0;
 
         for (InstitutionEhis ie : institutionsFromXml) {
-            if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) == null && !(ie.getType().equalsIgnoreCase(instType))) {
+            if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) == null && !(ie.getType().equalsIgnoreCase(instType))
+                    && !(ie.getStatus().equalsIgnoreCase(statusClosed))) {
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter ++;
             } else {
