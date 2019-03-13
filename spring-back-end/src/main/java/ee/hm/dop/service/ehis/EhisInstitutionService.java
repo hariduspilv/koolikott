@@ -18,8 +18,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_LI
 @Service
 public class EhisInstitutionService {
 
-    private static Logger logger = LoggerFactory.getLogger(EhisInstitutionService.class);
-
     @Autowired
     private EhisInstitutionParser ehisInstitutionParser;
     @Autowired

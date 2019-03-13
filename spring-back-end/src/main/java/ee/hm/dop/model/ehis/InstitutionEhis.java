@@ -17,6 +17,9 @@ public class InstitutionEhis implements AbstractEntity {
     @Column(nullable = false)
     private String name;
 
+    @Column
+    private String area;
+
     public String getStatus() {
         return status;
     }
@@ -28,12 +31,18 @@ public class InstitutionEhis implements AbstractEntity {
     @Transient
     private String status;
 
+    @Transient
+    private String type;
+
     public InstitutionEhis() {
     }
 
-    public InstitutionEhis(Long ehisId, String name) {
+    public InstitutionEhis(Long ehisId, String name, String area, String status, String type) {
         this.ehisId = ehisId;
         this.name = name;
+        this.area = area;
+        this.status = status;
+        this.type = type;
     }
 
     @Override
@@ -60,6 +69,22 @@ public class InstitutionEhis implements AbstractEntity {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 }
 

@@ -21,9 +21,9 @@ public class EhisInstitutionUpdateExecutor {
     public synchronized void run() {
 
         try {
-            log.info(format("EHIS institutions updating started"));
+            log.info("EHIS institutions updating started");
             ehisInstitutionService.getInstitutionsAndUpdateDb();
-            log.info(format("EHIS institutions updating ended"));
+            log.info("EHIS institutions updating ended");
         } catch (Exception e) {
             log.error("Unexpected error while updating EHIS institutions.", e);
         }
