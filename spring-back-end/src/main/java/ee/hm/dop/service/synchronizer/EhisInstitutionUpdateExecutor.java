@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
-import static java.lang.String.format;
-
 @Slf4j
 @Service
 @Transactional
@@ -24,6 +22,7 @@ public class EhisInstitutionUpdateExecutor {
             log.info("EHIS institutions updating started");
             ehisInstitutionService.getInstitutionsAndUpdateDb();
             log.info("EHIS institutions updating ended");
+
         } catch (Exception e) {
             log.error("Unexpected error while updating EHIS institutions.", e);
         }
