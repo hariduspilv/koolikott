@@ -27,7 +27,11 @@ md-dialog md-dialog-actions {
 }
 
 .creator-email-dialog-title {
-  min-width: 80%
+  min-width: 80%;
+}
+
+.learningobject-title-color {
+  color: rgba(0, 0, 0, 0.87) !important;
 }
 
 md-dialog.login-dialog {
