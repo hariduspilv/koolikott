@@ -4,10 +4,7 @@ import ee.hm.dop.model.ehis.InstitutionEhis;
 import ee.hm.dop.service.ehis.EhisInstitutionService;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.List;
 
@@ -23,4 +20,22 @@ public class EhisInstitutionResource extends BaseResource {
     public List<InstitutionEhis> getEhisInstitutions(){
         return ehisInstitutionService.findAll();
     }
+
+    @GET
+    @Path("areas")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<String> getEhisInstitutionAreas(){
+        return ehisInstitutionService.getInstitutionAreas();
+    }
+
+    @GET
+    @Path("institutions")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<InstitutionEhis> getInstitutionsPerArea(@QueryParam("area") String area)
+    {
+        return ehisInstitutionService.getInstitutionPerArea(area);
+    }
+
+
 }

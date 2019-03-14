@@ -35,4 +35,11 @@ public class EhisInstitutionService {
         return institutionEhisDao.findAll();
     }
 
+    public List<String> getInstitutionAreas() {
+        return institutionEhisDao.getInstitutionAreas();
+    }
+
+    public List<InstitutionEhis> getInstitutionPerArea(String area) {
+        return institutionEhisDao.getInstitutionPerArea(area);
+    }
 }

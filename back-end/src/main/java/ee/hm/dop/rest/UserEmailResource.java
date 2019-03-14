@@ -25,6 +25,13 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.save(userEmail);
     }
 
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getUserEmail() {
+        return userEmailService.getEmail(getLoggedInUser());
+    }
+
+
     @POST
     @Path("check")
     @Produces(MediaType.APPLICATION_JSON)

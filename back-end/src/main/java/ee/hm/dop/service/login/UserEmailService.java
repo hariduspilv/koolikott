@@ -80,6 +80,14 @@ public class UserEmailService {
         return emailToCreatorDao.createOrUpdate(emailToCreator);
     }
 
+    public String getEmail(User user) {
+        if (user == null)
+            throw badRequest("User is null, can't find e-mail of null");
+
+        return userEmailDao.findByUser(user).getEmail();
+
+    }
+
     public UserEmail save(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         if (userEmail.getUser() == null)

@@ -123,6 +123,12 @@ angular.module('koolikottApp')
                     controller: 'faqController',
                     controllerAs: '$ctrl',
                 })
+                .when('/profile', {
+                    templateUrl: 'views/userProfile/userProfile.html',
+                    controller: 'userProfileController',
+                    controllerAs: '$ctrl',
+                    permissions: ['ADMIN', 'MODERATOR', 'USER', 'RESTRICTED']
+                })
                 .when('/loginRedirect', {
                     templateUrl: 'views/loginRedirect/loginRedirect.html',
                     controller: 'loginRedirectController',

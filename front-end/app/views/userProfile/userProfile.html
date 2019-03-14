@@ -1,0 +1,127 @@
+<data-dop-cookie-notice class="cookie-parent"></data-dop-cookie-notice>
+<ont></ont>
+<div data-layout="row" data-layout-align="space-between center">
+  <h1 class="md-headline" data-translate="USER_PROFILE_HEADER"></h1>
+</div>
+<div>
+  <md-card class="card-lg">
+    <md-card-content>
+      <div data-layout="row" class="md-padding">
+        <md-input-container class="md-block" flex-gt-xs>
+          <label data-translate="USERNAME"></label>
+          <input placeholder="{{user.username}}" disabled>
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-xs>
+          <label data-translate="FULL_NAME"></label>
+          <input placeholder="{{user.name + ' ' + user.surname}}" disabled>
+        </md-input-container>
+      </div>
+      <div id="taxons" layout="row" class="md-padding" data-ng-repeat="taxon in user.userTaxons track by $index">
+        <dop-taxon-selector data-taxon="user.userTaxons[$index]" flex></dop-taxon-selector>
+      </div>
+      <div layout="row" class="md-padding" layout-align="start center" flex="100">
+        <md-input-container flex>
+          <label data-translate="GDPR_EMAIL" style="display: block"></label>
+          <input
+            name="email"
+            id="user-email"
+            ng-model="user.email"
+            type="email"
+            required
+            ng-pattern="validEmail">
+          <div data-ng-messages="gdprDialogContent.email.$error">
+            <div data-ng-message="required" data-translate="GDPR_EMAIL_REQUIRED"></div>
+            <div data-ng-message="pattern" data-translate="GDPR_EMAIL_INVALID"></div>
+            <div data-ng-message="validationError" data-translate="GDPR_EMAIL_DUPLICATE"></div>
+          </div>
+        </md-input-container>
+      </div>
+      <div data-layout="row" data-layout-align="start start">
+        <div flex="35" class="md-padding">
+          <h3 data-translate="USER_PROFILE_ROLE"></h3>
+          <div data-ng-repeat="role in roles track by $index">
+            <md-checkbox
+              data-ng-click="$ctrl.updateSelection($index, roles)"
+              ng-model="role.checked"
+              aria-label="role">
+              <span data-translate="{{'PROFILE_' + role.name.toUpperCase()}}"></span>
+            </md-checkbox>
+          </div>
+          <div layout="row" data-ng-repeat="school in userProfile.schools track by $index" layout-align="start center">
+          <div data-ng-show="roles[1].checked || roles[0].checked">
+            <md-input-container flex="60">
+              <label></label>
+              <md-select
+                placeholder="{{'USER_PROFILE_CHOOSE_SCHOOLS' | translate}}"
+                data-md-container-class="select-user-profile-header"
+                ng-model="area"
+                ng-change="$ctrl.handleAreaChange()"
+                >
+                <md-option ng-value="area" ng-repeat="area in institutionAreas track by $index">{{area}}</md-option>
+              </md-select>
+            </md-input-container>
+
+            <md-input-container flex="60">
+              <label></label>
+              <md-select
+                placeholder="{{'USER_PROFILE_CHOOSE_SCHOOLS' | translate}}"
+                         data-md-container-class="select-user-profile-header"
+                         ng-model="userProfile.selectedSchools"
+                data-ng-model-options="{trackBy: '$value.id'}"
+                         md-on-close="$ctrl.clearSearchTerm()"
+                         multiple>
+                <md-select-header class="up-select-header">
+                  <input id="select-search"
+                         ng-model="searchTerm"
+                         type="search"
+                         placeholder="{{'USER_PROFILE_SEARCH_SCHOOLS' | translate}}"
+                         class="up-header-searchbox md-text"
+                  >
+                </md-select-header>
+                  <md-option ng-value="institution" ng-repeat="institution in institutions | filter:searchTerm track by $index">{{institution.name}}</md-option>
+              </md-select>
+            </md-input-container>
+            </div>
+          </div>
+        </div>
+        <div class="md-padding" data-layout-align="center center">
+          <h3 data-translate="USER_PROFILE_INTERESTS"></h3>
+          <div data-layout="row" data-layout-align="center center">
+          <dop-taxon-selector
+            flex
+            class="statistics-filter__taxon-container"
+            data-taxon="educationalContext"
+            data-is-statistics-select="true"
+            data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
+            data-clear-selection="clearFields"
+          ></dop-taxon-selector>
+            <md-button class="md-icon-button md-primary"
+                       data-ng-click="addNewTaxon()" data-ng-disabled="isEmpty(user.userTaxons[0])">
+              <md-icon>add_circle</md-icon>
+            </md-button>
+          </div>
+        </div>
+      </div>
+      <div data-layout="row" data-layout-align="end center" class="md-padding-horizontal-double">
+        <md-button
+          class="font-weight-bold"
+          aria-label="Tühista kasutajaprofiili muutmine"
+          id="cancel-user-profile-changes-button"
+          data-ng-click="$ctrl.cancelProfileEdit()"
+        >
+          <span data-translate="BUTTON_CANCEL"></span>
+        </md-button>
+        <md-button
+          aria-label="Uuenda kasutajaprofiili"
+          id="update-user-profile-button"
+          class="md-primary font-weight-bold"
+          data-ng-disabled="$ctrl.isSubmitDisabled() || isSaving"
+          data-ng-click="$ctrl.updateUserProfile()"
+        >
+          <span data-translate="UPDATE_USER_PROFILE"></span>
+          <md-icon>arrow_forward</md-icon>
+        </md-button>
+      </div>
+    </md-card-content>
+  </md-card>
+</div>
