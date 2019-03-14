@@ -30,8 +30,18 @@
         <div layout="row" layout-align="center center" layout-align-xs="start center">
         </div>
         <!-- Description -->
-        <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
+        <div layout-xs="column" layout="column" layout-align-xs="start stretch" layout-align="start stretch" flex-order="1"
              flex-order-gt-sm="2" flex="100">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper creator-email-dialog-title" flex">
+            <input
+              name="learningobjectitle"
+              id="learningobject-title"
+              ng-model="emailToCreator.title"
+              type="text"
+              disabled
+              placeholder="{{'TITLE' | translate}}"
+            >
+          </md-input-container>
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
             <textarea
                       placeholder="{{placeholder}}"
