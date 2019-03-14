@@ -323,4 +323,8 @@ public class MaterialService {
         }
         material.setPeerReviews(peerReviews);
     }
+
+    public List<String> getRelatedPortfolios(long id){
+        return materialDao.getRelatedPortfolios(id);
+    }
 }

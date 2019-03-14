@@ -1,6 +1,8 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterBlock;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
@@ -11,10 +13,16 @@ import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static ee.hm.dop.utils.ValidatorUtil.permissionError;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -22,6 +30,7 @@ import static org.joda.time.DateTime.now;
 
 public class PortfolioService {
 
+    public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
@@ -81,6 +90,41 @@ public class PortfolioService {
         Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
+
+        //do magic with materials
+        List<String> results = new ArrayList<>();
+        Pattern pattern = Pattern.compile(MATERIAL_REGEX);
+        for (Chapter chapter : portfolio.getChapters()) {
+            for (ChapterBlock block : chapter.getBlocks()) {
+                if (StringUtils.isNotBlank(block.getHtmlContent())) {
+                    Matcher matcher = pattern.matcher(block.getHtmlContent());
+                    while (matcher.find()) {
+                        results.add(matcher.group());
+                    }
+                }
+            }
+        }
+        //domagic
+        //transform strings to material ids
+        List<Long> fromFrontIds = new ArrayList<>();
+        //from db get current materials
+        List<Long> dbIds = new ArrayList<>();
+
+        List<Long> newToSave = new ArrayList<>();
+        for (Long fromFrontId : fromFrontIds) {
+            if (!dbIds.contains(fromFrontId)){
+                newToSave.add(fromFrontId);
+            }
+        }
+        List<Long> oldToRemove = new ArrayList<>();
+        for (Long dbId : dbIds) {
+            if (!fromFrontIds.contains(dbId)){
+                oldToRemove.add(dbId);
+            }
+        }
+        //dao.save
+        //dao.remove
+
 
         return createdPortfolio;
     }

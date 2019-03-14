@@ -3,6 +3,8 @@ package ee.hm.dop.dao;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
@@ -145,6 +147,19 @@ public class MaterialDao extends AbstractDao<Material> {
                 .createQuery("FROM Material mat WHERE mat.deleted = false ORDER BY added DESC, id DESC", entity())
                 .setFirstResult(startPosition).setMaxResults(numberOfMaterials)
                 .getResultList();
+    }
+
+    public List<String> getRelatedPortfolios(long materialId) {
+        String s = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"" + materialId + "\"";
+//        String s = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"121\" class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"12221\"";
+        Pattern pattern = Pattern.compile("class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"");
+//        Pattern pattern = Pattern.compile("class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"");
+        Matcher matcher = pattern.matcher(s);
+        List<String> s123 = new ArrayList<>();
+        while (matcher.find()) {
+            s123.add(matcher.group());
+        }
+        return s123;
     }
 
     @Override

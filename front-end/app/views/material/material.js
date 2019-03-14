@@ -80,6 +80,8 @@ angular.module('koolikottApp')
                     $scope.sourceType = matchType(getSource($scope.material));
                     if ($scope.sourceType === "EBOOK" && isIE()) $scope.material.source += "?archive=true";
                 }
+
+
             }
 
             function probeContentSuccess(response) {
@@ -111,6 +113,10 @@ angular.module('koolikottApp')
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
                 }
+            }
+
+            function getMaterialRelatedPOrtfolios(id){
+                materialService.getRelatedPortfolios(id).then()
             }
 
             function getMaterial(success, fail) {
@@ -163,6 +169,8 @@ angular.module('koolikottApp')
                 $scope.material.source = getSource($scope.material);
                 getContentType();
                 processMaterial();
+
+                getMaterialRelatedPOrtfolios($scope.material.id);
 
                 eventService.notify('material:reloadTaxonObject');
 
