@@ -5,23 +5,10 @@
         constructor(...args) {
             super(...args)
 
-            /*if (this.$scope.userProfile) {
-                this.$scope.userProfile.selectedSchools = [{
-                    area: "Ida-Viru maakond",
-                    ehisId: 18571,
-                    id: 1,
-                    name: "Ida- Virumaa Kutseharidusekeskus Narva filiaal"
-                }, {
-                    area: "Ida-Viru maakond",
-                    ehisId: 18611,
-                    id: 3,
-                    name: "Ida- Virumaa Kutseharidusekeskus  Jõhvi filiaal"
-                }]
-            }*/
             this.$scope.userProfile = {}
+            this.$scope.userProfile.taxons = [{}]
             this.$scope.userProfile.schools = [{}]
             this.$scope.validEmail = VALID_EMAIL
-            this.$scope.userProfile = {}
             this.$scope.roles = [{name: 'Student', checked: false},
                                 {name: 'Teacher', checked: false},
                                 {name: 'Parent', checked: false},
@@ -39,6 +26,15 @@
             /*this.$timeout(() => {
                 $("#taxons").children().prop('ng-disabled',true)
             }, 10000)*/
+        }
+
+        addNewTaxon() {
+            this.$scope.userProfile.taxons.push(
+                this.taxonService.getEducationalContext(
+                    this.$scope.userProfile.taxons &&
+                    this.$scope.userProfile.taxons[0]
+                )
+            )
         }
 
         clearSearchTerm() {
@@ -118,6 +114,13 @@
             this.$scope.clearFields = false
 
         }
+        isEmpty (object) {
+            return _.isEmpty(object)
+        }
+
+        deleteTaxon(index) {
+            this.$scope.userProfile.taxons.splice(index, 1);
+        };
     }
 
     controller.$inject = [
@@ -128,6 +131,7 @@
         '$timeout',
         '$route',
         'userEmailService',
+        'taxonService'
     ]
     angular.module('koolikottApp').controller('userProfileController', controller)
 }

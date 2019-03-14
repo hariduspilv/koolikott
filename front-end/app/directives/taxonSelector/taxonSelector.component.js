@@ -171,6 +171,7 @@ component('dopTaxonSelector', {
         isSearch: '=?',
         markRequired: '=',
         isStatisticsSelect: '<',
+        isProfileSelect: '<',
         onStatisticsMultiselect: '&',
         clearSelection: '<'
     },
