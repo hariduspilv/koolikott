@@ -19,7 +19,8 @@
                  placeholder="{{'SEARCH' | translate}}"
                  class="search-learning-objects"
           >
-          <md-button id="clear-filter"
+          <md-button data-ng-if="$ctrl.viewPath != 'unReviewed'"
+                     id="clear-filter"
                      class="md-icon-button md-ink-ripple"
                      data-ng-click="$ctrl.clearFilter()"
                      data-ng-if="query.filter"
