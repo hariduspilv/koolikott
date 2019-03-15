@@ -2,9 +2,14 @@ package ee.hm.dop.service.synchronizer;
 
 import com.google.inject.Singleton;
 import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterBlock;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Repository;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +20,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScheduledFuture;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.lang.String.format;
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -22,8 +29,14 @@ import static java.util.concurrent.TimeUnit.DAYS;
 @Singleton
 public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
 
+    public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
+    public static final String NUMBER_REGEX = "\\d+";
+
     @Inject
     private SolrEngineService solrEngineService;
+    @Inject
+    private PortfolioDao portfolioDao;
+
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
     private static Future<?> synchronizeMaterialHandle;
@@ -33,6 +46,43 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
         List<SynchronizationAudit> audits = new ArrayList<>();
         try {
             beginTransaction();
+
+//            ---------------------------------------
+            //run only once
+            //getAllPortfolios
+
+            List<Portfolio> portfolios;
+            List<String> results = new ArrayList<>();
+            List<Long> fromFrontIds = new ArrayList<>();
+            portfolios = portfolioDao.findAll();
+            Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
+            Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
+
+            for (Portfolio portfolio : portfolios) {
+                for (Chapter chapter : portfolio.getChapters()) {
+                    for (ChapterBlock block : chapter.getBlocks()) {
+                        if (StringUtils.isNotBlank(block.getHtmlContent())) {
+                            Matcher matcher = chapterPattern .matcher(block.getHtmlContent());
+                            while (matcher.find()) {
+                                results.add(matcher.group());
+
+                            }
+                        }
+                    }
+                }
+//                for (String)
+//                    Matcher numberMatcher = numberPattern.matcher(NUMBER_REGEX);
+//                if ()
+//                    fromFrontIds.
+
+                //domagic
+                //transform strings to material ids
+
+                //save
+            }
+
+
+//            --------------------------------------------------
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllUsedRepositories();
 

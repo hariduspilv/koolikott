@@ -1,5 +1,6 @@
 package ee.hm.dop.service.synchronizer;
 
+import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.Chapter;
 import ee.hm.dop.model.ChapterBlock;
 import ee.hm.dop.model.Portfolio;
@@ -31,42 +32,46 @@ public class SynchronizeMaterialsExecutor {
     private SolrEngineService solrEngineService;
     @Inject
     private RepositoryService repositoryService;
+    @Inject
+    private PortfolioDao portfolioDao;
 
 
-    public static void main(String[] args) {
-        String s = "<div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"10\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"9511\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"5553\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"10491\"></div><h3 class=\"subchapter\">sassis</h3><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"10613\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"8206\"></div><h3 class=\"subchapter\">asdsadsadadad</h3>";
-        Pattern pattern = Pattern.compile("class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"");
-        Matcher matcher = pattern.matcher(s);
-        List<String > s123 = new ArrayList<>();
-        while (matcher.find()){
-            s123.add(matcher.group());
-        }
-        System.out.println(s123);
-    }
+//    public static void main(String[] args) {
+//        String s = "<div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"10\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"9511\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"5553\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"10491\"></div><h3 class=\"subchapter\">sassis</h3><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"10613\"></div><div class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"8206\"></div><h3 class=\"subchapter\">asdsadsadadad</h3>";
+//        Pattern pattern = Pattern.compile("class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"");
+//        Matcher matcher = pattern.matcher(s);
+//        List<String > s123 = new ArrayList<>();
+//        while (matcher.find()){
+//            s123.add(matcher.group());
+//        }
+//        System.out.println(s123);
+//    }
 
     public synchronized void run() {
 
         //run only once
         //getAllPortfolios
-        List<Portfolio> portfolios = new ArrayList<>();
-        List<String> results = new ArrayList<>();
-        Pattern pattern = Pattern.compile(MATERIAL_REGEX);
-        for (Portfolio portfolio : portfolios) {
-            for (Chapter chapter : portfolio.getChapters()) {
-                for (ChapterBlock block : chapter.getBlocks()) {
-                    if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                        Matcher matcher = pattern.matcher(block.getHtmlContent());
-                        while (matcher.find()) {
-                            results.add(matcher.group());
-                        }
-                    }
-                }
-            }
-            //domagic
-            //transform strings to material ids
-            List<Long> fromFrontIds = new ArrayList<>();
-            //save
-        }
+//
+//        List<Portfolio> portfolios;
+//        List<String> results = new ArrayList<>();
+//        portfolios = portfolioDao.findAll();
+//        Pattern pattern = Pattern.compile(MATERIAL_REGEX);
+//        for (Portfolio portfolio : portfolios) {
+//            for (Chapter chapter : portfolio.getChapters()) {
+//                for (ChapterBlock block : chapter.getBlocks()) {
+//                    if (StringUtils.isNotBlank(block.getHtmlContent())) {
+//                        Matcher matcher = pattern.matcher(block.getHtmlContent());
+//                        while (matcher.find()) {
+//                            results.add(matcher.group());
+//                        }
+//                    }
+//                }
+//            }
+//            //domagic
+//            //transform strings to material ids
+//            List<Long> fromFrontIds = new ArrayList<>();
+//            //save
+//        }
 
 
         List<SynchronizationAudit> audits = new ArrayList<>();
