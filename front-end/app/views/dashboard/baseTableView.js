@@ -272,6 +272,8 @@ class controller extends Controller {
     selectTaxons() {
         if (this.$scope.filter && this.$scope.filter.taxons) {
             return this.$scope.filter.taxons.map(t => '&taxon=' + t.id).join("");
+        } else if (!this.$scope.filter.taxons && this.$scope.filter.educationalContext) {
+                    return '&taxon=' + this.$scope.filter.educationalContext.id
         }
         return ""
     }
