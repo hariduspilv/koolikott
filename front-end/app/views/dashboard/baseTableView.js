@@ -50,6 +50,7 @@ class controller extends Controller {
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
+        this.$scope.sortByType = true
 
         this.$scope.types = ['All','Material','Portfolio']
 
@@ -105,7 +106,10 @@ class controller extends Controller {
         this.$scope.isFiltering = true
         this.$scope.query.page = 1
         this.getData('firstReview/unReviewed', this.sortedBy)
-
+        if (this.$scope.filter.materialType !== 'All')
+            this.$scope.sortByType = false
+        else
+            this.$scope.sortByType = true
     }
 
     onParamsChange({ users, taxons }) {
