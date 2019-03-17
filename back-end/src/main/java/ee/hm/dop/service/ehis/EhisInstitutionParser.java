@@ -55,17 +55,16 @@ class EhisInstitutionParser {
                     && getInstTypeCondition(ie)) {
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
-            } else {
-                if (ie.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_STATUS))) {
-                    institutionEhisDao.remove(ie);
-                    removeCounter++;
-                }
+            } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null
+                    && (!getInstAreaCondition(ie) || !getInstStatusCondition(ie) || !getInstTypeCondition(ie))) {
+                institutionEhisDao.remove(ie);
+                removeCounter++;
             }
         }
         long ehisEndOfSync = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         long syncDuration= ehisEndOfSync - ehisStartOfSync;
         logger.info("EHIS institution.Added " + addCounter + " institutions into DB");
-        logger.info("EHIS institution.Removed/not added " + removeCounter + " institutions");
+        logger.info("EHIS institution.Removed " + removeCounter + " institutions");
         logger.info("EHIS institution sync took " + syncDuration + " seconds");
     }
 
@@ -86,15 +85,15 @@ class EhisInstitutionParser {
     }
 
     private InstitutionEhis getInstitution(Node institutionNode) {
-        return new InstitutionEhis(Long.valueOf(getInstitutionAttr((Element) institutionNode, "koolId")),
-                getInstitutionAttr((Element) institutionNode, "nimetus"),
-                getInstitutionAttr((Element) institutionNode, "maakond"),
-                getInstitutionAttr((Element) institutionNode, "staatus"),
-                getInstitutionAttr((Element) institutionNode, "tyyp"));
+        return new InstitutionEhis(Long.valueOf(getInstitutionAttr(institutionNode, "koolId")),
+                getInstitutionAttr(institutionNode, "nimetus"),
+                getInstitutionAttr(institutionNode, "maakond"),
+                getInstitutionAttr(institutionNode, "staatus"),
+                getInstitutionAttr(institutionNode, "tyyp"));
     }
 
-    private String getInstitutionAttr(Element institutionElement, String attr) {
-        return institutionElement.getElementsByTagName(attr).item(0).getTextContent();
+    private String getInstitutionAttr(Node institutionElement, String attr) {
+        return ((Element)institutionElement).getElementsByTagName(attr).item(0).getTextContent();
     }
 
     private NodeList getNodeList(Object item, String path) {
