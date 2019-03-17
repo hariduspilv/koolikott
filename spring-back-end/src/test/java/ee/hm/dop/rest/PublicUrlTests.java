@@ -25,9 +25,6 @@ public class PublicUrlTests {
     private TestRestTemplate restTemplate;
 
     @Autowired
-    private EhisInstitutionService ehisInstitutionService;
-
-    @Autowired
     private Configuration configuration;
 
     @Test
@@ -35,10 +32,5 @@ public class PublicUrlTests {
         String ehisSchoolUrl = configuration.getString(XROAD_EHIS_INSTITUTIONS_LIST);
         ResponseEntity<String> health = restTemplate.getForEntity(ehisSchoolUrl,String.class);
         assertEquals(HttpStatus.OK,health.getStatusCode());
-    }
-
-    @Test
-    public void make_real_ehis_institution_update() throws MalformedURLException, DocumentException {
-        ehisInstitutionService.getInstitutionsAndUpdateDb();
     }
 }

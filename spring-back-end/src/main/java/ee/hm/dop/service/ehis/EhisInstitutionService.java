@@ -4,8 +4,6 @@ import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.InstitutionEhisDao;
 import ee.hm.dop.model.ehis.InstitutionEhis;
 import org.dom4j.DocumentException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
