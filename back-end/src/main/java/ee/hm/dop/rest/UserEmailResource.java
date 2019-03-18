@@ -25,12 +25,16 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.save(userEmail);
     }
 
-    @GET
-    @Produces(MediaType.TEXT_PLAIN)
-    public String getUserEmail() {
-        return userEmailService.getEmail(getLoggedInUser());
+    @POST
+    @Path("getEmailOnLogin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getEmailOnLogin(UserEmail userEmail) {
+        if (userEmailService.hasEmail(userEmail))
+            return Response.status(HttpURLConnection.HTTP_OK).build();
+        else
+            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
-
 
     @POST
     @Path("check")
@@ -42,6 +46,13 @@ public class UserEmailResource extends BaseResource {
         else
             return Response.status(HttpURLConnection.HTTP_OK).build();
     }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getUserEmail() {
+        return userEmailService.getEmail(getLoggedInUser());
+    }
+
 
     @POST
     @Path("checkForProfile")
