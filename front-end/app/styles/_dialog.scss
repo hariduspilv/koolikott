@@ -26,6 +26,14 @@ md-dialog md-dialog-actions {
   margin-bottom: 10px;
 }
 
+.creator-email-dialog-title {
+  min-width: 80%;
+}
+
+.learningobject-title-color {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
 md-dialog.login-dialog {
   max-height: 100%;
   min-width: 18rem;
@@ -175,6 +183,12 @@ md-dialog.login-dialog {
 
 .fit-content {
   max-width: fit-content;
+}
+
+.paginator-left {
+  @media screen and (max-width: $layout-breakpoint-xs) {
+    justify-content: flex-start;
+  }
 }
 
 .qr-padding {

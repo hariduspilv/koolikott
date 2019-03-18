@@ -10,8 +10,8 @@
             this.getCaptchaKey()
             this.$scope.emailToCreator = {}
             this.setPlaceholder()
-
-            this.$scope.cancel = () => {
+            this.getLearningObjectTitle()
+                this.$scope.cancel = () => {
                 this.$mdDialog.hide();
             };
 
@@ -33,10 +33,21 @@
 
         }
 
+        getLearningObjectTitle(){
+            if (this.locals.learningObject.type === '.Material')
+                this.$scope.emailToCreator.title= this.locals.learningObject.titles[0].text;
+            else
+                this.$scope.emailToCreator.title = this.locals.learningObject.title
+
+        }
+
         sendEmail() {
 
             this.$scope.isSaving = true
-            this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
+            if (this.locals.learningObject.type === '.Material')
+                this.locals.learningObject.title = this.locals.learningObject.titles[0].text;
+
+                this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
                 {
                     message: this.$scope.emailToCreator.emailContent,
                     creatorId:this.locals.learningObject.creator.id,

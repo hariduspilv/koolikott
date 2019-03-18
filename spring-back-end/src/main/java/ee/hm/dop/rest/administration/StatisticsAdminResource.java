@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.administration;
 
+import ee.hm.dop.model.Media;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.files.UploadedFileService;
@@ -59,7 +60,7 @@ public class StatisticsAdminResource extends BaseResource {
         return buildResponse(filename, FileFormat.valueOf(split[1]));
     }
 
-    @PostMapping("export")
+    @PostMapping(value = "export", produces = MediaType.TEXT_PLAIN_VALUE)
     @Secured({RoleString.ADMIN})
     public String searchExport(@RequestBody StatisticsFilterDto filter) {
         if (filter == null || !filter.isValidExportRequest()) {

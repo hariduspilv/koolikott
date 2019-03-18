@@ -27,22 +27,31 @@
     </md-toolbar>
     <div data-ng-if="!emailSent">
       <md-content class="md-padding">
-        <div layout="row" layout-align="center center" layout-align-xs="start center">
-        </div>
-        <!-- Description -->
-        <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
+        <div layout-xs="column" layout="column" layout-align-xs="start stretch" layout-align="start stretch" flex-order="1"
              flex-order-gt-sm="2" flex="100">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper creator-email-dialog-title" flex">
+          <input
+            class="learningobject-title-color"
+            name="learningobjectitle"
+            id="learningobject-title"
+            ng-model="emailToCreator.title"
+            type="text"
+            disabled
+            placeholder="{{'TITLE' | translate}}"
+          >
+          </md-input-container>
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
             <textarea
-                      placeholder="{{placeholder}}"
-                      name="emailContent"
-                      ng-model="emailToCreator.emailContent"
-                      id="email-content-description"
-                      autofocus="autofocus"
-                      rows="5"
-                      maxlength="500"
-                      ng-change="$ctrl.setPlaceholder()"
-                      class="final-step margin-bottom creator-email-overflow-auto"
+              placeholder="{{placeholder}}"
+              name="emailContent"
+              ng-model="emailToCreator.emailContent"
+              id="email-content-description"
+              autofocus="autofocus"
+              rows="5"
+              maxlength="500"
+              ng-change="$ctrl.setPlaceholder()"
+              class="final-step margin-bottom creator-email-overflow-auto"
+              ng-trim="false"
             ></textarea>
             <div layout="row" layout-align="space-between center" layout-xs="column" layout-align-xs="end center">
               <div class="recaptcha no-margin"
@@ -71,6 +80,9 @@
               </md-dialog-actions>
             </div>
           </md-input-container>
+        </div>
+        <!-- Description -->
+        <div layout="row" layout-align="center center" layout-align-xs="start center">
         </div>
       </md-content>
 
