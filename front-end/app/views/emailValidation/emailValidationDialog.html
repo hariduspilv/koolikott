@@ -4,6 +4,11 @@
       <div class="md-toolbar-tools" data-layout-align="space-between center">
         <h2 data-translate="EMAIL_VALIDATION_HEADER"
         ></h2>
+        <md-button id="validation-cancle-button" ng-click="cancel()" class="md-icon-button"
+                   data-ng-if="isValidateFromProfile()"
+                   aria-label="Sulge valideerimise modaalaken">
+          <md-icon>close</md-icon>
+        </md-button>
       </div>
     </div>
   </md-toolbar>
@@ -78,6 +83,7 @@
                 ng-paste="$event.preventDefault()"
               >
             </md-input-container>
+
             <md-progress-circular
               class="ng-hide"
               md-mode="indeterminate"
@@ -88,6 +94,15 @@
           <div data-ng-messages="emailValidationForm.$error">
             <div data-ng-message="validationError" class="email-alert" data-translate="EMAIL_INVALID_PIN"></div>
           </div>
+        </div>
+        <div data-layout="row" data-layout-align="end end" data-ng-if="isValidateFromProfile()" class="md-padding md-padding-horizontal-double">
+          <md-dialog-actions>
+          <md-button aria-label="Tühista emaili saatmine" id="send-email-cancel-button"
+                     data-ng-disabled="isSaving"
+                     data-ng-click="cancel()">
+            <span data-translate="CLOSE"></span>
+          </md-button>
+          </md-dialog-actions>
         </div>
       </md-content>
     </md-dialog-content>

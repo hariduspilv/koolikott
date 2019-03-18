@@ -1,9 +1,6 @@
 package ee.hm.dop.cron;
 
-import ee.hm.dop.service.synchronizer.AuthenticatedUserCleaner;
-import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
-import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
-import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
+import ee.hm.dop.service.synchronizer.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -20,6 +17,9 @@ public class CronProcesses {
     private AuthenticationStateCleaner authenticationStateCleaner;
     @Inject
     private AuthenticatedUserCleaner authenticatedUserCleaner;
+    @Inject
+    private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
+
 
     @Scheduled(cron = "0 0 1 * * *")
     public void synchronizeMaterialsExecutor() {
@@ -39,5 +39,10 @@ public class CronProcesses {
     @Scheduled(cron = "0 0 4 * * *")
     public void authenticatedUserCleaner() {
         authenticatedUserCleaner.run();
+    }
+
+    @Scheduled(cron = "0 0 1 * * *")
+    public void ehisInstitutionUpdateExecutor() {
+        ehisInstitutionUpdateExecutor.run();
     }
 }

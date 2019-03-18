@@ -16,6 +16,10 @@
   }
   md-toolbar.md-table-toolbar form {
     margin-left: 16px;
+    @media (max-width: $layout-breakpoint-xs) {
+      margin-left: 0px !important;
+
+    }
 
     > md-input-container {
       width: 100%;
@@ -59,6 +63,12 @@
         background-color: $hover-background-color;
       }
     }
+  }
+}
+
+.custom-table-padding {
+  @media (max-width: $layout-breakpoint-xs) {
+    padding: 0 16px !important;
   }
 }
 

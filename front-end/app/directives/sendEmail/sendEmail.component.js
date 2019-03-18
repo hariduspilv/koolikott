@@ -7,18 +7,21 @@
 
 
             this.showLoEmailCodeDialog = () => {
-
-                this.userEmailService.userHasEmail(this.learningObject.creator.id)
-                    .then(response => {
+                if (typeof this.learningObject.creator !== 'undefined' && this.learningObject.creator !== null) {
+                    this.userEmailService.userHasEmail(this.learningObject.creator.id)
+                        .then(response => {
                             if (response.status === 200) {
                                 this.showDialog();
                             } else {
                                 this.showNoCreatorEmailDialog()
                             }
                         })
-                    .catch(() => {
-                        this.showNoCreatorEmailDialog()
-                    });
+                        .catch(() => {
+                            this.showNoCreatorEmailDialog()
+                        });
+                } else {
+                    this.showNoCreatorEmailDialog()
+                }
             };
         }
 

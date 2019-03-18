@@ -85,6 +85,8 @@ xroad:
           code: 10585438
     use:
       v6: false
+    institutions:
+      list: http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/0/0/XML
   # timeouts are in ms
   timeout:
     connect: 5000

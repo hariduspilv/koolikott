@@ -25,5 +25,4 @@ public abstract class DopDaemonProcess {
         EntityTransaction transaction = DbUtils.getTransaction();
         if (!transaction.isActive()) transaction.begin();
     }
-
 }

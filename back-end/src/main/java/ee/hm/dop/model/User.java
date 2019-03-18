@@ -5,11 +5,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.ehis.InstitutionEhis;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.rest.jackson.map.RoleSerializer;
-import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
-import ee.hm.dop.rest.jackson.map.TaxonSerializer;
+import ee.hm.dop.rest.jackson.map.*;
 
 import javax.persistence.*;
 import java.util.List;
@@ -57,6 +56,26 @@ public class User implements AbstractEntity {
     @JsonDeserialize(contentUsing = TaxonDeserializer.class)
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> userTaxons;
+
+    @OneToMany
+    @JoinTable(
+            name = "User_InterestTaxon",
+            joinColumns = {@JoinColumn(name = "user")},
+            inverseJoinColumns = {@JoinColumn(name = "taxon")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user", "taxon"}))
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonDeserialize(contentUsing = TaxonDeserializer.class)
+    @JsonSerialize(contentUsing = TaxonSerializer.class)
+    private List<Taxon> taxons;
+
+    @OneToMany
+    @JoinTable(
+            name = "User_Institution",
+            joinColumns = {@JoinColumn(name = "user")},
+            inverseJoinColumns = {@JoinColumn(name = "institution")},
+            uniqueConstraints = @UniqueConstraint(columnNames = {"user", "institution"}))
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    private List<InstitutionEhis> institutions;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user", fetch = LAZY)
@@ -162,4 +181,19 @@ public class User implements AbstractEntity {
         this.location = location;
     }
 
+    public List<Taxon> getTaxons() {
+        return taxons;
+    }
+
+    public void setTaxons(List<Taxon> taxons) {
+        this.taxons = taxons;
+    }
+
+    public List<InstitutionEhis> getInstitutions() {
+        return institutions;
+    }
+
+    public void setInstitutions(List<InstitutionEhis> institutions) {
+        this.institutions = institutions;
+    }
 }

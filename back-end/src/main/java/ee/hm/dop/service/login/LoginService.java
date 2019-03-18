@@ -25,6 +25,7 @@ import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingU
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
 import static org.joda.time.DateTime.now;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class LoginService {
     private static final int MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR = 5 * 60 * 1000;
@@ -87,8 +88,11 @@ public class LoginService {
         }
 
         User user = getExistingOrNewUser(state);
+        UserEmail dbUserEmail = userEmailDao.findByUser(user);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
-        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
+        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && !isEmpty(dbUserEmail.getEmail())) {
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
+        } else if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && isEmpty(dbUserEmail.getEmail())) {
             userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
 
@@ -167,6 +171,15 @@ public class LoginService {
         User_Agreement userAgreement = new User_Agreement();
         userAgreement.setUser(user);
         userAgreement.setAgreement(agreement);
+        userAgreement.setCreatedAt(now());
+        return userAgreement;
+    }
+
+    private User_Agreement createUserAgreement(User user, Agreement agreement, boolean agreed) {
+        User_Agreement userAgreement = new User_Agreement();
+        userAgreement.setUser(user);
+        userAgreement.setAgreement(agreement);
+        userAgreement.setAgreed(agreed);
         userAgreement.setCreatedAt(now());
         return userAgreement;
     }
