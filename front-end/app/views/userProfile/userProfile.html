@@ -1,0 +1,135 @@
+<data-dop-cookie-notice class="cookie-parent"></data-dop-cookie-notice>
+<ont></ont>
+<div data-layout="row" data-layout-align="space-between center">
+  <h1 class="md-headline" data-translate="USER_PROFILE_HEADER"></h1>
+</div>
+<div>
+  <md-card class="card-lg">
+    <form name="userProfileForm">
+      <md-card-content>
+        <div data-layout="row" class="md-padding">
+          <md-input-container class="md-block" flex-gt-xs>
+            <label data-translate="USERNAME"></label>
+            <input placeholder="{{user.username}}" disabled>
+          </md-input-container>
+          <md-input-container class="md-block" flex-gt-xs>
+            <label data-translate="FULL_NAME"></label>
+            <input placeholder="{{user.name + ' ' + user.surname}}" disabled>
+          </md-input-container>
+        </div>
+        <div id="taxons" layout="row" class="md-padding" data-ng-repeat="taxon in user.userTaxons track by $index">
+          <dop-taxon-selector data-taxon="userProfile.userTaxons[$index]" flex></dop-taxon-selector>
+        </div>
+        <div layout="row" class="md-padding" layout-align="start center" flex="100">
+          <md-input-container flex>
+            <label data-translate="GDPR_EMAIL" style="display: block"></label>
+            <input
+              name="email"
+              id="user-email"
+              ng-model="userEmail"
+              type="email"
+              required
+              ng-pattern="validEmail">
+            <div data-ng-messages="userProfileForm.email.$error">
+              <div data-ng-message="required" data-translate="GDPR_EMAIL_REQUIRED"></div>
+              <div data-ng-message="pattern" data-translate="GDPR_EMAIL_INVALID"></div>
+              <div data-ng-message="validationError" data-translate="GDPR_EMAIL_DUPLICATE"></div>
+            </div>
+          </md-input-container>
+        </div>
+        <div data-layout="row" data-layout-align="start center">
+          <div class="md-padding" data-layout-align="center center" data-flex="50">
+            <h3 data-translate="USER_PROFILE_ROLE"></h3>
+            <div data-ng-repeat="role in roles track by $index">
+              <md-checkbox
+                data-ng-click="$ctrl.updateSelection($index, roles)"
+                ng-model="role.checked"
+                aria-label="role">
+                <span data-translate="{{'PROFILE_' + role.name.toUpperCase()}}"></span>
+              </md-checkbox>
+            </div>
+            <div layout="row" data-ng-show="roles[1].checked || roles[0].checked"
+                 data-ng-repeat="school in userProfile.institutions track by $index" data-layout-align="center center">
+              <dop-institution-selector
+                flex
+                data-institution="userProfile.institutions[$index]">
+              </dop-institution-selector>
+              <md-button
+                class="md-icon-button md-primary"
+                data-ng-show="$index+1 === userProfile.institutions.length"
+                data-ng-click="$ctrl.addNewSchool()"
+                data-ng-disabled="$ctrl.isEmpty(userProfile.institutions[0])"
+              >
+                <md-icon>add_circle</md-icon>
+                <md-tooltip md-direction="top"><span data-translate="USER_PROFILE_ADD_INSTITUTION"></span></md-tooltip>
+              </md-button>
+              <md-button
+                class="md-icon-button md-accent-2"
+                data-ng-show="userProfile.institutions.length > 1"
+                data-ng-click="$ctrl.removeInstitution($index)"
+              >
+                <md-icon>remove_circle</md-icon>
+                <md-tooltip md-direction="top"><span data-translate="USER_PROFILE_REMOVE_INSTITUTION"></span></md-tooltip>
+              </md-button>
+            </div>
+          </div>
+          <div class="md-padding" data-layout-align="center center" data-flex="50">
+            <h3 data-translate="USER_PROFILE_INTERESTS"></h3>
+            <div data-layout="row" data-ng-repeat="taxon in userProfile.taxons track by $index"
+                 data-layout-align="center center">
+              <dop-taxon-selector
+                flex
+                class="statistics-filter__taxon-container"
+                data-taxon="userProfile.taxons[$index]"
+                data-is-profile-select="true"
+              ></dop-taxon-selector>
+              <md-button
+                class="md-icon-button md-primary"
+                data-ng-show="$index+1 === userProfile.taxons.length"
+                data-ng-click="$ctrl.addNewTaxon()"
+                data-ng-disabled="$ctrl.isEmpty(userProfile.taxons[0])"
+              >
+                <md-icon>add_circle</md-icon>
+                <md-tooltip md-direction="top"><span data-translate="USER_PROFILE_ADD_INTEREST"></span></md-tooltip>
+              </md-button>
+              <md-button
+                class="md-icon-button md-accent-2"
+                data-ng-show="userProfile.taxons.length > 1"
+                data-ng-click="$ctrl.deleteTaxon($index)"
+              >
+                <md-icon>remove_circle</md-icon>
+                <md-tooltip md-direction="top"><span data-translate="USER_PROFILE_REMOVE_INTEREST"></span></md-tooltip>
+              </md-button>
+            </div>
+          </div>
+        </div>
+        <div data-layout="row" data-layout-align="end center" class="md-padding-horizontal-double">
+          <md-button
+            class="font-weight-bold"
+            aria-label="Tühista kasutajaprofiili muutmine"
+            id="cancel-user-profile-changes-button"
+            data-ng-click="$ctrl.cancelProfileEdit()"
+          >
+            <span data-translate="BUTTON_CANCEL"></span>
+          </md-button>
+          <md-button
+            aria-label="Uuenda kasutajaprofiili"
+            id="update-user-profile-button"
+            class="md-primary font-weight-bold"
+            data-ng-disabled="$ctrl.isSubmitDisabled() || isSaving"
+            data-ng-click="$ctrl.updateUserProfile()"
+          >
+            <span data-translate="UPDATE_USER_PROFILE"></span>
+            <md-icon>arrow_forward</md-icon>
+          </md-button>
+          <md-progress-circular
+            class="md-accent ng-hide padding-5"
+            md-mode="indeterminate"
+            md-diameter="40"
+            data-ng-show="isSaving"
+          ></md-progress-circular>
+        </div>
+      </md-card-content>
+    </form>
+  </md-card>
+</div>

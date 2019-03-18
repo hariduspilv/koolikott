@@ -31,7 +31,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     public static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
             "FROM LearningObject LO\n" +
             "       JOIN Portfolio P ON LO.id = P.id\n" +
-            "WHERE P.title LIKE :title\n" +
+            "WHERE LOWER(P.title) LIKE :title\n" +
             "UNION ALL\n" +
             "SELECT LO.id\n" +
             "FROM LearningObject LO\n" +
@@ -39,7 +39,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
             "       JOIN Material_Title MT ON M.id = MT.material\n" +
             "       JOIN LanguageString LS ON MT.title = LS.id\n" +
             "WHERE LS.lang = :transgroup\n" +
-            "AND LS.textValue LIKE :title )";
+            "AND LOWER(LS.textValue) LIKE :title )";
     public static final String JOIN_LO_TAXON = " JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
     public static final String LT_TAXON_IN = "  " +
             "AND lt.taxon IN (SELECT TP1.taxon\n" +

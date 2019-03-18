@@ -96,6 +96,21 @@ public class SendMailService {
                 .buildEmail();
     }
 
+    public Email sendPinToUser(UserEmail userEmail, String email) {
+        return EmailBuilder.startingBlank()
+                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .to(userEmail.getUser().getFullName(), email)
+                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
+                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
+                        BREAK +
+                        "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
+                        "Pane tähele, et kood on personaalne, ära saada seda teistele kasutajatele edasi." + BREAK +
+                        "Küsimuste korral kirjuta: e-koolikott@hitsa.ee")
+                .buildEmail();
+    }
+
     public Email sendPinToUser(UserEmail userEmail) {
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
@@ -116,7 +131,7 @@ public class SendMailService {
                 .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
-                .withHTMLText("See on emaili koopia, mille saatsid õppevara loojale." + BREAK
+                .withHTMLText("See on emaili koopia, mille saatsid õppevara loojale/koostajale." + BREAK
                         + BREAK + emailToCreator.getLearningObjectTitle() + BREAK + BREAK +emailToCreator.getMessage())
                 .buildEmail();
     }

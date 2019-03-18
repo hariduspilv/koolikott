@@ -1,0 +1,36 @@
+<form name="taxonForm" data-layout-xs="column" data-layout-gt-sm="row" data-flex>
+  <md-input-container class="md-block" flex>
+    <label></label>
+    <md-select
+      placeholder="{{'USER_PROFILE_CHOOSE_AREA' | translate}}"
+      data-md-container-class="select-user-profile-header"
+      ng-model="userProfile.area"
+      ng-change="$ctrl.handleAreaChange()"
+    >
+      <md-option ng-value="area" ng-repeat="area in institutionAreas track by $index">{{area}}</md-option>
+    </md-select>
+  </md-input-container>
+  <md-input-container class="md-block" flex>
+    <label></label>
+    <md-select
+      placeholder="{{'USER_PROFILE_CHOOSE_SCHOOLS' | translate}}"
+      data-md-container-class="select-user-profile-header"
+      ng-model="userProfile.selectedSchools"
+      md-on-close="$ctrl.clearSearchTerm()"
+      md-on-open="$ctrl.handleAreaChange()"
+    >
+      <md-select-header class="up-select-header">
+        <input id="select-search"
+               ng-model="searchTerm"
+               type="search"
+               placeholder="{{'USER_PROFILE_SEARCH_SCHOOLS' | translate}}"
+               class="up-header-searchbox md-text"
+        >
+      </md-select-header>
+      <md-option ng-value="institution"
+                 ng-repeat="institution in institutions | filter:searchTerm track by $index"
+                 data-ng-click="$ctrl.selectInstitution(institution)">
+      </md-option>
+    </md-select>
+  </md-input-container>
+</form>

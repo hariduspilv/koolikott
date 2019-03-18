@@ -213,7 +213,7 @@ class controller extends Controller {
             let url = 'rest/admin/' + restUri + '/' +
                 '?page=' + this.$scope.query.page +
                 '&itemSortedBy=' + sortBy +
-                '&query=' + this.$scope.query.filter +
+                '&query=' + this.$scope.query.filter.toLowerCase() +
                 this.selectTaxons() +
                 this.selectUsers() +
                 '&lang=' + this.getLanguage() +

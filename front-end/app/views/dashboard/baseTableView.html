@@ -6,7 +6,7 @@
     class="md-table-toolbar md-default"
     data-ng-if="$ctrl.viewPath != 'moderators' && $ctrl.viewPath != 'restrictedUsers'"
   >
-    <div class="md-toolbar-tools">
+    <div class="md-toolbar-tools custom-table-padding" data-layout-xs="column" data-layout-align-xs="start start">
       <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
       <form data-flex name="filter.form">
         <md-input-container>
@@ -64,7 +64,7 @@
     </div>
   </md-toolbar>
   <!-- END Search users -->
-  <div layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
+  <div data-layout-xs="column" layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
     <md-input-container class="statistics-filter__experts-container"
                         data-flex data-layout="column"
                         data-ng-show="isExpertsSelectVisible"
@@ -162,6 +162,7 @@
     <!-- END Not found message -->
   </md-table-container>
   <md-table-pagination
+    class="paginator-left"
     data-ng-if="itemsCount && itemsCount > query.limit"
     data-md-limit="query.limit"
     data-md-page="query.page"

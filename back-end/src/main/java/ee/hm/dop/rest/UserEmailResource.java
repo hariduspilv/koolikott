@@ -26,11 +26,40 @@ public class UserEmailResource extends BaseResource {
     }
 
     @POST
+    @Path("getEmailOnLogin")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getEmailOnLogin(UserEmail userEmail) {
+        if (userEmailService.hasEmail(userEmail))
+            return Response.status(HttpURLConnection.HTTP_OK).build();
+        else
+            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+    }
+
+    @POST
     @Path("check")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateEmail(UserEmail userEmail) {
         if (userEmailService.hasDuplicateEmail(userEmail))
+            return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
+        else
+            return Response.status(HttpURLConnection.HTTP_OK).build();
+    }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    public String getUserEmail() {
+        return userEmailService.getEmail(getLoggedInUser());
+    }
+
+
+    @POST
+    @Path("checkForProfile")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response validateEmailForProfile(UserEmail userEmail) {
+        if (userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()))
             return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
         else
             return Response.status(HttpURLConnection.HTTP_OK).build();
@@ -42,6 +71,14 @@ public class UserEmailResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public UserEmail validatePin(UserEmail userEmail) {
         return userEmailService.validatePin(userEmail);
+    }
+
+    @POST
+    @Path("validateFromPortfolio")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserEmail validatePinFromPortfolio(UserEmail userEmail) {
+        return userEmailService.validatePinFromPortfolio(userEmail);
     }
 
     @GET

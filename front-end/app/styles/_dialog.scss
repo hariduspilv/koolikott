@@ -22,6 +22,9 @@ md-dialog md-dialog-actions {
     max-width: 40% !important;
   }
 }
+.creator-email-dialog-input-text-wrap {
+  text-overflow: ellipsis !important;
+}
 .margin-bottom {
   margin-bottom: 10px;
 }
@@ -183,6 +186,15 @@ md-dialog.login-dialog {
 
 .fit-content {
   max-width: fit-content;
+}
+
+.paginator-left {
+  @media (max-width: $layout-breakpoint-xs) {
+    justify-content: flex-start;
+  }
+  @media (max-width: $layout-breakpoint-ipad) {
+    justify-content: flex-start;
+  }
 }
 
 .qr-padding {
