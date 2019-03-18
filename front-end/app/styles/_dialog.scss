@@ -185,6 +185,12 @@ md-dialog.login-dialog {
   max-width: fit-content;
 }
 
+.paginator-left {
+  @media screen and (max-width: $layout-breakpoint-xs) {
+    justify-content: flex-start;
+  }
+}
+
 .qr-padding {
   @media (min-width: $layout-breakpoint-lg) {
     padding: 9px 75px 75px;
