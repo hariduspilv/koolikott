@@ -24,6 +24,14 @@ public class EhisInstitutionService {
     @Inject
     private InstitutionEhisDao institutionEhisDao;
 
+    public InstitutionEhis getInstitutionEhisById(Long id) {
+        return institutionEhisDao.findById(id);
+    }
+
+    public List<InstitutionEhis> getInstitutionEhisById(List<Long> id) {
+        return institutionEhisDao.findById(id);
+    }
+
     public void getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
         URL docUrl = new URL("http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/0/0/XML");
 

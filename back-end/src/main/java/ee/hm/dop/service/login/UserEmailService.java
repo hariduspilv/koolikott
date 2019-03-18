@@ -126,6 +126,28 @@ public class UserEmailService {
         return userEmailDao.createOrUpdate(dbUserEmail);
     }
 
+    public UserEmail validatePinFromPortfolio(UserEmail userEmail) {
+        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
+        if (dbUserEmail == null)
+            throw notFound("User not found");
+        if (!dbUserEmail.getPin().equals(userEmail.getPin()))
+            throw badRequest("Pins not equal");
+
+        dbUserEmail.setActivated(true);
+        dbUserEmail.setActivatedAt(DateTime.now());
+        dbUserEmail.setEmail(userEmail.getEmail());
+
+        return userEmailDao.createOrUpdate(dbUserEmail);
+    }
+
+    public boolean hasDuplicateEmailForProfile(UserEmail userEmail, User loggedInUser) {
+        if (isBlank(userEmail.getEmail()))
+            throw badRequest("Email Empty");
+        User user = userDao.findUserById(loggedInUser.getId());
+        UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail.getEmail());
+        return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
+    }
+
     private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {
         validateEmail(email.getEmail());
         userEmail.setActivated(false);

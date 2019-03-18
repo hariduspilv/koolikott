@@ -11,34 +11,35 @@
             this.$scope.isSending = false
             this.$scope.input = [this.$scope.firstNum, this.$scope.secondNum, this.$scope.thirdNum, this.$scope.fourthNum]
 
-            this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
+            this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () =>
+            {
+                console.log('siin')
+                this.$mdDialog.hide()
+            })
             this.$scope.$watch(
                 () => this.authenticatedUserService.isAuthenticated(),
-                (newValue, oldValue) => newValue === true && this.$mdDialog.hide(),
-                false
+                (newValue, oldValue) => {
+                    if (this.$location.path() !== '/profile') {
+                        newValue === true && this.$mdDialog.hide(),
+                            false
+                    }
+                }
             );
+
+            this.$scope.cancel = () => {
+                this.$mdDialog.hide()
+            }
+
+            this.$scope.isValidateFromProfile = () => {
+                return this.$location.path() === '/profile'
+            }
 
             this.$scope.checkPin = () => {
                 this.$scope.emailValidationForm.$setValidity('validationError', true)
                 if (this.$scope.emailValidationForm.$valid && this.isNotEmpty()) {
                     this.$scope.isSending = true
                     let pin = this.$scope.firstNum + this.$scope.secondNum + this.$scope.thirdNum + this.$scope.fourthNum
-                    this.userEmailService.validatePin(this.$rootScope.userFromAuthentication, pin, this.$rootScope.email)
-                        .then(response => {
-                            if (response.status === 200) {
-                                this.$mdDialog.hide(true)
-                                this.$scope.isSending = false
-                            }
-                        }).catch( () => {
-                        this.$scope.emailValidationForm.$setValidity('validationError', false)
-                        this.setTouchedFalse()
-                        this.setFormToEmpty()
-                        this.$scope.isSending = false
-                        this.$timeout( () => {
-                            angular.element('#email-firstNum').focus()
-                        }, 10);
-
-                    })
+                        this.verifyPin(pin);
                 }
             }
 
@@ -46,6 +47,25 @@
                 if (!NUMBERS.includes(evt.data))
                     evt.preventDefault();
             });
+        }
+
+        verifyPin(pin) {
+            this.userEmailService.validatePin(this.$rootScope.userFromAuthentication, pin, this.$rootScope.email, this.$location.path())
+                .then(response => {
+                    if (response.status === 200) {
+                        this.$mdDialog.hide(true)
+                        this.$scope.isSending = false
+                    }
+                }).catch(() => {
+                this.$scope.emailValidationForm.$setValidity('validationError', false)
+                this.setTouchedFalse()
+                this.setFormToEmpty()
+                this.$scope.isSending = false
+                this.$timeout(() => {
+                    angular.element('#email-firstNum').focus()
+                }, 10);
+
+            })
         }
 
         setResponse() {
@@ -82,7 +102,8 @@
         'authenticatedUserService',
         'userEmailService',
         '$translate',
-        '$timeout'
+        '$timeout',
+        '$location'
     ]
 
     angular.module('koolikottApp').controller('emailValidationController', controller)

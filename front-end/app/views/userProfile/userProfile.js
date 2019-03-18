@@ -7,25 +7,25 @@
 
             this.$scope.userProfile = {}
             this.$scope.userProfile.taxons = [{}]
-            this.$scope.userProfile.schools = [{}]
+            this.$scope.userProfile.institutions = [{}]
             this.$scope.validEmail = VALID_EMAIL
-            this.$scope.roles = [{name: 'Student', checked: false},
-                                {name: 'Teacher', checked: false},
-                                {name: 'Parent', checked: false},
-                                {name: 'Other', checked: false}]
+            this.$scope.userProfile.role = ''
+            this.$scope.roles = [{name: 'STUDENT', checked: false},
+                                {name: 'TEACHER', checked: false},
+                                {name: 'PARENT', checked: false},
+                                {name: 'OTHER', checked: false}]
 
-            this.getEHISInstitutionAreas()
             angular.element(document.querySelector('#select-search')).on('keydown', (ev) => {
                 ev.stopPropagation()
             })
             if (!this.$scope.user) {
                 this.$scope.user = this.authenticatedUserService.getUser();
+                this.$rootScope.userFromAuthentication = this.$scope.user
             }
             this.getUserEmail()
+            this.getUserProfile()
 
-            /*this.$timeout(() => {
-                $("#taxons").children().prop('ng-disabled',true)
-            }, 10000)*/
+            this.$scope.location = this.$location
         }
 
         addNewTaxon() {
@@ -37,39 +37,17 @@
             )
         }
 
+        addNewSchool() {
+            this.$scope.userProfile.institutions.push(undefined)
+        }
+
+        removeInstitution(index) {
+            this.$scope.userProfile.institutions.splice(index, 1);
+        }
+
         clearSearchTerm() {
             this.$scope.searchTerm = ''
 
-        }
-
-        getEHISInstitutions() {
-            this.$scope.institutions = []
-            this.serverCallService.makeGet('rest/ehisInstitution/institutions')
-                .then(response => {
-                    this.$scope.institutions = response.data
-                    // response.data.forEach(i => {
-                    //     this.$scope.institutions.push(i.name)
-                    // })
-                })
-        }
-
-        handleAreaChange() {
-            this.$scope.userProfile.selectedSchools = []
-            this.serverCallService.makeGet('rest/ehisInstitution/institutions/?area=' + this.$scope.area)
-                .then( response => {
-                    this.$scope.institutions = response.data
-                })
-        }
-
-        getEHISInstitutionAreas() {
-            this.serverCallService.makeGet('rest/ehisInstitution/areas')
-                .then(response => {
-                    this.$scope.institutionAreas = response.data
-
-                    // response.data.forEach(i => {
-                    //     this.$scope.institutions.push(i.name)
-                    // })
-                })
         }
 
         isAdmin() {
@@ -80,7 +58,7 @@
             this.userEmailService.getEmail()
                 .then((response) => {
                     if (response.status === 200) {
-                        this.$scope.user.email = response.data
+                        this.$scope.userEmail = response.data
                     }
                 })
         }
@@ -89,24 +67,76 @@
             angular.forEach(roles, (subscription, index) => {
                     if (idx != index)
                         subscription.checked = false;
-
                 }
             );
         }
 
         updateUserProfile() {
-            console.log('help im being clicked')
-            this.$scope.userProfile.selectedSchools = [{
-                area: "Ida-Viru maakond",
-                ehisId: 18571,
-                id: 1,
-                name: "Ida- Virumaa Kutseharidusekeskus Narva filiaal"
-            }, {
-                area: "Ida-Viru maakond",
-                ehisId: 18611,
-                id: 3,
-                name: "Ida- Virumaa Kutseharidusekeskus  Jõhvi filiaal"
-            }]
+            this.$rootScope.email = this.$scope.userEmail
+            this.$scope.userProfileForm.email.$setValidity('validationError', true)
+            this.setRole();
+            this.$scope.userProfile.email = this.$scope.userEmail
+            this.$scope.isSaving = true
+            this.userEmailService.checkDuplicateEmailForProfile(this.$scope.userEmail)
+                .then( response => {
+                    if (response.status === 200) {
+                        this.serverCallService.makePost('rest/userProfile', this.$scope.userProfile)
+                            .then( response => {
+                                this.$scope.isSaving = false
+                                if (response.status === 201) {
+                                    this.showEmailValidationModal()
+                                } else if (response.status === 200) {
+                                    this.toastService.show('USER_PROFILE_UPDATED')
+                                }
+                            })
+                            .catch(() => {
+                                this.$scope.isSaving = false
+                                    this.toastService.show('USER_PROFILE_UPDATE_FAILED')
+                            })
+                    }
+                })
+                .catch(() => {
+                    this.$scope.isSaving = false
+                    this.$scope.userProfileForm.email.$setValidity('validationError', false)
+                    this.toastService.show('USER_PROFILE_UPDATE_FAILED')
+                })
+        }
+
+         showEmailValidationModal() {
+            this.$mdDialog.show({
+                templateUrl: 'views/emailValidation/emailValidationDialog.html',
+                controller: 'emailValidationController',
+                clickOutsideToClose: false,
+                escapeToClose: false,
+            }).then(res => {
+                if (res)
+                    this.toastService.show('USER_PROFILE_UPDATED')
+            })
+         }
+
+        setRole() {
+            this.$scope.roles.forEach(r => {
+                if (r.checked) {
+                    this.$scope.userProfile.role
+                }
+            })
+        }
+
+        getUserProfile() {
+            this.serverCallService.makeGet('rest/userProfile')
+                .then( response => {
+                    if (response.status === 200) {
+                        this.$scope.userProfile = response.data
+                        this.activateRole(this.$scope.userProfile.role)
+                    }
+                })
+        }
+
+        activateRole(role) {
+            this.$scope.roles.forEach( r => {
+                if (r.name === role)
+                    r.checked = true
+            })
         }
 
         onSelectTaxons(taxons) {
@@ -118,6 +148,14 @@
             return _.isEmpty(object)
         }
 
+        isSubmitDisabled() {
+            return !this.$scope.userProfileForm.$valid && this.$scope.isSaving
+        }
+
+        cancelProfileEdit() {
+            window.location = window.location.origin
+        }
+
         deleteTaxon(index) {
             this.$scope.userProfile.taxons.splice(index, 1);
         };
@@ -125,13 +163,17 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
         'serverCallService',
         'authenticatedUserService',
         'termsService',
         '$timeout',
         '$route',
         'userEmailService',
-        'taxonService'
+        'taxonService',
+        '$location',
+        'toastService',
+        '$mdDialog'
     ]
     angular.module('koolikottApp').controller('userProfileController', controller)
 }

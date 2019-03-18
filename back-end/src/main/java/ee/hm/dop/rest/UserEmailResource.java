@@ -44,11 +44,30 @@ public class UserEmailResource extends BaseResource {
     }
 
     @POST
+    @Path("checkForProfile")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response validateEmailForProfile(UserEmail userEmail) {
+        if (userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()))
+            return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
+        else
+            return Response.status(HttpURLConnection.HTTP_OK).build();
+    }
+
+    @POST
     @Path("validate")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public UserEmail validatePin(UserEmail userEmail) {
         return userEmailService.validatePin(userEmail);
+    }
+
+    @POST
+    @Path("validateFromPortfolio")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public UserEmail validatePinFromPortfolio(UserEmail userEmail) {
+        return userEmailService.validatePinFromPortfolio(userEmail);
     }
 
     @GET
