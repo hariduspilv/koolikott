@@ -17,28 +17,36 @@
             );
 
             this.$scope.$watch('agreementDialogEmail', () => {
-                this.$scope.gdprDialogContent.email.$setValidity('validationError', true)
+                if (!this.$rootScope.userHasEmailOnLogin)
+                    this.$scope.gdprDialogContent.email.$setValidity('validationError', true)
             })
 
             this.$scope.agree = () => {
-                this.$scope.isSaving = true
-                this.$scope.gdprDialogContent.email.$setValidity('validationError', true)
-                this.$rootScope.email = this.$scope.agreementDialogEmail
-                this.userEmailService.checkDuplicateEmail(this.$scope.agreementDialogEmail, this.$rootScope.statusForDuplicateCheck)
-                    .then(response => {
-                        if (response.status = 200) {
-                            this.$mdDialog.hide(true)
-                            this.$scope.isSaving = false
-                        }
-                    }).catch(() => {
-                    this.$scope.gdprDialogContent.email.$setValidity('validationError', false)
-                    this.$scope.isSaving = false
-                })
+                if (this.$rootScope.userHasEmailOnLogin)
+                    this.$mdDialog.hide(true)
+                else
+                    this.handleLoginWithNoEmail();
             }
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide()
             }
+        }
+
+        handleLoginWithNoEmail() {
+            this.$scope.isSaving = true
+            this.$scope.gdprDialogContent.email.$setValidity('validationError', true)
+            this.$rootScope.email = this.$scope.agreementDialogEmail
+            this.userEmailService.checkDuplicateEmail(this.$scope.agreementDialogEmail, this.$rootScope.statusForDuplicateCheck)
+                .then(response => {
+                    if (response.status = 200) {
+                        this.$mdDialog.hide(true)
+                        this.$scope.isSaving = false
+                    }
+                }).catch(() => {
+                this.$scope.gdprDialogContent.email.$setValidity('validationError', false)
+                this.$scope.isSaving = false
+            })
         }
 
         $onDestroy() {
@@ -47,8 +55,10 @@
         }
 
         isSubmitDisabled() {
-            const {email, pattern} = this.$scope.gdprDialogContent.email.$error
-            return !this.$scope.agreementDialogEmail || email || pattern || this.$scope.isSaving
+            if (!this.$rootScope.userHasEmailOnLogin) {
+                const {email, pattern} = this.$scope.gdprDialogContent.email.$error
+                return !this.$scope.agreementDialogEmail || email || pattern || this.$scope.isSaving
+            }
         }
     }
 
@@ -57,7 +67,8 @@
         '$rootScope',
         '$mdDialog',
         'authenticatedUserService',
-        'userEmailService'
+        'userEmailService',
+        '$rootScope'
     ]
 
     angular.module('koolikottApp').controller('agreementDialogController', controller)

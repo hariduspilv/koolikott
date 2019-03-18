@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 public class UserEmailService {
 
@@ -146,6 +147,13 @@ public class UserEmailService {
         User user = userDao.findUserById(loggedInUser.getId());
         UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail.getEmail());
         return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
+    }
+
+    public Boolean hasEmail(UserEmail userEmail) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userEmail.getUserStatus().getToken());
+        User user = userDao.findUserByIdCode(state.getIdCode());
+        UserEmail dbUserEmail = userEmailDao.findByUser(user);
+        return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());
     }
 
     private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {

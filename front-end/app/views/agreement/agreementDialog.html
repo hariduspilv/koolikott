@@ -21,7 +21,7 @@
           </a>
         </p>
         <div id="gdpr-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
-          <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10" data-ng-if="!$root.userHasEmailOnLogin">
             <label data-translate="GDPR_EMAIL" style="display: block"></label>
             <input
               name="email"

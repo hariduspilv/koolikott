@@ -15,6 +15,10 @@
                 .makePost('rest/userEmail/check', {email: userEmail, userStatus: userState})
         }
 
+        hasEmailOnLogin(userState) {
+            return this.serverCallService.makePost('rest/userEmail/getEmailOnLogin', {userStatus: userState})
+        }
+
         checkDuplicateEmailForProfile(userEmail) {
             return this.serverCallService
                 .makePost('rest/userEmail/checkForProfile', {email: userEmail})
