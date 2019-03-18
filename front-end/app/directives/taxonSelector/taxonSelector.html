@@ -1,4 +1,4 @@
-<form name="taxonForm" data-layout-xs="column" data-layout-gt-sm="row" data-flex>
+<form name="taxonForm" data-layout-xs="column" data-layout-gt-sm="row" data-flex id="taxonForm">
   <!-- Educational Context -->
   <md-input-container class="md-block" flex>
     <label for="taxonEducationalSelect">
@@ -54,7 +54,8 @@
       id="taxonDomainForPreschooleducationSelect"
       name="domain"
       aria-label="Ainevaldkond"
-      >
+      ng-disabled="$ctrl.selectDisabled"
+    >
       <md-option
         ng-value="domain"
         ng-repeat="domain in $ctrl.taxonPath.educationalContext.domains | orderBy: $ctrl.translateTaxon"
@@ -70,7 +71,8 @@
       id="taxonDomainForPreschooleducationSelect"
       name="domain"
       aria-label="Ainevaldkond"
-      >
+      ng-disabled="$ctrl.selectDisabled"
+    >
       <md-option
         data-ng-if="$ctrl.isSearch"
         data-translate="SELECT_DOMAIN"
@@ -128,6 +130,7 @@
       id="taxonDomainForVocationaleducationSelect"
       name="domain"
       aria-label="Ainevaldkond"
+      ng-disabled="$ctrl.selectDisabled"
     >
       <md-option
         data-ng-if="$ctrl.isSearch"
@@ -188,6 +191,7 @@
       name="domainAndSubject"
       aria-label="Ainevaldkond ja teema"
       class="select"
+      ng-disabled="$ctrl.selectDisabled"
       >
       <md-option
         data-ng-if="$ctrl.isSearch"
@@ -250,6 +254,7 @@
       name="secondaryEducationDomainAndSubject"
       aria-label="Ainevaldkond ja teema"
       class="select"
+      ng-disabled="$ctrl.selectDisabled"
       >
       <md-option
         data-ng-if="$ctrl.isSearch"
@@ -289,6 +294,7 @@
       name="subject"
       aria-label="Teema"
       data-ng-model-options="{trackBy: '$value.id'}"
+      ng-disabled="$ctrl.selectDisabled"
       >
       <md-option
         data-translate="SELECT_SUBJECT"
@@ -313,7 +319,7 @@
       <span data-translate="TAXON_PATH_SPECIALIZATION"></span>
     </label>
     <md-select data-ng-model="$ctrl.taxonPath.specialization" id="taxonSpecializationSelect" name="specialization"
-               aria-label="Eriala" ng-model-options="{trackBy: '$value.id'}">
+               aria-label="Eriala" ng-model-options="{trackBy: '$value.id'}" ng-disabled="$ctrl.selectDisabled">
       <md-option data-translate="SELECT_SPECIALIZATION" ng-click="$ctrl.reset($ctrl.taxonPath.domain)" ng-value="{{null}}"></md-option>
       <md-option ng-value="specialization"
                  ng-repeat="specialization in $ctrl.taxonPath.domain.specializations | orderBy: $ctrl.translateTaxon"
@@ -332,7 +338,7 @@
       <span data-translate="TAXON_PATH_MODULE"></span>
     </label>
     <md-select data-ng-model="$ctrl.taxonPath.module" id="taxonModuleSelect" name="module" aria-label="Moodul"
-               ng-model-options="{trackBy: '$value.id'}">
+               ng-model-options="{trackBy: '$value.id'}" ng-disabled="$ctrl.selectDisabled">
       <md-option data-translate="SELECT_MODULE" ng-click="$ctrl.reset($ctrl.taxonPath.specialization)" ng-value="{{null}}"></md-option>
       <md-option ng-value="module"
                  ng-repeat="module in $ctrl.taxonPath.specialization.modules | orderBy: $ctrl.translateTaxon"
@@ -351,7 +357,7 @@
       <span data-translate="{{$ctrl.taxonPath.educationalContext.name === 'VOCATIONALEDUCATION' ? 'VOCATIONAL_EDUCATION_TOPIC' : 'TAXON_PATH_TOPIC' | translate}}"></span>
     </label>
     <md-select data-ng-model="$ctrl.taxonPath.topic" id="taxonTopicSelect" name="topic" aria-label="Teema"
-               ng-model-options="{trackBy: '$value.id'}">
+               ng-model-options="{trackBy: '$value.id'}" ng-disabled="$ctrl.selectDisabled">
       <md-option data-translate="SELECT_TOPIC"
                  ng-click="$ctrl.reset($ctrl.taxonPath.domainSubject || $ctrl.taxonPath.module, $ctrl.taxonPath)" ng-value="{{null}}"></md-option>
       <md-option ng-value="topic" ng-repeat="topic in $ctrl.getTopics() | orderBy: $ctrl.translateTaxon"
@@ -369,7 +375,7 @@
     >
     <label for="taxonSubtopicSelect" data-translate="TAXON_PATH_SUBTOPIC"></label>
     <md-select data-ng-model="$ctrl.taxonPath.subtopic" id="taxonSubtopicSelect" aria-label="Alamteema"
-               ng-model-options="{trackBy: '$value.id'}">
+               ng-model-options="{trackBy: '$value.id'}" ng-disabled="$ctrl.selectDisabled">
       <md-option data-translate="SELECT_SUBTOPIC" ng-click="$ctrl.reset($ctrl.taxonPath.topic)" ng-value="{{null}}"></md-option>
       <md-option ng-value="subtopic"
                  ng-repeat="subtopic in $ctrl.taxonPath.topic.subtopics | orderBy: $ctrl.translateTaxon"

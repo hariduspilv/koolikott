@@ -18,7 +18,10 @@
           </md-input-container>
         </div>
         <div id="taxons" layout="row" class="md-padding" data-ng-repeat="taxon in user.userTaxons track by $index">
-          <dop-taxon-selector data-taxon="userProfile.userTaxons[$index]" flex></dop-taxon-selector>
+          <dop-taxon-selector data-taxon="user.userTaxons[$index]"
+                              flex
+                              data-select-disabled="true"
+                              data-disable-educational-context="true"></dop-taxon-selector>
         </div>
         <div layout="row" class="md-padding" layout-align="start center" flex="100">
           <md-input-container flex>

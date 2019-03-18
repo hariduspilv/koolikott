@@ -15,9 +15,8 @@
     <md-select
       placeholder="{{'USER_PROFILE_CHOOSE_SCHOOLS' | translate}}"
       data-md-container-class="select-user-profile-header"
-      ng-model="userProfile.selectedSchools"
+      ng-model="userProfile.institution"
       md-on-close="$ctrl.clearSearchTerm()"
-      md-on-open="$ctrl.handleAreaChange()"
     >
       <md-select-header class="up-select-header">
         <input id="select-search"
@@ -29,7 +28,7 @@
       </md-select-header>
       <md-option ng-value="institution"
                  ng-repeat="institution in institutions | filter:searchTerm track by $index"
-                 data-ng-click="$ctrl.selectInstitution(institution)">
+                 data-ng-click="$ctrl.selectInstitution(institution)">{{institution.name}}
       </md-option>
     </md-select>
   </md-input-container>
