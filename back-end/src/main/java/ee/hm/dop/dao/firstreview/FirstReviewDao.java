@@ -20,13 +20,13 @@ import java.util.stream.Collectors;
 
 public class FirstReviewDao extends AbstractDao<FirstReview> {
 
-    public static final String JOIN_USER = " LEFT JOIN User u ON lo.creator = u.id\n";
-    public static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
-    public static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " INNER JOIN Portfolio m ON lo.id = m.id\n";
-    public static final String JOIN_MATERIAL_TYPE_MATERIAL = " INNER JOIN Material m ON lo.id = m.id\n";
+    private static final String JOIN_USER = " LEFT JOIN User u ON lo.creator = u.id\n";
+    private static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
+    private static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " INNER JOIN Portfolio m ON lo.id = m.id\n";
+    private static final String JOIN_MATERIAL_TYPE_MATERIAL = " INNER JOIN Material m ON lo.id = m.id\n";
     private final Logger logger = LoggerFactory.getLogger(FirstReviewDao.class);
 
-    public static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
+    private static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
             "FROM LearningObject LO\n" +
             "       JOIN Portfolio P ON LO.id = P.id\n" +
             "WHERE LOWER(P.title) LIKE :title\n" +
@@ -38,33 +38,32 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
             "       JOIN LanguageString LS ON MT.title = LS.id\n" +
             "WHERE LS.lang = :transgroup\n" +
             "AND LOWER(LS.textValue) LIKE :title )";
-    public static final String JOIN_LO_TAXON = " JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
-    public static final String LT_TAXON_IN = "  " +
+    private static final String JOIN_LO_TAXON = " JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
+    private static final String LT_TAXON_IN = "  " +
             "AND lt.taxon IN (SELECT TP1.taxon\n" +
             "FROM LearningObject_Taxon lt1,TaxonPosition TP1\n" +
             "WHERE lt1.learningObject = lo.id\n" +
-            "AND (TP1.educationalContext IN (:taxons) AND lt1.taxon = TP1.educationalContext\n" +
-            "OR TP1.domain IN (:taxons) AND lt1.taxon = TP1.domain\n" +
-            "OR TP1.subject IN (:taxons) AND lt1.taxon = TP1.subject\n" +
-            "OR TP1.module IN (:taxons) AND lt1.taxon = TP1.module\n" +
-            "OR TP1.specialization IN (:taxons) AND lt1.taxon = TP1.specialization\n" +
-            "OR TP1.topic IN (:taxons) AND lt1.taxon = TP1.topic\n" +
-            "OR TP1.subtopic IN (:taxons) AND lt1.taxon = TP1.subtopic)\n" +
-            "GROUP BY taxon) " +
-            "AND lt.taxon IN (:taxons)";
-    public static final String FIRST_REVIEW_WHERE = " WHERE r.reviewed = 0\n" +
+            "AND (TP1.educationalContext IN (:taxons)\n" +
+            "OR TP1.domain IN (:taxons)\n" +
+            "OR TP1.subject IN (:taxons)\n" +
+            "OR TP1.module IN (:taxons)\n" +
+            "OR TP1.specialization IN (:taxons)\n" +
+            "OR TP1.topic IN (:taxons)\n" +
+            "OR TP1.subtopic IN (:taxons))\n" +
+            "GROUP BY taxon) ";
+    private static final String FIRST_REVIEW_WHERE = " WHERE r.reviewed = 0\n" +
             "      AND lo.deleted = 0\n" +
             "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
             "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
             "                        FROM ImproperContent ic\n" +
             "                        WHERE ic.learningObject = lo.id\n" +
             "                              AND ic.reviewed = 0)\n";
-    public static final String GROUP_BY_LO_ID = " GROUP BY lo.id\n";
-    public static final String LT_TAXON_USER_CONDITION = "  and lt.taxon in (:usertaxons)\n";
-    public static final String SELECT_LO_ID_B = "SELECT lo.id\n" +
+    private static final String GROUP_BY_LO_ID = " GROUP BY lo.id\n";
+    private static final String LT_TAXON_USER_CONDITION = "  and lt.taxon in (:usertaxons)\n";
+    private static final String SELECT_LO_ID_B = "SELECT lo.id\n" +
             "FROM LearningObject lo\n" +
             "       JOIN FirstReview r ON r.learningObject = lo.id\n";
-    public static final String JOIN_TAXON_TRANSLATIONS = "" +
+    private static final String JOIN_TAXON_TRANSLATIONS = "" +
             "       left join TaxonPosition tp on lt.taxon = tp.taxon\n" +
             "       left JOIN Taxon t ON t.id = tp.domain\n" +
             "       left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup = :transgroup\n" +
