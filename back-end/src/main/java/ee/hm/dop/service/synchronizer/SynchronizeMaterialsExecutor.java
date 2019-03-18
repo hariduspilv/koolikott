@@ -62,16 +62,19 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
                 for (Chapter chapter : portfolio.getChapters()) {
                     for (ChapterBlock block : chapter.getBlocks()) {
                         if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                            Matcher matcher = chapterPattern .matcher(block.getHtmlContent());
+                            Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
                             while (matcher.find()) {
                                 results.add(matcher.group());
-
+//                                Matcher numberMatcher = numberPattern.matcher(NUMBER_REGEX);
+//                                while (numberMatcher.find()) {
+//                                    fromFrontIds.add(numberMatcher.group());
+//                                }
                             }
                         }
                     }
                 }
 //                for (String)
-//                    Matcher numberMatcher = numberPattern.matcher(NUMBER_REGEX);
+//
 //                if ()
 //                    fromFrontIds.
 
@@ -79,6 +82,14 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
                 //transform strings to material ids
 
                 //save
+            }
+
+
+            for (String foundHtmlContent : results) {
+                Matcher numberMatcher = numberPattern.matcher(foundHtmlContent);
+                while (numberMatcher.find()) {
+                    fromFrontIds.add(Long.valueOf(numberMatcher.group()));
+                }
             }
 
 

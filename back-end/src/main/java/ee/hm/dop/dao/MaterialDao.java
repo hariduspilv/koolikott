@@ -21,6 +21,9 @@ public class MaterialDao extends AbstractDao<Material> {
     public static final String HTTPS = "https://";
     public static final String HTTPS_WWW = HTTPS + "www.";
 
+    public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
+    public static final String NUMBER_REGEX = "\\d+";
+
     @Inject
     private LearningObjectDao learningObjectDao;
 
