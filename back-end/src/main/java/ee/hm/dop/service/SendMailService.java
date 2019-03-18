@@ -131,7 +131,7 @@ public class SendMailService {
                 .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
                 .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
-                .withHTMLText("See on emaili koopia, mille saatsid õppevara loojale." + BREAK
+                .withHTMLText("See on emaili koopia, mille saatsid õppevara loojale/koostajale." + BREAK
                         + BREAK + emailToCreator.getLearningObjectTitle() + BREAK + BREAK +emailToCreator.getMessage())
                 .buildEmail();
     }
