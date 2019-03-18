@@ -65,34 +65,20 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
                             Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
                             while (matcher.find()) {
                                 results.add(matcher.group());
-//                                Matcher numberMatcher = numberPattern.matcher(NUMBER_REGEX);
-//                                while (numberMatcher.find()) {
-//                                    fromFrontIds.add(numberMatcher.group());
-//                                }
                             }
                         }
                     }
                 }
-//                for (String)
-//
-//                if ()
-//                    fromFrontIds.
-
                 //domagic
                 //transform strings to material ids
-
                 //save
             }
-
-
             for (String foundHtmlContent : results) {
                 Matcher numberMatcher = numberPattern.matcher(foundHtmlContent);
                 while (numberMatcher.find()) {
                     fromFrontIds.add(Long.valueOf(numberMatcher.group()));
                 }
             }
-
-
 //            --------------------------------------------------
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllUsedRepositories();

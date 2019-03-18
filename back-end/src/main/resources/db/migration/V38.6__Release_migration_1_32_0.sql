@@ -6,8 +6,8 @@ CREATE TABLE PortfolioMaterial
   portfolio BIGINT(20) NOT NULL,
   material  BIGINT(20) NOT NULL,
 
-  CONSTRAINT material_fk FOREIGN KEY (material) REFERENCES Material (id),
-  CONSTRAINT portfolio__fk FOREIGN KEY (portfolio) REFERENCES Portfolio (id)
+  FOREIGN KEY (material) REFERENCES Material (id) ON DELETE RESTRICT ,
+  FOREIGN KEY (portfolio) REFERENCES Portfolio (id) ON DELETE RESTRICT
 );
 
 SET foreign_key_checks = 1;
