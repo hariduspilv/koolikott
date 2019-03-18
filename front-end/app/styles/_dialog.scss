@@ -22,6 +22,9 @@ md-dialog md-dialog-actions {
     max-width: 40% !important;
   }
 }
+.creator-email-dialog-input-text-wrap {
+  text-overflow: ellipsis !important;
+}
 .margin-bottom {
   margin-bottom: 10px;
 }
