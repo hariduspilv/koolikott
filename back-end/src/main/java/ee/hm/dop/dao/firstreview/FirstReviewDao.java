@@ -39,19 +39,18 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
             "WHERE LS.lang = :transgroup\n" +
             "AND LOWER(LS.textValue) LIKE :title )";
     public static final String JOIN_LO_TAXON = " JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
-    public static final String LT_TAXON_IN = "  " +
+    private static final String LT_TAXON_IN = "  " +
             "AND lt.taxon IN (SELECT TP1.taxon\n" +
             "FROM LearningObject_Taxon lt1,TaxonPosition TP1\n" +
             "WHERE lt1.learningObject = lo.id\n" +
-            "AND (TP1.educationalContext IN (:taxons) AND lt1.taxon = TP1.educationalContext\n" +
-            "OR TP1.domain IN (:taxons) AND lt1.taxon = TP1.domain\n" +
-            "OR TP1.subject IN (:taxons) AND lt1.taxon = TP1.subject\n" +
-            "OR TP1.module IN (:taxons) AND lt1.taxon = TP1.module\n" +
-            "OR TP1.specialization IN (:taxons) AND lt1.taxon = TP1.specialization\n" +
-            "OR TP1.topic IN (:taxons) AND lt1.taxon = TP1.topic\n" +
-            "OR TP1.subtopic IN (:taxons) AND lt1.taxon = TP1.subtopic)\n" +
-            "GROUP BY taxon) " +
-            "AND lt.taxon IN (:taxons)";
+            "AND (TP1.educationalContext IN (:taxons)\n" +
+            "OR TP1.domain IN (:taxons)\n" +
+            "OR TP1.subject IN (:taxons)\n" +
+            "OR TP1.module IN (:taxons)\n" +
+            "OR TP1.specialization IN (:taxons)\n" +
+            "OR TP1.topic IN (:taxons)\n" +
+            "OR TP1.subtopic IN (:taxons))\n" +
+            "GROUP BY taxon) ";
     public static final String FIRST_REVIEW_WHERE = " WHERE r.reviewed = 0\n" +
             "      AND lo.deleted = 0\n" +
             "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
