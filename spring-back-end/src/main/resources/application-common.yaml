@@ -6,7 +6,21 @@ cron:
     maxPoolSize: 2
     queueCapacity: 500
     threadNamePrefix: KottCron-
-
+  materialSync:
+    scheduledTime: 0 0 1 * * ?
+    isEnabled : true
+  acceptReviewableChange:
+    scheduledTime: 0 0 2 * * ?
+    isEnabled : true
+  authenticationStateCleaner:
+    scheduledTime: 0 0 3 * * ?
+    isEnabled : true
+  authenticatedUserCleaner:
+    scheduledTime: 0 0 4 * * ?
+    isEnabled : true
+  ehisInstitution:
+    scheduledTime: 0 0 5 * * ?
+    isEnabled : true
 taat:
   sso: https://reos.taat.edu.ee/saml2/idp/SSOService.php
   connectionId: https://oxygen.netgroupdigital.com/sp

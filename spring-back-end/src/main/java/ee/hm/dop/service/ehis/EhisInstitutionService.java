@@ -23,9 +23,9 @@ public class EhisInstitutionService {
     @Autowired
     private InstitutionEhisDao institutionEhisDao;
 
-    public void getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
+    public List<Integer> getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
         URL docUrl = new URL(configuration.getString(XROAD_EHIS_INSTITUTIONS_LIST));
-        ehisInstitutionParser.parseAndUpdateDb(docUrl);
+        return ehisInstitutionParser.parseAndUpdateDb(docUrl);
     }
 
     public List<InstitutionEhis> findAll() {
