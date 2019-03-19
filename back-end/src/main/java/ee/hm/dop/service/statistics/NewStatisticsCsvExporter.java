@@ -32,11 +32,12 @@ public class NewStatisticsCsvExporter {
 
     public void generate(String filename, NewStatisticsResult statistics) {
         Long estId = languageDao.findByCode("et").getId();
+        NewStatisticsResult sortedStatistics = commonStatisticsExporter.translateAndSort(statistics, estId);
         try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
-            if (statistics.getFilter().isUserSearch()) {
-                userCsv(statistics, estId, writer);
+            if (sortedStatistics.getFilter().isUserSearch()) {
+                userCsv(sortedStatistics, estId, writer);
             } else {
-                taxonCsv(statistics, estId, writer);
+                taxonCsv(sortedStatistics, estId, writer);
             }
         } catch (IOException ex) {
             logger.error(statistics.getFilter().getFormat().name() + " file generation failed");
