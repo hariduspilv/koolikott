@@ -30,12 +30,8 @@
         }
 
         addNewTaxon() {
-            this.$scope.userProfile.taxons.push(
-                this.taxonService.getEducationalContext(
-                    this.$scope.userProfile.taxons &&
-                    this.$scope.userProfile.taxons[0]
-                )
-            )
+            this.$scope.userProfile.taxons.push(undefined)
+
         }
 
         addNewSchool() {
@@ -118,9 +114,12 @@
         setRole() {
             this.$scope.roles.forEach(r => {
                 if (r.checked) {
-                    this.$scope.userProfile.role = r.name
                     if (r.name === 'PARENT' || r.name === 'OTHER')
                         this.$scope.userProfile.institutions = [{}]
+                    if (r.name === 'OTHER')
+                        this.$scope.userProfile.role = r.name + ': ' + this.$scope.specifiedRole
+                    else
+                        this.$scope.userProfile.role = r.name
                 }
             })
         }
@@ -137,6 +136,10 @@
 
         activateRole(role) {
             this.$scope.roles.forEach( r => {
+                if (role.startsWith('OTHER') && (r.name === 'OTHER')) {
+                    r.checked = true
+                    this.$scope.specifiedRole = role.substring(7)
+                }
                 if (r.name === role)
                     r.checked = true
             })

@@ -27,12 +27,8 @@ public class UserProfileService {
     @Inject
     private SendMailService sendMailService;
 
-    public static final String[] ROLES = {"TEACHER", "STUDENT", "PARENT", "OTHER"};
-
     public Response update(UserProfile userProfile, User user) {
         Response response = Response.status(HttpURLConnection.HTTP_OK).build();
-        if (!userProfile.getRole().isEmpty() && !Arrays.stream(ROLES).anyMatch(userProfile.getRole()::equals))
-            throw badRequest("Role missing or invalid");
 
         updateUser(userProfile, user);
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
@@ -85,7 +81,7 @@ public class UserProfileService {
     private void updateUser(UserProfile userProfile, User user) {
         User dbUser = userDao.findUserById(user.getId());
         if (dbUser != null) {
-            if (userProfile.getRole().equals("PARENT") || userProfile.getRole().equals("OTHER")) {
+            if (userProfile.getRole().equals("PARENT") || userProfile.getRole().startsWith("OTHER")) {
                 dbUser.setInstitutions(null);
             } else {
                 dbUser.setInstitutions(userProfile.getInstitutions());
