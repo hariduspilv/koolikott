@@ -21,6 +21,7 @@
             if (!this.$scope.user) {
                 this.$scope.user = this.authenticatedUserService.getUser();
                 this.$rootScope.userFromAuthentication = this.$scope.user
+                this.$scope.userProfile.user = this.$scope.user
             }
             this.getUserEmail()
             this.getUserProfile()
@@ -89,13 +90,13 @@
                                     this.toastService.show('USER_PROFILE_UPDATED')
                                 }
                             })
-                            .catch(() => {
+                            .catch(( e ) => {
                                 this.$scope.isSaving = false
                                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
                             })
                     }
                 })
-                .catch(() => {
+                .catch(( e ) => {
                     this.$scope.isSaving = false
                     this.$scope.userProfileForm.email.$setValidity('validationError', false)
                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
@@ -117,7 +118,9 @@
         setRole() {
             this.$scope.roles.forEach(r => {
                 if (r.checked) {
-                    this.$scope.userProfile.role
+                    this.$scope.userProfile.role = r.name
+                    if (r.name === 'PARENT' || r.name === 'OTHER')
+                        this.$scope.userProfile.institutions = [{}]
                 }
             })
         }
@@ -149,7 +152,7 @@
         }
 
         isSubmitDisabled() {
-            return !this.$scope.userProfileForm.$valid && this.$scope.isSaving
+            return !this.$scope.userProfileForm.$valid || this.$scope.isSaving
         }
 
         cancelProfileEdit() {
