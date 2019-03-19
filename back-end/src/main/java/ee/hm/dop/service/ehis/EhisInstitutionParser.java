@@ -22,65 +22,67 @@ import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import static org.apache.commons.lang.StringUtils.isNotBlank;
 
 class EhisInstitutionParser {
 
     @Inject
     private Configuration configuration;
 
-    private static Logger logger = LoggerFactory.getLogger(EhisInstitutionParser.class);
     private static XPath xpath = XPathFactory.newInstance().newXPath();
 
     private InstitutionEhisDao institutionEhisDao = newInstitutionEhisDao();
 
-    void parseAndUpdateDb(URL url) throws DocumentException {
+    List<Integer> parseAndUpdateDb(URL url) throws DocumentException {
         SAXReader saxReader = new SAXReader();
         Document document = new DOMWriter().write(saxReader.read(url));
 
-        long ehisStartOfSync = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
         List<InstitutionEhis> institutionsFromXml = getEhisInstitutions(document);
-        logger.info("EHIS institution.Found - " + institutionsFromXml.size() + " institutions");
+
+        List<Integer> syncInfo = new ArrayList<>();
+        syncInfo.add(0, institutionsFromXml.size());
 
         int addCounter = 0;
         int removeCounter = 0;
 
         for (InstitutionEhis ie : institutionsFromXml) {
             if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) == null
-                    && getInstAreaCondition(ie)
-                    && getInstStatusCondition(ie)
-                    && getInstTypeCondition(ie)) {
+                    && checkAreaExists(ie)
+                    && checkStatusIsNotClosed(ie)
+                    && checkInstTypeIsNotPreSchool(ie)) {
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
             } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null
-                    && (!getInstAreaCondition(ie) || !getInstStatusCondition(ie) || !getInstTypeCondition(ie))) {
+                    && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie) || !checkInstTypeIsNotPreSchool(ie))) {
                 institutionEhisDao.remove(ie);
                 removeCounter++;
             }
         }
-        long ehisEndOfSync = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
-        long syncDuration= ehisEndOfSync - ehisStartOfSync;
-        logger.info("EHIS institution.Added " + addCounter + " institutions into DB");
-        logger.info("EHIS institution.Removed " + removeCounter + " institutions");
-        logger.info("EHIS institution sync took " + syncDuration + " seconds");
+        syncInfo.add(1, addCounter);
+        syncInfo.add(2, removeCounter);
+
+        return syncInfo;
     }
 
-    private boolean getInstAreaCondition(InstitutionEhis institutionEhis){
-        return !(institutionEhis.getArea().equalsIgnoreCase("") || institutionEhis.getArea() == null);
+    private boolean checkAreaExists(InstitutionEhis institutionEhis){
+        return (isNotBlank(institutionEhis.getArea()) || institutionEhis.getArea() != null);
     }
-    private boolean getInstStatusCondition(InstitutionEhis institutionEhis){
+    private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
         return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_STATUS)));
     }
-    private boolean getInstTypeCondition(InstitutionEhis institutionEhis){
+    private boolean checkInstTypeIsNotPreSchool(InstitutionEhis institutionEhis){
         return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_TYPE)));
     }
-
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
         NodeList institutionsNode = getNodeList(document, "//*[local-name()='oppeasutus']");
-        return IntStream.range(0, institutionsNode.getLength()).mapToObj(institutionsNode::item).map(this::getInstitution)
+        return IntStream.range(0, institutionsNode.getLength())
+                .mapToObj(institutionsNode::item)
+                .map(this::getInstitution)
                 .collect(Collectors.toList());
     }
 
