@@ -17,7 +17,7 @@
             <input placeholder="{{user.name + ' ' + user.surname}}" disabled>
           </md-input-container>
         </div>
-        <div id="taxons" layout="row" class="md-padding" data-ng-repeat="taxon in user.userTaxons track by $index">
+        <div id="taxons" layout="row" data-ng-repeat="taxon in user.userTaxons track by $index">
           <dop-taxon-selector data-taxon="user.userTaxons[$index]"
                               flex
                               data-select-disabled="true"
@@ -40,7 +40,7 @@
             </div>
           </md-input-container>
         </div>
-        <div data-layout="row" data-layout-align="start center">
+        <div data-layout="row" data-layout-align="start start">
           <div class="md-padding" data-layout-align="center center" data-flex="50">
             <h3 data-translate="USER_PROFILE_ROLE"></h3>
             <div data-ng-repeat="role in roles track by $index">
@@ -78,8 +78,8 @@
           </div>
           <div class="md-padding" data-layout-align="center center" data-flex="50">
             <h3 data-translate="USER_PROFILE_INTERESTS"></h3>
-            <div data-layout="row" data-ng-repeat="taxon in userProfile.taxons track by $index"
-                 data-layout-align="center center">
+            <div data-layout="row" data-layout-align="center center" data-ng-repeat="taxon in userProfile.taxons track by $index"
+                 >
               <dop-taxon-selector
                 flex
                 class="statistics-filter__taxon-container"
