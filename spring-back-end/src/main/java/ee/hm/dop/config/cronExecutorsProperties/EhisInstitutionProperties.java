@@ -10,23 +10,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties(prefix = "cron.ehis-institution")
 public class EhisInstitutionProperties {
-
     private String scheduledTime;
-    private boolean isEnabled;
-
-    public String getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public void setScheduledTime(String scheduledTime) {
-        this.scheduledTime = scheduledTime;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
+    private boolean enabled;
 }

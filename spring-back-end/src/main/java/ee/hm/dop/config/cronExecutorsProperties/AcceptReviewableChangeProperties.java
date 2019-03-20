@@ -11,21 +11,5 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = "cron.accept-reviewable-change")
 public class AcceptReviewableChangeProperties {
     private String scheduledTime;
-    private boolean isEnabled;
-
-    public String getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public void setScheduledTime(String scheduledTime) {
-        this.scheduledTime = scheduledTime;
-    }
-
-    public boolean isEnabled() {
-        return isEnabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        isEnabled = enabled;
-    }
+    private boolean enabled;
 }
