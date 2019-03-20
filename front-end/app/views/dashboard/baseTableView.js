@@ -154,7 +154,10 @@ class controller extends Controller {
     }
 
     onSelectTaxons(taxons) {
-        this.$scope.filter.taxons = taxons
+        if (taxons.length === 0)
+            this.$scope.filter.taxons = undefined
+        else
+            this.$scope.filter.taxons = taxons
         this.$scope.clearFields = false
 
     }
@@ -277,9 +280,9 @@ class controller extends Controller {
         if (this.$scope.filter && this.$scope.filter.taxons) {
             return this.$scope.filter.taxons.map(t => '&taxon=' + t.id).join("");
         } else if (!this.$scope.filter.taxons && this.$scope.filter.educationalContext) {
-                    return '&taxon=' + this.$scope.filter.educationalContext.id
-        }
-        return ""
+            return '&taxon=' + this.$scope.filter.educationalContext.id
+        } else
+            return ""
     }
 
     getModerators() {
