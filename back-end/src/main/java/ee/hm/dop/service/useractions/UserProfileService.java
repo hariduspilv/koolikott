@@ -81,11 +81,15 @@ public class UserProfileService {
     private void updateUser(UserProfile userProfile, User user) {
         User dbUser = userDao.findUserById(user.getId());
         if (dbUser != null) {
-            if (userProfile.getRole().equals("PARENT") || userProfile.getRole().startsWith("OTHER")) {
-                dbUser.setInstitutions(null);
+            if (userProfile.getRole() != null) {
+                if (userProfile.getRole().equals("PARENT") || userProfile.getRole().startsWith("OTHER")) {
+                    dbUser.setInstitutions(null);
+                } else {
+                    dbUser.setInstitutions(userProfile.getInstitutions());
+                    dbUser.setTaxons(userProfile.getTaxons());
+                }
             } else {
-                dbUser.setInstitutions(userProfile.getInstitutions());
-                dbUser.setTaxons(userProfile.getTaxons());
+                dbUser.setInstitutions(null);
             }
             userDao.createOrUpdate(dbUser);
         } else {
