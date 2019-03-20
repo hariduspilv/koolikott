@@ -2,11 +2,10 @@ package ee.hm.dop.service.synchronizer;
 
 import com.google.inject.Singleton;
 import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ChapterBlock;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Repository;
+import ee.hm.dop.dao.PortfolioMaterialDao;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
 import org.apache.commons.lang3.StringUtils;
@@ -36,6 +35,11 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
     private SolrEngineService solrEngineService;
     @Inject
     private PortfolioDao portfolioDao;
+    @Inject
+    private PortfolioMaterialDao portfolioMaterialDao;
+    @Inject
+    private MaterialDao materialDao;
+
 
 
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
@@ -64,21 +68,26 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
                         if (StringUtils.isNotBlank(block.getHtmlContent())) {
                             Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
                             while (matcher.find()) {
-                                results.add(matcher.group());
+                                Matcher numberMatcher = numberPattern.matcher(matcher.group());
+                                while (numberMatcher.find()) {
+                                    fromFrontIds.add(Long.valueOf(numberMatcher.group()));
+                                    PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
+                                    portfolioMaterial.setPortfolioId(portfolio.getId());
+//                                    Material material = materialDao.findById(Long.valueOf(numberMatcher.group()));
+                                    portfolioMaterial.setMaterialId(Long.valueOf(numberMatcher.group()));
+                                    portfolioMaterialDao.createOrUpdate(portfolioMaterial);
+                                }
                             }
                         }
                     }
                 }
+
                 //domagic
                 //transform strings to material ids
                 //save
             }
-            for (String foundHtmlContent : results) {
-                Matcher numberMatcher = numberPattern.matcher(foundHtmlContent);
-                while (numberMatcher.find()) {
-                    fromFrontIds.add(Long.valueOf(numberMatcher.group()));
-                }
-            }
+            System.out.println(fromFrontIds);
+
 //            --------------------------------------------------
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllUsedRepositories();
