@@ -70,7 +70,7 @@ class EhisInstitutionParser {
     }
 
     private boolean checkAreaExists(InstitutionEhis institutionEhis){
-        return (isNotBlank(institutionEhis.getArea()) || institutionEhis.getArea() != null);
+        return (isNotBlank(institutionEhis.getArea()) && institutionEhis.getArea() != null);
     }
     private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
         return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_STATUS)));

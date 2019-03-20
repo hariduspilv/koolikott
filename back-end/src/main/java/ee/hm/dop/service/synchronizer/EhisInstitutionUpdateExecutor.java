@@ -30,7 +30,7 @@ public class EhisInstitutionUpdateExecutor extends DopDaemonProcess {
             long ehisEndOfSync = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
             long syncDuration = ehisEndOfSync - ehisStartOfSync;
             logger.info("EHIS institutions updating ended");
-            logger.info("EHIS institution.Found - " + ehisSyncInfo.get(0)  + " institutions");
+            logger.info("EHIS institution.Found - " + ehisSyncInfo.get(0) + " institutions");
             logger.info("EHIS institution.Added " + ehisSyncInfo.get(1) + " institutions into DB");
             logger.info("EHIS institution.Removed " + ehisSyncInfo.get(2) + " institutions");
             logger.info("EHIS institution sync took " + syncDuration + " seconds");

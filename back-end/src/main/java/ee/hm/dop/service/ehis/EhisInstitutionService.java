@@ -28,11 +28,6 @@ public class EhisInstitutionService {
         return institutionEhisDao.findById(id);
     }
 
-    public void getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
-        URL docUrl = new URL("http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/0/0/XML");
-
-//        URL docUrl = new URL(configuration.getString(XROAD_EHIS_INSTITUTIONS_LIST));
-        ehisInstitutionParser.parseAndUpdateDb(docUrl);
     public List<Integer> getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
         URL docUrl = new URL(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_LIST));
         return ehisInstitutionParser.parseAndUpdateDb(docUrl);
