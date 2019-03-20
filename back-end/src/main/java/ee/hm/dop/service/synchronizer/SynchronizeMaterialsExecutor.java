@@ -35,8 +35,8 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
     private SolrEngineService solrEngineService;
     @Inject
     private PortfolioDao portfolioDao;
-    @Inject
-    private PortfolioMaterialDao portfolioMaterialDao;
+//    @Inject
+//    private PortfolioMaterialDao portfolioMaterialDao;
     @Inject
     private MaterialDao materialDao;
 
@@ -50,19 +50,15 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
         List<SynchronizationAudit> audits = new ArrayList<>();
         try {
             beginTransaction();
-
 //            ---------------------------------------
             //run only once
             //getAllPortfolios
 
-            List<Portfolio> portfolios;
-            List<String> results = new ArrayList<>();
-            List<Long> fromFrontIds = new ArrayList<>();
-            portfolios = portfolioDao.findAll();
+            PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
             Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
             Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
-            for (Portfolio portfolio : portfolios) {
+            for (Portfolio portfolio : portfolioDao.findAll()) {
                 for (Chapter chapter : portfolio.getChapters()) {
                     for (ChapterBlock block : chapter.getBlocks()) {
                         if (StringUtils.isNotBlank(block.getHtmlContent())) {
@@ -70,25 +66,17 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
                             while (matcher.find()) {
                                 Matcher numberMatcher = numberPattern.matcher(matcher.group());
                                 while (numberMatcher.find()) {
-                                    fromFrontIds.add(Long.valueOf(numberMatcher.group()));
                                     PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
-                                    portfolioMaterial.setPortfolioId(portfolio.getId());
-//                                    Material material = materialDao.findById(Long.valueOf(numberMatcher.group()));
-                                    portfolioMaterial.setMaterialId(Long.valueOf(numberMatcher.group()));
-                                    portfolioMaterialDao.createOrUpdate(portfolioMaterial);
+                                    portfolioMaterial.setPortfolio(portfolio);
+                                    portfolioMaterial.setMaterial(materialDao.findById(Long.valueOf(numberMatcher.group())));
+                                    newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
                                 }
                             }
                         }
                     }
                 }
 
-                //domagic
-                //transform strings to material ids
-                //save
             }
-            System.out.println(fromFrontIds);
-
-//            --------------------------------------------------
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllUsedRepositories();
 
@@ -169,5 +157,8 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
 
     protected RepositoryService newRepositoryService() {
         return GuiceInjector.getInjector().getInstance(RepositoryService.class);
+    }
+    private PortfolioMaterialDao newPortfolioMaterialDao(){
+        return GuiceInjector.getInjector().getInstance(PortfolioMaterialDao.class);
     }
 }

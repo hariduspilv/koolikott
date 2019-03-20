@@ -9,30 +9,32 @@ public class PortfolioMaterial implements AbstractEntity {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
-    private Long portfolioId;
+    @ManyToOne
+    @JoinColumn(name = "portfolio", nullable = false)
+    private Portfolio portfolio;
 
-    @Column(nullable = false)
-    private Long materialId;
+    @ManyToOne
+    @JoinColumn(name = "material", nullable = false)
+    private Material material;
 
     @Override
     public Long getId() {
         return id;
     }
 
-    public Long getPortfolioId() {
-        return portfolioId;
+    public Portfolio getPortfolio() {
+        return portfolio;
     }
 
-    public void setPortfolioId(Long portfolioId) {
-        this.portfolioId = portfolioId;
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
-    public Long getMaterialId() {
-        return materialId;
+    public Material getMaterial() {
+        return material;
     }
 
-    public void setMaterialId(Long materialId) {
-        this.materialId = materialId;
+    public void setMaterial(Material material) {
+        this.material = material;
     }
 }

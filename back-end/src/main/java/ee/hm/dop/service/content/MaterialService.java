@@ -324,7 +324,7 @@ public class MaterialService {
         material.setPeerReviews(peerReviews);
     }
 
-    public List<String> getRelatedPortfolios(long id){
+    public List<Long> getRelatedPortfolios(long id){
         return materialDao.getRelatedPortfolios(id);
     }
 }

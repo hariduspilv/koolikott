@@ -152,17 +152,11 @@ public class MaterialDao extends AbstractDao<Material> {
                 .getResultList();
     }
 
-    public List<String> getRelatedPortfolios(long materialId) {
-        String s = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"" + materialId + "\"";
-//        String s = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"121\" class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"12221\"";
-        Pattern pattern = Pattern.compile("class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"");
-//        Pattern pattern = Pattern.compile("class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"");
-        Matcher matcher = pattern.matcher(s);
-        List<String> s123 = new ArrayList<>();
-        while (matcher.find()) {
-            s123.add(matcher.group());
-        }
-        return s123;
+    public List<Long> getRelatedPortfolios(long materialId) {
+        return getEntityManager().
+                createQuery("SELECT pm.portfolio FROM PortfolioMaterial pm WHERE pm.material =:materialId")
+                .setParameter("materialId",materialId)
+                .getResultList();
     }
 
     @Override
