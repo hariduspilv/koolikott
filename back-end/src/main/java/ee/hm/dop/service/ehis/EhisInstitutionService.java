@@ -2,10 +2,9 @@ package ee.hm.dop.service.ehis;
 
 import ee.hm.dop.dao.InstitutionEhisDao;
 import ee.hm.dop.model.ehis.InstitutionEhis;
+import ee.hm.dop.utils.ConfigurationProperties;
 import org.apache.commons.configuration2.Configuration;
 import org.dom4j.DocumentException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import java.net.MalformedURLException;
@@ -14,13 +13,10 @@ import java.util.List;
 
 public class EhisInstitutionService {
 
-    private static Logger logger = LoggerFactory.getLogger(EhisInstitutionService.class);
-
     @Inject
     private EhisInstitutionParser ehisInstitutionParser;
     @Inject
     private Configuration configuration;
-
     @Inject
     private InstitutionEhisDao institutionEhisDao;
 
@@ -37,6 +33,9 @@ public class EhisInstitutionService {
 
 //        URL docUrl = new URL(configuration.getString(XROAD_EHIS_INSTITUTIONS_LIST));
         ehisInstitutionParser.parseAndUpdateDb(docUrl);
+    public List<Integer> getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
+        URL docUrl = new URL(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_LIST));
+        return ehisInstitutionParser.parseAndUpdateDb(docUrl);
     }
 
     public List<InstitutionEhis> findAll() {

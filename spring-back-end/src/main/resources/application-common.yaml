@@ -6,7 +6,21 @@ cron:
     maxPoolSize: 2
     queueCapacity: 500
     threadNamePrefix: KottCron-
-
+  materialSync:
+    scheduledTime: 0 0 1 * * ?
+    enabled : true
+  acceptReviewableChange:
+    scheduledTime: 0 0 2 * * ?
+    enabled : true
+  authenticationStateCleaner:
+    scheduledTime: 0 0 3 * * ?
+    enabled : true
+  authenticatedUserCleaner:
+    scheduledTime: 0 0 4 * * ?
+    enabled : true
+  ehisInstitution:
+    scheduledTime: 0 0 5 * * ?
+    enabled : true
 taat:
   sso: https://reos.taat.edu.ee/saml2/idp/SSOService.php
   connectionId: https://oxygen.netgroupdigital.com/sp
@@ -86,6 +100,8 @@ xroad:
       v6: false
     institutions:
       list: http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/0/0/XML
+      status: Suletud
+      type: koolieelne lasteasutus
   # timeouts are in ms
   timeout:
     connect: 5000
