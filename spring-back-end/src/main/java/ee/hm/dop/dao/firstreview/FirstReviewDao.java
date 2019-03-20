@@ -40,7 +40,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
             "       JOIN LanguageString LS ON MT.title = LS.id\n" +
             "WHERE LS.lang = :transgroup\n" +
             "AND LOWER(LS.textValue) LIKE :title )";
-    public static final String JOIN_LO_TAXON = " JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
+    public static final String JOIN_LO_TAXON = " LEFT JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
     private static final String LT_TAXON_IN = "  " +
             "AND lt.taxon IN (SELECT TP1.taxon\n" +
             "FROM LearningObject_Taxon lt1,TaxonPosition TP1\n" +
