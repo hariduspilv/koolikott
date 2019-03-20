@@ -127,7 +127,7 @@ public class UserEmailService {
         return userEmailDao.createOrUpdate(dbUserEmail);
     }
 
-    public UserEmail validatePinFromPortfolio(UserEmail userEmail) {
+    public UserEmail validatePinFromProfile(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         if (dbUserEmail == null)
             throw notFound("User not found");

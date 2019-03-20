@@ -23,6 +23,14 @@ public class EhisInstitutionService {
     @Autowired
     private InstitutionEhisDao institutionEhisDao;
 
+    public InstitutionEhis getInstitutionEhisById(Long id) {
+        return institutionEhisDao.findById(id);
+    }
+
+    public List<InstitutionEhis> getInstitutionEhisById(List<Long> id) {
+        return institutionEhisDao.findById(id);
+    }
+
     public List<Integer> getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
         URL docUrl = new URL(configuration.getString(XROAD_EHIS_INSTITUTIONS_LIST));
         return ehisInstitutionParser.parseAndUpdateDb(docUrl);
@@ -30,5 +38,13 @@ public class EhisInstitutionService {
 
     public List<InstitutionEhis> findAll() {
         return institutionEhisDao.findAll();
+    }
+
+    public List<String> getInstitutionAreas() {
+        return institutionEhisDao.getInstitutionAreas();
+    }
+
+    public List<InstitutionEhis> getInstitutionPerArea(String area) {
+        return institutionEhisDao.getInstitutionPerArea(area);
     }
 }

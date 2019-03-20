@@ -74,11 +74,11 @@ public class UserEmailResource extends BaseResource {
     }
 
     @POST
-    @Path("validateFromPortfolio")
+    @Path("validateFromProfile")
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    public UserEmail validatePinFromPortfolio(UserEmail userEmail) {
-        return userEmailService.validatePinFromPortfolio(userEmail);
+    public UserEmail validatePinFromProfile(UserEmail userEmail) {
+        return userEmailService.validatePinFromProfile(userEmail);
     }
 
     @GET

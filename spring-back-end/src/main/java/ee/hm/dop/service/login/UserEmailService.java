@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
 public class UserEmailService {
@@ -82,6 +83,14 @@ public class UserEmailService {
         return emailToCreatorDao.createOrUpdate(emailToCreator);
     }
 
+    public String getEmail(User user) {
+        if (user == null)
+            throw badRequest("User is null, can't find e-mail of null");
+
+        return userEmailDao.findByUser(user).getEmail();
+
+    }
+
     public UserEmail save(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         if (userEmail.getUser() == null)
@@ -118,6 +127,35 @@ public class UserEmailService {
 
 
         return userEmailDao.createOrUpdate(dbUserEmail);
+    }
+
+    public UserEmail validatePinFromProfile(UserEmail userEmail) {
+        UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
+        if (dbUserEmail == null)
+            throw notFound("User not found");
+        if (!dbUserEmail.getPin().equals(userEmail.getPin()))
+            throw badRequest("Pins not equal");
+
+        dbUserEmail.setActivated(true);
+        dbUserEmail.setActivatedAt(LocalDateTime.now());
+        dbUserEmail.setEmail(userEmail.getEmail());
+
+        return userEmailDao.createOrUpdate(dbUserEmail);
+    }
+
+    public boolean hasDuplicateEmailForProfile(UserEmail userEmail, User loggedInUser) {
+        if (isBlank(userEmail.getEmail()))
+            throw badRequest("Email Empty");
+        User user = userDao.findUserById(loggedInUser.getId());
+        UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail.getEmail());
+        return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
+    }
+
+    public Boolean hasEmail(UserEmail userEmail) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userEmail.getUserStatus().getToken());
+        User user = userDao.findUserByIdCode(state.getIdCode());
+        UserEmail dbUserEmail = userEmailDao.findByUser(user);
+        return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());
     }
 
     private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {

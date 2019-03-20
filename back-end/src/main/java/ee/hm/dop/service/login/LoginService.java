@@ -90,9 +90,12 @@ public class LoginService {
         User user = getExistingOrNewUser(state);
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
-        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && !isEmpty(dbUserEmail.getEmail())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
-        } else if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && isEmpty(dbUserEmail.getEmail())) {
+        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && dbUserEmail != null) {
+            if (isEmpty(dbUserEmail.getEmail()))
+                userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
+            else
+                userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
+        } else if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && dbUserEmail == null) {
             userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
         }
 
