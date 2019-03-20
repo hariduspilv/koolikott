@@ -21,6 +21,7 @@
             if (!this.$scope.user) {
                 this.$scope.user = this.authenticatedUserService.getUser();
                 this.$rootScope.userFromAuthentication = this.$scope.user
+                this.$scope.userProfile.user = this.$scope.user
             }
             this.getUserEmail()
             this.getUserProfile()
@@ -29,12 +30,8 @@
         }
 
         addNewTaxon() {
-            this.$scope.userProfile.taxons.push(
-                this.taxonService.getEducationalContext(
-                    this.$scope.userProfile.taxons &&
-                    this.$scope.userProfile.taxons[0]
-                )
-            )
+            this.$scope.userProfile.taxons.push(undefined)
+
         }
 
         addNewSchool() {
@@ -89,13 +86,13 @@
                                     this.toastService.show('USER_PROFILE_UPDATED')
                                 }
                             })
-                            .catch(() => {
+                            .catch(( e ) => {
                                 this.$scope.isSaving = false
                                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
                             })
                     }
                 })
-                .catch(() => {
+                .catch(( e ) => {
                     this.$scope.isSaving = false
                     this.$scope.userProfileForm.email.$setValidity('validationError', false)
                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
@@ -117,7 +114,12 @@
         setRole() {
             this.$scope.roles.forEach(r => {
                 if (r.checked) {
-                    this.$scope.userProfile.role
+                    if (r.name === 'PARENT' || r.name === 'OTHER')
+                        this.$scope.userProfile.institutions = [{}]
+                    if (r.name === 'OTHER')
+                        this.$scope.userProfile.role = r.name + ': ' + this.$scope.specifiedRole
+                    else
+                        this.$scope.userProfile.role = r.name
                 }
             })
         }
@@ -134,6 +136,10 @@
 
         activateRole(role) {
             this.$scope.roles.forEach( r => {
+                if (role.startsWith('OTHER') && (r.name === 'OTHER')) {
+                    r.checked = true
+                    this.$scope.specifiedRole = role.substring(7)
+                }
                 if (r.name === role)
                     r.checked = true
             })
@@ -149,7 +155,7 @@
         }
 
         isSubmitDisabled() {
-            return !this.$scope.userProfileForm.$valid && this.$scope.isSaving
+            return !this.$scope.userProfileForm.$valid || this.$scope.isSaving
         }
 
         cancelProfileEdit() {

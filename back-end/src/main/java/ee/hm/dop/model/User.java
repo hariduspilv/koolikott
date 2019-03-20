@@ -14,6 +14,7 @@ import javax.persistence.*;
 import java.util.List;
 
 import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.CascadeType.*;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -46,7 +47,7 @@ public class User implements AbstractEntity {
     @JoinColumn(name = "publisher")
     private Publisher publisher;
 
-    @OneToMany
+    @OneToMany(cascade = ALL)
     @JoinTable(
             name = "User_Taxon",
             joinColumns = {@JoinColumn(name = "user")},
@@ -57,7 +58,7 @@ public class User implements AbstractEntity {
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> userTaxons;
 
-    @OneToMany
+    @OneToMany(cascade = ALL)
     @JoinTable(
             name = "User_InterestTaxon",
             joinColumns = {@JoinColumn(name = "user")},

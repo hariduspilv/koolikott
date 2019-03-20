@@ -64,6 +64,7 @@ class controller extends Controller {
 
         this.$scope.filter = { };
         this.$scope.filter.materialType = 'All'
+        this.$scope.filter.materialTypeTempForSort = 'All'
 
         this.$scope.query = {
             filter: "",
@@ -89,8 +90,10 @@ class controller extends Controller {
 
     selectType(type) {
         this.$scope.filter.materialType = type
-        if (type !== 'All')
+        if (type !== 'All') {
             this.sortedBy = '-byCreatedAt';
+            this.$scope.sortByType = false
+        }
     }
 
     onFilterChange(filter) {
@@ -105,6 +108,7 @@ class controller extends Controller {
         this.$scope.query.filter = ''
         this.$scope.isFiltering = true
         this.$scope.query.page = 1
+        this.$scope.filter.materialTypeTempForSort = this.$scope.filter.materialType;
         this.getData('firstReview/unReviewed', this.sortedBy)
         if (this.$scope.filter.materialType !== 'All')
             this.$scope.sortByType = false
@@ -305,6 +309,7 @@ class controller extends Controller {
         this.sortedBy = order;
         this.$scope.query.order = order;
         this.$scope.query.page = 1;
+        this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
 
         if (this.viewPath === 'unReviewed') {
             this.getData('firstReview/unReviewed', order);

@@ -27,12 +27,8 @@ public class UserProfileService {
     @Inject
     private SendMailService sendMailService;
 
-    public static final String[] ROLES = {"TEACHER", "STUDENT", "PARENT", "OTHER"};
-
     public Response update(UserProfile userProfile, User user) {
         Response response = Response.status(HttpURLConnection.HTTP_OK).build();
-        if (userProfile.getRole().isEmpty() || !Arrays.stream(ROLES).anyMatch(userProfile.getRole()::equals))
-            throw badRequest("Role missing or invalid");
 
         updateUser(userProfile, user);
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
@@ -62,6 +58,9 @@ public class UserProfileService {
     public UserProfile getUserProfile(User loggedInUser) {
         User user = userDao.findUserById(loggedInUser.getId());
         UserProfile userProfile = userProfileDao.findByUser(user);
+        if (userProfile == null)
+            return null;
+
         userProfile.setInstitutions(user.getInstitutions());
         userProfile.setTaxons(user.getTaxons());
         return userProfile;
@@ -82,14 +81,13 @@ public class UserProfileService {
     private void updateUser(UserProfile userProfile, User user) {
         User dbUser = userDao.findUserById(user.getId());
         if (dbUser != null) {
-            if (userProfile.getRole() == "PARENT" || userProfile.getRole() == "OTHER") {
-                dbUser.setTaxons(null);
+            if (userProfile.getRole().equals("PARENT") || userProfile.getRole().startsWith("OTHER")) {
                 dbUser.setInstitutions(null);
             } else {
                 dbUser.setInstitutions(userProfile.getInstitutions());
                 dbUser.setTaxons(userProfile.getTaxons());
-                userDao.createOrUpdate(dbUser);
             }
+            userDao.createOrUpdate(dbUser);
         } else {
             throw badRequest("User not found");
         }

@@ -173,7 +173,8 @@ component('dopTaxonSelector', {
         isStatisticsSelect: '<',
         isProfileSelect: '<',
         onStatisticsMultiselect: '&',
-        clearSelection: '<'
+        clearSelection: '<',
+        selectDisabled: '<'
     },
     templateUrl: 'directives/taxonSelector/taxonSelector.html',
     controller
