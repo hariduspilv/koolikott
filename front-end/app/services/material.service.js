@@ -11,12 +11,6 @@ class controller extends Controller {
 
     getRelatedPortfolios(id){
         return this.serverCallService.makeGet("rest/material/getRelatedPortfolios",{'id':id})
-            .then((response) => {
-                if(response.data) {
-                    console.log(response);
-                    return response.data;
-                }
-            })
     }
 
     increaseViewCount(material) {

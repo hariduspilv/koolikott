@@ -2,6 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
+import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -24,6 +25,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -60,6 +63,9 @@ public class MaterialService {
     private MaterialGetter materialGetter;
     @Inject
     private OriginalPictureDao originalPictureDao;
+    @Inject
+    private PortfolioDao portfolioDao;
+
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
         return materialDao.findByRepository(repository, repositoryIdentifier);
@@ -324,7 +330,10 @@ public class MaterialService {
         material.setPeerReviews(peerReviews);
     }
 
-    public List<Long> getRelatedPortfolios(long id){
-        return materialDao.getRelatedPortfolios(id);
+    public List<Portfolio> getRelatedPortfolios(Long id) {
+        for (BigInteger pid : materialDao.getRelatedPortfolios(id)) {
+            ((List<Portfolio>) new ArrayList<Portfolio>()).add(portfolioDao.findById(pid.longValue()));
+        }
+        return new ArrayList<>();
     }
 }

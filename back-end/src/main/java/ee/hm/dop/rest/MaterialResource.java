@@ -116,12 +116,8 @@ public class MaterialResource extends BaseResource {
 
     @GET
     @Path("getRelatedPortfolios")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Long> getRelatedPortfolios(@QueryParam("id") long id) {
+    public List<Portfolio> getRelatedPortfolios(@QueryParam("id") Long id) {
         return materialService.getRelatedPortfolios(id);
     }
-
-
-
 }

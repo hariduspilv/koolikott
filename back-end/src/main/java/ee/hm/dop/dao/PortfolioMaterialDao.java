@@ -17,7 +17,7 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
     }
 
     public boolean materialToPortfolioConnected(Material material, Portfolio portfolio) {
-        List<Portfolio> portfolioList = getEntityManager()
+        List<Long> portfolioList = getEntityManager()
                 .createQuery("SELECT pm.portfolio FROM PortfolioMaterial pm WHERE pm.material =: material")
                 .setParameter("material", material)
                 .getResultList();
