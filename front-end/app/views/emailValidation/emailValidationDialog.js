@@ -28,6 +28,7 @@
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide()
+                document.removeEventListener('textInput', handler)
             }
 
             this.$scope.isValidateFromProfile = () => {
@@ -42,11 +43,12 @@
                         this.verifyPin(pin);
                 }
             }
-
-            document.addEventListener('textInput', (evt) => {
+            let handler = function(evt) {
                 if (!NUMBERS.includes(evt.data))
                     evt.preventDefault();
-            });
+            }
+
+            document.addEventListener('textInput', handler)
         }
 
         verifyPin(pin) {
