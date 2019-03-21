@@ -44,7 +44,6 @@
 
         clearSearchTerm() {
             this.$scope.searchTerm = ''
-
         }
 
         isAdmin() {
