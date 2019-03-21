@@ -34,14 +34,14 @@
             </div>
           </md-input-container>
         </div>
-        <div class="taxonomy-padding" data-ng-if="user.userTaxons.length === 0">
+        <div class="taxonomy-padding" data-ng-if="user.userTaxons.length > 0">
           <h3 data-translate="USER_PROFILE_EXPERTISE"></h3>
-        <div id="taxons" layout="row" data-ng-repeat="taxon in user.userTaxons track by $index">
-          <dop-taxon-selector data-taxon="user.userTaxons[$index]"
-                              flex
-                              data-select-disabled="true"
-                              data-disable-educational-context="true"></dop-taxon-selector>
-        </div>
+          <div id="taxons" layout="row" data-ng-repeat="taxon in user.userTaxons track by $index">
+            <dop-taxon-selector data-taxon="user.userTaxons[$index]"
+                                flex
+                                data-select-disabled="true"
+                                data-disable-educational-context="true"></dop-taxon-selector>
+          </div>
         </div>
         <div data-layout="row" data-layout-xs="column" data-layout-align="start start">
           <div class="md-padding" data-layout-align="center center" data-flex="100">
