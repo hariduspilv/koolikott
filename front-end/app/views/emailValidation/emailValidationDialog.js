@@ -10,6 +10,7 @@
             this.$scope.emailValidationForm = {}
             this.$scope.isSending = false
             this.$scope.input = [this.$scope.firstNum, this.$scope.secondNum, this.$scope.thirdNum, this.$scope.fourthNum]
+            this.$scope.$on('$destroy', () => document.removeEventListener('textInput', handler))
 
             this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () =>
             {
@@ -28,7 +29,6 @@
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide()
-                document.removeEventListener('textInput', handler)
             }
 
             this.$scope.isValidateFromProfile = () => {
@@ -84,10 +84,6 @@
 
         isNotEmpty() {
             return !!(this.$scope.firstNum && this.$scope.secondNum && this.$scope.thirdNum && this.$scope.fourthNum)
-        }
-        $onDestroy() {
-            if (typeof this.unsubscribeRouteChangeSuccess === 'function')
-                this.unsubscribeRouteChangeSuccess()
         }
 
         setTouchedFalse() {
