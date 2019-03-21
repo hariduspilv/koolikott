@@ -54,7 +54,7 @@ class controller extends Controller {
 
         this.$scope.types = ['All','Material','Portfolio']
 
-        this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
+        this.$scope.$watch('filter.educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
             if (newValue !== oldValue && (newValue.length >=3 || !newValue))
                 this.filterItems()
@@ -125,8 +125,7 @@ class controller extends Controller {
 
     onParamsChange({ users, taxons }) {
         this.$scope.isSubmitButtonEnabled =  users || taxons;
-        this.$scope.isTaxonSelectVisible = !users
-    }
+        this.$scope.isTaxonSelectVisible = !users}
 
     clearFields() {
         this.$scope.educationalContext = undefined
@@ -171,6 +170,7 @@ class controller extends Controller {
 
     onEducationalContextChange(educationalContext) {
         this.$scope.isExpertsSelectVisible = !educationalContext
+        this.$scope.filter.taxons = undefined
         this.onParamsChange({});
     }
 
