@@ -85,13 +85,13 @@
                                     this.toastService.show('USER_PROFILE_UPDATED')
                                 }
                             })
-                            .catch(( e ) => {
+                            .catch( () => {
                                 this.$scope.isSaving = false;
                                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
                             })
                     }
                 })
-                .catch(( e ) => {
+                .catch( () => {
                     this.$scope.isSaving = false;
                     this.$scope.userProfileForm.email.$setValidity('validationError', false);
                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
@@ -174,7 +174,11 @@
 
         deleteTaxon(index) {
             this.$scope.userProfile.taxons.splice(index, 1);
-        };
+        }
+
+        resetDuplicateEmailError() {
+            this.$scope.userProfileForm.email.$setValidity('validationError', true);
+        }
     }
 
     controller.$inject = [

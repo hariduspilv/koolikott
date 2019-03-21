@@ -26,7 +26,8 @@
               ng-model="userEmail"
               type="email"
               required
-              ng-pattern="validEmail">
+              ng-pattern="validEmail"
+            data-ng-change="$ctrl.resetDuplicateEmailError()">
             <div data-ng-messages="userProfileForm.email.$error">
               <div data-ng-message="required" data-translate="GDPR_EMAIL_REQUIRED"></div>
               <div data-ng-message="pattern" data-translate="GDPR_EMAIL_INVALID"></div>
