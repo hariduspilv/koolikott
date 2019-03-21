@@ -65,6 +65,9 @@ class controller extends Controller {
         this.$scope.filter = { };
         this.$scope.filter.materialType = 'All'
         this.$scope.filter.materialTypeTempForSort = 'All'
+        this.$scope.filter.materialModeratorTempForSort = ''
+        this.$scope.filter.materialEduTempForSort = ''
+        this.$scope.filter.materialDomainTempForSort = ''
 
         this.$scope.query = {
             filter: "",
@@ -109,6 +112,10 @@ class controller extends Controller {
         this.$scope.isFiltering = true
         this.$scope.query.page = 1
         this.$scope.filter.materialTypeTempForSort = this.$scope.filter.materialType;
+        this.$scope.filter.materialModeratorTempForSort= this.$scope.filter.user;
+        this.$scope.filter.materialEduTempForSort = this.$scope.filter.educationalContext
+        this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
+
         this.getData('firstReview/unReviewed', this.sortedBy)
         if (this.$scope.filter.materialType !== 'All')
             this.$scope.sortByType = false
@@ -313,6 +320,9 @@ class controller extends Controller {
         this.$scope.query.order = order;
         this.$scope.query.page = 1;
         this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
+        this.$scope.filter.user = this.$scope.filter.materialModeratorTempForSort;
+        this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
+        this.$scope.filter.taxons =  this.$scope.filter.materialDomainTempForSort
 
         if (this.viewPath === 'unReviewed') {
             this.getData('firstReview/unReviewed', order);

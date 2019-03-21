@@ -75,6 +75,7 @@
                  data-ng-model-options="{trackBy: '$value.id'}"
                  aria-label="Vali ekspert"
                  data-ng-disabled="$ctrl.isModerator()"
+                 data-ng-change="$ctrl.selectUsers(filter.user)"
       >
         <md-option
           data-ng-repeat="user in moderators"
