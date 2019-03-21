@@ -16,6 +16,8 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
+            // $scope.relatedPortfolios = getMaterialRelatedPortfolios($scope.material.id);
+
 
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
@@ -81,6 +83,7 @@ angular.module('koolikottApp')
                     if ($scope.sourceType === "EBOOK" && isIE()) $scope.material.source += "?archive=true";
                 }
 
+                // $scope.relatedPortfolios =
 
             }
 
@@ -112,11 +115,12 @@ angular.module('koolikottApp')
                     $scope.material = newMaterial;
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
+                    getMaterialRelatedPortfolios($scope.material.id)
                 }
             }
 
-            function getMaterialRelatedPOrtfolios(id){
-                materialService.getRelatedPortfolios(id).then()
+            function getMaterialRelatedPortfolios(id){
+                return materialService.getRelatedPortfolios(id).then(success,fail);
             }
 
             function getMaterial(success, fail) {
@@ -170,7 +174,7 @@ angular.module('koolikottApp')
                 getContentType();
                 processMaterial();
 
-                getMaterialRelatedPOrtfolios($scope.material.id);
+                getMaterialRelatedPortfolios($scope.material.id);
 
                 eventService.notify('material:reloadTaxonObject');
 
