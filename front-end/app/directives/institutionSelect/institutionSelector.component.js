@@ -3,9 +3,13 @@
 {
 class controller extends Controller {
     $onInit() {
+        this.$scope.searchTerm
         this.$scope.userProfile = [{}]
         this.getEHISInstitutionAreas()
         this._previousinstitution = this.institution
+        angular.element(document.querySelector('#select-search')).on('keydown', (ev) => {
+            ev.stopPropagation()
+        });
     }
 
     $onChanges(changes) {
@@ -23,6 +27,9 @@ class controller extends Controller {
 
     }
 
+    clearSearchTerm() {
+        this.$scope.searchTerm = ''
+    }
 
     getEHISInstitutionAreas() {
         this.serverCallService.makeGet('rest/ehisInstitution/areas')
