@@ -1,10 +1,10 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.config.guice.GuiceInjector;
+import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ChapterBlock;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.User;
+import ee.hm.dop.dao.PortfolioMaterialDao;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
@@ -31,6 +31,7 @@ import static org.joda.time.DateTime.now;
 public class PortfolioService {
 
     public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
+    public static final String NUMBER_REGEX = "\\d+";
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
@@ -45,6 +46,10 @@ public class PortfolioService {
     private PortfolioPermission portfolioPermission;
     @Inject
     private PortfolioCopier portfolioCopier;
+    @Inject
+    private MaterialDao materialDao;
+    @Inject
+    private PortfolioMaterialDao portfolioMaterialDao;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -91,40 +96,29 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
+        PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
+        Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
+        Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
+
         //do magic with materials
-        List<String> results = new ArrayList<>();
-        Pattern pattern = Pattern.compile(MATERIAL_REGEX);
         for (Chapter chapter : portfolio.getChapters()) {
             for (ChapterBlock block : chapter.getBlocks()) {
                 if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                    Matcher matcher = pattern.matcher(block.getHtmlContent());
+                    Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
                     while (matcher.find()) {
-                        results.add(matcher.group());
+                        Matcher numberMatcher = numberPattern.matcher(matcher.group());
+                        while (numberMatcher.find()) {
+                            if (portfolioMaterialDao.materialToPortfolioConnected(materialDao.findById(Long.valueOf(numberMatcher.group())), portfolio) == false) {
+                                PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
+                                portfolioMaterial.setPortfolio(portfolio);
+                                portfolioMaterial.setMaterial(materialDao.findById(Long.valueOf(numberMatcher.group())));
+                                newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
+                            }
+                        }
                     }
                 }
             }
         }
-        //domagic
-        //transform strings to material ids
-        List<Long> fromFrontIds = new ArrayList<>();
-        //from db get current materials
-        List<Long> dbIds = new ArrayList<>();
-
-        List<Long> newToSave = new ArrayList<>();
-        for (Long fromFrontId : fromFrontIds) {
-            if (!dbIds.contains(fromFrontId)){
-                newToSave.add(fromFrontId);
-            }
-        }
-        List<Long> oldToRemove = new ArrayList<>();
-        for (Long dbId : dbIds) {
-            if (!fromFrontIds.contains(dbId)){
-                oldToRemove.add(dbId);
-            }
-        }
-        //dao.save
-        //dao.remove
-
 
         return createdPortfolio;
     }
@@ -151,5 +145,9 @@ public class PortfolioService {
         if (isEmpty(portfolio.getTitle())) {
             throw new WebApplicationException("Required field title must be filled.", Response.Status.BAD_REQUEST);
         }
+    }
+
+    private PortfolioMaterialDao newPortfolioMaterialDao(){
+        return GuiceInjector.getInjector().getInstance(PortfolioMaterialDao.class);
     }
 }

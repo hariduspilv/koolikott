@@ -5,6 +5,8 @@ import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.PortfolioMaterial;
 
 import java.util.List;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
 
@@ -18,12 +20,14 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
 
     public boolean materialToPortfolioConnected(Material material, Portfolio portfolio) {
         List<Long> portfolioList = getEntityManager()
-                .createQuery("SELECT pm.portfolio FROM PortfolioMaterial pm WHERE pm.material =: material")
+                .createQuery("SELECT pm.portfolio.id FROM PortfolioMaterial pm WHERE pm.material =:material")
                 .setParameter("material", material)
                 .getResultList();
 
-        return portfolioList.isEmpty();
-
+        if (portfolioList.contains(portfolio.getId())) {
+            return true;
+        } else {
+            return false;
+        }
     }
-
 }

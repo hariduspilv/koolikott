@@ -331,9 +331,10 @@ public class MaterialService {
     }
 
     public List<Portfolio> getRelatedPortfolios(Long id) {
+        List<Portfolio> getPortfolios = new ArrayList<>();
         for (BigInteger pid : materialDao.getRelatedPortfolios(id)) {
-            ((List<Portfolio>) new ArrayList<Portfolio>()).add(portfolioDao.findById(pid.longValue()));
+            getPortfolios.add(portfolioDao.findById(pid.longValue()));
         }
-        return new ArrayList<>();
+        return getPortfolios;
     }
 }

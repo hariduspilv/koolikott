@@ -16,10 +16,11 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
-            // $scope.relatedPortfolios = getMaterialRelatedPortfolios($scope.material.id);
             getMaterialRelatedPortfolios();
+            $scope.isActive = false;
 
-
+            $scope.limitt = 3;
+            $scope.startFrom = 0;
 
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
@@ -64,6 +65,25 @@ angular.module('koolikottApp')
                     getContentType();
                 }
             });
+
+            function open(portfolio) {
+                $scope.isActive = !$scope.isActive;
+            }
+            $scope.showNext = () => {
+                if ($scope.startFrom + 3 > $scope.relatedPortfolios.length - 3){
+                    $scope.startFrom = $scope.relatedPortfolios.length - 3;
+                }
+                else
+                    $scope.startFrom += 3;
+                // $scope.limitt = 10;
+            }
+
+            $scope.showLess = () => {
+                $scope.startFrom = 0;
+            }
+            // $scope.pageNumber(index) = function (index) {
+            //     $scope.pageNumber = index;
+            // }
 
             function getContentType() {
                 if ($scope.material.embedSource) {

@@ -41,6 +41,8 @@ public class ApplicationLauncher {
     private static AuthenticatedUserCleaner authenticatedUserCleaner;
     @Inject
     private static EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
+    @Inject
+    private static UpdatePortfolioMaterials updatePortfolioMaterials;
 
 
     public static void startApplication() {
@@ -59,6 +61,7 @@ public class ApplicationLauncher {
             authenticatedUserCleaner();
             authenticationStateCleaner();
             ehisInstitutionUpdateExecutor();
+            updatePortfolioMaterials();
         }
     }
 
@@ -80,6 +83,9 @@ public class ApplicationLauncher {
 
     private static void ehisInstitutionUpdateExecutor() {
         Executors.newSingleThreadExecutor().submit(() -> ehisInstitutionUpdateExecutor.run());
+    }
+    private static void updatePortfolioMaterials() {
+        Executors.newSingleThreadExecutor().submit(() -> updatePortfolioMaterials.run());
     }
 
     private static void startExecutors() {

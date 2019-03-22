@@ -114,15 +114,13 @@
                     class="tags card-lg__container card-lg__container--padding-l-r-b"
                     data-learning-object="material">
           </dop-tags>
-
-          <li data-ng-repeat="portfolio in relatedPortfolios">
-            <a
-              data-ng-href="#{{portfolio.creator.location}}"
-              target="_blank">
-              <!--&lt;!&ndash;data-ng-href="{{portfolio.creator.location}}">-->
-              </a>
-          </li>
-
+          <div data-layout="column">
+            <div class="portfolio-material" data-ng-repeat="portfolio in relatedPortfolios | limitTo : 3 : startFrom ">
+              <a target="_blank" data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}</a>
+            </div>
+            <button data-ng-show="limitt === 3" data-ng-click="showNext()">Show more</button>
+            <button data-ng-show="startFrom > 3" data-ng-click="showLess()">Show less</button>
+          </div>
         </div>
         <!-- SECTION 1: Right  -->
         <div flex flex-gt-xs="25" class="card-lg__container--border-left" id="section-right">
