@@ -93,9 +93,9 @@ class controller extends Controller {
 
     selectType(type) {
         this.$scope.filter.materialType = type
-        if (type !== 'All') {
+        if (type !== 'All' && this.$scope.filter.materialTypeTempForSort === 'All') {
             this.sortedBy = '-byCreatedAt';
-            this.$scope.sortByType = false
+            this.$scope.sortByType = true
         }
     }
 
@@ -169,7 +169,6 @@ class controller extends Controller {
     }
 
     onEducationalContextChange(educationalContext) {
-        this.$scope.isExpertsSelectVisible = !educationalContext
         this.$scope.filter.taxons = undefined
         this.onParamsChange({});
     }
