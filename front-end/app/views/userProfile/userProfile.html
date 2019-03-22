@@ -55,8 +55,9 @@
                 <span data-translate="{{'PROFILE_' + role.name.toUpperCase()}}"></span>
               </md-checkbox>
             </div>
-            <div layout="row" data-ng-show="roles[1].checked || roles[0].checked"
-                 data-ng-repeat="school in userProfile.institutions track by $index" data-layout-align="center center">
+            <div  data-ng-show="roles[1].checked || roles[0].checked" data-layout-align="center center">
+              <h3 data-translate="USER_PROFILE_INSTITUTIONS"></h3>
+              <div layout="row" data-ng-repeat="school in userProfile.institutions track by $index" data-layout-align="center center">
               <dop-institution-selector
                 flex
                 data-institution="userProfile.institutions[$index]">
@@ -78,6 +79,7 @@
                 <md-icon>remove_circle</md-icon>
                 <md-tooltip md-direction="top"><span data-translate="USER_PROFILE_REMOVE_INSTITUTION"></span></md-tooltip>
               </md-button>
+              </div>
             </div>
             <div layout="row" data-ng-show="roles[3].checked" data-layout-align="center center">
               <md-input-container class="md-block" flex-gt-xs>
@@ -89,7 +91,7 @@
               </md-input-container>
             </div>
           </div>
-          <div class="md-padding" data-layout-align="center center" data-flex="50">
+          <div class="md-padding" data-layout-align="center center" data-flex-gt-sm="100" data-flex="100">
             <h3 data-translate="USER_PROFILE_INTERESTS"></h3>
             <div data-layout="row" data-layout-align="center center" data-ng-repeat="taxon in userProfile.taxons track by $index"
                  >

@@ -15,13 +15,9 @@
                                 {name: 'PARENT', checked: false},
                                 {name: 'OTHER', checked: false}];
 
-            angular.element(document.querySelector('#select-search')).on('keydown', (ev) => {
-                ev.stopPropagation()
-            });
             if (!this.$scope.user) {
                 this.$scope.user = this.authenticatedUserService.getUser();
                 this.$rootScope.userFromAuthentication = this.$scope.user;
-                this.$scope.userProfile.user = this.$scope.user
             }
             this.getUserEmail();
             this.getUserProfile();
@@ -68,6 +64,7 @@
         }
 
         updateUserProfile() {
+            this.$scope.userProfile.user = this.$scope.user
             this.$rootScope.email = this.$scope.userEmail;
             this.$scope.userProfileForm.email.$setValidity('validationError', true);
             this.setRole();
