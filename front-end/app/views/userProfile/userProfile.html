@@ -35,7 +35,7 @@
             </div>
           </md-input-container>
         </div>
-        <div class="taxonomy-padding" data-ng-if="user.userTaxons.length > 0">
+        <div class="taxonomy-padding" data-ng-if="user.userTaxons.length > 0 && isModerator">
           <h3 data-translate="USER_PROFILE_EXPERTISE"></h3>
           <div id="taxons" layout="row" data-ng-repeat="taxon in user.userTaxons track by $index">
             <dop-taxon-selector data-taxon="user.userTaxons[$index]"

@@ -19,6 +19,10 @@
                 this.$scope.user = this.authenticatedUserService.getUser();
                 this.$rootScope.userFromAuthentication = this.$scope.user;
             }
+
+            this.$scope.isModerator = () => {
+                return this.authenticatedUserService.isModerator()
+            }
             this.getUserEmail();
             this.getUserProfile();
 
