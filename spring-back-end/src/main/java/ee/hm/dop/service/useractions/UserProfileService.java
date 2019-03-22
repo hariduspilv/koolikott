@@ -6,6 +6,7 @@ import ee.hm.dop.dao.UserProfileDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.UserProfile;
+import ee.hm.dop.model.enums.UserRole;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.joda.time.DateTime;
@@ -44,7 +45,7 @@ public class UserProfileService {
             userEmailDao.createOrUpdate(dbUserEmail);
             response = ResponseEntity.status(HttpStatus.CREATED).build();
         } else if (dbUserEmail == null ){
-            createUserEmail(user);
+            createUserEmail(user, userProfile);
             response = ResponseEntity.status(HttpStatus.CREATED).build();
         }
 
@@ -52,6 +53,7 @@ public class UserProfileService {
         if (dbUserProfile != null) {
             dbUserProfile.setLastUpdate(DateTime.now());
             dbUserProfile.setRole(userProfile.getRole());
+            dbUserProfile.setCustomRole(userProfile.getCustomRole());
             userProfileDao.createOrUpdate(dbUserProfile);
             return response;
         }
@@ -72,7 +74,7 @@ public class UserProfileService {
         return userProfile;
     }
 
-    private void createUserEmail(User user) {
+    private void createUserEmail(User user, UserProfile userProfile) {
         UserEmail userEmail = new UserEmail();
         userEmail.setPin(PinGeneratorService.generatePin());
         userEmail.setUser(user);
@@ -80,7 +82,7 @@ public class UserProfileService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setEmail("");
-        if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail)));
+        if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, userProfile.getEmail())));
             userEmailDao.createOrUpdate(userEmail);
     }
 
@@ -88,7 +90,7 @@ public class UserProfileService {
         User dbUser = userDao.findUserById(user.getId());
         if (dbUser != null) {
             if (userProfile.getRole() != null) {
-                if (userProfile.getRole().equals("PARENT") || userProfile.getRole().startsWith("OTHER")) {
+                if (userProfile.getRole() == UserRole.PARENT|| userProfile.getRole() == UserRole.OTHER) {
                     dbUser.setInstitutions(null);
                 } else {
                     dbUser.setInstitutions(userProfile.getInstitutions());

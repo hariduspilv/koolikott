@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.ehis.InstitutionEhis;
+import ee.hm.dop.model.enums.UserRole;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
@@ -28,8 +29,11 @@ public class UserProfile implements AbstractEntity{
     private User user;
 
 
+    @Enumerated(EnumType.STRING)
+    private UserRole role;
+
     @Column
-    private String role;
+    private String customRole;
 
     @Column
     @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
@@ -62,11 +66,11 @@ public class UserProfile implements AbstractEntity{
         this.user = user;
     }
 
-    public String getRole() {
+    public UserRole getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(UserRole role) {
         this.role = role;
     }
 
@@ -100,5 +104,13 @@ public class UserProfile implements AbstractEntity{
 
     public void setInstitutions(List<InstitutionEhis> institutions) {
         this.institutions = institutions;
+    }
+
+    public String getCustomRole() {
+        return customRole;
+    }
+
+    public void setCustomRole(String customRole) {
+        this.customRole = customRole;
     }
 }

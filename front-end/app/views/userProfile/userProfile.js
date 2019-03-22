@@ -86,8 +86,9 @@
                                     this.toastService.show('USER_PROFILE_UPDATED')
                                 }
                             })
-                            .catch( () => {
+                            .catch( (e) => {
                                 this.$scope.isSaving = false;
+                                console.log(e)
                                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
                             })
                     }
@@ -120,9 +121,6 @@
                     if (r.checked) {
                         if (r.name === 'PARENT' || r.name === 'OTHER')
                             this.$scope.userProfile.institutions = [{}];
-                        if (r.name === 'OTHER')
-                            this.$scope.userProfile.role = r.name + ': ' + this.$scope.specifiedRole;
-                        else
                             this.$scope.userProfile.role = r.name
                     }
                 })
@@ -149,7 +147,8 @@
             this.$scope.roles.forEach( r => {
                 if (role.startsWith('OTHER') && (r.name === 'OTHER')) {
                     r.checked = true;
-                    this.$scope.specifiedRole = role.substring(7)
+                    if (!this.$scope.userProfile.customRole)
+                        this.$scope.userProfile.customRole = ''
                 }
                 if (r.name === role)
                     r.checked = true

@@ -69,7 +69,7 @@ public class User implements AbstractEntity {
     @JsonSerialize(contentUsing = TaxonSerializer.class)
     private List<Taxon> taxons;
 
-    @OneToMany
+    @OneToMany(cascade = ALL)
     @JoinTable(
             name = "User_Institution",
             joinColumns = {@JoinColumn(name = "user")},
