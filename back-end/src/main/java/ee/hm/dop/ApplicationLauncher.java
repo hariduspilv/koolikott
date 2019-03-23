@@ -27,7 +27,7 @@ public class ApplicationLauncher {
     private static final int AUTOMATICALLY_ACCEPT_REVIEWABLE_CHANGES_HOUR_OF_DAY = 2;
     private static final int AUTHENTICATION_STATE_CLEANER_HOUR_OF_DAY = 3;
     private static final int AUTHENTICATED_USER_CLEANER_HOUR_OF_DAY = 4;
-    private static final int EHIS_INSTITUTION_SYNCHRONIZATION_HOUR_OF_DAY = 1;
+    private static final int EHIS_INSTITUTION_SYNCHRONIZATION_HOUR_OF_DAY = 5;
 
     @Inject
     private static Configuration configuration;

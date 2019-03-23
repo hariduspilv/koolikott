@@ -1,25 +1,19 @@
 package ee.hm.dop.service.ehis;
 
-import org.dom4j.DocumentException;
+import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import org.junit.Test;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import javax.ws.rs.core.Response;
 
-public class EhisInstitutionServiceTest {
+import static org.junit.Assert.assertNotNull;
 
-    private EhisInstitutionService ehisInstitutionService = new EhisInstitutionService();
-
-    private EhisInstitutionParser ehisInstitutionParser = new EhisInstitutionParser();
-
-//    @Inject
-//    private EhisInstitutionParser ehisInstitutionParser;
+public class EhisInstitutionServiceTest extends ResourceIntegrationTestBase {
 
     private final String ehisSchoolUrl = "http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/0/0/XML";
 
     @Test
-    public void getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
-        URL url = new URL(ehisSchoolUrl);
-        ehisInstitutionParser.parseAndUpdateDb(url);
+    public void can_get_response_from_ehis_institutions() {
+        Response response = doGet(ehisSchoolUrl);
+        assertNotNull(response);
     }
 }

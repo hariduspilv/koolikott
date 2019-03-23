@@ -4,8 +4,6 @@ import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.InstitutionEhisDao;
 import ee.hm.dop.model.ehis.InstitutionEhis;
 import org.dom4j.DocumentException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,8 +16,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_LI
 @Service
 public class EhisInstitutionService {
 
-    private static Logger logger = LoggerFactory.getLogger(EhisInstitutionService.class);
-
     @Autowired
     private EhisInstitutionParser ehisInstitutionParser;
     @Autowired
@@ -27,12 +23,28 @@ public class EhisInstitutionService {
     @Autowired
     private InstitutionEhisDao institutionEhisDao;
 
-    public void getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
+    public InstitutionEhis getInstitutionEhisById(Long id) {
+        return institutionEhisDao.findById(id);
+    }
+
+    public List<InstitutionEhis> getInstitutionEhisById(List<Long> id) {
+        return institutionEhisDao.findById(id);
+    }
+
+    public List<Integer> getInstitutionsAndUpdateDb() throws MalformedURLException, DocumentException {
         URL docUrl = new URL(configuration.getString(XROAD_EHIS_INSTITUTIONS_LIST));
-        ehisInstitutionParser.parseAndUpdateDb(docUrl);
+        return ehisInstitutionParser.parseAndUpdateDb(docUrl);
     }
 
     public List<InstitutionEhis> findAll() {
         return institutionEhisDao.findAll();
+    }
+
+    public List<String> getInstitutionAreas() {
+        return institutionEhisDao.getInstitutionAreas();
+    }
+
+    public List<InstitutionEhis> getInstitutionPerArea(String area) {
+        return institutionEhisDao.getInstitutionPerArea(area);
     }
 }

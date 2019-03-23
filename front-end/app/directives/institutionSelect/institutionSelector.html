@@ -23,6 +23,7 @@
         <input id="select-search"
                ng-model="searchTerm"
                type="search"
+               ng-keydown="$event.stopPropagation()"
                placeholder="{{'USER_PROFILE_SEARCH_SCHOOLS' | translate}}"
                class="up-header-searchbox md-text"
         >

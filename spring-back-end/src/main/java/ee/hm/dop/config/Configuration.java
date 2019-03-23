@@ -16,7 +16,7 @@ public class Configuration {
 
     public int getInt(String s) {
         String property = env.getProperty(s);
-        return property != null ? Integer.valueOf(property) : 0;
+        return property != null ? Integer.parseInt(property) : 0;
     }
 
     public boolean getBoolean(String s) {

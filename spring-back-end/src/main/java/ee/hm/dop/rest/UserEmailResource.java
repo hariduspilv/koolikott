@@ -23,9 +23,25 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.save(userEmail);
     }
 
+    @PostMapping("getEmailOnLogin")
+    public ResponseEntity<?> getEmailOnLogin(@RequestBody UserEmail userEmail) {
+        if (userEmailService.hasEmail(userEmail)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
     @PostMapping("check")
     public ResponseEntity<?> validateEmail(@RequestBody UserEmail userEmail) {
         if (userEmailService.hasDuplicateEmail(userEmail)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("checkForProfile")
+    public ResponseEntity<?> validateEmailForProfile(@RequestBody UserEmail userEmail) {
+        if (userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -36,6 +52,15 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.validatePin(userEmail);
     }
 
+    @PostMapping("validateFromProfile")
+    public UserEmail validatePinFromProfile(@RequestBody UserEmail userEmail) {
+        return userEmailService.validatePinFromProfile(userEmail);
+    }
+
+    @GetMapping
+    public String getUserEmail() {
+        return userEmailService.getEmail(getLoggedInUser());
+    }
 
     @GetMapping("getEmail")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})

@@ -5,7 +5,6 @@
         constructor(...args) {
             super(...args)
 
-            this.$scope.agreementDialogEmail = ''
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.isSaving = false
 
@@ -36,7 +35,7 @@
         handleLoginWithNoEmail() {
             this.$scope.isSaving = true
             this.$scope.gdprDialogContent.email.$setValidity('validationError', true)
-            this.$rootScope.email = this.$scope.agreementDialogEmail
+            this.$rootScope.email = this.$scope.gdprDialogContent.email.$viewValue
             this.userEmailService.checkDuplicateEmail(this.$scope.agreementDialogEmail, this.$rootScope.statusForDuplicateCheck)
                 .then(response => {
                     if (response.status = 200) {
@@ -57,7 +56,7 @@
         isSubmitDisabled() {
             if (!this.$rootScope.userHasEmailOnLogin) {
                 const {email, pattern} = this.$scope.gdprDialogContent.email.$error
-                return !this.$scope.agreementDialogEmail || email || pattern || this.$scope.isSaving
+                return !this.$scope.gdprDialogContent.email.$viewValue || email || pattern || this.$scope.isSaving
             }
         }
     }

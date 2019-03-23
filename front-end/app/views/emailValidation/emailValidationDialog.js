@@ -10,6 +10,7 @@
             this.$scope.emailValidationForm = {}
             this.$scope.isSending = false
             this.$scope.input = [this.$scope.firstNum, this.$scope.secondNum, this.$scope.thirdNum, this.$scope.fourthNum]
+            this.$scope.$on('$destroy', () => document.removeEventListener('textInput', handler))
 
             this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () =>
             {
@@ -42,11 +43,12 @@
                         this.verifyPin(pin);
                 }
             }
-
-            document.addEventListener('textInput', (evt) => {
+            let handler = function(evt) {
                 if (!NUMBERS.includes(evt.data))
                     evt.preventDefault();
-            });
+            }
+
+            document.addEventListener('textInput', handler)
         }
 
         verifyPin(pin) {
@@ -82,10 +84,6 @@
 
         isNotEmpty() {
             return !!(this.$scope.firstNum && this.$scope.secondNum && this.$scope.thirdNum && this.$scope.fourthNum)
-        }
-        $onDestroy() {
-            if (typeof this.unsubscribeRouteChangeSuccess === 'function')
-                this.unsubscribeRouteChangeSuccess()
         }
 
         setTouchedFalse() {

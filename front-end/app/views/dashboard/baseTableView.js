@@ -54,7 +54,7 @@ class controller extends Controller {
 
         this.$scope.types = ['All','Material','Portfolio']
 
-        this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
+        this.$scope.$watch('filter.educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
             if (newValue !== oldValue && (newValue.length >=3 || !newValue))
                 this.filterItems()
@@ -65,6 +65,9 @@ class controller extends Controller {
         this.$scope.filter = { };
         this.$scope.filter.materialType = 'All'
         this.$scope.filter.materialTypeTempForSort = 'All'
+        this.$scope.filter.materialModeratorTempForSort = ''
+        this.$scope.filter.materialEduTempForSort = ''
+        this.$scope.filter.materialDomainTempForSort = ''
 
         this.$scope.query = {
             filter: "",
@@ -90,9 +93,9 @@ class controller extends Controller {
 
     selectType(type) {
         this.$scope.filter.materialType = type
-        if (type !== 'All') {
+        if (type !== 'All' && this.$scope.filter.materialTypeTempForSort === 'All') {
             this.sortedBy = '-byCreatedAt';
-            this.$scope.sortByType = false
+            this.$scope.sortByType = true
         }
     }
 
@@ -109,6 +112,10 @@ class controller extends Controller {
         this.$scope.isFiltering = true
         this.$scope.query.page = 1
         this.$scope.filter.materialTypeTempForSort = this.$scope.filter.materialType;
+        this.$scope.filter.materialModeratorTempForSort= this.$scope.filter.user;
+        this.$scope.filter.materialEduTempForSort = this.$scope.filter.educationalContext
+        this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
+
         this.getData('firstReview/unReviewed', this.sortedBy)
         if (this.$scope.filter.materialType !== 'All')
             this.$scope.sortByType = false
@@ -118,8 +125,7 @@ class controller extends Controller {
 
     onParamsChange({ users, taxons }) {
         this.$scope.isSubmitButtonEnabled =  users || taxons;
-        this.$scope.isTaxonSelectVisible = !users
-    }
+        this.$scope.isTaxonSelectVisible = !users}
 
     clearFields() {
         this.$scope.educationalContext = undefined
@@ -154,13 +160,16 @@ class controller extends Controller {
     }
 
     onSelectTaxons(taxons) {
-        this.$scope.filter.taxons = taxons
+        if (taxons.length === 0)
+            this.$scope.filter.taxons = undefined
+        else
+            this.$scope.filter.taxons = taxons
         this.$scope.clearFields = false
 
     }
 
     onEducationalContextChange(educationalContext) {
-        this.$scope.isExpertsSelectVisible = !educationalContext
+        this.$scope.filter.taxons = undefined
         this.onParamsChange({});
     }
 
@@ -277,9 +286,9 @@ class controller extends Controller {
         if (this.$scope.filter && this.$scope.filter.taxons) {
             return this.$scope.filter.taxons.map(t => '&taxon=' + t.id).join("");
         } else if (!this.$scope.filter.taxons && this.$scope.filter.educationalContext) {
-                    return '&taxon=' + this.$scope.filter.educationalContext.id
-        }
-        return ""
+            return '&taxon=' + this.$scope.filter.educationalContext.id
+        } else
+            return ""
     }
 
     getModerators() {
@@ -310,6 +319,9 @@ class controller extends Controller {
         this.$scope.query.order = order;
         this.$scope.query.page = 1;
         this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
+        this.$scope.filter.user = this.$scope.filter.materialModeratorTempForSort;
+        this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
+        this.$scope.filter.taxons =  this.$scope.filter.materialDomainTempForSort
 
         if (this.viewPath === 'unReviewed') {
             this.getData('firstReview/unReviewed', order);

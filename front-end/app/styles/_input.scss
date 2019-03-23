@@ -26,3 +26,13 @@ md-input-container .md-resize-handle {
 md-input-container label:not(.md-container-ignore).md-required:empty:after {
     content: "";
 }
+
+.taxonomy-padding {
+    padding: 0px 8px 0px 8px;
+}
+  .md-padding {
+    padding: 8px;
+}
+.no-underline {
+  background-image: none !important;
+}

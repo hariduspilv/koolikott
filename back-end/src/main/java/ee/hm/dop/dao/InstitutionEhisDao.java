@@ -13,13 +13,13 @@ public class InstitutionEhisDao extends AbstractDao<InstitutionEhis> {
 
     public List<String> getInstitutionAreas() {
         return getEntityManager()
-                .createQuery("select distinct i.area from InstitutionEhis i order by i.area asc", String.class)
+                .createQuery("SELECT DISTINCT i.area FROM InstitutionEhis i WHERE i.area NOT LIKE '%vana%' ORDER BY i.area ASC", String.class)
                 .getResultList();
     }
     public List<InstitutionEhis> getInstitutionPerArea(String area) {
         return getEntityManager().createQuery("" +
-                "   SELECT i FROM InstitutionEhis i where i.area=:area ORDER BY i.name ASC", entity())
-                .setParameter("area", area)
+                "   SELECT i FROM InstitutionEhis i WHERE i.area LIKE :area ORDER BY i.name ASC", entity())
+                .setParameter("area", "%" + area + "%")
                 .getResultList();
     }
 

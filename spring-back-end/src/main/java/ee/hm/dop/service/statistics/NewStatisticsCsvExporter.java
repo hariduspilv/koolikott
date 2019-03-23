@@ -37,7 +37,7 @@ public class NewStatisticsCsvExporter {
     public void generate(String filename, NewStatisticsResult statistics) {
         Long estId = languageDao.findByCode("et").getId();
         NewStatisticsResult sortedStatistics = commonStatisticsExporter.translateAndSort(statistics, estId);
-        try (CSVWriter writer = new CSVWriter(new FileWriter(filename))) {
+        try (CSVWriter writer = new CSVWriter(new OutputStreamWriter(new FileOutputStream(filename, true), StandardCharsets.UTF_8))) {
             if (sortedStatistics.getFilter().isUserSearch()) {
                 userCsv(sortedStatistics, estId, writer);
             } else {

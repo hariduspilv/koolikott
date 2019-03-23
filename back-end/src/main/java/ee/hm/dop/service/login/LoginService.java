@@ -24,6 +24,7 @@ import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 import static org.joda.time.DateTime.now;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -90,10 +91,10 @@ public class LoginService {
         User user = getExistingOrNewUser(state);
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
-        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && !isEmpty(dbUserEmail.getEmail())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, true));
-        } else if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId()) && isEmpty(dbUserEmail.getEmail())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
+        boolean agreementDoesntExist = userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId());
+        if (agreementDoesntExist) {
+            boolean agreed = dbUserEmail != null && isNotEmpty(dbUserEmail.getEmail());
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, agreed));
         }
 
         AuthenticatedUser authenticate = authenticate(user, userStatus.getLoginFrom());

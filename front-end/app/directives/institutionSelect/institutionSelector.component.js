@@ -23,6 +23,9 @@ class controller extends Controller {
 
     }
 
+    clearSearchTerm() {
+        this.$scope.searchTerm = ''
+    }
 
     getEHISInstitutionAreas() {
         this.serverCallService.makeGet('rest/ehisInstitution/areas')

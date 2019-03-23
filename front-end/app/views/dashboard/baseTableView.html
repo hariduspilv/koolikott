@@ -67,7 +67,6 @@
   <div data-layout-xs="column" layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
     <md-input-container class="statistics-filter__experts-container"
                         data-flex data-layout="column"
-                        data-ng-show="isExpertsSelectVisible"
     >
       <md-select id="expert-select"
                  data-placeholder="{{'EXPERT' | translate}}"
@@ -75,6 +74,7 @@
                  data-ng-model-options="{trackBy: '$value.id'}"
                  aria-label="Vali ekspert"
                  data-ng-disabled="$ctrl.isModerator()"
+                 data-ng-change="$ctrl.selectUsers(filter.user)"
       >
         <md-option
           data-ng-repeat="user in moderators"
@@ -84,18 +84,7 @@
         ></md-option>
       </md-select>
     </md-input-container>
-    <dop-taxon-selector
-      flex
-      class="statistics-filter__taxon-container"
-      data-taxon="filter.educationalContext"
-      data-is-statistics-select="true"
-      data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
-      data-ng-show="isTaxonSelectVisible"
-      data-clear-selection="clearFields"
-    ></dop-taxon-selector>
-  </div>
-  <div layout="row" data-layout-align="space-between center" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
-    <md-input-container flex="50" class="statistics-filter__experts-container"
+    <md-input-container class="statistics-filter__experts-container"
                         data-flex data-layout="column"
     >
       <md-select id="materialtype-select"
@@ -113,6 +102,17 @@
         ></md-option>
       </md-select>
     </md-input-container>
+  </div>
+  <div layout="row" data-flex data-layout-align="space-between center" data-layout-xs="column" data-layout-align-xs="start start" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
+    <dop-taxon-selector
+      flex
+      class="statistics-filter__taxon-container"
+      data-taxon="filter.educationalContext"
+      data-is-statistics-select="true"
+      data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
+      data-ng-show="isTaxonSelectVisible"
+      data-clear-selection="clearFields"
+    ></dop-taxon-selector>
     <div data-ng-if="$ctrl.viewPath == 'unReviewed'">
       <md-button id="clear-button"
                  class="statistics-filter__clear"
