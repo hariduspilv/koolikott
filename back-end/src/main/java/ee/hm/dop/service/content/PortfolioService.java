@@ -11,6 +11,7 @@ import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.synchronizer.UpdatePortfolioMaterials;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.lang3.StringUtils;
@@ -51,6 +52,9 @@ public class PortfolioService {
     @Inject
     private PortfolioMaterialDao portfolioMaterialDao;
 
+    @Inject
+    private UpdatePortfolioMaterials updatePortfolioMaterials;
+
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
         ValidatorUtil.mustNotHaveId(portfolio);
@@ -70,7 +74,7 @@ public class PortfolioService {
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
 
         solrEngineService.updateIndex();
-
+        updatePortfolioMaterials.run();
         return updatedPortfolio;
     }
 
@@ -108,7 +112,7 @@ public class PortfolioService {
                     while (matcher.find()) {
                         Matcher numberMatcher = numberPattern.matcher(matcher.group());
                         while (numberMatcher.find()) {
-                            if (portfolioMaterialDao.materialToPortfolioConnected(materialDao.findById(Long.valueOf(numberMatcher.group())), portfolio) == false) {
+                            if (!portfolioMaterialDao.materialToPortfolioConnected(materialDao.findById(Long.valueOf(numberMatcher.group())), portfolio)) {
                                 PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
                                 portfolioMaterial.setPortfolio(portfolio);
                                 portfolioMaterial.setMaterial(materialDao.findById(Long.valueOf(numberMatcher.group())));

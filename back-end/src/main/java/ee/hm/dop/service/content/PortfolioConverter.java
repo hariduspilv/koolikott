@@ -3,6 +3,7 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.service.synchronizer.UpdatePortfolioMaterials;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -11,6 +12,9 @@ public class PortfolioConverter {
 
     @Inject
     private OriginalPictureDao originalPictureDao;
+
+    @Inject
+    private UpdatePortfolioMaterials updatePortfolioMaterials;
 
     public Portfolio setFieldsToNewPortfolio(Portfolio portfolio) {
         Portfolio safePortfolio = new Portfolio();
@@ -51,6 +55,8 @@ public class PortfolioConverter {
                 to.getPicture().setName(originalPicture.getName());
             }
         }
+        updatePortfolioMaterials.run();
+
         return to;
     }
 }

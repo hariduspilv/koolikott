@@ -16,10 +16,10 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
+
             getMaterialRelatedPortfolios();
             $scope.isActive = false;
-
-            $scope.limitt = 3;
+            $scope.limitt = 2;
             $scope.startFrom = 0;
 
             document.addEventListener('keyup', (e) => {
@@ -66,24 +66,22 @@ angular.module('koolikottApp')
                 }
             });
 
-            function open(portfolio) {
-                $scope.isActive = !$scope.isActive;
-            }
-            $scope.showNext = () => {
-                if ($scope.startFrom + 3 > $scope.relatedPortfolios.length - 3){
-                    $scope.startFrom = $scope.relatedPortfolios.length - 3;
-                }
-                else
-                    $scope.startFrom += 3;
-                // $scope.limitt = 10;
-            }
+            $scope.showNextItemButton = () => {
+                return ($scope.limitt < $scope.relatedPortfolios.length && ($scope.startFrom + $scope.limitt < $scope.relatedPortfolios.length))
+            };
+            $scope.showNextItems = () => {
+                if ($scope.startFrom + $scope.limitt > $scope.relatedPortfolios.length - $scope.limitt) {
+                    $scope.startFrom = $scope.relatedPortfolios.length - $scope.limitt;
+                } else
+                    $scope.startFrom += $scope.limitt;
+            };
+            $scope.showFirstItemButton = () => {
+                return $scope.startFrom >= $scope.limitt;
+            };
 
-            $scope.showLess = () => {
+            $scope.showFirstItems = () => {
                 $scope.startFrom = 0;
-            }
-            // $scope.pageNumber(index) = function (index) {
-            //     $scope.pageNumber = index;
-            // }
+            };
 
             function getContentType() {
                 if ($scope.material.embedSource) {
@@ -104,9 +102,6 @@ angular.module('koolikottApp')
                     $scope.sourceType = matchType(getSource($scope.material));
                     if ($scope.sourceType === "EBOOK" && isIE()) $scope.material.source += "?archive=true";
                 }
-
-                // $scope.relatedPortfolios = getMaterialRelatedPortfolios($scope.material.id);
-
             }
 
             function probeContentSuccess(response) {
@@ -145,10 +140,19 @@ angular.module('koolikottApp')
                 if ($scope.material && $scope.material.id) {
                     materialService.getRelatedPortfolios($scope.material.id)
                         .then(response => {
-                            $scope.relatedPortfolios = response.data
+                            $scope.relatedPortfolios = response.data;
+                            // if(!$scope.isAdmin)
+                            //     $scope.canYouClick = 'none';
                         })
                 }
             }
+            $scope.userHasAccessToPortfolio = ((portfolio) => {
+                if (portfolio.creator.id === $scope.material.creator.id){
+                    return 'auto'
+                }else
+                    return 'none'
+
+            });
 
             function getMaterial(success, fail) {
                 materialService.getMaterialById($route.current.params.id).then(success, fail)

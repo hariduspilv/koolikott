@@ -114,12 +114,20 @@
                     class="tags card-lg__container card-lg__container--padding-l-r-b"
                     data-learning-object="material">
           </dop-tags>
-          <div data-layout="column">
-            <div class="portfolio-material" data-ng-repeat="portfolio in relatedPortfolios | limitTo : 3 : startFrom ">
-              <a target="_blank" data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}</a>
+          <div class="portfolio-material" data-layout="column">
+            <span data-translate="SEOTUD_KOGUMIKUD"></span>
+            <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limitt : startFrom ">
+              <a
+                data-ng-style="{'pointer-events':userHasAccessToPortfolio(portfolio)}"
+                target="_blank"
+                data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}</a>
             </div>
-            <button data-ng-show="limitt === 3" data-ng-click="showNext()">Show more</button>
-            <button data-ng-show="startFrom > 3" data-ng-click="showLess()">Show less</button>
+            <button
+              data-ng-show="showNextItemButton()" data-ng-click="showNextItems()">Show more
+            </button>
+            <button
+              data-ng-show="showFirstItemButton()" data-ng-click="showFirstItems()">Show less
+            </button>
           </div>
         </div>
         <!-- SECTION 1: Right  -->
