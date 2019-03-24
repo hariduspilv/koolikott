@@ -6,17 +6,24 @@ import ee.hm.dop.dao.UserProfileDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.UserProfile;
+import ee.hm.dop.model.ehis.InstitutionEhis;
 import ee.hm.dop.model.enums.UserRole;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.EnumUtils;
+import ee.hm.dop.service.ehis.EhisInstitutionService;
+import ee.hm.dop.service.metadata.TaxonService;
+import org.apache.commons.lang3.ArrayUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 
@@ -31,6 +38,10 @@ public class UserProfileService {
     private UserEmailDao userEmailDao;
     @Inject
     private SendMailService sendMailService;
+    @Inject
+    private EhisInstitutionService ehisInstitutionService;
+    @Inject
+    private TaxonService taxonService;
 
     public Response update(UserProfile userProfile, User user) {
         Response response = Response.status(HttpURLConnection.HTTP_OK).build();
@@ -91,8 +102,8 @@ public class UserProfileService {
                 if (userProfile.getRole() == UserRole.PARENT || userProfile.getRole() == UserRole.OTHER) {
                     dbUser.setInstitutions(null);
                 } else {
-                    dbUser.setInstitutions(userProfile.getInstitutions());
-                    dbUser.setTaxons(userProfile.getTaxons());
+                    setInstitutions(userProfile, dbUser);
+                    setTaxons(userProfile, dbUser);
                 }
             } else {
                 dbUser.setInstitutions(null);
@@ -101,6 +112,28 @@ public class UserProfileService {
         } else {
             throw badRequest("User not found");
         }
+    }
+
+    private void setTaxons(UserProfile userProfile, User dbUser) {
+        List<Taxon> taxons;
+        if (userProfile.getTaxons().stream().noneMatch(Objects::nonNull))
+            taxons = null;
+        else {
+            List<Long> ids = userProfile.getTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
+            taxons = taxonService.getTaxonById(ids);
+        }
+        dbUser.setTaxons(taxons);
+    }
+
+    private void setInstitutions(UserProfile userProfile, User dbUser) {
+        List<InstitutionEhis> institutions;
+        if (userProfile.getInstitutions().stream().noneMatch(Objects::nonNull))
+            institutions = null;
+        else {
+            List<Long> ids = userProfile.getInstitutions().stream().map(InstitutionEhis::getId).collect(Collectors.toList());
+            institutions = ehisInstitutionService.getInstitutionEhisById(ids);
+        }
+        dbUser.setInstitutions(institutions);
     }
 
     private WebApplicationException badRequest(String s) {

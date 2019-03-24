@@ -11,10 +11,10 @@ public class InstitutionEhis implements AbstractEntity {
     @GeneratedValue
     private Long id;
 
-    @Column(nullable = false)
+    @Column
     private Long ehisId;
 
-    @Column(nullable = false)
+    @Column
     private String name;
 
     @Column

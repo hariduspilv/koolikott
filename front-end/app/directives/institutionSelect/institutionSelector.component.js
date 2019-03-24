@@ -43,6 +43,10 @@ class controller extends Controller {
     }
 
     handleAreaChange() {
+        this.$scope.institutions = undefined
+    }
+
+    handleInstitutionOpen() {
             this.$scope.userProfile.selectedSchools = [{}]
             this.serverCallService.makeGet('rest/ehisInstitution/institutions/?area=' + this.$scope.userProfile.area)
                 .then(response => {
