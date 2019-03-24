@@ -18,6 +18,7 @@
       ng-model="userProfile.institution"
       md-on-close="$ctrl.clearSearchTerm()"
       ng-model-options="{trackBy: '$value.id'}"
+      md-on-open="$ctrl.handleInstitutionOpen()"
     >
       <md-select-header class="up-select-header">
         <input id="select-search"
