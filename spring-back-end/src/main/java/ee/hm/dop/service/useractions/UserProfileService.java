@@ -6,24 +6,29 @@ import ee.hm.dop.dao.UserProfileDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.UserProfile;
+import ee.hm.dop.model.ehis.InstitutionEhis;
 import ee.hm.dop.model.enums.UserRole;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
+import ee.hm.dop.service.ehis.EhisInstitutionService;
+import ee.hm.dop.service.metadata.TaxonService;
 import org.joda.time.DateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response.Status;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 
 @Service
 public class UserProfileService {
-
 
     @Inject
     private UserProfileDao userProfileDao;
@@ -33,6 +38,10 @@ public class UserProfileService {
     private UserEmailDao userEmailDao;
     @Inject
     private SendMailService sendMailService;
+    @Inject
+    private EhisInstitutionService ehisInstitutionService;
+    @Inject
+    private TaxonService taxonService;
 
     public ResponseEntity<?> update(UserProfile userProfile, User user) {
         ResponseEntity<?> response = ResponseEntity.status(HttpStatus.OK).build();
@@ -81,7 +90,7 @@ public class UserProfileService {
         userEmail.setActivated(false);
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
-        userEmail.setEmail("");
+        userEmail.setEmail(null);
         if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, userProfile.getEmail())));
             userEmailDao.createOrUpdate(userEmail);
     }
@@ -105,7 +114,31 @@ public class UserProfileService {
         }
     }
 
-    private WebApplicationException badRequest(String s) {
-        return new WebApplicationException(s, Status.BAD_REQUEST);
+    private void setTaxons(UserProfile userProfile, User dbUser) {
+        dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
+    }
+
+    private List<Taxon> getTaxons(List<Taxon> taxons) {
+        if (taxons.stream().noneMatch(Objects::nonNull)) {
+            return null;
+        }
+        List<Long> ids = taxons.stream().map(Taxon::getId).collect(Collectors.toList());
+        return taxonService.getTaxonById(ids);
+    }
+
+    private void setInstitutions(UserProfile userProfile, User dbUser) {
+        dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
+    }
+
+    private List<InstitutionEhis> getInstitutionEhis(List<InstitutionEhis> institutions) {
+        if (institutions.stream().noneMatch(Objects::nonNull)) {
+            return null;
+        }
+        List<Long> ids = institutions.stream().map(InstitutionEhis::getId).collect(Collectors.toList());
+        return ehisInstitutionService.getInstitutionEhisById(ids);
+    }
+
+    private ResponseStatusException badRequest(String s) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
     }
 }
