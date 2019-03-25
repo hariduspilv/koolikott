@@ -31,11 +31,11 @@ public class UpdatePortfolioMaterials extends DopDaemonProcess {
             PortfolioDao newPortfolioDao = newPortfolioDao();
             MaterialDao newMaterialDao = newMaterialDao();
 
-            boolean hasData = newPortfolioMaterialDao.hasData();
-            if (hasData) {
-                logger.info("No!");
-                return;
-            }
+//            boolean hasData = newPortfolioMaterialDao.hasData();
+//            if (hasData) {
+//                logger.info("No!");
+//                return;
+//            }
 
             beginTransaction();
             Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
@@ -65,12 +65,14 @@ public class UpdatePortfolioMaterials extends DopDaemonProcess {
                 }
             }
             closeTransaction();
+            logger.info("Portfolio materials updating ended");
 
         } catch (Exception e) {
             logger.error("Unexpected error while synchronizing portfolios with materials.", e);
-        } finally {
-            closeEntityManager();
         }
+//        finally {
+//            closeEntityManager();
+//        }
     }
 
     private PortfolioMaterial newPortfolioMaterial() {

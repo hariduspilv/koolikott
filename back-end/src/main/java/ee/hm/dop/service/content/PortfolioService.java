@@ -66,6 +66,9 @@ public class PortfolioService {
     public Portfolio update(Portfolio portfolio, User user) {
         TextFieldUtil.cleanTextFields(portfolio);
 
+        EntityTransaction transaction = DbUtils.getTransaction();
+        if (!transaction.isActive()) transaction.begin();
+
         Portfolio originalPortfolio = portfolioConverter.setFieldsToExistingPortfolio(validateUpdate(portfolio, user), portfolio);
         originalPortfolio.setUpdated(now());
 
@@ -76,7 +79,34 @@ public class PortfolioService {
 
         solrEngineService.updateIndex();
 
+        PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
+        MaterialDao newMaterialDao = newMaterialDao();
 
+        Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
+        Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
+
+        //do magic with materials
+        for (Chapter chapter : portfolio.getChapters()) {
+            if (chapter.getBlocks() != null) {
+                for (ChapterBlock block : chapter.getBlocks()) {
+                    if (StringUtils.isNotBlank(block.getHtmlContent())) {
+                        Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
+                        while (matcher.find()) {
+                            Matcher numberMatcher = numberPattern.matcher(matcher.group());
+                            while (numberMatcher.find()) {
+                                if (!newPortfolioMaterialDao.materialToPortfolioConnected(newMaterialDao.findById(Long.valueOf(numberMatcher.group())), portfolio)) {
+                                    PortfolioMaterial portfolioMaterial = newPortfolioMaterial();
+                                    portfolioMaterial.setPortfolio(portfolio);
+                                    portfolioMaterial.setMaterial(newMaterialDao.findById(Long.valueOf(numberMatcher.group())));
+                                    newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        DbUtils.closeTransaction();
 
         return updatedPortfolio;
     }
@@ -106,7 +136,6 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
-
         PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
         PortfolioDao newPortfolioDao = newPortfolioDao();
         MaterialDao newMaterialDao = newMaterialDao();
@@ -124,7 +153,7 @@ public class PortfolioService {
                             Matcher numberMatcher = numberPattern.matcher(matcher.group());
                             while (numberMatcher.find()) {
                                 if (!newPortfolioMaterialDao.materialToPortfolioConnected(newMaterialDao.findById(Long.valueOf(numberMatcher.group())), portfolio)) {
-                                    PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
+                                    PortfolioMaterial portfolioMaterial = newPortfolioMaterial();
                                     portfolioMaterial.setPortfolio(portfolio);
                                     portfolioMaterial.setMaterial(newMaterialDao.findById(Long.valueOf(numberMatcher.group())));
                                     newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
@@ -136,7 +165,6 @@ public class PortfolioService {
             }
         }
         DbUtils.closeTransaction();
-
         return createdPortfolio;
     }
 
