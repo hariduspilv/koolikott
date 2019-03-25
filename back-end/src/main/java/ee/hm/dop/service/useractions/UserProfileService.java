@@ -97,10 +97,10 @@ public class UserProfileService {
         User dbUser = userDao.findUserById(user.getId());
         if (dbUser != null) {
             if (userProfile.getRole() != null) {
-                if (userProfile.getRole() == UserRole.PARENT || userProfile.getRole() == UserRole.OTHER) {
-                    dbUser.setInstitutions(null);
-                } else {
+                if (userProfile.getRole().needsInstitutions()) {
                     dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
+                } else {
+                    dbUser.setInstitutions(null);
                 }
             } else {
                 dbUser.setInstitutions(null);

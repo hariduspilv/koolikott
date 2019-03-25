@@ -99,15 +99,15 @@ public class UserProfileService {
         User dbUser = userDao.findUserById(user.getId());
         if (dbUser != null) {
             if (userProfile.getRole() != null) {
-                if (userProfile.getRole() == UserRole.PARENT|| userProfile.getRole() == UserRole.OTHER) {
-                    dbUser.setInstitutions(null);
+                if (userProfile.getRole().needsInstitutions()) {
+                    dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
                 } else {
-                    dbUser.setInstitutions(userProfile.getInstitutions());
-                    dbUser.setTaxons(userProfile.getTaxons());
+                    dbUser.setInstitutions(null);
                 }
             } else {
                 dbUser.setInstitutions(null);
             }
+            dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
             userDao.createOrUpdate(dbUser);
         } else {
             throw badRequest("User not found");
