@@ -6,7 +6,7 @@ import javax.persistence.*;
 public class PortfolioMaterial implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
@@ -20,10 +20,6 @@ public class PortfolioMaterial implements AbstractEntity {
     @Override
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public Portfolio getPortfolio() {

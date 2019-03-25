@@ -2,6 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
+import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -26,6 +27,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -64,6 +67,9 @@ public class MaterialService {
     private MaterialGetter materialGetter;
     @Inject
     private OriginalPictureDao originalPictureDao;
+    @Inject
+    private PortfolioDao portfolioDao;
+
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
         return materialDao.findByRepository(repository, repositoryIdentifier);
@@ -326,5 +332,13 @@ public class MaterialService {
             }
         }
         material.setPeerReviews(peerReviews);
+    }
+
+    public List<Portfolio> getRelatedPortfolios(Long id) {
+        List<Portfolio> getPortfolios = new ArrayList<>();
+        for (BigInteger pid : materialDao.getRelatedPortfolios(id)) {
+            getPortfolios.add(portfolioDao.findById(pid.longValue()));
+        }
+        return getPortfolios;
     }
 }
