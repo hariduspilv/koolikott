@@ -9,18 +9,31 @@ class controller extends Controller {
     }
 
     $onChanges(changes) {
-        if (changes.clearSelection.currentValue)
+        if (changes.clearSelection.currentValue){
             this.institution = {}
+        }
     }
+
     $doCheck() {
         const institutionChanged =
-            (this.institution && !this._previousinstitution) ||
-            (!this.institution && this._previousinstitution) ||
-            !_.isEqual(this.institution, this._previousinstitution)
+            (this.institution && !this._previousInstitution) ||
+            (!this.institution && this._previousInstitution) ||
+            !_.isEqual(this.institution, this._previousInstitution)
 
         if (institutionChanged)
-            this._previousinstitution = this.institution
+            this._previousInstitution = this.institution
 
+        if (institutionChanged)
+            this.buildInstitutions()
+
+    }
+
+    buildInstitutions() {
+        this.$scope.userProfile = {}
+
+        if (this.institution) {
+            this.getEHISInstitutionAreas()
+        }
     }
 
     clearSearchTerm() {

@@ -40,7 +40,10 @@
         }
 
         removeInstitution(index) {
-            this.$scope.userProfile.institutions.splice(index, 1);
+            if (this.$scope.userProfile.institutions.length === 1 && index === 0 )
+                this.$scope.userProfile.institutions = [{}]
+            else
+                this.$scope.userProfile.institutions.splice(index, 1);
         }
 
         clearSearchTerm() {

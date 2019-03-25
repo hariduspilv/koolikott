@@ -30,10 +30,9 @@
         >
       </md-select-header>
       <md-option ng-value="{{institution}}"
-                 ng-repeat="institution in institutions | filter:searchTerm track by $index"
+                 ng-repeat="institution in institutions | filter:searchTerm track by institution.id"
                  data-ng-click="$ctrl.selectInstitution(institution)">{{institution.name}}
       </md-option>
-
     </md-select>
   </md-input-container>
 </form>

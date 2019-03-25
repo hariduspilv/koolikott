@@ -88,7 +88,7 @@ public class UserProfileService {
         userEmail.setActivated(false);
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(DateTime.now());
-        userEmail.setEmail("");
+        userEmail.setEmail(null);
         if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, userProfile.getEmail())));
             userEmailDao.createOrUpdate(userEmail);
     }
@@ -100,12 +100,12 @@ public class UserProfileService {
                 if (userProfile.getRole() == UserRole.PARENT || userProfile.getRole() == UserRole.OTHER) {
                     dbUser.setInstitutions(null);
                 } else {
-                    setInstitutions(userProfile, dbUser);
+                    dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
                 }
             } else {
                 dbUser.setInstitutions(null);
             }
-            setTaxons(userProfile, dbUser);
+            dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
             userDao.createOrUpdate(dbUser);
         } else {
             throw badRequest("User not found");
@@ -113,25 +113,27 @@ public class UserProfileService {
     }
 
     private void setTaxons(UserProfile userProfile, User dbUser) {
-        List<Taxon> taxons;
-        if (userProfile.getTaxons().stream().noneMatch(Objects::nonNull))
-            taxons = null;
-        else {
-            List<Long> ids = userProfile.getTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
-            taxons = taxonService.getTaxonById(ids);
+        dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
+    }
+
+    private List<Taxon> getTaxons(List<Taxon> taxons) {
+        if (taxons.stream().noneMatch(Objects::nonNull)) {
+            return null;
         }
-        dbUser.setTaxons(taxons);
+        List<Long> ids = taxons.stream().map(Taxon::getId).collect(Collectors.toList());
+        return taxonService.getTaxonById(ids);
     }
 
     private void setInstitutions(UserProfile userProfile, User dbUser) {
-        List<InstitutionEhis> institutions;
-        if (userProfile.getInstitutions().stream().noneMatch(Objects::nonNull))
-            institutions = null;
-        else {
-            List<Long> ids = userProfile.getInstitutions().stream().map(InstitutionEhis::getId).collect(Collectors.toList());
-            institutions = ehisInstitutionService.getInstitutionEhisById(ids);
+        dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
+    }
+
+    private List<InstitutionEhis> getInstitutionEhis(List<InstitutionEhis> institutions) {
+        if (institutions.stream().noneMatch(Objects::nonNull)) {
+            return null;
         }
-        dbUser.setInstitutions(institutions);
+        List<Long> ids = institutions.stream().map(InstitutionEhis::getId).collect(Collectors.toList());
+        return ehisInstitutionService.getInstitutionEhisById(ids);
     }
 
     private WebApplicationException badRequest(String s) {
