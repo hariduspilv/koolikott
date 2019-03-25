@@ -38,13 +38,12 @@ angular.module('koolikottApp')
         function hasEmail(userStatus) {
             userEmailService.hasEmailOnLogin(userStatus)
                 .then(response => {
-                    if (response.status === 200){
+                    if (response.status === 200)
                         $rootScope.userHasEmailOnLogin = true
-                        return true
-                    } else {
+                    else
                         $rootScope.userHasEmailOnLogin = false
-                        return false
-                    }
+
+                    return $rootScope.userHasEmailOnLogin
                 })
         }
 

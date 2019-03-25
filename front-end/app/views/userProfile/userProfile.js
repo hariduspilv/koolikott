@@ -20,13 +20,14 @@
                 this.$rootScope.userFromAuthentication = this.$scope.user;
             }
 
-            this.$scope.isModerator = () => {
-                return this.authenticatedUserService.isModerator()
-            }
             this.getUserEmail();
             this.getUserProfile();
 
             this.$scope.location = this.$location
+        }
+
+        isModerator() {
+            return this.authenticatedUserService.isModerator()
         }
 
         addNewTaxon() {
@@ -116,12 +117,16 @@
             if (_.isEmpty(this.$scope.roles.filter(role => (role.checked)))) {
                 this.$scope.userProfile.role = undefined
                 this.$scope.userProfile.institutions = [{}]
+                this.$scope.userProfile.customRole = ''
             } else {
                 this.$scope.roles.forEach(r => {
                     if (r.checked) {
-                        if (r.name === 'PARENT' || r.name === 'OTHER')
+                        if (r.name === 'PARENT' || r.name === 'OTHER') {
                             this.$scope.userProfile.institutions = [{}];
-                            this.$scope.userProfile.role = r.name
+                        } else {
+                            this.$scope.userProfile.customRole = ''
+                        }
+                        this.$scope.userProfile.role = r.name
                     }
                 })
             }
