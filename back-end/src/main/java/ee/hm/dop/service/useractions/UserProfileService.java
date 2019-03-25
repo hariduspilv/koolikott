@@ -13,14 +13,12 @@ import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import ee.hm.dop.service.ehis.EhisInstitutionService;
 import ee.hm.dop.service.metadata.TaxonService;
-import org.apache.commons.lang3.ArrayUtils;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -103,11 +101,11 @@ public class UserProfileService {
                     dbUser.setInstitutions(null);
                 } else {
                     setInstitutions(userProfile, dbUser);
-                    setTaxons(userProfile, dbUser);
                 }
             } else {
                 dbUser.setInstitutions(null);
             }
+            setTaxons(userProfile, dbUser);
             userDao.createOrUpdate(dbUser);
         } else {
             throw badRequest("User not found");
