@@ -1,16 +1,19 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.User;
+import ee.hm.dop.dao.PortfolioMaterialDao;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
+import ee.hm.dop.service.synchronizer.UpdatePortfolioMaterials;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,12 +23,20 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static java.time.LocalDateTime.now;
 
 @Service
 @Transactional
 public class PortfolioService {
+
+    public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
+    public static final String NUMBER_REGEX = "\\d+";
+    public static final Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
+    public static final Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
     @Inject
     private PortfolioDao portfolioDao;
@@ -41,6 +52,10 @@ public class PortfolioService {
     private PortfolioPermission portfolioPermission;
     @Inject
     private PortfolioCopier portfolioCopier;
+    @Inject
+    private MaterialDao materialDao;
+    @Inject
+    private PortfolioMaterialDao portfolioMaterialDao;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -61,7 +76,7 @@ public class PortfolioService {
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
 
         solrEngineService.updateIndex();
-
+        updatePortfolioMaterials(portfolio,chapterPattern,numberPattern);
         return updatedPortfolio;
     }
 
@@ -87,7 +102,31 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
+        updatePortfolioMaterials(portfolio, chapterPattern, numberPattern);
         return createdPortfolio;
+    }
+
+    private void updatePortfolioMaterials(Portfolio portfolio, Pattern chapterPattern, Pattern numberPattern) {
+        for (Chapter chapter : portfolio.getChapters()) {
+            if (chapter.getBlocks() != null) {
+                for (ChapterBlock block : chapter.getBlocks()) {
+                    if (StringUtils.isNotBlank(block.getHtmlContent())) {
+                        Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
+                        while (matcher.find()) {
+                            Matcher numberMatcher = numberPattern.matcher(matcher.group());
+                            while (numberMatcher.find()) {
+                                if (!portfolioMaterialDao.materialToPortfolioConnected(materialDao.findById(Long.valueOf(numberMatcher.group())), portfolio)) {
+                                    PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
+                                    portfolioMaterial.setPortfolio(portfolio);
+                                    portfolioMaterial.setMaterial(materialDao.findById(Long.valueOf(numberMatcher.group())));
+                                    portfolioMaterialDao.createOrUpdate(portfolioMaterial);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {

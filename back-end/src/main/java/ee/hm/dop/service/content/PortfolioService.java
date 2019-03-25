@@ -12,11 +12,13 @@ import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.UpdatePortfolioMaterials;
+import ee.hm.dop.utils.DbUtils;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.inject.Inject;
+import javax.persistence.EntityTransaction;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
@@ -51,7 +53,6 @@ public class PortfolioService {
     private MaterialDao materialDao;
     @Inject
     private PortfolioMaterialDao portfolioMaterialDao;
-
     @Inject
     private UpdatePortfolioMaterials updatePortfolioMaterials;
 
@@ -74,7 +75,9 @@ public class PortfolioService {
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
 
         solrEngineService.updateIndex();
-        updatePortfolioMaterials.run();
+
+
+
         return updatedPortfolio;
     }
 
@@ -96,33 +99,43 @@ public class PortfolioService {
         portfolio.setVisibility(Visibility.PRIVATE);
         portfolio.setAdded(now());
 
+        EntityTransaction transaction = DbUtils.getTransaction();
+        if (!transaction.isActive()) transaction.begin();
+
         Portfolio createdPortfolio = portfolioDao.createOrUpdate(portfolio);
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
+
         PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
+        PortfolioDao newPortfolioDao = newPortfolioDao();
+        MaterialDao newMaterialDao = newMaterialDao();
+
         Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
         //do magic with materials
         for (Chapter chapter : portfolio.getChapters()) {
-            for (ChapterBlock block : chapter.getBlocks()) {
-                if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                    Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
-                    while (matcher.find()) {
-                        Matcher numberMatcher = numberPattern.matcher(matcher.group());
-                        while (numberMatcher.find()) {
-                            if (!portfolioMaterialDao.materialToPortfolioConnected(materialDao.findById(Long.valueOf(numberMatcher.group())), portfolio)) {
-                                PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
-                                portfolioMaterial.setPortfolio(portfolio);
-                                portfolioMaterial.setMaterial(materialDao.findById(Long.valueOf(numberMatcher.group())));
-                                newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
+            if (chapter.getBlocks() != null) {
+                for (ChapterBlock block : chapter.getBlocks()) {
+                    if (StringUtils.isNotBlank(block.getHtmlContent())) {
+                        Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
+                        while (matcher.find()) {
+                            Matcher numberMatcher = numberPattern.matcher(matcher.group());
+                            while (numberMatcher.find()) {
+                                if (!newPortfolioMaterialDao.materialToPortfolioConnected(newMaterialDao.findById(Long.valueOf(numberMatcher.group())), portfolio)) {
+                                    PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
+                                    portfolioMaterial.setPortfolio(portfolio);
+                                    portfolioMaterial.setMaterial(newMaterialDao.findById(Long.valueOf(numberMatcher.group())));
+                                    newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
+                                }
                             }
                         }
                     }
                 }
             }
         }
+        DbUtils.closeTransaction();
 
         return createdPortfolio;
     }
@@ -153,5 +166,16 @@ public class PortfolioService {
 
     private PortfolioMaterialDao newPortfolioMaterialDao(){
         return GuiceInjector.getInjector().getInstance(PortfolioMaterialDao.class);
+    }
+    private PortfolioMaterial newPortfolioMaterial() {
+        return GuiceInjector.getInjector().getInstance(PortfolioMaterial.class);
+    }
+
+    private PortfolioDao newPortfolioDao() {
+        return GuiceInjector.getInjector().getInstance(PortfolioDao.class);
+    }
+
+    private MaterialDao newMaterialDao() {
+        return GuiceInjector.getInjector().getInstance(MaterialDao.class);
     }
 }

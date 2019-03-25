@@ -1,9 +1,6 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.MaterialGetter;
@@ -21,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Encoded;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -108,5 +104,12 @@ public class MaterialResource extends BaseResource {
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject delete(@RequestBody Material material) {
         return learningObjectAdministrationService.delete(material, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getRelatedPortfolios")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Portfolio> getRelatedPortfolios(@QueryParam("id") Long id) {
+        return materialService.getRelatedPortfolios(id);
     }
 }

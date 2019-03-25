@@ -42,8 +42,8 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
     private static final Logger logger = LoggerFactory.getLogger(SynchronizeMaterialsExecutor.class);
     private static Future<?> synchronizeMaterialHandle;
 
-    public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
-    public static final String NUMBER_REGEX = "\\d+";
+//    public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
+//    public static final String NUMBER_REGEX = "\\d+";
 
     @Override
     public synchronized void run() {
@@ -54,31 +54,31 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
             //updatePortfolioMaterials only once
             //getAllPortfolios
 
-            PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
-            Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
-            Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
+//            PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
+//            Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
+//            Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
-            for (Portfolio portfolio : portfolioDao.findAll()) {
-                for (Chapter chapter : portfolio.getChapters()) {
-                    for (ChapterBlock block : chapter.getBlocks()) {
-                        if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                            Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
-                            while (matcher.find()) {
-                                Matcher numberMatcher = numberPattern.matcher(matcher.group());
-                                while (numberMatcher.find()) {
-//                                    if (portfolioMaterialDao.materialToPortfolioConnected(materialDao.findById(Long.valueOf(numberMatcher.group())), portfolio) == false)
-//                                    {
-                                        PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
-                                        portfolioMaterial.setPortfolio(portfolio);
-                                        portfolioMaterial.setMaterial(materialDao.findById(Long.valueOf(numberMatcher.group())));
-                                        newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
-//                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+//            for (Portfolio portfolio : portfolioDao.findAll()) {
+//                for (Chapter chapter : portfolio.getChapters()) {
+//                    for (ChapterBlock block : chapter.getBlocks()) {
+//                        if (StringUtils.isNotBlank(block.getHtmlContent())) {
+//                            Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
+//                            while (matcher.find()) {
+//                                Matcher numberMatcher = numberPattern.matcher(matcher.group());
+//                                while (numberMatcher.find()) {
+////                                    if (portfolioMaterialDao.materialToPortfolioConnected(materialDao.findById(Long.valueOf(numberMatcher.group())), portfolio) == false)
+////                                    {
+//                                        PortfolioMaterial portfolioMaterial = new PortfolioMaterial();
+//                                        portfolioMaterial.setPortfolio(portfolio);
+//                                        portfolioMaterial.setMaterial(materialDao.findById(Long.valueOf(numberMatcher.group())));
+//                                        newPortfolioMaterialDao.createOrUpdate(portfolioMaterial);
+////                                    }
+//                                }
+//                            }
+//                        }
+//                    }
+//                }
+//            }
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllUsedRepositories();
 

@@ -3,15 +3,19 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.PortfolioMaterial;
+import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
 import java.util.List;
 
+@Repository
 public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
 
     public Class<PortfolioMaterial> entity() {
         return PortfolioMaterial.class;
     }
+
+
 
     public void connectMaterialToPortfolio(Material material, Portfolio portfolio) {
         getEntityManager()

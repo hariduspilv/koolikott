@@ -21,6 +21,8 @@ angular.module('koolikottApp')
             $scope.isActive = false;
             $scope.limitt = 2;
             $scope.startFrom = 0;
+            $scope.relatedPortfolios = null
+            // getLoggedInUserData();
 
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
@@ -141,17 +143,21 @@ angular.module('koolikottApp')
                     materialService.getRelatedPortfolios($scope.material.id)
                         .then(response => {
                             $scope.relatedPortfolios = response.data;
-                            // if(!$scope.isAdmin)
-                            //     $scope.canYouClick = 'none';
                         })
                 }
             }
-            $scope.userHasAccessToPortfolio = ((portfolio) => {
-                if (portfolio.creator.id === $scope.material.creator.id){
-                    return 'auto'
-                }else
-                    return 'none'
 
+
+            $scope.userHasAccessToPortfolio = ((portfolio) => {
+                if ($scope.isAdmin)
+                // if ($scope.user.isAdmin())
+                    return 'auto'
+                else {
+                    if (portfolio.creator.id === $scope.material.creator.id)
+                        return 'auto'
+                    else
+                        return 'none'
+                }
             });
 
             function getMaterial(success, fail) {
