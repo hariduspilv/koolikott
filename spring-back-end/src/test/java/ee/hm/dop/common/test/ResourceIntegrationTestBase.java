@@ -10,7 +10,7 @@ import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.rest.filter.SecurityFilter;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;

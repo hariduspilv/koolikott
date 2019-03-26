@@ -3,10 +3,12 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.dao.UserEmailDao;
 import ee.hm.dop.model.Agreement;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.AuthenticationState;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.User_Agreement;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.enums.LoginFrom;
@@ -14,8 +16,6 @@ import ee.hm.dop.service.ehis.IEhisSOAPService;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.useractions.SessionService;
 import ee.hm.dop.service.useractions.UserService;
-import org.joda.time.DateTime;
-import org.joda.time.Interval;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -30,6 +30,8 @@ import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
 import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
 import static java.lang.String.format;
+import static java.time.LocalDateTime.*;
+import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
 @Transactional
@@ -52,6 +54,8 @@ public class LoginService {
     private UserAgreementDao userAgreementDao;
     @Inject
     private SessionService sessionService;
+    @Inject
+    private UserEmailDao userEmailDao;
 
     public UserStatus login(String idCode, String name, String surname, LoginFrom loginFrom) {
         Agreement latestAgreement = agreementDao.findLatestAgreement();
@@ -91,9 +95,12 @@ public class LoginService {
         }
 
         User user = getExistingOrNewUser(state);
+        UserEmail dbUserEmail = userEmailDao.findByUser(user);
         Agreement agreement = agreementDao.findById(userStatus.getAgreementId());
-        if (userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId())) {
-            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement));
+        boolean agreementDoesntExist = userAgreementDao.agreementDoesntExist(user.getId(), agreement.getId());
+        if (agreementDoesntExist) {
+            boolean agreed = dbUserEmail != null && isNotEmpty(dbUserEmail.getEmail());
+            userAgreementDao.createOrUpdate(createUserAgreement(user, agreement, agreed));
         }
 
         AuthenticatedUser authenticate = authenticate(user, userStatus.getLoginFrom());
@@ -132,7 +139,10 @@ public class LoginService {
     }
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
-        Person person = ehisSOAPService.getPersonInformation(user.getIdCode());
+        Person person = new Person();
+        if (!loginFrom.name().equals("DEV"))
+            person = ehisSOAPService.getPersonInformation(user.getIdCode());
+
         return sessionService.startSession(user, person, loginFrom);
     }
 
@@ -159,7 +169,7 @@ public class LoginService {
     }
 
     public boolean hasExpired(AuthenticationState state) {
-        Duration between = Duration.between(state.getCreated(), LocalDateTime.now());
+        Duration between = Duration.between(state.getCreated(), now());
         return !between.minusMillis(MILLISECONDS_AUTHENTICATIONSTATE_IS_VALID_FOR).isNegative();
     }
 
@@ -167,7 +177,16 @@ public class LoginService {
         User_Agreement userAgreement = new User_Agreement();
         userAgreement.setUser(user);
         userAgreement.setAgreement(agreement);
-        userAgreement.setCreatedAt(LocalDateTime.now());
+        userAgreement.setCreatedAt(now());
+        return userAgreement;
+    }
+
+    private User_Agreement createUserAgreement(User user, Agreement agreement, boolean agreed) {
+        User_Agreement userAgreement = new User_Agreement();
+        userAgreement.setUser(user);
+        userAgreement.setAgreement(agreement);
+        userAgreement.setAgreed(agreed);
+        userAgreement.setCreatedAt(now());
         return userAgreement;
     }
 }

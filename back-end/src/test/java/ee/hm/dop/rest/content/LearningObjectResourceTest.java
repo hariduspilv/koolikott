@@ -46,7 +46,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public void cannot_add_a_tag_to_learning_object_what_does_not_exist() {
         login(USER_PEETER);
         Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTS_ID), tag(TEST_TAG));
-        assertEquals("Add regular tag", Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals("Add regular tag", Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -201,7 +201,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
 
         response = doPost(INCREASE_VIEW_COUNT_URL, materialWithId(NOT_EXISTS_ID));
-        assertEquals(Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
 
         response = doGet(format(GET_MATERIAL_URL, NOT_EXISTS_ID));
         assertEquals(Status.NO_CONTENT.getStatusCode(), response.getStatus());
@@ -219,6 +219,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void increaseViewCountNoPortfolio() {
         Response response = doPost(INCREASE_VIEW_COUNT_URL, portfolioWithId(99999L));
-        assertEquals(500, response.getStatus());
+        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 }

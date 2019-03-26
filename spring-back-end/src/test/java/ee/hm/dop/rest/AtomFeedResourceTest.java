@@ -2,7 +2,7 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.enums.LanguageC;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

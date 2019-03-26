@@ -222,6 +222,10 @@ function isHomePage(path) {
     return path === '/';
 }
 
+function isProfilePath(path) {
+    return path === '/profile'
+}
+
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
     function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
         $rootScope.$on('$routeChangeSuccess', function () {
@@ -241,6 +245,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             if (isLoggedIn) {
                 userSessionService.startTimer()
             }
+            $rootScope.isProfile = isProfilePath(path)
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);

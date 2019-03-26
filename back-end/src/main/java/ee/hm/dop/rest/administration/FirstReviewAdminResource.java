@@ -38,8 +38,10 @@ public class FirstReviewAdminResource extends BaseResource {
                                       @QueryParam("query") String query,
                                       @QueryParam("taxon") List<Long> taxons,
                                       @QueryParam("user") List<Long> user,
-                                      @QueryParam("lang") int lang) {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, user, lang);
+                                      @QueryParam("lang") int lang,
+                                      @QueryParam("materialtype") String materialType)
+    {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, user, lang, materialType);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }

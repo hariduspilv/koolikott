@@ -35,7 +35,7 @@ public class DateUtils {
             date = LocalDateTime.parse(jsonDate, formatterWithoutMillis);
         }
 
-        return date.atZone(ZoneId.systemDefault()).toLocalDateTime();
+        return date.atZone(ZoneId.of("UTC")).withZoneSameInstant(ZoneId.of("Europe/Tallinn")).toLocalDateTime();
     }
 
     /**

@@ -1,6 +1,6 @@
 package ee.hm.dop.config.soap;
 
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 

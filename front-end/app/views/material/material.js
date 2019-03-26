@@ -353,7 +353,12 @@ angular.module('koolikottApp')
                 }
             }
 
-
+            $scope.isAdminOrModerator = function () {
+                return (
+                    authenticatedUserService.isAdmin() ||
+                    authenticatedUserService.isModerator()
+                )
+            }
 
             $scope.setRecommendation = (recommendation) => {
                 if ($scope.material)

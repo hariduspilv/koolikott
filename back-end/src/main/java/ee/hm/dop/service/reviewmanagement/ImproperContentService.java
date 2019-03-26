@@ -67,7 +67,7 @@ public class ImproperContentService {
             throw new RuntimeException("Invalid Improper object.");
         }
         LearningObject learningObject = learningObjectService.get(learningObject1.getId(), creator);
-        ValidatorUtil.mustHaveEntity(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject, learningObject1.getId());
         return learningObject;
     }
 

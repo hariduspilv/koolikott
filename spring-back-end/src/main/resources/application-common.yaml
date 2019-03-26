@@ -1,0 +1,174 @@
+version: ${project.version}
+
+cron:
+  executor:
+    corePoolSize: 2
+    maxPoolSize: 2
+    queueCapacity: 500
+    threadNamePrefix: KottCron-
+  materialSync:
+    scheduledTime: 0 0 1 * * ?
+    enabled : true
+  acceptReviewableChange:
+    scheduledTime: 0 0 2 * * ?
+    enabled : true
+  authenticationStateCleaner:
+    scheduledTime: 0 0 3 * * ?
+    enabled : true
+  authenticatedUserCleaner:
+    scheduledTime: 0 0 4 * * ?
+    enabled : true
+  ehisInstitution:
+    scheduledTime: 0 0 5 * * ?
+    enabled : true
+taat:
+  sso: https://reos.taat.edu.ee/saml2/idp/SSOService.php
+  connectionId: https://oxygen.netgroupdigital.com/sp
+  assertionConsumerServiceIndex: 0
+
+  metadata:
+    filepath: reos_metadata.xml
+    entityID: https://reos.taat.edu.ee/saml2/idp/metadata.php
+
+keystore:
+  filename: server.keystore
+  password: password
+  signingEntityID: keyAlias
+  signingEntityPassword: password
+
+mobileID:
+  endpoint: https://tsp.demo.sk.ee
+  serviceName: Testimine
+  namespace:
+    prefix: dig
+    uri: http://www.sk.ee/DigiDocService/DigiDocService_2_3.wsdl
+  messageToDisplay: eKoolikott
+
+ehis:
+  xroad:
+    version: v6
+  endpoint: http://10.151.25.40/cgi-bin/consumer_proxy/
+  institution: 10585438
+  system:
+    name: ehis
+  service:
+    name: ehis.isiku_rollid.v1
+
+xtee:
+  namespace:
+    prefix: xtee
+    uri: http://x-tee.riik.ee/xsd/xtee.xsd
+
+xroad:
+  ehis:
+    v6:
+      namespace:
+        xtee:
+          uri: http://x-tee.riik.ee/xsd/xtee.xsd
+          prefix: xtee
+        xro:
+          uri: http://x-road.eu/xsd/xroad.xsd
+          prefix: xro
+        iden:
+          uri: http://x-road.eu/xsd/identifiers
+          prefix: iden
+        ehis:
+          uri: http://producers.ehis.xtee.riik.ee/producer/ehis
+          prefix: ehis
+      endpoint: http://10.151.25.40/cgi-bin/consumer_proxy/
+      header:
+        protocol: 4.0
+        issue: ehis
+      service:
+        instance: ee
+        member:
+          class: gov
+          code: 70000740
+        subsystem:
+          code: ehis
+        service:
+          name: isiku_rollid
+        version: v1
+      subsystem:
+        instance: ee
+        member:
+          class: gov
+          code: 10585438
+        subsystem:
+          code: 10585438
+    use:
+      v6: false
+    institutions:
+      list: http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/0/0/XML
+      status: Suletud
+      type: koolieelne lasteasutus
+  # timeouts are in ms
+  timeout:
+    connect: 5000
+    read: 10000
+ekool:
+  extra:
+    logging: false
+  client:
+    id: koolikott
+    secret: 9rIxgey74Ke87OVYhCZfezyJ6g95UeLI9YxIhY0FuH8m
+  url:
+    authorize: https://chucknorris.ekool.eu/auth/oauth/authorize
+    token: https://chucknorris.ekool.eu/auth/oauth/token
+    generaldata: https://chucknorris.ekool.eu/auth/generaldata
+
+stuudium:
+  extra:
+    logging: false
+  client:
+    id: 511d21de7352ba8c03df
+    secret: 05e6ab586c33e5b1ac9673212de79b
+    url:
+      authorize: https://api.ope.ee/v1/authenticate?subdomain=demo&
+      generaldata: https://api.ope.ee/v1/authenticate/verify
+
+file:
+  upload:
+    max:
+      size: 10
+    directory: uploads/
+  document:
+    upload:
+      max:
+        size: 500
+  review:
+    directory: reviews/
+
+request:
+  extra:
+    logging: false
+
+feed:
+  items:
+    max: 30
+
+automatically:
+  accept:
+    reviewableChanges:
+      days: 10
+
+session:
+  duration:
+    mins: 120
+  alert:
+    mins: 5
+
+email:
+  address: test
+  host: test
+  port: 587
+  username: test
+  password: test
+  # Send mail transport srategy (SMTP, SMTP_TLS, SMTPS)
+  transport:
+    strategy: SMTP_TLS
+  noreply:
+    address: noreply@e-koolikott.ee
+
+captcha:
+  key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI

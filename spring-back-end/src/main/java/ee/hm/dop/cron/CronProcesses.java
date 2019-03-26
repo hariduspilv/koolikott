@@ -1,9 +1,7 @@
 package ee.hm.dop.cron;
 
-import ee.hm.dop.service.synchronizer.AuthenticatedUserCleaner;
-import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
-import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
-import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
+import ee.hm.dop.config.cronExecutorsProperties.*;
+import ee.hm.dop.service.synchronizer.*;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +11,16 @@ import javax.inject.Inject;
 public class CronProcesses {
 
     @Inject
+    private EhisInstitutionProperties ehisInstitutionProperties;
+    @Inject
+    private MaterialSyncProperties materialSyncProperties;
+    @Inject
+    private AcceptReviewableChangeProperties acceptReviewableChangeProperties;
+    @Inject
+    private AuthenticatedUserCleanerProperties authenticatedUserCleanerProperties;
+    @Inject
+    private AuthenticationStateCleanerProperties authenticationStateCleanerProperties;
+    @Inject
     private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
     @Inject
     private AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
@@ -20,24 +28,41 @@ public class CronProcesses {
     private AuthenticationStateCleaner authenticationStateCleaner;
     @Inject
     private AuthenticatedUserCleaner authenticatedUserCleaner;
+    @Inject
+    private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
 
-    @Scheduled(cron = "0 0 1 * * *")
+    @Scheduled(cron = "${cron.materialSync.scheduledTime}")
     public void synchronizeMaterialsExecutor() {
-        synchronizeMaterialsExecutor.run();
+        if (materialSyncProperties.isEnabled()) {
+            synchronizeMaterialsExecutor.run();
+        }
     }
 
-    @Scheduled(cron = "0 0 2 * * *")
+    @Scheduled(cron = "${cron.acceptReviewableChange.scheduledTime}")
     public void automaticallyAcceptReviewableChange() {
-        automaticallyAcceptReviewableChange.run();
+        if (acceptReviewableChangeProperties.isEnabled()) {
+            automaticallyAcceptReviewableChange.run();
+        }
     }
 
-    @Scheduled(cron = "0 0 3 * * *")
+    @Scheduled(cron = "${cron.authenticationStateCleaner.scheduledTime}")
     public void authenticationStateCleaner() {
-        authenticationStateCleaner.run();
+        if (authenticationStateCleanerProperties.isEnabled()) {
+            authenticationStateCleaner.run();
+        }
     }
 
-    @Scheduled(cron = "0 0 4 * * *")
+    @Scheduled(cron = "${cron.authenticatedUserCleaner.scheduledTime}")
     public void authenticatedUserCleaner() {
-        authenticatedUserCleaner.run();
+        if (authenticatedUserCleanerProperties.isEnabled()) {
+            authenticatedUserCleaner.run();
+        }
+    }
+
+    @Scheduled(cron = "${cron.ehisInstitution.scheduledTime}")
+    public void ehisInstitutionUpdateExecutor() {
+        if (ehisInstitutionProperties.isEnabled()) {
+            ehisInstitutionUpdateExecutor.run();
+        }
     }
 }

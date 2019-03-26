@@ -12,7 +12,7 @@ public class KoolikottApplication {
     @PostConstruct
 	void started() {
 		TimeZone.setDefault(TimeZone.getTimeZone("UTC"));
-	}
+    }
 
 	public static void main(String[] args) {
 		SpringApplication.run(KoolikottApplication.class, args);

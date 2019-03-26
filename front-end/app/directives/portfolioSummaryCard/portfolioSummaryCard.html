@@ -5,13 +5,18 @@
     <div data-flex data-flex-gt-xs="75" data-layout="column" id="section-left">
       <!-- Headline -->
       <div class="card-lg__container card-lg__container--padding-l-r-t" data-layout="row">
-        <h1 class="learning-object-title" data-flex-gt-sm="70" data-ng-bind="portfolio.title"></h1>
+        <h1 class="learning-object-title" data-flex-gt-sm="65" data-ng-bind="portfolio.title"></h1>
         <div class="card-menus" data-layout="row">
           <dop-share
             id="share"
             data-title="portfolio.title"
             data-object="portfolio"
           ></dop-share>
+          <dop-send-email
+            ng-if="isAdminOrModerator() && !$root.isEditPortfolioMode && !$root.isFullScreen"
+            id="send-email"
+            data-learning-object="portfolio">
+          </dop-send-email>
           <div data-ng-if="!$root.isEditPortfolioMode">
             <dop-qr
               id="qr-code"
@@ -31,7 +36,6 @@
             <md-icon md-menu-align-target>close</md-icon>
             <md-tooltip><span data-translate="FULL_SCREEN_OFF"></span></md-tooltip>
           </md-button>
-
           <md-menu ng-if="dotsAreShowing() || $root.isEditPortfolioMode && canEdit()" id="dots-menu">
             <md-button class="md-icon-button" ng-click="$mdMenu.open($event)" id="material-menu">
               <md-icon md-menu-origin>more_vert</md-icon>

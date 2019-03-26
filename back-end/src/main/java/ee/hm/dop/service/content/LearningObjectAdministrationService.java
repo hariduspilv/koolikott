@@ -15,6 +15,8 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 import java.util.List;
 
+import static ee.hm.dop.utils.ValidatorUtil.permissionError;
+
 public class LearningObjectAdministrationService {
 
     @Inject
@@ -70,7 +72,7 @@ public class LearningObjectAdministrationService {
             UserUtil.mustBeModeratorOrAdmin(loggedInUser);
         } else {
             if (!learningObjectService.canUpdate(loggedInUser, originalLearningObject)) {
-                throw ValidatorUtil.permissionError();
+                throw permissionError();
             }
         }
 

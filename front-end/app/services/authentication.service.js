@@ -35,7 +35,20 @@ angular.module('koolikottApp')
             userLocatorService.stopTimer()
         }
 
+        function hasEmail(userStatus) {
+            userEmailService.hasEmailOnLogin(userStatus)
+                .then(response => {
+                    if (response.status === 200)
+                        $rootScope.userHasEmailOnLogin = true
+                    else
+                        $rootScope.userHasEmailOnLogin = false
+
+                    return $rootScope.userHasEmailOnLogin
+                })
+        }
+
         function showGdprModalAndAct(userStatus) {
+            hasEmail(userStatus)
             $rootScope.statusForDuplicateCheck = userStatus
             $mdDialog.show({
                 templateUrl: 'views/agreement/agreementDialog.html',
@@ -53,9 +66,13 @@ angular.module('koolikottApp')
                     userStatus.userConfirmed = true;
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
+                            if ($rootScope.userHasEmailOnLogin) {
+                                authenticateUser(response.data);
+                            } else {
                                 userEmailService.saveEmail($rootScope.email, response.data.user)
                                 showEmailValidationModal(response)
                                 $rootScope.userFromAuthentication = response.data.user
+                            }
                             }, () => {
                                 loginFail();
                             }

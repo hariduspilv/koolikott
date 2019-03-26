@@ -19,7 +19,7 @@ import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -106,7 +106,7 @@ public class MaterialService {
     }
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
-        ValidatorUtil.mustHaveId(material);
+        ValidatorUtil.mustHaveId(material, material != null ? material.getId() : null);
         Material originalMaterial = materialGetter.get(material.getId(), changer);
         mustHavePermission(changer, originalMaterial);
         mustBeValid(originalMaterial, changer);

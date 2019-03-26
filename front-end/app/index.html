@@ -40,8 +40,8 @@
 <img data-ng-if="!hasAppInitated" id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
 
 <data-dop-column-layout data-ng-if="hasAppInitated" layout-fill></data-dop-column-layout>
-<data-dop-main-fab-button></data-dop-main-fab-button>
-<data-dop-scroll-top></data-dop-scroll-top>
+<data-dop-main-fab-button data-ng-show="!isProfile"></data-dop-main-fab-button>
+<data-dop-scroll-top data-ng-show="!isProfile"></data-dop-scroll-top>
 <data-dop-customer-support></data-dop-customer-support>
 
 <!--preloader-->
@@ -191,6 +191,7 @@
 <script src="views/emailValidation/emailValidationDialog.js"></script>
 <script src="views/faq/faq.js"></script>
 <script src="views/terms/terms.js"></script>
+<script src="views/userProfile/userProfile.js"></script>
 <script src="views/locationDialog/locationDialog.js"></script>
 <script src="views/sessionDialog/sessionDialog.js"></script>
 <script src="views/sessionDialog/sessionExpiredDialog.js"></script>
@@ -243,6 +244,7 @@
 <script src="directives/tags/tags.component.js"></script>
 <script src="directives/targetGroupSelector/targetGroupSelector.component.js"></script>
 <script src="directives/taxonSelector/taxonSelector.component.js"></script>
+<script src="directives/institutionSelect/institutionSelector.component.js"></script>
 <script src="directives/toolbarAddMaterials/toolbarAddMaterials.component.js"></script>
 <script src="directives/remainingCharacters/remaining-char.component.js"></script>
 <script src="directives/tour/tour.component.js"></script>
@@ -250,6 +252,8 @@
 <script src="directives/taxonMeta/taxonMeta.component.js"></script>
 <script src="directives/customerSupport/customerSupport.component.js"></script>
 <script src="directives/cookieNotice/cookieNotice.component.js"></script>
+<script src="directives/sendEmail/sendEmail.component.js"></script>
+<script src="directives/sendEmail/sendEmailDialog.js"></script>
 <!-- endbuild -->
 
 <!-- remove-html-for-live -->

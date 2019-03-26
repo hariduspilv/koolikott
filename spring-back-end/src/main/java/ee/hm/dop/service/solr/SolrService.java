@@ -2,7 +2,7 @@ package ee.hm.dop.service.solr;
 
 import ee.hm.dop.model.solr.SolrSearchResponse;
 import ee.hm.dop.service.SuggestionStrategy;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
@@ -54,14 +54,12 @@ public class SolrService implements SolrEngineService {
     private Client client;
     @Inject
     private Configuration configuration;
-    @Inject
-    private Environment environment;
     private SolrClient solrClient;
     private SolrIndexThread indexThread;
 
     @Inject
     public void postConstruct() {
-        postConstruct(environment.getProperty(SEARCH_SERVER));
+        postConstruct(configuration.getString(SEARCH_SERVER));
     }
 
     void postConstruct(String url) {

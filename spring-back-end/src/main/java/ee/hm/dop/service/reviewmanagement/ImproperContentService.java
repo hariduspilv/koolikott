@@ -17,6 +17,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class ImproperContentService {
             }
         }
         if (CollectionUtils.isEmpty(saved.getReportingReasons())) {
-            throw new RuntimeException("no reason specified");
+            throw new WebApplicationException("no reason specified", Response.Status.BAD_REQUEST);
         }
         improperContentDao.createOrUpdate(saved);
         return saved;
@@ -70,10 +72,10 @@ public class ImproperContentService {
 
     private LearningObject findValid(ImproperContent improperContent, User creator, LearningObject learningObject1) {
         if (improperContent == null || learningObject1 == null) {
-            throw new RuntimeException("Invalid Improper object.");
+            throw new WebApplicationException("Invalid Improper object.", Response.Status.BAD_REQUEST);
         }
         LearningObject learningObject = learningObjectService.get(learningObject1.getId(), creator);
-        ValidatorUtil.mustHaveEntity(learningObject);
+        ValidatorUtil.mustHaveEntity(learningObject, learningObject1.getId());
         return learningObject;
     }
 

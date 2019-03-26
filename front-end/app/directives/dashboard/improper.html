@@ -15,11 +15,10 @@
         <dop-dashboard-type-icon data-learning-object="item"></dop-dashboard-type-icon>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--title">
-        <a
+        <span
           class="ellipsis ellipsis--2"
-          data-ng-href="{{$ctrl.getLearningObjectUrl(item)}}"
           data-ng-bind="$ctrl.getCorrectLanguageTitle(item)"
-        ></a>
+        ></span>
       </td>
       <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.getMostRecentReportDateFormatted(item)"></td>
       <td md-cell class="dashboard-cell dashboard-cell--qty" data-ng-bind="item.__reports.length"></td>

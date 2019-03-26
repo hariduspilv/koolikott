@@ -6,7 +6,7 @@ import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.login.dto.UserStatus;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

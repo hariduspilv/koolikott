@@ -14,6 +14,29 @@ md-dialog md-dialog-actions {
   margin: .5rem 0 1rem;
 }
 
+.creator-email-dialog {
+  @media screen and (min-width: $layout-breakpoint-sm) and (max-width: $layout-breakpoint-md) {
+    max-width: 51% !important;
+  }
+  @media screen and (min-width: $layout-breakpoint-md) {
+    max-width: 40% !important;
+  }
+}
+.creator-email-dialog-input-text-wrap {
+  text-overflow: ellipsis !important;
+}
+.margin-bottom {
+  margin-bottom: 10px;
+}
+
+.creator-email-dialog-title {
+  min-width: 80%;
+}
+
+.learningobject-title-color {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
 md-dialog.login-dialog {
   max-height: 100%;
   min-width: 18rem;
@@ -136,12 +159,42 @@ md-dialog.login-dialog {
     }
 }
 
+.creator-email-full-screen {
+  width: 100%;
+  max-height: 100%;
+
+  @media screen and (max-width: $layout-breakpoint-xs) {
+    height: fit-content;
+    max-height: 92.5%;
+    max-width: 100%;
+    position: absolute;
+    top: initial;
+    left: 0;
+    border-radius: 0;
+  }
+}
+
+.creator-email-overflow-auto {
+  resize: none;
+  max-height: 135px;
+  overflow: auto;
+}
+
 .qr-code {
   background: url("../images/qrcode-scan.svg") no-repeat center;
 }
 
 .fit-content {
   max-width: fit-content;
+}
+
+.paginator-left {
+  @media (max-width: $layout-breakpoint-xs) {
+    justify-content: flex-start;
+  }
+  @media (max-width: $layout-breakpoint-ipad) {
+    justify-content: flex-start;
+  }
 }
 
 .qr-padding {
@@ -179,6 +232,9 @@ body > .md-dialog-container {
     @media (max-width: $layout-breakpoint-md) {
       max-width: 80% !important;
     }
+  }
+  .send-mail-ie {
+    height: 280px
   }
 }
 

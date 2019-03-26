@@ -29,13 +29,16 @@ public class FirstReviewAdminResource extends BaseResource {
     @GetMapping
     @RequestMapping("unReviewed")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public SearchResult getUnReviewed(@QueryParam("page") int page,
-                                      @QueryParam("itemSortedBy") String itemSortedBy,
-                                      @QueryParam("query") String query,
-                                      @QueryParam("taxon") List<Long> taxons,
-                                      @QueryParam("user") List<Long> user,
-                                      @QueryParam("lang") int lang) {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, user, lang);
+    public SearchResult getUnReviewed(@RequestParam(value = "page", defaultValue = "1") int page,
+                                      @RequestParam(value = "itemSortedBy", required = false) String itemSortedBy,
+                                      @RequestParam(value = "query", required = false) String query,
+                                      @RequestParam(value = "taxon", required = false) List<Long> taxons,
+                                      @RequestParam(value = "user", required = false) List<Long> user,
+                                      @RequestParam(value = "lang", required = false) Integer lang,
+                                      @RequestParam(value = "materialtype", required = false) String materialType)
+
+    {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, user, lang,materialType);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }

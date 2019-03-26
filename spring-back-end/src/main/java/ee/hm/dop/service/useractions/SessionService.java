@@ -8,7 +8,7 @@ import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.user.UserSession;
 import ee.hm.dop.service.login.TokenGenerator;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 
 import java.time.LocalDateTime;
 

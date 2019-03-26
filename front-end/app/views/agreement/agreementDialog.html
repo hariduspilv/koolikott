@@ -16,12 +16,12 @@
       <md-content data-layout-padding>
         <p><span id="gdpr-agreement-text" data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
         <p>
-          <a id="gdpr-agreement-link" target="_blank" href="{{'AGREEMENT_DIALOG_LINK_HREF' | translate}}">
+          <a id="gdpr-agreement-link" target="_blank" data-translate="AGREEMENT_DIALOG_LINK_TEXT" href="/terms">
             <span id="gdpr-agreement-link-text" data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
           </a>
         </p>
         <div id="gdpr-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
-          <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10" data-ng-show="!$root.userHasEmailOnLogin">
             <label data-translate="GDPR_EMAIL" style="display: block"></label>
             <input
               name="email"

@@ -50,16 +50,24 @@ class controller extends Controller {
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
+        this.$scope.sortByType = true
 
-        this.$scope.$watch('educationalContext', this.onEducationalContextChange.bind(this), true)
+        this.$scope.types = ['All','Material','Portfolio']
+
+        this.$scope.$watch('filter.educationalContext', this.onEducationalContextChange.bind(this), true)
         this.$scope.$watch('query.filter', (newValue, oldValue) => {
-            if (newValue !== oldValue && newValue.length >=3)
+            if (newValue !== oldValue && (newValue.length >=3 || !newValue))
                 this.filterItems()
         })
 
         this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true)
 
         this.$scope.filter = { };
+        this.$scope.filter.materialType = 'All'
+        this.$scope.filter.materialTypeTempForSort = 'All'
+        this.$scope.filter.materialModeratorTempForSort = ''
+        this.$scope.filter.materialEduTempForSort = ''
+        this.$scope.filter.materialDomainTempForSort = ''
 
         this.$scope.query = {
             filter: "",
@@ -83,6 +91,14 @@ class controller extends Controller {
         }
     }
 
+    selectType(type) {
+        this.$scope.filter.materialType = type
+        if (type !== 'All' && this.$scope.filter.materialTypeTempForSort === 'All') {
+            this.sortedBy = '-byCreatedAt';
+            this.$scope.sortByType = true
+        }
+    }
+
     onFilterChange(filter) {
         const params = Object.assign({}, filter)
 
@@ -95,14 +111,21 @@ class controller extends Controller {
         this.$scope.query.filter = ''
         this.$scope.isFiltering = true
         this.$scope.query.page = 1
-        this.getData('firstReview/unReviewed', this.sortedBy)
+        this.$scope.filter.materialTypeTempForSort = this.$scope.filter.materialType;
+        this.$scope.filter.materialModeratorTempForSort= this.$scope.filter.user;
+        this.$scope.filter.materialEduTempForSort = this.$scope.filter.educationalContext
+        this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
 
+        this.getData('firstReview/unReviewed', this.sortedBy)
+        if (this.$scope.filter.materialType !== 'All')
+            this.$scope.sortByType = false
+        else
+            this.$scope.sortByType = true
     }
 
     onParamsChange({ users, taxons }) {
         this.$scope.isSubmitButtonEnabled =  users || taxons;
-        this.$scope.isTaxonSelectVisible = !users
-    }
+        this.$scope.isTaxonSelectVisible = !users}
 
     clearFields() {
         this.$scope.educationalContext = undefined
@@ -137,19 +160,22 @@ class controller extends Controller {
     }
 
     onSelectTaxons(taxons) {
-        this.$scope.filter.taxons = taxons
+        if (taxons.length === 0)
+            this.$scope.filter.taxons = undefined
+        else
+            this.$scope.filter.taxons = taxons
         this.$scope.clearFields = false
 
     }
 
     onEducationalContextChange(educationalContext) {
-        this.$scope.isExpertsSelectVisible = !educationalContext
+        this.$scope.filter.taxons = undefined
         this.onParamsChange({});
     }
 
     isDisabled() {
-        return this.isModerator() ? !(this.$scope.filter && this.$scope.filter.taxons) : !((this.$scope.filter && this.$scope.filter.taxons) ||
-            this.$scope.filter.user);
+        return this.isModerator() ? !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType)  : !((this.$scope.filter && this.$scope.filter.taxons) ||
+            this.$scope.filter.user || this.$scope.filter.materialType);
     }
 
     getMaximumUnreviewed(){
@@ -193,15 +219,19 @@ class controller extends Controller {
     getData(restUri, sortBy) {
         let query;
         this.$scope.isLoading = true
+        if (!this.$scope.filter.materialType)
+            this.$scope.filter.materialType
 
         if (restUri === 'firstReview/unReviewed') {
             let url = 'rest/admin/' + restUri + '/' +
                 '?page=' + this.$scope.query.page +
                 '&itemSortedBy=' + sortBy +
-                '&query=' + this.$scope.query.filter +
+                '&query=' + this.$scope.query.filter.toLowerCase() +
                 this.selectTaxons() +
                 this.selectUsers() +
-                '&lang=' + this.getLanguage();
+                '&lang=' + this.getLanguage() +
+                '&materialtype=' + this.$scope.filter.materialType;
+
                 query = this.serverCallService
                 .makeGet(url);
         }
@@ -255,8 +285,10 @@ class controller extends Controller {
     selectTaxons() {
         if (this.$scope.filter && this.$scope.filter.taxons) {
             return this.$scope.filter.taxons.map(t => '&taxon=' + t.id).join("");
-        }
-        return ""
+        } else if (!this.$scope.filter.taxons && this.$scope.filter.educationalContext) {
+            return '&taxon=' + this.$scope.filter.educationalContext.id
+        } else
+            return ""
     }
 
     getModerators() {
@@ -286,15 +318,13 @@ class controller extends Controller {
         this.sortedBy = order;
         this.$scope.query.order = order;
         this.$scope.query.page = 1;
+        this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
+        this.$scope.filter.user = this.$scope.filter.materialModeratorTempForSort;
+        this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
+        this.$scope.filter.taxons =  this.$scope.filter.materialDomainTempForSort
 
-        if (this.viewPath === 'unReviewed'){
-
-            // if (order === 'bySubject' || order === '-bySubject'){
-                this.getData('firstReview/unReviewed',order);
-            // }
-            // else {
-            //     this.$scope.data = this.sortService.orderItems(this.getData('firstReview/unReviewed',order))
-            // }
+        if (this.viewPath === 'unReviewed') {
+            this.getData('firstReview/unReviewed', order);
         }
         else{
             this.sortService.orderItems(

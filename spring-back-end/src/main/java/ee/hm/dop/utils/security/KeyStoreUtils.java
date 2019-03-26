@@ -1,7 +1,7 @@
 package ee.hm.dop.utils.security;
 
 import ee.hm.dop.utils.DOPFileUtils;
-import org.apache.commons.configuration2.Configuration;
+import ee.hm.dop.config.Configuration;
 import org.opensaml.xml.security.Criteria;
 import org.opensaml.xml.security.CriteriaSet;
 import org.opensaml.xml.security.credential.Credential;

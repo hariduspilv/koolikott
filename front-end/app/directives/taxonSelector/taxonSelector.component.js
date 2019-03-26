@@ -171,8 +171,10 @@ component('dopTaxonSelector', {
         isSearch: '=?',
         markRequired: '=',
         isStatisticsSelect: '<',
+        isProfileSelect: '<',
         onStatisticsMultiselect: '&',
-        clearSelection: '<'
+        clearSelection: '<',
+        selectDisabled: '<'
     },
     templateUrl: 'directives/taxonSelector/taxonSelector.html',
     controller

@@ -1,13 +1,13 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
+import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.login.UserEmailService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
@@ -23,9 +23,25 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.save(userEmail);
     }
 
+    @PostMapping("getEmailOnLogin")
+    public ResponseEntity<?> getEmailOnLogin(@RequestBody UserEmail userEmail) {
+        if (userEmailService.hasEmail(userEmail)) {
+            return ResponseEntity.status(HttpStatus.OK).build();
+        }
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+    }
+
     @PostMapping("check")
     public ResponseEntity<?> validateEmail(@RequestBody UserEmail userEmail) {
         if (userEmailService.hasDuplicateEmail(userEmail)) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
+
+    @PostMapping("checkForProfile")
+    public ResponseEntity<?> validateEmailForProfile(@RequestBody UserEmail userEmail) {
+        if (userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.status(HttpStatus.OK).build();
@@ -36,5 +52,25 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.validatePin(userEmail);
     }
 
+    @PostMapping("validateFromProfile")
+    public UserEmail validatePinFromProfile(@RequestBody UserEmail userEmail) {
+        return userEmailService.validatePinFromProfile(userEmail);
+    }
 
+    @GetMapping
+    public String getUserEmail() {
+        return userEmailService.getEmail(getLoggedInUser());
+    }
+
+    @GetMapping("getEmail")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public UserEmail userHasEmail(@RequestParam("userId") int userId) {
+        return userEmailService.getUserEmail(userId);
+    }
+
+    @PostMapping("sendEmailToCreator")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public EmailToCreator saveEmailForCreator(@RequestBody EmailToCreator emailToCreator) {
+        return userEmailService.sendEmailForCreator(emailToCreator, getLoggedInUser());
+    }
 }

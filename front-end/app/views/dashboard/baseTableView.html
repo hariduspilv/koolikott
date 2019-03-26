@@ -6,7 +6,7 @@
     class="md-table-toolbar md-default"
     data-ng-if="$ctrl.viewPath != 'moderators' && $ctrl.viewPath != 'restrictedUsers'"
   >
-    <div class="md-toolbar-tools">
+    <div class="md-toolbar-tools custom-table-padding" data-layout-xs="column" data-layout-align-xs="start start">
       <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
       <form data-flex name="filter.form">
         <md-input-container>
@@ -19,7 +19,8 @@
                  placeholder="{{'SEARCH' | translate}}"
                  class="search-learning-objects"
           >
-          <md-button id="clear-filter"
+          <md-button data-ng-if="$ctrl.viewPath != 'unReviewed'"
+                     id="clear-filter"
                      class="md-icon-button md-ink-ripple"
                      data-ng-click="$ctrl.clearFilter()"
                      data-ng-if="query.filter"
@@ -63,10 +64,9 @@
     </div>
   </md-toolbar>
   <!-- END Search users -->
-  <div layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
+  <div data-layout-xs="column" layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
     <md-input-container class="statistics-filter__experts-container"
                         data-flex data-layout="column"
-                        data-ng-show="isExpertsSelectVisible"
     >
       <md-select id="expert-select"
                  data-placeholder="{{'EXPERT' | translate}}"
@@ -74,6 +74,7 @@
                  data-ng-model-options="{trackBy: '$value.id'}"
                  aria-label="Vali ekspert"
                  data-ng-disabled="$ctrl.isModerator()"
+                 data-ng-change="$ctrl.selectUsers(filter.user)"
       >
         <md-option
           data-ng-repeat="user in moderators"
@@ -83,38 +84,59 @@
         ></md-option>
       </md-select>
     </md-input-container>
+    <md-input-container class="statistics-filter__experts-container"
+                        data-flex data-layout="column"
+    >
+      <md-select id="materialtype-select"
+                 data-placeholder="{{'TYPE' | translate}}"
+                 data-ng-model="filter.materialType"
+                 aria-label="Vali materialitüüp"
+                 data-ng-model-options="{trackBy: '$value'}"
+                 data-ng-change="$ctrl.selectType(filter.materialType)"
+                 data-ng-selected = "true"
+      >
+        <md-option
+          data-ng-repeat="type in types"
+          data-ng-value="type"
+          data-translate="TYPE_{{type.toUpperCase()}}"
+        ></md-option>
+      </md-select>
+    </md-input-container>
+  </div>
+  <div layout="row" data-flex data-layout-align="space-between center" data-layout-xs="column" data-layout-align-xs="start start" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
     <dop-taxon-selector
       flex
       class="statistics-filter__taxon-container"
-      data-taxon="educationalContext"
+      data-taxon="filter.educationalContext"
       data-is-statistics-select="true"
       data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
       data-ng-show="isTaxonSelectVisible"
       data-clear-selection="clearFields"
     ></dop-taxon-selector>
+    <div data-ng-if="$ctrl.viewPath == 'unReviewed'">
+      <md-button id="clear-button"
+                 class="statistics-filter__clear"
+                 data-translate="CLEAR_FORM"
+                 data-ng-click="$ctrl.clearFields()"
+                 data-ng-show="filter.user || filter.taxons || educationalContext || filter.materialType"
+                 aria-label="Tühjenda filtriväljad"
+      ></md-button>
+      <md-button id="filter-button"
+                 class="md-raised md-primary statistics-filter__submit"
+                 data-ng-class="{fetching: fetching}"
+                 data-ng-click="$ctrl.getFilterResults()"
+                 data-ng-disabled="$ctrl.isDisabled()"
+                 aria-label="Käivita filter"
+      >
+        <div class="spinner">
+          <md-progress-circular data-md-diameter="20"></md-progress-circular>
+        </div>
+        <span data-translate="DO_FILTER"></span>
+        <md-icon>arrow_forward</md-icon>
+      </md-button>
+    </div>
   </div>
-  <div data-ng-if="$ctrl.viewPath == 'unReviewed'">
-    <md-button id="clear-button"
-               class="statistics-filter__clear"
-               data-translate="CLEAR_FORM"
-               data-ng-click="$ctrl.clearFields()"
-               data-ng-show="filter.user || filter.taxons || educationalContext"
-               aria-label="Tühjenda filtriväljad"
-    ></md-button>
-    <md-button id="filter-button"
-               class="md-raised md-primary statistics-filter__submit"
-               data-ng-class="{fetching: fetching}"
-               data-ng-click="$ctrl.getFilterResults()"
-               data-ng-disabled="$ctrl.isDisabled()"
-               aria-label="Käivita filter"
-    >
-      <div class="spinner">
-        <md-progress-circular data-md-diameter="20"></md-progress-circular>
-      </div>
-      <span data-translate="DO_FILTER"></span>
-      <md-icon>arrow_forward</md-icon>
-    </md-button>
-  </div>
+
   <md-table-container class="table-container">
     <div data-ng-show="itemsCount" class="md-data-table">
       <dop-unreviewed data-ng-if="$ctrl.viewPath == 'unReviewed'"></dop-unreviewed>
@@ -140,6 +162,7 @@
     <!-- END Not found message -->
   </md-table-container>
   <md-table-pagination
+    class="paginator-left"
     data-ng-if="itemsCount && itemsCount > query.limit"
     data-md-limit="query.limit"
     data-md-page="query.page"
