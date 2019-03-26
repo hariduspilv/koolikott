@@ -120,10 +120,9 @@ public class PortfolioService {
                         while (matcher.find()) {
                             Matcher numberMatcher = numberPattern.matcher(matcher.group());
                             if (numberMatcher.find()) {
-                                Long materialId = Long.valueOf(numberMatcher.group());
-                                frontIds.add(materialId);
+                                frontIds.add(Long.valueOf(numberMatcher.group()));
                             } else {
-                                //log
+                                logger.info("Did not find material");
                             }
                         }
                     }

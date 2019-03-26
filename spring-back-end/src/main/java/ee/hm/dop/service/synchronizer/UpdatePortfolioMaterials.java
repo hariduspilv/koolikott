@@ -40,7 +40,7 @@ public class UpdatePortfolioMaterials {
         try {
             boolean hasData = portfolioMaterialDao.hasData();
             if (hasData) {
-                logger.info("No!");
+                logger.info("PortfolioMaterials table is not empty, migration will not proceed!");
                 return;
             }
             Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);

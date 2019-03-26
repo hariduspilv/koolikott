@@ -78,7 +78,7 @@ angular.module('koolikottApp')
                     $scope.startFrom += $scope.limitt;
             };
             $scope.showFirstItemButton = () => {
-                return $scope.startFrom >= $scope.limitt;
+                return $scope.startFrom > 0;
             };
 
             $scope.showFirstItems = () => {
