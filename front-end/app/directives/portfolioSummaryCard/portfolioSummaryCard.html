@@ -13,7 +13,7 @@
             data-object="portfolio"
           ></dop-share>
           <dop-send-email
-            ng-if="isAdminOrModerator() && !$root.isEditPortfolioMode"
+            ng-if="isAdminOrModerator() && !$root.isEditPortfolioMode && !$root.isFullScreen"
             id="send-email"
             data-learning-object="portfolio">
           </dop-send-email>
