@@ -98,9 +98,8 @@
           </div>
         </md-input-container>
         <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10 padding-10" flex>
-          <label data-translate="CUSTOMER_SUPPORT_MESSAGE"></label>
           <textarea
-            placeholder="{{'CUSTOMER_SUPPORT_MESSAGE_PLACEHOLDER' | translate}}"
+            placeholder="{{placeholder}}"
             class="overflow-auto"
             name="message"
             id="message"
@@ -108,6 +107,7 @@
             type="text"
             required
             maxlength="500"
+            ng-change="$ctrl.setPlaceholder()"
             style="resize: none"
             rows="3"></textarea>
           <div data-ng-messages="customerSupportForm.message.$error">
