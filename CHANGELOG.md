@@ -2,10 +2,9 @@
 
 ### Muutunud
 * Õppevara autoriga ühenduse võtmine, vormil õppevara nime kuvamine, järelejäänud tähemärkida loendur [EK-211](https://projektid.hitsa.ee/jira/browse/EK-211)
-* Kasutajaprofiil, rollida ja huvide küsimine, e-posti muutmine, salvestamine [EK-229](https://projektid.hitsa.ee/jira/browse/EK-229)
+* Kasutajaprofiil, rollide ja huvide küsimine, e-posti muutmine, salvestamine [EK-229](https://projektid.hitsa.ee/jira/browse/EK-229)
+* EHISest õppeasutuste nimekirja pärimine ja baasi salvestamine [EK-298](https://projektid.hitsa.ee/jira/browse/EK-298)
 * Uus õppevara vaates kogumike ja materjalide filter [EK-319](https://projektid.hitsa.ee/jira/browse/EK-319)
-* "Uus õppevara" tabeli algseisu taastamine filtrite tühjendamisel [EK-309](https://projektid.hitsa.ee/jira/browse/EK-309)
-* Filtrite tühjendamisel Uus õppevara tabelis algseisu taastamine [EK-320](https://projektid.hitsa.ee/jira/browse/EK-320)
 * Uus õppevara otsing case insensitive [EK-339](https://projektid.hitsa.ee/jira/browse/EK-339)
 
 ## e-Koolikott [1.31.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703)
