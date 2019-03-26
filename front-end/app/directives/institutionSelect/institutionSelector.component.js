@@ -61,7 +61,7 @@ class controller extends Controller {
 
     handleInstitutionOpen() {
             this.$scope.userProfile.selectedSchools = [{}]
-            this.serverCallService.makeGet('rest/ehisInstitution/institutions/?area=' + this.$scope.userProfile.area)
+            this.serverCallService.makeGet('rest/ehisInstitution/institutions/?area=' +  encodeURI(this.$scope.userProfile.area))
                 .then(response => {
                     this.$scope.institutions = response.data
                 })
