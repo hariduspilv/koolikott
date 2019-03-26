@@ -55,6 +55,7 @@ class EhisInstitutionParser {
                     && checkAreaExists(ie)
                     && checkStatusIsNotClosed(ie)
                     && checkInstTypeIsNotPreSchool(ie)) {
+                    ie.setArea(ie.getArea().trim());
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
             } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null
