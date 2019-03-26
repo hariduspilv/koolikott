@@ -11,7 +11,6 @@ import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.service.synchronizer.UpdatePortfolioMaterials;
 import ee.hm.dop.utils.DbUtils;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -21,9 +20,6 @@ import javax.inject.Inject;
 import javax.persistence.EntityTransaction;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
-import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -49,12 +45,6 @@ public class PortfolioService {
     private PortfolioPermission portfolioPermission;
     @Inject
     private PortfolioCopier portfolioCopier;
-    @Inject
-    private MaterialDao materialDao;
-    @Inject
-    private PortfolioMaterialDao portfolioMaterialDao;
-    @Inject
-    private UpdatePortfolioMaterials updatePortfolioMaterials;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -85,7 +75,6 @@ public class PortfolioService {
         Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
-        //do magic with materials
         for (Chapter chapter : portfolio.getChapters()) {
             if (chapter.getBlocks() != null) {
                 for (ChapterBlock block : chapter.getBlocks()) {
@@ -137,13 +126,11 @@ public class PortfolioService {
         solrEngineService.updateIndex();
 
         PortfolioMaterialDao newPortfolioMaterialDao = newPortfolioMaterialDao();
-        PortfolioDao newPortfolioDao = newPortfolioDao();
         MaterialDao newMaterialDao = newMaterialDao();
 
         Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
-        //do magic with materials
         for (Chapter chapter : portfolio.getChapters()) {
             if (chapter.getBlocks() != null) {
                 for (ChapterBlock block : chapter.getBlocks()) {
@@ -197,10 +184,6 @@ public class PortfolioService {
     }
     private PortfolioMaterial newPortfolioMaterial() {
         return GuiceInjector.getInjector().getInstance(PortfolioMaterial.class);
-    }
-
-    private PortfolioDao newPortfolioDao() {
-        return GuiceInjector.getInjector().getInstance(PortfolioDao.class);
     }
 
     private MaterialDao newMaterialDao() {

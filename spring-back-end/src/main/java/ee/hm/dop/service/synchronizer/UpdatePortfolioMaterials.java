@@ -26,6 +26,7 @@ public class UpdatePortfolioMaterials {
 
     private static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
     private static final String NUMBER_REGEX = "\\d+";
+    private static final Logger logger = LoggerFactory.getLogger(UpdatePortfolioMaterials.class);
 
     @Inject
     private PortfolioMaterialDao portfolioMaterialDao;
@@ -34,7 +35,6 @@ public class UpdatePortfolioMaterials {
     @Inject
     private MaterialDao materialDao;
 
-    private static final Logger logger = LoggerFactory.getLogger(UpdatePortfolioMaterials.class);
 
     public synchronized void run() {
         try {
