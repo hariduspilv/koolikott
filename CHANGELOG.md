@@ -1,4 +1,3 @@
-## e-Koolikott [1.31.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703) (Toodangusse paigaldatud 14.03.2019)
 ## e-Koolikott [1.32.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10750)
 
 ### Muutunud
@@ -8,7 +7,7 @@
 * Uus õppevara vaates kogumike ja materjalide filter [EK-319](https://projektid.hitsa.ee/jira/browse/EK-319)
 * Uus õppevara otsing case insensitive [EK-339](https://projektid.hitsa.ee/jira/browse/EK-339)
 
-## e-Koolikott [1.31.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703)
+## e-Koolikott [1.31.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10703) (Toodangusse paigaldatud 14.03.2019)
 
 ### Muutunud
 * Menüüpunkt "Uus õppevara" universaalne komponent, filtreerimine, pagineerimine, otsing, uute veergude lisamine, sortimine [EK-157](https://projektid.hitsa.ee/jira/browse/EK-157)
