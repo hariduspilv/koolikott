@@ -46,7 +46,7 @@ class controller extends Controller {
                 this.$scope.institutionAreas = response.data
                 if (this.institution) {
                     this.$scope.userProfile.area = this.institution.area
-                    this.serverCallService.makeGet('rest/ehisInstitution/institutions/?area=' + this.$scope.userProfile.area)
+                    this.serverCallService.makeGet('rest/ehisInstitution/institutions/?area=' + encodeURI(this.$scope.userProfile.area))
                         .then((response) => {
                             this.$scope.institutions = response.data
                             this.$scope.userProfile.institution = this.institution

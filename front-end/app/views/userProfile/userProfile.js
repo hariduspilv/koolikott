@@ -181,7 +181,10 @@
         }
 
         deleteTaxon(index) {
-            this.$scope.userProfile.taxons.splice(index, 1);
+            if (this.$scope.userProfile.taxons.length === 1 && index === 0 )
+                this.$scope.userProfile.taxons = [{}]
+            else
+                this.$scope.userProfile.taxons.splice(index, 1);
         }
 
         resetDuplicateEmailError() {

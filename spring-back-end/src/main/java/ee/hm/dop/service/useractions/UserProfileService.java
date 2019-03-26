@@ -122,7 +122,7 @@ public class UserProfileService {
         if (taxons.stream().noneMatch(Objects::nonNull)) {
             return null;
         }
-        List<Long> ids = taxons.stream().map(Taxon::getId).collect(Collectors.toList());
+        List<Long> ids = taxons.stream().filter(Objects::nonNull).map(Taxon::getId).filter(Objects::nonNull).collect(Collectors.toList());
         return taxonService.getTaxonById(ids);
     }
 
@@ -134,7 +134,7 @@ public class UserProfileService {
         if (institutions.stream().noneMatch(Objects::nonNull)) {
             return null;
         }
-        List<Long> ids = institutions.stream().map(InstitutionEhis::getId).collect(Collectors.toList());
+        List<Long> ids = institutions.stream().filter(Objects::nonNull).map(InstitutionEhis::getId).filter(Objects::nonNull).collect(Collectors.toList());
         return ehisInstitutionService.getInstitutionEhisById(ids);
     }
 

@@ -18,7 +18,7 @@ public class InstitutionEhisDao extends AbstractDao<InstitutionEhis> {
     }
     public List<InstitutionEhis> getInstitutionPerArea(String area) {
         return getEntityManager().createQuery("" +
-                "   SELECT i FROM InstitutionEhis i WHERE i.area LIKE :area ORDER BY i.name ASC", entity())
+                "   SELECT i FROM InstitutionEhis i WHERE i.area = :area ORDER BY i.name ASC", entity())
                 .setParameter("area", "%" + area + "%")
                 .getResultList();
     }
