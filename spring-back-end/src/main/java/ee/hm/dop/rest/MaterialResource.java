@@ -106,10 +106,8 @@ public class MaterialResource extends BaseResource {
         return learningObjectAdministrationService.delete(material, getLoggedInUser());
     }
 
-    @GET
-    @Path("getRelatedPortfolios")
-    @Produces(MediaType.APPLICATION_JSON)
-    public List<Portfolio> getRelatedPortfolios(@QueryParam("id") Long id) {
+    @GetMapping("getRelatedPortfolios")
+    public List<Portfolio> getRelatedPortfolios(@RequestParam("id") Long id) {
         return materialService.getRelatedPortfolios(id);
     }
 }
