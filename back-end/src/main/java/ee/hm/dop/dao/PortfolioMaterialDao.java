@@ -21,6 +21,15 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
                 .executeUpdate();
     }
 
+    public List<PortfolioMaterial>findAllPortfolioMaterialsByPortfolio(Long portfolio){
+        return getEntityManager()
+                .createNativeQuery("" +
+                        "SELECT pm.* FROM PortfolioMaterial pm " +
+                        "WHERE pm.portfolio =:portfolio", entity())
+                .setParameter("portfolio",portfolio)
+                .getResultList();
+    }
+
     public boolean materialToPortfolioConnected(Material material, Portfolio portfolio) {
         List<Long> portfolioList = getEntityManager()
                 .createQuery("SELECT pm.portfolio.id FROM PortfolioMaterial pm WHERE pm.material =:material")
@@ -35,5 +44,13 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
                 .createNativeQuery("select exists(select * from PortfolioMaterial) as exi")
                 .getSingleResult();
         return portfolioList.intValue() > 0;
+    }
+
+    public void deleteNotExistingMaterialIds(Long portfolioId, Long materialId){
+        getEntityManager().createNativeQuery("DELETE pm FROM PortfolioMaterial pm " +
+                "WHERE pm.portfolio =:portfolioId AND pm.material =:materialId")
+                .setParameter("portfolioId",portfolioId)
+                .setParameter("materialId",materialId)
+                .executeUpdate();
     }
 }

@@ -33,7 +33,7 @@ public class UpdatePortfolioMaterials extends DopDaemonProcess {
 
             boolean hasData = newPortfolioMaterialDao.hasData();
             if (hasData) {
-                logger.info("No!");
+                logger.info("PortfolioMaterials table is not empty, migration will not proceed!");
                 return;
             }
 
