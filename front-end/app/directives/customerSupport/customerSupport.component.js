@@ -9,6 +9,7 @@
             this.$scope.customerSupport = {}
             this.$scope.captchaKey = ''
             this.getCaptchaKey()
+            this.setPlaceholder()
             this.$scope.fileSizeTooLarge = false
             this.$scope.maxFiles = false
 
@@ -258,6 +259,18 @@
         resetCaptcha() {
             if (this.grecaptcha.getResponse() !== '') {
                 this.grecaptcha.reset();
+            }
+        }
+
+        setPlaceholder() {
+            if (!this.$scope.customerSupport.message || this.$scope.customerSupport.message.length <= 0) {
+                this.$translate('CUSTOMER_SUPPORT_MESSAGE_PLACEHOLDER').then(value => {
+                    this.$scope.placeholder = value
+                })
+            } else {
+                this.$translate('SEND_EMAIL_CONTENT_COUNTER').then(value => {
+                    this.$scope.placeholder = (value.replace('${counter}', 500 - this.$scope.customerSupport.message.length))
+                })
             }
         }
     }
