@@ -114,21 +114,7 @@
                     class="tags card-lg__container card-lg__container--padding-l-r-b"
                     data-learning-object="material">
           </dop-tags>
-          <div class="portfolio-material" data-layout="column">
-            <span data-translate="SEOTUD_KOGUMIKUD"></span>
-            <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limitt : startFrom ">
-              <a
-                data-ng-style="{'pointer-events':userHasAccessToPortfolio(portfolio)}"
-                target="_blank"
-                data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}</a>
-            </div>
-            <button
-              data-ng-show="showNextItemButton()" data-ng-click="showNextItems()">Show more
-            </button>
-            <button
-              data-ng-show="showFirstItemButton()" data-ng-click="showFirstItems()">Show less
-            </button>
-          </div>
+          <dop-related-portfolios data-learning-object="material"></dop-related-portfolios>
         </div>
         <!-- SECTION 1: Right  -->
         <div flex flex-gt-xs="25" class="card-lg__container--border-left" id="section-right">

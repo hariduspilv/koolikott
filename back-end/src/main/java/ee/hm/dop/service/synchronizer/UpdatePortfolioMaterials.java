@@ -42,7 +42,7 @@ public class UpdatePortfolioMaterials extends DopDaemonProcess {
             Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
             logger.info("Portfolio materials updating started");
 
-            for (Portfolio portfolio : newPortfolioDao.findAll()) {
+            for (Portfolio portfolio : newPortfolioDao.getAllPortfoliosDeletedExcluded()) {
                 for (Chapter chapter : portfolio.getChapters()) {
                     if (chapter.getBlocks() != null) {
                         for (ChapterBlock block : chapter.getBlocks()) {

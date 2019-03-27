@@ -9,10 +9,6 @@ import java.util.List;
 
 public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
 
-    public Class<PortfolioMaterial> entity() {
-        return PortfolioMaterial.class;
-    }
-
     public void connectMaterialToPortfolio(Material material, Portfolio portfolio) {
         getEntityManager()
                 .createNativeQuery("INSERT INTO PortfolioMaterial (portfolio,material) VALUES (:portfolio,:material)")

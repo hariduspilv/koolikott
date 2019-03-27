@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,6 +24,9 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
 
     @Inject
     private LearningObjectDao learningObjectDao;
+
+    @Inject
+    private MaterialDao materialDao;
 
     public Portfolio findByIdNotDeleted(Long objectId) {
         TypedQuery<Portfolio> findByCode = getEntityManager()
@@ -99,6 +103,12 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
                 .createQuery("FROM Portfolio port WHERE port.deleted = false ORDER BY added DESC, id DESC", entity())
                 .setFirstResult(startPosition)
                 .setMaxResults(numberOfMaterials)
+                .getResultList();
+    }
+
+    public List<Portfolio> getAllPortfoliosDeletedExcluded() {
+        return getEntityManager()
+                .createQuery("SELECT p FROM Portfolio p WHERE p.deleted = false", entity())
                 .getResultList();
     }
 

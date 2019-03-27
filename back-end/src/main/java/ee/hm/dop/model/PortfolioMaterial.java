@@ -17,6 +17,14 @@ public class PortfolioMaterial implements AbstractEntity {
     @JoinColumn(name = "material", nullable = false)
     private Material material;
 
+    public PortfolioMaterial() {
+    }
+
+    public PortfolioMaterial(Portfolio portfolio, Material material) {
+        this.portfolio = portfolio;
+        this.material = material;
+    }
+
     @Override
     public Long getId() {
         return id;
@@ -39,14 +47,6 @@ public class PortfolioMaterial implements AbstractEntity {
     }
 
     public void setMaterial(Material material) {
-        this.material = material;
-    }
-
-    public PortfolioMaterial() {
-    }
-
-    public PortfolioMaterial(Portfolio portfolio, Material material) {
-        this.portfolio = portfolio;
         this.material = material;
     }
 }

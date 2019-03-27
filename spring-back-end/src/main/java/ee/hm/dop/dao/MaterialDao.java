@@ -155,6 +155,14 @@ public class MaterialDao extends AbstractDao<Material> {
                 .getResultList();
     }
 
+//    public List<Portfolio> getRelatedPortfolios(Long id) {
+//        List<Portfolio> getPortfolios = new ArrayList<>();
+//        for (BigInteger pid : materialDao.getRelatedPortfolios(id)) {
+//            getPortfolios.add(portfolioDao.findById(pid.longValue()));
+//        }
+//        return getPortfolios;
+//    }
+
     @Override
     public Material createOrUpdate(Material entity) {
         entity.setLastInteraction(now());

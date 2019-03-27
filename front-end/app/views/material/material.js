@@ -16,13 +16,7 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
-
-            getMaterialRelatedPortfolios();
             $scope.isActive = false;
-            $scope.limitt = 2;
-            $scope.startFrom = 0;
-            $scope.relatedPortfolios = null
-            // getLoggedInUserData();
 
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
@@ -67,23 +61,6 @@ angular.module('koolikottApp')
                     getContentType();
                 }
             });
-
-            $scope.showNextItemButton = () => {
-                return ($scope.limitt < $scope.relatedPortfolios.length && ($scope.startFrom + $scope.limitt < $scope.relatedPortfolios.length))
-            };
-            $scope.showNextItems = () => {
-                if ($scope.startFrom + $scope.limitt > $scope.relatedPortfolios.length - $scope.limitt) {
-                    $scope.startFrom = $scope.relatedPortfolios.length - $scope.limitt;
-                } else
-                    $scope.startFrom += $scope.limitt;
-            };
-            $scope.showFirstItemButton = () => {
-                return $scope.startFrom > 0;
-            };
-
-            $scope.showFirstItems = () => {
-                $scope.startFrom = 0;
-            };
 
             function getContentType() {
                 if ($scope.material.embedSource) {
@@ -134,31 +111,9 @@ angular.module('koolikottApp')
                     $scope.material = newMaterial;
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
-                    getMaterialRelatedPortfolios($scope.material.id)
+                    // getMaterialRelatedPortfolios($scope.material.id)
                 }
             }
-
-            function getMaterialRelatedPortfolios() {
-                if ($scope.material && $scope.material.id) {
-                    materialService.getRelatedPortfolios($scope.material.id)
-                        .then(response => {
-                            $scope.relatedPortfolios = response.data;
-                        })
-                }
-            }
-
-
-            $scope.userHasAccessToPortfolio = ((portfolio) => {
-                if ($scope.isAdmin)
-                // if ($scope.user.isAdmin())
-                    return 'auto'
-                else {
-                    if (portfolio.creator.id === $scope.material.creator.id)
-                        return 'auto'
-                    else
-                        return 'none'
-                }
-            });
 
             function getMaterial(success, fail) {
                 materialService.getMaterialById($route.current.params.id).then(success, fail)
@@ -211,7 +166,7 @@ angular.module('koolikottApp')
                 getContentType();
                 processMaterial();
 
-                getMaterialRelatedPortfolios($scope.material.id);
+                // getMaterialRelatedPortfolios($scope.material.id);
 
                 eventService.notify('material:reloadTaxonObject');
 
