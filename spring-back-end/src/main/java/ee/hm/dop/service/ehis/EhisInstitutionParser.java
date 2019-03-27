@@ -34,24 +34,24 @@ public class EhisInstitutionParser {
     @Autowired
     private Configuration configuration;
 
-    public List<Integer>  parseAndUpdateDb(URL url) throws DocumentException {
+    List<Integer> parseAndUpdateDb(URL url) throws DocumentException {
         SAXReader saxReader = new SAXReader();
         Document document = new DOMWriter().write(saxReader.read(url));
 
         List<InstitutionEhis> institutionsFromXml = getEhisInstitutions(document);
-        return updateDb(institutionsFromXml);
-    }
 
-    private List<Integer> updateDb(List<InstitutionEhis> institutionsFromXml) {
         List<Integer> syncInfo = new ArrayList<>();
         syncInfo.add(0, institutionsFromXml.size());
+
         int addCounter = 0;
         int removeCounter = 0;
+
         for (InstitutionEhis ie : institutionsFromXml) {
             if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) == null
                     && checkAreaExists(ie)
                     && checkStatusIsNotClosed(ie)
                     && checkInstTypeIsNotPreSchool(ie)) {
+                ie.setArea(ie.getArea().trim());
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
             } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null
@@ -70,12 +70,11 @@ public class EhisInstitutionParser {
         return (isNotBlank(institutionEhis.getArea()) && institutionEhis.getArea() != null);
     }
     private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
-        return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_STATUS)));
+        return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS)));
     }
     private boolean checkInstTypeIsNotPreSchool(InstitutionEhis institutionEhis){
-        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_TYPE)));
+        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_TYPE)));
     }
-
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
         NodeList institutionsNode = getNodeList(document, "//*[local-name()='oppeasutus']");
         return IntStream.range(0, institutionsNode.getLength())
@@ -85,8 +84,7 @@ public class EhisInstitutionParser {
     }
 
     private InstitutionEhis getInstitution(Node institutionNode) {
-        return new InstitutionEhis(
-                Long.valueOf(getInstitutionAttr(institutionNode, "koolId")),
+        return new InstitutionEhis(Long.valueOf(getInstitutionAttr(institutionNode, "koolId")),
                 getInstitutionAttr(institutionNode, "nimetus"),
                 getInstitutionAttr(institutionNode, "maakond"),
                 getInstitutionAttr(institutionNode, "staatus"),

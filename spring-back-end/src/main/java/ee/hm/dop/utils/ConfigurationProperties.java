@@ -72,8 +72,8 @@ public interface ConfigurationProperties {
     String XROAD_EHIS_TIMEOUT_READ = "xroad.ehis.timeout.read";
 
     String XROAD_EHIS_INSTITUTIONS_LIST = "xroad.ehis.institutions.list";
-    String XROAD_EHIS_INSTITUTION_STATUS = "xroad.ehis.institution.status";
-    String XROAD_EHIS_INSTITUTION_TYPE = "xroad.ehis.institution.type";
+    String XROAD_EHIS_INSTITUTIONS_STATUS = "xroad.ehis.institutions.status";
+    String XROAD_EHIS_INSTITUTIONS_TYPE = "xroad.ehis.institutions.type";
 
     // EKool
     String EKOOL_EXTRA_LOGGING = "ekool.extra.logging";

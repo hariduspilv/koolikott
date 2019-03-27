@@ -8,8 +8,6 @@ import org.apache.commons.configuration2.Configuration;
 import org.dom4j.DocumentException;
 import org.dom4j.io.DOMWriter;
 import org.dom4j.io.SAXReader;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -74,10 +72,10 @@ class EhisInstitutionParser {
         return (isNotBlank(institutionEhis.getArea()) && institutionEhis.getArea() != null);
     }
     private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
-        return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_STATUS)));
+        return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS)));
     }
     private boolean checkInstTypeIsNotPreSchool(InstitutionEhis institutionEhis){
-        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTION_TYPE)));
+        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_TYPE)));
     }
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
         NodeList institutionsNode = getNodeList(document, "//*[local-name()='oppeasutus']");
