@@ -10,7 +10,6 @@ import ee.hm.dop.model.interfaces.IMaterial;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
-import ee.hm.dop.utils.ValidatorUtil;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
@@ -31,7 +30,7 @@ public class LearningObjectAdministrationService {
     @Inject
     private AdminLearningObjectDao adminLearningObjectDao;
     @Inject
-    private PortfolioMaterialDao portfolioMaterialDao;
+    private PortfolioMaterialService portfolioMaterialService;
 
     public Recommendation addRecommendation(LearningObject learningObject, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
@@ -65,6 +64,10 @@ public class LearningObjectAdministrationService {
         learningObjectDao.restore(originalLearningObject);
         reviewManager.setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED, ReviewType.SYSTEM_RESTORE);
         solrEngineService.updateIndex();
+
+        if (originalLearningObject instanceof Portfolio) {
+            portfolioMaterialService.save((Portfolio) originalLearningObject);
+        }
         return originalLearningObject;
     }
 
@@ -82,7 +85,9 @@ public class LearningObjectAdministrationService {
         learningObjectDao.delete(originalLearningObject);
         reviewManager.setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED, ReviewType.SYSTEM_DELETE);
         solrEngineService.updateIndex();
-        portfolioMaterialDao.removeDeletedPortfolio(originalLearningObject.getId());
+        if (originalLearningObject instanceof Portfolio) {
+            portfolioMaterialService.delete((Portfolio) originalLearningObject);
+        }
         return originalLearningObject;
     }
 

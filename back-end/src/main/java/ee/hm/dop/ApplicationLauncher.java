@@ -42,7 +42,7 @@ public class ApplicationLauncher {
     @Inject
     private static EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
     @Inject
-    private static UpdatePortfolioMaterials updatePortfolioMaterials;
+    private static UpdatePortfolioMaterialsExecutor updatePortfolioMaterialsExecutor;
 
 
     public static void startApplication() {
@@ -85,7 +85,7 @@ public class ApplicationLauncher {
         Executors.newSingleThreadExecutor().submit(() -> ehisInstitutionUpdateExecutor.run());
     }
     private static void updatePortfolioMaterials() {
-        Executors.newSingleThreadExecutor().submit(() -> updatePortfolioMaterials.run());
+        Executors.newSingleThreadExecutor().submit(() -> updatePortfolioMaterialsExecutor.run());
     }
 
     private static void startExecutors() {

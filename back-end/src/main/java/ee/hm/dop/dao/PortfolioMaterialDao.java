@@ -3,6 +3,7 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.PortfolioMaterial;
+import org.apache.commons.collections.CollectionUtils;
 
 import java.math.BigInteger;
 import java.util.List;
@@ -48,6 +49,16 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
                 .setParameter("portfolioId", portfolioId)
                 .setParameter("materialId", materialId)
                 .executeUpdate();
+    }
+
+    public void deleteNotExistingMaterialIds(Long portfolioId, List<Long> materialId) {
+        if (CollectionUtils.isNotEmpty(materialId)) {
+            getEntityManager().createNativeQuery("DELETE pm FROM PortfolioMaterial pm " +
+                    "WHERE pm.portfolio =:portfolioId AND pm.material in (:materialId)")
+                    .setParameter("portfolioId", portfolioId)
+                    .setParameter("materialId", materialId)
+                    .executeUpdate();
+        }
     }
 
     public void removeDeletedPortfolio(Long portfolioId) {
