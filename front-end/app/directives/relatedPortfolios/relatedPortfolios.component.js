@@ -4,7 +4,7 @@
     class controller extends Controller {
         $onInit() {
 
-            this.$scope.limit = 3;
+            this.$scope.limit = 2;
             this.$scope.startFrom = 0;
             this.$scope.relatedPortfolios = []
 

@@ -1,7 +1,8 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
