@@ -105,6 +105,7 @@
             id="message"
             ng-model="customerSupport.message"
             type="text"
+            ng-trim="false"
             required
             maxlength="500"
             ng-change="$ctrl.setPlaceholder()"
