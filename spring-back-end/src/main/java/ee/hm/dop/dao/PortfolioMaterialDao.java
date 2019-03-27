@@ -57,4 +57,10 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
                 .setParameter("materialId",materialId)
                 .executeUpdate();
     }
+
+    public void removeDeletedPortfolio(Long portfolioId) {
+        getEntityManager().createNativeQuery("DELETE pm FROM PortfolioMaterial pm WHERE pm.portfolio =:portfolioId")
+                .setParameter("portfolioId", portfolioId)
+                .executeUpdate();
+    }
 }

@@ -21,12 +21,12 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
                 .executeUpdate();
     }
 
-    public List<PortfolioMaterial>findAllPortfolioMaterialsByPortfolio(Long portfolio){
+    public List<PortfolioMaterial> findAllPortfolioMaterialsByPortfolio(Long portfolio) {
         return getEntityManager()
                 .createNativeQuery("" +
                         "SELECT pm.* FROM PortfolioMaterial pm " +
                         "WHERE pm.portfolio =:portfolio", entity())
-                .setParameter("portfolio",portfolio)
+                .setParameter("portfolio", portfolio)
                 .getResultList();
     }
 
@@ -46,11 +46,17 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
         return portfolioList.intValue() > 0;
     }
 
-    public void deleteNotExistingMaterialIds(Long portfolioId, Long materialId){
+    public void deleteNotExistingMaterialIds(Long portfolioId, Long materialId) {
         getEntityManager().createNativeQuery("DELETE pm FROM PortfolioMaterial pm " +
                 "WHERE pm.portfolio =:portfolioId AND pm.material =:materialId")
-                .setParameter("portfolioId",portfolioId)
-                .setParameter("materialId",materialId)
+                .setParameter("portfolioId", portfolioId)
+                .setParameter("materialId", materialId)
+                .executeUpdate();
+    }
+
+    public void removeDeletedPortfolio(Long portfolioId) {
+        getEntityManager().createNativeQuery("DELETE pm FROM PortfolioMaterial pm WHERE pm.portfolio =:portfolioId")
+                .setParameter("portfolioId", portfolioId)
                 .executeUpdate();
     }
 }
