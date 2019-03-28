@@ -79,13 +79,13 @@
     component('dopRelatedPortfolios', {
         controller,
         template: `
-              <div class="portfolio-material" data-layout="column">
+              <div data-ng-if="relatedPortfolios.length > 0" class="portfolio-material" data-layout="column">
             <span data-translate="SEOTUD_KOGUMIKUD"></span>
-            <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limit : startFrom ">
+            <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limit : startFrom " flex data-layout="row">
               <a
                 data-ng-style="{'pointer-events':$ctrl.userCanClickPortfolio(portfolio)}"
                 target="_blank"
-                data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}<span data-ng-if="$ctrl.userCanClickPortfolio(portfolio) === 'none'" data-translate="PORTFOLIO_PRIVATE"></span></a>
+                data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}<span style="margin-left: 0px" data-ng-if="$ctrl.userCanClickPortfolio(portfolio) === 'none'" data-translate="PORTFOLIO_PRIVATE"></span></a>
             </div>
             <button
               data-ng-show="showNextButton()" data-ng-click="showNextItems()">Show more
