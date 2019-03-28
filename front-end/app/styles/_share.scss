@@ -63,3 +63,19 @@
 .share__title {
   margin-top: 0;
 }
+
+.hide-share-on-mobile {
+    @media screen and (max-width : $layout-small-screen-500) {
+    display: none;
+  }
+}
+
+.show-share-on-mobile {
+  display: none;
+  @media screen and (max-width : $layout-small-screen-500) {
+    display: block;
+    position: absolute;
+    top: 25px;
+    right: 140px;
+  }
+}

@@ -19,6 +19,7 @@ class controller extends Controller {
 
             this.initGoogleButton()
         })
+        this.leftOrDown()
     }
     initGoogleButton() {
         if (!gapi) {
@@ -32,6 +33,10 @@ class controller extends Controller {
             prefilltext: this.title,
             calltoactionurl: this.pageUrl
         })
+    }
+
+    leftOrDown() {
+        return window.screen.availWidth < 500 ? 'down' : 'left'
     }
     isVisible() {
         if (this.object && this.object.deleted || this.$rootScope.isEditPortfolioPage)

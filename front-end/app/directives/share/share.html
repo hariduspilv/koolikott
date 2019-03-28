@@ -1,6 +1,6 @@
 <md-fab-speed-dial
   md-open="$ctrl.isOpen"
-  md-direction="left"
+  md-direction="{{$ctrl.leftOrDown()}}"
   data-ng-show="$ctrl.isVisible()"
   class="md-scale share"
   data-ng-click="$ctrl.addStyle()"
