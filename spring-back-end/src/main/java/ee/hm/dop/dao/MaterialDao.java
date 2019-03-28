@@ -150,7 +150,7 @@ public class MaterialDao extends AbstractDao<Material> {
 
     public List<BigInteger> getRelatedPortfolios(Long materialId) {
         return getEntityManager().
-                createNativeQuery("SELECT pm.portfolio FROM PortfolioMaterial pm WHERE pm.material =:materialId")
+                createNativeQuery("SELECT pm.portfolio FROM PortfolioMaterial pm WHERE pm.material =:materialId ORDER BY pm.portfolio DESC")
                 .setParameter("materialId",materialId)
                 .getResultList();
     }

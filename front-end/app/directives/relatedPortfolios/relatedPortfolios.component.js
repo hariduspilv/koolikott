@@ -75,7 +75,7 @@
     component('dopRelatedPortfolios', {
         controller,
         template: `
-                   <hr>
+              <md-divider class="md-default-theme"></md-divider>
               <div data-ng-if="relatedPortfolios.length > 0" class="portfolio-material" data-layout="column">
             <span data-translate="PORTFOLIO_RELATED_PORTFOLIOS"></span>
             <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limit : startFrom " flex data-layout="row">
@@ -84,12 +84,16 @@
                 target="_blank"
                 data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}<span class="span-margin-left" data-ng-if="$ctrl.userCanClickPortfolio(portfolio) === 'none'" data-translate="PORTFOLIO_PRIVATE"></span></a>
             </div>
-            <button
-              data-ng-show="showNextButton()" data-ng-click="showNextItems()"><span class="span-margin-left" data-translate="PORTFOLIO_SHOW_MORE"></span>
-            </button>
-            <button
-              data-ng-show="showFirstButton()" data-ng-click="reset()"><span class="span-margin-left" data-translate="PORTFOLIO_SHOW_LESS"></span>
-            </button>
+            <div>
+            <md-button 
+              data-ng-show="showNextButton()" data-ng-click="showNextItems()"><span class="md-button md-ink-ripple span-margin-left" data-translate="PORTFOLIO_SHOW_MORE"></span>
+              <md-icon class="md-primary">keyboard_arrow_right</md-icon>
+            </md-button>
+            <md-button 
+              data-ng-show="showFirstButton()" data-ng-click="reset()"><span class="md-button md-ink-ripple span-margin-left" data-translate="PORTFOLIO_SHOW_LESS"></span>
+            <md-icon class="md-primary">keyboard_arrow_right</md-icon>
+            </md-button>
+            </div>
           </div>
         `,
         bindings: {
