@@ -26,8 +26,6 @@ public class TagService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private TagConverter tagConverter;
-    @Inject
     private LearningObjectService learningObjectService;
 
     public Tag getTagByName(String name) {
@@ -39,14 +37,6 @@ public class TagService {
         ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         return addTag(learningObject, tag, loggedInUser);
-    }
-
-    public TagDTO addSystemTag(Long learningObjectId, Tag tag, User user) {
-        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
-        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
-
-        LearningObject newLearningObject = addTag(learningObject, tag, user);
-        return tagConverter.addChangeReturnTagDto(tag.getName(), newLearningObject, user);
     }
 
     private LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {

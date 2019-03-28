@@ -234,43 +234,14 @@ class controller extends Controller {
         this.$scope.upvotes = this.allUpvotes.slice(0, 10)
         this.showMoreTags = true
     }
-    doSuggest(query) {
-        return this.suggestService.suggest(query, this.suggestService.getSuggestSystemTagURLbase())
-    }
-    tagSelected() {
-        if (this.newTag && this.newTag.tagName) {
-            this.serverCallService
-                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
-                .then(({ data }) => {
-                    this.$rootScope.learningObjectChanged = true
-                    this.addTagSuccess(data.learningObject)
-                    this.showSystemTagDialog(data.tagTypeName)
-                    this.$scope.$emit(
-                        this.isMaterial(learningObject)
-                            ? 'tags:updateMaterial'
-                            : 'tags:updatePortfolio',
-                        learningObject
-                    )
-                })
-            this.newTag.tagName = null
-        }
-    }
+    // doSuggest(query) {
+    //     return this.suggestService.suggest(query, this.suggestService.getSuggestSystemTagURLbase())
+    // }
     limitTextLength() {
         if (this.newTag && this.newTag.tagName && this.newTag.tagName.length > 60)
             this.newTag.tagName = this.newTag.tagName.slice(0, -1)
     }
-    showSystemTagDialog(tagType) {
-        if (tagType)
-            this.$mdDialog.show(
-                this.$mdDialog
-                    .alert()
-                    .clickOutsideToClose(true)
-                    .title(this.$translate.instant('SYSTEM_TAG_DIALOG_TITLE'))
-                    .textContent(this.$translate.instant('SYSTEM_TAG_DIALOG_CONTENT'))
-                    .ok('Ok')
-                    .closeTo(`#${tagType}-close`)
-            )
-    }
+
     setNewTags() {
         const setNew = (tags) => Array.isArray(tags) && tags.forEach(t => {
             t.isNew = !this.$rootScope.learningObjectChanges ? false : !!this.$rootScope.learningObjectChanges

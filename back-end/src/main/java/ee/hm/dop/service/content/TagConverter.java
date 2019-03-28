@@ -43,7 +43,6 @@ public class TagConverter {
             return convertDto(learningObject, tagTypeName);
         }
 
-        updateLO(learningObject, taxon, resourceType, targetGroup);
         if (ChangeProcessStrategy.processStrategy(learningObject).processNewChanges()) {
             reviewableChangeService.registerChange(learningObject, user, taxon, resourceType, targetGroup, null);
             learningObject.setChanged(learningObject.getChanged() + 1);
@@ -51,19 +50,6 @@ public class TagConverter {
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
         solrEngineService.updateIndex();
         return convertDto(updatedLearningObject, tagTypeName);
-    }
-
-    private void updateLO(LearningObject learningObject, Taxon taxon, ResourceType resourceType, TargetGroup targetGroup) {
-        if (taxon != null) {
-            learningObject.getTaxons().add(taxon);
-        } else if (resourceType != null) {
-            if (learningObject instanceof Material) {
-                Material material = (Material) learningObject;
-                material.getResourceTypes().add(resourceType);
-            }
-        } else if (targetGroup != null) {
-            learningObject.getTargetGroups().add(targetGroup);
-        }
     }
 
     private TagDTO convertDto(LearningObject updatedLearningObject, String tagTypeName) {

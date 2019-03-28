@@ -39,15 +39,6 @@ public class LearningObjectResource extends BaseResource {
         return tagService.addRegularTag(learningObjectId, newTag, getLoggedInUser());
     }
 
-    @PUT
-    @Path("{learningObjectId}/system_tags")
-    @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public TagDTO addSystemTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
-        return tagService.addSystemTag(learningObjectId, newTag, getLoggedInUser());
-    }
-
     @GET
     @Path("favorite")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
