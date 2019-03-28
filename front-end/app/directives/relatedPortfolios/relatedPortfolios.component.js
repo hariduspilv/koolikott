@@ -4,14 +4,15 @@
     class controller extends Controller {
         $onInit() {
 
-            this.$scope.limit = 2;
+            const itemCount = 10;
+            this.$scope.limit = itemCount;
             this.$scope.startFrom = 0;
             this.$scope.relatedPortfolios = []
 
             this.getMaterialRelatedPortfolios()
 
             this.$scope.showFirstButton = () => {
-                return this.$scope.limit > 2;
+                return this.$scope.limit > itemCount;
             };
 
             this.$scope.showNextButton = () => {
@@ -20,11 +21,11 @@
 
             this.$scope.reset = () => {
                 this.$scope.startFrom = 0;
-                this.$scope.limit = 2;
+                this.$scope.limit = itemCount;
             };
 
             this.$scope.showNextItems = () => {
-                this.$scope.limit += 2;
+                this.$scope.limit += itemCount;
             };
         }
 
