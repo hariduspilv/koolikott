@@ -11,22 +11,23 @@ import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 
-import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static java.time.LocalDateTime.now;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
 @Transactional
 public class PortfolioService {
 
+    private static final Logger logger = LoggerFactory.getLogger(PortfolioService.class);
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
@@ -41,6 +42,8 @@ public class PortfolioService {
     private PortfolioPermission portfolioPermission;
     @Inject
     private PortfolioCopier portfolioCopier;
+    @Inject
+    private PortfolioMaterialService portfolioMaterialService;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -55,13 +58,16 @@ public class PortfolioService {
         Portfolio originalPortfolio = portfolioConverter.setFieldsToExistingPortfolio(validateUpdate(portfolio, user), portfolio);
         originalPortfolio.setUpdated(now());
 
+        logger.info("Portfolio materials updating started. Portfolio id= " + portfolio.getId());
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
+
+        portfolioMaterialService.update(portfolio);
+        logger.info("Portfolio materials updating ended");
 
         boolean loChanged = reviewableChangeService.processChanges(updatedPortfolio, user, ChangeProcessStrategy.processStrategy(updatedPortfolio));
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
 
         solrEngineService.updateIndex();
-
         return updatedPortfolio;
     }
 
@@ -87,6 +93,7 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
+        portfolioMaterialService.save(portfolio);
         return createdPortfolio;
     }
 

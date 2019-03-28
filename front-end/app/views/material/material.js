@@ -16,6 +16,7 @@ angular.module('koolikottApp')
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
+            $scope.isActive = false;
 
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
@@ -110,6 +111,7 @@ angular.module('koolikottApp')
                     $scope.material = newMaterial;
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
+                    // getMaterialRelatedPortfolios($scope.material.id)
                 }
             }
 
@@ -163,6 +165,8 @@ angular.module('koolikottApp')
                 $scope.material.source = getSource($scope.material);
                 getContentType();
                 processMaterial();
+
+                // getMaterialRelatedPortfolios($scope.material.id);
 
                 eventService.notify('material:reloadTaxonObject');
 

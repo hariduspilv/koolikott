@@ -53,6 +53,7 @@ public class AutomaticallyAcceptReviewableChange extends DopDaemonProcess {
                 }
             }
 
+
             logger.info("Automatic ReviewableChange Acceptor has finished execution, updated changes: " + accepted);
             closeTransaction();
         } catch (Exception e) {
