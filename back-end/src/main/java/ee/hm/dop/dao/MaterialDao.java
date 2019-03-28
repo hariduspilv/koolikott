@@ -3,6 +3,8 @@ package ee.hm.dop.dao;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.inject.Inject;
 import javax.persistence.TypedQuery;
@@ -144,6 +146,13 @@ public class MaterialDao extends AbstractDao<Material> {
         return getEntityManager()
                 .createQuery("FROM Material mat WHERE mat.deleted = false ORDER BY added DESC, id DESC", entity())
                 .setFirstResult(startPosition).setMaxResults(numberOfMaterials)
+                .getResultList();
+    }
+
+    public List<BigInteger> getRelatedPortfolios(Long materialId) {
+        return getEntityManager().
+                createNativeQuery("SELECT pm.portfolio FROM PortfolioMaterial pm WHERE pm.material =:materialId")
+                .setParameter("materialId",materialId)
                 .getResultList();
     }
 

@@ -2,6 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.AdminLearningObjectDao;
 import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.PortfolioMaterialDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
@@ -33,6 +34,8 @@ public class LearningObjectAdministrationService {
     private ReviewManager reviewManager;
     @Inject
     private AdminLearningObjectDao adminLearningObjectDao;
+    @Inject
+    private PortfolioMaterialService portfolioMaterialService;
 
     public Recommendation addRecommendation(LearningObject learningObject, User loggedInUser) {
         UserUtil.mustBeAdmin(loggedInUser);
@@ -66,6 +69,9 @@ public class LearningObjectAdministrationService {
         learningObjectDao.restore(originalLearningObject);
         reviewManager.setEverythingReviewed(user, originalLearningObject, ReviewStatus.RESTORED, ReviewType.SYSTEM_RESTORE);
         solrEngineService.updateIndex();
+        if (originalLearningObject instanceof Portfolio) {
+            portfolioMaterialService.save((Portfolio) originalLearningObject);
+        }
         return originalLearningObject;
     }
 
@@ -83,6 +89,9 @@ public class LearningObjectAdministrationService {
         learningObjectDao.delete(originalLearningObject);
         reviewManager.setEverythingReviewed(loggedInUser, originalLearningObject, ReviewStatus.DELETED, ReviewType.SYSTEM_DELETE);
         solrEngineService.updateIndex();
+        if (originalLearningObject instanceof Portfolio) {
+            portfolioMaterialService.delete((Portfolio) originalLearningObject);
+        }
         return originalLearningObject;
     }
 

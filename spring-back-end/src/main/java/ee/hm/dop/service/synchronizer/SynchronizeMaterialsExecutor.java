@@ -26,6 +26,7 @@ public class SynchronizeMaterialsExecutor {
     private RepositoryService repositoryService;
 
     public synchronized void run() {
+
         List<SynchronizationAudit> audits = new ArrayList<>();
         try {
             RepositoryService repositoryService = newRepositoryService();

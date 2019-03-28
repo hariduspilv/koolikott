@@ -9,6 +9,10 @@ class controller extends Controller {
             });
     }
 
+    getRelatedPortfolios(id){
+        return this.serverCallService.makeGet("rest/material/getRelatedPortfolios",{'id':id})
+    }
+
     increaseViewCount(material) {
         let viewCountParams = {
             'type': '.Material',

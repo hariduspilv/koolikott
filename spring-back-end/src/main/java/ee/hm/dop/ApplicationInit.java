@@ -17,6 +17,7 @@ public class ApplicationInit {
     private AuthenticationStateCleaner authenticationStateCleaner;
     private AuthenticatedUserCleaner authenticatedUserCleaner;
     private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
+    private UpdatePortfolioMaterialsExecutor updatePortfolioMaterialsExecutor;
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
@@ -25,5 +26,6 @@ public class ApplicationInit {
         authenticationStateCleaner.runAsync();
         authenticatedUserCleaner.runAsync();
         ehisInstitutionUpdateExecutor.runAsync();
+        updatePortfolioMaterialsExecutor.runAsync();
     }
 }

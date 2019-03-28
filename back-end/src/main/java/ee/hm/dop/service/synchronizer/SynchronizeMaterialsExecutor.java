@@ -33,6 +33,7 @@ public class SynchronizeMaterialsExecutor extends DopDaemonProcess {
         List<SynchronizationAudit> audits = new ArrayList<>();
         try {
             beginTransaction();
+
             RepositoryService repositoryService = newRepositoryService();
             List<Repository> repositories = repositoryService.getAllUsedRepositories();
 

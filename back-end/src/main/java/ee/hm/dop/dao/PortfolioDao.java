@@ -1,16 +1,14 @@
 package ee.hm.dop.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
 
 import javax.inject.Inject;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.enums.Visibility;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 import static org.joda.time.DateTime.now;
@@ -31,6 +29,16 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
                 .setParameter("id", objectId);
 
         return getSingleResult(findByCode);
+    }
+
+    public List<Portfolio> getRelatedPortfolios(Long materialId) {
+        return getEntityManager().
+                createNativeQuery("" +
+                        "SELECT p.* FROM PortfolioMaterial pm\n" +
+                        "join Portfolio p on pm.portfolio = p.id\n" +
+                        "WHERE pm.material = :materialId", entity())
+                .setParameter("materialId",materialId)
+                .getResultList();
     }
 
     public Portfolio findDeletedById(Long portfolioId) {
@@ -99,6 +107,12 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
                 .createQuery("FROM Portfolio port WHERE port.deleted = false ORDER BY added DESC, id DESC", entity())
                 .setFirstResult(startPosition)
                 .setMaxResults(numberOfMaterials)
+                .getResultList();
+    }
+
+    public List<Portfolio> getAllPortfoliosDeletedExcluded() {
+        return getEntityManager()
+                .createQuery("SELECT p FROM Portfolio p WHERE p.deleted = false", entity())
                 .getResultList();
     }
 

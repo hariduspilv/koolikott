@@ -3,13 +3,11 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Portfolio;
-
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 
 @Service
 @Transactional

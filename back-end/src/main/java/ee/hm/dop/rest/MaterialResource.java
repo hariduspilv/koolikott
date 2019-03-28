@@ -1,9 +1,6 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.MaterialGetter;
@@ -115,5 +112,12 @@ public class MaterialResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject delete(Material material) {
         return learningObjectAdministrationService.delete(material, getLoggedInUser());
+    }
+
+    @GET
+    @Path("getRelatedPortfolios")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Portfolio> getRelatedPortfolios(@QueryParam("id") Long id) {
+        return materialService.getRelatedPortfolios(id);
     }
 }
