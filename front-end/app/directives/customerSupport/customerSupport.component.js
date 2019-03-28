@@ -144,6 +144,10 @@
                             this.$scope.showCustomerSupportInput = false
                             this.$scope.finalStep = true
                             this.$scope.captchaSuccess = false
+                            this.$scope.customerSupport.message = ''
+                            this.$translate('CUSTOMER_SUPPORT_MESSAGE_PLACEHOLDER').then(value => {
+                                this.$scope.placeholder = value
+                            })
                         } else {
                             this.$scope.showCustomerSupportDialog = false
                             this.$scope.captchaSuccess = false
@@ -193,6 +197,11 @@
                 this.$scope.customerSupport.subject = ''
                 this.$scope.userManualExists = false
                 this.$scope.showCustomerSupportInput = false
+                this.$scope.customerSupport.message = ''
+                this.$translate('CUSTOMER_SUPPORT_MESSAGE_PLACEHOLDER').then(value => {
+                    this.$scope.placeholder = value
+                })
+
             } else {
 
                 this.$scope.showCustomerSupportInput = false
