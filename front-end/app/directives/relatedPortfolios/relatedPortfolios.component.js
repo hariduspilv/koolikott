@@ -11,7 +11,7 @@
             this.getMaterialRelatedPortfolios()
 
             this.$scope.showFirstButton = () => {
-                return this.$scope.startFrom > 0;
+                return this.$scope.limit > 2;
             };
 
             this.$scope.showNextButton = () => {
@@ -20,20 +20,17 @@
 
             this.$scope.reset = () => {
                 this.$scope.startFrom = 0;
+                this.$scope.limit = 2;
             };
 
             this.$scope.showNextItems = () => {
-                this.$scope.startFrom = this.numberOfDisplayed() <= this.numberOfRemaining() ? this.numberOfDisplayed() : this.numberOfRemaining();
+                this.$scope.limit += 2;
             };
         }
 
         $onChanges({learningObject}) {
             if (learningObject && learningObject.currentValue !== learningObject.previousValue)
                 this.getMaterialRelatedPortfolios()
-        }
-
-        numberOfRemaining() {
-            return this.$scope.relatedPortfolios.length - this.$scope.limit;
         }
 
         numberOfDisplayed() {

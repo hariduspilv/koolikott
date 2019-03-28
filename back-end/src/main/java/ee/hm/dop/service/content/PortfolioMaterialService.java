@@ -75,17 +75,19 @@ public class PortfolioMaterialService {
         Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
-        for (Chapter chapter : portfolio.getChapters()) {
-            if (chapter.getBlocks() != null) {
-                for (ChapterBlock block : chapter.getBlocks()) {
-                    if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                        Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
-                        while (matcher.find()) {
-                            Matcher numberMatcher = numberPattern.matcher(matcher.group());
-                            if (numberMatcher.find()) {
-                                frontIds.add(Long.valueOf(numberMatcher.group()));
-                            } else {
-                                logger.info("Did not find material");
+        if (portfolio.getChapters() != null) {
+            for (Chapter chapter : portfolio.getChapters()) {
+                if (chapter.getBlocks() != null) {
+                    for (ChapterBlock block : chapter.getBlocks()) {
+                        if (StringUtils.isNotBlank(block.getHtmlContent())) {
+                            Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
+                            while (matcher.find()) {
+                                Matcher numberMatcher = numberPattern.matcher(matcher.group());
+                                if (numberMatcher.find()) {
+                                    frontIds.add(Long.valueOf(numberMatcher.group()));
+                                } else {
+                                    logger.info("Did not find material");
+                                }
                             }
                         }
                     }
