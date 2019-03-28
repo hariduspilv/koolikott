@@ -1,20 +1,17 @@
 package ee.hm.dop.service.metadata;
 
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.TagDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.service.content.TagConverter;
-import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
 
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 public class TagService {
