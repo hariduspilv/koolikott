@@ -27,6 +27,10 @@
             this.$scope.showNextItems = () => {
                 this.$scope.limit += itemCount;
             };
+
+            this.$scope.isAdmin = () => {
+                return this.authenticatedUserService.isAdmin()
+            };
         }
 
         $onChanges({learningObject}) {
@@ -47,10 +51,6 @@
             }
         }
 
-        isAdmin() {
-            return this.authenticatedUserService.isAdmin()
-        }
-
         isOwner(portfolio) {
             return this.authenticatedUserService.isAuthenticated() &&
             portfolio && portfolio.creator ? portfolio.creator.id === this.authenticatedUserService.getUser().id
@@ -63,7 +63,6 @@
             }
             return 'none';
         }
-
     }
 
     controller.$inject = [
@@ -86,11 +85,11 @@
             </div>
             <div>
             <md-button 
-              data-ng-show="showNextButton()" data-ng-click="showNextItems()"><span class="md-button md-ink-ripple span-margin-left" data-translate="PORTFOLIO_SHOW_MORE"></span>
+              data-ng-show="showNextButton()" data-ng-click="showNextItems()"><span class="span-margin-left" data-translate="PORTFOLIO_SHOW_MORE"></span>
               <md-icon class="md-primary">keyboard_arrow_right</md-icon>
             </md-button>
             <md-button 
-              data-ng-show="showFirstButton()" data-ng-click="reset()"><span class="md-button md-ink-ripple span-margin-left" data-translate="PORTFOLIO_SHOW_LESS"></span>
+              data-ng-show="showFirstButton()" data-ng-click="reset()"><span class="span-margin-left" data-translate="PORTFOLIO_SHOW_LESS"></span>
             <md-icon class="md-primary">keyboard_arrow_right</md-icon>
             </md-button>
             </div>
