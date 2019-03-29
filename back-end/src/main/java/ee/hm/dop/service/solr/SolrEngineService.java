@@ -1,7 +1,6 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.model.solr.SolrSearchResponse;
-import ee.hm.dop.service.SuggestionStrategy;
 
 import java.util.List;
 
@@ -11,7 +10,7 @@ public interface SolrEngineService {
 
     SolrSearchResponse limitlessSearch(SolrSearchRequest searchRequest);
 
-    List<String> suggest(String query, SuggestionStrategy suggestionStrategy);
+    List<String> suggest(String query);
 
     void fullImport();
 

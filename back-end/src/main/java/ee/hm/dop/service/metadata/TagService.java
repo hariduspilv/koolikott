@@ -1,20 +1,17 @@
 package ee.hm.dop.service.metadata;
 
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.TagDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.service.content.TagConverter;
-import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
 
+import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 public class TagService {
@@ -25,8 +22,6 @@ public class TagService {
     private LearningObjectDao learningObjectDao;
     @Inject
     private SolrEngineService solrEngineService;
-    @Inject
-    private TagConverter tagConverter;
     @Inject
     private LearningObjectService learningObjectService;
 
@@ -39,14 +34,6 @@ public class TagService {
         ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         return addTag(learningObject, tag, loggedInUser);
-    }
-
-    public TagDTO addSystemTag(Long learningObjectId, Tag tag, User user) {
-        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
-        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
-
-        LearningObject newLearningObject = addTag(learningObject, tag, user);
-        return tagConverter.addChangeReturnTagDto(tag.getName(), newLearningObject, user);
     }
 
     private LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
@@ -65,5 +52,4 @@ public class TagService {
 
         return updatedLearningObject;
     }
-
 }

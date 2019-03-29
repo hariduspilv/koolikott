@@ -1,7 +1,5 @@
 package ee.hm.dop.service.solr;
 
-import ee.hm.dop.service.SuggestionStrategy;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -12,11 +10,11 @@ public class SuggestService {
     @Inject
     private SolrEngineService solrEngineService;
 
-    public Response suggest(String query, SuggestionStrategy suggestionStrategy) {
+    public Response suggest(String query) {
         if (query.isEmpty()) {
             return Response.status(Response.Status.BAD_REQUEST).build();
         }
-        List<String> suggestResponse = solrEngineService.suggest(query, suggestionStrategy);
+        List<String> suggestResponse = solrEngineService.suggest(query);
         return Response.ok(suggestResponse).build();
     }
 

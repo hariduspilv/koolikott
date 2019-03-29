@@ -11,10 +11,6 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.getTagUpVotes()
 
-        this.unsubscribeTagsAdded = this.$rootScope.$watch('learningObjectChanges', (currentValue, previousValue) => {
-            if (currentValue !== previousValue)
-                this.setNewTags()
-        }, true)
         this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this))
         this.$rootScope.$on('tags:focusInput', () => {
             let numAttempts = 0
@@ -88,8 +84,6 @@ class controller extends Controller {
                     this.$scope.upvotes = sorted
                     this.showMoreTags = false
                 }
-
-                this.setNewTags()
             })
     }
     isLoggedOutAndHasNoTags() {
@@ -234,63 +228,10 @@ class controller extends Controller {
         this.$scope.upvotes = this.allUpvotes.slice(0, 10)
         this.showMoreTags = true
     }
-    doSuggest(query) {
-        return this.suggestService.suggest(query, this.suggestService.getSuggestSystemTagURLbase())
-    }
-    tagSelected() {
-        if (this.newTag && this.newTag.tagName) {
-            this.serverCallService
-                .makePut(`rest/learningObject/${this.learningObject.id}/system_tags`, JSON.stringify(this.newTag.tagName))
-                .then(({ data }) => {
-                    this.$rootScope.learningObjectChanged = true
-                    this.addTagSuccess(data.learningObject)
-                    this.showSystemTagDialog(data.tagTypeName)
-                    this.$scope.$emit(
-                        this.isMaterial(learningObject)
-                            ? 'tags:updateMaterial'
-                            : 'tags:updatePortfolio',
-                        learningObject
-                    )
-                })
-            this.newTag.tagName = null
-        }
-    }
+
     limitTextLength() {
         if (this.newTag && this.newTag.tagName && this.newTag.tagName.length > 60)
             this.newTag.tagName = this.newTag.tagName.slice(0, -1)
-    }
-    showSystemTagDialog(tagType) {
-        if (tagType)
-            this.$mdDialog.show(
-                this.$mdDialog
-                    .alert()
-                    .clickOutsideToClose(true)
-                    .title(this.$translate.instant('SYSTEM_TAG_DIALOG_TITLE'))
-                    .textContent(this.$translate.instant('SYSTEM_TAG_DIALOG_CONTENT'))
-                    .ok('Ok')
-                    .closeTo(`#${tagType}-close`)
-            )
-    }
-    setNewTags() {
-        const setNew = (tags) => Array.isArray(tags) && tags.forEach(t => {
-            t.isNew = !this.$rootScope.learningObjectChanges ? false : !!this.$rootScope.learningObjectChanges
-                .find(c => {
-                    if (c.taxon && c.taxon.translationKey) {
-                        return this.$translate.instant(c.taxon.translationKey).toLowerCase() === t.tag;
-                    }
-                    if (c.resourceType && c.resourceType.name) {
-                        return this.$translate.instant(c.resourceType.name).toLowerCase() === t.tag
-                    }
-                    if (c.targetGroup && c.targetGroup.name) {
-                        return this.$translate.instant(c.targetGroup.name).toLowerCase() === t.tag
-                    }
-                    return false;
-                });
-        });
-        this.$translate.onReady().then(() => {
-            setNew(this.$scope.upvotes)
-            setNew(this.allUpvotes)
-        })
     }
 }
 controller.$inject = [

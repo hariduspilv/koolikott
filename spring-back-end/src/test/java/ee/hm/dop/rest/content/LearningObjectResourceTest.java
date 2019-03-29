@@ -27,7 +27,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     public static final String INCREASE_VIEW_COUNT_URL = "learningObject/increaseViewCount";
     public static final String ADD_TAG_URL = "learningObject/%s/tags";
-    public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_TO_FAVOURITE_URL = "learningObject/favorite";
     public static final String GET_FAVOURITE_URL = "learningObject/favorite?id=%s";
     public static final String DELETE_FAVOURITE_URL = "learningObject/favorite/delete";
@@ -39,7 +38,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String REMOVE_USER_LIKE_URL = "learningObject/removeUserLike";
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
-    public static final String TEST_SYSTEM_TAG = "matemaatika";
 
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
@@ -57,19 +55,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         login(USER_PEETER);
         Response response = doPut(format(ADD_TAG_URL, (Long) NOT_EXISTS_ID), tag(TEST_TAG));
         assertEquals("Add regular tag", Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void adding_system_tag_adds_a_tag()  {
-        login(USER_PEETER);
-
-        Portfolio portfolio = getPortfolio(PORTFOLIO_16);
-        assertFalse("System tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
-
-        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, PORTFOLIO_16), tag(TEST_SYSTEM_TAG), TagDTO.class);
-
-        Portfolio portfolioAfter = (Portfolio) tagDTO.getLearningObject();
-        assertTrue("System tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
     }
 
     @Test
@@ -216,7 +201,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         response = doGet(format(GET_MATERIAL_URL, NOT_EXISTS_ID));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
-
 
     @Test
     public void increaseViewCount_portfolio() {

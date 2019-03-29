@@ -6,10 +6,6 @@ class controller extends Controller {
         return "rest/suggest/";
     }
 
-    getSuggestSystemTagURLbase() {
-        return "rest/suggest/tag";
-    }
-
     getURL(query) {
         return this.getSuggestURLbase() + "?q=" + query;
     }

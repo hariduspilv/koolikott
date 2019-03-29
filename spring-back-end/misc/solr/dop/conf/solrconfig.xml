@@ -1365,30 +1365,6 @@
         </arr>
     </requestHandler>
 
-    <searchComponent name="suggest_tag" class="solr.SuggestComponent">
-        <str name="queryAnalyzerFieldType">suggest_tag_phrase</str>
-        <lst name="suggester">
-            <str name="name">dopTagSuggester</str>
-            <str name="suggestAnalyzerFieldType">suggest_analyzer</str>
-            <str name="classname">org.apache.solr.spelling.suggest.Suggester</str>
-            <str name="lookupImpl">FSTLookupFactory</str>
-            <str name="field">suggest_tag</str>
-            <str name="fieldType">suggest_tag_phrase</str>
-            <str name="buildOnOptimize">true</str>
-        </lst>
-    </searchComponent>
-    <!--<?xml version="1.0" encoding="UTF-8"?>-->
-
-    <requestHandler name="/suggest_tag" class="solr.SearchHandler" startup="lazy">
-        <lst name="defaults">
-            <str name="suggest">true</str>
-            <str name="suggest.dictionary">dopTagSuggester</str>
-            <str name="suggest.count">5</str>
-        </lst>
-        <arr name="components">
-            <str>suggest_tag</str>
-        </arr>
-    </requestHandler>
     <!-- Term Vector Component
 
          http://wiki.apache.org/solr/TermVectorComponent

@@ -51,6 +51,10 @@
             }
         }
 
+        isAdmin() {
+            return this.authenticatedUserService.isAdmin()
+        }
+
         isOwner(portfolio) {
             return this.authenticatedUserService.isAuthenticated() &&
             portfolio && portfolio.creator ? portfolio.creator.id === this.authenticatedUserService.getUser().id

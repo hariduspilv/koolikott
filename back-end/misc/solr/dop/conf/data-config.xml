@@ -19,19 +19,19 @@
             <entity name="Type" query="select 'material' as type"/>
         </entity>
 
-        <entity name="ResourceType" pk="id"
-                query="select concat((FLOOR(RAND() * 90000001) + 10000000), ResourceType.id) as id,
-                 Translation.translation as resource_type_name from Translation
-                 right join ResourceType on Translation.translationKey=upper(ResourceType.name)">
-            <entity name="Type" query="select 'material' as type"/>
-        </entity>
+<!--        <entity name="ResourceType" pk="id"-->
+<!--                query="select concat((FLOOR(RAND() * 90000001) + 10000000), ResourceType.id) as id,-->
+<!--                 Translation.translation as resource_type_name from Translation-->
+<!--                 right join ResourceType on Translation.translationKey=upper(ResourceType.name)">-->
+<!--            <entity name="Type" query="select 'material' as type"/>-->
+<!--        </entity>-->
 
-        <entity name="TargetGroup" pk="id"
-                query="select concat((FLOOR(RAND() * 90000001) + 10000000), TargetGroup.id) as id,
-                Translation.translation as target_group_name from Translation
-                right join TargetGroup on Translation.translationKey=concat('TARGET_GROUP_', upper(TargetGroup.name))">
-            <entity name="Type" query="select 'material' as type"/>
-        </entity>
+<!--        <entity name="TargetGroup" pk="id"-->
+<!--                query="select concat((FLOOR(RAND() * 90000001) + 10000000), TargetGroup.id) as id,-->
+<!--                Translation.translation as target_group_name from Translation-->
+<!--                right join TargetGroup on Translation.translationKey=concat('TARGET_GROUP_', upper(TargetGroup.name))">-->
+<!--            <entity name="Type" query="select 'material' as type"/>-->
+<!--        </entity>-->
 
         <entity name="LearningObject" pk="id"
                 query="select id, added, views, creator, visibility, licenseType from LearningObject
