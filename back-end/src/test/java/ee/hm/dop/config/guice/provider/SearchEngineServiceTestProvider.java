@@ -8,7 +8,6 @@ import ee.hm.dop.common.test.TestConstants;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SolrSearchResponse;
-import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.solr.SolrSearchRequest;
 
@@ -281,7 +280,7 @@ class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
-    public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
+    public List<String> suggest(String query) {
         return null;
     }
 

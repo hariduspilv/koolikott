@@ -112,8 +112,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
         doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_25), tag(TAXON_MATHEMATICS_DOMAIN.name));
         doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_25), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
-        Material updatedMaterial = getMaterial(MATERIAL_25);
-//        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
         Material updatedMaterial1 = doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_25), null, Material.class);
         assertTrue(updatedMaterial1.getChanged() == 0);
@@ -129,13 +127,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
 
     @Test
     public void admin_can_revert_all_changes() {
-        Material material = getMaterial(MATERIAL_26);
-        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-//        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_26), tag(TAXON_MATHEMATICS_DOMAIN.name), TagDTO.class);
-//        assertHas((Material) tagDTO.getLearningObject(), TAXON_MATHEMATICS_DOMAIN);
-//        TagDTO tagDTO2 = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_26), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name), TagDTO.class);
-//        Material updatedMaterial = (Material) tagDTO2.getLearningObject();
-//        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
 
         Material updatedMaterial1 = doPost(format(REVERT_ALL_CHANGES_URL, MATERIAL_26), null, Material.class);
         assertTrue(updatedMaterial1.getChanged() == 0);
@@ -150,75 +141,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
         Material updatedMaterial2 = getMaterial(MATERIAL_26);
         assertTrue(updatedMaterial2.getTaxons().isEmpty());
     }
-
-//    related to system tag deletion
-//    @Test
-//    public void admin_can_accept_one_change() {
-//        Material material = getMaterial(MATERIAL_27);
-//        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-////        TagDTO tagDto = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_MATHEMATICS_DOMAIN.name), TagDTO.class);
-////        assertHas((Material) tagDto.getLearningObject(), TAXON_MATHEMATICS_DOMAIN);
-////        TagDTO tagDto2 = doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_27), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name), TagDTO.class);
-////        Material updatedMaterial = (Material) tagDto2.getLearningObject();
-////        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-//
-//        ReviewableChange oneChange = doGet(format(GET_CHANGES_BY_ID, MATERIAL_27), listOfChanges()).get(0);
-//
-//        Material updatedMaterial1 = doPost(format(ACCEPT_ONE_CHANGES_URL, MATERIAL_27, oneChange.getId()), null, Material.class);
-//        assertFalse(updatedMaterial1.getChanged() == 0);
-//        if (doWierdFlakyStuff) {
-//            List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_27);
-//            assertEquals(2, review.size());
-//            for (ReviewableChange change : review) {
-//                if (change.getId().equals(oneChange.getId())) {
-//                    assertTrue(change.isReviewed());
-//                    assertEquals(ReviewStatus.ACCEPTED, change.getStatus());
-//                } else {
-//                    assertFalse(change.isReviewed());
-//                }
-//            }
-//        }
-//        Material updatedMaterial2 = getMaterial(MATERIAL_27);
-//        assertEquals(2, updatedMaterial2.getTaxons().size());
-//    }
-
-    //    related to system tag deletion
-//    @Test
-//    public void admin_can_revert_one_change() {
-//        Material material = getMaterial(MATERIAL_28);
-//        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-//        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_28), tag(TAXON_MATHEMATICS_DOMAIN.name));
-//        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_28), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
-//        Material updatedMaterial = getMaterial(MATERIAL_28);
-////        assertHas(updatedMaterial, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-//
-//        List<ReviewableChange> reviewableChanges = doGet(format(GET_CHANGES_BY_ID, MATERIAL_28), listOfChanges());
-//        ReviewableChange oneChange = reviewableChanges.get(0);
-//
-//        Material updatedMaterial1 = doPost(format(REVERT_ONE_CHANGES_URL, MATERIAL_28, oneChange.getId()), null, Material.class);
-//        assertFalse(updatedMaterial1.getChanged() == 0);
-//
-//        if (doWierdFlakyStuff) {
-//            List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_28);
-//            assertEquals(2, review.size());
-//            for (ReviewableChange change : review) {
-//                if (change.getId().equals(oneChange.getId())) {
-//                    assertTrue(change.isReviewed());
-//                    assertEquals(ReviewStatus.REJECTED, change.getStatus());
-//                } else {
-//                    assertFalse(change.isReviewed());
-//                }
-//            }
-//        }
-//        Material updatedMaterial2 = getMaterial(MATERIAL_28);
-//        if (oneChange.getTaxon().getId().equals(TAXON_FOREIGNLANGUAGE_DOMAIN.id)) {
-//            assertHasChangesDontMatter(updatedMaterial2, TAXON_MATHEMATICS_DOMAIN);
-//            assertHasNoTagsNoTaxonsChangesAre1(updatedMaterial2, TAXON_FOREIGNLANGUAGE_DOMAIN);
-//        } else {
-//            assertHasNoTagsNoTaxonsChangesAre1(updatedMaterial2, TAXON_MATHEMATICS_DOMAIN);
-//            assertHasChangesDontMatter(updatedMaterial2, TAXON_FOREIGNLANGUAGE_DOMAIN);
-//        }
-//    }
 
     @Test
     public void I_change_bieber_url_to_beyonce_then_to_madonna___material_has_madonna_url_change_has_bieber() {

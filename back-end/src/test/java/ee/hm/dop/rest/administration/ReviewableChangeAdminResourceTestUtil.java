@@ -34,18 +34,6 @@ public class ReviewableChangeAdminResourceTestUtil {
         assertEquals(source, material.getSource());
         assertFalse(material.getChanged() == 0);
     }
-//    related to system tag deletion
-//    public static void assertHas(Material material, TestTaxon... testTaxon) {
-//        for (TestTaxon taxon : testTaxon) {
-//            assertHas(material, taxon);
-//        }
-//    }
-//
-//    public static void assertHas(Material material, TestTaxon testTaxon) {
-//        assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));
-//        assertTrue(material.getTaxons().stream().map(Taxon::getId).anyMatch(t -> t.equals(testTaxon.id)));
-//        assertFalse(material.getChanged() == 0);
-//    }
 
     public static void assertHasChangesDontMatter(Material material, TestTaxon testTaxon) {
         assertTrue(material.getTags().stream().map(Tag::getName).anyMatch(t -> t.equals(testTaxon.name)));

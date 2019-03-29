@@ -60,19 +60,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    public void adding_system_tag_adds_a_tag()  {
-        login(USER_PEETER);
-
-        Portfolio portfolio = getPortfolio(PORTFOLIO_16);
-        assertFalse("System tag name", portfolio.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
-
-        TagDTO tagDTO = doPut(format(ADD_SYSTEM_TAG_URL, PORTFOLIO_16), tag(TEST_SYSTEM_TAG), TagDTO.class);
-
-        Portfolio portfolioAfter = (Portfolio) tagDTO.getLearningObject();
-        assertTrue("System tag name", portfolioAfter.getTags().stream().map(Tag::getName).anyMatch(name -> name.equals(TEST_SYSTEM_TAG)));
-    }
-
-    @Test
     public void adding_tag_with_same_name_causes_bad_request()  {
         login(USER_PEETER);
 

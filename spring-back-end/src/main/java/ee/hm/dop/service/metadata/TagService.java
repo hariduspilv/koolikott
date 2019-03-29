@@ -1,17 +1,11 @@
 package ee.hm.dop.service.metadata;
 
-import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.TagDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.service.content.TagConverter;
-import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.springframework.http.HttpStatus;
@@ -19,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.inject.Inject;
 import java.util.List;
 
 @Service
@@ -32,8 +27,6 @@ public class TagService {
     @Inject
     private SolrEngineService solrEngineService;
     @Inject
-    private TagConverter tagConverter;
-    @Inject
     private LearningObjectService learningObjectService;
 
     public Tag getTagByName(String name) {
@@ -45,14 +38,6 @@ public class TagService {
         ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
         return addTag(learningObject, tag, loggedInUser);
-    }
-
-    public TagDTO addSystemTag(Long learningObjectId, Tag tag, User user) {
-        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
-        ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
-
-        LearningObject newLearningObject = addTag(learningObject, tag, user);
-        return tagConverter.addChangeReturnTagDto(tag.getName(), newLearningObject, user);
     }
 
     private LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
@@ -71,5 +56,4 @@ public class TagService {
 
         return updatedLearningObject;
     }
-
 }

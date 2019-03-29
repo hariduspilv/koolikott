@@ -1,6 +1,5 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.service.SuggestionStrategy;
 import ee.hm.dop.service.solr.SuggestService;
 
 import javax.inject.Inject;
@@ -20,6 +19,6 @@ public class SuggestResource extends BaseResource {
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response suggest(@QueryParam("q") String query){
-        return suggestService.suggest(query, SuggestionStrategy.SUGGEST_URL);
+        return suggestService.suggest(query);
     }
 }

@@ -269,7 +269,7 @@ public class SolrEngineServiceMock implements SolrEngineService {
     }
 
     @Override
-    public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
+    public List<String> suggest(String query) {
         return null;
     }
 

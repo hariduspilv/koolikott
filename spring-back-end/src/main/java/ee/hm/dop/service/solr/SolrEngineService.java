@@ -11,7 +11,7 @@ public interface SolrEngineService {
 
     SolrSearchResponse limitlessSearch(SolrSearchRequest searchRequest);
 
-    List<String> suggest(String query, SuggestionStrategy suggestionStrategy);
+    List<String> suggest(String query);
 
     void fullImport();
 

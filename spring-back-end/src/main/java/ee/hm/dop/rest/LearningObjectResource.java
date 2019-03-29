@@ -50,12 +50,6 @@ public class LearningObjectResource extends BaseResource {
         return tagService.addRegularTag(learningObjectId, newTag, getLoggedInUser());
     }
 
-    @PutMapping("{learningObjectId}/system_tags")
-    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public TagDTO addSystemTag(@PathVariable("learningObjectId") Long learningObjectId, @RequestBody Tag newTag) {
-        return tagService.addSystemTag(learningObjectId, newTag, getLoggedInUser());
-    }
-
     @GetMapping("favorite")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public UserFavorite hasSetFavorite(@RequestParam("id") Long id) {
