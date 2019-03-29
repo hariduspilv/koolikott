@@ -1,14 +1,11 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import org.apache.solr.client.solrj.SolrServerException;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
 import org.easymock.TestSubject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-
-import java.io.IOException;
 
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
@@ -23,7 +20,7 @@ public class SuggestServiceTest extends ResourceIntegrationTestBase {
     SolrService solrService;
 
     @Test
-    public void suggestEmpty() throws IOException, SolrServerException {
+    public void suggestEmpty() {
         expect(solrService.suggest("")).andReturn(null);
         replay(solrService);
         assertEquals(suggestService.suggest("").getStatus(), 400);

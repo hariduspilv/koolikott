@@ -27,7 +27,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
     public static final String INCREASE_VIEW_COUNT_URL = "learningObject/increaseViewCount";
     public static final String ADD_TAG_URL = "learningObject/%s/tags";
-    public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_TO_FAVOURITE_URL = "learningObject/favorite";
     public static final String GET_FAVOURITE_URL = "learningObject/favorite?id=%s";
     public static final String DELETE_FAVOURITE_URL = "learningObject/favorite/delete";
@@ -39,7 +38,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String REMOVE_USER_LIKE_URL = "learningObject/removeUserLike";
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
-    public static final String TEST_SYSTEM_TAG = "matemaatika";
 
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
@@ -203,7 +201,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         response = doGet(format(GET_MATERIAL_URL, NOT_EXISTS_ID));
         assertEquals(Status.OK.getStatusCode(), response.getStatus());
     }
-
 
     @Test
     public void increaseViewCount_portfolio() {

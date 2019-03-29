@@ -1,7 +1,6 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.model.solr.SolrSearchResponse;
-import ee.hm.dop.service.SuggestionStrategy;
 
 import java.util.List;
 

@@ -51,7 +51,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public static final String ACCEPT_ONE_CHANGES_URL = "admin/changed/%s/acceptOne/%s";
     public static final String REVERT_ALL_CHANGES_URL = "admin/changed/%s/revertAll";
     public static final String REVERT_ONE_CHANGES_URL = "admin/changed/%s/revertOne/%s";
-    public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_IMPROPER = "impropers";
 
     public static final String BIEBER_ORIGINAL = "http://www.bieber%s.com";

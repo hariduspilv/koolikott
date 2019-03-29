@@ -1,7 +1,6 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.model.solr.SolrSearchResponse;
-import ee.hm.dop.service.SuggestionStrategy;
 import org.apache.commons.configuration2.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.solr.client.solrj.SolrClient;
@@ -42,7 +41,6 @@ public class SolrService implements SolrEngineService {
     private static final int DEFAULT_RESULTS_PER_PAGE = 24;
     private static final int SUGGEST_COUNT = 5;
     private static final String SUGGEST_URL = "/suggest";
-    private static final String SUGGEST_TAG_URL = "/suggest_tag";
     private static final String STATUS_MESSAGES = "Status messages: ";
     @Inject
     private Client client;
@@ -86,10 +84,10 @@ public class SolrService implements SolrEngineService {
     }
 
     @Override
-    public List<String> suggest(String query, SuggestionStrategy suggestionStrategy) {
+    public List<String> suggest(String query) {
         if (query.isEmpty()) return null;
         SolrQuery solrQuery = new SolrQuery();
-        solrQuery.setRequestHandler(suggestionStrategy.suggestTag() ? SUGGEST_TAG_URL : SUGGEST_URL);
+        solrQuery.setRequestHandler(SUGGEST_URL);
         solrQuery.setQuery(query);
 
         QueryResponse qr;
@@ -103,12 +101,8 @@ public class SolrService implements SolrEngineService {
         if (qr.getSuggesterResponse() == null) return null;
         List<Suggestion> combinedSuggestions = new ArrayList<>();
 
-        if (suggestionStrategy.suggestTag()) {
-            combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopTagSuggester"));
-        } else {
-            combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("linkSuggester"));
-            combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopSuggester"));
-        }
+        combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("linkSuggester"));
+        combinedSuggestions.addAll(qr.getSuggesterResponse().getSuggestions().get("dopSuggester"));
 
         List<String> suggestions = combinedSuggestions.stream().map(Suggestion::getTerm).collect(Collectors.toList());
         return suggestions.size() > SUGGEST_COUNT ? suggestions.subList(0, SUGGEST_COUNT - 1) : suggestions;

@@ -38,7 +38,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
     public static final String ACCEPT_ONE_CHANGES_URL = "admin/changed/%s/acceptOne/%s";
     public static final String REVERT_ALL_CHANGES_URL = "admin/changed/%s/revertAll";
     public static final String REVERT_ONE_CHANGES_URL = "admin/changed/%s/revertOne/%s";
-    public static final String ADD_SYSTEM_TAG_URL = "learningObject/%s/system_tags";
     public static final String SET_IMPROPER = "impropers";
 
     public static final String BIEBER_ORIGINAL = "http://www.bieber%s.com";
@@ -104,25 +103,6 @@ public class ReviewableChangeAdminResourceTest extends ResourceIntegrationTestBa
 
         assertNotEquals(changedLearnigObjectsCount, changedLearnigObjectsCount2);
         assertNotEquals(reviewableChanges, reviewableChanges2);
-    }
-
-    @Test
-    public void admin_can_accept_all_changes() {
-        Material material = getMaterial(MATERIAL_25);
-        assertDoesntHave(material, TAXON_MATHEMATICS_DOMAIN, TAXON_FOREIGNLANGUAGE_DOMAIN);
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_25), tag(TAXON_MATHEMATICS_DOMAIN.name));
-        doPut(format(ADD_SYSTEM_TAG_URL, MATERIAL_25), tag(TAXON_FOREIGNLANGUAGE_DOMAIN.name));
-
-        Material updatedMaterial1 = doPost(format(ACCEPT_ALL_CHANGES_URL, MATERIAL_25), null, Material.class);
-        assertTrue(updatedMaterial1.getChanged() == 0);
-
-        if (doWierdFlakyStuff) {
-            List<ReviewableChange> review = reviewableChangeDao.findByComboFieldList("learningObject.id", MATERIAL_25);
-            assertEquals(2, review.size());
-            for (ReviewableChange change : review) {
-                assertEquals(ReviewStatus.ACCEPTED, change.getStatus());
-            }
-        }
     }
 
     @Test

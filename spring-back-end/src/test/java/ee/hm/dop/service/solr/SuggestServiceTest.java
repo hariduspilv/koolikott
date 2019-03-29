@@ -1,7 +1,6 @@
 package ee.hm.dop.service.solr;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.service.SuggestionStrategy;
 import org.apache.solr.client.solrj.SolrServerException;
 import org.easymock.EasyMockRunner;
 import org.easymock.Mock;
