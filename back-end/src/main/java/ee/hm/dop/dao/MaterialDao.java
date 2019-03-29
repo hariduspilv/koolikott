@@ -155,7 +155,7 @@ public class MaterialDao extends AbstractDao<Material> {
                         "FROM PortfolioMaterial pm " +
                         "JOIN Portfolio P on pm.portfolio = P.id " +
                         "WHERE pm.material =:materialId " +
-                        "ORDER BY P.title ASC")
+                        "ORDER BY lower(P.title) ASC")
                 .setParameter("materialId",materialId)
                 .getResultList();
     }
