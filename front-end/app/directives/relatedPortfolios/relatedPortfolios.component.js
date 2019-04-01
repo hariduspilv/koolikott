@@ -76,14 +76,14 @@
         template: `
               <md-divider class="md-default-theme"></md-divider>
               <div data-ng-if="relatedPortfolios.length > 0" class="portfolio-material" data-layout="column">
-            <span data-translate="PORTFOLIO_RELATED_PORTFOLIOS"></span>
-            <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limit : startFrom " flex data-layout="row">
-              <a data-ng-class="{'link-is-grey': $ctrl.userCanClickPortfolio(portfolio) === 'none'}"
-                data-ng-style="{'pointer-events':$ctrl.userCanClickPortfolio(portfolio)}"
-                target="_blank"
-                data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}<span class="span-margin-left" data-ng-if="$ctrl.userCanClickPortfolio(portfolio) === 'none'" data-translate="PORTFOLIO_PRIVATE"></span></a>
-            </div>
-            <div>
+                <span data-translate="PORTFOLIO_RELATED_PORTFOLIOS"></span>
+                    <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limit : startFrom " flex data-layout="row">
+                      <a data-ng-class="{'link-is-grey': $ctrl.userCanClickPortfolio(portfolio) === 'none'}"
+                        data-ng-style="{'pointer-events':$ctrl.userCanClickPortfolio(portfolio)}"
+                        target="_blank"
+                        data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}<span class="span-margin-left" data-ng-if="$ctrl.userCanClickPortfolio(portfolio) === 'none'" data-translate="PORTFOLIO_PRIVATE"></span></a>
+                    </div>
+              <div>
             <md-button 
               data-ng-show="showNextButton()" data-ng-click="showNextItems()"><span class="span-margin-left" data-translate="PORTFOLIO_SHOW_MORE"></span>
               <md-icon class="md-primary">keyboard_arrow_right</md-icon>
