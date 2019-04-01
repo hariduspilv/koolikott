@@ -84,7 +84,7 @@ component('dopSendEmail', {
                 <md-button
                   class="md-icon-button">
                   <md-icon md-menu-align-target>email</md-icon>
-                  <md-tooltip><span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span></md-tooltip>
+                  <md-tooltip md-direction="top"><span data-translate="SEND_EMAIL_SPECIFY_QUESTION"></span></md-tooltip>
                 </md-button>
               </div>
         `,

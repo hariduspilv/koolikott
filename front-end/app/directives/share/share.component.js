@@ -17,12 +17,8 @@ class controller extends Controller {
                 this.pictureName = this.object.picture.name
 
         })
-        this.leftOrDown()
     }
 
-    leftOrDown() {
-        return window.screen.availWidth < 500 ? 'down' : 'left'
-    }
     isVisible() {
         if (this.object && this.object.deleted || this.$rootScope.isEditPortfolioPage)
             return false

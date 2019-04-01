@@ -37,7 +37,7 @@
         controller,
         template: `
             <div ng-click="$ctrl.showQrCodeDialog()">
-                <md-tooltip><span data-translate="TOOLTIP_SHOW_QR_CODE"></span></md-tooltip>
+                <md-tooltip md-direction="top"><span data-translate="TOOLTIP_SHOW_QR_CODE"></span></md-tooltip>
                 <md-button
                   class="md-icon-button qr-code">
                 </md-button>
