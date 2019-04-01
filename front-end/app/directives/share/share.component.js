@@ -8,7 +8,6 @@ class controller extends Controller {
         this.pictureName = ''
         this.shareMediaPlaces = [
             { provider: 'email', icon: 'icon-mail-squared' },
-            { provider: 'google', icon: 'icon-gplus-squared' },
             { provider: 'twitter', icon: 'icon-twitter-squared' },
             { provider: 'facebook', icon: 'icon-facebook-squared' }
         ]
@@ -17,22 +16,8 @@ class controller extends Controller {
             if (this.object && this.object.picture)
                 this.pictureName = this.object.picture.name
 
-            this.initGoogleButton()
         })
         this.leftOrDown()
-    }
-    initGoogleButton() {
-        if (!gapi) {
-            throw new Error('Expecting Google+ Javascript API is to be in global namespace as `gapi` but none found!')
-            return
-        }
-        gapi.interactivepost.render('shareGoogleFakeButton', {
-            contenturl: this.pageUrl,
-            clientid: this.GOOGLE_SHARE_CLIENT_ID,
-            cookiepolicy: this.$location.$$protocol + '://' + this.$location.$$host,
-            prefilltext: this.title,
-            calltoactionurl: this.pageUrl
-        })
     }
 
     leftOrDown() {
@@ -138,8 +123,6 @@ class controller extends Controller {
                     }
                 })
                 break
-            case 'google':
-                angular.element(document.getElementById('shareGoogleFakeButton')).triggerHandler('click')
         }
     }
     addStyle() {
@@ -162,7 +145,6 @@ controller.$inject = [
     'authenticatedUserService',
     'Socialshare',
     'FB_APP_ID',
-    'GOOGLE_SHARE_CLIENT_ID'
 ]
 
 component('dopShare', {
