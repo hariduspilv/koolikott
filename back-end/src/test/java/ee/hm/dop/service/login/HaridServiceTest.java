@@ -43,6 +43,7 @@ public class HaridServiceTest {
 
     @Before
     public void setUp() throws Exception {
+
         String clientString = "clientsecret";
         haridService.postConstruct(clientString);
     }
