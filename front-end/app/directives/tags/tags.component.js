@@ -258,11 +258,4 @@ component('dopTags', {
 /**
  * @see: https://github.com/angular/material/issues/8692
  */
-directive('dopTagCustomChip', {
-    link($scope, $elem) {
-        $scope.$watch('$chip.isNew', (isNew) =>
-            $elem.parent().parent().toggleClass('new', isNew)
-        )
-    }
-})
 }

@@ -6,7 +6,7 @@
     data-ng-model="upvotes"
     readonly="true"
   >
-    <md-chip-template dop-tag-custom-chip>
+    <md-chip-template>
       <md-button
         data-ng-if="$ctrl.authenticatedUserService.isUserOrModerator() && !$root.isEditPortfolioMode"
         class="md-icon-button"
