@@ -1,0 +1,11 @@
+.email-location {
+  z-index: 20;
+  position: absolute;
+  top: 0px;
+  right: 150px;
+  @media screen and (max-width: $layout-breakpoint-sm) {
+    top: 24px;
+    right: 135px;
+  }
+}
+
