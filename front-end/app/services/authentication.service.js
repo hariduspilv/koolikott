@@ -8,6 +8,7 @@ angular.module('koolikottApp')
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
         $rootScope.showLocationDialog = true;
+        $rootScope.userFirstLogin = false;
 
         var mobileIdLoginSuccessCallback;
         var mobileIdLoginFailCallback;
@@ -145,6 +146,7 @@ angular.module('koolikottApp')
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/profile');
+                $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
                 $location.url(localStorage.getItem(LOGIN_ORIGIN));
             }

@@ -7,6 +7,9 @@
   <md-card class="card-lg">
     <form name="userProfileForm">
       <md-card-content>
+        <div data-layout="row" class="md-padding" data-ng-if="$root.userFirstLogin">
+          <span data-translate="USER_PROFILE_FIRST_LOGIN_NOTICE"></span>
+        </div>
         <div data-layout="row" class="md-padding">
           <md-input-container class="md-block" flex-gt-xs>
             <label data-translate="USERNAME"></label>
