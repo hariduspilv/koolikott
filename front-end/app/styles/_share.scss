@@ -64,6 +64,17 @@
   margin-top: 0;
 }
 
+.share-location {
+  display: block;
+  position: absolute;
+  top: 0px;
+  right: 115px;
+  @media screen and (max-width: $layout-breakpoint-sm) {
+    top: 24px;
+    right: 102px;
+  }
+}
+
 .hide-share-on-mobile {
     @media screen and (max-width : $layout-small-screen-500) {
     display: none;
@@ -75,7 +86,7 @@
   @media screen and (max-width : $layout-small-screen-500) {
     display: block;
     position: absolute;
-    top: 25px;
-    right: 140px;
+    top: 24px;
+    right: 98px;
   }
 }

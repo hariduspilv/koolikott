@@ -159,7 +159,7 @@
 .learning-object-title {
   margin: 0;
   position: relative;
-  z-index: 2;
+  z-index: 1;
 
   @media (max-width: $layout-breakpoint-sm) {
     max-width: 100% !important;
