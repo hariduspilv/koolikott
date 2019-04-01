@@ -105,6 +105,12 @@ public class LoginResource extends BaseResource {
     }
 
     @GET
+    @Path("harid")
+    public Response haridAuthenticate(@QueryParam("token") String token) throws URISyntaxException {
+        return token != null ? authenticateWithHaridToken(token) : redirectToHarid();
+    }
+
+    @GET
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
     public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
@@ -127,8 +133,16 @@ public class LoginResource extends BaseResource {
         return authenticatedUserService.getAuthenticatedUserByToken(token);
     }
 
+    private Response redirectToHarid() {
+        return redirect(getHaridAuthenticationURI());
+    }
+
     private Response redirectToStuudium() throws URISyntaxException {
         return redirect(getStuudiumAuthenticationURI());
+    }
+
+    private Response authenticateWithHaridToken(String token) throws URISyntaxException {
+        return redirect(getHaridLocation(token));
     }
 
     private Response authenticateWithStuudiumToken(String token) throws URISyntaxException {
@@ -145,6 +159,15 @@ public class LoginResource extends BaseResource {
 
     private String getEkoolCallbackUrl() {
         return getServerAddress() + EKOOL_CALLBACK_PATH;
+    }
+
+    private URI getHaridLocation(String token) throws URISyntaxException {
+        try {
+            return redirectSuccess(haridService.authenticate(token));
+        } catch (Exception e) {
+            logger.error("stuudium login failed", e);
+            return redirectFailure();
+        }
     }
 
     private URI getStuudiumLocation(String token) throws URISyntaxException {

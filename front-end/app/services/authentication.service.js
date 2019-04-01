@@ -259,6 +259,10 @@ angular.module('koolikottApp')
                 loginWithOAuth("/rest/login/stuudium");
             },
 
+            loginWithHarid: function() {
+                loginWithOAuth('/rest/login/harid');
+            },
+
             authenticateUsingOAuth: function(inputParams) {
                 const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {

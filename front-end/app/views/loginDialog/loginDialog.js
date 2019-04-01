@@ -29,6 +29,7 @@ class controller extends Controller {
         // this.$scope.taatAuth = () => this.authenticationService.loginWithTaat()
         this.$scope.ekoolAuth = () => this.authenticationService.loginWithEkool()
         this.$scope.stuudiumAuth = () => this.authenticationService.loginWithStuudium()
+        this.$scope.haridAuth= () => this.authenticationService.loginWithHarid()
         this.$scope.mobileIdAuth = () => {
             if (!this.validatorsBound) {
                 this.bindValidators()
