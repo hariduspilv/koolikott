@@ -1,3 +1,12 @@
+## e-Koolikott [1.33.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10751)
+
+### Muutunud
+* Materjalide detailvaates seotud kogumike kuvamine [EK-209](https://projektid.hitsa.ee/jira/browse/EK-209)
+* Süsteemsete võtmesõnade lisamise funktsionaalsuse eemaldamine [EK-387](https://projektid.hitsa.ee/jira/browse/EK-387)
+* Kasutajatoe akna tekstiväljal järelejäänud tähemärkide kuvamine [EK-338](https://projektid.hitsa.ee/jira/browse/EK-338)
+* Esmakordsel autentimisel kasutaja suunamine tema profiilile [EK-363](https://projektid.hitsa.ee/jira/browse/EK-363)
+* Google+ jagamise nupu alt eemaldamine [EK-416](https://projektid.hitsa.ee/jira/browse/EK-416)
+
 ## e-Koolikott [1.32.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10750)
 
 ### Muutunud
