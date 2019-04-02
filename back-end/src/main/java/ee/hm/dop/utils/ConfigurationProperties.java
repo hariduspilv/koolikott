@@ -96,6 +96,7 @@ public interface ConfigurationProperties {
     String HARID_CLIENT_SECRET = "harid.client.secret";
     String HARID_URL_AUTHORIZE = "harid.url.authorize";
     String HARID_URL_GENERALDATA = "harid.url.generaldata";
+    String HARID_URL_TOKEN= "hari.url.token";
 
     String MAX_FILE_SIZE = "file.upload.max.size";
     String FILE_UPLOAD_DIRECTORY = "file.upload.directory";
