@@ -40,8 +40,8 @@ public class LoginResource extends BaseResource {
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=personal_code&response_type=code";
 //    private static final String HARID_AUTHENTICATION_URL = "https://test.harid.ee/et/authorizations/new";
-//    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
-    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/success";
+    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
+//    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/success";
 //    private static final String HARID_AUTHENTICATION_FAILURE_URL = "/rest/login/harid/fail";
     private static final String HARID_AUTHENTICATION_FAILURE_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/failure";
     public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
@@ -186,7 +186,7 @@ public class LoginResource extends BaseResource {
     }
 
     private String getHaridCallbackUrl() {
-        return HARID_AUTHENTICATION_SUCCESS_URL;
+        return getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL;
     }
 
     private URI getHaridLocation(String token) throws URISyntaxException {
