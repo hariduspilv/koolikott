@@ -38,12 +38,9 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
-//    private static final String HARID_AUTHENTICATION_URL = "https://test.harid.ee/et/authorizations/new";
+    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=profile&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
-//    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/success";
-    private static final String HARID_AUTHENTICATION_FAILURE_URL = "/rest/login/harid/fail";
-//    private static final String HARID_AUTHENTICATION_FAILURE_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/failure";
+    private static final String HARID_AUTHENTICATION_FAILURE_URL = "/rest/login/harid/failure";
     public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
