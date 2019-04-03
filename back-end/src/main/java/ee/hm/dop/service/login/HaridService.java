@@ -67,6 +67,19 @@ public class HaridService {
         return loginService.login(harIdUser.getIdCode(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
     }
 
+    private HarIdUser getHaridUser(HarIdCode code) {
+
+        Response response = client.target(getUserDataUrl())
+                .request()
+                .header("Authorization", "Bearer " + code.getAccessToken())
+                .header("Content-type", "application/x-www-form-urlencoded")
+                .get();
+        logAsString("getPerson", response);
+        logger.info(response.readEntity(String.class));
+        return response.readEntity(HarIdUser.class);
+
+    }
+
     private HarIdCode getHarIdCode(String code, String redirectUrl) {
         MultivaluedMap<String, String> params = new MultivaluedHashMap<>();
         params.add("grant_type", "authorization_code");
@@ -79,18 +92,6 @@ public class HaridService {
                 .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
         logAsString("getCode", response);
         return response.readEntity(HarIdCode.class);
-    }
-
-    private HarIdUser getHaridUser(HarIdCode code) {
-
-        Response response = client.target(getUserDataUrl())
-                .request()
-                .header("Authorization", "Bearer " + code.getAccessToken())
-                .header("Content-type", "application/x-www-form-urlencoded")
-                .get();
-        logAsString("getPerson", response);
-        return response.readEntity(HarIdUser.class);
-
     }
 
     private String getHarIdTokenUrl() {
