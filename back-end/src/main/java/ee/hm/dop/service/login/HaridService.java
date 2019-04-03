@@ -76,6 +76,7 @@ public class HaridService {
                 .request()
                 .header("Authorization", "Bearer " + code.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
+                .header("scope","personal_code")
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
         logAsString("getPerson", response);
@@ -88,7 +89,6 @@ public class HaridService {
         params.add("grant_type", "authorization_code");
         params.add("redirect_uri", redirectUrl);
         params.add("code", code);
-        params.add("scope", "personal_code");
 
         Response response = client.target(getHarIdTokenUrl())
                 .request()
