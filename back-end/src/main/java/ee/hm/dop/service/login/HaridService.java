@@ -88,6 +88,7 @@ public class HaridService {
         params.add("grant_type", "authorization_code");
         params.add("redirect_uri", redirectUrl);
         params.add("code", code);
+        params.add("scope", "personal_code");
 
         Response response = client.target(getHarIdTokenUrl())
                 .request()
