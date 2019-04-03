@@ -221,6 +221,7 @@ public class LoginResource extends BaseResource {
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
         if (status.isStatusOk()) {
+            logger.info("Status: "+ status.toString());
             return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
         }
         if (status.iseKoolUserMissingIdCode()) {

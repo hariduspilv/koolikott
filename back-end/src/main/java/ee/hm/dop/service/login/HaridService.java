@@ -72,7 +72,7 @@ public class HaridService {
     private HarIdUser getHaridUser(HarIdCode code) {
         logger.info("Hakkame User-it pärima");
         Response response = client.target(getUserDataUrl())
-                .queryParam("scope","given_name")
+//                .queryParam("scope","personal_code")
                 .request()
                 .header("Authorization", "Bearer " + code.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
