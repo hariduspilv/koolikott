@@ -120,8 +120,8 @@ public class LoginResource extends BaseResource {
     @GET
     @Path("harid/success")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response haridAuthenticateSuccess(@QueryParam("code") String code) throws URISyntaxException {
-        return code != null ? authenticateWithHaridToken(code) : redirectToHarid();
+    public Response haridAuthenticateSuccess(@QueryParam("code") String code,@QueryParam("scope") String scope) throws URISyntaxException {
+        return code != null ? authenticateWithHaridToken(code,scope) : redirectToHarid();
     }
 
     @GET
@@ -181,8 +181,8 @@ public class LoginResource extends BaseResource {
         return new URI(format(HARID_AUTHENTICATION_URL, haridService.getAuthorizationUrl(), haridService.getClientId(), getHaridCallbackUrl()));
     }
 
-    private Response authenticateWithHaridToken(String token) throws URISyntaxException {
-        return redirect(getHaridLocation(token));
+    private Response authenticateWithHaridToken(String token,String scope) throws URISyntaxException {
+        return redirect(getHaridLocation(token,scope));
     }
 
     private String getHaridCallbackUrl() {
@@ -190,10 +190,10 @@ public class LoginResource extends BaseResource {
         return getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL;
     }
 
-    private URI getHaridLocation(String token) throws URISyntaxException {
+    private URI getHaridLocation(String token,String scope) throws URISyntaxException {
         try {
-            logger.info("token: " + token + "URL= " + getHaridCallbackUrl());
-            return redirectSuccess(haridService.authenticate(token,getHaridCallbackUrl()));
+            logger.info("token: " + token + "URL= " + getHaridCallbackUrl() + "scope=" + scope);
+            return redirectSuccess(haridService.authenticate(token,scope,getHaridCallbackUrl()));
         } catch (Exception e) {
             logger.error("harId login failed", e);
 //            return new URI(HARID_AUTHENTICATION_FAILURE_URL);

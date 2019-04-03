@@ -58,19 +58,21 @@ public class HaridService {
         hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret);
     }
 
-    public UserStatus authenticate(String code,String redirectUrl) {
+    public UserStatus authenticate(String code,String scope,String redirectUrl) {
         logger.info("url= " +redirectUrl);
         HarIdCode harIdCode = getHarIdCode(code,redirectUrl);
-        HarIdUser harIdUser = getHaridUser(harIdCode);
+        HarIdUser harIdUser = getHaridUser(harIdCode,scope);
         if (isBlank(harIdUser.getIdCode())) {
-//            return UserStatus.missingHarIdCode();
+            logger.info("HarIdUser doesnt have idcode");
+            return UserStatus.missingHarIdCode();
         }
         return loginService.login(harIdUser.getIdCode(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
     }
 
-    private HarIdUser getHaridUser(HarIdCode code) {
+    private HarIdUser getHaridUser(HarIdCode code,String scope) {
 
         Response response = client.target(getUserDataUrl())
+                .queryParam("scope",scope)
                 .request()
                 .header("Authorization", "Bearer " + code.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
