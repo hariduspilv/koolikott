@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
@@ -73,9 +74,9 @@ public class HaridService {
                 .request()
                 .header("Authorization", "Bearer " + code.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
+                .accept(MediaType.APPLICATION_JSON)
                 .get();
         logAsString("getPerson", response);
-        logger.info(response.readEntity(String.class));
         return response.readEntity(HarIdUser.class);
 
     }

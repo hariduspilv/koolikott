@@ -22,6 +22,10 @@ public class HarIdUser {
     public HarIdUser() {
     }
 
+    public HarIdUser(String idCode) {
+        this.idCode = idCode;
+    }
+
     public String getIdCode() {
         return idCode;
     }
