@@ -59,7 +59,7 @@ public class HaridService {
     }
 
     public UserStatus authenticate(String code,String redirectUrl) {
-        logger.info("url= " +redirectUrl);
+        logger.info("redirecturl= " +redirectUrl);
         HarIdCode harIdCode = getHarIdCode(code,redirectUrl);
         HarIdUser harIdUser = getHaridUser(harIdCode);
         if (isBlank(harIdUser.getIdCode())) {

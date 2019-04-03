@@ -38,7 +38,7 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=personal_code&response_type=id_token";
+    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=personal_code&response_type=code";
 //    private static final String HARID_AUTHENTICATION_URL = "https://test.harid.ee/et/authorizations/new";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
 //    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/success";
@@ -49,6 +49,7 @@ public class LoginResource extends BaseResource {
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM = "%s/#!/loginRedirect?stuudiumUserMissingIdCode=%s";
+    public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_HARID= "%s/#!/loginRedirect?harIdUserMissingIdCode=%s";
 
     @Inject
     private LoginService loginService;
@@ -193,11 +194,10 @@ public class LoginResource extends BaseResource {
 
     private URI getHaridLocation(String token) throws URISyntaxException {
         try {
-            logger.info("token: " + token + "URL= " + getHaridCallbackUrl());
+            logger.info("token: " + token + " URL= " + getHaridCallbackUrl());
             return redirectSuccess(haridService.authenticate(token,getHaridCallbackUrl()));
         } catch (Exception e) {
             logger.error("harId login failed", e);
-//            return new URI(HARID_AUTHENTICATION_FAILURE_URL);
             return new URI(getServerAddress() + HARID_AUTHENTICATION_FAILURE_URL);
         }
     }
@@ -231,7 +231,9 @@ public class LoginResource extends BaseResource {
         if (status.isStuudiumUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM, getServerAddress(), true));
         }
-        //todo add harid error
+        if (status.isHarIdUserMissingIdCode()) {
+            return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
+        }
 
         return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString(), status.isExistingUser(), status.getLoginFrom().name()));
     }
