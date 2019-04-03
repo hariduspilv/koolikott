@@ -266,7 +266,7 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode,harIdUserMissingIdCode, loginFrom} = inputParams;
+                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -276,8 +276,9 @@ angular.module('koolikottApp')
                     idCodeLoginFail('ERROR_LOGIN_FAILED_STUUDIUM');
                     return;
                 }
+
                 if (harIdUserMissingIdCode) {
-                    idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');
+                    idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');//TODO add translation
                     return;
                 }
 

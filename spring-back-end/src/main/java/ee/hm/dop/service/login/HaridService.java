@@ -6,9 +6,10 @@ import ee.hm.dop.model.harid.HarIdUser;
 import ee.hm.dop.service.login.dto.UserStatus;
 import org.apache.commons.codec.digest.HmacAlgorithms;
 import org.apache.commons.codec.digest.HmacUtils;
-import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
@@ -18,6 +19,8 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
+
+import ee.hm.dop.config.Configuration;
 
 import static ee.hm.dop.utils.ConfigurationProperties.HARID_CLIENT_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.HARID_CLIENT_SECRET;
@@ -29,6 +32,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.xml.security.utils.Base64.encode;
 
+@Service
+@Transactional
 public class HaridService {
 
     private static Logger logger = LoggerFactory.getLogger(HaridService.class);
@@ -41,34 +46,18 @@ public class HaridService {
     private LoginService loginService;
     private HmacUtils hmacUtils;
 
-//    @Inject
-//    public void postConstruct() {
-//        postConstruct(configuration.getString(HARID_CLIENT_SECRET));
-//    }
-
     void postConstruct(String secret) {
         hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret);
     }
 
-    public UserStatus authenticate(String code,String redirectUrl) {
-        HarIdCode harIdCode = getHarIdCode(code,redirectUrl);
+    public UserStatus authenticate(String code, String redirectUrl) {
+        HarIdCode harIdCode = getHarIdCode(code, redirectUrl);
         HarIdUser harIdUser = getHaridUser(harIdCode);
         if (isBlank(harIdUser.getIdCode())) {
             logger.info("HarIdUser doesnt have idcode");
             return UserStatus.missingHarIdCode();
         }
         return loginService.login(harIdUser.getIdCode(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
-    }
-
-    private HarIdUser getHaridUser(HarIdCode code) {
-        Response response = client.target(getUserDataUrl())
-                .request()
-                .header("Authorization", "Bearer " + code.getAccessToken())
-                .header("Content-type", "application/x-www-form-urlencoded")
-                .accept(MediaType.APPLICATION_JSON)
-                .get();
-        logAsString("getPerson", response);
-        return response.readEntity(HarIdUser.class);
     }
 
     private HarIdCode getHarIdCode(String code, String redirectUrl) {
@@ -83,6 +72,17 @@ public class HaridService {
                 .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
         logAsString("getCode", response);
         return response.readEntity(HarIdCode.class);
+    }
+
+    private HarIdUser getHaridUser(HarIdCode code) {
+        Response response = client.target(getUserDataUrl())
+                .request()
+                .header("Authorization", "Bearer " + code.getAccessToken())
+                .header("Content-type", "application/x-www-form-urlencoded")
+                .accept(MediaType.APPLICATION_JSON)
+                .get();
+        logAsString("getPerson", response);
+        return response.readEntity(HarIdUser.class);
     }
 
     private String getHarIdTokenUrl() {
@@ -111,7 +111,7 @@ public class HaridService {
     }
 
     private void logAsString(String reason, Response response) {
-            response.bufferEntity();
-            logger.info(reason + " " + response.readEntity(String.class));
+        response.bufferEntity();
+        logger.info(reason + " " + response.readEntity(String.class));
     }
 }
