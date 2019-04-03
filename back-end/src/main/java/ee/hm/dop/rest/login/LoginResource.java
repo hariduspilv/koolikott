@@ -38,7 +38,7 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=personal_code&response_type=code id_token token";
+    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=personal_code&response_type=id_token";
 //    private static final String HARID_AUTHENTICATION_URL = "https://test.harid.ee/et/authorizations/new";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
 //    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/success";
@@ -125,6 +125,7 @@ public class LoginResource extends BaseResource {
     }
 
     @GET
+    //todo update url and redirect kuhugi
     @Path("harid/failure")
     public URI haridAuthenticateFailure() throws URISyntaxException {
         return redirectFailure();
@@ -230,6 +231,7 @@ public class LoginResource extends BaseResource {
         if (status.isStuudiumUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM, getServerAddress(), true));
         }
+        //todo add harid error
 
         return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString(), status.isExistingUser(), status.getLoginFrom().name()));
     }
