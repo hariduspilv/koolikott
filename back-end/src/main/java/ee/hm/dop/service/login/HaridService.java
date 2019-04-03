@@ -42,18 +42,6 @@ public class HaridService {
 //        postConstruct(configuration.getString(HARID_CLIENT_SECRET));
 //    }
 
-    public String getAuthorizationUrl() {
-        return configuration.getString(HARID_URL_AUTHORIZE);
-    }
-
-    public String getClientId() {
-        return configuration.getString(HARID_CLIENT_ID);
-    }
-
-    private String getUserDataUrl() {
-        return configuration.getString(HARID_URL_GENERALDATA);
-    }
-
     void postConstruct(String secret) {
         hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret);
     }
@@ -89,6 +77,7 @@ public class HaridService {
         params.add("grant_type", "authorization_code");
         params.add("redirect_uri", redirectUrl);
         params.add("code", code);
+        params.add("scope","personal_code");
 
         Response response = client.target(getHarIdTokenUrl())
                 .request()
@@ -102,13 +91,25 @@ public class HaridService {
         return configuration.getString(HARID_URL_TOKEN);
     }
 
-    private String generateAuthHeaderHash() {
-        String authHeader = format("%s:%s", getClientId(), getClientSecret());
-        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
+    public String getAuthorizationUrl() {
+        return configuration.getString(HARID_URL_AUTHORIZE);
+    }
+
+    public String getClientId() {
+        return configuration.getString(HARID_CLIENT_ID);
+    }
+
+    private String getUserDataUrl() {
+        return configuration.getString(HARID_URL_GENERALDATA);
     }
 
     private String getClientSecret() {
         return configuration.getString(HARID_CLIENT_SECRET);
+    }
+
+    private String generateAuthHeaderHash() {
+        String authHeader = format("%s:%s", getClientId(), getClientSecret());
+        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
     }
 
     private void logAsString(String reason, Response response) {
