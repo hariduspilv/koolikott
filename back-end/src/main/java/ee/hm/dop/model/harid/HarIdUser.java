@@ -13,6 +13,15 @@ public class HarIdUser {
     @JsonProperty("family_name")
     private String lastName;
 
+    public HarIdUser(String idCode, String firstName, String lastName) {
+        this.idCode = idCode;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public HarIdUser() {
+    }
+
     public String getIdCode() {
         return idCode;
     }
