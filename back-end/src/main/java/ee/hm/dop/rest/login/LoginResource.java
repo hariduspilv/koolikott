@@ -42,8 +42,8 @@ public class LoginResource extends BaseResource {
 //    private static final String HARID_AUTHENTICATION_URL = "https://test.harid.ee/et/authorizations/new";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
 //    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/success";
-//    private static final String HARID_AUTHENTICATION_FAILURE_URL = "/rest/login/harid/fail";
-    private static final String HARID_AUTHENTICATION_FAILURE_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/failure";
+    private static final String HARID_AUTHENTICATION_FAILURE_URL = "/rest/login/harid/fail";
+//    private static final String HARID_AUTHENTICATION_FAILURE_URL = "https://oxygen.netgroupdigital.com/rest/login/harid/failure";
     public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
@@ -186,16 +186,18 @@ public class LoginResource extends BaseResource {
     }
 
     private String getHaridCallbackUrl() {
+        logger.info(getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL);
         return getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL;
     }
 
     private URI getHaridLocation(String token) throws URISyntaxException {
         try {
+            logger.info("token: " + token + "URL= " + getHaridCallbackUrl());
             return redirectSuccess(haridService.authenticate(token,getHaridCallbackUrl()));
         } catch (Exception e) {
             logger.error("harId login failed", e);
-            return new URI(HARID_AUTHENTICATION_FAILURE_URL);
-//            return new URI(getServerAddress() + HARID_AUTHENTICATION_FAILURE_URL);
+//            return new URI(HARID_AUTHENTICATION_FAILURE_URL);
+            return new URI(getServerAddress() + HARID_AUTHENTICATION_FAILURE_URL);
         }
     }
 
