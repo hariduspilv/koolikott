@@ -77,12 +77,13 @@ public class HaridService {
     private HarIdUser getHaridUser(HarIdCode code) {
         Response response = client.target(getUserDataUrl())
                 .request()
-                .header("Authorization", "Bearer " + code.getAccessToken())
+//                .header("Authorization", "Bearer " + code.getAccessToken())
+                .header("Authorization", "Bearer " + code.getIdToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
         logAsString("getPerson", response);
-        logger.info("accesstoken for getting Harid user: " +  code.getAccessToken());
+        logger.info("accesstoken for getting Harid user: " +  code.getIdToken());
         return response.readEntity(HarIdUser.class);
     }
 
