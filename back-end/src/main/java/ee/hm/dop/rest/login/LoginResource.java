@@ -14,21 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static ee.hm.dop.rest.login.IdCardUtil.SSL_CLIENT_S_DN;
-import static ee.hm.dop.rest.login.IdCardUtil.getInfo;
-import static ee.hm.dop.rest.login.IdCardUtil.isAuthValid;
+import static ee.hm.dop.rest.login.IdCardUtil.*;
 import static java.lang.String.format;
 
 @Path("login")
@@ -40,13 +33,12 @@ public class LoginResource extends BaseResource {
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+email+personal_code+roles+session_type+custodies&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
-    private static final String HARID_AUTHENTICATION_FAILURE_URL = "/rest/login/harid/failure";
     public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM = "%s/#!/loginRedirect?stuudiumUserMissingIdCode=%s";
-    public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_HARID= "%s/#!/loginRedirect?harIdUserMissingIdCode=%s";
+    public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_HARID = "%s/#!/loginRedirect?harIdUserMissingIdCode=%s";
 
     @Inject
     private LoginService loginService;
@@ -123,12 +115,6 @@ public class LoginResource extends BaseResource {
     }
 
     @GET
-    @Path("harid/failure")
-    public URI haridAuthenticateFailure() throws URISyntaxException {
-        return redirectFailure();
-    }
-
-    @GET
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
     public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
@@ -184,17 +170,15 @@ public class LoginResource extends BaseResource {
     }
 
     private String getHaridCallbackUrl() {
-        logger.info(getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL);
         return getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL;
     }
 
     private URI getHaridLocation(String token) throws URISyntaxException {
         try {
-            logger.info("token sent to harid: " + token + " URL= " + getHaridCallbackUrl());
-            return redirectSuccess(haridService.authenticate(token,getHaridCallbackUrl()));
+            return redirectSuccess(haridService.authenticate(token, getHaridCallbackUrl()));
         } catch (Exception e) {
             logger.error("harId login failed", e);
-            return new URI(getServerAddress() + HARID_AUTHENTICATION_FAILURE_URL);
+            return redirectFailure();
         }
     }
 
