@@ -149,6 +149,9 @@ public class LoginService {
         if (existingUser != null) {
             return existingUser;
         }
+        if (idCode.toUpperCase().charAt(0) >= 'A') {
+            idCode = idCode.substring(idCode.lastIndexOf(':') + 1);
+        }
         userService.create(idCode, firstname, surname);
         User newUser = userService.getUserByIdCode(idCode);
         if (newUser == null) {

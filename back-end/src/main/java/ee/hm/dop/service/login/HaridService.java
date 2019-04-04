@@ -19,11 +19,7 @@ import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
 
-import static ee.hm.dop.utils.ConfigurationProperties.HARID_CLIENT_ID;
-import static ee.hm.dop.utils.ConfigurationProperties.HARID_CLIENT_SECRET;
-import static ee.hm.dop.utils.ConfigurationProperties.HARID_URL_AUTHORIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.HARID_URL_GENERALDATA;
-import static ee.hm.dop.utils.ConfigurationProperties.HARID_URL_TOKEN;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -41,18 +37,12 @@ public class HaridService {
     private LoginService loginService;
     private HmacUtils hmacUtils;
 
-//    @Inject
-//    public void postConstruct() {
-//        postConstruct(configuration.getString(HARID_CLIENT_SECRET));
-//    }
-
     void postConstruct(String secret) {
         hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret);
     }
 
     public UserStatus authenticate(String code,String redirectUrl) {
         HarIdCode harIdCode = getHarIdCode(code,redirectUrl);
-        logger.info("harId accessToken: " + harIdCode.getAccessToken());
         HarIdUser harIdUser = getHaridUser(harIdCode);
         if (isBlank(harIdUser.getIdCode())) {
             logger.info("HarIdUser doesnt have idcode");
@@ -71,7 +61,7 @@ public class HaridService {
                 .request()
                 .header("Authorization", "Basic " + generateAuthHeaderHash())
                 .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
-        logAsString("getCode", response);
+//        logAsString("getCode", response);
         return response.readEntity(HarIdCode.class);
     }
 
@@ -82,8 +72,7 @@ public class HaridService {
                 .header("Content-type", "application/x-www-form-urlencoded")
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
-        logAsString("getPerson", response);
-        logger.info("accesstoken for getting Harid user: " +  code.getAccessToken());
+//        logAsString("getPerson", response);
         return response.readEntity(HarIdUser.class);
     }
 
