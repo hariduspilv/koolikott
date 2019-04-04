@@ -3,10 +3,12 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
@@ -29,6 +31,7 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
@@ -65,6 +68,8 @@ public class MaterialService {
     private OriginalPictureDao originalPictureDao;
     @Inject
     private PortfolioDao portfolioDao;
+    @Inject
+    private TaxonDao taxonDao;
 
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
@@ -336,5 +341,36 @@ public class MaterialService {
             getPortfolios.add(portfolioDao.findById(pid.longValue()));
         }
         return getPortfolios;
+    }
+
+    public boolean showUnreviewedMaterial(Long id, User user) {
+        boolean answer = false;
+        if (UserUtil.isAdmin(user)) {
+            answer = true;
+        } else if (UserUtil.isModerator(user)) {
+            List<Long> collect = materialDao.findById(id).getTaxons().stream().mapToLong(Taxon::getId).boxed().collect(Collectors.toList());
+            List<Long> userTaxons = taxonDao.getUserTaxonsWithChildren(user);
+
+            System.out.println(collect.retainAll(userTaxons));
+
+
+            for (Long collectid : collect) {
+                for (Long usetaxonId : userTaxons)
+                    if (collectid.equals(usetaxonId)) {
+                        answer = true;
+
+                    } else {
+                        answer = false;
+                    }
+            }
+//            return taxonDao.getUserTaxonsWithChildren(user).contains(collect);
+
+//            List<Taxon>taxons = materialDao.findById(id).getTaxons();
+//            List<Long>taxonIds = (List<Long>) taxons.stream().mapToLong(taxon1 -> taxon1.getId());
+//            return taxonDao.getUserTaxonsWithChildren(user).contains(materialDao.findById(id).getTaxons());
+        } else {
+            answer = false;
+        }
+        return answer;
     }
 }

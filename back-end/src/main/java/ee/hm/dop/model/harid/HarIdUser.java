@@ -13,6 +13,9 @@ public class HarIdUser {
     @JsonProperty("family_name")
     private String lastName;
 
+    @JsonProperty("profile")
+    private String profile;
+
     public HarIdUser(String idCode, String firstName, String lastName) {
         this.idCode = idCode;
         this.firstName = firstName;
@@ -20,6 +23,14 @@ public class HarIdUser {
     }
 
     public HarIdUser() {
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     public HarIdUser(String idCode) {

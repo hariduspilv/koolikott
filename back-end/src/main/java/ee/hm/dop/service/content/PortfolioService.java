@@ -4,12 +4,14 @@ import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
+import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +19,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ValidatorUtil.permissionError;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -118,4 +123,35 @@ public class PortfolioService {
             throw new WebApplicationException("Required field title must be filled.", Response.Status.BAD_REQUEST);
         }
     }
+
+//    public boolean showUnreviewedPortfolio(Long id, User user) {
+//        boolean answer = false;
+//        if (UserUtil.isAdmin(user)) {
+//            answer = true;
+//        } else if (UserUtil.isModerator(user)) {
+//            List<Long> collect = portfolioDao.findById(id).getTaxons().stream().mapToLong(Taxon::getId).boxed().collect(Collectors.toList());
+//            List<Long> userTaxons = taxonDao.getUserTaxonsWithChildren(user);
+//
+//            System.out.println(collect.retainAll(userTaxons));
+//
+//
+//            for (Long collectid : collect) {
+//                for (Long usetaxonId : userTaxons)
+//                    if (collectid.equals(usetaxonId)) {
+//                        answer = true;
+//
+//                    } else {
+//                        answer = false;
+//                    }
+//            }
+////            return taxonDao.getUserTaxonsWithChildren(user).contains(collect);
+//
+////            List<Taxon>taxons = materialDao.findById(id).getTaxons();
+////            List<Long>taxonIds = (List<Long>) taxons.stream().mapToLong(taxon1 -> taxon1.getId());
+////            return taxonDao.getUserTaxonsWithChildren(user).contains(materialDao.findById(id).getTaxons());
+//        } else {
+//            answer = false;
+//        }
+//        return answer;
+//    }
 }

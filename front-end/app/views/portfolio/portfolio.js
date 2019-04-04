@@ -92,6 +92,17 @@ class controller extends Controller {
         })
     }
 
+    showUnreviewedMessage() {
+        if ($scope.material && $scope.material.id) {
+            serverCallService.makeGet('rest/material/showUnreviewedMaterial/?materialId=' + $scope.material.id)
+                .then(response => {
+                    $scope.showUnreviewedLO = response.data;
+                })
+
+
+        }
+    }
+
     getPortfolio() {
         const { id } = this.$route.current.params
         const fail = () => {

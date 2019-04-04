@@ -2,6 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.permission.MaterialPermission;
@@ -23,6 +24,8 @@ public class MaterialGetter {
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private MaterialPermission materialPermission;
+    @Inject
+    private TaxonDao taxonDao;
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -69,4 +72,4 @@ public class MaterialGetter {
     public long getByCreatorSize(User creator) {
         return materialDao.findByCreatorSize(creator);
     }
-}
+  }

@@ -102,4 +102,11 @@ public class PortfolioResource extends BaseResource {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         return userService.getUserByUsername(username);
     }
+
+    @GET
+    @Path("showUnreviewedMaterial")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean showUnreviewedMaterial(@QueryParam("materialId") Long id) {
+        return portfolioService.showUnreviewedPortfolio(id, getLoggedInUser());
+    }
 }

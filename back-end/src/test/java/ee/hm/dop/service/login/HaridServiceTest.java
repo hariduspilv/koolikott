@@ -71,12 +71,11 @@ public class HaridServiceTest {
         expect(configuration.getString(HARID_CLIENT_ID)).andReturn(clientID);
 
         expect(client.target(generalDataUrl)).andReturn(target);
-        expect(target.queryParam("token", token)).andReturn(target);
-        expect(target.queryParam("client_id", clientID)).andReturn(target);
-        expect(target.queryParam("signature", HmacUtils.hmacSha1Hex(clientSecret, token))).andReturn(target);
         expect(target.request()).andReturn(builder);
         expect(builder.accept(MediaType.APPLICATION_JSON_TYPE)).andReturn(builder);
         expect(builder.get()).andReturn(response);
+
+
 
         expect(response.readEntity(HarIdUser.class)).andReturn(harIdUser);
         expect(loginService.login(harIdUser.getIdCode(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID)).andReturn(userStatus);

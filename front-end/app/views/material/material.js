@@ -17,6 +17,7 @@ angular.module('koolikottApp')
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
             $scope.isActive = false;
+            // $scope.showUnreviewedMessage = showUnreviewedMessage
 
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
@@ -165,6 +166,7 @@ angular.module('koolikottApp')
                 $scope.material.source = getSource($scope.material);
                 getContentType();
                 processMaterial();
+                showUnreviewedMessage();
 
                 // getMaterialRelatedPortfolios($scope.material.id);
 
@@ -221,6 +223,17 @@ angular.module('koolikottApp')
             $scope.isModerator = () => authenticatedUserService.isModerator();
             $scope.isRestricted = () => authenticatedUserService.isRestricted();
             $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
+
+            function showUnreviewedMessage() {
+                if ($scope.material && $scope.material.id) {
+                    serverCallService.makeGet('rest/material/showUnreviewedMaterial/?materialId=' + $scope.material.id)
+                    .then(response => {
+                        $scope.showUnreviewedLO = response.data;
+                    })
+
+
+                }
+            }
 
             $scope.processMaterial = () => {
                 processMaterial();
