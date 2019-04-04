@@ -53,6 +53,8 @@ public class HaridService {
     public UserStatus authenticate(String code,String redirectUrl) {
         HarIdCode harIdCode = getHarIdCode(code,redirectUrl);
         logger.info("harId accessToken: " + harIdCode.getAccessToken());
+        logger.info("harId accessredirectUrl!!!! : " + redirectUrl);
+
         HarIdUser harIdUser = getHaridUser(harIdCode);
         if (isBlank(harIdUser.getIdCode())) {
             logger.info("HarIdUser doesnt have idcode");
