@@ -77,9 +77,10 @@ public class HaridService {
     private HarIdUser getHaridUser(HarIdCode code) {
         Response response = client.target(getUserDataUrl())
                 .request()
-//                .header("Authorization", "Bearer " + code.getAccessToken())
-                .header("Authorization", "Bearer " + code.getIdToken())
+                .header("Authorization", "Bearer " + code.getAccessToken())
+//                .header("Authorization", "Bearer " + code.getIdToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
+                .header("Scope", "personal_code")
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
         logAsString("getPerson", response);
