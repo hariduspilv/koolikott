@@ -16,6 +16,16 @@ public class HarIdCode {
     @JsonProperty("token_type")
     private String tokenType;
 
+    public HarIdCode() {
+    }
+
+    public HarIdCode(String accessToken, String idToken, String expiresIn, String tokenType) {
+        this.accessToken = accessToken;
+        this.idToken = idToken;
+        this.expiresIn = expiresIn;
+        this.tokenType = tokenType;
+    }
+
     public String getAccessToken() {
         return accessToken;
     }
