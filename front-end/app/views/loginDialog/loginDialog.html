@@ -16,7 +16,7 @@
       </div>
     </div>
   </md-toolbar>
-  <div data-layout="row" data-layout-align="center start">
+  <div data-layout="row" data-layout-xs="column" data-layout-align="center start">
     <div>
       <md-content>
         <div class="login-dialog-mobile-id-challenge" data-ng-if="mobileIdChallenge">
@@ -69,7 +69,7 @@
             ></md-button>
           </form>
           <md-divider></md-divider>
-          <div class="login-display-flex">
+          <div class="login-display-flex" data-layout-xs="column" layout-align-xs="start stretch" data-layout-sm="column">
             <md-button
               class="md-raised login-button-idkaart"
               aria-label="Logi sisse kasutades ID-kaarti"
