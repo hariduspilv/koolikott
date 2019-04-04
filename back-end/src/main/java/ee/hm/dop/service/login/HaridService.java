@@ -85,6 +85,18 @@ public class HaridService {
         return response.readEntity(HarIdCode.class);
     }
 
+    private HarIdUser getHaridUser(HarIdCode code) {
+        Response response = client.target(getUserDataUrl())
+                .request()
+                .header("Authorization", "Bearer " + code.getAccessToken())
+                .header("Content-type", "application/x-www-form-urlencoded")
+                .accept(MediaType.APPLICATION_JSON)
+                .get();
+        logAsString("getPerson", response);
+        logger.info("accesstoken for getting Harid user: " +  code.getAccessToken());
+        return response.readEntity(HarIdUser.class);
+    }
+
     private String getHarIdTokenUrl() {
         return configuration.getString(HARID_URL_TOKEN);
     }

@@ -190,7 +190,7 @@ public class LoginResource extends BaseResource {
 
     private URI getHaridLocation(String token) throws URISyntaxException {
         try {
-            logger.info("token: " + token + " URL= " + getHaridCallbackUrl());
+            logger.info("token sent to harid: " + token + " URL= " + getHaridCallbackUrl());
             return redirectSuccess(haridService.authenticate(token,getHaridCallbackUrl()));
         } catch (Exception e) {
             logger.error("harId login failed", e);
