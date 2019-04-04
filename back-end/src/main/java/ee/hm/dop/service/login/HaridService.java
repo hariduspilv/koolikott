@@ -52,6 +52,7 @@ public class HaridService {
 
     public UserStatus authenticate(String code,String redirectUrl) {
         HarIdCode harIdCode = getHarIdCode(code,redirectUrl);
+        logger.info("harId accessToken: " + harIdCode.getAccessToken());
         HarIdUser harIdUser = getHaridUser(harIdCode);
         if (isBlank(harIdUser.getIdCode())) {
             logger.info("HarIdUser doesnt have idcode");
@@ -78,13 +79,11 @@ public class HaridService {
         Response response = client.target(getUserDataUrl())
                 .request()
                 .header("Authorization", "Bearer " + code.getAccessToken())
-//                .header("Authorization", "Bearer " + code.getIdToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
-                .header("Scope", "personal_code")
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
         logAsString("getPerson", response);
-        logger.info("accesstoken for getting Harid user: " +  code.getIdToken());
+        logger.info("accesstoken for getting Harid user: " +  code.getAccessToken());
         return response.readEntity(HarIdUser.class);
     }
 
