@@ -60,17 +60,6 @@ public class HaridService {
         return loginService.login(harIdUser.getIdCode(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
     }
 
-    private HarIdUser getHaridUser(HarIdCode code) {
-        Response response = client.target(getUserDataUrl())
-                .request()
-                .header("Authorization", "Bearer " + code.getAccessToken())
-                .header("Content-type", "application/x-www-form-urlencoded")
-                .accept(MediaType.APPLICATION_JSON)
-                .get();
-        logAsString("getPerson", response);
-        return response.readEntity(HarIdUser.class);
-    }
-
     private HarIdCode getHarIdCode(String code, String redirectUrl) {
         MultivaluedMap<String, String> params = new MultivaluedHashMap<>();
         params.add("grant_type", "authorization_code");
