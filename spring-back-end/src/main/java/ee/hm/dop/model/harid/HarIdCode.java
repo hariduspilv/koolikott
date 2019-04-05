@@ -1,19 +1,13 @@
 package ee.hm.dop.model.harid;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class HarIdCode {
 
-    @JsonProperty("access_token")
     private String accessToken;
-
-    @JsonProperty("id_token")
     private String idToken;
-
-    @JsonProperty("expires_in")
     private String expiresIn;
-
-    @JsonProperty("token_type")
     private String tokenType;
 
     public String getAccessToken() {

@@ -46,9 +46,8 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=personal_code&response_type=code";
+    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+personal_code&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
-    private static final String HARID_AUTHENTICATION_FAILURE_URL = "/rest/login/harid/failure";
     public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
@@ -124,12 +123,6 @@ public class LoginResource extends BaseResource {
     }
 
     @GetMapping
-    @RequestMapping("harid/failure")
-    public URI haridAuthenticateFailure() throws URISyntaxException {
-        return redirectFailure();
-    }
-
-    @GetMapping
     @RequestMapping("/mobileId")
     public MobileIDSecurityCodes mobileIDLogin(@RequestParam("phoneNumber") String phoneNumber,
                                                @RequestParam("idCode") String idCode,
@@ -183,17 +176,15 @@ public class LoginResource extends BaseResource {
     }
 
     private String getHaridCallbackUrl() {
-        logger.info(getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL);
         return getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL;
     }
 
     private URI getHaridLocation(String token) throws URISyntaxException {
         try {
-            logger.info("token: " + token + " URL= " + getHaridCallbackUrl());
-            return redirectSuccess(haridService.authenticate(token,getHaridCallbackUrl()));
+            return redirectSuccess(haridService.authenticate(token, getHaridCallbackUrl()));
         } catch (Exception e) {
             logger.error("harId login failed", e);
-            return new URI(getServerAddress() + HARID_AUTHENTICATION_FAILURE_URL);
+            return redirectFailure();
         }
     }
 

@@ -278,7 +278,7 @@ angular.module('koolikottApp')
                 }
 
                 if (harIdUserMissingIdCode) {
-                    idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');//TODO add translation
+                    idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');
                     return;
                 }
 
