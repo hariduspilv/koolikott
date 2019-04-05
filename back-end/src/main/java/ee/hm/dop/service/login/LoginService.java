@@ -145,13 +145,10 @@ public class LoginService {
     }
 
     private User getExistingOrNewUser(String idCode, String firstname, String surname) {
-        logger.info("idcode- " + idCode + "firstname- "+ firstname+ "lastname- "+ surname);
         if (idCode.toUpperCase().charAt(0) >= 'A') {
             idCode = idCode.substring(idCode.lastIndexOf(':') + 1);
         }
-        logger.info("idcode-modified- " + idCode);
         User existingUser = userService.getUserByIdCode(idCode);
-        logger.info("existingUser- " + existingUser);
         if (existingUser != null) {
             return existingUser;
         }
