@@ -54,6 +54,7 @@ class controller extends Controller {
         this.$scope.dotsAreShowing = this.dotsAreShowing.bind(this)
         this.$scope.restorePortfolio = this.restorePortfolio
         this.$scope.toggleFullScreen = this.toggleFullScreen.bind(this)
+        this.$scope.showUnreviewedMessage = this.showUnreviewedMessage();
 
         this.$scope.getLicenseIconList = () => {
             if (this.portfolio && this.portfolio.licenseType) {
@@ -220,6 +221,15 @@ class controller extends Controller {
             this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
         else {
             this.toastService.hide()
+        }
+    }
+
+    showUnreviewedMessage() {
+        if (this.$scope.portfolio && this.$scope.portfolio.id) {
+            this.serverCallService.makeGet('rest/portfolio/showUnreviewedPortfolio/?portfolioId=' + this.$scope.portfolio.id)
+                .then(response => {
+                    this.$scope.showUnreviewedPortfolio = response.data;
+                })
         }
     }
 }

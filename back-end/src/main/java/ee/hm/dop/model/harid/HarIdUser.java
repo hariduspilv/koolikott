@@ -13,6 +13,9 @@ public class HarIdUser {
     @JsonProperty("family_name")
     private String lastName;
 
+    @JsonProperty("profile")
+    private String profile;
+
     @JsonProperty("strong_session")
     private String strongSession;
 
@@ -23,6 +26,14 @@ public class HarIdUser {
     }
 
     public HarIdUser() {
+    }
+
+    public String getProfile() {
+        return profile;
+    }
+
+    public void setProfile(String profile) {
+        this.profile = profile;
     }
 
     public HarIdUser(String idCode) {

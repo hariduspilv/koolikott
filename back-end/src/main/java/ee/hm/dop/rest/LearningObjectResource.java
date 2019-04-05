@@ -118,4 +118,11 @@ public class LearningObjectResource extends BaseResource {
     public void increaseViewCount(LearningObjectMiniDto learningObjectMiniDto) {
         learningObjectService.incrementViewCount(learningObjectMiniDto.convert());
     }
+
+    @GET
+    @Path("showUnreviewed")
+    @Produces(MediaType.APPLICATION_JSON)
+    public boolean showUnreviewedMessage(@QueryParam("id") Long id) {
+        return learningObjectService.showUnreviewed(id, getLoggedInUser());
+    }
 }

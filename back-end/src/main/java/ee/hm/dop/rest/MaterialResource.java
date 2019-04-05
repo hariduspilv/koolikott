@@ -31,6 +31,8 @@ public class MaterialResource extends BaseResource {
     @Inject
     private MaterialGetter materialGetter;
 
+
+
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Material get(@QueryParam("id") long materialId) {
