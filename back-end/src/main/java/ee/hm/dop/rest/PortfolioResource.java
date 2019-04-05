@@ -104,9 +104,9 @@ public class PortfolioResource extends BaseResource {
     }
 
     @GET
-    @Path("showUnreviewedMaterial")
+    @Path("showUnreviewedPortfolio")
     @Produces(MediaType.APPLICATION_JSON)
-    public boolean showUnreviewedMaterial(@QueryParam("materialId") Long id) {
+    public boolean showUnreviewedMaterial(@QueryParam("portfolioId") Long id) {
         return portfolioService.showUnreviewedPortfolio(id, getLoggedInUser());
     }
 }

@@ -1,6 +1,7 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
@@ -46,6 +47,8 @@ public class PortfolioService {
     private PortfolioCopier portfolioCopier;
     @Inject
     private PortfolioMaterialService portfolioMaterialService;
+    @Inject
+    private TaxonDao taxonDao;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -124,34 +127,34 @@ public class PortfolioService {
         }
     }
 
-//    public boolean showUnreviewedPortfolio(Long id, User user) {
-//        boolean answer = false;
-//        if (UserUtil.isAdmin(user)) {
-//            answer = true;
-//        } else if (UserUtil.isModerator(user)) {
-//            List<Long> collect = portfolioDao.findById(id).getTaxons().stream().mapToLong(Taxon::getId).boxed().collect(Collectors.toList());
-//            List<Long> userTaxons = taxonDao.getUserTaxonsWithChildren(user);
-//
-//            System.out.println(collect.retainAll(userTaxons));
-//
-//
-//            for (Long collectid : collect) {
-//                for (Long usetaxonId : userTaxons)
-//                    if (collectid.equals(usetaxonId)) {
-//                        answer = true;
-//
-//                    } else {
-//                        answer = false;
-//                    }
-//            }
-////            return taxonDao.getUserTaxonsWithChildren(user).contains(collect);
-//
-////            List<Taxon>taxons = materialDao.findById(id).getTaxons();
-////            List<Long>taxonIds = (List<Long>) taxons.stream().mapToLong(taxon1 -> taxon1.getId());
-////            return taxonDao.getUserTaxonsWithChildren(user).contains(materialDao.findById(id).getTaxons());
-//        } else {
-//            answer = false;
-//        }
-//        return answer;
-//    }
+    public boolean showUnreviewedPortfolio(Long id, User user) {
+        boolean answer = false;
+        if (UserUtil.isAdmin(user)) {
+            answer = true;
+        } else if (UserUtil.isModerator(user)) {
+            List<Long> collect = portfolioDao.findById(id).getTaxons().stream().mapToLong(Taxon::getId).boxed().collect(Collectors.toList());
+            List<Long> userTaxons = taxonDao.getUserTaxonsWithChildren(user);
+
+            System.out.println(collect.retainAll(userTaxons));
+
+
+            for (Long collectid : collect) {
+                for (Long usetaxonId : userTaxons)
+                    if (collectid.equals(usetaxonId)) {
+                        answer = true;
+
+                    } else {
+                        answer = false;
+                    }
+            }
+//            return taxonDao.getUserTaxonsWithChildren(user).contains(collect);
+
+//            List<Taxon>taxons = materialDao.findById(id).getTaxons();
+//            List<Long>taxonIds = (List<Long>) taxons.stream().mapToLong(taxon1 -> taxon1.getId());
+//            return taxonDao.getUserTaxonsWithChildren(user).contains(materialDao.findById(id).getTaxons());
+        } else {
+            answer = false;
+        }
+        return answer;
+    }
 }

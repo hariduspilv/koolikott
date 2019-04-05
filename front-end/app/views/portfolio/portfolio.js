@@ -67,6 +67,7 @@ class controller extends Controller {
         this.$scope.newComment = {}
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
+        this.$scope.showUnreviewedMessage = this.showUnreviewedMessage();
 
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newPortfolio, oldPortfolio) => {
             this.eventService.notify('portfolio:reloadTaxonObject')
@@ -93,13 +94,11 @@ class controller extends Controller {
     }
 
     showUnreviewedMessage() {
-        if ($scope.material && $scope.material.id) {
-            serverCallService.makeGet('rest/material/showUnreviewedMaterial/?materialId=' + $scope.material.id)
+        if (this.$scope.portfolio && this.$scope.portfolio.id) {
+            this.serverCallService.makeGet('rest/material/showUnreviewedPortfolio/?portfolioId=' + this.$scope.portfolio.id)
                 .then(response => {
-                    $scope.showUnreviewedLO = response.data;
+                    this.$scope.showUnreviewedLO = response.data;
                 })
-
-
         }
     }
 
