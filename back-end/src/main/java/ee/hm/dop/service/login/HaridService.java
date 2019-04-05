@@ -72,7 +72,7 @@ public class HaridService {
                 .header("Content-type", "application/x-www-form-urlencoded")
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
-//        logAsString("getPerson", response);
+        logAsString("getPerson", response);
         return response.readEntity(HarIdUser.class);
     }
 
