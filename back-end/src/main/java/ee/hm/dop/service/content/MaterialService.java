@@ -8,7 +8,6 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
@@ -16,11 +15,14 @@ import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
-import ee.hm.dop.utils.*;
+import ee.hm.dop.utils.TaxonUtils;
+import ee.hm.dop.utils.TextFieldUtil;
+import ee.hm.dop.utils.UrlUtil;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
@@ -31,10 +33,10 @@ import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static ee.hm.dop.utils.UserUtil.*;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -86,7 +88,7 @@ public class MaterialService {
         material.setSource(UrlUtil.processURL(material.getSource()));
         cleanPeerReviewUrls(material);
         material.setCreator(creator);
-        if (UserUtil.isPublisher(creator)) {
+        if (isPublisher(creator)) {
             material.setEmbeddable(true);
         }
         material.setRecommendation(null);
@@ -113,7 +115,7 @@ public class MaterialService {
     }
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
-        ValidatorUtil.mustHaveId(material, material!= null ? material.getId(): null);
+        ValidatorUtil.mustHaveId(material, material != null ? material.getId() : null);
         Material originalMaterial = materialGetter.get(material.getId(), changer);
         mustHavePermission(changer, originalMaterial);
         mustBeValid(originalMaterial, changer);
@@ -122,7 +124,7 @@ public class MaterialService {
         mustHaveUniqueSource(material);
 
         cleanPeerReviewUrls(material);
-        if (!UserUtil.isAdmin(changer)) {
+        if (!isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
         material.setId(originalMaterial.getId());
@@ -156,7 +158,7 @@ public class MaterialService {
     }
 
     private void mustHavePermission(User changer, Material originalMaterial) {
-        if (changer != null && !UserUtil.isAdminOrModerator(changer) && !UserUtil.isCreator(originalMaterial, changer)) {
+        if (changer != null && !isAdminOrModerator(changer) && !isCreator(originalMaterial, changer)) {
             throw ValidatorUtil.permissionError();
         }
     }
@@ -185,7 +187,7 @@ public class MaterialService {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
         }
 
-        if (originalMaterial.getRepository() != null && changer != null && !UserUtil.isAdminOrModerator(changer)) {
+        if (originalMaterial.getRepository() != null && changer != null && !isAdminOrModerator(changer)) {
             throw new IllegalArgumentException("Normal user can't update external repository material");
         }
     }
@@ -341,36 +343,5 @@ public class MaterialService {
             getPortfolios.add(portfolioDao.findById(pid.longValue()));
         }
         return getPortfolios;
-    }
-
-    public boolean showUnreviewedMaterial(Long id, User user) {
-        boolean answer = false;
-        if (UserUtil.isAdmin(user)) {
-            answer = true;
-        } else if (UserUtil.isModerator(user)) {
-            List<Long> collect = materialDao.findById(id).getTaxons().stream().mapToLong(Taxon::getId).boxed().collect(Collectors.toList());
-            List<Long> userTaxons = taxonDao.getUserTaxonsWithChildren(user);
-
-            System.out.println(collect.retainAll(userTaxons));
-
-
-            for (Long collectid : collect) {
-                for (Long usetaxonId : userTaxons)
-                    if (collectid.equals(usetaxonId)) {
-                        answer = true;
-
-                    } else {
-                        answer = false;
-                    }
-            }
-//            return taxonDao.getUserTaxonsWithChildren(user).contains(collect);
-
-//            List<Taxon>taxons = materialDao.findById(id).getTaxons();
-//            List<Long>taxonIds = (List<Long>) taxons.stream().mapToLong(taxon1 -> taxon1.getId());
-//            return taxonDao.getUserTaxonsWithChildren(user).contains(materialDao.findById(id).getTaxons());
-        } else {
-            answer = false;
-        }
-        return answer;
     }
 }

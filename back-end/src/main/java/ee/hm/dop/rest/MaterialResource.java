@@ -122,11 +122,4 @@ public class MaterialResource extends BaseResource {
     public List<Portfolio> getRelatedPortfolios(@QueryParam("id") Long id) {
         return materialService.getRelatedPortfolios(id);
     }
-
-    @GET
-    @Path("showUnreviewedMaterial")
-    @Produces(MediaType.APPLICATION_JSON)
-    public boolean showUnreviewedMaterial(@QueryParam("materialId") Long id) {
-        return materialService.showUnreviewedMaterial(id, getLoggedInUser());
-    }
 }

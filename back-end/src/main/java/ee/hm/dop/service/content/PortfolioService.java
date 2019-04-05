@@ -126,35 +126,4 @@ public class PortfolioService {
             throw new WebApplicationException("Required field title must be filled.", Response.Status.BAD_REQUEST);
         }
     }
-
-    public boolean showUnreviewedPortfolio(Long id, User user) {
-        boolean answer = false;
-        if (UserUtil.isAdmin(user)) {
-            answer = true;
-        } else if (UserUtil.isModerator(user)) {
-            List<Long> collect = portfolioDao.findById(id).getTaxons().stream().mapToLong(Taxon::getId).boxed().collect(Collectors.toList());
-            List<Long> userTaxons = taxonDao.getUserTaxonsWithChildren(user);
-
-            System.out.println(collect.retainAll(userTaxons));
-
-
-            for (Long collectid : collect) {
-                for (Long usetaxonId : userTaxons)
-                    if (collectid.equals(usetaxonId)) {
-                        answer = true;
-
-                    } else {
-                        answer = false;
-                    }
-            }
-//            return taxonDao.getUserTaxonsWithChildren(user).contains(collect);
-
-//            List<Taxon>taxons = materialDao.findById(id).getTaxons();
-//            List<Long>taxonIds = (List<Long>) taxons.stream().mapToLong(taxon1 -> taxon1.getId());
-//            return taxonDao.getUserTaxonsWithChildren(user).contains(materialDao.findById(id).getTaxons());
-        } else {
-            answer = false;
-        }
-        return answer;
-    }
 }

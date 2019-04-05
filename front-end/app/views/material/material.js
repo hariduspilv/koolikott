@@ -17,7 +17,6 @@ angular.module('koolikottApp')
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
             $scope.isActive = false;
-            // $scope.showUnreviewedMessage = showUnreviewedMessage
 
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
@@ -226,7 +225,7 @@ angular.module('koolikottApp')
 
             function showUnreviewedMessage() {
                 if ($scope.material && $scope.material.id) {
-                    serverCallService.makeGet('rest/material/showUnreviewedMaterial/?materialId=' + $scope.material.id)
+                    serverCallService.makeGet('rest/learningObject/showUnreviewed?id=' + $scope.material.id)
                     .then(response => {
                         $scope.showUnreviewedLO = response.data;
                     })
