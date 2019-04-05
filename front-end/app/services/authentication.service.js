@@ -280,6 +280,7 @@ angular.module('koolikottApp')
 
                 if (harIdUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');
+                    $route.current.params = {}
                     return;
                 }
 
