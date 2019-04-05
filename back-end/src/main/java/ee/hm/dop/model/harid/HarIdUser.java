@@ -13,6 +13,9 @@ public class HarIdUser {
     @JsonProperty("family_name")
     private String lastName;
 
+    @JsonProperty("strong_session")
+    private String strongSession;
+
     public HarIdUser(String idCode, String firstName, String lastName) {
         this.idCode = idCode;
         this.firstName = firstName;
@@ -48,5 +51,13 @@ public class HarIdUser {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getStrongSession() {
+        return strongSession;
+    }
+
+    public void setStrongSession(String strongSession) {
+        this.strongSession = strongSession;
     }
 }
