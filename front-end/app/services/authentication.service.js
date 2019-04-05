@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .factory('authenticationService',
 [
-    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService', 'userSessionService', 'userEmailService',
-    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService, userSessionService, userEmailService) {
+    '$location', '$rootScope', '$timeout', 'serverCallService', 'authenticatedUserService', '$mdDialog', 'toastService', 'userLocatorService', 'userSessionService', 'userEmailService', '$route',
+    function($location, $rootScope, $timeout, serverCallService, authenticatedUserService, $mdDialog, toastService, userLocatorService, userSessionService, userEmailService, $route) {
         var isAuthenticationInProgress;
         var isOAuthAuthentication = false;
         $rootScope.showLocationDialog = true;
@@ -267,6 +267,7 @@ angular.module('koolikottApp')
 
             authenticateUsingOAuth: function(inputParams) {
                 const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                console.log($route.current.params)
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;

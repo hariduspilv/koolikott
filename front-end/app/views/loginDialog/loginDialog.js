@@ -106,7 +106,8 @@ controller.$inject = [
     '$mdDialog',
     'authenticationService',
     'translationService',
-    'authenticatedUserService'
+    'authenticatedUserService',
+    '$route'
 ]
 
 window.loginDialogController = controller
