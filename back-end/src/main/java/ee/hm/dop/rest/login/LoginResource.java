@@ -31,7 +31,7 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+email+personal_code+roles+session_type&response_type=code";
+    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=profile+email+personal_code&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
     public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
