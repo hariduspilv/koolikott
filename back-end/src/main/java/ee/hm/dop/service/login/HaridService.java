@@ -61,7 +61,7 @@ public class HaridService {
                 .request()
                 .header("Authorization", "Basic " + generateAuthHeaderHash())
                 .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
-//        logAsString("getCode", response);
+        logAsString("getCode", response);
         return response.readEntity(HarIdCode.class);
     }
 
