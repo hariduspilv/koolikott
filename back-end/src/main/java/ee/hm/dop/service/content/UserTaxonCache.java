@@ -14,8 +14,7 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
-import static ee.hm.dop.utils.ConfigurationProperties.CACHE_MAX_SIZE;
-import static ee.hm.dop.utils.ConfigurationProperties.CACHE_TIME;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 
 public class UserTaxonCache {
     private static Logger logger = LoggerFactory.getLogger(UserTaxonCache.class);
@@ -24,18 +23,22 @@ public class UserTaxonCache {
     private TaxonDao taxonDao;
     @Inject
     private Configuration configuration;
+    private LoadingCache<Long, List<Long>> userTaxonCache;
 
-    LoadingCache<Long, List<Long>> userTaxonCache = CacheBuilder.newBuilder()
-            .maximumSize(1000)
-            .expireAfterAccess(configuration.getInt(CACHE_TIME), TimeUnit.MINUTES)
-            .maximumSize(configuration.getInt(CACHE_MAX_SIZE))
-            .build(
-                    new CacheLoader<Long, List<Long>>() {
-                        public List<Long> load(Long id) {
-                            return taxonDao.getUserTaxonWithChildren(id);
+    @Inject
+    public void postConstruct() {
+        userTaxonCache = CacheBuilder.newBuilder()
+                .expireAfterAccess(configuration.getInt(CACHE_TIME), TimeUnit.MINUTES)
+                .maximumSize(configuration.getInt(CACHE_MAX_SIZE))
+                .build(
+                        new CacheLoader<Long, List<Long>>() {
+                            public List<Long> load(Long id) {
+                                return taxonDao.getUserTaxonWithChildren(id);
+                            }
                         }
-                    }
-            );
+                );
+    }
+
 
     public synchronized List<Long> getUserTaxonsWithChildren(User user) {
         try {
