@@ -7,6 +7,7 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.service.login.dto.UserStatus;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +65,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Status.TEMPORARY_REDIRECT.getStatusCode(),response.getStatus());
     }
 
+    @Ignore
     @Test
     public void haridAuthenticateSuccess(){
         Response response = doGet("login/harid/success?code=123456789");
@@ -75,6 +77,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         logout();
     }
 
+    @Ignore
     @Test
     public void haridAuthenticateSuccessTwo() {
         Response response = doGet("login/harid/success?code=987654321");
@@ -85,6 +88,7 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         logout();
     }
 
+    @Ignore
     @Test
     public void harid_authentication_without_id_code_returns_missin_id_message() {
         Response response = doGet("login/harid/success?code=123123456");
