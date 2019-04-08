@@ -149,17 +149,6 @@ public class MaterialDao extends AbstractDao<Material> {
                 .getResultList();
     }
 
-    public List<BigInteger> getRelatedPortfolios(Long materialId) {
-        return getEntityManager().
-                createNativeQuery("SELECT pm.portfolio " +
-                        "FROM PortfolioMaterial pm " +
-                        "JOIN Portfolio P on pm.portfolio = P.id " +
-                        "WHERE pm.material =:materialId " +
-                        "ORDER BY lower(P.title) ASC")
-                .setParameter("materialId",materialId)
-                .getResultList();
-    }
-
     @Override
     public Material createOrUpdate(Material entity) {
         entity.setLastInteraction(now());

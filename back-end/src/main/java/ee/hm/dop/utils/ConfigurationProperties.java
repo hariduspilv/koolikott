@@ -120,4 +120,9 @@ public interface ConfigurationProperties {
 
     //Captcha
     String CAPTCHA_KEY = "captcha.key";
+
+    //Cache
+    String CACHE_TIME = "cache.time";
+    String CACHE_MAX_SIZE = "cache.max.size";
+
 }

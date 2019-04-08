@@ -5,6 +5,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.User;
+import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,15 +14,21 @@ import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
+import static ee.hm.dop.utils.ConfigurationProperties.CACHE_MAX_SIZE;
+import static ee.hm.dop.utils.ConfigurationProperties.CACHE_TIME;
+
 public class UserTaxonCache {
     private static Logger logger = LoggerFactory.getLogger(UserTaxonCache.class);
 
     @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private Configuration configuration;
 
     LoadingCache<Long, List<Long>> userTaxonCache = CacheBuilder.newBuilder()
             .maximumSize(1000)
-            .expireAfterAccess(60, TimeUnit.MINUTES)
+            .expireAfterAccess(configuration.getInt(CACHE_TIME), TimeUnit.MINUTES)
+            .maximumSize(configuration.getInt(CACHE_MAX_SIZE))
             .build(
                     new CacheLoader<Long, List<Long>>() {
                         public List<Long> load(Long id) {

@@ -70,9 +70,6 @@ public class MaterialService {
     private OriginalPictureDao originalPictureDao;
     @Inject
     private PortfolioDao portfolioDao;
-    @Inject
-    private TaxonDao taxonDao;
-
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
         return materialDao.findByRepository(repository, repositoryIdentifier);
@@ -338,9 +335,6 @@ public class MaterialService {
     }
 
     public List<Portfolio> getRelatedPortfolios(Long id) {
-        for (BigInteger pid : materialDao.getRelatedPortfolios(id)) {
-            ((List<Portfolio>) new ArrayList<Portfolio>()).add(portfolioDao.findById(pid.longValue()));
-        }
-        return new ArrayList<>();
+        return portfolioDao.getRelatedPortfolios(id);
     }
 }

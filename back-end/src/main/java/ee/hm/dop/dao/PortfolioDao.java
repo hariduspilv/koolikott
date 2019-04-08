@@ -31,16 +31,6 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
         return getSingleResult(findByCode);
     }
 
-    public List<Portfolio> getRelatedPortfolios(Long materialId) {
-        return getEntityManager().
-                createNativeQuery("" +
-                        "SELECT p.* FROM PortfolioMaterial pm\n" +
-                        "join Portfolio p on pm.portfolio = p.id\n" +
-                        "WHERE pm.material = :materialId", entity())
-                .setParameter("materialId",materialId)
-                .getResultList();
-    }
-
     public Portfolio findDeletedById(Long portfolioId) {
         TypedQuery<Portfolio> findByCode = getEntityManager()
                 .createQuery("SELECT lo FROM Portfolio lo " +
@@ -122,6 +112,18 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
 
     public void restore(LearningObject learningObject) {
         learningObjectDao.restore(learningObject);
+    }
+
+
+    public List<Portfolio> getRelatedPortfolios(Long materialId) {
+        return (List<Portfolio>) getEntityManager().
+                createNativeQuery("SELECT P.* " +
+                        "FROM PortfolioMaterial pm " +
+                        "JOIN Portfolio P on pm.portfolio = P.id " +
+                        "WHERE pm.material =:materialId " +
+                        "ORDER BY lower(P.title) ASC", entity())
+                .setParameter("materialId",materialId)
+                .getResultList();
     }
 
     @Override
