@@ -174,4 +174,4 @@ captcha:
 cache:
   cache-names: LearningObjectServiceCache_userTaxonCache
   caffeine:
-    spec:expireAfterWrite=1h
+    spec: expireAfterWrite=1h
