@@ -172,6 +172,6 @@ captcha:
   key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 
 cache:
-  cache-names: TaxonDao_userTaxonCache
+  cache-names: LearningObjectServiceCache_userTaxonCache
   caffeine:
     spec:expireAfterWrite=1h

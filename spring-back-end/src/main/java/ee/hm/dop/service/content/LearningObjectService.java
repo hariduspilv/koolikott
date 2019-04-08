@@ -27,8 +27,7 @@ public class LearningObjectService {
     @Inject
     private PermissionFactory permissionFactory;
     @Inject
-    private TaxonDao taxonDao;
-
+    private LearningObjectServiceCache learningObjectServiceCache;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
@@ -78,10 +77,9 @@ public class LearningObjectService {
             LearningObject obj = learningObjectDao.findById(id);
             if (obj == null) return false;
             List<Long> collect = obj.getTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
-            List<Long> userTaxons = taxonDao.getUserTaxonWithChildren(user.getId());
+            List<Long> userTaxons = learningObjectServiceCache.getUserTaxonWithChildren(user.getId());
             return userTaxons != null && collect.stream().anyMatch(userTaxons::contains);
         }
         return false;
     }
-
 }

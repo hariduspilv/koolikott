@@ -7,6 +7,7 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.service.content.LearningObjectServiceCache;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -27,6 +28,9 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     public static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " INNER JOIN Portfolio m ON lo.id = m.id\n";
     public static final String JOIN_MATERIAL_TYPE_MATERIAL = " INNER JOIN Material m ON lo.id = m.id\n";
     private final Logger logger = LoggerFactory.getLogger(FirstReviewDao.class);
+
+    @Inject
+    private LearningObjectServiceCache learningObjectServiceCache;
 
     public static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
             "FROM LearningObject LO\n" +
@@ -162,7 +166,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
                         "  AND lt.taxon IN (:taxonIds)")
-                .setParameter("taxonIds", taxonDao.getUserTaxonWithChildren(Arrays.asList(user.getId())))
+                .setParameter("taxonIds", learningObjectServiceCache.getUserTaxonWithChildren(user.getId()))
                 .getSingleResult()).longValue();
     }
 

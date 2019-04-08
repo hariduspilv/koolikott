@@ -159,12 +159,6 @@ public class TaxonDao extends AbstractDao<Taxon> {
         return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
     }
 
-    @Cacheable("TaxonDao_userTaxonCache")
-    public List<Long> getUserTaxonWithChildren(Long user) {
-        return getUserTaxonWithChildren(Arrays.asList(user));
-    }
-
-
     /**
      * when user is assigned high level taxon
      * then they can access all of its children
