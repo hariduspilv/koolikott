@@ -20,7 +20,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
     private final Logger logger = LoggerFactory.getLogger(TaxonDao.class);
 
 
-    public List<Taxon>findTaxonDomainAndSubject(Taxon taxon){
+    public List<Taxon> findTaxonDomainAndSubject(Taxon taxon) {
         return getEntityManager()
                 .createNativeQuery("" +
                         "  SELECT tp.domain as t_id FROM TaxonPosition tp\n" +
@@ -28,7 +28,7 @@ public class TaxonDao extends AbstractDao<Taxon> {
                         "  UNION ALL\n" +
                         "  SELECT tp.subject as t_id FROM TaxonPosition tp\n" +
                         "  WHERE tp.taxon= :taxonId ")
-                .setParameter("taxonId",taxon.getId())
+                .setParameter("taxonId", taxon.getId())
                 .getResultList();
     }
 
@@ -156,6 +156,10 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .getResultList();
 
         return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+    }
+
+    public List<Long> getUserTaxonWithChildren(Long user) {
+        return getUserTaxonWithChildren(Arrays.asList(user));
     }
 
     /**

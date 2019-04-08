@@ -7,6 +7,7 @@ import ee.hm.dop.utils.TaxonUtils;
 import ee.hm.dop.utils.UserUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
@@ -157,6 +158,12 @@ public class TaxonDao extends AbstractDao<Taxon> {
 
         return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
     }
+
+    @Cacheable("TaxonDao_userTaxonCache")
+    public List<Long> getUserTaxonWithChildren(Long user) {
+        return getUserTaxonWithChildren(Arrays.asList(user));
+    }
+
 
     /**
      * when user is assigned high level taxon

@@ -1,30 +1,15 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.LearningObjectMiniDto;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.UserFavorite;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.LearningObjectService;
-import ee.hm.dop.service.content.dto.TagDTO;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.UserFavoriteService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.Comparator;
@@ -116,5 +101,10 @@ public class LearningObjectResource extends BaseResource {
     @PostMapping("increaseViewCount")
     public void increaseViewCount(@RequestBody LearningObjectMiniDto learningObjectMiniDto) {
         learningObjectService.incrementViewCount(learningObjectMiniDto.convert());
+    }
+
+    @GetMapping("showUnreviewed")
+    public boolean showUnreviewedMessage(@RequestParam("id") Long id) {
+        return learningObjectService.showUnreviewed(id, getLoggedInUser());
     }
 }

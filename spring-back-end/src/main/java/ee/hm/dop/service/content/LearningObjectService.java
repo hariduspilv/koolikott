@@ -1,8 +1,10 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.permission.PermissionFactory;
 import ee.hm.dop.service.permission.PermissionItem;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -10,6 +12,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static ee.hm.dop.utils.UserUtil.isAdmin;
+import static ee.hm.dop.utils.UserUtil.isModerator;
 
 @Service
 @Transactional
@@ -19,6 +26,9 @@ public class LearningObjectService {
     private LearningObjectDao learningObjectDao;
     @Inject
     private PermissionFactory permissionFactory;
+    @Inject
+    private TaxonDao taxonDao;
+
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
@@ -60,4 +70,18 @@ public class LearningObjectService {
     private PermissionItem getLearningObjectHandler(LearningObject learningObject) {
         return permissionFactory.get(learningObject);
     }
+
+    public boolean showUnreviewed(Long id, User user) {
+        if (isAdmin(user)) {
+            return true;
+        } else if (isModerator(user)) {
+            LearningObject obj = learningObjectDao.findById(id);
+            if (obj == null) return false;
+            List<Long> collect = obj.getTaxons().stream().map(Taxon::getId).collect(Collectors.toList());
+            List<Long> userTaxons = taxonDao.getUserTaxonWithChildren(user.getId());
+            return userTaxons != null && collect.stream().anyMatch(userTaxons::contains);
+        }
+        return false;
+    }
+
 }

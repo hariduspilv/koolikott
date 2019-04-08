@@ -170,3 +170,8 @@ email:
 
 captcha:
   key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+
+cache:
+  cache-names: TaxonDao_userTaxonCache
+  caffeine:
+    spec:expireAfterWrite=1h
