@@ -42,12 +42,12 @@ public class HaridServiceTest {
     private LoginService loginService;
 
 
-    @Before
-    public void setUp() throws Exception {
-
-        String clientString = "clientsecret";
-        haridService.postConstruct(clientString);
-    }
+//    @Before
+//    public void setUp() throws Exception {
+//
+//        String clientString = "clientsecret";
+//        haridService.postConstruct(clientString);
+//    }
 
     @Test
     public void authenticate() {

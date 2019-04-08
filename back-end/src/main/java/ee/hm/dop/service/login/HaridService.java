@@ -35,11 +35,11 @@ public class HaridService {
     private Client client;
     @Inject
     private LoginService loginService;
-    private HmacUtils hmacUtils;
+//    private HmacUtils hmacUtils;
 
-    void postConstruct(String secret) {
-        hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret);
-    }
+//    void postConstruct(String secret) {
+//        hmacUtils = new HmacUtils(HmacAlgorithms.HMAC_SHA_1, secret);
+//    }
 
     public UserStatus authenticate(String code,String redirectUrl) {
         HarIdCode harIdCode = getHarIdCode(code,redirectUrl);
