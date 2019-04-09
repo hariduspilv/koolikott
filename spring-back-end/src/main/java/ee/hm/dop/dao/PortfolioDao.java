@@ -35,10 +35,10 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
 
     public List<Portfolio> getRelatedPortfolios(Long materialId) {
         return getEntityManager().
-                createNativeQuery("" +
-                        "SELECT p.* FROM PortfolioMaterial pm\n" +
-                        "join Portfolio p on pm.portfolio = p.id\n" +
-                        "WHERE pm.material = :materialId", entity())
+                createQuery("SELECT pm.portfolio " +
+                        "FROM PortfolioMaterial pm " +
+                        "WHERE pm.material.id =:materialId " +
+                        "ORDER BY lower(pm.portfolio.title) ASC" , entity())
                 .setParameter("materialId",materialId)
                 .getResultList();
     }

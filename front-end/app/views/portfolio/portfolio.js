@@ -4,12 +4,11 @@
 class controller extends Controller {
     constructor(...args) {
         super(...args)
+        this.$rootScope.isFullScreen = false
 
         window.addEventListener('scroll', (e) => {
             this.handleScroll(e);
         });
-
-        this.$rootScope.isFullScreen = false
 
         document.addEventListener('keyup', (e) => {
             if (e.code === "Escape" && this.$rootScope.isFullScreen) {
@@ -28,10 +27,7 @@ class controller extends Controller {
         $('body').materialScrollTop({ offset: 300 })
         const storedPortfolio = this.storageService.getPortfolio()
 
-        if (storedPortfolio &&
-            storedPortfolio.type !== '.ReducedPortfolio' &&
-            storedPortfolio.type !== '.AdminPortfolio'
-        ) {
+        if (storedPortfolio && storedPortfolio.type === '.Portfolio') {
             this.setPortfolio(storedPortfolio)
             this.increaseViewCount()
         } else
@@ -159,7 +155,9 @@ class controller extends Controller {
         this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
         this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
         this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
-        this.showUnreviewedMessage(portfolio.id);
+        if (!isLocallyStored){
+            this.showUnreviewedMessage(portfolio.id);
+        }
 
         if (!isLocallyStored && portfolio && portfolio.chapters) {
             portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
