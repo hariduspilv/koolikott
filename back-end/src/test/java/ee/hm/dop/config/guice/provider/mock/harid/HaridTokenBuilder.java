@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 public class HaridTokenBuilder extends Builder {
 
     private static final String AUTH_HEADER_HASH = "Basic "
-            + Base64.getEncoder().encodeToString("koolikott:9rIxgey74Ke87OVYhCZfezyJ6g95UeLI9YxIhY0FuH8m".getBytes(StandardCharsets.UTF_8));
+            + Base64.getEncoder().encodeToString("123456789CLIENTID123456789:999888777TEST666555444".getBytes(StandardCharsets.UTF_8));
 
     private static final Map<String, HarIdCode> tokenMap = initMap();
     private static final String CODE_1 = "123456789";

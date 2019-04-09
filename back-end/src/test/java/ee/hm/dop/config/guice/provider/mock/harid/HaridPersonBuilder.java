@@ -27,8 +27,8 @@ public class HaridPersonBuilder extends Builder {
             } else if (AUTH_HEADER_HASH3.equals(value)) {
                 person = person3();
             }
-        } else if (name.equals("Content-Type")) {
-            assertEquals("Content-Type", name);
+        } else if (name.equals("Content-type")) {
+            assertEquals("Content-type", name);
             assertEquals("application/x-www-form-urlencoded", value);
         }
         return this;
@@ -56,6 +56,8 @@ public class HaridPersonBuilder extends Builder {
         person.setFirstName(firstname1);
         person.setLastName(lastname1);
         person.setIdCode(s);
+        person.setProfile("123");
+        person.setStrongSession("123");
         return person;
     }
 }
