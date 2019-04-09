@@ -321,4 +321,50 @@ public class LoginResourceTest extends ResourceIntegrationTestBase {
         UserStatus status = getTarget(LOGIN_ID_CARD, filter).request().accept(MediaType.APPLICATION_JSON).get(UserStatus.class);
         return status != null ? status.getAuthenticatedUser() : null;
     }
+
+    @Test
+    public void haridAuthenticate_returns_temporary_redirect_status() {
+        Response response = doGet("login/harid");
+        assertEquals(Response.Status.TEMPORARY_REDIRECT.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void haridAuthenticateSuccess() {
+        Response response = doGet("login/harid/success?code=123456789");
+        String url = response.getHeaderString("Location");
+        assertEquals(true, url.contains("token"));
+        assertEquals(307, response.getStatus());
+
+        logout();
+    }
+
+    @Test
+    public void haridAuthenticateSuccessTwo() {
+        Response response = doGet("login/harid/success?code=987654321");
+        String url = response.getHeaderString("Location");
+        assertTrue(url.contains("token"));
+        assertEquals(307, response.getStatus());
+
+        logout();
+    }
+
+    @Test
+    public void harid_authentication_without_id_code_returns_missin_id_message() {
+        Response response = doGet("login/harid/success?code=123123456");
+        String url = response.getHeaderString("Location");
+        assertTrue(url.contains("harIdUserMissingIdCode=true"));
+        assertEquals(307, response.getStatus());
+
+        logout();
+    }
+
+    @Test
+    public void haridAuthenticateFail() {
+        Response response = doGet("login/harid/success?code=000000");
+        String url = response.getHeaderString("Location");
+        assertFalse(url.contains("token"));
+        assertEquals(307, response.getStatus());
+
+        logout();
+    }
 }
