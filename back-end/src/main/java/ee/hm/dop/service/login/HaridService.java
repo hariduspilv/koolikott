@@ -65,7 +65,7 @@ public class HaridService {
                 .request()
                 .header("Authorization", "Bearer " + code.getAccessToken())
                 .header("Content-type", "application/x-www-form-urlencoded")
-//                .accept(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .get();
 //        logAsString("getPerson", response);
         return response.readEntity(HarIdUser.class);

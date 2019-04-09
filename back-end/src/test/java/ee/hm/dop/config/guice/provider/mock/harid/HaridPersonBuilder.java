@@ -39,6 +39,11 @@ public class HaridPersonBuilder extends Builder {
         return new HaridResponse(person);
     }
 
+    @Override
+    public Builder accept(String... mediaTypes) {
+        return this;
+    }
+
     private HarIdUser person1() {
         return person("firstname1", "lastname1", "111111");
     }
