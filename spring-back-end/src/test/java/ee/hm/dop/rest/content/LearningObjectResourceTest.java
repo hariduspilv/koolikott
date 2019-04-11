@@ -25,6 +25,7 @@ import static org.junit.Assert.assertTrue;
 
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
+    public static final String SHOW_UNREVIEWED_URL = "learningObject/showUnreviewed?id=%s";
     public static final String INCREASE_VIEW_COUNT_URL = "learningObject/increaseViewCount";
     public static final String ADD_TAG_URL = "learningObject/%s/tags";
     public static final String SET_TO_FAVOURITE_URL = "learningObject/favorite";
@@ -214,5 +215,46 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public void increaseViewCountNoPortfolio() {
         Response response = doPost(INCREASE_VIEW_COUNT_URL, portfolioWithId(99999L));
         assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
+    }
+
+    @Test
+    public void admin_can_see_all_unreviewed() {
+        login(USER_ADMIN);
+
+        Material material = getMaterial(MATERIAL_1);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        boolean materialb = doGet(format(SHOW_UNREVIEWED_URL, material.getId()), Boolean.class);
+        assertTrue(materialb);
+
+        boolean portfoliob = doGet(format(SHOW_UNREVIEWED_URL, portfolio.getId()), Boolean.class);
+        assertTrue(portfoliob);
+    }
+
+    @Test
+    public void not_admin_and_not_owner_can_not_see_other_user_unreviewed() {
+        login(USER_PEETER);
+
+        Material material = getMaterial(MATERIAL_1);
+        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
+
+        boolean materialb = doGet(format(SHOW_UNREVIEWED_URL, material.getId()), Boolean.class);
+        assertFalse(materialb);
+
+        boolean portfoliob = doGet(format(SHOW_UNREVIEWED_URL, portfolio.getId()), Boolean.class);
+        assertFalse(portfoliob);
+    }
+
+    @Test
+    public void moderator_can_see_unreviewed_only_if_he_has_correct_taxons_for_it() {
+        login(USER_MODERATOR);
+
+        Material material = getMaterial(MATERIAL_2);
+
+        boolean materialb = doGet(format(SHOW_UNREVIEWED_URL, material.getId()), Boolean.class);
+
+        //false because we have no taxonpositions in the db
+        assertEquals(false, materialb);
+
     }
 }
