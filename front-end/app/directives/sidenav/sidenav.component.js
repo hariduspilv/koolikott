@@ -30,11 +30,13 @@ class controller extends Controller {
             '/dashboard/restrictedUsers',
             '/dashboard/deleted',
             '/dashboard/stat/expert',
+            '/dashboard/sentEmails',
         ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
         this.$scope.checkUser = this.checkUser.bind(this)
         this.$scope.updateCount = this.updateCount.bind(this)
+        this.$scope.updateSentEmailsCount = this.updateSentEmailsCount.bind(this)
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
         this.$scope.closeOtherTabs = this.closeOtherTabs.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
@@ -68,12 +70,12 @@ class controller extends Controller {
         this.$scope.isModerator = this.authenticatedUserService.isModerator();
         this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
         this.$scope.updateUserCounts();
+        // this.$scope.updateSentEmailsCount();
 
         if (!this.$scope.isAuthenticated) {
             this.$rootScope.isUserTabOpen = false
             this.$rootScope.isAdminTabOpen = false
         }
-
     }
     isLocationActive(menuLocation) {
         if (!this.$scope.user)
@@ -99,9 +101,11 @@ class controller extends Controller {
                         ? menuLocation === '/dashboard/improper'
                         : this.$rootScope.learningObjectUnreviewed
                             ? menuLocation === '/dashboard/unReviewed'
-                            : this.$rootScope.learningObjectChanged
-                                ? menuLocation === '/dashboard/changes'
-                                : false
+                            : this.$rootScope.sentEmails
+                                ? menuLocation === '/dashboard/sentEmails'
+                                : this.$rootScope.learningObjectChanged
+                                    ? menuLocation === '/dashboard/changes'
+                                    : false
     }
     isUserLocation(location) {
         const { username } = this.$scope.user
@@ -162,6 +166,12 @@ class controller extends Controller {
                 })
         }
     }
+    updateSentEmailsCount(){
+        return 10;
+
+    }
+
+
     updateUserCounts() {
         if (this.authenticatedUserService.isAuthenticated()) {
             this.updateCount('userFavorites')

@@ -90,6 +90,12 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
+                .when('/dashboard/sentEmails', {
+                    templateUrl: 'views/dashboard/baseTableView.html',
+                    controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
+                    permissions: ['ADMIN', 'MODERATOR']
+                })
                 .when('/dashboard/stat/expert', {
                     templateUrl: 'views/statistics/expertStatistics.html',
                     controller: 'statisticsController',

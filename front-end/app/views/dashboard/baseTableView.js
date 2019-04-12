@@ -7,6 +7,11 @@ const DASHBOARD_VIEW_STATE_MAP = {
         'firstReview/unReviewed', // rest URI (after 'rest/admin/')
         '-byCreatedAt' // default sort by (use leading minus for DESC)
     ],
+    sentEmails: [
+        'SENTEMAILS',
+        'sentEmails',
+        '-byCreatedAt'
+    ],
     improper: [
         'IMPROPER',
         'improper',
@@ -89,6 +94,13 @@ class controller extends Controller {
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data)
         }
+        //TODO
+        // if (this.viewPath == 'sentEmails') {
+        //     this.serverCallService
+        //         .makeGet('rest/user/sentEmails')
+        //         .then(r => this.$scope.sentEmails = r.data)
+        // }
+
     }
 
     selectType(type) {
