@@ -11,6 +11,7 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
+import java.util.List;
 
 @Path("/userEmail")
 public class UserEmailResource extends BaseResource {
@@ -97,5 +98,22 @@ public class UserEmailResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public EmailToCreator sendEmailToCreator(EmailToCreator emailToCreator) {
         return userEmailService.sendEmailForCreator(emailToCreator, getLoggedInUser());
+    }
+
+    @GET
+    @Path("sentEmails")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public List<EmailToCreator> getSentEmails() {
+        return userEmailService.getUserEmail(getLoggedInUser());
+    }
+
+    @GET
+    @Path("count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public Long getSentEmailsCount() {
+        return userEmailService.getSentEmailsCount(getLoggedInUser());
     }
 }

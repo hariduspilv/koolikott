@@ -1,0 +1,20 @@
+<table md-table>
+  <thead md-head md-order="query.order" md-on-reorder="onSort">
+  <tr md-row>
+    <th md-column md-order-by="byLOCreator"><span data-translate="EMAIL_RECEIVER"></span></th>
+    <th md-column md-order-by="byTitle"><span data-translate="EMAIL_LEARNINGOBJECT_TITLE"></span></th>
+    <th md-column md-order-by="byContent"><span data-translate="EMAIL_CONTENT"></span></th>
+    <th md-column md-order-by="byCreatedAt"><span data-translate="EMAIL_SENT_AT"></span></th>
+  </tr>
+  </thead>
+  <tbody md-body>
+  <tr md-row ng-repeat="item in data" ng-click="$ctrl.openContent(item)">
+    <td md-cell class="dashboard-cell" data-ng-bind="item.user.name+' '+item.user.surname"></td>
+    <td md-cell class="dashboard-cell" data-ng-bind="item.learningObject.titles[0].text"></td>
+    <td md-cell class="dashboard-cell"
+        data-ng-style="{'text-overflow':$ctrl.showEllipsis(item.message)}"
+        data-ng-bind="$ctrl.showMaxMessageText(item.message)"></td>
+    <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToTimeDayMonthYear(item.sentAt)" ></td>
+  </tr>
+  </tbody>
+</table>

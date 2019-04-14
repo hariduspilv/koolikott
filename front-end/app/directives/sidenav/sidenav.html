@@ -236,10 +236,11 @@
           <a id="sentEmails" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/sentEmails')}"
-             data-ng-href="/dashboard/sentEmails" data-ng-click="updateSentEmailsCount('sentEmails')">
+             data-ng-href="/dashboard/sentEmails"
+             data-ng-click="updateCount('sentEmails')">
             <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">autorenew</md-icon>
-              <span data-translate="SENT_EMAILS" class="sidenav__name"></span>
+              <md-icon class="material-icons sidenav__icon">email</md-icon>
+              <span data-translate="EMAIL_SENT_EMAILS" class="sidenav__name"></span>
             </div>
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="sentEmailsCount"></span>
           </a>

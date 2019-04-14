@@ -10,6 +10,8 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 
+import java.util.List;
+
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -46,7 +48,7 @@ public class UserEmailService {
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
-        if(emailToCreator.getMessage().length() > 500){
+        if (emailToCreator.getMessage().length() > 500) {
             throw badRequest("Message is too long");
         }
         verifyLOCreator(emailToCreator);
@@ -61,6 +63,7 @@ public class UserEmailService {
         emailToCreator.setUser(userCreator);
         emailToCreator.setCreatedAt(DateTime.now());
         emailToCreator.setSentTries(0);
+        emailToCreator.setSender(userSender);
 
         if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
             sendMailService.sendEmail(sendMailService.sendEmailToExpertSelf(emailToCreator));
@@ -179,7 +182,7 @@ public class UserEmailService {
     }
 
     private void verifyLOCreator(EmailToCreator emailToCreator) {
-        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
+        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObject().getId());
         User creator = learningObject.getCreator();
         if (!creator.getId().equals(emailToCreator.getCreatorId())) {
             throw forbidden("This creator is not creator of this LO");
@@ -196,5 +199,13 @@ public class UserEmailService {
 
     private WebApplicationException notFound(String s) {
         return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    }
+
+    public List<EmailToCreator> getUserEmail(User loggedInUser) {
+        return emailToCreatorDao.getSenderSentEmails(loggedInUser);
+    }
+
+    public Long getSentEmailsCount(User loggedInUser) {
+        return emailToCreatorDao.getSentEmailsCount(loggedInUser);
     }
 }

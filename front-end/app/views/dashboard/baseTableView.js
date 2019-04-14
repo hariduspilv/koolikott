@@ -8,7 +8,7 @@ const DASHBOARD_VIEW_STATE_MAP = {
         '-byCreatedAt' // default sort by (use leading minus for DESC)
     ],
     sentEmails: [
-        'SENTEMAILS',
+        'EMAIL_SENT_EMAILS',
         'sentEmails',
         '-byCreatedAt'
     ],
@@ -57,6 +57,7 @@ class controller extends Controller {
         this.$scope.isSubmitButtonEnabled = false
         this.$scope.sortByType = true
 
+
         this.$scope.types = ['All','Material','Portfolio']
 
         this.$scope.$watch('filter.educationalContext', this.onEducationalContextChange.bind(this), true)
@@ -94,13 +95,6 @@ class controller extends Controller {
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data)
         }
-        //TODO
-        // if (this.viewPath == 'sentEmails') {
-        //     this.serverCallService
-        //         .makeGet('rest/user/sentEmails')
-        //         .then(r => this.$scope.sentEmails = r.data)
-        // }
-
     }
 
     selectType(type) {
@@ -201,6 +195,22 @@ class controller extends Controller {
     getTranslation(key) {
         return this.$filter('translate')(key)
     }
+
+    openContent(learningObject) {
+        if (learningObject) {
+
+            const scope = this.$scope.$new(true)
+            scope.learningObject = learningObject
+            this.$mdDialog.show({
+                templateUrl: 'views/sentEmail/sentEmail.html',
+                controller: 'sentEmailController',
+                scope,
+                clickOutsideToClose: true
+            })
+                .then(() => this.$route.reload())
+        }
+    }
+
     editUser(user) {
         if (user) {
             const scope = this.$scope.$new(true)
@@ -209,7 +219,6 @@ class controller extends Controller {
             this.$mdDialog
                 .show({
                     templateUrl: 'views/editUserDialog/editUser.html',
-                    controller: 'editUserController',
                     scope
                 })
                 .then(() => this.$route.reload())
@@ -220,6 +229,7 @@ class controller extends Controller {
             ? this.$scope.users.filter(u => u.username.indexOf(query.toLowerCase()) === 0)
             : this.$scope.users
     }
+
     getUsernamePlaceholder() {
         return this.$filter('translate')('USERNAME')
     }
@@ -247,6 +257,45 @@ class controller extends Controller {
                 query = this.serverCallService
                 .makeGet(url);
         }
+
+        else if(restUri === 'sentEmails'){
+            query = this.serverCallService
+                .makeGet('rest/userEmail/' + restUri)
+
+            query
+                .then(({ data }) => {
+                    if (data) {
+                        this.$scope.isLoading = false
+
+                        if (sortBy)
+                            this.$scope.query.order = sortBy
+
+                        // if (restUri === 'changed')
+                        //     data.forEach(o => {
+                        //         o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
+                        //         o.__changers = this.getChangers(o)
+                        //     })
+                        // if (restUri === 'improper')
+                        //     data.forEach(o => {
+                        //         o.__reports = o.improperContents.filter(c => !c.reviewed)
+                        //         o.__reporters = this.getReporters(o)
+                        //         o.__reportLabelKey = this.getImproperReportLabelKey(o)
+                        //     })
+                        this.collection = data
+
+                        if (this.viewPath === 'unReviewed') {
+                            this.$scope.data = data.items;
+                            this.$scope.itemsCount = data.totalResults;
+                        } else {
+                            this.$scope.itemsCount = data.length;
+                            this.$scope.data = data.slice(0, this.$scope.query.limit)
+                        }
+                    }
+                })
+
+        }
+
+
         else
             query = this.serverCallService
                 .makeGet('rest/admin/' + restUri )
@@ -314,6 +363,15 @@ class controller extends Controller {
             this.getLearningObjectUrl(learningObject), '_blank'
         )
     }
+
+    showMaxMessageText(message) {
+        return message.length > 130 ? message.substring(0, 129) : message;
+    }
+
+    showEllipsis(message) {
+        return message.length > 120 ? 'ellipsis' : null;
+    }
+
     getLearningObjectUrl(learningObject) {
 
         if (learningObject)
@@ -513,6 +571,19 @@ class controller extends Controller {
         }
 
         return reasonKey
+    }
+
+    showDialog(learningObject) {
+
+        this.$mdDialog.show({
+            templateUrl: 'directives/sendEmail/sendEmail.html',
+            controller: 'sendEmailDialogController',
+            controllerAs: '$ctrl',
+            clickOutsideToClose: false,
+            locals: {
+                learningObject: this.learningObject
+            }
+        })
     }
 }
 controller.$inject = [

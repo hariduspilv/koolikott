@@ -36,7 +36,6 @@ class controller extends Controller {
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
         this.$scope.checkUser = this.checkUser.bind(this)
         this.$scope.updateCount = this.updateCount.bind(this)
-        this.$scope.updateSentEmailsCount = this.updateSentEmailsCount.bind(this)
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
         this.$scope.closeOtherTabs = this.closeOtherTabs.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
@@ -70,7 +69,6 @@ class controller extends Controller {
         this.$scope.isModerator = this.authenticatedUserService.isModerator();
         this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
         this.$scope.updateUserCounts();
-        // this.$scope.updateSentEmailsCount();
 
         if (!this.$scope.isAuthenticated) {
             this.$rootScope.isUserTabOpen = false
@@ -166,17 +164,13 @@ class controller extends Controller {
                 })
         }
     }
-    updateSentEmailsCount(){
-        return 10;
-
-    }
-
 
     updateUserCounts() {
         if (this.authenticatedUserService.isAuthenticated()) {
             this.updateCount('userFavorites')
             this.updateCount('userMaterials')
             this.updateCount('userPortfolios')
+            this.updateCount('sentEmails')//TODO
             this.updateAdminCounts()
         }
     }
@@ -188,6 +182,7 @@ class controller extends Controller {
             this.updateCount('deleted')
             this.updateCount('improper')
             this.updateCount('changes')
+            this.updateCount('sentEmails')//TODO
             this.updateCount('unReviewedLearningObjects')
         }
         if (this.authenticatedUserService.isAdmin()) {

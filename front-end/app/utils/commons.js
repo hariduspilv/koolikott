@@ -842,6 +842,15 @@ class Controller {
             ? ''
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
     }
+
+    formatDateToTimeDayMonthYear(dateString) {
+        const date = new Date(dateString)
+
+        return isNaN(date)
+            ? ''
+            : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes()
+    }
+
     sprintf(str, ...replacements) {
         let idx = 0
         return str.replace(/(%s|%d)/g, (match) => {

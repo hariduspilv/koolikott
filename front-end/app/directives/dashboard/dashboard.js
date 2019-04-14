@@ -9,7 +9,8 @@ const lists = {
     dopImproper: 'directives/dashboard/improper.html',
     dopChanged: 'directives/dashboard/changed.html',
     dopDeleted: 'directives/dashboard/deleted.html',
-    dopUsers: 'directives/dashboard/users.html'
+    dopUsers: 'directives/dashboard/users.html',
+    dopSentemails: 'directives/dashboard/sentemails.html'
 }
 Object.keys(lists).forEach(key =>
     directive(key, {
