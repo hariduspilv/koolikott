@@ -1,7 +1,9 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.EmailToCreator;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.UserEmail;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.login.UserEmailService;
 
@@ -104,9 +106,16 @@ public class UserEmailResource extends BaseResource {
     @Path("sentEmails")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    @Consumes(MediaType.APPLICATION_JSON)
-    public List<EmailToCreator> getSentEmails() {
-        return userEmailService.getUserEmail(getLoggedInUser());
+    public SearchResult getSentEmails(@QueryParam("page") int page,
+                                      @QueryParam("itemSortedBy") String itemSortedBy,
+                                      @QueryParam("query") String query,
+                                      @QueryParam("lang") int lang) {
+        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, lang);
+        if (!pageableQuery.isValid()) {
+            throw badRequest("Query parameters invalid");
+        }
+
+        return userEmailService.getUserEmail(getLoggedInUser(),pageableQuery);
     }
 
     @GET
@@ -116,4 +125,5 @@ public class UserEmailResource extends BaseResource {
     public Long getSentEmailsCount() {
         return userEmailService.getSentEmailsCount(getLoggedInUser());
     }
+
 }

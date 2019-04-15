@@ -198,7 +198,6 @@ class controller extends Controller {
 
     openContent(learningObject) {
         if (learningObject) {
-
             const scope = this.$scope.$new(true)
             scope.learningObject = learningObject
             this.$mdDialog.show({
@@ -258,48 +257,20 @@ class controller extends Controller {
                 .makeGet(url);
         }
 
-        else if(restUri === 'sentEmails'){
+        else if(restUri === 'sentEmails') {
+            let url = 'rest/userEmail/' + restUri + '/' +
+                '?page=' + this.$scope.query.page +
+                '&itemSortedBy=' + sortBy +
+                '&query=' + this.$scope.query.filter.toLowerCase() +
+                '&lang=' + this.getLanguage();
+
             query = this.serverCallService
-                .makeGet('rest/userEmail/' + restUri)
-
-            query
-                .then(({ data }) => {
-                    if (data) {
-                        this.$scope.isLoading = false
-
-                        if (sortBy)
-                            this.$scope.query.order = sortBy
-
-                        // if (restUri === 'changed')
-                        //     data.forEach(o => {
-                        //         o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
-                        //         o.__changers = this.getChangers(o)
-                        //     })
-                        // if (restUri === 'improper')
-                        //     data.forEach(o => {
-                        //         o.__reports = o.improperContents.filter(c => !c.reviewed)
-                        //         o.__reporters = this.getReporters(o)
-                        //         o.__reportLabelKey = this.getImproperReportLabelKey(o)
-                        //     })
-                        this.collection = data
-
-                        if (this.viewPath === 'unReviewed') {
-                            this.$scope.data = data.items;
-                            this.$scope.itemsCount = data.totalResults;
-                        } else {
-                            this.$scope.itemsCount = data.length;
-                            this.$scope.data = data.slice(0, this.$scope.query.limit)
-                        }
-                    }
-                })
-
+                .makeGet(url);
         }
-
-
-        else
+        else {
             query = this.serverCallService
-                .makeGet('rest/admin/' + restUri )
-
+                .makeGet('rest/admin/' + restUri)
+        }
                 query
                 .then(({ data }) => {
                 if (data) {
@@ -321,7 +292,7 @@ class controller extends Controller {
                         })
                     this.collection = data
 
-                    if (this.viewPath === 'unReviewed') {
+                    if (this.viewPath === 'unReviewed' || this.viewPath ==='sentEmails') {
                         this.$scope.data = data.items;
                         this.$scope.itemsCount = data.totalResults;
                     } else {
@@ -331,6 +302,7 @@ class controller extends Controller {
                 }
         })
     }
+
 
     isModerator() {
         return this.authenticatedUserService.isModerator();
@@ -573,7 +545,7 @@ class controller extends Controller {
         return reasonKey
     }
 
-    showDialog(learningObject) {
+    showDialog() {
 
         this.$mdDialog.show({
             templateUrl: 'directives/sendEmail/sendEmail.html',

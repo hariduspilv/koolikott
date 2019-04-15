@@ -2,6 +2,7 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.joda.time.DateTime;
@@ -201,8 +202,15 @@ public class UserEmailService {
         return new WebApplicationException(s, Response.Status.NOT_FOUND);
     }
 
-    public List<EmailToCreator> getUserEmail(User loggedInUser) {
-        return emailToCreatorDao.getSenderSentEmails(loggedInUser);
+    public SearchResult getUserEmail(User loggedInUser, PageableQuery pageableQuery) {
+        List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
+
+        Long emailsCount = getSentEmailsCount(loggedInUser);
+        SearchResult searchResult = new SearchResult();
+        searchResult.setItems(emails);
+        searchResult.setTotalResults(emailsCount);
+
+        return searchResult;
     }
 
     public Long getSentEmailsCount(User loggedInUser) {

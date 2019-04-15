@@ -61,6 +61,18 @@ public class PageableQuery {
         }
     }
 
+    public PageableQuery(int page, String itemSortedBy, String query, int lang) {
+
+        if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
+            valid = true;
+            sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
+            this.page = page;
+            this.itemSortedBy = itemSortedBy;
+            this.query = query;
+            this.lang = lang;
+        }
+    }
+
     public boolean hasSearch() {
         return !StringUtils.isBlank(query) && query.trim().length() >= 3;
     }
