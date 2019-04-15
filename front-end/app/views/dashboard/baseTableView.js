@@ -456,6 +456,10 @@ class controller extends Controller {
             return this.getData('firstReview/unReviewed', this.sortedBy)
         }
 
+        else if (this.viewPath === 'sentEmails') {
+            return this.getData('sentEmails', this.sortedBy)
+        }
+
         else {
 
             const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1;

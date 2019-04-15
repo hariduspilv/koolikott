@@ -214,6 +214,6 @@ public class UserEmailService {
     }
 
     public Long getSentEmailsCount(User loggedInUser) {
-        return emailToCreatorDao.getSentEmailsCount(loggedInUser);
+        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
     }
 }
