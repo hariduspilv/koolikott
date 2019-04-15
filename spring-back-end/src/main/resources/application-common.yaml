@@ -127,6 +127,17 @@ stuudium:
       authorize: https://api.ope.ee/v1/authenticate?subdomain=demo&
       generaldata: https://api.ope.ee/v1/authenticate/verify
 
+harid:
+  extra:
+    logging: false
+  client:
+    id: 09547eb7af633167ec0b27f50dd6fb21
+    secret: 5e030dea37260e997c0b6466bfb6042d9fdf27459df7678f23383006bec25de1
+  url:
+    authorize: https://test.harid.ee/et/authorizations/new
+    token: https://test.harid.ee/et/access_tokens
+    generaldata: https://test.harid.ee/et/user_info
+
 file:
   upload:
     max:

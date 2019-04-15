@@ -165,6 +165,7 @@ angular.module('koolikottApp')
                 $scope.material.source = getSource($scope.material);
                 getContentType();
                 processMaterial();
+                showUnreviewedMessage();
 
                 // getMaterialRelatedPortfolios($scope.material.id);
 
@@ -221,6 +222,17 @@ angular.module('koolikottApp')
             $scope.isModerator = () => authenticatedUserService.isModerator();
             $scope.isRestricted = () => authenticatedUserService.isRestricted();
             $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
+
+            function showUnreviewedMessage() {
+                if ($scope.material && $scope.material.id) {
+                    serverCallService.makeGet('rest/learningObject/showUnreviewed?id=' + $scope.material.id)
+                    .then(response => {
+                        $scope.showUnreviewedLO = response.data;
+                    })
+
+
+                }
+            }
 
             $scope.processMaterial = () => {
                 processMaterial();

@@ -90,6 +90,14 @@ public interface ConfigurationProperties {
     String STUUDIUM_URL_AUTHORIZE = "stuudium.url.authorize";
     String STUUDIUM_URL_GENERALDATA = "stuudium.url.generaldata";
 
+    //Harid
+    String HARID_EXTRA_LOGGING = "harid.extra.logging";
+    String HARID_CLIENT_ID = "harid.client.id";
+    String HARID_CLIENT_SECRET = "harid.client.secret";
+    String HARID_URL_AUTHORIZE = "harid.url.authorize";
+    String HARID_URL_GENERALDATA = "harid.url.generaldata";
+    String HARID_URL_TOKEN= "harid.url.token";
+
     String MAX_FILE_SIZE = "file.upload.max.size";
     String FILE_UPLOAD_DIRECTORY = "file.upload.directory";
     String DOCUMENT_MAX_FILE_SIZE = "file.document.upload.max.size";
@@ -112,4 +120,9 @@ public interface ConfigurationProperties {
 
     //Captcha
     String CAPTCHA_KEY = "captcha.key";
+
+    //Cache
+    String CACHE_TIME = "cache.time";
+    String CACHE_MAX_SIZE = "cache.max.size";
+
 }

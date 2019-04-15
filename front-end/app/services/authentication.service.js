@@ -261,8 +261,12 @@ angular.module('koolikottApp')
                 loginWithOAuth("/rest/login/stuudium");
             },
 
+            loginWithHarid: function() {
+                loginWithOAuth('/rest/login/harid');
+            },
+
             authenticateUsingOAuth: function(inputParams) {
-                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, loginFrom} = inputParams;
+                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -270,6 +274,11 @@ angular.module('koolikottApp')
 
                 if (stuudiumUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_STUUDIUM');
+                    return;
+                }
+
+                if (harIdUserMissingIdCode) {
+                    idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');
                     return;
                 }
 

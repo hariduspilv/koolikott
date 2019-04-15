@@ -4,39 +4,11 @@
 class controller extends Controller {
     constructor(...args) {
         super(...args)
+        this.$rootScope.isFullScreen = false
 
         window.addEventListener('scroll', (e) => {
-            let allElements = Array.from(document.querySelectorAll('.portfolio-chapter'))
-
-            allElements.forEach( (el) => {
-
-                    if (this.isElementInViewport(el)) {
-                        e.preventDefault()
-                        e.stopPropagation()
-
-                        let item = $(".sidenav__list .sidenav__item--chapter-title a");
-                        let total = item.length
-
-                        for (let i = 0; i < total; i++) {
-                            let link = item.eq(i).attr("ng-href")
-                            if (link) {
-                                let id = link.split("#")[1]
-                                item.eq(i).css("background-color", id === el.id ? "rgba(158, 158, 158, 0.2)" : "transparent")
-                            }
-                        }
-                        let title = $(el).find('h2').text()
-                        title = this.replaceSpacesAndCharacters(title)
-                        let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title + '#' + el.id;
-
-                        if (!window.location.href.includes(title) && this.$location.path() === '/portfolio') {
-                            this.$location.url(url)
-                            history.pushState({}, '', url)
-                        }
-                    }
-            })
+            this.handleScroll(e);
         });
-
-        this.$rootScope.isFullScreen = false
 
         document.addEventListener('keyup', (e) => {
             if (e.code === "Escape" && this.$rootScope.isFullScreen) {
@@ -55,10 +27,7 @@ class controller extends Controller {
         $('body').materialScrollTop({ offset: 300 })
         const storedPortfolio = this.storageService.getPortfolio()
 
-        if (storedPortfolio &&
-            storedPortfolio.type !== '.ReducedPortfolio' &&
-            storedPortfolio.type !== '.AdminPortfolio'
-        ) {
+        if (storedPortfolio && storedPortfolio.type === '.Portfolio') {
             this.setPortfolio(storedPortfolio)
             this.increaseViewCount()
         } else
@@ -71,8 +40,9 @@ class controller extends Controller {
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newPortfolio, oldPortfolio) => {
             this.eventService.notify('portfolio:reloadTaxonObject')
 
-            if (newPortfolio !== oldPortfolio)
+            if (newPortfolio !== oldPortfolio) {
                 this.setPortfolio(newPortfolio)
+            }
         })
         this.$scope.$watch(() => this.$location.search().id, (newValue, oldValue) => {
             if (newValue !== oldValue)
@@ -92,21 +62,60 @@ class controller extends Controller {
         })
     }
 
+    handleScroll(e) {
+        let allElements = Array.from(document.querySelectorAll('.portfolio-chapter'))
+        allElements.forEach((el) => {
+
+            if (this.isElementInViewport(el)) {
+                e.preventDefault()
+                e.stopPropagation()
+
+                let item = $(".sidenav__list .sidenav__item--chapter-title a");
+                let total = item.length
+
+                for (let i = 0; i < total; i++) {
+                    let link = item.eq(i).attr("ng-href")
+                    if (link) {
+                        let id = link.split("#")[1]
+                        item.eq(i).css("background-color", id === el.id ? "rgba(158, 158, 158, 0.2)" : "transparent")
+                    }
+                }
+                let title = $(el).find('h2').text()
+                title = this.replaceSpacesAndCharacters(title)
+                let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title + '#' + el.id;
+
+                if (!window.location.href.includes(title) && this.$location.path() === '/portfolio') {
+                    this.$location.url(url)
+                    history.pushState({}, '', url)
+                }
+            }
+        })
+    }
+
+    showUnreviewedMessage(id) {
+        this.serverCallService.makeGet('rest/learningObject/showUnreviewed?id=' + id)
+            .then(response => {
+                this.$scope.showUnreviewedPortfolio = response.data;
+            })
+    }
+
     getPortfolio() {
         const { id } = this.$route.current.params
         const fail = () => {
             this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
             this.$location.url('/')
         }
-        if (id)
+        if (id) {
             this.serverCallService
-                .makeGet('rest/portfolio', { id })
-                .then(({ status, data }) =>
-                    200 <= status && status < 300 && data
-                        ? this.setPortfolio(data, false) || this.increaseViewCount()
-                        : fail(),
+                .makeGet('rest/portfolio', {id})
+                .then(({status, data}) =>
+                        200 <= status && status < 300 && data
+                            ? this.setPortfolio(data, false) || this.increaseViewCount()
+                            : fail(),
                     fail
                 )
+        }
+
     }
     increaseViewCount() {
         /**
@@ -146,6 +155,9 @@ class controller extends Controller {
         this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
         this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
         this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
+        if (!isLocallyStored){
+            this.showUnreviewedMessage(portfolio.id);
+        }
 
         if (!isLocallyStored && portfolio && portfolio.chapters) {
             portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)

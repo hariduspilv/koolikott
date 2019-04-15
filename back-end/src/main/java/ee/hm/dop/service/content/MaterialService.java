@@ -3,6 +3,7 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -14,11 +15,14 @@ import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
-import ee.hm.dop.utils.*;
+import ee.hm.dop.utils.TaxonUtils;
+import ee.hm.dop.utils.TextFieldUtil;
+import ee.hm.dop.utils.UrlUtil;
+import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.configuration2.Configuration;
 import org.slf4j.Logger;
@@ -32,6 +36,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static ee.hm.dop.utils.UserUtil.*;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static org.joda.time.DateTime.now;
 
@@ -66,7 +71,6 @@ public class MaterialService {
     @Inject
     private PortfolioDao portfolioDao;
 
-
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
         return materialDao.findByRepository(repository, repositoryIdentifier);
     }
@@ -81,7 +85,7 @@ public class MaterialService {
         material.setSource(UrlUtil.processURL(material.getSource()));
         cleanPeerReviewUrls(material);
         material.setCreator(creator);
-        if (UserUtil.isPublisher(creator)) {
+        if (isPublisher(creator)) {
             material.setEmbeddable(true);
         }
         material.setRecommendation(null);
@@ -108,7 +112,7 @@ public class MaterialService {
     }
 
     public Material update(Material material, User changer, SearchIndexStrategy strategy) {
-        ValidatorUtil.mustHaveId(material, material!= null ? material.getId(): null);
+        ValidatorUtil.mustHaveId(material, material != null ? material.getId() : null);
         Material originalMaterial = materialGetter.get(material.getId(), changer);
         mustHavePermission(changer, originalMaterial);
         mustBeValid(originalMaterial, changer);
@@ -117,7 +121,7 @@ public class MaterialService {
         mustHaveUniqueSource(material);
 
         cleanPeerReviewUrls(material);
-        if (!UserUtil.isAdmin(changer)) {
+        if (!isAdmin(changer)) {
             material.setRecommendation(originalMaterial.getRecommendation());
         }
         material.setId(originalMaterial.getId());
@@ -151,7 +155,7 @@ public class MaterialService {
     }
 
     private void mustHavePermission(User changer, Material originalMaterial) {
-        if (changer != null && !UserUtil.isAdminOrModerator(changer) && !UserUtil.isCreator(originalMaterial, changer)) {
+        if (changer != null && !isAdminOrModerator(changer) && !isCreator(originalMaterial, changer)) {
             throw ValidatorUtil.permissionError();
         }
     }
@@ -180,7 +184,7 @@ public class MaterialService {
             throw new IllegalArgumentException("Error updating Material: material does not exist.");
         }
 
-        if (originalMaterial.getRepository() != null && changer != null && !UserUtil.isAdminOrModerator(changer)) {
+        if (originalMaterial.getRepository() != null && changer != null && !isAdminOrModerator(changer)) {
             throw new IllegalArgumentException("Normal user can't update external repository material");
         }
     }
@@ -331,10 +335,6 @@ public class MaterialService {
     }
 
     public List<Portfolio> getRelatedPortfolios(Long id) {
-        List<Portfolio> getPortfolios = new ArrayList<>();
-        for (BigInteger pid : materialDao.getRelatedPortfolios(id)) {
-            getPortfolios.add(portfolioDao.findById(pid.longValue()));
-        }
-        return getPortfolios;
+        return portfolioDao.getRelatedPortfolios(id);
     }
 }

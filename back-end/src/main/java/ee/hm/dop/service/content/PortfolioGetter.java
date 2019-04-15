@@ -2,6 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.UserUtil;
@@ -23,6 +24,8 @@ public class PortfolioGetter {
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private PortfolioPermission portfolioPermission;
+    @Inject
+    private TaxonDao taxonDao;
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -53,5 +56,14 @@ public class PortfolioGetter {
 
     public Portfolio findValid(Portfolio portfolio) {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
+    }
+
+    public boolean showUnreviewedPortfolio(Long id, User user) {
+        if (UserUtil.isAdmin(user)) {
+            return true;
+        } else if (UserUtil.isModerator(user)) {
+            return taxonDao.getUserTaxonsWithChildren(user).contains(portfolioDao.findById(id).getTaxons());
+        } else
+            return false;
     }
 }

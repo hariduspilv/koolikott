@@ -114,6 +114,16 @@ stuudium:
     url:
       authorize: https://www.example.com/stuudium/auth?subdomain=blabla&
       generaldata: https://www.example.com/stuudium/auth/verify
+harid:
+  extra:
+    logging: false
+  client:
+    id: 09547eb7af633167ec0b27f50dd6fb21
+    secret: 5e030dea37260e997c0b6466bfb6042d9fdf27459df7678f23383006bec25de1
+  url:
+    authorize: https://test.harid.ee/et/authorizations/new
+    token: https://test.harid.ee/et/access_tokens
+    generaldata: https://test.harid.ee/et/user_info
 
 file:
   upload:
@@ -160,3 +170,8 @@ email:
 
 captcha:
   key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+
+cache:
+  cache-names: LearningObjectServiceCache_userTaxonCache
+  caffeine:
+    spec: expireAfterWrite=5m,maximumSize=1000

@@ -7,6 +7,7 @@ public class UserStatus {
 
     private boolean eKoolUserMissingIdCode;
     private boolean stuudiumUserMissingIdCode;
+    private boolean harIdUserMissingIdCode;
     private boolean statusOk;
     private boolean existingUser;
     private boolean userConfirmed;
@@ -50,6 +51,12 @@ public class UserStatus {
     public static UserStatus missingStuudiumIdCode() {
         UserStatus userStatus = new UserStatus();
         userStatus.setStuudiumUserMissingIdCode(true);
+        return userStatus;
+    }
+
+    public static UserStatus missingHarIdCode() {
+        UserStatus userStatus = new UserStatus();
+        userStatus.setHarIdUserMissingIdCode(true);
         return userStatus;
     }
 
@@ -123,5 +130,13 @@ public class UserStatus {
 
     public void setLoginFrom(LoginFrom loginFrom) {
         this.loginFrom = loginFrom;
+    }
+
+    public boolean isHarIdUserMissingIdCode() {
+        return harIdUserMissingIdCode;
+    }
+
+    public void setHarIdUserMissingIdCode(boolean harIdUserMissingIdCode) {
+        this.harIdUserMissingIdCode = harIdUserMissingIdCode;
     }
 }

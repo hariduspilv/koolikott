@@ -1,15 +1,18 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
+import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +20,9 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ValidatorUtil.permissionError;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -41,6 +47,8 @@ public class PortfolioService {
     private PortfolioCopier portfolioCopier;
     @Inject
     private PortfolioMaterialService portfolioMaterialService;
+    @Inject
+    private TaxonDao taxonDao;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);

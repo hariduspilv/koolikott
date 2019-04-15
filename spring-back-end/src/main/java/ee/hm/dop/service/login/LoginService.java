@@ -140,7 +140,7 @@ public class LoginService {
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
         Person person = new Person();
-        if (!loginFrom.name().equals("DEV"))
+        if (!loginFrom.name().equals("DEV") && !loginFrom.name().equals("HAR_ID"))
             person = ehisSOAPService.getPersonInformation(user.getIdCode());
 
         return sessionService.startSession(user, person, loginFrom);
@@ -151,6 +151,9 @@ public class LoginService {
     }
 
     private User getExistingOrNewUser(String idCode, String firstname, String surname) {
+        if (idCode.toUpperCase().charAt(0) >= 'A') {
+            idCode = idCode.substring(idCode.lastIndexOf(':') + 1);
+        }
         User existingUser = userService.getUserByIdCode(idCode);
         if (existingUser != null) {
             return existingUser;

@@ -4,10 +4,7 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.login.EkoolService;
-import ee.hm.dop.service.login.LoginService;
-import ee.hm.dop.service.login.MobileIDLoginService;
-import ee.hm.dop.service.login.StuudiumService;
+import ee.hm.dop.service.login.*;
 import ee.hm.dop.service.login.dto.IdCardInfo;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.metadata.LanguageService;
@@ -17,20 +14,14 @@ import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static ee.hm.dop.rest.login.IdCardUtil.SSL_CLIENT_S_DN;
-import static ee.hm.dop.rest.login.IdCardUtil.getInfo;
-import static ee.hm.dop.rest.login.IdCardUtil.isAuthValid;
+import static ee.hm.dop.rest.login.IdCardUtil.*;
 import static java.lang.String.format;
 
 @Path("login")
@@ -40,11 +31,14 @@ public class LoginResource extends BaseResource {
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
-    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
-    public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
-    public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
-    public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
-    public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM = "%s/#!/loginRedirect?stuudiumUserMissingIdCode=%s";
+    private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+personal_code&response_type=code";
+    private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
+    static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&agreement=%s&existingUser=%s&loginFrom=%s";
+    static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
+    static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
+    private static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
+    private static final String LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM = "%s/#!/loginRedirect?stuudiumUserMissingIdCode=%s";
+    private static final String LOGIN_REDIRECT_WITHOUT_IDCODE_HARID = "%s/#!/loginRedirect?harIdUserMissingIdCode=%s";
 
     @Inject
     private LoginService loginService;
@@ -58,6 +52,8 @@ public class LoginResource extends BaseResource {
     private LanguageService languageService;
     @Inject
     private MobileIDLoginService mobileIDLoginService;
+    @Inject
+    private HaridService haridService;
 
     @POST
     @Path("/finalizeLogin")
@@ -105,6 +101,20 @@ public class LoginResource extends BaseResource {
     }
 
     @GET
+    @Path("harid")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response haridAuthenticate() throws URISyntaxException {
+        return redirect(getHaridAuthenticationURI());
+    }
+
+    @GET
+    @Path("harid/success")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response haridAuthenticateSuccess(@QueryParam("code") String code) throws URISyntaxException {
+        return code != null ? authenticateWithHaridToken(code) : redirectToHarid();
+    }
+
+    @GET
     @Path("/mobileId")
     @Produces(MediaType.APPLICATION_JSON)
     public MobileIDSecurityCodes mobileIDLogin(@QueryParam("phoneNumber") String phoneNumber,
@@ -147,6 +157,31 @@ public class LoginResource extends BaseResource {
         return getServerAddress() + EKOOL_CALLBACK_PATH;
     }
 
+    private Response redirectToHarid() throws URISyntaxException {
+        return redirect(getHaridAuthenticationURI());
+    }
+
+    private URI getHaridAuthenticationURI() throws URISyntaxException {
+        return new URI(format(HARID_AUTHENTICATION_URL, haridService.getAuthorizationUrl(), haridService.getClientId(), getHaridCallbackUrl()));
+    }
+
+    private Response authenticateWithHaridToken(String token) throws URISyntaxException {
+        return redirect(getHaridLocation(token));
+    }
+
+    private String getHaridCallbackUrl() {
+        return getServerAddress() + HARID_AUTHENTICATION_SUCCESS_URL;
+    }
+
+    private URI getHaridLocation(String token) throws URISyntaxException {
+        try {
+            return redirectSuccess(haridService.authenticate(token, getHaridCallbackUrl()));
+        } catch (Exception e) {
+            logger.error("harId login failed", e);
+            return redirectFailure();
+        }
+    }
+
     private URI getStuudiumLocation(String token) throws URISyntaxException {
         try {
             return redirectSuccess(stuudiumService.authenticate(token));
@@ -174,6 +209,9 @@ public class LoginResource extends BaseResource {
         }
         if (status.isStuudiumUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM, getServerAddress(), true));
+        }
+        if (status.isHarIdUserMissingIdCode()) {
+            return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
 
         return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString(), status.isExistingUser(), status.getLoginFrom().name()));

@@ -1,7 +1,7 @@
 <div data-layout="column" data-layout-gt-sm="row" data-ng-cloak>
   <div flex-gt-sm="75">
     <data-dop-cookie-notice class="cookie-parent"></data-dop-cookie-notice>
-    <dop-error-message ng-if="isModerator || isAdmin" data="portfolio" id="dop-error"></dop-error-message>
+    <dop-error-message ng-if="showUnreviewedPortfolio" data="portfolio" id="dop-error"></dop-error-message>
     <data-dop-portfolio-summary-card
       comment="newComment"
       data-portfolio="portfolio"
