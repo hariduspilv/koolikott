@@ -7,6 +7,8 @@ import ee.hm.dop.utils.ConfigurationProperties;
 import org.dom4j.DocumentException;
 import org.dom4j.io.DOMWriter;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,8 @@ public class EhisInstitutionParser {
     private InstitutionEhisDao institutionEhisDao;
     @Autowired
     private Configuration configuration;
+
+    private static final Logger logger = LoggerFactory.getLogger(EhisInstitutionParser.class);
 
     List<Integer> parseAndUpdateDb(URL url) throws DocumentException {
         SAXReader saxReader = new SAXReader();
@@ -70,9 +74,11 @@ public class EhisInstitutionParser {
         return (isNotBlank(institutionEhis.getArea()) && institutionEhis.getArea() != null);
     }
     private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
+        logger.info("XROAD_EHIS_INSTITUTIONS_STATUS - " + configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS));
         return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS)));
     }
     private boolean checkInstTypeIsNotPreSchool(InstitutionEhis institutionEhis){
+        logger.info("XROAD_EHIS_INSTITUTIONS_TYPE - " + configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_TYPE));
         return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_TYPE)));
     }
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
