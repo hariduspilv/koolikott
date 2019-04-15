@@ -1,3 +1,10 @@
+## e-Koolikott [1.34.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10781)
+
+### Muutunud
+* HarID liidestus [EK-409](https://projektid.hitsa.ee/jira/browse/EK-409)
+* Ekspert näeb detailvaadetel üle vaatamata õppevara ainult oma taksonoomia piires [EK-411](https://projektid.hitsa.ee/jira/browse/EK-411)
+* Ekspert näeb detailvaadetel üle vaatamata õppevara ainult oma taksonoomia piires-cache [EK-412](https://projektid.hitsa.ee/jira/browse/EK-412)
+
 ## e-Koolikott [1.33.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10751)
 
 ### Muutunud
