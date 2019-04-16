@@ -140,9 +140,9 @@ public class LoginService {
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
         Person person = new Person();
-        if (!loginFrom.name().equals("DEV") && !loginFrom.name().equals("HAR_ID"))
+        if (loginFrom.equals(LoginFrom.DEV)) {
             person = ehisSOAPService.getPersonInformation(user.getIdCode());
-
+        }
         return sessionService.startSession(user, person, loginFrom);
     }
 
