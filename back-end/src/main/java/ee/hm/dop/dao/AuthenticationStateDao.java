@@ -28,7 +28,7 @@ public class AuthenticationStateDao extends AbstractDao<AuthenticationState> {
         try {
             return createOrUpdate(authenticationState);
         } catch (PersistenceException e) {
-            throw new DuplicateTokenException("Duplicate token found when persisting authentication state.");
+            throw new DuplicateTokenException("Duplicate token found when persisting authentication state.", e);
         }
     }
 

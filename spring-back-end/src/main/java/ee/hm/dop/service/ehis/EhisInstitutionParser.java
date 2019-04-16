@@ -7,6 +7,8 @@ import ee.hm.dop.utils.ConfigurationProperties;
 import org.dom4j.DocumentException;
 import org.dom4j.io.DOMWriter;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,6 +36,8 @@ public class EhisInstitutionParser {
     @Autowired
     private Configuration configuration;
 
+    private static final Logger logger = LoggerFactory.getLogger(EhisInstitutionParser.class);
+
     List<Integer> parseAndUpdateDb(URL url) throws DocumentException {
         SAXReader saxReader = new SAXReader();
         Document document = new DOMWriter().write(saxReader.read(url));
@@ -52,6 +56,12 @@ public class EhisInstitutionParser {
                     && checkStatusIsNotClosed(ie)
                     && checkInstTypeIsNotPreSchool(ie)) {
                 ie.setArea(ie.getArea().trim());
+                if (ie.getType().equalsIgnoreCase("koolieelne lasteasutus")) {
+                    logger.info("VIGA: ei filtreeri lasteaedu");
+                }
+                if (ie.getStatus().equalsIgnoreCase("Suletud")) {
+                    logger.info("VIGA: ei filtreeri suletud");
+                }
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
             } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null

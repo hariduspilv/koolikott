@@ -37,10 +37,10 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
     }
 
     public boolean hasData() {
-        Boolean value = (Boolean) getEntityManager()
+        BigInteger portfolioList = (BigInteger) getEntityManager()
                 .createNativeQuery("select exists(select * from PortfolioMaterial) as exi")
                 .getSingleResult();
-        return Boolean.TRUE.equals(value);
+        return portfolioList.intValue() > 0;
     }
 
     public void deleteNotExistingMaterialIds(Long portfolioId, Long materialId) {
