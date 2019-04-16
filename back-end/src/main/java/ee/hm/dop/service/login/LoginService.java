@@ -133,10 +133,7 @@ public class LoginService {
     }
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
-        Person person = new Person();
-        if (loginFrom.equals(LoginFrom.DEV)) {
-            person = ehisSOAPService.getPersonInformation(user.getIdCode());
-        }
+        Person person = getPerson(user, loginFrom);
         return sessionService.startSession(user, person, loginFrom);
     }
 
@@ -186,5 +183,12 @@ public class LoginService {
         userAgreement.setAgreed(agreed);
         userAgreement.setCreatedAt(now());
         return userAgreement;
+    }
+
+    private Person getPerson(User user, LoginFrom loginFrom) {
+        if (loginFrom.isDev()) {
+            return new Person();
+        }
+        return ehisSOAPService.getPersonInformation(user.getIdCode());
     }
 }
