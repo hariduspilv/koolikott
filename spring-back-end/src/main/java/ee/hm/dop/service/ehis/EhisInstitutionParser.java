@@ -56,6 +56,12 @@ public class EhisInstitutionParser {
                     && checkStatusIsNotClosed(ie)
                     && checkInstTypeIsNotPreSchool(ie)) {
                 ie.setArea(ie.getArea().trim());
+                if (ie.getType().equalsIgnoreCase("koolieelne lasteasutus")) {
+                    logger.info("VIGA: ei filtreeri lasteaedu");
+                }
+                if (ie.getStatus().equalsIgnoreCase("Suletud")) {
+                    logger.info("VIGA: ei filtreeri suletud");
+                }
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
             } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null
@@ -74,11 +80,9 @@ public class EhisInstitutionParser {
         return (isNotBlank(institutionEhis.getArea()) && institutionEhis.getArea() != null);
     }
     private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
-        logger.info("XROAD_EHIS_INSTITUTIONS_STATUS - " + configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS));
         return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS)));
     }
     private boolean checkInstTypeIsNotPreSchool(InstitutionEhis institutionEhis){
-        logger.info("XROAD_EHIS_INSTITUTIONS_TYPE - " + configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_TYPE));
         return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_TYPE)));
     }
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
