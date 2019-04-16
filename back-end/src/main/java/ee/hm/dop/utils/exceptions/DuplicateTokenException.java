@@ -11,4 +11,7 @@ public class DuplicateTokenException extends RuntimeException {
     public DuplicateTokenException(String message) {
         super(message);
     }
+    public DuplicateTokenException(String message, Throwable cause) {
+        super(message, cause);
+    }
 }
