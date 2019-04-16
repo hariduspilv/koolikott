@@ -50,7 +50,12 @@ class controller extends Controller {
 
         this.getModerators();
         this.getMaximumUnreviewed();
-        this.sortedBy = '-byCreatedAt';
+
+        if (this.viewPath ==='sentEmails')
+            this.sortedBy = '-byEmailSentAt';
+        else
+            this.sortedBy = '-byCreatedAt';
+
         this.$scope.isFiltering = false
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
@@ -95,6 +100,9 @@ class controller extends Controller {
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data)
         }
+
+        if (this.viewPath ==='sentEmails')
+            this.sortedBy = '-byEmailSentAt';
     }
 
     selectType(type) {
@@ -365,7 +373,7 @@ class controller extends Controller {
         this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
         this.$scope.filter.taxons =  this.$scope.filter.materialDomainTempForSort
 
-        if (this.viewPath === 'unReviewed') {
+        if (this.viewPath === 'unReviewed' || this.viewPath ==='sentEmails') {
             this.getData('firstReview/unReviewed', order);
         }
         else{
