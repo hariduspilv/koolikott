@@ -8,8 +8,6 @@ import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.service.content.LearningObjectServiceCache;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -27,7 +25,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     public static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
     public static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " INNER JOIN Portfolio m ON lo.id = m.id\n";
     public static final String JOIN_MATERIAL_TYPE_MATERIAL = " INNER JOIN Material m ON lo.id = m.id\n";
-    private final Logger logger = LoggerFactory.getLogger(FirstReviewDao.class);
 
     @Inject
     private LearningObjectServiceCache learningObjectServiceCache;
@@ -95,8 +92,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                 (params.hasSearch() ? TITLE_SEARCH_CONDITION : "") +
                 GROUP_BY_LO_ID +
                 params.order();
-
-        logger.info(sqlString2);
 
         Query query2 = getEntityManager()
                 .createNativeQuery(sqlString2)
