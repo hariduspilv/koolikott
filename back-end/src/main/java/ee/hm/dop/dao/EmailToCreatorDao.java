@@ -27,9 +27,9 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
             " WHERE LS.lang = :transgroup\n" +
             " AND LOWER(LS.textValue) LIKE :searchObject)";
 
-    public static final String GROUP_BY_LO_ID = " GROUP BY e.id";
+    public static final String GROUP_BY_LO_ID = " GROUP BY e.id ";
 
-//    public static final String USER_SQL = " AND e.sender=:user ORDER BY e.sentAt DESC";
+    public static final String USER_SQL = " AND e.sender=:user ORDER BY e.sentAt DESC";
 
     private final Logger logger = LoggerFactory.getLogger(EmailToCreatorDao.class);
 

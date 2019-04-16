@@ -10,7 +10,7 @@ const DASHBOARD_VIEW_STATE_MAP = {
     sentEmails: [
         'EMAIL_SENT_EMAILS',
         'sentEmails',
-        '-byCreatedAt'
+        '-byEmailSentAt'
     ],
     improper: [
         'IMPROPER',

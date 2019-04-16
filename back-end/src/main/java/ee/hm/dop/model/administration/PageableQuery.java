@@ -17,19 +17,19 @@ public class PageableQuery {
     public static final String BY_TYPE_DESC = "-byType";
 
     public static final String BY_EMAIL_REC = "byEmailReceiver";
-    public static final String BY_EMAIL_REC_DESC= "-byEmailReceiver";
-    public static final String BY_LO_TITLE= "byLoTitle";
-    public static final String BY_LO_TITLE_DESC= "-byLoTitle";
-    public static final String BY_EMAIL_SENT_AT= "byEmailSentAt";
-    public static final String BY_EMAIL_SENT_AT_DESC= "-byEmailSentAt";
+    public static final String BY_EMAIL_REC_DESC = "-byEmailReceiver";
+    public static final String BY_LO_TITLE = "byLoTitle";
+    public static final String BY_LO_TITLE_DESC = "-byLoTitle";
+    public static final String BY_EMAIL_SENT_AT = "byEmailSentAt";
+    public static final String BY_EMAIL_SENT_AT_DESC = "-byEmailSentAt";
 
     public static final String BY_MATERIAL_TYPE_MATERIAL = "Material";
     public static final String BY_MATERIAL_TYPE_PORTFOLIO = "Portfolio";
-    public static final String BY_MATERIAL_TYPE_ALL= "All";
-    private static List<String> SORT_TYPES = Arrays.asList(BY_SUBJECT_TRANS, FR_CREATED_AT,
+    public static final String BY_MATERIAL_TYPE_ALL = "All";
+    private static List<String> SORT_TYPES = Arrays.asList(BY_EMAIL_SENT_AT_DESC, BY_EMAIL_SENT_AT, BY_LO_TITLE_DESC, BY_LO_TITLE, BY_EMAIL_REC_DESC, BY_EMAIL_REC, BY_SUBJECT_TRANS, FR_CREATED_AT,
             LO_CREATED_BY, BY_TYPE,
             BY_SUBJECT_TRANS_DESC, FR_CREATED_AT_DESC, LO_CREATED_BY_DESC, BY_TYPE_DESC);
-    private static List<String> MATERIAL_TYPES = Arrays.asList(BY_MATERIAL_TYPE_MATERIAL,BY_MATERIAL_TYPE_PORTFOLIO, BY_MATERIAL_TYPE_ALL);
+    private static List<String> MATERIAL_TYPES = Arrays.asList(BY_MATERIAL_TYPE_MATERIAL, BY_MATERIAL_TYPE_PORTFOLIO, BY_MATERIAL_TYPE_ALL);
 
     private Sort sort;
     private int page;
@@ -203,9 +203,9 @@ public class PageableQuery {
         } else if (orderByLoTitleDesc()) {
             return "ORDER BY m.id " + sort.name();
         } else if (orderByEmailSentAt()) {
-            return "ORDER BY e.id " + sort.name();
+            return "ORDER BY e.sentAt " + sort.name();
         } else if (orderByEmailSentAtDesc()) {
-            return "ORDER BY e.id " + sort.name();
+            return "ORDER BY e.sentAt " + sort.name();
         } else {
             throw new UnsupportedOperationException("unknown sort");
         }
@@ -290,4 +290,4 @@ public class PageableQuery {
     public void setMaterialType(String materialType) {
         this.materialType = materialType;
     }
-    }
+}
