@@ -67,7 +67,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
             "       left join TaxonPosition tp on lt.taxon = tp.taxon\n" +
             "       left JOIN Taxon t ON t.id = tp.domain\n" +
             "       left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup = :transgroup\n" +
-            "left JOIN Taxon t2 ON t2.id = tp.subject\n" +
+            "       left JOIN Taxon t2 ON t2.id = tp.subject\n" +
             "       left JOIN Translation tr2 ON t2.translationKey = tr2.translationKey and tr2.translationGroup = :transgroup\n";
     @Inject
     private AdminLearningObjectDao adminLearningObjectDao;

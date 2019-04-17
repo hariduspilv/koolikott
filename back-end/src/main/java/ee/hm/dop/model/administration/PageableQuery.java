@@ -15,14 +15,12 @@ public class PageableQuery {
     public static final String BY_SUBJECT_TRANS_DESC = "-bySubject";
     public static final String BY_TYPE = "byType";
     public static final String BY_TYPE_DESC = "-byType";
-
     public static final String BY_EMAIL_REC = "byEmailReceiver";
     public static final String BY_EMAIL_REC_DESC = "-byEmailReceiver";
     public static final String BY_LO_TITLE = "byLoTitle";
     public static final String BY_LO_TITLE_DESC = "-byLoTitle";
     public static final String BY_EMAIL_SENT_AT = "byEmailSentAt";
     public static final String BY_EMAIL_SENT_AT_DESC = "-byEmailSentAt";
-
     public static final String BY_MATERIAL_TYPE_MATERIAL = "Material";
     public static final String BY_MATERIAL_TYPE_PORTFOLIO = "Portfolio";
     public static final String BY_MATERIAL_TYPE_ALL = "All";
@@ -70,11 +68,13 @@ public class PageableQuery {
     }
 
     public PageableQuery(int page, String itemSortedBy, String query, int lang) {
-
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
             this.page = page;
+            if (!hasSearch()) {
+                this.size = 20;
+            }
             this.itemSortedBy = itemSortedBy;
             this.query = query;
             this.lang = lang;
@@ -99,6 +99,10 @@ public class PageableQuery {
 
     public boolean hasCreatorOrder() {
         return orderByCreatorDesc() || orderByCreator();
+    }
+
+    public boolean hasEmailReceiverOrder() {
+        return orderByEmailReceiverDesc() || orderByEmailReceiver();
     }
 
     private boolean orderByCreatorDesc() {
@@ -143,6 +147,10 @@ public class PageableQuery {
 
     private boolean orderByEmailSentAtDesc() {
         return itemSortedBy.equals(BY_EMAIL_SENT_AT_DESC);
+    }
+
+    public boolean hasOrderByTitle() {
+        return orderByLoTitleDesc() || orderByLoTitle();
     }
 
     public boolean hasOrderByType() {
@@ -195,13 +203,13 @@ public class PageableQuery {
         } else if (orderByTypeDesc()) {
             return "ORDER BY m.id " + sort.name();
         } else if (orderByEmailReceiver()) {
-            return "ORDER BY m.id " + sort.name();
+            return "ORDER BY min(U.surName) " + sort.name();
         } else if (orderByEmailReceiverDesc()) {
-            return "ORDER BY m.id " + sort.name();
+            return "ORDER BY max(U.surName)" + sort.name();
         } else if (orderByLoTitle()) {
-            return "ORDER BY m.id " + sort.name();
+            return "ORDER BY e.id " + sort.name();
         } else if (orderByLoTitleDesc()) {
-            return "ORDER BY m.id " + sort.name();
+            return "ORDER BY e.id " + sort.name();
         } else if (orderByEmailSentAt()) {
             return "ORDER BY e.sentAt " + sort.name();
         } else if (orderByEmailSentAtDesc()) {

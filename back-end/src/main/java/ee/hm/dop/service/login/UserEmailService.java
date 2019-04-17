@@ -203,14 +203,7 @@ public class UserEmailService {
     }
 
     public SearchResult getUserEmail(User loggedInUser, PageableQuery pageableQuery) {
-        List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
-
-        Long emailsCount = getSentEmailsCount(loggedInUser);
-        SearchResult searchResult = new SearchResult();
-        searchResult.setItems(emails);
-        searchResult.setTotalResults(emailsCount);
-
-        return searchResult;
+        return emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
     }
 
     public Long getSentEmailsCount(User loggedInUser) {

@@ -66,7 +66,6 @@ public class EmailToCreator implements AbstractEntity,Searchable {
     @Transient
     private Long creatorId;
 
-
     @Transient
     private String learningObjectTitle;
 

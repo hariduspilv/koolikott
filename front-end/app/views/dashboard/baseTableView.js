@@ -50,18 +50,17 @@ class controller extends Controller {
 
         this.getModerators();
         this.getMaximumUnreviewed();
+        this.getMaximumEmailSent();
 
-        if (this.viewPath ==='sentEmails')
+        this.sortedBy = '-byCreatedAt';
+        if (this.viewPath === 'sentEmails')
             this.sortedBy = '-byEmailSentAt';
-        else
-            this.sortedBy = '-byCreatedAt';
 
         this.$scope.isFiltering = false
         this.$scope.isTaxonSelectVisible = true
         this.$scope.isExpertsSelectVisible = true
         this.$scope.isSubmitButtonEnabled = false
         this.$scope.sortByType = true
-
 
         this.$scope.types = ['All','Material','Portfolio']
 
@@ -100,9 +99,6 @@ class controller extends Controller {
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data)
         }
-
-        if (this.viewPath ==='sentEmails')
-            this.sortedBy = '-byEmailSentAt';
     }
 
     selectType(type) {
@@ -197,6 +193,14 @@ class controller extends Controller {
             .makeGet('rest/admin/firstReview/unReviewed/count')
             .then(result => {
                 this.$scope.totalCountOfUnreviewed = result.data;
+            })
+    }
+
+    getMaximumEmailSent(){
+        this.serverCallService
+            .makeGet('rest/userEmail/count')
+            .then(result => {
+                this.$scope.itemsCount = result.data;
             })
     }
 
@@ -300,10 +304,17 @@ class controller extends Controller {
                         })
                     this.collection = data
 
-                    if (this.viewPath === 'unReviewed' || this.viewPath ==='sentEmails') {
+                    if (this.viewPath === 'unReviewed' ) {
                         this.$scope.data = data.items;
                         this.$scope.itemsCount = data.totalResults;
-                    } else {
+                    }
+                    else if (this.viewPath ==='sentEmails') {
+                        this.$scope.data = data.items;
+                        if (this.$scope.isFiltering)
+                            this.$scope.itemsCount = data.totalResults;
+                    }
+
+                    else {
                         this.$scope.itemsCount = data.length;
                         this.$scope.data = data.slice(0, this.$scope.query.limit)
                     }
@@ -371,12 +382,13 @@ class controller extends Controller {
         this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
         this.$scope.filter.user = this.$scope.filter.materialModeratorTempForSort;
         this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
-        this.$scope.filter.taxons =  this.$scope.filter.materialDomainTempForSort
+        this.$scope.filter.taxons = this.$scope.filter.materialDomainTempForSort
 
-        if (this.viewPath === 'unReviewed' || this.viewPath ==='sentEmails') {
+        if (this.viewPath === 'unReviewed') {
             this.getData('firstReview/unReviewed', order);
-        }
-        else{
+        } else if (this.viewPath === 'sentEmails') {
+            this.getData('sentEmails', order);
+        } else {
             this.sortService.orderItems(
                 this.filteredCollection !== null
                     ? this.filteredCollection
@@ -404,7 +416,7 @@ class controller extends Controller {
     }
 
     onPaginate(page, limit) {
-        if (this.viewPath === 'unReviewed')
+        if (this.viewPath === 'unReviewed' || this.viewPath ==='sentEmails')
             this.paginate(page, limit)
         else
             this.$scope.data = this.paginate(page, limit)
@@ -458,18 +470,19 @@ class controller extends Controller {
 
     filterItems() {
 
-        this.$scope.isFiltering = true
+        this.$scope.isFiltering = true;
 
         if (this.viewPath === 'unReviewed') {
             return this.getData('firstReview/unReviewed', this.sortedBy)
         }
 
         else if (this.viewPath === 'sentEmails') {
+            this.sortedBy = '-byEmailSentAt';
+            this.$scope.query.page = 1;
             return this.getData('sentEmails', this.sortedBy)
         }
 
         else {
-
             const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1;
 
             this.filteredCollection = this.collection.filter(data => {
@@ -505,15 +518,17 @@ class controller extends Controller {
     }
 
     paginate(page, limit) {
-        this.$scope.isPaginating = true
-        const start = (page - 1) * limit
-        const end = start + limit
+        this.$scope.isPaginating = true;
+        const start = (page - 1) * limit;
+        const end = start + limit;
 
-        if (this.viewPath === 'unReviewed'){
+        if (this.viewPath === 'unReviewed') {
             this.$scope.query.page = page;
             return this.getData('firstReview/unReviewed', this.sortedBy);
-        }
-        else {
+        } else if (this.viewPath === 'sentEmails') {
+            this.$scope.query.page = page;
+            return this.getData('sentEmails', this.sortedBy);
+        } else {
             return this.filteredCollection !== null
                 ? this.filteredCollection.slice(start, end)
                 : this.collection.slice(start, end)

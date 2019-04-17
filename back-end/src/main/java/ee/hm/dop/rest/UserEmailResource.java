@@ -119,11 +119,10 @@ public class UserEmailResource extends BaseResource {
     }
 
     @GET
-    @Path("count")
+    @Path("/count")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public Long getSentEmailsCount() {
         return userEmailService.getSentEmailsCount(getLoggedInUser());
     }
-
 }

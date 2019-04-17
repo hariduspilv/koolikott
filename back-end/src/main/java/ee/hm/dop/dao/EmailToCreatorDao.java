@@ -1,13 +1,13 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.EmailToCreator;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.persistence.Query;
-import java.util.List;
 
 public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
 
@@ -15,7 +15,8 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
     public static final String MAIN_SQL_2 = " WHERE e.senderId= :user ";
     public static final String SEARCH_CONDITION_1 = " JOIN User U ON e.user = U.id";
     public static final String SEARCH_CONDITION_2 = " AND LOWER(U.name) LIKE :searchObject";
-    public static final String SEARCH_CONDITION_3 = " OR e.learningObjectId IN (SELECT LO.id FROM LearningObject LO\n " +
+    public static final String SEARCH_CONDITION_3 = " OR e.learningObjectId IN (" +
+            "SELECT LO.id FROM LearningObject LO\n " +
             " JOIN Portfolio P ON LO.id = P.id\n" +
             " WHERE LOWER(P.title) LIKE :searchObject\n" +
             " UNION ALL\n" +
@@ -27,9 +28,21 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
             " WHERE LS.lang = :transgroup\n" +
             " AND LOWER(LS.textValue) LIKE :searchObject)";
 
-    public static final String GROUP_BY_LO_ID = " GROUP BY e.id ";
+    public static final String SORT_BY_TITLE = " JOIN LearningObject lob ON e.learningObjectId = lob.id\n" +
+            "WHERE e.senderId= :user" +
+            " AND e.learningObjectId IN\n" +
+            "(SELECT LO.id\n" +
+            "FROM LearningObject LO\n" +
+            "JOIN Portfolio P ON LO.id = P.id\n" +
+            "UNION ALL\n" +
+            "SELECT LO.id\n" +
+            "FROM LearningObject LO\n" +
+            "JOIN Material M ON LO.id = M.id\n" +
+            "JOIN Material_Title MT ON M.id = MT.material\n" +
+            "JOIN LanguageString LS ON MT.title = LS.id\n" +
+            "WHERE LS.lang = :transgroup)\n";
 
-    public static final String USER_SQL = " AND e.sender=:user ORDER BY e.sentAt DESC";
+    public static final String GROUP_BY_ETC_ID = " GROUP BY e.id ";
 
     private final Logger logger = LoggerFactory.getLogger(EmailToCreatorDao.class);
 
@@ -37,12 +50,15 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
         return findByField("senderId", user);
     }
 
-    public List<EmailToCreator> getSenderSentEmails(User user, PageableQuery params) {
+    public SearchResult getSenderSentEmails(User user, PageableQuery params) {
 
         String sqlString = MAIN_SQL_1 +
-                (params.hasSearch() ? SEARCH_CONDITION_1 : "") + MAIN_SQL_2 +
+                (params.hasSearch() ? SEARCH_CONDITION_1 : "") +
+                (params.hasEmailReceiverOrder() ? SEARCH_CONDITION_1 : "") +
+                (params.hasOrderByTitle() ? SORT_BY_TITLE : "") +
+                (params.hasOrderByTitle() ? "" : MAIN_SQL_2) +
                 (params.hasSearch() ? SEARCH_CONDITION_2 + SEARCH_CONDITION_3 : "") +
-                GROUP_BY_LO_ID +
+                GROUP_BY_ETC_ID +
                 params.order();
 
         logger.info(sqlString);
@@ -55,8 +71,12 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
 
         query = params.hasSearch() ? addSearchObject(params, query) : query;
         query = params.hasSearch() ? addLanguageGroup(params, query) : query;
+        query = params.hasOrderByTitle() ? addLanguageGroup(params, query) : query;
 
-        return query.getResultList();
+        SearchResult searchResult = new SearchResult();
+        searchResult.setItems(query.getResultList());
+        searchResult.setTotalResults(query.getResultList().size());
+        return searchResult;
     }
 
     private Query addSearchObject(PageableQuery params, Query query) {
