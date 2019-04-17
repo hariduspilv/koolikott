@@ -5,7 +5,7 @@
 * Ekspert näeb detailvaadetel üle vaatamata õppevara ainult oma taksonoomia piires [EK-411](https://projektid.hitsa.ee/jira/browse/EK-411)
 * Ekspert näeb detailvaadetel üle vaatamata õppevara ainult oma taksonoomia piires-cache [EK-412](https://projektid.hitsa.ee/jira/browse/EK-412)
 
-## e-Koolikott [1.33.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10751)
+## e-Koolikott [1.33.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10751) (Toodangusse paigaldatud 11.04.2019)
 
 ### Muutunud
 * Materjalide detailvaates seotud kogumike kuvamine [EK-209](https://projektid.hitsa.ee/jira/browse/EK-209)
@@ -14,7 +14,7 @@
 * Süsteemsete võtmesõnade lisamise funktsionaalsuse eemaldamine [EK-387](https://projektid.hitsa.ee/jira/browse/EK-387)
 * Google+ jagamise nupu alt eemaldamine [EK-416](https://projektid.hitsa.ee/jira/browse/EK-416)
 
-## e-Koolikott [1.32.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10750)
+## e-Koolikott [1.32.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10750) (Toodangusse paigaldatud 28.03.2019)
 
 ### Muutunud
 * Õppevara autoriga ühenduse võtmine, vormil õppevara nime kuvamine, järelejäänud tähemärkida loendur [EK-211](https://projektid.hitsa.ee/jira/browse/EK-211)
