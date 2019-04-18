@@ -156,6 +156,13 @@ class controller extends Controller {
 
         if (this.$scope.filter.form.$dirty)
             this.$scope.filter.form.$setPristine()
+
+        if (this.viewPath === 'sentEmails'){
+            this.$scope.filter = {};
+            this.$scope.clearFields = true;
+            this.$scope.query.filter = '';
+            this.$route.reload()
+        }
     }
 
     getPostParams() {
@@ -210,11 +217,12 @@ class controller extends Controller {
 
     openContent(learningObject) {
         if (learningObject) {
-            const scope = this.$scope.$new(true)
-            scope.learningObject = learningObject
+            const scope = this.$scope.$new(true);
+            scope.learningObject = learningObject;
             this.$mdDialog.show({
                 templateUrl: 'views/sentEmail/sentEmail.html',
                 controller: 'sentEmailController',
+                controllerAs: '$ctrl',
                 scope,
                 clickOutsideToClose: true
             })
@@ -321,7 +329,6 @@ class controller extends Controller {
                 }
         })
     }
-
 
     isModerator() {
         return this.authenticatedUserService.isModerator();
@@ -489,7 +496,7 @@ class controller extends Controller {
                 if (data) {
                     const query = this.$scope.query.filter.toLowerCase()
 
-                    if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers')
+                    if (this.viewPath === 'moderators' || this.viewPath === 'restrictedUsers')
                         return (
                             isFilterMatch(data.name + ' ' + data.surname, query) ||
                             isFilterMatch(data.name, query) ||
@@ -505,7 +512,7 @@ class controller extends Controller {
                             ? this.getCorrectLanguageTitle(data.material)
                             : this.isMaterial(data)
                                 ? this.getCorrectLanguageTitle(data)
-                                : data.title
+                                : data.title;
 
                     if (text)
                         return isFilterMatch(text, query)
@@ -568,17 +575,14 @@ class controller extends Controller {
                 }
             }
         }
-
         return reasonKey
     }
 
     showDialog() {
-
         this.$mdDialog.show({
             templateUrl: 'directives/sendEmail/sendEmail.html',
             controller: 'sendEmailDialogController',
             controllerAs: '$ctrl',
-            clickOutsideToClose: false,
             locals: {
                 learningObject: this.learningObject
             }

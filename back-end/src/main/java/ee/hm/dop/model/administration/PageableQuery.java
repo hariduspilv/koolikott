@@ -72,9 +72,7 @@ public class PageableQuery {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
             this.page = page;
-            if (!hasSearch()) {
-                this.size = 20;
-            }
+            this.size = 20;
             this.itemSortedBy = itemSortedBy;
             this.query = query;
             this.lang = lang;

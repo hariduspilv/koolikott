@@ -156,8 +156,7 @@
     >
       <h4 data-translate="{{
         $ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'
-          ? 'ERROR_USERS_NOT_FOUND'
-          : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
+          ? 'ERROR_USERS_NOT_FOUND' : $ctrl.viewPath == 'sentEmails' ? 'EMAIL_SENT_EMAIL_NOT_FOUND'  : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
       ></h4>
     </div>
     <!-- END Not found message -->

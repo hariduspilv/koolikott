@@ -851,6 +851,13 @@ class Controller {
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes()
     }
 
+    getCorrectTitleForLo(lo) {
+        return lo.learningObject
+            ? (this.isMaterial(lo.learningObject)
+                ? this.getCorrectLanguageTitle(lo.learningObject)
+                : lo.learningObject.title) : null
+    }
+
     sprintf(str, ...replacements) {
         let idx = 0
         return str.replace(/(%s|%d)/g, (match) => {

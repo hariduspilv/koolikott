@@ -114,7 +114,6 @@ public class UserEmailResource extends BaseResource {
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }
-
         return userEmailService.getUserEmail(getLoggedInUser(),pageableQuery);
     }
 
