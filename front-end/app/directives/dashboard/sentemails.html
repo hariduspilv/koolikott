@@ -19,7 +19,8 @@
     <td md-cell class="dashboard-cell" data-ng-bind="$ctrl.getCorrectTitleForLo(item)"></td>
     <td md-cell class="dashboard-cell"
         data-ng-style="{'text-overflow':$ctrl.showEllipsis(item.message)}"
-        data-ng-bind="$ctrl.showMaxMessageText(item.message)"></td>
+        data-ng-bind="$ctrl.showMaxMessageText(item.message)">
+    </td>
     <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToTimeDayMonthYear(item.sentAt)" ></td>
   </tr>
   </tbody>

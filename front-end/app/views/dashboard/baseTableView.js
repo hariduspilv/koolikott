@@ -367,7 +367,7 @@ class controller extends Controller {
     }
 
     showEllipsis(message) {
-        return message.length > 120 ? 'ellipsis' : null;
+        return message.length > 130 ? 'ellipsis' : 'clip';
     }
 
     getLearningObjectUrl(learningObject) {
