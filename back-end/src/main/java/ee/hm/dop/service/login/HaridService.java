@@ -43,7 +43,7 @@ public class HaridService {
             logger.info("HarIdUser doesnt have idcode");
             return UserStatus.missingHarIdCode();
         }
-        return loginService.login(harIdUser.getIdCode(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
+        return loginService.login(harIdUser.getIdCodeNumbers(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
     }
 
     private HarIdCode getHarIdCode(String code, String redirectUrl) {

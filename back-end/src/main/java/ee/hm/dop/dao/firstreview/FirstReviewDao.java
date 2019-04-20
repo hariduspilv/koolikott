@@ -7,8 +7,6 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
 import javax.persistence.Query;
@@ -24,7 +22,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     public static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
     public static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " INNER JOIN Portfolio m ON lo.id = m.id\n";
     public static final String JOIN_MATERIAL_TYPE_MATERIAL = " INNER JOIN Material m ON lo.id = m.id\n";
-    private final Logger logger = LoggerFactory.getLogger(FirstReviewDao.class);
 
     public static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
             "FROM LearningObject LO\n" +
@@ -89,8 +86,6 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                 (params.hasSearch() ? TITLE_SEARCH_CONDITION : "") +
                 GROUP_BY_LO_ID +
                 params.order();
-
-        logger.info(sqlString2);
 
         Query query2 = getEntityManager()
                 .createNativeQuery(sqlString2)

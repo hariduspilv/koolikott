@@ -44,6 +44,13 @@ public class HarIdUser {
         return idCode;
     }
 
+    public String getIdCodeNumbers() {
+        if (idCode.toUpperCase().charAt(0) >= 'A') {
+            idCode = idCode.substring(idCode.lastIndexOf(':') + 1);
+        }
+        return idCode;
+    }
+
     public void setIdCode(String idCode) {
         this.idCode = idCode;
     }

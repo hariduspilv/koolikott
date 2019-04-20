@@ -17,7 +17,7 @@ public class AuthenticatedUserDao extends AbstractDao<AuthenticatedUser> {
         try {
             return createOrUpdate(authenticatedUser);
         } catch (PersistenceException e) {
-            throw new DuplicateTokenException("Duplicate token found when persisting authenticatedUser.");
+            throw new DuplicateTokenException("Duplicate token found when persisting authenticatedUser.",e);
         }
     }
 
