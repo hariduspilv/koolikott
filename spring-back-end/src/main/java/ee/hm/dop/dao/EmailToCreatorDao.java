@@ -75,7 +75,7 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
 
         public Long getSenderSentEmailsCount(User user) {
             return (Long) getEntityManager()
-                    .createQuery("SELECT count(*) FROM EmailToCreator e WHERE sender = :user")
+                    .createQuery("SELECT count(e.id) FROM EmailToCreator e WHERE e.sender = :user")
                     .setParameter("user", user)
                     .getSingleResult();
         }

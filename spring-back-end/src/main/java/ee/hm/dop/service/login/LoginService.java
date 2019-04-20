@@ -139,11 +139,15 @@ public class LoginService {
     }
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
-        Person person = new Person();
-        if (loginFrom.equals(LoginFrom.DEV)) {
-            person = ehisSOAPService.getPersonInformation(user.getIdCode());
-        }
+        Person person = getPerson(user, loginFrom);
         return sessionService.startSession(user, person, loginFrom);
+    }
+
+    private Person getPerson(User user, LoginFrom loginFrom) {
+        if (loginFrom.isDev()) {
+            return new Person();
+        }
+        return ehisSOAPService.getPersonInformation(user.getIdCode());
     }
 
     private User getExistingOrNewUser(AuthenticationState state) {
