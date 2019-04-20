@@ -176,10 +176,16 @@ public class PageableQuery {
     }
 
     public boolean hasTaxons() {
+        if (taxons == null){
+            return false;
+        }
         return taxons.size() > 0;
     }
 
     public boolean hasUsers() {
+        if (users == null){
+            return false;
+        }
         return users.size() > 0;
     }
 
