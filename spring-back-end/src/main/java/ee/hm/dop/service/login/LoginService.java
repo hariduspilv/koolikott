@@ -151,9 +151,6 @@ public class LoginService {
     }
 
     private User getExistingOrNewUser(String idCode, String firstname, String surname) {
-        if (idCode.toUpperCase().charAt(0) >= 'A') {
-            idCode = idCode.substring(idCode.lastIndexOf(':') + 1);
-        }
         User existingUser = userService.getUserByIdCode(idCode);
         if (existingUser != null) {
             return existingUser;
