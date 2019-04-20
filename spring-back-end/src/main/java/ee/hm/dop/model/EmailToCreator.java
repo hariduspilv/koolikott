@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class EmailToCreator implements AbstractEntity {
+public class EmailToCreator implements AbstractEntity, Searchable {
 
     @Id
     @GeneratedValue

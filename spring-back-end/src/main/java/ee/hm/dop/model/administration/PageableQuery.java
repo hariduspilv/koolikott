@@ -2,7 +2,6 @@ package ee.hm.dop.model.administration;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,14 +15,19 @@ public class PageableQuery {
     public static final String BY_SUBJECT_TRANS_DESC = "-bySubject";
     public static final String BY_TYPE = "byType";
     public static final String BY_TYPE_DESC = "-byType";
+    public static final String BY_EMAIL_REC = "byEmailReceiver";
+    public static final String BY_EMAIL_REC_DESC = "-byEmailReceiver";
+    public static final String BY_LO_TITLE = "byLoTitle";
+    public static final String BY_LO_TITLE_DESC = "-byLoTitle";
+    public static final String BY_EMAIL_SENT_AT = "byEmailSentAt";
+    public static final String BY_EMAIL_SENT_AT_DESC = "-byEmailSentAt";
     public static final String BY_MATERIAL_TYPE_MATERIAL = "Material";
     public static final String BY_MATERIAL_TYPE_PORTFOLIO = "Portfolio";
-    public static final String BY_MATERIAL_TYPE_ALL= "All";
-    private static List<String> SORT_TYPES = Arrays.asList(BY_SUBJECT_TRANS, FR_CREATED_AT,
+    public static final String BY_MATERIAL_TYPE_ALL = "All";
+    private static List<String> SORT_TYPES = Arrays.asList(BY_EMAIL_SENT_AT_DESC, BY_EMAIL_SENT_AT, BY_LO_TITLE_DESC, BY_LO_TITLE, BY_EMAIL_REC_DESC, BY_EMAIL_REC, BY_SUBJECT_TRANS, FR_CREATED_AT,
             LO_CREATED_BY, BY_TYPE,
             BY_SUBJECT_TRANS_DESC, FR_CREATED_AT_DESC, LO_CREATED_BY_DESC, BY_TYPE_DESC);
-    private static List<String> MATERIAL_TYPES = Arrays.asList(BY_MATERIAL_TYPE_MATERIAL,BY_MATERIAL_TYPE_PORTFOLIO, BY_MATERIAL_TYPE_ALL);
-
+    private static List<String> MATERIAL_TYPES = Arrays.asList(BY_MATERIAL_TYPE_MATERIAL, BY_MATERIAL_TYPE_PORTFOLIO, BY_MATERIAL_TYPE_ALL);
 
     private Sort sort;
     private int page;
@@ -33,8 +37,8 @@ public class PageableQuery {
     private String query;
     private List<Long> taxons;
     private List<Long> users;
+    private int lang;
     private String materialType;
-    private Integer lang;
 
     public PageableQuery() {
     }
@@ -42,7 +46,7 @@ public class PageableQuery {
     public PageableQuery(int page, String itemSortedBy, String query,
                          List<Long> taxons,
                          List<Long> users,
-                         Integer lang,
+                         int lang,
                          String materialType) {
 
         if (materialType != null && MATERIAL_TYPES.contains(materialType)) {
@@ -50,7 +54,6 @@ public class PageableQuery {
         } else {
             valid = false;
         }
-
         if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
             valid = true;
             sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
@@ -58,8 +61,20 @@ public class PageableQuery {
             this.page = page;
             this.size = 20;
             this.query = query;
-            this.taxons = taxons != null ? taxons : new ArrayList<>();
-            this.users = users != null ? users : new ArrayList<>();
+            this.taxons = taxons;
+            this.users = users;
+            this.lang = lang;
+        }
+    }
+
+    public PageableQuery(int page, String itemSortedBy, String query, int lang) {
+        if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
+            valid = true;
+            sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
+            this.page = page;
+            this.size = 20;
+            this.itemSortedBy = itemSortedBy;
+            this.query = query;
             this.lang = lang;
         }
     }
@@ -84,6 +99,10 @@ public class PageableQuery {
         return orderByCreatorDesc() || orderByCreator();
     }
 
+    public boolean hasEmailReceiverOrder() {
+        return orderByEmailReceiverDesc() || orderByEmailReceiver();
+    }
+
     private boolean orderByCreatorDesc() {
         return itemSortedBy.equals(LO_CREATED_BY_DESC);
     }
@@ -102,6 +121,34 @@ public class PageableQuery {
 
     private boolean orderByFrCreatedAt() {
         return itemSortedBy.equals(FR_CREATED_AT);
+    }
+
+    private boolean orderByEmailReceiver() {
+        return itemSortedBy.equals(BY_EMAIL_REC);
+    }
+
+    private boolean orderByEmailReceiverDesc() {
+        return itemSortedBy.equals(BY_EMAIL_REC_DESC);
+    }
+
+    private boolean orderByLoTitle() {
+        return itemSortedBy.equals(BY_LO_TITLE);
+    }
+
+    private boolean orderByLoTitleDesc() {
+        return itemSortedBy.equals(BY_LO_TITLE_DESC);
+    }
+
+    private boolean orderByEmailSentAt() {
+        return itemSortedBy.equals(BY_EMAIL_SENT_AT);
+    }
+
+    private boolean orderByEmailSentAtDesc() {
+        return itemSortedBy.equals(BY_EMAIL_SENT_AT_DESC);
+    }
+
+    public boolean hasOrderByTitle() {
+        return orderByLoTitleDesc() || orderByLoTitle();
     }
 
     public boolean hasOrderByType() {
@@ -153,6 +200,18 @@ public class PageableQuery {
             return "ORDER BY m.id " + sort.name();
         } else if (orderByTypeDesc()) {
             return "ORDER BY m.id " + sort.name();
+        } else if (orderByEmailReceiver()) {
+            return "ORDER BY min(U.surName) " + sort.name();
+        } else if (orderByEmailReceiverDesc()) {
+            return "ORDER BY max(U.surName)" + sort.name();
+        } else if (orderByLoTitle()) {
+            return "ORDER BY e.id " + sort.name();
+        } else if (orderByLoTitleDesc()) {
+            return "ORDER BY e.id " + sort.name();
+        } else if (orderByEmailSentAt()) {
+            return "ORDER BY e.sentAt " + sort.name();
+        } else if (orderByEmailSentAtDesc()) {
+            return "ORDER BY e.sentAt " + sort.name();
         } else {
             throw new UnsupportedOperationException("unknown sort");
         }
@@ -210,11 +269,11 @@ public class PageableQuery {
         this.query = query;
     }
 
-    public Integer getLang() {
+    public int getLang() {
         return lang;
     }
 
-    public void setLang(Integer lang) {
+    public void setLang(int lang) {
         this.lang = lang;
     }
 
@@ -232,5 +291,9 @@ public class PageableQuery {
 
     public void setUsers(List<Long> users) {
         this.users = users;
+    }
+
+    public void setMaterialType(String materialType) {
+        this.materialType = materialType;
     }
 }

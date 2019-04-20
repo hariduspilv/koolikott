@@ -2,6 +2,7 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -198,5 +200,20 @@ public class UserEmailService {
 
     private WebApplicationException notFound(String s) {
         return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    }
+
+    public SearchResult getUserEmail(User loggedInUser, PageableQuery pageableQuery) {
+
+        List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
+        Long sentEmailsCount = emailToCreatorDao.getSenderSentEmailCount(loggedInUser, pageableQuery);
+
+        SearchResult searchResult = new SearchResult();
+        searchResult.setItems(emails);
+        searchResult.setTotalResults(sentEmailsCount);
+        return searchResult;
+    }
+
+    public Long getSentEmailsCount(User loggedInUser) {
+        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
     }
 }

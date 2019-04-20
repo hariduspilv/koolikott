@@ -363,12 +363,9 @@ class controller extends Controller {
     }
 
     showMaxMessageText(message) {
-        return message.length > 130 ? message.substring(0, 129) : message;
+        return message.length > 130 ? message.substring(0, 126) + '...' : message;
     }
 
-    showEllipsis(message) {
-        return message.length > 130 ? 'ellipsis' : 'clip';
-    }
 
     getLearningObjectUrl(learningObject) {
 
