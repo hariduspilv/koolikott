@@ -1,7 +1,17 @@
 package ee.hm.dop.service.login;
 
-import ee.hm.dop.dao.*;
-import ee.hm.dop.model.*;
+import ee.hm.dop.dao.AuthenticationStateDao;
+import ee.hm.dop.dao.EmailToCreatorDao;
+import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.dao.UserDao;
+import ee.hm.dop.dao.UserEmailDao;
+import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.EmailToCreator;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserEmail;
+import ee.hm.dop.model.User_Agreement;
 import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.PinGeneratorService;
@@ -33,6 +43,48 @@ public class UserEmailService {
     private EmailToCreatorDao emailToCreatorDao;
     @Inject
     private LearningObjectDao learningObjectDao;
+
+    private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {
+        validateEmail(email.getEmail());
+        userEmail.setActivated(false);
+        userEmail.setActivatedAt(null);
+        userEmail.setCreatedAt(DateTime.now());
+        userEmail.setPin(PinGeneratorService.generatePin());
+        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, email));
+        userEmail.setEmail("");
+        return userEmail;
+    }
+
+    private UserEmail setUserAndSendMail(UserEmail userEmail) {
+        validateEmail(userEmail.getEmail());
+        userEmail.setActivated(false);
+        userEmail.setActivatedAt(null);
+        userEmail.setCreatedAt(DateTime.now());
+        userEmail.setPin(PinGeneratorService.generatePin());
+        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
+        userEmail.setEmail("");
+        return userEmail;
+    }
+
+    private void verifyLOCreator(EmailToCreator emailToCreator) {
+        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObject().getId());
+        User creator = learningObject.getCreator();
+        if (!creator.getId().equals(emailToCreator.getCreatorId())) {
+            throw forbidden("This creator is not creator of this LO");
+        }
+    }
+
+    private WebApplicationException forbidden(String s) {
+        return new WebApplicationException(s, Response.Status.FORBIDDEN);
+    }
+
+    private WebApplicationException badRequest(String s) {
+        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
+    }
+
+    private WebApplicationException notFound(String s) {
+        return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    }
 
     public UserEmail getUserEmail(long id) {
 
@@ -90,7 +142,6 @@ public class UserEmailService {
             throw badRequest("User is null, can't find e-mail of null");
 
         return userEmailDao.findByUser(user).getEmail();
-
     }
 
     public UserEmail save(UserEmail userEmail) {
@@ -127,7 +178,6 @@ public class UserEmailService {
         dbUserAgreement.setAgreed(true);
         userAgreementDao.createOrUpdate(dbUserAgreement);
 
-
         return userEmailDao.createOrUpdate(dbUserEmail);
     }
 
@@ -160,68 +210,21 @@ public class UserEmailService {
         return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());
     }
 
-    private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {
-        validateEmail(email.getEmail());
-        userEmail.setActivated(false);
-        userEmail.setActivatedAt(null);
-        userEmail.setCreatedAt(DateTime.now());
-        userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, email));
-        userEmail.setEmail("");
-        return userEmail;
-    }
-
-    private UserEmail setUserAndSendMail(UserEmail userEmail) {
-        validateEmail(userEmail.getEmail());
-        userEmail.setActivated(false);
-        userEmail.setActivatedAt(null);
-        userEmail.setCreatedAt(DateTime.now());
-        userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
-        userEmail.setEmail("");
-        return userEmail;
-    }
-
-    private void verifyLOCreator(EmailToCreator emailToCreator) {
-        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObject().getId());
-        User creator = learningObject.getCreator();
-        if (!creator.getId().equals(emailToCreator.getCreatorId())) {
-            throw forbidden("This creator is not creator of this LO");
-        }
-    }
-
-    private WebApplicationException forbidden(String s) {
-        return new WebApplicationException(s, Response.Status.FORBIDDEN);
-    }
-
-    private WebApplicationException badRequest(String s) {
-        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
-    }
-
-    private WebApplicationException notFound(String s) {
-        return new WebApplicationException(s, Response.Status.NOT_FOUND);
-    }
-
     public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
-
         List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
         Long sentEmailsCount = emailToCreatorDao.getSenderSentEmailCount(loggedInUser, pageableQuery);
 
-        DopPage<EmailToCreator>page = new DopPage<>();
+        DopPage<EmailToCreator> page = new DopPage<>();
         page.setPage(pageableQuery.getPage());
         page.setSize(pageableQuery.getSize());
         page.setContent(emails);
         page.setTotalElements(sentEmailsCount);
         page.setTotalPages((int) (sentEmailsCount / pageableQuery.getSize()));
 
-//        SearchResult searchResult = new SearchResult();
-//        searchResult.setItems(emails);
-//        searchResult.setTotalResults(sentEmailsCount);
-//        return searchResult;
         return page;
     }
 
-//    public Long getSentEmailsCount(User loggedInUser) {
-//        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
-//    }
+    public Long getSentEmailsCount(User loggedInUser) {
+        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
+    }
 }

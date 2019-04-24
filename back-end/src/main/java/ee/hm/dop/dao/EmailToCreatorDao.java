@@ -65,12 +65,12 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
         return query.getResultList();
     }
 
-//    public Long getSenderSentEmailsCount(User user) {
-//        return (Long) getEntityManager()
-//                .createQuery("SELECT count(*) FROM EmailToCreator e WHERE sender = :user")
-//                .setParameter("user", user)
-//                .getSingleResult();
-//    }
+    public Long getSenderSentEmailsCount(User user) {
+        return (Long) getEntityManager()
+                .createQuery("SELECT count(*) FROM EmailToCreator e WHERE sender = :user")
+                .setParameter("user", user)
+                .getSingleResult();
+    }
 
     public Long getSenderSentEmailCount(User user, PageableQuerySentEmails params) {
         String sqlString = SELECT_COUNT_ETC +
