@@ -683,6 +683,13 @@ class Controller {
             return 'portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
     }
 
+    getLearningObjectUrl(learningObject) {
+        if (learningObject)
+            return this.isPortfolio(learningObject)
+                ? `/portfolio?name=${titleForUrl}&id=${id}`
+                : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id;
+    }
+
     replaceSpacesAndCharacters(title) {
         if (title)
             return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")

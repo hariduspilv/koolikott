@@ -5,44 +5,46 @@
         unReviewed: [
             'UNREVIEWED', // title translation key
             'firstReview/unReviewed', // rest URI (after 'rest/admin/')
-            '-byCreatedAt' // default sort by (use leading minus for DESC)
+            '-byCreatedAt' , // default sort by (use leading minus for DESC)
+            true // backendPagination?
         ],
         sentEmails: [
             'EMAIL_SENT_EMAILS',
             'sentEmails',
-            '-byEmailSentAt'
+            '-byEmailSentAt',
+            true
         ],
         improper: [
             'IMPROPER',
             'improper',
             '-byReportCount',
+            false
         ],
         changes: [
             'CHANGED_LEARNING_OBJECTS',
             'changed',
-            'byLastChangedAt'
+            'byLastChangedAt',
+            false
         ],
         deleted: [
             'DELETED_LEARNING_OBJECTS',
             'deleted',
-            'byUpdatedAt'
+            'byUpdatedAt',
+            false
         ],
         moderators: [
             'MODERATORS_TAB',
             'moderator',
-            'byUsername'
+            'byUsername',
+            false
         ],
         restrictedUsers: [
             'RESTRICTED_USERS_TAB',
             'restrictedUser',
-            'byUsername'
+            'byUsername',
+            false
         ]
-        // ,
-        // sentEmailLOViewPathCondition : Boolean(this.viewPath === 'unReviewed' || this.viewPath === 'sentEmails')
     };
-
-
-
 
     class controller extends Controller {
         constructor(...args) {
@@ -52,23 +54,18 @@
             this.filteredCollection = null;
 
             this.viewPath = this.$location.path().replace(/^\/dashboard\//, '');
-            const [titleTranslationKey, ...rest] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
+            const [titleTranslationKey,  url, sort, backendPagination, ...rest] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
 
-            this.getModerators();
-            // this.getMaximumUnreviewed();
-            // this.getMaximumEmailSent();
+            this.$scope.titleTranslationKey = titleTranslationKey
+            this.sortedBy = sort;
+            this.restUri = url;
+            this.isBackendPagination = backendPagination;
 
-            // this.sortedBy = '-byCreatedAt';
-            // if (this.viewPath === 'sentEmails')
-            //     this.sortedBy = '-byEmailSentAt';
+            this.$scope.isTaxonSelectVisible = true;
+            this.$scope.isExpertsSelectVisible = true;
+            this.$scope.sortByType = true;
 
-            // this.$scope.isFiltering = false
-            this.$scope.isTaxonSelectVisible = true
-            this.$scope.isExpertsSelectVisible = true
-            // this.$scope.isSubmitButtonEnabled = false
-            this.$scope.sortByType = true
-
-            this.$scope.types = ['All', 'Material', 'Portfolio']
+            this.$scope.types = ['All', 'Material', 'Portfolio'];
 
             this.$scope.$watch('filter.educationalContext', this.onEducationalContextChange.bind(this), true)
             this.$scope.$watch('query.filter', (newValue, oldValue) => {
@@ -95,23 +92,28 @@
             this.$scope.onPaginate = this.onPaginate.bind(this)
             this.$scope.onSort = this.onSort.bind(this)
 
-            this.$scope.titleTranslationKey = titleTranslationKey
+            url
+                ? this.getData(url,sort)
+                : console.error(new Error(`Could not find ${url} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`));
 
-            rest.length
-                ? this.getData(...rest)
-                : console.error(new Error(`Could not find ${this.viewPath} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`))
-            if (this.usersViewPathCondition) {
+            if (!this.usersViewPathCondition) {
                 this.serverCallService
                     .makeGet('rest/user/all')
                     .then(r => this.$scope.users = r.data)
+
+            }
+
+            if (this.authenticatedUserService.isAdmin()) {
+                this.getModerators();
             }
         }
+
         usersViewPathCondition(){
-            return this.viewPath === 'moderators' || this.viewPath === 'restrictedUsers';
+            return this.viewPath === 'moderators' || this.viewPath  === 'restrictedUsers';
         }
 
         sentEmailLOViewPathCondition(){
-            return this.viewPath === 'unReviewed' || this.viewPath === 'sentEmails';
+            return this.viewPath  === 'firstReview/unReviewed' || this.viewPath  === 'sentEmails'
         }
 
         selectType(type) {
@@ -139,7 +141,7 @@
             this.$scope.filter.materialEduTempForSort = this.$scope.filter.educationalContext
             this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
 
-            this.getData('firstReview/unReviewed', this.sortedBy)
+            this.getData(this.restUri, this.sortedBy);
             this.$scope.sortByType = this.$scope.filter.materialType === 'All';
         }
 
@@ -188,12 +190,8 @@
         }
 
         onSelectTaxons(taxons) {
-            if (taxons.length === 0)
-                this.$scope.filter.taxons = undefined
-            else
-                this.$scope.filter.taxons = taxons
+            taxons.length === 0 ? this.$scope.filter.taxons = undefined : this.$scope.filter.taxons = taxons;
             this.$scope.clearFields = false
-
         }
 
         onEducationalContextChange(educationalContext) {
@@ -202,25 +200,10 @@
         }
 
         isDisabled() {
-            return this.isModerator() ? !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType) : !((this.$scope.filter && this.$scope.filter.taxons) ||
-                this.$scope.filter.user || this.$scope.filter.materialType);
+            return this.isModerator()
+                ? !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType) :
+                !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user || this.$scope.filter.materialType);
         }
-
-        // getMaximumUnreviewed() {
-        //     this.serverCallService
-        //         .makeGet('rest/admin/firstReview/unReviewed/count')
-        //         .then(result => {
-        //             this.$scope.totalCountOfUnreviewed = result.data;
-        //         })
-        // }
-
-        // getMaximumEmailSent() {
-        //     this.serverCallService
-        //         .makeGet('rest/userEmail/sentEmails')
-        //         .then(result => {
-        //             this.$scope.itemsCount = result.data;
-        //         })
-        // }
 
         getTranslation(key) {
             return this.$filter('translate')(key)
@@ -257,14 +240,12 @@
 
         getData(restUri, sortBy) {
             let query;
-            this.$scope.isLoading = true
-            if (!this.$scope.filter.materialType)
-                this.$scope.filter.materialType
+            this.$scope.isLoading = true;
 
-            if (restUri === 'firstReview/unReviewed') {
-                query = this.getUnreviewed(restUri, sortBy, query);
-            } else if (restUri === 'sentEmails') {
-                query = this.getSentEmails(restUri, sortBy, query);
+            if (this.restUri === 'firstReview/unReviewed') {
+                query = this.getUnreviewed(restUri, sortBy);
+            } else if (this.restUri === 'sentEmails') {
+                query = this.getSentEmails(restUri, sortBy);
             } else {
                 query = this.serverCallService
                     .makeGet('rest/admin/' + restUri)
@@ -272,10 +253,10 @@
             query
                 .then(({data}) => {
                     if (data) {
-                        this.$scope.isLoading = false
+                        this.$scope.isLoading = false;
 
                         if (sortBy)
-                            this.$scope.query.order = sortBy
+                            this.$scope.query.order = sortBy;
 
                         if (restUri === 'changed')
                             data.forEach(o => {
@@ -288,7 +269,7 @@
                                 o.__reporters = this.getReporters(o)
                                 o.__reportLabelKey = this.getImproperReportLabelKey(o)
                             })
-                        this.collection = data
+                        this.collection = data;
 
                         if (this.sentEmailLOViewPathCondition) {
                             this.$scope.data = data.content;
@@ -301,7 +282,7 @@
                 })
         }
 
-        getUnreviewed(restUri, sortBy, query) {
+        getUnreviewed(restUri, sortBy) {
             let url = 'rest/admin/' + restUri + '/' +
                 '?page=' + this.$scope.query.page +
                 '&itemSortedBy=' + sortBy +
@@ -311,21 +292,19 @@
                 '&lang=' + this.getLanguage() +
                 '&materialtype=' + this.$scope.filter.materialType;
 
-            query = this.serverCallService
+            return this.serverCallService
                 .makeGet(url);
-            return query;
         }
 
-        getSentEmails(restUri, sortBy, query) {
+        getSentEmails(restUri, sortBy) {
             let url = 'rest/userEmail/' + restUri + '/' +
                 '?page=' + this.$scope.query.page +
                 '&itemSortedBy=' + sortBy +
                 '&query=' + this.$scope.query.filter.toLowerCase() +
                 '&lang=' + this.getLanguage();
 
-            query = this.serverCallService
+            return this.serverCallService
                 .makeGet(url);
-            return query;
         }
 
         isModerator() {
@@ -342,7 +321,7 @@
         selectTaxons() {
             if (this.$scope.filter && this.$scope.filter.taxons) {
                 return this.$scope.filter.taxons.map(t => '&taxon=' + t.id).join("");
-            } else if (!this.$scope.filter.taxons && this.$scope.filter.educationalContext) {
+            } else if (this.$scope.filter && this.$scope.filter.educationalContext) {
                 return '&taxon=' + this.$scope.filter.educationalContext.id
             } else
                 return ""
@@ -363,14 +342,6 @@
         showMaxMessageText(message) {
             return message.length > 130 ? message.substring(0, 126) + '...' : message;
         }
-
-        getLearningObjectUrl(learningObject) {
-            if (learningObject)
-                return this.isPortfolio(learningObject)
-                    ? '/portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
-                    : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
-        }
-
 
         formatTitleForUrl(learningObject) {
             return this.replaceSpacesAndCharacters(this.getUserDefinedLanguageString(learningObject.titles, this.currentLanguage, language));
@@ -482,8 +453,6 @@
             if (this.viewPath === 'unReviewed') {
                 return this.getData('firstReview/unReviewed', this.sortedBy)
             } else if (this.viewPath === 'sentEmails') {
-                this.sortedBy = '-byEmailSentAt';
-                // this.$scope.query.page = 1;
                 return this.getData('sentEmails', this.sortedBy)
             } else {
                 const isFilterMatch = (str, query) => str.toLowerCase().indexOf(query) > -1;
@@ -500,15 +469,7 @@
                                 isFilterMatch(data.username, query)
                             )
 
-                        const text = data.learningObject
-                            ? (this.isMaterial(data.learningObject)
-                                ? this.getCorrectLanguageTitle(data.learningObject)
-                                : data.learningObject.title)
-                            : data.material
-                                ? this.getCorrectLanguageTitle(data.material)
-                                : this.isMaterial(data)
-                                    ? this.getCorrectLanguageTitle(data)
-                                    : data.title;
+                        const text = this.getCorrectLanguageTitle(data.learningObject);
 
                         if (text)
                             return isFilterMatch(text, query)

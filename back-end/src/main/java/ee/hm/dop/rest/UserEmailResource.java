@@ -112,11 +112,11 @@ public class UserEmailResource extends BaseResource {
         return userEmailService.getUserEmail(getLoggedInUser(), pageableQuery);
     }
 
-    @GET
-    @Path("/count")
-    @Produces(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
-    public Long getSentEmailsCount() {
-        return userEmailService.getSentEmailsCount(getLoggedInUser());
-    }
+//    @GET
+//    @Path("/count")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+//    public Long getSentEmailsCount() {
+//        return userEmailService.getSentEmailsCount(getLoggedInUser());
+//    }
 }

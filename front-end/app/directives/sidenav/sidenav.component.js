@@ -170,7 +170,7 @@ class controller extends Controller {
             this.updateCount('userFavorites')
             this.updateCount('userMaterials')
             this.updateCount('userPortfolios')
-            this.updateCount('sentEmails')//TODO
+            this.updateCount('sentEmails')
             this.updateAdminCounts()
         }
     }
@@ -182,7 +182,7 @@ class controller extends Controller {
             this.updateCount('deleted')
             this.updateCount('improper')
             this.updateCount('changes')
-            this.updateCount('sentEmails')//TODO
+            this.updateCount('sentEmails')
             this.updateCount('unReviewedLearningObjects')
         }
         if (this.authenticatedUserService.isAdmin()) {

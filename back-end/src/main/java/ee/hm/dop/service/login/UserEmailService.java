@@ -3,7 +3,6 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.administration.DopPage;
-import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
@@ -12,7 +11,6 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
 import java.util.List;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
@@ -223,7 +221,7 @@ public class UserEmailService {
         return page;
     }
 
-    public Long getSentEmailsCount(User loggedInUser) {
-        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
-    }
+//    public Long getSentEmailsCount(User loggedInUser) {
+//        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
+//    }
 }

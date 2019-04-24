@@ -2,7 +2,11 @@ package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.dao.firstreview.FirstReviewDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.AdminLearningObject;
+import ee.hm.dop.model.FirstReview;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQuery;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.FirstReviewTaxon;
@@ -26,17 +30,21 @@ public class FirstReviewAdminService {
     @Inject
     private TaxonPositionDao taxonPositionDao;
 
-    public SearchResult getUnReviewed(User user, PageableQuery pageableQuery) {
+    public DopPage getUnReviewed(User user, PageableQuery pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isModerator(user)) {
             pageableQuery.setUsers(Arrays.asList(user.getId()));
         }
         List<AdminLearningObject> unreviewed = firstReviewDao.findAllUnreviewed(pageableQuery);
         Long unreviewedCount = firstReviewDao.findCoundOfAllUnreviewed(pageableQuery);
-        return getSearchResult(unreviewed, unreviewedCount);
+        DopPage dp = getSearchResult(unreviewed, unreviewedCount);
+        dp.setPage(pageableQuery.getPage());
+        dp.setSize(pageableQuery.getSize());
+        dp.setTotalPages((int) (unreviewedCount / pageableQuery.getSize()));
+        return dp;
     }
 
-    private SearchResult getSearchResult(List<AdminLearningObject> allUnreviewed, Long unreviewedCount) {
+    private DopPage getSearchResult(List<AdminLearningObject> allUnreviewed, Long unreviewedCount) {
         for (AdminLearningObject learningObject : allUnreviewed) {
             List<FirstReviewTaxon> firstReviewTaxons = learningObject.getTaxons().stream()
                     .map(this::convert)
@@ -44,11 +52,10 @@ public class FirstReviewAdminService {
                     .collect(Collectors.toList());
             learningObject.setFirstReviewTaxons(firstReviewTaxons);
         }
-
-        SearchResult searchResult = new SearchResult();
-        searchResult.setItems(allUnreviewed);
-        searchResult.setTotalResults(unreviewedCount);
-        return searchResult;
+        DopPage dopPage = new DopPage();
+        dopPage.setContent(allUnreviewed);
+        dopPage.setTotalElements(unreviewedCount);
+        return dopPage;
     }
 
     private FirstReviewTaxon convert(Taxon taxon) {

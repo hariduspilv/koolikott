@@ -9,7 +9,7 @@
     controller.$inject = [
         '$scope',
         '$mdDialog',
-        'translationService'
+        'translationService',
     ];
     angular.module('koolikottApp').controller('sentEmailController', controller)
 }

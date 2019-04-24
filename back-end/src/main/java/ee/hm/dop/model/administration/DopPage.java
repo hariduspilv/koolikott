@@ -1,8 +1,10 @@
 package ee.hm.dop.model.administration;
 
+import ee.hm.dop.model.Searchable;
+
 import java.util.List;
 
-public class DopPage<T> {
+public class DopPage<T extends Searchable> {
     private List<T> content;
     private Integer page;
     private Integer size;
@@ -59,4 +61,5 @@ public class DopPage<T> {
     public void setTotalElements(long totalElements) {
         this.totalElements = totalElements;
     }
+
 }
