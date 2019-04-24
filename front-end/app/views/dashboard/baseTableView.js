@@ -92,21 +92,18 @@
             this.$scope.onPaginate = this.onPaginate.bind(this);
             this.$scope.onSort = this.onSort.bind(this);
 
+            this.getModeratorsAndAllUsers();
+
             url
                 ? this.getData(url,sort)
                 : console.error(new Error(`Could not find ${url} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`));
-
-            this.adminRelatedQueries();
-
         }
 
-        adminRelatedQueries() {
+        getModeratorsAndAllUsers() {
 
+            let promiseGetModerators = Promise.resolve(this.getModerators());
             if (this.authenticatedUserService.isAdmin()) {
-
                 let promiseGetAllUsers = Promise.resolve(this.getAllUsers());
-                let promiseGetModerators = Promise.resolve(this.getModerators());
-
                 Promise.all([promiseGetAllUsers, promiseGetModerators])
                     .catch(error => {
                         console.log(error.message);
@@ -119,7 +116,7 @@
         }
 
         sentEmailsOrUnreviewed(){
-            return this.viewPath  === 'firstReview/unReviewed' || this.viewPath  === 'sentEmails'
+            return this.viewPath  === 'unReviewed' || this.viewPath  === 'sentEmails'
         }
 
         selectType(type) {
@@ -206,9 +203,15 @@
         }
 
         isDisabled() {
-            return this.isModerator()
-                ? !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType)
-                : !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user || this.$scope.filter.materialType);
+            return this.isModerator() ? this.getB() : this.getB1();
+        }
+
+        getB1() {
+            return !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user || this.$scope.filter.materialType);
+        }
+
+        getB() {
+            return !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType);
         }
 
         getTranslation(key) {
@@ -278,7 +281,7 @@
                             })
                         this.collection = data;
 
-                        if (this.sentEmailsOrUnreviewed) {
+                        if (this.sentEmailsOrUnreviewed()) {
                             this.$scope.data = data.content;
                             this.$scope.itemsCount = data.totalElements;
                         } else {
@@ -344,7 +347,6 @@
             this.serverCallService
                 .makeGet('rest/user/all')
                 .then(r => this.$scope.users = r.data);
-
         }
 
         openLearningObject(learningObject) {
