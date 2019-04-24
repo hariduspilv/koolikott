@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 {
     const DASHBOARD_VIEW_STATE_MAP = {
@@ -36,31 +36,36 @@
             'RESTRICTED_USERS_TAB',
             'restrictedUser',
             'byUsername'
-        ],
-    }
+        ]
+        // ,
+        // sentEmailLOViewPathCondition : Boolean(this.viewPath === 'unReviewed' || this.viewPath === 'sentEmails')
+    };
+
+
+
 
     class controller extends Controller {
         constructor(...args) {
-            super(...args)
+            super(...args);
 
-            this.collection = null
-            this.filteredCollection = null
+            this.collection = null;
+            this.filteredCollection = null;
 
-            this.viewPath = this.$location.path().replace(/^\/dashboard\//, '')
-            const [titleTranslationKey, ...rest] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || []
+            this.viewPath = this.$location.path().replace(/^\/dashboard\//, '');
+            const [titleTranslationKey, ...rest] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
 
             this.getModerators();
-            this.getMaximumUnreviewed();
-            this.getMaximumEmailSent();
+            // this.getMaximumUnreviewed();
+            // this.getMaximumEmailSent();
 
-            this.sortedBy = '-byCreatedAt';
-            if (this.viewPath === 'sentEmails')
-                this.sortedBy = '-byEmailSentAt';
+            // this.sortedBy = '-byCreatedAt';
+            // if (this.viewPath === 'sentEmails')
+            //     this.sortedBy = '-byEmailSentAt';
 
-            this.$scope.isFiltering = false
+            // this.$scope.isFiltering = false
             this.$scope.isTaxonSelectVisible = true
             this.$scope.isExpertsSelectVisible = true
-            this.$scope.isSubmitButtonEnabled = false
+            // this.$scope.isSubmitButtonEnabled = false
             this.$scope.sortByType = true
 
             this.$scope.types = ['All', 'Material', 'Portfolio']
@@ -95,11 +100,18 @@
             rest.length
                 ? this.getData(...rest)
                 : console.error(new Error(`Could not find ${this.viewPath} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`))
-            if (this.viewPath == 'moderators' || this.viewPath == 'restrictedUsers') {
+            if (this.usersViewPathCondition) {
                 this.serverCallService
                     .makeGet('rest/user/all')
                     .then(r => this.$scope.users = r.data)
             }
+        }
+        usersViewPathCondition(){
+            return this.viewPath === 'moderators' || this.viewPath === 'restrictedUsers';
+        }
+
+        sentEmailLOViewPathCondition(){
+            return this.viewPath === 'unReviewed' || this.viewPath === 'sentEmails';
         }
 
         selectType(type) {
@@ -128,10 +140,7 @@
             this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
 
             this.getData('firstReview/unReviewed', this.sortedBy)
-            if (this.$scope.filter.materialType !== 'All')
-                this.$scope.sortByType = false
-            else
-                this.$scope.sortByType = true
+            this.$scope.sortByType = this.$scope.filter.materialType === 'All';
         }
 
         onParamsChange({users, taxons}) {
@@ -197,39 +206,24 @@
                 this.$scope.filter.user || this.$scope.filter.materialType);
         }
 
-        getMaximumUnreviewed() {
-            this.serverCallService
-                .makeGet('rest/admin/firstReview/unReviewed/count')
-                .then(result => {
-                    this.$scope.totalCountOfUnreviewed = result.data;
-                })
-        }
+        // getMaximumUnreviewed() {
+        //     this.serverCallService
+        //         .makeGet('rest/admin/firstReview/unReviewed/count')
+        //         .then(result => {
+        //             this.$scope.totalCountOfUnreviewed = result.data;
+        //         })
+        // }
 
-        getMaximumEmailSent() {
-            this.serverCallService
-                .makeGet('rest/userEmail/count')
-                .then(result => {
-                    this.$scope.itemsCount = result.data;
-                })
-        }
+        // getMaximumEmailSent() {
+        //     this.serverCallService
+        //         .makeGet('rest/userEmail/sentEmails')
+        //         .then(result => {
+        //             this.$scope.itemsCount = result.data;
+        //         })
+        // }
 
         getTranslation(key) {
             return this.$filter('translate')(key)
-        }
-
-        openContent(learningObject) {
-            if (learningObject) {
-                const scope = this.$scope.$new(true);
-                scope.learningObject = learningObject;
-                this.$mdDialog.show({
-                    templateUrl: 'views/sentEmail/sentEmail.html',
-                    controller: 'sentEmailController',
-                    controllerAs: '$ctrl',
-                    scope,
-                    clickOutsideToClose: true
-                })
-                    .then(() => this.$route.reload())
-            }
         }
 
         editUser(user) {
@@ -240,6 +234,7 @@
                 this.$mdDialog
                     .show({
                         templateUrl: 'views/editUserDialog/editUser.html',
+                        controller: 'editUserController',
                         scope
                     })
                     .then(() => this.$route.reload())
@@ -267,26 +262,9 @@
                 this.$scope.filter.materialType
 
             if (restUri === 'firstReview/unReviewed') {
-                let url = 'rest/admin/' + restUri + '/' +
-                    '?page=' + this.$scope.query.page +
-                    '&itemSortedBy=' + sortBy +
-                    '&query=' + this.$scope.query.filter.toLowerCase() +
-                    this.selectTaxons() +
-                    this.selectUsers() +
-                    '&lang=' + this.getLanguage() +
-                    '&materialtype=' + this.$scope.filter.materialType;
-
-                query = this.serverCallService
-                    .makeGet(url);
+                query = this.getUnreviewed(restUri, sortBy, query);
             } else if (restUri === 'sentEmails') {
-                let url = 'rest/userEmail/' + restUri + '/' +
-                    '?page=' + this.$scope.query.page +
-                    '&itemSortedBy=' + sortBy +
-                    '&query=' + this.$scope.query.filter.toLowerCase() +
-                    '&lang=' + this.getLanguage();
-
-                query = this.serverCallService
-                    .makeGet(url);
+                query = this.getSentEmails(restUri, sortBy, query);
             } else {
                 query = this.serverCallService
                     .makeGet('rest/admin/' + restUri)
@@ -312,15 +290,42 @@
                             })
                         this.collection = data
 
-                        if (this.viewPath === 'unReviewed' || this.viewPath === 'sentEmails') {
-                            this.$scope.data = data.items;
-                            this.$scope.itemsCount = data.totalResults;
+                        if (this.sentEmailLOViewPathCondition) {
+                            this.$scope.data = data.content;
+                            this.$scope.itemsCount = data.totalElements;
                         } else {
                             this.$scope.itemsCount = data.length;
                             this.$scope.data = data.slice(0, this.$scope.query.limit)
                         }
                     }
                 })
+        }
+
+        getUnreviewed(restUri, sortBy, query) {
+            let url = 'rest/admin/' + restUri + '/' +
+                '?page=' + this.$scope.query.page +
+                '&itemSortedBy=' + sortBy +
+                '&query=' + this.$scope.query.filter.toLowerCase() +
+                this.selectTaxons() +
+                this.selectUsers() +
+                '&lang=' + this.getLanguage() +
+                '&materialtype=' + this.$scope.filter.materialType;
+
+            query = this.serverCallService
+                .makeGet(url);
+            return query;
+        }
+
+        getSentEmails(restUri, sortBy, query) {
+            let url = 'rest/userEmail/' + restUri + '/' +
+                '?page=' + this.$scope.query.page +
+                '&itemSortedBy=' + sortBy +
+                '&query=' + this.$scope.query.filter.toLowerCase() +
+                '&lang=' + this.getLanguage();
+
+            query = this.serverCallService
+                .makeGet(url);
+            return query;
         }
 
         isModerator() {
@@ -359,15 +364,13 @@
             return message.length > 130 ? message.substring(0, 126) + '...' : message;
         }
 
-
         getLearningObjectUrl(learningObject) {
-
             if (learningObject)
-
                 return this.isPortfolio(learningObject)
                     ? '/portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
                     : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
         }
+
 
         formatTitleForUrl(learningObject) {
             return this.replaceSpacesAndCharacters(this.getUserDefinedLanguageString(learningObject.titles, this.currentLanguage, language));
@@ -414,7 +417,7 @@
         }
 
         onPaginate(page, limit) {
-            if (this.viewPath === 'unReviewed' || this.viewPath === 'sentEmails')
+            if (this.sentEmailLOViewPathCondition)
                 this.paginate(page, limit)
             else
                 this.$scope.data = this.paginate(page, limit)
@@ -489,7 +492,7 @@
                     if (data) {
                         const query = this.$scope.query.filter.toLowerCase()
 
-                        if (this.viewPath === 'moderators' || this.viewPath === 'restrictedUsers')
+                        if (this.usersViewPathCondition)
                             return (
                                 isFilterMatch(data.name + ' ' + data.surname, query) ||
                                 isFilterMatch(data.name, query) ||
@@ -580,6 +583,20 @@
                     learningObject: this.learningObject
                 }
             })
+        }
+
+        openContent(learningObject) {
+            if (learningObject) {
+                const scope = this.$scope.$new(true);
+                scope.learningObject = learningObject;
+                this.$mdDialog.show({
+                    templateUrl: 'views/sentEmail/sentEmail.html',
+                    controller: 'sentEmailController',
+                    controllerAs: '$ctrl',
+                    scope,
+                    clickOutsideToClose: true
+                })
+            }
         }
     }
 

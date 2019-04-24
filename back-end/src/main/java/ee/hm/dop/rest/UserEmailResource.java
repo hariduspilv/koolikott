@@ -1,19 +1,23 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.EmailToCreator;
-import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.UserEmail;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.DopPage;
+import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.login.UserEmailService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.*;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.net.HttpURLConnection;
-import java.util.List;
 
 @Path("/userEmail")
 public class UserEmailResource extends BaseResource {
@@ -33,10 +37,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getEmailOnLogin(UserEmail userEmail) {
-        if (userEmailService.hasEmail(userEmail))
-            return Response.status(HttpURLConnection.HTTP_OK).build();
-        else
-            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+        return userEmailService.hasEmail(userEmail) ? Response.status(HttpURLConnection.HTTP_OK).build() : Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
     }
 
     @POST
@@ -44,10 +45,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateEmail(UserEmail userEmail) {
-        if (userEmailService.hasDuplicateEmail(userEmail))
-            return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
-        else
-            return Response.status(HttpURLConnection.HTTP_OK).build();
+        return userEmailService.hasDuplicateEmail(userEmail) ? Response.status(HttpURLConnection.HTTP_CONFLICT).build() : Response.status(HttpURLConnection.HTTP_OK).build();
     }
 
     @GET
@@ -62,10 +60,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateEmailForProfile(UserEmail userEmail) {
-        if (userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()))
-            return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
-        else
-            return Response.status(HttpURLConnection.HTTP_OK).build();
+        return userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()) ? Response.status(HttpURLConnection.HTTP_CONFLICT).build() : Response.status(HttpURLConnection.HTTP_OK).build();
     }
 
     @POST
@@ -106,15 +101,15 @@ public class UserEmailResource extends BaseResource {
     @Path("sentEmails")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public SearchResult getSentEmails(@QueryParam("page") int page,
-                                      @QueryParam("itemSortedBy") String itemSortedBy,
-                                      @QueryParam("query") String query,
-                                      @QueryParam("lang") int lang) {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, lang);
+    public DopPage getSentEmails(@QueryParam("page") int page,
+                                 @QueryParam("itemSortedBy") String itemSortedBy,
+                                 @QueryParam("query") String query,
+                                 @QueryParam("lang") int lang) {
+        PageableQuerySentEmails pageableQuery = new PageableQuerySentEmails(page, itemSortedBy, query, lang);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }
-        return userEmailService.getUserEmail(getLoggedInUser(),pageableQuery);
+        return userEmailService.getUserEmail(getLoggedInUser(), pageableQuery);
     }
 
     @GET

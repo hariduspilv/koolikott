@@ -2,7 +2,7 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.PageableQuerySentEmails;
 
 import javax.persistence.Query;
 import java.math.BigInteger;
@@ -10,13 +10,13 @@ import java.util.List;
 
 public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
 
-    private static final String MAIN_SQL_1_SELECT = "SELECT * FROM EmailToCreator e";
-    private static final String MAIN_COUNT_SQL_1 = "SELECT count(*) FROM EmailToCreator e";
-    private static final String MAIN_SQL_2_WHERE = " WHERE e.senderId= :user ";
-    private static final String SEARCH_CONDITION_1_JOIN_USER = " JOIN User U ON e.user = U.id";
-    private static final String SEARCH_CONDITION_2_BY_NAME = " AND (LOWER(U.userName) LIKE :searchObject";
+    private static final String SELECT_ETC = "SELECT * FROM EmailToCreator e";
+    private static final String SELECT_COUNT_ETC = "SELECT count(*) FROM EmailToCreator e";
+    private static final String WHERE_USER = " WHERE e.senderId= :user ";
+    private static final String JOIN_USER = " JOIN User U ON e.user = U.id";
+    private static final String SEARCH_CONDITION_BY_NAME = " AND (LOWER(U.userName) LIKE :searchObject";
     private static final String GROUP_BY_ETC_ID = " GROUP BY e.id ";
-    private static final String SEARCH_CONDITION_3_BY_LO_TITLE = " OR e.learningObjectId IN (" +
+    private static final String SEARCH_CONDITION_BY_LO_TITLE = " OR e.learningObjectId IN (" +
             "SELECT LO.id FROM LearningObject LO\n " +
             " JOIN Portfolio P ON LO.id = P.id\n" +
             " WHERE LOWER(P.title) LIKE :searchObject\n" +
@@ -43,17 +43,13 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
             "JOIN LanguageString LS ON MT.title = LS.id\n" +
             "WHERE LS.lang = :transgroup)\n";
 
-    public EmailToCreator findBySenderId(User user) {
-        return findByField("senderId", user);
-    }
-
-    public List<EmailToCreator> getSenderSentEmails(User user, PageableQuery params) {
-        String sqlString = MAIN_SQL_1_SELECT +
-                (params.hasSearch() ? SEARCH_CONDITION_1_JOIN_USER : "") +
-                (params.hasEmailReceiverOrder() && !params.hasSearch()  ? SEARCH_CONDITION_1_JOIN_USER : "") +
+    public List<EmailToCreator> getSenderSentEmails(User user, PageableQuerySentEmails params) {
+        String sqlString = SELECT_ETC +
+                (params.hasSearch() ? JOIN_USER : "") +
+                (params.hasEmailReceiverOrder() && !params.hasSearch() ? JOIN_USER : "") +
                 (params.hasOrderByTitle() ? SORT_BY_TITLE : "") +
-                (params.hasOrderByTitle() ? "" : MAIN_SQL_2_WHERE) +
-                (params.hasSearch() ? SEARCH_CONDITION_2_BY_NAME + SEARCH_CONDITION_3_BY_LO_TITLE : "") +
+                (params.hasOrderByTitle() ? "" : WHERE_USER) +
+                (params.hasSearch() ? SEARCH_CONDITION_BY_NAME + SEARCH_CONDITION_BY_LO_TITLE : "") +
                 GROUP_BY_ETC_ID +
                 params.order();
 
@@ -77,11 +73,11 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
                 .getSingleResult();
     }
 
-    public Long getSenderSentEmailCount(User user, PageableQuery params) {
-        String sqlString = MAIN_COUNT_SQL_1 +
-                (params.hasSearch() ? SEARCH_CONDITION_1_JOIN_USER : "") +
-                MAIN_SQL_2_WHERE +
-                (params.hasSearch() ? SEARCH_CONDITION_2_BY_NAME + SEARCH_CONDITION_3_BY_LO_TITLE : "");
+    public Long getSenderSentEmailCount(User user, PageableQuerySentEmails params) {
+        String sqlString = SELECT_COUNT_ETC +
+                (params.hasSearch() ? JOIN_USER : "") +
+                WHERE_USER +
+                (params.hasSearch() ? SEARCH_CONDITION_BY_NAME + SEARCH_CONDITION_BY_LO_TITLE : "");
 
         Query query = getEntityManager()
                 .createNativeQuery(sqlString)
@@ -92,11 +88,11 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
         return ((BigInteger) query.getSingleResult()).longValue();
     }
 
-    private Query addSearchObject(PageableQuery params, Query query) {
+    private Query addSearchObject(PageableQuerySentEmails params, Query query) {
         return query.setParameter("searchObject", "%" + params.getQuery() + "%");
     }
 
-    private Query addLanguageGroup(PageableQuery params, Query query) {
+    private Query addLanguageGroup(PageableQuerySentEmails params, Query query) {
         return query.setParameter("transgroup", params.getLang());
     }
 }

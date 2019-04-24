@@ -7,24 +7,18 @@ import java.util.List;
 
 public class PageableQuery {
 
-    public static final String FR_CREATED_AT = "byCreatedAt";
-    public static final String FR_CREATED_AT_DESC = "-byCreatedAt";
-    public static final String LO_CREATED_BY = "byCreatedBy";
-    public static final String LO_CREATED_BY_DESC = "-byCreatedBy";
-    public static final String BY_SUBJECT_TRANS = "bySubject";
-    public static final String BY_SUBJECT_TRANS_DESC = "-bySubject";
-    public static final String BY_TYPE = "byType";
-    public static final String BY_TYPE_DESC = "-byType";
-    public static final String BY_EMAIL_REC = "byEmailReceiver";
-    public static final String BY_EMAIL_REC_DESC = "-byEmailReceiver";
-    public static final String BY_LO_TITLE = "byLoTitle";
-    public static final String BY_LO_TITLE_DESC = "-byLoTitle";
-    public static final String BY_EMAIL_SENT_AT = "byEmailSentAt";
-    public static final String BY_EMAIL_SENT_AT_DESC = "-byEmailSentAt";
-    public static final String BY_MATERIAL_TYPE_MATERIAL = "Material";
-    public static final String BY_MATERIAL_TYPE_PORTFOLIO = "Portfolio";
-    public static final String BY_MATERIAL_TYPE_ALL = "All";
-    private static List<String> SORT_TYPES = Arrays.asList(BY_EMAIL_SENT_AT_DESC, BY_EMAIL_SENT_AT, BY_LO_TITLE_DESC, BY_LO_TITLE, BY_EMAIL_REC_DESC, BY_EMAIL_REC, BY_SUBJECT_TRANS, FR_CREATED_AT,
+    private static final String FR_CREATED_AT = "byCreatedAt";
+    private static final String FR_CREATED_AT_DESC = "-byCreatedAt";
+    private static final String LO_CREATED_BY = "byCreatedBy";
+    private static final String LO_CREATED_BY_DESC = "-byCreatedBy";
+    private static final String BY_SUBJECT_TRANS = "bySubject";
+    private static final String BY_SUBJECT_TRANS_DESC = "-bySubject";
+    private static final String BY_TYPE = "byType";
+    private static final String BY_TYPE_DESC = "-byType";
+    private static final String BY_MATERIAL_TYPE_MATERIAL = "Material";
+    private static final String BY_MATERIAL_TYPE_PORTFOLIO = "Portfolio";
+    private static final String BY_MATERIAL_TYPE_ALL = "All";
+    private static List<String> SORT_TYPES = Arrays.asList(BY_SUBJECT_TRANS, FR_CREATED_AT,
             LO_CREATED_BY, BY_TYPE,
             BY_SUBJECT_TRANS_DESC, FR_CREATED_AT_DESC, LO_CREATED_BY_DESC, BY_TYPE_DESC);
     private static List<String> MATERIAL_TYPES = Arrays.asList(BY_MATERIAL_TYPE_MATERIAL, BY_MATERIAL_TYPE_PORTFOLIO, BY_MATERIAL_TYPE_ALL);
@@ -67,18 +61,6 @@ public class PageableQuery {
         }
     }
 
-    public PageableQuery(int page, String itemSortedBy, String query, int lang) {
-        if (itemSortedBy != null && SORT_TYPES.contains(itemSortedBy)) {
-            valid = true;
-            sort = itemSortedBy.startsWith("-") ? Sort.DESC : Sort.ASC;
-            this.page = page;
-            this.size = 20;
-            this.itemSortedBy = itemSortedBy;
-            this.query = query;
-            this.lang = lang;
-        }
-    }
-
     public boolean hasSearch() {
         return !StringUtils.isBlank(query) && query.trim().length() >= 3;
     }
@@ -99,10 +81,6 @@ public class PageableQuery {
         return orderByCreatorDesc() || orderByCreator();
     }
 
-    public boolean hasEmailReceiverOrder() {
-        return orderByEmailReceiverDesc() || orderByEmailReceiver();
-    }
-
     private boolean orderByCreatorDesc() {
         return itemSortedBy.equals(LO_CREATED_BY_DESC);
     }
@@ -121,34 +99,6 @@ public class PageableQuery {
 
     private boolean orderByFrCreatedAt() {
         return itemSortedBy.equals(FR_CREATED_AT);
-    }
-
-    private boolean orderByEmailReceiver() {
-        return itemSortedBy.equals(BY_EMAIL_REC);
-    }
-
-    private boolean orderByEmailReceiverDesc() {
-        return itemSortedBy.equals(BY_EMAIL_REC_DESC);
-    }
-
-    private boolean orderByLoTitle() {
-        return itemSortedBy.equals(BY_LO_TITLE);
-    }
-
-    private boolean orderByLoTitleDesc() {
-        return itemSortedBy.equals(BY_LO_TITLE_DESC);
-    }
-
-    private boolean orderByEmailSentAt() {
-        return itemSortedBy.equals(BY_EMAIL_SENT_AT);
-    }
-
-    private boolean orderByEmailSentAtDesc() {
-        return itemSortedBy.equals(BY_EMAIL_SENT_AT_DESC);
-    }
-
-    public boolean hasOrderByTitle() {
-        return orderByLoTitleDesc() || orderByLoTitle();
     }
 
     public boolean hasOrderByType() {
@@ -200,18 +150,6 @@ public class PageableQuery {
             return "ORDER BY m.id " + sort.name();
         } else if (orderByTypeDesc()) {
             return "ORDER BY m.id " + sort.name();
-        } else if (orderByEmailReceiver()) {
-            return "ORDER BY min(U.surName) " + sort.name();
-        } else if (orderByEmailReceiverDesc()) {
-            return "ORDER BY max(U.surName)" + sort.name();
-        } else if (orderByLoTitle()) {
-            return "ORDER BY e.id " + sort.name();
-        } else if (orderByLoTitleDesc()) {
-            return "ORDER BY e.id " + sort.name();
-        } else if (orderByEmailSentAt()) {
-            return "ORDER BY e.sentAt " + sort.name();
-        } else if (orderByEmailSentAtDesc()) {
-            return "ORDER BY e.sentAt " + sort.name();
         } else {
             throw new UnsupportedOperationException("unknown sort");
         }
