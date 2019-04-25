@@ -54,7 +54,7 @@
             this.filteredCollection = null;
 
             this.viewPath = this.$location.path().replace(/^\/dashboard\//, '');
-            const [titleTranslationKey,  url, sort, backendPagination, ...rest] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
+            const [titleTranslationKey,  url, sort, backendPagination] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
 
             this.$scope.titleTranslationKey = titleTranslationKey;
             this.sortedBy = sort;
@@ -77,10 +77,6 @@
 
             this.$scope.filter = {};
             this.$scope.filter.materialType = 'All';
-            this.$scope.filter.materialTypeTempForSort = 'All';
-            this.$scope.filter.materialModeratorTempForSort = '';
-            this.$scope.filter.materialEduTempForSort = '';
-            this.$scope.filter.materialDomainTempForSort = '';
 
             this.$scope.query = {
                 filter: '',
@@ -102,14 +98,9 @@
         }
 
         getModeratorsAndAllUsers() {
-
-            let promiseGetModerators = Promise.resolve(this.getModerators());
+            this.getModerators();
             if (this.authenticatedUserService.isAdmin()) {
-                let promiseGetAllUsers = Promise.resolve(this.getAllUsers());
-                Promise.all([promiseGetAllUsers, promiseGetModerators])
-                    .catch(error => {
-                        console.log(error.message);
-                    })
+                this.getAllUsers();
             }
         }
 
@@ -123,15 +114,13 @@
 
         selectType(type) {
             this.$scope.filter.materialType = type
-            if (type !== 'All' && this.$scope.filter.materialTypeTempForSort === 'All') {
-                this.sortedBy = '-byCreatedAt';
-                this.$scope.sortByType = true
+            if (type !== 'All' && this.$scope.sortByType) {
+                this.sortedBy = DASHBOARD_VIEW_STATE_MAP[this.viewPath][2];
             }
         }
 
         onFilterChange(filter) {
             const params = Object.assign({}, filter)
-
             if (params.taxons && !this.$scope.isPaginating) {
                 this.$scope.filter.taxons = params.taxons;
             }
@@ -141,10 +130,10 @@
             this.$scope.query.filter = ''
             this.$scope.isFiltering = true
             this.$scope.query.page = 1
-            this.$scope.filter.materialTypeTempForSort = this.$scope.filter.materialType;
-            this.$scope.filter.materialModeratorTempForSort = this.$scope.filter.user;
-            this.$scope.filter.materialEduTempForSort = this.$scope.filter.educationalContext
-            this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
+            // this.$scope.filter.materialTypeTempForSort = this.$scope.filter.materialType;
+            // this.$scope.filter.materialModeratorTempForSort = this.$scope.filter.user;
+            // this.$scope.filter.materialEduTempForSort = this.$scope.filter.educationalContext
+            // this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
 
             this.getData(this.restUri, this.sortedBy);
             this.$scope.sortByType = this.$scope.filter.materialType === 'All';
@@ -183,19 +172,8 @@
             }
         }
 
-        getPostParams() {
-            const params = Object.assign({}, this.$scope.params)
-
-            if (params.taxons) {
-                params.taxons = params.taxons.map(({id, level}) => ({id, level}))
-            }
-
-            this.$scope.paramsForDownload = params;
-            return params
-        }
-
         onSelectTaxons(taxons) {
-            taxons.length === 0 ? this.$scope.filter.taxons = undefined : this.$scope.filter.taxons = taxons;
+            taxons.length ? this.$scope.filter.taxons = taxons : this.$scope.filter.taxons = undefined;
             this.$scope.clearFields = false
         }
 
@@ -312,6 +290,7 @@
         }
 
         isModerator() {
+            // this.$scope.filter.user = this.authenticatedUserService.getUser();
             return this.authenticatedUserService.isModerator();
         }
 
@@ -359,10 +338,13 @@
             this.sortedBy = order;
             this.$scope.query.order = order;
             this.$scope.query.page = 1;
-            this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
-            this.$scope.filter.user = this.$scope.filter.materialModeratorTempForSort;
-            this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
-            this.$scope.filter.taxons = this.$scope.filter.materialDomainTempForSort
+            // this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
+            // this.$scope.filter.user = this.$scope.filter.materialModeratorTempForSort;
+            // this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
+            // this.$scope.filter.taxons = this.$scope.filter.materialDomainTempForSort
+            if(order === 'byType' && this.$scope.filter.materialType !== 'All'){
+                this.sortedBy = DASHBOARD_VIEW_STATE_MAP[this.viewPath][2];
+            }
 
             if (this.isBackendPagination) {
                 return this.getData(this.restUri, this.sortedBy)
@@ -464,7 +446,7 @@
                     if (data) {
                         const query = this.$scope.query.filter.toLowerCase()
 
-                        if (this.moderatorsOrRestrictedUsers)
+                        if (this.)
                             return (
                                 isFilterMatch(data.name + ' ' + data.surname, query) ||
                                 isFilterMatch(data.name, query) ||

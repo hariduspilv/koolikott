@@ -45,6 +45,7 @@ public class PageableQuery {
 
         if (materialType != null && MATERIAL_TYPES.contains(materialType)) {
             this.materialType = materialType.equalsIgnoreCase("All") ? "" : materialType;
+
         } else {
             valid = false;
         }
