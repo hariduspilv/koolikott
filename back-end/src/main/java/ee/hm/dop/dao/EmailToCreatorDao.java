@@ -12,7 +12,7 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
 
     private static final String SELECT_ETC = "SELECT * FROM EmailToCreator e";
     private static final String SELECT_COUNT_ETC = "SELECT count(*) FROM EmailToCreator e";
-    private static final String WHERE_USER = " WHERE e.senderId= :user ";
+    private static final String WHERE_E_SENDER_ID_USER = " WHERE e.senderId= :user ";
     private static final String JOIN_USER = " JOIN User U ON e.user = U.id";
     private static final String SEARCH_CONDITION_BY_NAME = " AND (LOWER(U.userName) LIKE :searchObject";
     private static final String GROUP_BY_ETC_ID = " GROUP BY e.id ";
@@ -47,7 +47,7 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
         String sqlString = SELECT_ETC +
                 (params.hasEmailReceiverOrder() || params.hasSearch() ? JOIN_USER : "") +
                 (params.hasOrderByTitle() ? SORT_BY_TITLE : "") +
-                (params.hasOrderByTitle() ? "" : WHERE_USER) +
+                (params.hasOrderByTitle() ? "" : WHERE_E_SENDER_ID_USER) +
                 (params.hasSearch() ? SEARCH_CONDITION_BY_NAME + SEARCH_CONDITION_BY_LO_TITLE : "") +
                 GROUP_BY_ETC_ID +
                 params.order();
@@ -75,7 +75,7 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
     public Long getSenderSentEmailCount(User user, PageableQuerySentEmails params) {
         String sqlString = SELECT_COUNT_ETC +
                 (params.hasSearch() ? JOIN_USER : "") +
-                WHERE_USER +
+                WHERE_E_SENDER_ID_USER +
                 (params.hasSearch() ? SEARCH_CONDITION_BY_NAME + SEARCH_CONDITION_BY_LO_TITLE : "");
 
         Query query = getEntityManager()

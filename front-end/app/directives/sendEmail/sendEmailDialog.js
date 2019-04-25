@@ -30,15 +30,12 @@
                     this.$scope.placeholder = (value.replace('${counter}', 500 - this.$scope.emailToCreator.emailContent.length))
                 })
             }
-
         }
 
-        getLearningObjectTitle(){
-            if (this.locals.learningObject.type === '.Material')
-                this.$scope.emailToCreator.title= this.locals.learningObject.titles[0].text;
-            else
-                this.$scope.emailToCreator.title = this.locals.learningObject.title
-
+        getLearningObjectTitle() {
+            this.locals.learningObject.type === '.Material'
+                ? this.$scope.emailToCreator.title = this.locals.learningObject.titles[0].text
+                : this.$scope.emailToCreator.title = this.locals.learningObject.title;
         }
 
         sendEmail() {

@@ -220,7 +220,6 @@ public class UserEmailService {
         page.setContent(emails);
         page.setTotalElements(sentEmailsCount);
         page.setTotalPages((int) (sentEmailsCount / pageableQuery.getSize()));
-
         return page;
     }
 

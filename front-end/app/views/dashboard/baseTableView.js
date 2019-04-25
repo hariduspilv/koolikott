@@ -89,6 +89,8 @@
                 page: 1
             };
 
+            this.notModerator = (this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType;
+
             this.$scope.onPaginate = this.onPaginate.bind(this);
             this.$scope.onSort = this.onSort.bind(this);
 
@@ -203,15 +205,7 @@
         }
 
         isDisabled() {
-            return this.isModerator() ? this.getB() : this.getB1();
-        }
-
-        getB1() {
-            return !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.user || this.$scope.filter.materialType);
-        }
-
-        getB() {
-            return !((this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType);
+            return this.isModerator() ? !(this.notModerator || this.$scope.filter.user) : !(this.notModerator);
         }
 
         getTranslation(key) {
@@ -350,9 +344,7 @@
         }
 
         openLearningObject(learningObject) {
-            this.$window.open(
-                this.getLearningObjectUrl(learningObject), '_blank'
-            )
+            this.$window.open(this.getLearningObjectUrl(learningObject), '_blank')
         }
 
         showMaxMessageText(message) {
