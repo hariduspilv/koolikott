@@ -4,15 +4,13 @@ import com.google.inject.Inject;
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.dao.firstreview.FirstReviewDao;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import ee.hm.dop.model.administration.Sort;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 @Ignore//TODO
 public class FirstReviewDaoTest extends DatabaseTestBase{
 
@@ -23,7 +21,7 @@ public class FirstReviewDaoTest extends DatabaseTestBase{
 
     @Test
     public void query_does_not_fail() {
-        PageableQuery pageableQuery = new PageableQuery();
+        PageableQueryUnreviewed pageableQuery = new PageableQueryUnreviewed();
         User moderator = userDao.findById(USER_MODERATOR.id);
         pageableQuery.setUsers(Arrays.asList(moderator.getId()));
         pageableQuery.setMaterialType("Material");

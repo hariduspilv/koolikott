@@ -130,11 +130,6 @@
             this.$scope.query.filter = ''
             this.$scope.isFiltering = true
             this.$scope.query.page = 1
-            // this.$scope.filter.materialTypeTempForSort = this.$scope.filter.materialType;
-            // this.$scope.filter.materialModeratorTempForSort = this.$scope.filter.user;
-            // this.$scope.filter.materialEduTempForSort = this.$scope.filter.educationalContext
-            // this.$scope.filter.materialDomainTempForSort = this.$scope.filter.taxons
-
             this.getData(this.restUri, this.sortedBy);
             this.$scope.sortByType = this.$scope.filter.materialType === 'All';
         }
@@ -163,13 +158,6 @@
 
             if (this.$scope.filter.form.$dirty)
                 this.$scope.filter.form.$setPristine()
-
-            if (this.viewPath === 'sentEmails') {
-                this.$scope.filter = {};
-                this.$scope.clearFields = true;
-                this.$scope.query.filter = '';
-                this.$route.reload()
-            }
         }
 
         onSelectTaxons(taxons) {
@@ -228,8 +216,7 @@
             } else if (this.restUri === 'sentEmails') {
                 query = this.getSentEmails(restUri, sortBy);
             } else {
-                query = this.serverCallService
-                    .makeGet('rest/admin/' + restUri)
+                query = this.serverCallService.makeGet('rest/admin/' + restUri)
             }
 
             query
@@ -274,8 +261,7 @@
                 '&lang=' + this.getLanguage() +
                 '&materialtype=' + this.$scope.filter.materialType;
 
-            return this.serverCallService
-                .makeGet(url);
+            return this.serverCallService.makeGet(url);
         }
 
         getSentEmails(restUri, sortBy) {
@@ -285,12 +271,10 @@
                 '&query=' + this.$scope.query.filter.toLowerCase() +
                 '&lang=' + this.getLanguage();
 
-            return this.serverCallService
-                .makeGet(url);
+            return this.serverCallService.makeGet(url);
         }
 
         isModerator() {
-            // this.$scope.filter.user = this.authenticatedUserService.getUser();
             return this.authenticatedUserService.isModerator();
         }
 
@@ -338,10 +322,6 @@
             this.sortedBy = order;
             this.$scope.query.order = order;
             this.$scope.query.page = 1;
-            // this.$scope.filter.materialType = this.$scope.filter.materialTypeTempForSort;
-            // this.$scope.filter.user = this.$scope.filter.materialModeratorTempForSort;
-            // this.$scope.filter.educationalContext = this.$scope.filter.materialEduTempForSort
-            // this.$scope.filter.taxons = this.$scope.filter.materialDomainTempForSort
             if(order === 'byType' && this.$scope.filter.materialType !== 'All'){
                 this.sortedBy = DASHBOARD_VIEW_STATE_MAP[this.viewPath][2];
             }
@@ -446,7 +426,7 @@
                     if (data) {
                         const query = this.$scope.query.filter.toLowerCase()
 
-                        if (this.)
+                        if (this.moderatorsOrRestrictedUsers())
                             return (
                                 isFilterMatch(data.name + ' ' + data.surname, query) ||
                                 isFilterMatch(data.name, query) ||

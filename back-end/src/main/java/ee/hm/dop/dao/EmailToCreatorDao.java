@@ -46,8 +46,7 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
     public List<EmailToCreator> getSenderSentEmails(User user, PageableQuerySentEmails params) {
         String sqlString = SELECT_ETC +
                 (params.hasEmailReceiverOrder() || params.hasSearch() ? JOIN_USER : "") +
-                (params.hasOrderByTitle() ? SORT_BY_TITLE : "") +
-                (params.hasOrderByTitle() ? "" : WHERE_E_SENDER_ID_USER) +
+                (params.hasOrderByTitle() ? SORT_BY_TITLE : WHERE_E_SENDER_ID_USER) +
                 (params.hasSearch() ? SEARCH_CONDITION_BY_NAME + SEARCH_CONDITION_BY_LO_TITLE : "") +
                 GROUP_BY_ETC_ID +
                 params.order();

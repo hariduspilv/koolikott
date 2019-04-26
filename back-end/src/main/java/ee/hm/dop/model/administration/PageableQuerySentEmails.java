@@ -1,11 +1,9 @@
 package ee.hm.dop.model.administration;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.util.Arrays;
 import java.util.List;
 
-public class PageableQuerySentEmails {
+public class PageableQuerySentEmails extends PageableQuery {
 
     private static final String BY_EMAIL_REC = "byEmailReceiver";
     private static final String BY_EMAIL_REC_DESC = "-byEmailReceiver";
@@ -14,15 +12,9 @@ public class PageableQuerySentEmails {
     private static final String BY_EMAIL_SENT_AT = "byEmailSentAt";
     private static final String BY_EMAIL_SENT_AT_DESC = "-byEmailSentAt";
     private static List<String> SORT_TYPES = Arrays.asList(BY_EMAIL_SENT_AT_DESC, BY_EMAIL_SENT_AT, BY_LO_TITLE_DESC, BY_LO_TITLE, BY_EMAIL_REC_DESC, BY_EMAIL_REC);
-    private Sort sort;
-    private int page;
-    private int size;
-    private String itemSortedBy;
-    private boolean valid;
-    private String query;
-    private int lang;
 
     public PageableQuerySentEmails() {
+        super();
     }
 
     public PageableQuerySentEmails(int page, String itemSortedBy, String query, int lang) {
@@ -35,10 +27,6 @@ public class PageableQuerySentEmails {
             this.query = query;
             this.lang = lang;
         }
-    }
-
-    public boolean hasSearch() {
-        return !StringUtils.isBlank(query) && query.trim().length() >= 3;
     }
 
     public boolean hasEmailReceiverOrder() {
@@ -91,65 +79,4 @@ public class PageableQuerySentEmails {
             throw new UnsupportedOperationException("unknown sort");
         }
     }
-
-    public Sort getSort() {
-        return sort;
-    }
-
-    public int getPage() {
-        return page;
-    }
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    public String getItemSortedBy() {
-        return itemSortedBy;
-    }
-
-    public void setItemSortedBy(String itemSortedBy) {
-        this.itemSortedBy = itemSortedBy;
-    }
-
-    public void setSort(Sort sort) {
-        this.sort = sort;
-    }
-
-    public boolean isValid() {
-        return valid;
-    }
-
-    public void setValid(boolean valid) {
-        this.valid = valid;
-    }
-
-    public int getOffset() {
-        return (page - 1) * size;
-    }
-
-    public int getSize() {
-        return size;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
-    }
-
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
-    }
-
-    public int getLang() {
-        return lang;
-    }
-
-    public void setLang(int lang) {
-        this.lang = lang;
-    }
-
 }

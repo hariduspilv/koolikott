@@ -686,7 +686,7 @@ class Controller {
     getLearningObjectUrl(learningObject) {
         if (learningObject)
             return this.isPortfolio(learningObject)
-                ? `/portfolio?name=${learningObject.titleForUrl}+&id=${learningObject.id}`
+                ? `/portfolio?name=${learningObject.titleForUrl}&id=${learningObject.id}`
                 : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id;
     }
 

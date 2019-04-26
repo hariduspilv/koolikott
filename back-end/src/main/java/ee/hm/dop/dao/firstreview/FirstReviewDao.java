@@ -7,6 +7,7 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 
 import javax.inject.Inject;
 import javax.persistence.Query;
@@ -20,9 +21,8 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
 
     private static final String JOIN_USER = " LEFT JOIN User u ON lo.creator = u.id\n";
     private static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
-    private static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " INNER JOIN Portfolio m ON lo.id = m.id\n";
-    private static final String JOIN_MATERIAL_TYPE_MATERIAL = " INNER JOIN Material m ON lo.id = m.id\n";
-
+    private static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " JOIN Portfolio m ON lo.id = m.id\n";
+    private static final String JOIN_MATERIAL_TYPE_MATERIAL = " JOIN Material m ON lo.id = m.id\n";
     private static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
             "FROM LearningObject LO\n" +
             "       JOIN Portfolio P ON LO.id = P.id\n" +
@@ -71,7 +71,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     @Inject
     private TaxonDao taxonDao;
 
-    public List<AdminLearningObject> findAllUnreviewed(PageableQuery params) {
+    public List<AdminLearningObject> findAllUnreviewed(PageableQueryUnreviewed params) {
         String sqlString2 = "\n" +
                 SELECT_LO_ID_B +
                 (params.hasFilterByTypeMaterial() ? JOIN_MATERIAL_TYPE_MATERIAL : "") +
@@ -103,7 +103,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         return learningObjects;
     }
 
-    public Long findCoundOfAllUnreviewed(PageableQuery params) {
+    public Long findCoundOfAllUnreviewed(PageableQueryUnreviewed params) {
         String sqlString2 = " select count(a.id) from (\n" +
                 SELECT_LO_ID_B +
                 (params.hasFilterByTypeMaterial() ? JOIN_MATERIAL_TYPE_MATERIAL : "") +

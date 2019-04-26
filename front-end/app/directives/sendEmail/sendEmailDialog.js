@@ -11,7 +11,7 @@
             this.$scope.emailToCreator = {}
             this.setPlaceholder()
             this.getLearningObjectTitle()
-                this.$scope.cancel = () => {
+            this.$scope.cancel = () => {
                 this.$mdDialog.hide();
             };
 
@@ -33,9 +33,7 @@
         }
 
         getLearningObjectTitle() {
-            this.locals.learningObject.type === '.Material'
-                ? this.$scope.emailToCreator.title = this.locals.learningObject.titles[0].text
-                : this.$scope.emailToCreator.title = this.locals.learningObject.title;
+            return this.$scope.emailToCreator.title = this.getCorrectLanguageTitle(this.locals.learningObject);
         }
 
         sendEmail() {

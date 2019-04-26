@@ -3,7 +3,7 @@ package ee.hm.dop.rest.administration;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.administration.DopPage;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -37,7 +37,7 @@ public class FirstReviewAdminResource extends BaseResource {
                                  @QueryParam("lang") int lang,
                                  @QueryParam("materialtype") String materialType)
     {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, user, lang, materialType);
+        PageableQueryUnreviewed pageableQuery = new PageableQueryUnreviewed(page, itemSortedBy, query, taxons, user, lang, materialType);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }

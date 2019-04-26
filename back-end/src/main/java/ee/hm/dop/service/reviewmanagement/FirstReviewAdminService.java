@@ -7,7 +7,7 @@ import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.DopPage;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.FirstReviewTaxon;
 import ee.hm.dop.model.taxon.Taxon;
@@ -30,7 +30,7 @@ public class FirstReviewAdminService {
     @Inject
     private TaxonPositionDao taxonPositionDao;
 
-    public DopPage getUnReviewed(User user, PageableQuery pageableQuery) {
+    public DopPage getUnReviewed(User user, PageableQueryUnreviewed pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isModerator(user)) {
             pageableQuery.setUsers(Arrays.asList(user.getId()));
