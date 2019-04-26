@@ -9,15 +9,12 @@ import ee.hm.dop.service.login.UserEmailService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.HttpURLConnection;
+
+import static java.net.HttpURLConnection.*;
+import static javax.ws.rs.core.Response.status;
 
 @Path("/userEmail")
 public class UserEmailResource extends BaseResource {
@@ -37,7 +34,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getEmailOnLogin(UserEmail userEmail) {
-        return userEmailService.hasEmail(userEmail) ? Response.status(HttpURLConnection.HTTP_OK).build() : Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+       return status(userEmailService.hasEmail(userEmail) ? HTTP_OK : HTTP_NOT_FOUND).build();
     }
 
     @POST
@@ -45,7 +42,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateEmail(UserEmail userEmail) {
-        return userEmailService.hasDuplicateEmail(userEmail) ? Response.status(HttpURLConnection.HTTP_CONFLICT).build() : Response.status(HttpURLConnection.HTTP_OK).build();
+        return status(userEmailService.hasDuplicateEmail(userEmail) ? HTTP_CONFLICT : HTTP_OK).build();
     }
 
     @GET
@@ -60,7 +57,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateEmailForProfile(UserEmail userEmail) {
-        return userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()) ? Response.status(HttpURLConnection.HTTP_CONFLICT).build() : Response.status(HttpURLConnection.HTTP_OK).build();
+        return status(userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()) ? HTTP_CONFLICT : HTTP_OK).build();
     }
 
     @POST

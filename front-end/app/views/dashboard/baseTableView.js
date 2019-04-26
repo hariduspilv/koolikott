@@ -5,44 +5,51 @@
         unReviewed: [
             'UNREVIEWED', // title translation key
             'firstReview/unReviewed', // rest URI (after 'rest/admin/')
-            '-byCreatedAt' , // default sort by (use leading minus for DESC)
-            true // backendPagination?
+            '-byCreatedAt', // default sort by (use leading minus for DESC)
+            true, // backendPagination?
+            false // userpage
         ],
         sentEmails: [
             'EMAIL_SENT_EMAILS',
             'sentEmails',
             '-byEmailSentAt',
-            true
+            true,
+            false
         ],
         improper: [
             'IMPROPER',
             'improper',
             '-byReportCount',
+            false,
             false
         ],
         changes: [
             'CHANGED_LEARNING_OBJECTS',
             'changed',
             'byLastChangedAt',
+            false,
             false
         ],
         deleted: [
             'DELETED_LEARNING_OBJECTS',
             'deleted',
             'byUpdatedAt',
+            false,
             false
         ],
         moderators: [
             'MODERATORS_TAB',
             'moderator',
             'byUsername',
-            false
+            false,
+            true
         ],
         restrictedUsers: [
             'RESTRICTED_USERS_TAB',
             'restrictedUser',
             'byUsername',
-            false
+            false,
+            true
         ]
     };
 
@@ -54,12 +61,13 @@
             this.filteredCollection = null;
 
             this.viewPath = this.$location.path().replace(/^\/dashboard\//, '');
-            const [titleTranslationKey,  url, sort, backendPagination] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
+            const [titleTranslationKey, url, sort, backendPagination, userPage] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
 
             this.$scope.titleTranslationKey = titleTranslationKey;
             this.sortedBy = sort;
             this.restUri = url;
             this.isBackendPagination = backendPagination;
+            this.userPage = userPage;
 
             this.$scope.isTaxonSelectVisible = true;
             this.$scope.isExpertsSelectVisible = true;
@@ -85,31 +93,23 @@
                 page: 1
             };
 
-            this.notModerator = (this.$scope.filter && this.$scope.filter.taxons) || this.$scope.filter.materialType;
-
             this.$scope.onPaginate = this.onPaginate.bind(this);
             this.$scope.onSort = this.onSort.bind(this);
 
             this.getModeratorsAndAllUsers();
 
             url
-                ? this.getData(url,sort)
+                ? this.getData(url, sort)
                 : console.error(new Error(`Could not find ${url} in DASHBOARD_VIEW_STATE_MAP. See baseTableView.js`));
         }
 
         getModeratorsAndAllUsers() {
-            this.getModerators();
-            if (this.authenticatedUserService.isAdmin()) {
+            if (this.viewPath === 'unReviewed') {
+                this.getModerators();
+            }
+            if (this.userPage) {
                 this.getAllUsers();
             }
-        }
-
-        moderatorsOrRestrictedUsers(){
-            return this.viewPath === 'moderators' || this.viewPath  === 'restrictedUsers';
-        }
-
-        sentEmailsOrUnreviewed(){
-            return this.viewPath  === 'unReviewed' || this.viewPath  === 'sentEmails'
         }
 
         selectType(type) {
@@ -161,17 +161,13 @@
         }
 
         onSelectTaxons(taxons) {
-            taxons.length ? this.$scope.filter.taxons = taxons : this.$scope.filter.taxons = undefined;
+            this.$scope.filter.taxons = taxons.length ? taxons : undefined;
             this.$scope.clearFields = false
         }
 
         onEducationalContextChange(educationalContext) {
             this.$scope.filter.taxons = undefined
             this.onParamsChange({});
-        }
-
-        isDisabled() {
-            return this.isModerator() ? !(this.notModerator || this.$scope.filter.user) : !(this.notModerator);
         }
 
         getTranslation(key) {
@@ -240,7 +236,7 @@
                             })
                         this.collection = data;
 
-                        if (this.sentEmailsOrUnreviewed()) {
+                        if (this.isBackendPagination) {
                             this.$scope.data = data.content;
                             this.$scope.itemsCount = data.totalElements;
                         } else {
@@ -314,15 +310,11 @@
             return message.length > 130 ? message.substring(0, 126) + '...' : message;
         }
 
-        formatTitleForUrl(learningObject) {
-            return this.replaceSpacesAndCharacters(this.getUserDefinedLanguageString(learningObject.titles, this.currentLanguage, language));
-        }
-
         onSort(order) {
             this.sortedBy = order;
             this.$scope.query.order = order;
             this.$scope.query.page = 1;
-            if(order === 'byType' && this.$scope.filter.materialType !== 'All'){
+            if (order === 'byType' && this.$scope.filter.materialType !== 'All') {
                 this.sortedBy = DASHBOARD_VIEW_STATE_MAP[this.viewPath][2];
             }
 
@@ -356,7 +348,7 @@
         }
 
         onPaginate(page, limit) {
-            if (this.sentEmailsOrUnreviewed)
+            if (this.isBackendPagination)
                 this.paginate(page, limit);
             else
                 this.$scope.data = this.paginate(page, limit)
@@ -377,19 +369,6 @@
             }, '')
         }
 
-        getCreators(item) {
-            const ids = []
-            return this
-                .getDuplicates(item)
-                .filter(c => {
-                    const {id} = c.createdBy || c.creator || {id: 'UNKNOWN'}
-                    return ids.includes(id)
-                        ? false
-                        : ids.push(id)
-                })
-                .map(c => c.createdBy || c.creator)
-        }
-
         getChangers({reviewableChanges}) {
             return this.getCreatedBy(reviewableChanges);
         }
@@ -408,14 +387,7 @@
             }, [])
         }
 
-        getDuplicates(item) {
-            return item.learningObject
-                ? this.unmergedData.filter(r => r.learningObject.id == item.learningObject.id)
-                : this.unmergedData.filter(r => r.id == item.id)
-        }
-
         filterItems() {
-
             this.$scope.isFiltering = true;
             if (this.isBackendPagination) {
                 return this.getData(this.restUri, this.sortedBy)
@@ -426,7 +398,7 @@
                     if (data) {
                         const query = this.$scope.query.filter.toLowerCase()
 
-                        if (this.moderatorsOrRestrictedUsers())
+                        if (this.userPage)
                             return (
                                 isFilterMatch(data.name + ' ' + data.surname, query) ||
                                 isFilterMatch(data.name, query) ||

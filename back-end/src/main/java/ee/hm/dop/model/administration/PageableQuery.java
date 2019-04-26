@@ -6,16 +6,16 @@ import java.util.List;
 
 public class PageableQuery {
 
-    Sort sort;
-    int page;
-    int size;
-    String itemSortedBy;
-    boolean valid;
-    String query;
-    List<Long> taxons;
-    List<Long> users;
-    int lang;
-    String materialType;
+    protected Sort sort;
+    protected int page;
+    protected int size;
+    protected String itemSortedBy;
+    protected boolean valid;
+    protected String query;
+    protected List<Long> taxons;
+    protected List<Long> users;
+    protected int lang;
+    protected String materialType;
 
     PageableQuery() {
     }

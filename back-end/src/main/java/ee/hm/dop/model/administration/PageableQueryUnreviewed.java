@@ -22,7 +22,6 @@ public class PageableQueryUnreviewed extends PageableQuery {
     private static List<String> MATERIAL_TYPES = Arrays.asList(BY_MATERIAL_TYPE_MATERIAL, BY_MATERIAL_TYPE_PORTFOLIO, BY_MATERIAL_TYPE_ALL);
 
     public PageableQueryUnreviewed() {
-        super();
     }
 
     public PageableQueryUnreviewed(int page, String itemSortedBy, String query,

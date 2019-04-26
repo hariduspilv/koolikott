@@ -10,7 +10,7 @@
             this.getCaptchaKey()
             this.$scope.emailToCreator = {}
             this.setPlaceholder()
-            this.getLearningObjectTitle()
+            this.$scope.emailToCreator.title = this.getCorrectLanguageTitle(this.locals.learningObject)
             this.$scope.cancel = () => {
                 this.$mdDialog.hide();
             };
@@ -30,10 +30,6 @@
                     this.$scope.placeholder = (value.replace('${counter}', 500 - this.$scope.emailToCreator.emailContent.length))
                 })
             }
-        }
-
-        getLearningObjectTitle() {
-            return this.$scope.emailToCreator.title = this.getCorrectLanguageTitle(this.locals.learningObject);
         }
 
         sendEmail() {

@@ -14,7 +14,6 @@ public class PageableQuerySentEmails extends PageableQuery {
     private static List<String> SORT_TYPES = Arrays.asList(BY_EMAIL_SENT_AT_DESC, BY_EMAIL_SENT_AT, BY_LO_TITLE_DESC, BY_LO_TITLE, BY_EMAIL_REC_DESC, BY_EMAIL_REC);
 
     public PageableQuerySentEmails() {
-        super();
     }
 
     public PageableQuerySentEmails(int page, String itemSortedBy, String query, int lang) {
