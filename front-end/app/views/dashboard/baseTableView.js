@@ -236,7 +236,11 @@
                             })
                         this.collection = data;
 
-                        if (this.isBackendPagination) {
+                        if (this.restUri === 'firstReview/unReviewed') {
+                            this.$scope.data = data.items;
+                            this.$scope.itemsCount = data.totalResults;
+
+                        } else if (this.restUri === 'sentEmails') {
                             this.$scope.data = data.content;
                             this.$scope.itemsCount = data.totalElements;
                         } else {

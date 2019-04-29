@@ -5,8 +5,8 @@ import ee.hm.dop.dao.firstreview.FirstReviewDao;
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.FirstReviewTaxon;
@@ -30,21 +30,17 @@ public class FirstReviewAdminService {
     @Inject
     private TaxonPositionDao taxonPositionDao;
 
-    public DopPage getUnReviewed(User user, PageableQueryUnreviewed pageableQuery) {
+    public SearchResult getUnReviewed(User user, PageableQueryUnreviewed pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isModerator(user)) {
             pageableQuery.setUsers(Arrays.asList(user.getId()));
         }
         List<AdminLearningObject> unreviewed = firstReviewDao.findAllUnreviewed(pageableQuery);
         Long unreviewedCount = firstReviewDao.findCoundOfAllUnreviewed(pageableQuery);
-        DopPage dp = getSearchResult(unreviewed, unreviewedCount);
-        dp.setPage(pageableQuery.getPage());
-        dp.setSize(pageableQuery.getSize());
-        dp.setTotalPages((int) (unreviewedCount / pageableQuery.getSize()));
-        return dp;
+        return getSearchResult(unreviewed, unreviewedCount);
     }
 
-    private DopPage getSearchResult(List<AdminLearningObject> allUnreviewed, Long unreviewedCount) {
+    private SearchResult getSearchResult(List<AdminLearningObject> allUnreviewed, Long unreviewedCount) {
         for (AdminLearningObject learningObject : allUnreviewed) {
             List<FirstReviewTaxon> firstReviewTaxons = learningObject.getTaxons().stream()
                     .map(this::convert)
@@ -52,10 +48,10 @@ public class FirstReviewAdminService {
                     .collect(Collectors.toList());
             learningObject.setFirstReviewTaxons(firstReviewTaxons);
         }
-        DopPage dopPage = new DopPage();
-        dopPage.setContent(allUnreviewed);
-        dopPage.setTotalElements(unreviewedCount);
-        return dopPage;
+        SearchResult searchResult = new SearchResult();
+        searchResult.setItems(allUnreviewed);
+        searchResult.setTotalResults(unreviewedCount);
+        return searchResult;
     }
 
     private FirstReviewTaxon convert(Taxon taxon) {

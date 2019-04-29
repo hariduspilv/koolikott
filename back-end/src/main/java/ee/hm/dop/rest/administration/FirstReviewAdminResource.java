@@ -2,6 +2,7 @@ package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -29,13 +30,13 @@ public class FirstReviewAdminResource extends BaseResource {
     @Path("unReviewed")
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
-    public DopPage getUnReviewed(@QueryParam("page") int page,
-                                 @QueryParam("itemSortedBy") String itemSortedBy,
-                                 @QueryParam("query") String query,
-                                 @QueryParam("taxon") List<Long> taxons,
-                                 @QueryParam("user") List<Long> user,
-                                 @QueryParam("lang") int lang,
-                                 @QueryParam("materialtype") String materialType)
+    public SearchResult getUnReviewed(@QueryParam("page") int page,
+                                      @QueryParam("itemSortedBy") String itemSortedBy,
+                                      @QueryParam("query") String query,
+                                      @QueryParam("taxon") List<Long> taxons,
+                                      @QueryParam("user") List<Long> user,
+                                      @QueryParam("lang") int lang,
+                                      @QueryParam("materialtype") String materialType)
     {
         PageableQueryUnreviewed pageableQuery = new PageableQueryUnreviewed(page, itemSortedBy, query, taxons, user, lang, materialType);
         if (!pageableQuery.isValid()) {

@@ -1,6 +1,5 @@
 package ee.hm.dop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -8,11 +7,16 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
-public class EmailToCreator implements AbstractEntity,Searchable {
+public class EmailToCreator implements AbstractEntity {
 
     @Id
     @GeneratedValue
@@ -72,6 +76,7 @@ public class EmailToCreator implements AbstractEntity,Searchable {
     public EmailToCreator() {
     }
 
+    @Override()
     public Long getId() {
         return id;
     }

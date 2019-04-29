@@ -38,16 +38,15 @@
             if (this.locals.learningObject.type === '.Material')
                 this.locals.learningObject.title = this.locals.learningObject.titles[0].text;
 
-                this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
+            this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
                 {
                     message: this.$scope.emailToCreator.emailContent,
-                    creatorId:this.locals.learningObject.creator.id,
-                    learningObjectId:this.locals.learningObject.id,
-                    learningObjectTitle:this.locals.learningObject.title
+                    creatorId: this.locals.learningObject.creator.id,
+                    learningObject: this.locals.learningObject,
+                    learningObjectTitle: this.locals.learningObject.title
                 })
                 .then(response => {
                         this.$scope.isSaving = false
-
                         if (response.status === 200) {
                             this.$scope.emailSent = true
                         } else {

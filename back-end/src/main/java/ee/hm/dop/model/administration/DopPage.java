@@ -1,11 +1,9 @@
 package ee.hm.dop.model.administration;
 
-import ee.hm.dop.model.Searchable;
-
 import java.util.List;
 
-public class DopPage<T extends Searchable> {
-    private List<T> content;
+public class DopPage {
+    private List content;
     private Integer page;
     private Integer size;
     private Integer totalPages;
@@ -14,19 +12,11 @@ public class DopPage<T extends Searchable> {
     public DopPage() {
     }
 
-    public DopPage(List<T> content, Integer page, Integer size, Integer totalPages, long totalElements) {
-        this.content = content;
-        this.page = page;
-        this.size = size;
-        this.totalPages = totalPages;
-        this.totalElements = totalElements;
-    }
-
-    public List<T> getContent() {
+    public List getContent() {
         return content;
     }
 
-    public void setContent(List<T> content) {
+    public void setContent(List content) {
         this.content = content;
     }
 

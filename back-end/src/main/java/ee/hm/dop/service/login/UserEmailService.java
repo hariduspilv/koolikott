@@ -210,11 +210,11 @@ public class UserEmailService {
         return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());
     }
 
-    public DopPage<EmailToCreator> getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
+    public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
         List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
         Long sentEmailsCount = emailToCreatorDao.getSenderSentEmailCount(loggedInUser, pageableQuery);
 
-        DopPage<EmailToCreator> page = new DopPage<>();
+        DopPage page = new DopPage();
         page.setPage(pageableQuery.getPage());
         page.setSize(pageableQuery.getSize());
         page.setContent(emails);
