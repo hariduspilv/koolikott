@@ -170,7 +170,6 @@ class controller extends Controller {
             this.updateCount('userFavorites')
             this.updateCount('userMaterials')
             this.updateCount('userPortfolios')
-            this.updateCount('sentEmails')
             this.updateAdminCounts()
         }
     }
