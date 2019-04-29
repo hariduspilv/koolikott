@@ -46,7 +46,6 @@
                     learningObjectTitle: this.locals.learningObject.title
                 })
                 .then(response => {
-                        this.$scope.isSaving = false
                         if (response.status === 200) {
                             this.$scope.isSaving = false
                             this.$scope.emailSent = true
