@@ -16,7 +16,7 @@
             };
 
             this.$scope.isSendButtonDisabled = () => {
-                return (!this.$scope.emailToCreator.emailContent || !this.$scope.captchaSuccess)
+                return (!this.$scope.emailToCreator.emailContent || !this.$scope.captchaSuccess || this.$scope.isSaving)
             }
         }
 
@@ -47,8 +47,8 @@
                 })
                 .then(response => {
                         if (response.status === 200) {
-                            this.$scope.isSaving = false
                             this.$scope.emailSent = true
+                            this.$scope.isSaving = false
                         } else {
                             this.$scope.captchaSuccess = false
                         }
