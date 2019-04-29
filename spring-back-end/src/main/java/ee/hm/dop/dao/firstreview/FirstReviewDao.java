@@ -7,7 +7,7 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.FirstReview;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.administration.PageableQuery;
-import ee.hm.dop.service.content.LearningObjectServiceCache;
+import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -21,15 +21,11 @@ import java.util.stream.Collectors;
 @Repository
 public class FirstReviewDao extends AbstractDao<FirstReview> {
 
-    public static final String JOIN_USER = " LEFT JOIN User u ON lo.creator = u.id\n";
-    public static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
-    public static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " INNER JOIN Portfolio m ON lo.id = m.id\n";
-    public static final String JOIN_MATERIAL_TYPE_MATERIAL = " INNER JOIN Material m ON lo.id = m.id\n";
-
-    @Inject
-    private LearningObjectServiceCache learningObjectServiceCache;
-
-    public static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
+    private static final String JOIN_USER = " LEFT JOIN User u ON lo.creator = u.id\n";
+    private static final String JOIN_MATERIAL = " LEFT JOIN Material m ON lo.id = m.id\n";
+    private static final String JOIN_MATERIAL_TYPE_PORTFOLIO = " JOIN Portfolio m ON lo.id = m.id\n";
+    private static final String JOIN_MATERIAL_TYPE_MATERIAL = " JOIN Material m ON lo.id = m.id\n";
+    private static final String TITLE_SEARCH_CONDITION = " AND lo.id IN (SELECT LO.id\n" +
             "FROM LearningObject LO\n" +
             "       JOIN Portfolio P ON LO.id = P.id\n" +
             "WHERE LOWER(P.title) LIKE :title\n" +
@@ -41,7 +37,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
             "       JOIN LanguageString LS ON MT.title = LS.id\n" +
             "WHERE LS.lang = :transgroup\n" +
             "AND LOWER(LS.textValue) LIKE :title )";
-    public static final String JOIN_LO_TAXON = " LEFT JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
+    private static final String JOIN_LO_TAXON = " LEFT JOIN LearningObject_Taxon lt ON lt.learningObject = lo.id\n";
     private static final String LT_TAXON_IN = "  " +
             "AND lt.taxon IN (SELECT TP1.taxon\n" +
             "FROM LearningObject_Taxon lt1,TaxonPosition TP1\n" +
@@ -54,30 +50,30 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
             "OR TP1.topic IN (:taxons)\n" +
             "OR TP1.subtopic IN (:taxons))\n" +
             "GROUP BY taxon) ";
-    public static final String FIRST_REVIEW_WHERE = " WHERE r.reviewed = 0\n" +
+    private static final String FIRST_REVIEW_WHERE = " WHERE r.reviewed = 0\n" +
             "      AND lo.deleted = 0\n" +
             "      AND (lo.visibility = 'PUBLIC' OR lo.visibility = 'NOT_LISTED')\n" +
             "      AND lo.id NOT IN (SELECT ic.learningObject\n" +
             "                        FROM ImproperContent ic\n" +
             "                        WHERE ic.learningObject = lo.id\n" +
             "                              AND ic.reviewed = 0)\n";
-    public static final String GROUP_BY_LO_ID = " GROUP BY lo.id\n";
-    public static final String LT_TAXON_USER_CONDITION = "  and lt.taxon in (:usertaxons)\n";
-    public static final String SELECT_LO_ID_B = "SELECT lo.id\n" +
+    private static final String GROUP_BY_LO_ID = " GROUP BY lo.id\n";
+    private static final String LT_TAXON_USER_CONDITION = "  and lt.taxon in (:usertaxons)\n";
+    private static final String SELECT_LO_ID_B = "SELECT lo.id\n" +
             "FROM LearningObject lo\n" +
             "       JOIN FirstReview r ON r.learningObject = lo.id\n";
-    public static final String JOIN_TAXON_TRANSLATIONS = "" +
+    private static final String JOIN_TAXON_TRANSLATIONS = "" +
             "       left join TaxonPosition tp on lt.taxon = tp.taxon\n" +
             "       left JOIN Taxon t ON t.id = tp.domain\n" +
             "       left JOIN Translation tr ON t.translationKey = tr.translationKey and tr.translationGroup = :transgroup\n" +
-            "left JOIN Taxon t2 ON t2.id = tp.subject\n" +
+            "       left JOIN Taxon t2 ON t2.id = tp.subject\n" +
             "       left JOIN Translation tr2 ON t2.translationKey = tr2.translationKey and tr2.translationGroup = :transgroup\n";
     @Inject
     private AdminLearningObjectDao adminLearningObjectDao;
     @Inject
     private TaxonDao taxonDao;
 
-    public List<AdminLearningObject> findAllUnreviewed(PageableQuery params) {
+    public List<AdminLearningObject> findAllUnreviewed(PageableQueryUnreviewed params) {
         String sqlString2 = "\n" +
                 SELECT_LO_ID_B +
                 (params.hasFilterByTypeMaterial() ? JOIN_MATERIAL_TYPE_MATERIAL : "") +
@@ -109,7 +105,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
         return learningObjects;
     }
 
-    public Long findCoundOfAllUnreviewed(PageableQuery params) {
+    public Long findCoundOfAllUnreviewed(PageableQueryUnreviewed params) {
         String sqlString2 = " select count(a.id) from (\n" +
                 SELECT_LO_ID_B +
                 (params.hasFilterByTypeMaterial() ? JOIN_MATERIAL_TYPE_MATERIAL : "") +
@@ -161,7 +157,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
                         "                        WHERE ic.learningObject = lo.id\n" +
                         "                              AND ic.reviewed = 0)\n" +
                         "  AND lt.taxon IN (:taxonIds)")
-                .setParameter("taxonIds", learningObjectServiceCache.getUserTaxonWithChildren(user.getId()))
+                .setParameter("taxonIds", taxonDao.getUserTaxonWithChildren(Arrays.asList(user.getId())))
                 .getSingleResult()).longValue();
     }
 
@@ -170,11 +166,7 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     }
 
     private Query addUserTaxons(PageableQuery params, Query query) {
-        List<Long> children = taxonDao.getUserTaxonWithChildren(params.getUsers());
-        if (children.isEmpty()){
-            children = Arrays.asList(-1L);
-        }
-        return query.setParameter("usertaxons", children);
+        return query.setParameter("usertaxons", taxonDao.getUserTaxonWithChildren(params.getUsers()));
     }
 
     private Query addTaxons(PageableQuery params, Query query) {

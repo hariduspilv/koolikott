@@ -2,7 +2,8 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.DopPage;
+import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.springframework.stereotype.Service;
@@ -202,15 +203,17 @@ public class UserEmailService {
         return new WebApplicationException(s, Response.Status.NOT_FOUND);
     }
 
-    public SearchResult getUserEmail(User loggedInUser, PageableQuery pageableQuery) {
-
+    public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
         List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
         Long sentEmailsCount = emailToCreatorDao.getSenderSentEmailCount(loggedInUser, pageableQuery);
 
-        SearchResult searchResult = new SearchResult();
-        searchResult.setItems(emails);
-        searchResult.setTotalResults(sentEmailsCount);
-        return searchResult;
+        DopPage page = new DopPage();
+        page.setPage(pageableQuery.getPage());
+        page.setSize(pageableQuery.getSize());
+        page.setContent(emails);
+        page.setTotalElements(sentEmailsCount);
+        page.setTotalPages((int) (sentEmailsCount / pageableQuery.getSize()));
+        return page;
     }
 
     public Long getSentEmailsCount(User loggedInUser) {
