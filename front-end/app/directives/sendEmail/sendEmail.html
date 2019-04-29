@@ -70,12 +70,14 @@
                 </md-button>
                 <md-button class="md-raised md-primary"
                            data-ng-click="$ctrl.sendEmail()"
-                           data-ng-disabled="isSendButtonDisabled()"
+                           data-ng-disabled="isSendButtonDisabled() || isSaving"
                            aria-label="Send mail"
                 >
                   <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
                 </md-button>
-                <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                <md-progress-circular class="md-accent ng-hide"
+                                      md-mode="indeterminate"
+                                      md-diameter="40"
                                       data-ng-show="isSaving"></md-progress-circular>
               </md-dialog-actions>
             </div>
