@@ -232,6 +232,18 @@
           </a>
         </li>
         <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
+          <a id="changes" class="sidenav__header" md-ink-ripple layout="row"
+             layout-align="space-between center"
+             data-ng-class="{'is-active': isLocationActive('/dashboard/changes')}"
+             data-ng-href="/dashboard/changes" data-ng-click="updateCount('changes')">
+            <div layout="row" layout-align="center center">
+              <md-icon class="material-icons sidenav__icon">autorenew</md-icon>
+              <span data-translate="CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
+            </div>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="changesCount"></span>
+          </a>
+        </li>
+        <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="sentEmails" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/dashboard/sentEmails')}"
@@ -242,18 +254,6 @@
               <span data-translate="EMAIL_SENT_EMAILS" class="sidenav__name"></span>
             </div>
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="sentEmailsCount"></span>
-          </a>
-        </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
-          <a id="changes" class="sidenav__header" md-ink-ripple layout="row"
-             layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/changes')}"
-             data-ng-href="/dashboard/changes" data-ng-click="updateCount('changes')">
-            <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">autorenew</md-icon>
-              <span data-translate="CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
-            </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="changesCount"></span>
           </a>
         </li>
         <!--Must be hidden for now-->
