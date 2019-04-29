@@ -17,8 +17,9 @@
   <tr md-row ng-repeat="item in data" ng-click="$ctrl.openContent(item)">
     <td md-cell class="dashboard-cell" data-ng-bind="item.user.name+' '+ item.user.surname"></td>
     <td md-cell class="dashboard-cell" data-ng-bind="$ctrl.getCorrectTitleForLo(item)"></td>
-    <td md-cell class="dashboard-cell" data-ng-bind="$ctrl.showMaxMessageText(item.message)"></td>
+    <td md-cell class="dashboard-cell word-break " data-ng-bind="$ctrl.showMaxMessageText(item.message)"></td>
     <td md-cell class="dashboard-cell dashboard-cell--date" data-ng-bind="$ctrl.formatDateToTimeDayMonthYear(item.sentAt)" ></td>
   </tr>
   </tbody>
 </table>
+
