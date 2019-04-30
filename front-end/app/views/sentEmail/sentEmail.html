@@ -15,7 +15,7 @@
       <md-content class="md-padding send-mail-ie">
         <div layout-xs="column" layout="column" layout-align-xs="start stretch" layout-align="start stretch" flex-order="1"
              flex-order-gt-sm="2" flex="100">
-          <md-input-container class="md-block animate-if remaining-charaters-wrapper creator-email-dialog-title" flex>
+          <md-input-container style="margin: 5px 0 !important;" class="md-block animate-if remaining-charaters-wrapper creator-email-dialog-title" flex>
             <input
               class="learningobject-title-color creator-email-dialog-input-text-wrap"
               ng-value="$ctrl.getCorrectTitleForLo(learningObject)"
@@ -29,7 +29,7 @@
               style="color: black"
               ng-bind="learningObject.message"
               maxlength="500"
-              class="final-step margin-bottom creator-email-overflow-auto"
+              class="final-step creator-email-overflow-auto"
               disabled
             ></textarea>
           </md-input-container>
