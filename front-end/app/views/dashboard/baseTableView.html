@@ -16,7 +16,7 @@
                  type="text"
                  data-ng-model="query.filter"
                  data-ng-model-options="filter.options"
-                 placeholder="{{'SEARCH' | translate}}"
+                 placeholder = "{{$ctrl.viewPath === 'sentEmails' ? ('SENT_EMAILS_SEARCH' | translate) : ('SEARCH' | translate)}}"
                  class="search-learning-objects"
           >
           <md-button data-ng-if="$ctrl.viewPath != 'unReviewed'"
