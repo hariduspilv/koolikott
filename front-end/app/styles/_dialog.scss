@@ -40,7 +40,9 @@ md-dialog md-dialog-actions {
 .learningobject-title-color {
   color: rgba(0, 0, 0, 0.87) !important;
 }
-
+.sentemail-dialog{
+  border-width: 0 0 3px;
+}
 md-dialog.login-dialog {
   max-height: 100%;
   min-width: 18rem;

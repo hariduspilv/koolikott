@@ -17,7 +17,7 @@
              flex-order-gt-sm="2" flex="100">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper creator-email-dialog-title" flex>
             <input
-              class="learningobject-title-color creator-email-dialog-input-text-wrap"
+              class="learningobject-title-color creator-email-dialog-input-text-wrap sentemail-dialog"
               ng-value="$ctrl.getCorrectTitleForLo(learningObject)"
               type="text"
               disabled
@@ -29,7 +29,7 @@
               style="color: black;"
               ng-model="learningObject.message"
               maxlength="500"
-              class="creator-email-overflow-auto"
+              class="creator-email-overflow-auto sentemail-dialog"
               disabled
               placeholder="{{'SENT_EMAILS_CONTENT' | translate}}"
             ></textarea>
