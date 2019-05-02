@@ -16,7 +16,7 @@
             };
 
             this.$scope.isSendButtonDisabled = () => {
-                return (!this.$scope.emailToCreator.emailContent || !this.$scope.captchaSuccess || this.$scope.isSaving)
+                return (!this.$scope.emailToCreator.emailContent || !this.$scope.captchaSuccess || this.$scope.isSaving || this.$scope.emailToCreator.emailContent.trim().length < 2)
             }
         }
 
