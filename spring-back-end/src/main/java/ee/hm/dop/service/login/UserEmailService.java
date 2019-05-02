@@ -68,6 +68,7 @@ public class UserEmailService {
         emailToCreator.setUser(userCreator);
         emailToCreator.setCreatedAt(LocalDateTime.now());
         emailToCreator.setSentTries(0);
+        emailToCreator.setSender(userSender);
 
         if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
             sendMailService.sendEmail(sendMailService.sendEmailToExpertSelf(emailToCreator));
