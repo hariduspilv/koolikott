@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class EmailToCreator implements AbstractEntity {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(nullable = false)
@@ -43,6 +43,13 @@ public class EmailToCreator implements AbstractEntity {
     @JoinColumn(name = "user")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "senderId")
+    private User sender;
+
+    @ManyToOne
+    @JoinColumn(name = "learningObjectId")
+    private LearningObject learningObject;
 
     @Column
     private String errorMessage;
@@ -55,9 +62,6 @@ public class EmailToCreator implements AbstractEntity {
 
     @Transient
     private Long creatorId;
-
-    @Transient
-    private Long learningObjectId;
 
     @Transient
     private String learningObjectTitle;
@@ -161,20 +165,28 @@ public class EmailToCreator implements AbstractEntity {
         this.sentAt = sentAt;
     }
 
-    public Long getLearningObjectId() {
-        return learningObjectId;
-    }
-
-    public void setLearningObjectId(Long learningObjectId) {
-        this.learningObjectId = learningObjectId;
-    }
-
     public String getLearningObjectTitle() {
         return learningObjectTitle;
     }
 
     public void setLearningObjectTitle(String learningObjectTitle) {
         this.learningObjectTitle = learningObjectTitle;
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public LearningObject getLearningObject() {
+        return learningObject;
+    }
+
+    public void setLearningObject(LearningObject learningObject) {
+        this.learningObject = learningObject;
     }
 }
 

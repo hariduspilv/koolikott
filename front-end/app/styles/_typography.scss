@@ -143,7 +143,11 @@ h2 {
 
 .wrapped {
   white-space: pre-line;
-  overflow-wrap: break-word;
+  word-wrap: break-word;
+}
+
+.word-break {
+  word-break: break-word;
 }
 
 .error-color {

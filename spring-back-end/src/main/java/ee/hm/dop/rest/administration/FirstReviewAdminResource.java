@@ -3,7 +3,7 @@ package ee.hm.dop.rest.administration;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -14,7 +14,6 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
-import javax.ws.rs.QueryParam;
 import java.util.List;
 
 @RestController
@@ -38,7 +37,7 @@ public class FirstReviewAdminResource extends BaseResource {
                                       @RequestParam(value = "materialtype", required = false) String materialType)
 
     {
-        PageableQuery pageableQuery = new PageableQuery(page, itemSortedBy, query, taxons, user, lang,materialType);
+        PageableQueryUnreviewed pageableQuery = new PageableQueryUnreviewed(page, itemSortedBy, query, taxons, user, lang,materialType);
         if (!pageableQuery.isValid()) {
             throw badRequest("Query parameters invalid");
         }

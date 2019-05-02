@@ -286,6 +286,10 @@ function formatYear(year) {
     return year < 0 ? year * -1 : year;
 }
 
+function formatHoursMinutesSeconds(hours){
+    return hours.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
+}
+
 function formatDateToDayMonthYear(dateString) {
     var date = new Date(dateString);
     return isNaN(date)
@@ -683,6 +687,13 @@ class Controller {
             return 'portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
     }
 
+    getLearningObjectUrl(learningObject) {
+        if (learningObject)
+            return this.isPortfolio(learningObject)
+                ? `/portfolio?name=${learningObject.titleForUrl}&id=${learningObject.id}`
+                : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id;
+    }
+
     replaceSpacesAndCharacters(title) {
         if (title)
             return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")
@@ -842,6 +853,22 @@ class Controller {
             ? ''
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
     }
+
+    formatDateToTimeDayMonthYear(dateString) {
+        const date = new Date(dateString)
+
+        return isNaN(date)
+            ? ''
+            : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear() + " " + formatHoursMinutesSeconds(date);
+    }
+
+    getCorrectTitleForLo(lo) {
+        return lo.learningObject
+            ? (this.isMaterial(lo.learningObject)
+                ? this.getCorrectLanguageTitle(lo.learningObject)
+                : lo.learningObject.title) : null
+    }
+
     sprintf(str, ...replacements) {
         let idx = 0
         return str.replace(/(%s|%d)/g, (match) => {

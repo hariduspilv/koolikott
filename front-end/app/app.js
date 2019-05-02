@@ -222,8 +222,8 @@ function isHomePage(path) {
     return path === '/';
 }
 
-function isProfilePath(path) {
-    return path === '/profile'
+function isProfileOrSendEmailPath(path) {
+    return path === '/profile' || path === '/dashboard/sentEmails';
 }
 
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
@@ -245,7 +245,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             if (isLoggedIn) {
                 userSessionService.startTimer()
             }
-            $rootScope.isProfile = isProfilePath(path)
+            $rootScope.isProfile = isProfileOrSendEmailPath(path)
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
             $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);

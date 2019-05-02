@@ -5,7 +5,6 @@
         constructor(...args) {
             super(...args)
 
-
             this.showLoEmailCodeDialog = () => {
                 if (typeof this.learningObject.creator !== 'undefined' && this.learningObject.creator !== null) {
                     this.userEmailService.userHasEmail(this.learningObject.creator.id)

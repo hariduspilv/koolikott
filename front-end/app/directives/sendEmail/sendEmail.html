@@ -40,7 +40,7 @@
             placeholder="{{'TITLE' | translate}}"
           >
           </md-input-container>
-          <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper label-top-ie" flex>
             <textarea
               placeholder="{{placeholder}}"
               name="emailContent"
@@ -75,7 +75,9 @@
                 >
                   <span data-translate="CUSTOMER_SUPPORT_SEND"></span>
                 </md-button>
-                <md-progress-circular class="md-accent ng-hide" md-mode="indeterminate" md-diameter="40"
+                <md-progress-circular class="md-accent ng-hide"
+                                      md-mode="indeterminate"
+                                      md-diameter="40"
                                       data-ng-show="isSaving"></md-progress-circular>
               </md-dialog-actions>
             </div>

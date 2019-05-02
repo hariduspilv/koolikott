@@ -1,6 +1,5 @@
 package ee.hm.dop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
@@ -8,10 +7,15 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Type;
 import org.joda.time.DateTime;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
 @Entity
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class EmailToCreator implements AbstractEntity {
 
     @Id
@@ -46,6 +50,14 @@ public class EmailToCreator implements AbstractEntity {
     @JoinColumn(name = "user")
     private User user;
 
+    @ManyToOne
+    @JoinColumn(name = "senderId")
+    private User sender;
+
+    @ManyToOne
+    @JoinColumn(name = "learningObjectId")
+    private LearningObject learningObject;
+
     @Column
     private String errorMessage;
 
@@ -59,14 +71,12 @@ public class EmailToCreator implements AbstractEntity {
     private Long creatorId;
 
     @Transient
-    private Long learningObjectId;
-
-    @Transient
     private String learningObjectTitle;
 
     public EmailToCreator() {
     }
 
+    @Override()
     public Long getId() {
         return id;
     }
@@ -163,13 +173,6 @@ public class EmailToCreator implements AbstractEntity {
         this.creatorId = creatorId;
     }
 
-    public Long getLearningObjectId() {
-        return learningObjectId;
-    }
-
-    public void setLearningObjectId(Long learningObjectId) {
-        this.learningObjectId = learningObjectId;
-    }
 
     public String getLearningObjectTitle() {
         return learningObjectTitle;
@@ -177,6 +180,22 @@ public class EmailToCreator implements AbstractEntity {
 
     public void setLearningObjectTitle(String learningObjectTitle) {
         this.learningObjectTitle = learningObjectTitle;
+    }
+
+    public User getSender() {
+        return sender;
+    }
+
+    public void setSender(User sender) {
+        this.sender = sender;
+    }
+
+    public LearningObject getLearningObject() {
+        return learningObject;
+    }
+
+    public void setLearningObject(LearningObject learningObject) {
+        this.learningObject = learningObject;
     }
 }
 

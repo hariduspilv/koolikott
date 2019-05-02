@@ -16,6 +16,7 @@ angular.module('koolikottApp')
         var restrictedUsersCountCallbacks = [];
         var changedLearningObjectCountCallbacks = [];
         var unReviewedLearningObjectCountCallbacks = [];
+        var sentEmailsCountCallbacks = [];
 
         function getUsername() {
             if (authenticatedUserService.isAuthenticated()) return {'username': authenticatedUserService.getUser().username};
@@ -32,6 +33,16 @@ angular.module('koolikottApp')
                 });
                 deletedCountCallbacks = [];
                 localStorage.setItem("deletedCount", data);
+            }
+        }
+
+        function getSentEmailsCountSuccess(data) {
+            if (!_.isNil(data)) {
+                sentEmailsCountCallbacks.forEach(function (callback) {
+                    callback(data);
+                });
+                sentEmailsCountCallbacks = [];
+                localStorage.setItem("sentEmailsCount", data);
             }
         }
 
@@ -116,6 +127,14 @@ angular.module('koolikottApp')
                 deletedCountCallbacks.push(callback);
                 serverCallService.makeGet("rest/admin/deleted/count", {}, getDeletedCountSuccess, getItemsFail);
 
+            },
+            loadSentEmailsCount: function (callback) {
+                var data = localStorage.getItem("sentEmailsCount");
+                if (data) {
+                    callback(data);
+                }
+                sentEmailsCountCallbacks.push(callback);
+                serverCallService.makeGet("rest/userEmail/count", {}, getSentEmailsCountSuccess, getItemsFail);
             },
             loadImproperCount: function (callback) {
                 var data = localStorage.getItem("improperCount");

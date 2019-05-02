@@ -44,8 +44,8 @@
             })
         }
 
-        isUserModeratorOrAdmin() {
-            return this.authenticatedUserService.isModeratorOrAdmin()
+        isAuthenticatedUser() {
+            return this.authenticatedUserService.isAuthenticated();
         }
 
         openNewTab() {

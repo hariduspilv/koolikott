@@ -2,6 +2,8 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
+import ee.hm.dop.model.administration.DopPage;
+import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.login.UserEmailService;
 
@@ -10,7 +12,9 @@ import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.net.HttpURLConnection;
+
+import static java.net.HttpURLConnection.*;
+import static javax.ws.rs.core.Response.status;
 
 @Path("/userEmail")
 public class UserEmailResource extends BaseResource {
@@ -30,10 +34,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response getEmailOnLogin(UserEmail userEmail) {
-        if (userEmailService.hasEmail(userEmail))
-            return Response.status(HttpURLConnection.HTTP_OK).build();
-        else
-            return Response.status(HttpURLConnection.HTTP_NOT_FOUND).build();
+       return status(userEmailService.hasEmail(userEmail) ? HTTP_OK : HTTP_NOT_FOUND).build();
     }
 
     @POST
@@ -41,10 +42,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateEmail(UserEmail userEmail) {
-        if (userEmailService.hasDuplicateEmail(userEmail))
-            return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
-        else
-            return Response.status(HttpURLConnection.HTTP_OK).build();
+        return status(userEmailService.hasDuplicateEmail(userEmail) ? HTTP_CONFLICT : HTTP_OK).build();
     }
 
     @GET
@@ -59,10 +57,7 @@ public class UserEmailResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
     public Response validateEmailForProfile(UserEmail userEmail) {
-        if (userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()))
-            return Response.status(HttpURLConnection.HTTP_CONFLICT).build();
-        else
-            return Response.status(HttpURLConnection.HTTP_OK).build();
+        return status(userEmailService.hasDuplicateEmailForProfile(userEmail, getLoggedInUser()) ? HTTP_CONFLICT : HTTP_OK).build();
     }
 
     @POST
@@ -97,5 +92,28 @@ public class UserEmailResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
     public EmailToCreator sendEmailToCreator(EmailToCreator emailToCreator) {
         return userEmailService.sendEmailForCreator(emailToCreator, getLoggedInUser());
+    }
+
+    @GET
+    @Path("sentEmails")
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @Produces(MediaType.APPLICATION_JSON)
+    public DopPage getSentEmails(@QueryParam("page") int page,
+                                 @QueryParam("itemSortedBy") String itemSortedBy,
+                                 @QueryParam("query") String query,
+                                 @QueryParam("lang") int lang) {
+        PageableQuerySentEmails pageableQuery = new PageableQuerySentEmails(page, itemSortedBy, query, lang);
+        if (!pageableQuery.isValid()) {
+            throw badRequest("Query parameters invalid");
+        }
+        return userEmailService.getUserEmail(getLoggedInUser(), pageableQuery);
+    }
+
+    @GET
+    @Path("/count")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    public Long getSentEmailsCount() {
+        return userEmailService.getSentEmailsCount(getLoggedInUser());
     }
 }

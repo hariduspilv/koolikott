@@ -30,7 +30,7 @@ public class CustomerSupportResource extends BaseResource {
     private CustomerSupportService customerSupportService;
 
     @PostMapping
-    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR, RoleString.USER, RoleString.RESTRICTED})
     public CustomerSupport saveCustomerSupportRequest(@RequestBody CustomerSupport customerSupport) {
         if (invalidForm(customerSupport)) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "contains invalid files");

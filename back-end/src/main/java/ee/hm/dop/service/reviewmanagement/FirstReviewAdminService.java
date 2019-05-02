@@ -2,8 +2,12 @@ package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.dao.firstreview.FirstReviewDao;
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.administration.PageableQuery;
+import ee.hm.dop.model.AdminLearningObject;
+import ee.hm.dop.model.FirstReview;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.administration.PageableQueryUnreviewed;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.taxon.FirstReviewTaxon;
 import ee.hm.dop.model.taxon.Taxon;
@@ -26,7 +30,7 @@ public class FirstReviewAdminService {
     @Inject
     private TaxonPositionDao taxonPositionDao;
 
-    public SearchResult getUnReviewed(User user, PageableQuery pageableQuery) {
+    public SearchResult getUnReviewed(User user, PageableQueryUnreviewed pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isModerator(user)) {
             pageableQuery.setUsers(Arrays.asList(user.getId()));
@@ -44,7 +48,6 @@ public class FirstReviewAdminService {
                     .collect(Collectors.toList());
             learningObject.setFirstReviewTaxons(firstReviewTaxons);
         }
-
         SearchResult searchResult = new SearchResult();
         searchResult.setItems(allUnreviewed);
         searchResult.setTotalResults(unreviewedCount);

@@ -1,7 +1,19 @@
 package ee.hm.dop.service.login;
 
-import ee.hm.dop.dao.*;
-import ee.hm.dop.model.*;
+import ee.hm.dop.dao.AuthenticationStateDao;
+import ee.hm.dop.dao.EmailToCreatorDao;
+import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.UserAgreementDao;
+import ee.hm.dop.dao.UserDao;
+import ee.hm.dop.dao.UserEmailDao;
+import ee.hm.dop.model.AuthenticationState;
+import ee.hm.dop.model.EmailToCreator;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserEmail;
+import ee.hm.dop.model.User_Agreement;
+import ee.hm.dop.model.administration.DopPage;
+import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.joda.time.DateTime;
@@ -9,6 +21,7 @@ import org.joda.time.DateTime;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
+import java.util.List;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -31,6 +44,48 @@ public class UserEmailService {
     @Inject
     private LearningObjectDao learningObjectDao;
 
+    private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {
+        validateEmail(email.getEmail());
+        userEmail.setActivated(false);
+        userEmail.setActivatedAt(null);
+        userEmail.setCreatedAt(DateTime.now());
+        userEmail.setPin(PinGeneratorService.generatePin());
+        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, email));
+        userEmail.setEmail("");
+        return userEmail;
+    }
+
+    private UserEmail setUserAndSendMail(UserEmail userEmail) {
+        validateEmail(userEmail.getEmail());
+        userEmail.setActivated(false);
+        userEmail.setActivatedAt(null);
+        userEmail.setCreatedAt(DateTime.now());
+        userEmail.setPin(PinGeneratorService.generatePin());
+        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
+        userEmail.setEmail("");
+        return userEmail;
+    }
+
+    private void verifyLOCreator(EmailToCreator emailToCreator) {
+        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObject().getId());
+        User creator = learningObject.getCreator();
+        if (!creator.getId().equals(emailToCreator.getCreatorId())) {
+            throw forbidden("This creator is not creator of this LO");
+        }
+    }
+
+    private WebApplicationException forbidden(String s) {
+        return new WebApplicationException(s, Response.Status.FORBIDDEN);
+    }
+
+    private WebApplicationException badRequest(String s) {
+        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
+    }
+
+    private WebApplicationException notFound(String s) {
+        return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    }
+
     public UserEmail getUserEmail(long id) {
 
         User user = userDao.findUserById(id);
@@ -46,7 +101,7 @@ public class UserEmailService {
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
-        if(emailToCreator.getMessage().length() > 500){
+        if (emailToCreator.getMessage().length() > 500) {
             throw badRequest("Message is too long");
         }
         verifyLOCreator(emailToCreator);
@@ -61,6 +116,7 @@ public class UserEmailService {
         emailToCreator.setUser(userCreator);
         emailToCreator.setCreatedAt(DateTime.now());
         emailToCreator.setSentTries(0);
+        emailToCreator.setSender(userSender);
 
         if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
             sendMailService.sendEmail(sendMailService.sendEmailToExpertSelf(emailToCreator));
@@ -86,7 +142,6 @@ public class UserEmailService {
             throw badRequest("User is null, can't find e-mail of null");
 
         return userEmailDao.findByUser(user).getEmail();
-
     }
 
     public UserEmail save(UserEmail userEmail) {
@@ -123,7 +178,6 @@ public class UserEmailService {
         dbUserAgreement.setAgreed(true);
         userAgreementDao.createOrUpdate(dbUserAgreement);
 
-
         return userEmailDao.createOrUpdate(dbUserEmail);
     }
 
@@ -156,45 +210,20 @@ public class UserEmailService {
         return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());
     }
 
-    private UserEmail setUserAndSendMail(UserEmail userEmail, UserEmail email) {
-        validateEmail(email.getEmail());
-        userEmail.setActivated(false);
-        userEmail.setActivatedAt(null);
-        userEmail.setCreatedAt(DateTime.now());
-        userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, email));
-        userEmail.setEmail("");
-        return userEmail;
+    public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
+        List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
+        Long sentEmailsCount = emailToCreatorDao.getSenderSentEmailCount(loggedInUser, pageableQuery);
+
+        DopPage page = new DopPage();
+        page.setPage(pageableQuery.getPage());
+        page.setSize(pageableQuery.getSize());
+        page.setContent(emails);
+        page.setTotalElements(sentEmailsCount);
+        page.setTotalPages((int) (sentEmailsCount / pageableQuery.getSize()));
+        return page;
     }
 
-    private UserEmail setUserAndSendMail(UserEmail userEmail) {
-        validateEmail(userEmail.getEmail());
-        userEmail.setActivated(false);
-        userEmail.setActivatedAt(null);
-        userEmail.setCreatedAt(DateTime.now());
-        userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
-        userEmail.setEmail("");
-        return userEmail;
-    }
-
-    private void verifyLOCreator(EmailToCreator emailToCreator) {
-        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
-        User creator = learningObject.getCreator();
-        if (!creator.getId().equals(emailToCreator.getCreatorId())) {
-            throw forbidden("This creator is not creator of this LO");
-        }
-    }
-
-    private WebApplicationException forbidden(String s) {
-        return new WebApplicationException(s, Response.Status.FORBIDDEN);
-    }
-
-    private WebApplicationException badRequest(String s) {
-        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
-    }
-
-    private WebApplicationException notFound(String s) {
-        return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    public Long getSentEmailsCount(User loggedInUser) {
+        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
     }
 }

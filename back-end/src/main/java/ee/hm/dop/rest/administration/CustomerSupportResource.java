@@ -27,7 +27,7 @@ public class CustomerSupportResource extends BaseResource {
     @POST
     @Produces(MediaType.APPLICATION_JSON)
     @Consumes(MediaType.APPLICATION_JSON)
-    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR})
+    @RolesAllowed({RoleString.ADMIN, RoleString.MODERATOR, RoleString.USER, RoleString.RESTRICTED})
     public CustomerSupport saveCustomerSupportRequest(CustomerSupport customerSupport) {
         if (invalidForm(customerSupport)) {
             throw new WebApplicationException("contains invalid files", Response.Status.BAD_REQUEST);

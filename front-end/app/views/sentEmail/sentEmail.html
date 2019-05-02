@@ -1,0 +1,42 @@
+<md-dialog aria-label="Saadetud ekirja modaalaken" flex-gt-sm="75" flex
+           class=" creator-email-dialog creator-email-full-screen">
+    <md-toolbar class="md-accent">
+      <div class="md-toolbar-tools" flex>
+        <div>
+          <h2 data-translate="EMAIL_SENT_EMAILS_CREATOR"></h2>
+        </div>
+        <span flex></span>
+        <md-button ng-click="$ctrl.$mdDialog.cancel()" id="email-sent-close" class="md-icon-button" aria-label="Sulge modaalaken">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </md-toolbar>
+    <div>
+      <md-content class="md-padding send-mail-ie">
+        <div layout-xs="column" layout="column" layout-align-xs="start stretch" layout-align="start stretch" flex-order="1"
+             flex-order-gt-sm="2" flex="100">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper creator-email-dialog-title" flex>
+            <input
+              style="border-width: 0 0 3px"
+              class="learningobject-title-color creator-email-dialog-input-text-wrap"
+              ng-value="$ctrl.getCorrectTitleForLo(learningObject)"
+              type="text"
+              disabled
+              placeholder="{{'TITLE' | translate}}"
+            >
+          </md-input-container>
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper label-top-ie" flex>
+            <textarea
+              style="color: black"
+              ng-model="learningObject.message"
+              maxlength="500"
+              class="creator-email-overflow-auto"
+              readonly
+              placeholder="{{'SENT_EMAILS_CONTENT' | translate}}"
+            ></textarea>
+          </md-input-container>
+        </div>
+      </md-content>
+    </div>
+</md-dialog>
+

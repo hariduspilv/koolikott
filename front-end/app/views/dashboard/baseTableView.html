@@ -16,7 +16,7 @@
                  type="text"
                  data-ng-model="query.filter"
                  data-ng-model-options="filter.options"
-                 placeholder="{{'SEARCH' | translate}}"
+                 placeholder = "{{$ctrl.viewPath === 'sentEmails' ? ('SENT_EMAILS_SEARCH' | translate) : ('SEARCH' | translate)}}"
                  class="search-learning-objects"
           >
           <md-button data-ng-if="$ctrl.viewPath != 'unReviewed'"
@@ -125,7 +125,6 @@
                  class="md-raised md-primary statistics-filter__submit"
                  data-ng-class="{fetching: fetching}"
                  data-ng-click="$ctrl.getFilterResults()"
-                 data-ng-disabled="$ctrl.isDisabled()"
                  aria-label="Käivita filter"
       >
         <div class="spinner">
@@ -145,6 +144,7 @@
       <dop-deleted data-ng-if="$ctrl.viewPath == 'deleted'"></dop-deleted>
       <dop-users data-ng-if="$ctrl.viewPath == 'moderators'"></dop-users>
       <dop-users data-ng-if="$ctrl.viewPath == 'restrictedUsers'"></dop-users>
+      <dop-sentemails data-ng-if="$ctrl.viewPath == 'sentEmails'"></dop-sentemails>
     </div>
     <!-- BEGIN Not found message after data is loaded but contains 0 items -->
     <div
@@ -155,8 +155,7 @@
     >
       <h4 data-translate="{{
         $ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'
-          ? 'ERROR_USERS_NOT_FOUND'
-          : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
+          ? 'ERROR_USERS_NOT_FOUND' : $ctrl.viewPath == 'sentEmails' ? 'EMAIL_SENT_EMAIL_NOT_FOUND'  : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
       ></h4>
     </div>
     <!-- END Not found message -->

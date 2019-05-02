@@ -30,6 +30,7 @@ class controller extends Controller {
             '/dashboard/restrictedUsers',
             '/dashboard/deleted',
             '/dashboard/stat/expert',
+            '/dashboard/sentEmails',
         ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
@@ -73,7 +74,6 @@ class controller extends Controller {
             this.$rootScope.isUserTabOpen = false
             this.$rootScope.isAdminTabOpen = false
         }
-
     }
     isLocationActive(menuLocation) {
         if (!this.$scope.user)
@@ -99,9 +99,11 @@ class controller extends Controller {
                         ? menuLocation === '/dashboard/improper'
                         : this.$rootScope.learningObjectUnreviewed
                             ? menuLocation === '/dashboard/unReviewed'
-                            : this.$rootScope.learningObjectChanged
-                                ? menuLocation === '/dashboard/changes'
-                                : false
+                            : this.$rootScope.sentEmails
+                                ? menuLocation === '/dashboard/sentEmails'
+                                : this.$rootScope.learningObjectChanged
+                                    ? menuLocation === '/dashboard/changes'
+                                    : false
     }
     isUserLocation(location) {
         const { username } = this.$scope.user
@@ -162,6 +164,7 @@ class controller extends Controller {
                 })
         }
     }
+
     updateUserCounts() {
         if (this.authenticatedUserService.isAuthenticated()) {
             this.updateCount('userFavorites')
@@ -178,6 +181,7 @@ class controller extends Controller {
             this.updateCount('deleted')
             this.updateCount('improper')
             this.updateCount('changes')
+            this.updateCount('sentEmails')
             this.updateCount('unReviewedLearningObjects')
         }
         if (this.authenticatedUserService.isAdmin()) {

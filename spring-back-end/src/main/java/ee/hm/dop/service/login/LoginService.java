@@ -139,11 +139,15 @@ public class LoginService {
     }
 
     private AuthenticatedUser authenticate(User user, LoginFrom loginFrom) {
-        Person person = new Person();
-        if (loginFrom.equals(LoginFrom.DEV)) {
-            person = ehisSOAPService.getPersonInformation(user.getIdCode());
-        }
+        Person person = getPerson(user, loginFrom);
         return sessionService.startSession(user, person, loginFrom);
+    }
+
+    private Person getPerson(User user, LoginFrom loginFrom) {
+        if (loginFrom.isDev()) {
+            return new Person();
+        }
+        return ehisSOAPService.getPersonInformation(user.getIdCode());
     }
 
     private User getExistingOrNewUser(AuthenticationState state) {
@@ -151,9 +155,6 @@ public class LoginService {
     }
 
     private User getExistingOrNewUser(String idCode, String firstname, String surname) {
-        if (idCode.toUpperCase().charAt(0) >= 'A') {
-            idCode = idCode.substring(idCode.lastIndexOf(':') + 1);
-        }
         User existingUser = userService.getUserByIdCode(idCode);
         if (existingUser != null) {
             return existingUser;
@@ -163,7 +164,7 @@ public class LoginService {
         if (newUser == null) {
             throw new RuntimeException(format("User with id %s tried to log in after creating account, but failed.", idCode));
         }
-        logger.info("System created new user with id %s", newUser.getId());
+        logger.info("System created new user with id {}", newUser.getId());
         newUser.setNewUser(true);
         if (newUser.getUserAgreements() == null) {
             newUser.setUserAgreements(new ArrayList<>());

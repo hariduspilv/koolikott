@@ -2,20 +2,25 @@ package ee.hm.dop.service.login;
 
 import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.administration.DopPage;
+import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
+import java.util.List;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
+@Transactional
 public class UserEmailService {
 
     @Inject
@@ -63,6 +68,7 @@ public class UserEmailService {
         emailToCreator.setUser(userCreator);
         emailToCreator.setCreatedAt(LocalDateTime.now());
         emailToCreator.setSentTries(0);
+        emailToCreator.setSender(userSender);
 
         if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
             sendMailService.sendEmail(sendMailService.sendEmailToExpertSelf(emailToCreator));
@@ -181,7 +187,7 @@ public class UserEmailService {
     }
 
     private void verifyLOCreator(EmailToCreator emailToCreator) {
-        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObjectId());
+        LearningObject learningObject = learningObjectDao.findById(emailToCreator.getLearningObject().getId());
         User creator = learningObject.getCreator();
         if (!creator.getId().equals(emailToCreator.getCreatorId())) {
             throw forbidden("This creator is not creator of this LO");
@@ -198,5 +204,22 @@ public class UserEmailService {
 
     private WebApplicationException notFound(String s) {
         return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    }
+
+    public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
+        List<EmailToCreator> emails = emailToCreatorDao.getSenderSentEmails(loggedInUser, pageableQuery);
+        Long sentEmailsCount = emailToCreatorDao.getSenderSentEmailCount(loggedInUser, pageableQuery);
+
+        DopPage page = new DopPage();
+        page.setPage(pageableQuery.getPage());
+        page.setSize(pageableQuery.getSize());
+        page.setContent(emails);
+        page.setTotalElements(sentEmailsCount);
+        page.setTotalPages((int) (sentEmailsCount / pageableQuery.getSize()));
+        return page;
+    }
+
+    public Long getSentEmailsCount(User loggedInUser) {
+        return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
     }
 }

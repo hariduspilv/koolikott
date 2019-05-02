@@ -10,13 +10,13 @@
             this.getCaptchaKey()
             this.$scope.emailToCreator = {}
             this.setPlaceholder()
-            this.getLearningObjectTitle()
-                this.$scope.cancel = () => {
+            this.$scope.emailToCreator.title = this.getCorrectLanguageTitle(this.locals.learningObject)
+            this.$scope.cancel = () => {
                 this.$mdDialog.hide();
             };
 
             this.$scope.isSendButtonDisabled = () => {
-                return (!this.$scope.emailToCreator.emailContent || !this.$scope.captchaSuccess)
+                return (!this.$scope.emailToCreator.emailContent || !this.$scope.captchaSuccess || this.$scope.isSaving || this.$scope.emailToCreator.emailContent.trim().length < 2)
             }
         }
 
@@ -30,15 +30,6 @@
                     this.$scope.placeholder = (value.replace('${counter}', 500 - this.$scope.emailToCreator.emailContent.length))
                 })
             }
-
-        }
-
-        getLearningObjectTitle(){
-            if (this.locals.learningObject.type === '.Material')
-                this.$scope.emailToCreator.title= this.locals.learningObject.titles[0].text;
-            else
-                this.$scope.emailToCreator.title = this.locals.learningObject.title
-
         }
 
         sendEmail() {
@@ -47,18 +38,17 @@
             if (this.locals.learningObject.type === '.Material')
                 this.locals.learningObject.title = this.locals.learningObject.titles[0].text;
 
-                this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
+            this.serverCallService.makePost('rest/userEmail/sendEmailToCreator',
                 {
                     message: this.$scope.emailToCreator.emailContent,
-                    creatorId:this.locals.learningObject.creator.id,
-                    learningObjectId:this.locals.learningObject.id,
-                    learningObjectTitle:this.locals.learningObject.title
+                    creatorId: this.locals.learningObject.creator.id,
+                    learningObject: this.locals.learningObject,
+                    learningObjectTitle: this.locals.learningObject.title
                 })
                 .then(response => {
-                        this.$scope.isSaving = false
-
                         if (response.status === 200) {
                             this.$scope.emailSent = true
+                            this.$scope.isSaving = false
                         } else {
                             this.$scope.captchaSuccess = false
                         }
