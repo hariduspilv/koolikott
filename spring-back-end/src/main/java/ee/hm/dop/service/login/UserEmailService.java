@@ -7,6 +7,7 @@ import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
@@ -19,6 +20,7 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
 @Service
+@Transactional
 public class UserEmailService {
 
     @Inject
