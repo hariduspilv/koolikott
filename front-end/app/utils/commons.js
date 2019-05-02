@@ -286,6 +286,10 @@ function formatYear(year) {
     return year < 0 ? year * -1 : year;
 }
 
+function formatHoursMinutesSeconds(hours){
+    return hours.toTimeString().replace(/.*(\d{2}:\d{2}:\d{2}).*/, '$1');
+}
+
 function formatDateToDayMonthYear(dateString) {
     var date = new Date(dateString);
     return isNaN(date)
@@ -855,7 +859,7 @@ class Controller {
 
         return isNaN(date)
             ? ''
-            : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear() + " " + date.getHours() + ":" + date.getMinutes()
+            : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear() + " " + formatHoursMinutesSeconds(date);
     }
 
     getCorrectTitleForLo(lo) {
