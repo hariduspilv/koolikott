@@ -153,16 +153,6 @@ public class SendMailService {
                 .buildEmail();
     }
 
-    public Email sendEmailToExpertSelf(EmailToCreator emailToCreator) {
-        return EmailBuilder.startingBlank()
-                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
-                .to(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
-                .withSubject("e-Koolikott: Aineeksperdi küsimuse koopia")
-                .withHTMLText("See on emaili koopia, mille saatsid õppevara loojale/koostajale.." + BREAK
-                        + BREAK + emailToCreator.getMessage())
-                .buildEmail();
-    }
-
     public Email sendEmailToCreator(EmailToCreator emailToCreator) {
         return EmailBuilder.startingBlank()
                 .from(emailToCreator.getSenderName(), emailToCreator.getSenderEmail())
