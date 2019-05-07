@@ -1,36 +1,24 @@
 USE dop;
 
-CREATE TABLE Portfolio_History
+CREATE TABLE LearningObject_Log
 (
-    id              BIGINT PRIMARY KEY,
-    loId            BIGINT,
-    title           VARCHAR(255) NOT NULL,
-    originalCreator BIGINT       NOT NULL,
-    summary         TEXT,
-    createdAt       TIMESTAMP NULL,
+    id                   BIGINT AUTO_INCREMENT PRIMARY KEY,
+    historyId            BIGINT,
+    added                TIMESTAMP             DEFAULT CURRENT_TIMESTAMP,
+    deleted              BOOLEAN      NOT NULL DEFAULT FALSE,
+    updated              TIMESTAMP    NULL     DEFAULT NULL,
+    views                BIGINT       NOT NULL DEFAULT 0,
+    creator              BIGINT,
+    recommendation       BIGINT,
+    lastInteraction      TIMESTAMP    NULL     DEFAULT NULL,
+    picture              BIGINT,
+    visibility           VARCHAR(255) NOT NULL,
+    publicationConfirmed BOOLEAN               DEFAULT FALSE,
+    licenseType          BIGINT       NULL,
 
     FOREIGN KEY (id)
         REFERENCES LearningObject (id)
         ON DELETE RESTRICT,
-
-    FOREIGN KEY (loId)
-        REFERENCES LearningObject_Snapshot (id)
-        ON DELETE RESTRICT
-);
-
-CREATE TABLE LearningObject_Snapshot
-(
-    id             BIGINT AUTO_INCREMENT PRIMARY KEY,
-    added          TIMESTAMP          DEFAULT CURRENT_TIMESTAMP,
-    deleted        BOOLEAN,
-    updated        TIMESTAMP NULL     DEFAULT NULL,
-    views          BIGINT    NOT NULL DEFAULT 0,
-    creator        BIGINT,
-    recommendation BIGINT,
-    lastInteraction TIMESTAMP NULL DEFAULT NULL,
-    picture        LONGBLOB           DEFAULT NULL,
-    visibility VARCHAR(255) NOT NULL,
-    publicationConfirmed BOOLEAN,
 
     FOREIGN KEY (creator)
         REFERENCES User (id)
@@ -38,12 +26,27 @@ CREATE TABLE LearningObject_Snapshot
 
     FOREIGN KEY (recommendation)
         REFERENCES Recommendation (id)
-        ON DELETE RESTRICT
+        ON DELETE RESTRICT,
+
+    FOREIGN KEY (licenseType)
+        REFERENCES LicenseType (id),
+
+    FOREIGN KEY (picture)
+        REFERENCES Picture (id)
+
 );
-CREATE TABLE LearningObject_Snapshot
+
+CREATE TABLE PortfolioHistory
 (
-    id             BIGINT AUTO_INCREMENT PRIMARY KEY,
-    portfolioHistoryId  BIGINT
+    id              BIGINT PRIMARY KEY,
+    title           VARCHAR(255) NOT NULL,
+    originalCreator BIGINT       NOT NULL,
+    summary         TEXT,
+    publishedAt       TIMESTAMP    NULL,
+
+    FOREIGN KEY (id)
+        REFERENCES LearningObject_Log (historyId)
+        ON DELETE RESTRICT
 );
 
 CREATE TABLE LearningObject_CrossCurricularTheme_Snapshot
@@ -54,7 +57,7 @@ CREATE TABLE LearningObject_CrossCurricularTheme_Snapshot
     PRIMARY KEY (learningObject, crossCurricularTheme),
 
     FOREIGN KEY (learningObject)
-        REFERENCES LearningObject_Snapshot (id)
+        REFERENCES LearningObject_Log (historyId)
         ON DELETE RESTRICT,
 
     FOREIGN KEY (crossCurricularTheme)
@@ -70,7 +73,7 @@ CREATE TABLE LearningObject_KeyCompetence_Snapshot
     PRIMARY KEY (learningObject, keyCompetence),
 
     FOREIGN KEY (learningObject)
-        REFERENCES LearningObject_Snapshot (id)
+        REFERENCES LearningObject_Log (historyId)
         ON DELETE RESTRICT,
 
     FOREIGN KEY (keyCompetence)
@@ -86,7 +89,7 @@ CREATE TABLE LearningObject_Tag_Snapshot
     PRIMARY KEY (learningObject, tag),
 
     FOREIGN KEY (learningObject)
-        REFERENCES LearningObject_Snapshot (id)
+        REFERENCES LearningObject_Log (historyId)
         ON DELETE RESTRICT,
 
     FOREIGN KEY (tag)
@@ -102,7 +105,7 @@ CREATE TABLE LearningObject_TargetGroup_Snapshot
     PRIMARY KEY (learningObject, targetGroup),
 
     FOREIGN KEY (learningObject)
-        REFERENCES LearningObject_Snapshot (id)
+        REFERENCES LearningObject_Log (historyId)
         ON DELETE RESTRICT,
 
     FOREIGN KEY (targetGroup)
@@ -114,7 +117,7 @@ CREATE TABLE LearningObject_Taxon_Snapshot
     learningObject BIGINT,
     taxon          BIGINT,
     PRIMARY KEY (learningObject, taxon),
-    FOREIGN KEY (learningObject) REFERENCES LearningObject_Snapshot (id),
+    FOREIGN KEY (learningObject) REFERENCES LearningObject_Log (historyId),
     FOREIGN KEY (taxon) REFERENCES Taxon (id)
 );
 
@@ -129,7 +132,7 @@ CREATE TABLE Chapter_Snapshot
     deleted BOOLEAN NULL,
 
     FOREIGN KEY (portfolio)
-        REFERENCES Portfolio_History (loId)
+        REFERENCES PortfolioHistory (id)
         ON DELETE RESTRICT,
 
     FOREIGN KEY (parentChapter)
