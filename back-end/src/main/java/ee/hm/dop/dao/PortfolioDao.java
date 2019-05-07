@@ -2,11 +2,13 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.PortfolioHistory;
 import ee.hm.dop.model.User;
 
 import javax.inject.Inject;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.client.Entity;
 import java.util.ArrayList;
 import java.util.List;
 

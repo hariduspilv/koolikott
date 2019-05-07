@@ -17,6 +17,12 @@ public class PortfolioConverter {
         return setCommonFields(safePortfolio, portfolio);
     }
 
+    public Portfolio setFieldsToNewPortfolioHistory(Portfolio portfolio) {
+        return setCommonFields(safePortfolio, portfolio);
+    }
+
+
+
     public Portfolio setFieldsToExistingPortfolio(Portfolio to, Portfolio from) {
         setCommonFields(to, from);
         setUpdateFields(to, from);

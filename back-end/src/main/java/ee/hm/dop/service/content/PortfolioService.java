@@ -1,8 +1,10 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.PortfolioHistoryDao;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.PortfolioHistory;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
@@ -49,11 +51,15 @@ public class PortfolioService {
     private PortfolioMaterialService portfolioMaterialService;
     @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private PortfolioHistoryDao portfolioHistoryDao;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
         ValidatorUtil.mustNotHaveId(portfolio);
         validateTitle(portfolio);
+
+        PortfolioHistory created = savePortfolioHistory(portfolio, creator, creator); // portfolioHistory
         return save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
     }
 
@@ -65,6 +71,9 @@ public class PortfolioService {
 
         logger.info("Portfolio materials updating started. Portfolio id= " + portfolio.getId());
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
+
+        PortfolioHistory updated = savePortfolioHistory(portfolioConverter.setFieldsToNewPortfolio(portfolio), user, user); // portfolioHistory
+        logger.info("Portfolio with id: " + portfolio.getId() + " history added"); // TODO
 
         portfolioMaterialService.update(portfolio);
         logger.info("Portfolio materials updating ended");
@@ -101,6 +110,16 @@ public class PortfolioService {
 
         portfolioMaterialService.save(portfolio);
         return createdPortfolio;
+    }
+
+    private PortfolioHistory savePortfolioHistory(Portfolio portfolio, User creator, User originalCreator){
+        portfolio.setViews(0L);
+        portfolio.setCreator(creator);
+        portfolio.setOriginalCreator(originalCreator);
+        portfolio.setVisibility(Visibility.PRIVATE);
+        portfolio.setAdded(now());
+
+        return portfolioHistoryDao.createOrUpdate(portfolio);
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {
