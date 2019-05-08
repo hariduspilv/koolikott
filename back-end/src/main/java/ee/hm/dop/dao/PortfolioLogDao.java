@@ -1,34 +1,24 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.PortfolioHistory;
-import ee.hm.dop.model.User;
-import org.opensaml.xml.signature.P;
+import ee.hm.dop.model.PortfolioLog;
 
 import javax.inject.Inject;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
-import java.util.ArrayList;
-import java.util.List;
 
-import static org.apache.commons.collections4.CollectionUtils.isEmpty;
-import static org.joda.time.DateTime.now;
+public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
 
-public class PortfolioHistoryDao extends AbstractDao<PortfolioHistory> {
-
-    public Class<PortfolioHistory> entity() {
-        return PortfolioHistory.class;
+    public Class<PortfolioLog> entity() {
+        return PortfolioLog.class;
     }
 
     @Inject
     private LearningObjectDao learningObjectDao;
 
-    public PortfolioHistory createOrUpdate(Portfolio entity) {
-        PortfolioHistory portfolioHistory = new PortfolioHistory();
-        portfolioHistory.setId(entity.getId());
-        return super.createOrUpdate(portfolioHistory);
+    public PortfolioLog createOrUpdate(PortfolioLog entity) {
+//        entity.setLastInteraction(now());
+        return super.createOrUpdate(entity);
     }
+
+
 
 //    public Portfolio findByIdNotDeleted(Long objectId) {
 //        TypedQuery<Portfolio> findByCode = getEntityManager()

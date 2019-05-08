@@ -120,7 +120,7 @@ class controller extends Controller {
                         : this.setPortfolio(portfolio)
             })
     }
-    startAutosave() {
+    startAutosave() { //TODO siin on kogumiku autosave
         this.autoSaveInterval = this.$interval(() => {
             this.isAutoSaving = true
 

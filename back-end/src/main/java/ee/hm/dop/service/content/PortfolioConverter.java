@@ -1,11 +1,13 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.OriginalPictureDao;
-import ee.hm.dop.model.OriginalPicture;
-import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.*;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class PortfolioConverter {
 
@@ -17,11 +19,11 @@ public class PortfolioConverter {
         return setCommonFields(safePortfolio, portfolio);
     }
 
-    public Portfolio setFieldsToNewPortfolioHistory(Portfolio portfolio) {
-        return setCommonFields(safePortfolio, portfolio);
+    public PortfolioLog setFieldsToNewPortfolioLog(Portfolio portfolio) {
+        PortfolioLog portfolioLog = new PortfolioLog();
+        portfolioLog.setLearningObject(portfolio.getId());
+        return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
-
-
 
     public Portfolio setFieldsToExistingPortfolio(Portfolio to, Portfolio from) {
         setCommonFields(to, from);
@@ -47,6 +49,31 @@ public class PortfolioConverter {
         to.setTaxons(from.getTaxons());
         to.setChapters(from.getChapters());
         to.setPicture(from.getPicture());
+        to.setLicenseType(from.getLicenseType());
+        if (from.getPicture() != null) {
+            if (from.getPicture().getId() == null) {
+                to.setPicture(null);
+            } else {
+                OriginalPicture originalPicture = originalPictureDao.findById(from.getPicture().getId());
+                to.getPicture().setData(originalPicture.getData());
+                to.getPicture().setName(originalPicture.getName());
+            }
+        }
+        return to;
+    }
+
+    private PortfolioLog setCommonFieldsToPortfolioLog(PortfolioLog to, Portfolio from) {
+        to.setTitle(from.getTitle());
+        to.setSummary(from.getSummary());
+        to.setTags(from.getTags());
+        to.setTargetGroups(from.getTargetGroups());
+        to.setTaxons(from.getTaxons());
+        List<?> chapters = from.getChapters();
+        List<ChapterLog> chapterLogs = new ArrayList<>();
+        chapterLogs.addAll((Collection<? extends ChapterLog>) chapters);
+//        to.setChapters();
+        to.setChapters(chapterLogs);
+        to.setPicture((OriginalPicture) from.getPicture());
         to.setLicenseType(from.getLicenseType());
         if (from.getPicture() != null) {
             if (from.getPicture().getId() == null) {

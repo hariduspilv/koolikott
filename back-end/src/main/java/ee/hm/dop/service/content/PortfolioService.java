@@ -1,20 +1,17 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.dao.PortfolioHistoryDao;
-import ee.hm.dop.dao.TaxonDao;
+import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.PortfolioHistory;
+import ee.hm.dop.model.PortfolioLog;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
 import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.TextFieldUtil;
-import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,9 +19,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ValidatorUtil.permissionError;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -50,17 +44,18 @@ public class PortfolioService {
     @Inject
     private PortfolioMaterialService portfolioMaterialService;
     @Inject
-    private TaxonDao taxonDao;
-    @Inject
-    private PortfolioHistoryDao portfolioHistoryDao;
+    private PortfolioLogDao portfolioLogDao;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
         ValidatorUtil.mustNotHaveId(portfolio);
         validateTitle(portfolio);
 
-        PortfolioHistory created = savePortfolioHistory(portfolio, creator, creator); // portfolioHistory
-        return save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+//        return save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+        Portfolio portfolio1 = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+        PortfolioLog created = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolio1),creator,creator); // portfolioHistory
+
+        return portfolio1;
     }
 
     public Portfolio update(Portfolio portfolio, User user) {
@@ -72,8 +67,8 @@ public class PortfolioService {
         logger.info("Portfolio materials updating started. Portfolio id= " + portfolio.getId());
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
 
-        PortfolioHistory updated = savePortfolioHistory(portfolioConverter.setFieldsToNewPortfolio(portfolio), user, user); // portfolioHistory
-        logger.info("Portfolio with id: " + portfolio.getId() + " history added"); // TODO
+        PortfolioLog updated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio), user, user); // portfolioHistory
+        logger.info("Portfolio with id: " + portfolio.getId() + " history log added"); // TODO
 
         portfolioMaterialService.update(portfolio);
         logger.info("Portfolio materials updating ended");
@@ -112,14 +107,14 @@ public class PortfolioService {
         return createdPortfolio;
     }
 
-    private PortfolioHistory savePortfolioHistory(Portfolio portfolio, User creator, User originalCreator){
+    private PortfolioLog savePortfolioLog(PortfolioLog portfolio, User creator, User originalCreator){
         portfolio.setViews(0L);
         portfolio.setCreator(creator);
         portfolio.setOriginalCreator(originalCreator);
         portfolio.setVisibility(Visibility.PRIVATE);
         portfolio.setAdded(now());
 
-        return portfolioHistoryDao.createOrUpdate(portfolio);
+        return portfolioLogDao.createOrUpdate(portfolio);
     }
 
     private Portfolio validateUpdate(Portfolio portfolio, User loggedInUser) {

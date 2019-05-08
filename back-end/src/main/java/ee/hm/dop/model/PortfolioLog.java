@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PortfolioHistory extends LearningObject implements Searchable, IPortfolio {
+public class PortfolioLog extends LearningObjectLog {
 
     @Column(nullable = false)
     private String title;
@@ -31,7 +31,7 @@ public class PortfolioHistory extends LearningObject implements Searchable, IPor
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder")
-    private List<Chapter> chapters;
+    private List<ChapterLog> chapters;
 
     @ManyToOne
     @JoinColumn(name = "originalCreator", nullable = false)
@@ -56,14 +56,14 @@ public class PortfolioHistory extends LearningObject implements Searchable, IPor
     }
 
     public void setSummary(String summary) {
-        this.summary = getSanitizedHTML(summary);
+        this.summary = summary;
     }
 
-    public List<Chapter> getChapters() {
+    public List<ChapterLog> getChapters() {
         return chapters;
     }
 
-    public void setChapters(List<Chapter> chapters) {
+    public void setChapters(List<ChapterLog> chapters) {
         this.chapters = chapters;
     }
 
@@ -73,13 +73,6 @@ public class PortfolioHistory extends LearningObject implements Searchable, IPor
 
     public void setOriginalCreator(User originalCreator) {
         this.originalCreator = originalCreator;
-    }
-
-    private String getSanitizedHTML(String summary) {
-        if (summary != null) {
-            summary = LO_ALLOWED_HTML_TAGS_POLICY.sanitize(summary);
-        }
-        return summary;
     }
 
     public DateTime getPublishedAt() {
