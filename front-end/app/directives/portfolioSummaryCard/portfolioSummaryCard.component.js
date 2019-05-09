@@ -170,9 +170,12 @@ class controller extends Controller {
     showPortfolioHistoryDialog(){
         this.$rootScope.$broadcast('portfolioHistory:show')
         // ng-click="$mdMenu.open($event)";
-        // this.$scope.showPortfolioHistoryDialog = true;
-        // let menu = document.getElementById('historymenu');
-        // menu.dispatchEvent(this.returnEvent());
+        this.$scope.showPortfolioHistoryDialog = true;
+        let menu = document.getElementById('historymenu');
+
+        this.$timeout(() => {
+            menu.dispatchEvent(this.returnEvent());
+        },3000);
     }
 
     returnEvent() {
@@ -267,7 +270,8 @@ controller.$inject = [
     'taxonService',
     'taxonGroupingService',
     'eventService',
-    'portfolioService'
+    'portfolioService',
+    '$timeout'
 ]
 component('dopPortfolioSummaryCard', {
     bindings: {

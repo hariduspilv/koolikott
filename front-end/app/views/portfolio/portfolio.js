@@ -60,14 +60,18 @@ class controller extends Controller {
             if (!_.isEqual(value, this.$scope.portfolio))
                 this.setPortfolio(value)
         })
-        // this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
+        this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
     }
 
-    // showPortfolioHistoryLog() {
+    showPortfolioHistoryLog() {
+        this.$scope.showPortfolioHistoryDialog = true;
+        let menu = document.getElementById('historymenu');
+        menu.dispatchEvent(this.returnEvent());
+
+    }
+
+    // showPortfolioHistoryLog(){
     //     this.$scope.showPortfolioHistoryDialog = true;
-    //     let menu = document.getElementById('historymenu');
-    //     menu.dispatchEvent(this.returnEvent());
-    //
     // }
 
     returnEvent() {

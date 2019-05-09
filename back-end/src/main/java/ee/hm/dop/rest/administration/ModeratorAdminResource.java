@@ -25,7 +25,6 @@ public class ModeratorAdminResource extends BaseResource {
     @RolesAllowed({RoleString.ADMIN,RoleString.MODERATOR})
     @Produces(MediaType.APPLICATION_JSON)
     public List<User> getModerators() {
-
         if (getLoggedInUser().getRole() == Role.MODERATOR) {
             List<User> userList = new ArrayList<>();
             userList.add(getLoggedInUser());
