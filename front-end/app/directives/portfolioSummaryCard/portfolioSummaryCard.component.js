@@ -18,6 +18,7 @@ class controller extends Controller {
 
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
+        this.showPortfolioHistoryDialog = this.showPortfolioHistoryDialog.bind(this)
 
         this.eventService.notify('portfolio:reloadTaxonObject')
 
@@ -129,7 +130,8 @@ class controller extends Controller {
                     this.storageService.setPortfolio(portfolio)
             })
     }
-    getPortfolioEducationalContexts() {
+
+     getPortfolioEducationalContexts() {
         if (!this.portfolio || !this.portfolio.taxons)
             return
 
@@ -165,6 +167,32 @@ class controller extends Controller {
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
             })
     }
+    showPortfolioHistoryDialog(){
+        this.$rootScope.$broadcast('portfolioHistory:show')
+        // ng-click="$mdMenu.open($event)";
+        // this.$scope.showPortfolioHistoryDialog = true;
+        // let menu = document.getElementById('historymenu');
+        // menu.dispatchEvent(this.returnEvent());
+    }
+
+    returnEvent() {
+        let event;
+        if (typeof (MouseEvent) === 'function') {
+            event = new MouseEvent('click');
+        } else {
+            event = document.createEvent('MouseEvent');
+            event.initEvent('click', true, true);
+        }
+        return event;
+    }
+
+    // showPortfolioHistoryLog() {
+    //     this.$scope.showPortfolioHistoryDialog = true;
+    //     let menu = document.getElementById('historymenu');
+    //     menu.dispatchEvent(this.returnEvent());
+    //
+    // }
+
     confirmPortfolioDeletion() {
         this.dialogService.showDeleteConfirmationDialog(
             'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',

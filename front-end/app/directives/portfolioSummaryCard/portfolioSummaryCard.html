@@ -4,6 +4,7 @@
     <!-- SECTION 1: Left -->
     <div data-flex data-flex-gt-xs="75" data-layout="column" id="section-left">
       <!-- Headline -->
+      <dop-show-portfolio-history data="portfolio" id="dop-portfolio-history"></dop-show-portfolio-history>
       <div class="card-lg__container card-lg__container--padding-l-r-t" data-layout="row">
         <h1 class="learning-object-title" data-flex-gt-sm="65" data-ng-bind="portfolio.title"></h1>
         <div class="card-menus" data-layout="row">
@@ -54,7 +55,7 @@
                 </md-button>
               </md-menu-item>
               <md-menu-item>
-                <md-button data-ng-click="showPortfolioHistoryDialog()">
+                <md-button data-ng-click="$ctrl.showPortfolioHistoryDialog()">
                   <md-icon md-menu-align-target>history</md-icon>
                   <span data-translate="PORTFOLIO_SHOW_HISTORY"></span>
                 </md-button>

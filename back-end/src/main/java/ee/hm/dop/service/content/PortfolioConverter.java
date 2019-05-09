@@ -108,11 +108,13 @@ public class PortfolioConverter {
         }
     };
 
-    private Function<ChapterBlock, ChapterBlockLog> convertChapterBlockToLog = chapter -> {
+    private Function<ChapterBlock, ChapterBlockLog> convertChapterBlockToLog = PortfolioConverter::apply;
+
+    private static ChapterBlockLog apply(ChapterBlock chapter) {
         ChapterBlockLog chapterLog = new ChapterBlockLog();
         chapterLog.setId(chapter.getId());
         chapterLog.setHtmlContent(chapter.getHtmlContent());
 
         return chapterLog;
-    };
+    }
 }

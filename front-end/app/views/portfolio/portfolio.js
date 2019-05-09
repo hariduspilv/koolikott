@@ -60,6 +60,25 @@ class controller extends Controller {
             if (!_.isEqual(value, this.$scope.portfolio))
                 this.setPortfolio(value)
         })
+        // this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
+    }
+
+    // showPortfolioHistoryLog() {
+    //     this.$scope.showPortfolioHistoryDialog = true;
+    //     let menu = document.getElementById('historymenu');
+    //     menu.dispatchEvent(this.returnEvent());
+    //
+    // }
+
+    returnEvent() {
+        let event;
+        if (typeof (MouseEvent) === 'function') {
+            event = new MouseEvent('click');
+        } else {
+            event = document.createEvent('MouseEvent');
+            event.initEvent('click', true, true);
+        }
+        return event;
     }
 
     handleScroll(e) {
