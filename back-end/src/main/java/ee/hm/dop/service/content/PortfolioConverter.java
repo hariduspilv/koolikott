@@ -1,13 +1,19 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.OriginalPictureDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.Chapter;
+import ee.hm.dop.model.ChapterBlock;
+import ee.hm.dop.model.ChapterBlockLog;
+import ee.hm.dop.model.ChapterLog;
+import ee.hm.dop.model.OriginalPicture;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.PortfolioLog;
 import org.joda.time.DateTime;
 
 import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class PortfolioConverter {
 
@@ -68,10 +74,9 @@ public class PortfolioConverter {
         to.setTags(from.getTags());
         to.setTargetGroups(from.getTargetGroups());
         to.setTaxons(from.getTaxons());
-        List<?> chapters = from.getChapters();
-        List<ChapterLog> chapterLogs = new ArrayList<>();
-        chapterLogs.addAll((Collection<? extends ChapterLog>) chapters);
-//        to.setChapters();
+        List<ChapterLog> chapterLogs = from.getChapters().stream()
+                .map(convertChapterToLog)
+                .collect(Collectors.toList());
         to.setChapters(chapterLogs);
         to.setPicture((OriginalPicture) from.getPicture());
         to.setLicenseType(from.getLicenseType());
@@ -86,4 +91,28 @@ public class PortfolioConverter {
         }
         return to;
     }
+
+    private Function<Chapter, ChapterLog> convertChapterToLog = new Function<Chapter, ChapterLog>() {
+        public ChapterLog apply(Chapter chapter) {
+            ChapterLog chapterLog = new ChapterLog();
+            chapterLog.setId(chapter.getId());
+            chapterLog.setTitle(chapter.getTitle());
+
+            List<ChapterBlockLog> chapterBlockLogs = chapter.getBlocks().stream()
+                    .map(convertChapterBlockToLog)
+                    .collect(Collectors.toList());
+
+            chapterLog.setBlocks(chapterBlockLogs);
+
+            return chapterLog;
+        }
+    };
+
+    private Function<ChapterBlock, ChapterBlockLog> convertChapterBlockToLog = chapter -> {
+        ChapterBlockLog chapterLog = new ChapterBlockLog();
+        chapterLog.setId(chapter.getId());
+        chapterLog.setHtmlContent(chapter.getHtmlContent());
+
+        return chapterLog;
+    };
 }

@@ -10,7 +10,7 @@ class controller extends Controller {
             ? this.setPortfolio(storedPortfolio, true)
             : this.fetchPortfolio()
 
-        this.startAutosave()
+        // this.startAutosave()
 
         this.$scope.toggleSidenav = (menuId) => this.$mdSidenav(menuId).toggle()
         this.$scope.closeSidenav = (menuId) => this.$mdSidenav(menuId).close()
