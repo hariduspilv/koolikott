@@ -43,6 +43,9 @@ public class PortfolioLog extends LearningObjectLog {
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private DateTime publishedAt;
 
+    public PortfolioLog() {
+    }
+
     public String getTitle() {
         return title;
     }

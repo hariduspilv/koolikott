@@ -66,13 +66,10 @@ class controller extends Controller {
     showPortfolioHistoryLog() {
         this.$scope.showPortfolioHistoryDialog = true;
         let menu = document.getElementById('historymenu');
-        menu.dispatchEvent(this.returnEvent());
-
+        this.$timeout(() => {
+            menu.dispatchEvent(this.returnEvent());
+        }, 100);
     }
-
-    // showPortfolioHistoryLog(){
-    //     this.$scope.showPortfolioHistoryDialog = true;
-    // }
 
     returnEvent() {
         let event;

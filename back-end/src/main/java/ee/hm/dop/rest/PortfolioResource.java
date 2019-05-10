@@ -1,26 +1,21 @@
 package ee.hm.dop.rest;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.RoleString;
+import ee.hm.dop.service.content.LearningObjectAdministrationService;
+import ee.hm.dop.service.content.PortfolioCopier;
+import ee.hm.dop.service.content.PortfolioGetter;
+import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.useractions.UserService;
 
 import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 
-import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.Like;
-import ee.hm.dop.service.content.*;
-import ee.hm.dop.service.useractions.UserLikeService;
-import ee.hm.dop.service.useractions.UserService;
-import org.apache.commons.collections.CollectionUtils;
+import java.util.List;
+
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Path("portfolio")
 public class PortfolioResource extends BaseResource {
@@ -53,12 +48,25 @@ public class PortfolioResource extends BaseResource {
     }
 
     @GET
+    @Path("getPortfolioHistoryAll")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<PortfolioLog> getPortfolioHistoryAll(@QueryParam("portfolioId") long portfolioId) {
+        return portfolioGetter.getPortfolioHistoryAll(portfolioId);//TODO check such id
+    }
+
+    @GET
+    @Path("getPortfolioHistory")
+    @Produces(MediaType.APPLICATION_JSON)
+    public PortfolioLog getPortfolioHistory(@QueryParam("portfolioHistoryId") long portfolioHistoryId) {
+        return portfolioGetter.getPortfolioHistory(portfolioHistoryId);//TODO check such id
+    }
+
+    @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)
     public Long getByCreatorCount(@QueryParam("username") String username) {
         User creator = getValidCreator(username);
         if (creator == null) throw badRequest("User does not exist with this username parameter");
-
         return portfolioGetter.getCountByCreator(creator);
     }
 

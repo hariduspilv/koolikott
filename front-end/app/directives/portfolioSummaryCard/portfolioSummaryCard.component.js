@@ -18,7 +18,7 @@ class controller extends Controller {
 
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
-        this.showPortfolioHistoryDialog = this.showPortfolioHistoryDialog.bind(this)
+        // this.showPortfolioHistoryDialog = this.showPortfolioHistoryDialog.bind(this)
 
         this.eventService.notify('portfolio:reloadTaxonObject')
 
@@ -167,27 +167,31 @@ class controller extends Controller {
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
             })
     }
+
     showPortfolioHistoryDialog(){
-        this.$rootScope.$broadcast('portfolioHistory:show')
+        this.$rootScope.$broadcast('portfolioHistory:show');
         // ng-click="$mdMenu.open($event)";
-        this.$scope.showPortfolioHistoryDialog = true;
-        let menu = document.getElementById('historymenu');
+        // this.$scope.showPortfolioHistoryDialog = true;
+        // let menu = document.getElementById('historymenu');
+        // this.getPortfolioLogs();
+        //
+        // menu.dispatchEvent(this.returnEvent());
 
-        this.$timeout(() => {
-            menu.dispatchEvent(this.returnEvent());
-        },3000);
+        // this.$timeout(() => {
+        //     menu.dispatchEvent(this.returnEvent());
+        // },3000);
     }
 
-    returnEvent() {
-        let event;
-        if (typeof (MouseEvent) === 'function') {
-            event = new MouseEvent('click');
-        } else {
-            event = document.createEvent('MouseEvent');
-            event.initEvent('click', true, true);
-        }
-        return event;
-    }
+    // returnEvent() {
+    //     let event;
+    //     if (typeof (MouseEvent) === 'function') {
+    //         event = new MouseEvent('click');
+    //     } else {
+    //         event = document.createEvent('MouseEvent');
+    //         event.initEvent('click', true, true);
+    //     }
+    //     return event;
+    // }
 
     // showPortfolioHistoryLog() {
     //     this.$scope.showPortfolioHistoryDialog = true;

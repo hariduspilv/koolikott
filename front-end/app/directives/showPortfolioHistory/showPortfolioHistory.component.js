@@ -1,53 +1,35 @@
 'use strict'
-
 {
     class controller extends Controller {
         $onInit() {
-
-            // this.$scope.showPortfolioHistoryDialog = this.showPortfolioHistoryDialog.bind(this)
+            this.$scope.$on('portfolioHistory:show', this.getPortfolioLogs.bind(this));
         }
 
-        // showPortfolioHistoryLog() {
-        //     this.$scope.showPortfolioHistoryDialog = true;
-        //     let menu = document.getElementById('historymenu');
-        //     menu.dispatchEvent(this.returnEvent());
-        // }
-        //
-        // returnEvent() {
-        //     let event;
-        //     if (typeof (MouseEvent) === 'function') {
-        //         event = new MouseEvent('click');
-        //     } else {
-        //         event = document.createEvent('MouseEvent');
-        //         event.initEvent('click', true, true);
-        //     }
-        //     return event;
-        // }
-
-        $doCheck() {
-            if (this.$scope.portfolio !== this.portfolio)
-                this.$scope.portfolio = this.portfolio
+        getPortfolioLogs() {
+            let url = 'rest/portfolio/getPortfolioHistoryAll?portfolioId=' + 5475;
+            this.serverCallService.makeGet(url)
+                .then(({data}) => {
+                    if (data) {
+                        this.$scope.data = data;
+                    }
+                });
         }
 
-
+        getPortfolioHistoryToRestore() {
+            let url = 'rest/portfolio/getPortfolioHistory?portfolioHistoryId=' + 25;
+            this.serverCallService.makeGet(url)
+                .then(({data}) => {
+                    if (data) {
+                        this.$scope.data = data;
+                    }
+                });
+        }
     }
+
     controller.$inject = [
-        '$rootScope',
         '$scope',
-        '$location',
         '$mdDialog',
-        '$rootScope',
-        'authenticatedUserService',
-        '$route',
-        'dialogService',
-        'serverCallService',
-        'toastService',
-        'storageService',
-        'targetGroupService',
-        'taxonService',
-        'taxonGroupingService',
-        'eventService',
-        'portfolioService'
+        'serverCallService'
     ]
     component('dopShowPortfolioHistory', {
         bindings: {

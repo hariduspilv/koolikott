@@ -3,6 +3,7 @@ package ee.hm.dop.dao;
 import ee.hm.dop.model.PortfolioLog;
 
 import javax.inject.Inject;
+import java.util.List;
 
 public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
 
@@ -18,6 +19,22 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
         return super.createOrUpdate(entity);
     }
 
+    public List<PortfolioLog> findByIdAllPortfolioLOgs(Long learningObjectId) {
+        return getEntityManager()
+                .createNativeQuery("SELECT lo.* FROM PortfolioLog lo " +
+                        "JOIN LearningObject_Log lol " +
+                        "ON lo.id = lol.id " +
+                        "WHERE lol.learningObject = :id")
+                .setParameter("id", learningObjectId)
+                .getResultList();
+
+    }
+
+    //    public List<Portfolio> findDeletedPortfolios() {
+//        return getEntityManager()
+//                .createQuery("SELECT p FROM Portfolio p WHERE p.deleted = true", entity())
+//                .getResultList();
+//    }
 
 
 //    public Portfolio findByIdNotDeleted(Long objectId) {
@@ -37,12 +54,6 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
 //        return getSingleResult(findByCode);
 //    }
 //
-//    public Portfolio findById(Long portfolioId) {
-//        TypedQuery<Portfolio> findByCode = getEntityManager()
-//                .createQuery("SELECT lo FROM Portfolio lo WHERE lo.id = :id", entity()) //
-//                .setParameter("id", portfolioId);
-//        return getSingleResult(findByCode);
-//    }
 //
 //    public List<Portfolio> findDeletedPortfolios() {
 //        return getEntityManager()
