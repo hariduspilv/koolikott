@@ -17,6 +17,7 @@ import org.joda.time.DateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
@@ -28,6 +29,7 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 
 @Service
+@Transactional
 public class UserProfileService {
 
     @Inject
