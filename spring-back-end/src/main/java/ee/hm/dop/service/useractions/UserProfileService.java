@@ -48,7 +48,7 @@ public class UserProfileService {
 
         updateUser(userProfile, user);
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
-        if (dbUserEmail != null && !dbUserEmail.getEmail().equals(validateEmail(userProfile.getEmail()))) {
+        if (dbUserEmail != null && dbUserEmail.getEmail() != null && !dbUserEmail.getEmail().equals(validateEmail(userProfile.getEmail()))) {
             dbUserEmail.setPin(PinGeneratorService.generatePin());
             sendMailService.sendEmail(sendMailService.sendPinToUser(dbUserEmail, userProfile.getEmail()));
             userEmailDao.createOrUpdate(dbUserEmail);
