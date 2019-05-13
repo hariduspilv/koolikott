@@ -63,14 +63,15 @@ class controller extends Controller {
         this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
         // this.$scope.$on('portfolioHistory:loadHistory',this.loadHistory.bind(this));
 
-        this.$scope.$on('portfolioHistory:loadHistory',(evt, value) => {
-            if (!_.isEqual(value, this.$scope.portfolio))
-                this.setPortfolio(value)
-        });
-    }
+        // this.$scope.$on('portfolioHistory:loadHistory',(evt, value) => {
+        //     if (!_.isEqual(value, this.$scope.portfolio))
+        //         this.setPortfolio(value)
+        // });
 
-    loadHistory(){
-        alert('fuckkk')
+        this.$scope.$watch('portfolio', (newValue, oldValue) => {
+            if (newValue !== oldValue)
+                this.setPortfolio(this.$scope.portfolio)
+        });
     }
 
     showPortfolioHistoryLog() {
