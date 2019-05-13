@@ -1,6 +1,7 @@
 package ee.hm.dop.rest.administration;
 
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.useractions.UserService;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -20,9 +22,15 @@ public class ModeratorAdminResource extends BaseResource {
     private UserService userService;
 
     @GetMapping
-    @Secured(RoleString.ADMIN)
+    @Secured({RoleString.ADMIN,RoleString.MODERATOR})
     public List<User> getModerators() {
-        return userService.getModerators(getLoggedInUser());
+        if (getLoggedInUser().getRole() == Role.MODERATOR) {
+            List<User> userList = new ArrayList<>();
+            userList.add(getLoggedInUser());
+            return userList;
+        } else {
+            return userService.getModerators(getLoggedInUser());
+        }
     }
 
     @GetMapping
