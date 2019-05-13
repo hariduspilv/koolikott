@@ -5,6 +5,8 @@ import ee.hm.dop.model.PortfolioLog;
 import javax.inject.Inject;
 import java.util.List;
 
+import static org.joda.time.DateTime.now;
+
 public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
 
     public Class<PortfolioLog> entity() {
@@ -15,16 +17,16 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
     private LearningObjectDao learningObjectDao;
 
     public PortfolioLog createOrUpdate(PortfolioLog entity) {
-//        entity.setLastInteraction(now());
+        entity.setPublishedAt(now());
         return super.createOrUpdate(entity);
     }
 
     public List<PortfolioLog> findByIdAllPortfolioLOgs(Long learningObjectId) {
         return getEntityManager()
-                .createNativeQuery("SELECT lo.* FROM PortfolioLog lo " +
-                        "JOIN LearningObject_Log lol " +
-                        "ON lo.id = lol.id " +
-                        "WHERE lol.learningObject = :id")
+                .createQuery("" +
+                                "SELECT p FROM PortfolioLog p \n" +
+                                "   WHERE p.learningObject = :id "
+                        , PortfolioLog.class)
                 .setParameter("id", learningObjectId)
                 .getResultList();
 

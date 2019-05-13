@@ -38,12 +38,12 @@ class controller extends Controller {
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
 
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newPortfolio, oldPortfolio) => {
-            this.eventService.notify('portfolio:reloadTaxonObject')
+            this.eventService.notify('portfolio:reloadTaxonObject');
 
             if (newPortfolio !== oldPortfolio) {
                 this.setPortfolio(newPortfolio)
             }
-        })
+        });
         this.$scope.$watch(() => this.$location.search().id, (newValue, oldValue) => {
             if (newValue !== oldValue)
                 this.$route.reload()
@@ -61,6 +61,16 @@ class controller extends Controller {
                 this.setPortfolio(value)
         })
         this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
+        // this.$scope.$on('portfolioHistory:loadHistory',this.loadHistory.bind(this));
+
+        this.$scope.$on('portfolioHistory:loadHistory',(evt, value) => {
+            if (!_.isEqual(value, this.$scope.portfolio))
+                this.setPortfolio(value)
+        });
+    }
+
+    loadHistory(){
+        alert('fuckkk')
     }
 
     showPortfolioHistoryLog() {

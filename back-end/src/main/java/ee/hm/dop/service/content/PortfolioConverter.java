@@ -28,6 +28,7 @@ public class PortfolioConverter {
     public PortfolioLog setFieldsToNewPortfolioLog(Portfolio portfolio) {
         PortfolioLog portfolioLog = new PortfolioLog();
         portfolioLog.setLearningObject(portfolio.getId());
+        portfolioLog.setCreator(portfolio.getCreator());
         return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
 

@@ -47,7 +47,7 @@ public class PortfolioGetter {
         return new SearchResult(searchables, size, start);
     }
 
-    public List<PortfolioLog> getPortfolioHistoryAll(long portfolioId) {
+    public List<PortfolioLog> getPortfolioHistoryAll(Long portfolioId) {
         return portfolioLogDao.findByIdAllPortfolioLOgs(portfolioId);
     }
 

@@ -25,8 +25,10 @@ class controller extends Controller {
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
-            if (newValue !== oldValue)
+            if (newValue !== oldValue) {
+                this.$rootScope.$broadcast('portfolioHistory:loadHistory');
                 this.eventService.notify('portfolio:reloadTaxonObject')
+            }
         })
         this.$scope.$watch('portfolio.taxon.id', (newValue, oldValue) => {
             if (newValue !== oldValue)
@@ -168,37 +170,9 @@ class controller extends Controller {
             })
     }
 
-    showPortfolioHistoryDialog(){
+    showPortfolioHistoryDialog() {
         this.$rootScope.$broadcast('portfolioHistory:show');
-        // ng-click="$mdMenu.open($event)";
-        // this.$scope.showPortfolioHistoryDialog = true;
-        // let menu = document.getElementById('historymenu');
-        // this.getPortfolioLogs();
-        //
-        // menu.dispatchEvent(this.returnEvent());
-
-        // this.$timeout(() => {
-        //     menu.dispatchEvent(this.returnEvent());
-        // },3000);
     }
-
-    // returnEvent() {
-    //     let event;
-    //     if (typeof (MouseEvent) === 'function') {
-    //         event = new MouseEvent('click');
-    //     } else {
-    //         event = document.createEvent('MouseEvent');
-    //         event.initEvent('click', true, true);
-    //     }
-    //     return event;
-    // }
-
-    // showPortfolioHistoryLog() {
-    //     this.$scope.showPortfolioHistoryDialog = true;
-    //     let menu = document.getElementById('historymenu');
-    //     menu.dispatchEvent(this.returnEvent());
-    //
-    // }
 
     confirmPortfolioDeletion() {
         this.dialogService.showDeleteConfirmationDialog(

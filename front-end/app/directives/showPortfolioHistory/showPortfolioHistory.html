@@ -1,6 +1,35 @@
-<!--<div id="showPortfolioHistoryDiv" class="customer-support"-->
-<!--<md-toolbar class="error-message" data-md-colors="{ 'background-color': 'grey-900' }" data-ng-if="true">-->
-<!--</md-toolbar>-->
+<!--<div id="showPortfolioHistoryDiv" class="customer-support">-->
+<div data-layout="column" ng-if="showLogSelect">
+  <md-toolbar class="error-message" data-md-colors="{ 'background-color': 'red' }" data-ng-if="true">
+    <div class="md-toolbar-tools" data-layout="row">
+      <h2><span>{{selectedPortfolioLog.creator.username}}</span><span>{{$ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt)}}</span>
+      </h2>
+      <!--    <h2>{{$ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog[1][4])}}</h2>-->
+      <div>
+        <md-button class="md-primary" data-ng-click="$ctrl.restoreSelectedPortfolio()">
+          <md-icon>history</md-icon>
+        </md-button>
+        <md-button class="md-primary" data-ng-click="$ctrl.closePortfolioRestore()">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </div>
+  </md-toolbar>
+  <md-select
+    id="historymenu"
+    data-ng-model="selectedPortfolioLog"
+    ng-model-options="{trackBy: '$value.id'}"
+    md-on-open="$ctrl.getPortfolioHistoryToRestore(selectedPortfolioLog[1][0])"
+    data-ng-change="$ctrl.dosmth(selectedPortfolioLog)">
+
+    <md-option
+      data-ng-value="opt"
+      data-ng-repeat="opt in data">{{opt}}</md-option>
+  </md-select>
+  <md-input-container>
+</md-input-container>
+</div>
+
 <!--<md-menu id="portfolio-menu" md-position-mode="left bottom">-->
 <!--  <md-button id="historymenu" ng-click="$mdMenu.open($event)" class="md-icon-button">-->
 <!--    <md-icon md-menu-origin>history</md-icon>-->
@@ -13,52 +42,52 @@
 <!--    </md-menu-item>-->
 <!--  </md-menu-content>-->
 <!--</md-menu>-->
-<div>
-<md-card class="md-data-table">
-  <md-toolbar class="md-table-toolbar md-default">
-    <div class="md-toolbar-tools">
-      <h2 class="md-headline" data-translate="AJALUGU" data-flex></h2>
-      <md-button></md-button>
-    </div>
-  </md-toolbar>
-  <md-content
-    class="statistics-info-text text-small"
-    data-ng-class="{'is-open': isInfoTextOpen}"
-    data-md-colors="{color: 'grey-600'}"
-  >
-    <div data-translate="GDPR_INFO_TEXT" data-layout-padding></div>
-  </md-content>
-  <md-content data-layout-padding>
-    <div data-layout="row" data-layout-align="end center">
-      <md-button class="md-raised md-primary"
-                 data-ng-click="$ctrl.toggleNewRow()">
-      </md-button><md-button class="md-raised md-primary"
-                 data-ng-click="$ctrl.toggleNewRow()">
-      </md-button><md-button class="md-raised md-primary"
-                 data-ng-click="$ctrl.toggleNewRow()">
-      </md-button>
-    </div>
-  </md-content>
-  <md-table-container>
-    <table data-ng-if="data" md-table class="table-fixed">
-      <tbody md-body>
-      <tr md-row data-ng-repeat="item in data track by $index">
-        <td md-cell class="dashboard-cell dashboard-cell--title td-word-wrap">
-          <span data-ng-bind="item[1][0]"></span>
-        </td><td md-cell class="dashboard-cell dashboard-cell--title td-word-wrap">
-          <span data-ng-bind="item[1][1]"></span>
-        </td>
-      </tr>
-      </tbody>
-    </table>
-  </md-table-container>
-  <md-table-pagination
-    data-ng-if="true"
-    data-md-limit="perPage"
-    data-md-page="page"
-    data-md-total="{{data.length}}"
-    data-md-on-paginate="paginate"
-    data-md-page-select
-  ></md-table-pagination>
-</md-card>
-</div>
+<!--<div>-->
+<!--<md-card class="md-data-table">-->
+<!--  <md-toolbar class="md-table-toolbar md-default">-->
+<!--    <div class="md-toolbar-tools">-->
+<!--      <h2 class="md-headline" data-translate="AJALUGU" data-flex></h2>-->
+<!--      <md-button></md-button>-->
+<!--    </div>-->
+<!--  </md-toolbar>-->
+<!--  <md-content-->
+<!--    class="statistics-info-text text-small"-->
+<!--    data-ng-class="{'is-open': isInfoTextOpen}"-->
+<!--    data-md-colors="{color: 'grey-600'}"-->
+<!--  >-->
+<!--    <div data-translate="GDPR_INFO_TEXT" data-layout-padding></div>-->
+<!--  </md-content>-->
+<!--  <md-content data-layout-padding>-->
+<!--    <div data-layout="row" data-layout-align="end center">-->
+<!--      <md-button class="md-raised md-primary"-->
+<!--                 data-ng-click="$ctrl.toggleNewRow()">-->
+<!--      </md-button><md-button class="md-raised md-primary"-->
+<!--                 data-ng-click="$ctrl.toggleNewRow()">-->
+<!--      </md-button><md-button class="md-raised md-primary"-->
+<!--                 data-ng-click="$ctrl.toggleNewRow()">-->
+<!--      </md-button>-->
+<!--    </div>-->
+<!--  </md-content>-->
+<!--  <md-table-container>-->
+<!--    <table data-ng-if="data" md-table class="table-fixed">-->
+<!--      <tbody md-body>-->
+<!--      <tr md-row data-ng-repeat="item in data track by $index">-->
+<!--        <td md-cell class="dashboard-cell dashboard-cell&#45;&#45;title td-word-wrap">-->
+<!--          <span data-ng-bind="item[1][0]"></span>-->
+<!--        </td><td md-cell class="dashboard-cell dashboard-cell&#45;&#45;title td-word-wrap">-->
+<!--          <span data-ng-bind="item[1][1]"></span>-->
+<!--        </td>-->
+<!--      </tr>-->
+<!--      </tbody>-->
+<!--    </table>-->
+<!--  </md-table-container>-->
+<!--  <md-table-pagination-->
+<!--    data-ng-if="true"-->
+<!--    data-md-limit="perPage"-->
+<!--    data-md-page="page"-->
+<!--    data-md-total="{{data.length}}"-->
+<!--    data-md-on-paginate="paginate"-->
+<!--    data-md-page-select-->
+<!--  ></md-table-pagination>-->
+<!--</md-card>-->
+<!--</div>-->
