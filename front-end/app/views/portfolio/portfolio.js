@@ -66,11 +66,15 @@ class controller extends Controller {
         // this.$scope.$on('portfolioHistory:loadHistory',(evt, value) => {
         //     if (!_.isEqual(value, this.$scope.portfolio))
         //         this.setPortfolio(value)
-        // });
+        // });56325
 
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
-            if (newValue !== oldValue)
-                this.setPortfolio(this.$scope.portfolio)
+            if (newValue !== oldValue) {
+                if (newValue.type === '.PortfolioLog') {
+                    this.eventService.notify('portfolio:reloadTaxonObject');
+                    this.setPortfolio(this.$scope.portfolio)
+                }
+            }
         });
     }
 

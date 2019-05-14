@@ -18,7 +18,6 @@ class controller extends Controller {
 
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
-        // this.showPortfolioHistoryDialog = this.showPortfolioHistoryDialog.bind(this)
 
         this.eventService.notify('portfolio:reloadTaxonObject')
 
@@ -26,6 +25,7 @@ class controller extends Controller {
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
             if (newValue !== oldValue) {
+                this.historySelectionInProgress = true;
                 this.$rootScope.$broadcast('portfolioHistory:loadHistory');
                 this.eventService.notify('portfolio:reloadTaxonObject')
             }
@@ -171,6 +171,7 @@ class controller extends Controller {
     }
 
     showPortfolioHistoryDialog() {
+        this.historySelectionInProgress = true;
         this.$rootScope.$broadcast('portfolioHistory:show');
     }
 

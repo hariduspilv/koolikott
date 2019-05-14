@@ -90,6 +90,8 @@ class controller extends Controller {
                     }
                 })
             )
+        else
+            this.$scope.chapters = null;
     }
 }
 controller.$inject = [

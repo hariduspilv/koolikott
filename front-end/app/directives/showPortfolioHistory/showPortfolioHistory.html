@@ -1,15 +1,15 @@
 <!--<div id="showPortfolioHistoryDiv" class="customer-support">-->
-<div data-layout="column" ng-if="showLogSelect">
-  <md-toolbar class="error-message" data-md-colors="{ 'background-color': 'red' }" data-ng-if="true">
+<div data-layout="column" data-ng-show="showLogSelect">
+  <md-toolbar class="error-message" data-ng-if="true">
     <div class="md-toolbar-tools" data-layout="row">
-      <h2><span>{{selectedPortfolioLog.creator.username}}</span><span>{{$ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt)}}</span>
+      <h2><span>{{selectedPortfolioLog ? selectedPortfolioLog.creator.username : 'Ajalugu'}}</span>
+        <span>{{$ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt)}}</span>
       </h2>
-      <!--    <h2>{{$ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog[1][4])}}</h2>-->
       <div>
-        <md-button class="md-primary" data-ng-click="$ctrl.restoreSelectedPortfolio()">
+        <md-button class="md-grey" data-ng-click="$ctrl.restoreSelectedPortfolio()">
           <md-icon>history</md-icon>
         </md-button>
-        <md-button class="md-primary" data-ng-click="$ctrl.closePortfolioRestore()">
+        <md-button class="md-grey" data-ng-click="$ctrl.closePortfolioRestore()">
           <md-icon>close</md-icon>
         </md-button>
       </div>
@@ -19,15 +19,11 @@
     id="historymenu"
     data-ng-model="selectedPortfolioLog"
     ng-model-options="{trackBy: '$value.id'}"
-    md-on-open="$ctrl.getPortfolioHistoryToRestore(selectedPortfolioLog[1][0])"
-    data-ng-change="$ctrl.dosmth(selectedPortfolioLog)">
-
+    data-ng-change="$ctrl.selectPortfolioLog(selectedPortfolioLog)">
     <md-option
       data-ng-value="opt"
-      data-ng-repeat="opt in data">{{opt}}</md-option>
+      data-ng-repeat="opt in data">{{$ctrl.formatDateToTimeDayMonthYear(opt.createdAt)}}&nbsp&nbsp&nbsp{{opt.creator.username}}</md-option>
   </md-select>
-  <md-input-container>
-</md-input-container>
 </div>
 
 <!--<md-menu id="portfolio-menu" md-position-mode="left bottom">-->

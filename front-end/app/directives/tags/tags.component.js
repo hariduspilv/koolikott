@@ -62,8 +62,15 @@ class controller extends Controller {
         }
     }
     getTagUpVotes() {
+
+        const { type,learningObject } = this.learningObject;
+        // const { learningObject } = this.learningObject;
         const { id } = this.learningObject || {}
 
+        // if (type === '.PortfolioLog')
+        //      id = learningObject;
+        // else
+        //    id  = this.learningObject;
         if (!id) {
             this.$scope.upvotes = undefined
             this.allUpvotes = undefined
@@ -177,6 +184,8 @@ class controller extends Controller {
 
             if (this.isPortfolio(this.learningObject)) {
                 this.storageService.setPortfolio(this.learningObject);
+                this.updatePortfolio()
+                // this.$rootScope.$broadcast('tags:updatePortfolio');
             } else  if (this.isMaterial(this.learningObject)){
                 this.storageService.setMaterial(this.learningObject)
             }

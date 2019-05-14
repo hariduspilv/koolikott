@@ -41,7 +41,7 @@
               <md-icon md-menu-origin>more_vert</md-icon>
             </md-button>
             <md-menu-content width="4" id="material-actions">
-              <md-menu-item data-ng-if="!$root.isEditPortfolioMode && canEdit()">
+              <md-menu-item data-ng-if="!$root.isEditPortfolioMode && canEdit() && !historySelectionInProgress">
                 <md-button data-ng-click="editPortfolio()" id="material-edit">
                   <md-icon md-menu-align-target>edit</md-icon>
                   <span data-translate="EDIT_PORTFOLIO"></span>

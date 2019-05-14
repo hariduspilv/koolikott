@@ -61,6 +61,13 @@ public class PortfolioResource extends BaseResource {
         return portfolioGetter.getPortfolioHistory(portfolioHistoryId);//TODO check such id
     }
 
+//    @POST
+//    @Path("history/restore")
+//    @Produces(MediaType.APPLICATION_JSON)
+//    public Portfolio setPortfolioLogToPortfolio(@QueryParam("id") long id) {
+//        return portfolioGetter.setPortfolioHistory(id);//TODO check such id
+//    }
+
     @GET
     @Path("getByCreator/count")
     @Produces(MediaType.APPLICATION_JSON)

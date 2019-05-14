@@ -77,4 +77,10 @@ public class PortfolioGetter {
         } else
             return false;
     }
+
+//    public Portfolio setPortfolioHistory(long id) {
+//        PortfolioLog portfolioLog = portfolioLogDao.findById(id);
+//
+//        return portfolioDao.createOrUpdate(portfolioLog);
+//    }
 }
