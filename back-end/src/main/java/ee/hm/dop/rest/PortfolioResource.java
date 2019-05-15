@@ -12,7 +12,6 @@ import javax.annotation.security.RolesAllowed;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;

@@ -171,7 +171,7 @@ class controller extends Controller {
     }
 
     showPortfolioHistoryDialog() {
-        this.historySelectionInProgress = true;
+        // this.historySelectionInProgress = true;
         this.$rootScope.$broadcast('portfolioHistory:show');
     }
 
@@ -255,6 +255,7 @@ controller.$inject = [
 component('dopPortfolioSummaryCard', {
     bindings: {
         portfolio: '=',
+        showLogSelect: '=',
     },
     templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller

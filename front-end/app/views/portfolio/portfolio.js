@@ -6,6 +6,8 @@ class controller extends Controller {
         super(...args)
         this.$rootScope.isFullScreen = false
 
+        this.$scope.showLogSelect = false;
+
         window.addEventListener('scroll', (e) => {
             this.handleScroll(e);
         });
@@ -80,10 +82,12 @@ class controller extends Controller {
 
     showPortfolioHistoryLog() {
         this.$scope.showPortfolioHistoryDialog = true;
-        let menu = document.getElementById('historymenu');
-        this.$timeout(() => {
-            menu.dispatchEvent(this.returnEvent());
-        }, 100);
+        this.showLogSelect = true;
+        this.$scope.showLogSelect = true;
+        // let menu = document.getElementById('historymenu');
+        // this.$timeout(() => {
+        //     menu.dispatchEvent(this.returnEvent());
+        // }, 400);
     }
 
     returnEvent() {
