@@ -61,16 +61,13 @@ class controller extends Controller {
                 })
         }
     }
+
     getTagUpVotes() {
+        let isPortfolio;
+        const {id, type} = this.learningObject || {}
 
-        const { type,learningObject } = this.learningObject;
-        // const { learningObject } = this.learningObject;
-        const { id } = this.learningObject || {}
+        isPortfolio = (type === '.Portfolio');
 
-        // if (type === '.PortfolioLog')
-        //      id = learningObject;
-        // else
-        //    id  = this.learningObject;
         if (!id) {
             this.$scope.upvotes = undefined
             this.allUpvotes = undefined
@@ -78,7 +75,7 @@ class controller extends Controller {
         }
 
         this.serverCallService
-            .makeGet('rest/tagUpVotes/report', { learningObject: id })
+            .makeGet('rest/tagUpVotes/report', { learningObject: id,isPortfolio: isPortfolio})
             .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
 
