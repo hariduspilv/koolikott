@@ -1,0 +1,28 @@
+<div data-layout="column" data-ng-show="showLogSelect">
+  <md-toolbar class="error-message" data-md-colors="{ 'background-color': 'grey-900' }">
+    <div data-ng-click="$ctrl.showSelection()" class="md-toolbar-tools" data-layout="row">
+      <h2><span>{{selectedPortfolioLog ? 'Seisuga '+ $ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt) : 'Ajalugu'}}</span>
+      </h2>
+      <div>
+        <md-button class="md-grey" data-ng-click="$ctrl.restoreSelectedPortfolio()">
+          <md-icon>history</md-icon>
+        </md-button>
+        <md-button class="md-grey" data-ng-click="$ctrl.closePortfolioRestore()">
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </div>
+  </md-toolbar>
+  <md-select
+    data-placeholder="Vali versioon"
+    data-ng-show="selectionMade"
+    id="historymenu"
+    data-ng-model="selectedPortfolioLog"
+    ng-model-options="{trackBy: '$value.id'}"
+    data-ng-change="$ctrl.selectPortfolioLog(selectedPortfolioLog)">
+    <md-option
+      data-ng-value="opt"
+      data-ng-repeat="opt in data">{{$ctrl.formatDateToTimeDayMonthYear(opt.createdAt)}}&nbsp&nbsp&nbsp{{opt.creator.username}}</md-option>
+  </md-select>
+</div>
+

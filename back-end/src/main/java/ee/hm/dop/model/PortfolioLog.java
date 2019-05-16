@@ -9,7 +9,7 @@ import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
+import org.joda.time.DateTime;
 
 import javax.persistence.*;
 import java.util.List;
@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Portfolio extends LearningObject implements Searchable, IPortfolio {
+public class PortfolioLog extends LearningObjectLog {
 
     @Column(nullable = false)
     private String title;
@@ -31,16 +31,20 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder")
-    private List<Chapter> chapters;
+    private List<ChapterLog> chapters;
 
     @ManyToOne
     @JoinColumn(name = "originalCreator", nullable = false)
     private User originalCreator;
 
     @Column
+    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentDateTime")
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private LocalDateTime publishedAt;
+    private DateTime publishedAt;
+
+    public PortfolioLog() {
+    }
 
     public String getTitle() {
         return title;
@@ -55,14 +59,14 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     }
 
     public void setSummary(String summary) {
-        this.summary = getSanitizedHTML(summary);
+        this.summary = summary;
     }
 
-    public List<Chapter> getChapters() {
+    public List<ChapterLog> getChapters() {
         return chapters;
     }
 
-    public void setChapters(List<Chapter> chapters) {
+    public void setChapters(List<ChapterLog> chapters) {
         this.chapters = chapters;
     }
 
@@ -74,18 +78,11 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
         this.originalCreator = originalCreator;
     }
 
-    private String getSanitizedHTML(String summary) {
-        if (summary != null) {
-            summary = LO_ALLOWED_HTML_TAGS_POLICY.sanitize(summary);
-        }
-        return summary;
-    }
-
-    public LocalDateTime getPublishedAt() {
+    public DateTime getPublishedAt() {
         return publishedAt;
     }
 
-    public void setPublishedAt(LocalDateTime publishedAt) {
+    public void setPublishedAt(DateTime publishedAt) {
         this.publishedAt = publishedAt;
     }
 }

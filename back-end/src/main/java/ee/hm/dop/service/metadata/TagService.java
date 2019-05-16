@@ -1,11 +1,14 @@
 package ee.hm.dop.service.metadata;
 
 import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.TagDao;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.ValidatorUtil;
 
@@ -24,6 +27,10 @@ public class TagService {
     private SolrEngineService solrEngineService;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private PortfolioService portfolioService;
+    @Inject
+    private PortfolioDao portfolioDao;
 
     public Tag getTagByName(String name) {
         return tagDao.findByName(name);
@@ -48,6 +55,9 @@ public class TagService {
 
         tags.add(newTag);
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
+        Portfolio portfolio = portfolioDao.findById(updatedLearningObject.getId());
+        portfolioService.update(portfolio, user);
+
         solrEngineService.updateIndex();
 
         return updatedLearningObject;

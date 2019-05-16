@@ -1,7 +1,5 @@
 package ee.hm.dop.service.useractions;
 
-import javax.inject.Inject;
-
 import ee.hm.dop.dao.TagUpVoteDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
@@ -9,9 +7,9 @@ import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.solr.SolrEngineService;
-import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 
+import javax.inject.Inject;
 import java.util.Objects;
 
 public class TagUpVoteService {

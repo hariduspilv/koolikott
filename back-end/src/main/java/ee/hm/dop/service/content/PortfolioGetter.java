@@ -1,6 +1,7 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.*;
@@ -26,6 +27,8 @@ public class PortfolioGetter {
     private PortfolioPermission portfolioPermission;
     @Inject
     private TaxonDao taxonDao;
+    @Inject
+    private PortfolioLogDao portfolioLogDao;
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -42,6 +45,14 @@ public class PortfolioGetter {
         List<Searchable> searchables = new ArrayList<>(getByCreator(creator, loggedInUser, start, maxResults));
         Long size = getCountByCreator(creator);
         return new SearchResult(searchables, size, start);
+    }
+
+    public List<PortfolioLog> getPortfolioHistoryAll(Long portfolioId) {
+        return portfolioLogDao.findByIdAllPortfolioLogs(portfolioId);
+    }
+
+    public PortfolioLog getPortfolioHistory(long portfolioHistoryId) {
+        return portfolioLogDao.findById(portfolioHistoryId);
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {

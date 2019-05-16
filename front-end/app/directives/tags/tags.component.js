@@ -11,6 +11,8 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.getTagUpVotes()
 
+        this.isPortfolioLog = false;
+
         this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this))
         this.$rootScope.$on('tags:focusInput', () => {
             let numAttempts = 0
@@ -61,9 +63,11 @@ class controller extends Controller {
                 })
         }
     }
-    getTagUpVotes() {
-        const { id } = this.learningObject || {}
 
+    getTagUpVotes() {
+        const {id, type} = this.learningObject || {}
+
+        let portfolioLog = (type === '.PortfolioLog');
         if (!id) {
             this.$scope.upvotes = undefined
             this.allUpvotes = undefined
@@ -71,10 +75,10 @@ class controller extends Controller {
         }
 
         this.serverCallService
-            .makeGet('rest/tagUpVotes/report', { learningObject: id })
+            .makeGet('rest/tagUpVotes/report', {learningObject: id, portfolioLog: portfolioLog})
             .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
-
+                this.$scope.isPortfolioLog = this.portfolioLog;
                 if (sorted.length > 10) {
                     this.allUpvotes = sorted
                     this.$scope.upvotes = this.allUpvotes.slice(0, 10)
@@ -107,10 +111,10 @@ class controller extends Controller {
             })
     }
     isAllowedToAdd() {
-        return this.authenticatedUserService.isUserPlus()
+        return this.authenticatedUserService.isUserPlus() && !this.$scope.isPortfolioLog
     }
     isAllowedToRemove() {
-        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject);
+        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject) && !this.$scope.isPortfolioLog;
     }
     isDeleteQueryRunning(){
         return this.deleteQueryIsRunning
@@ -177,6 +181,8 @@ class controller extends Controller {
 
             if (this.isPortfolio(this.learningObject)) {
                 this.storageService.setPortfolio(this.learningObject);
+                this.updatePortfolio()
+                // this.$rootScope.$broadcast('tags:updatePortfolio');
             } else  if (this.isMaterial(this.learningObject)){
                 this.storageService.setMaterial(this.learningObject)
             }

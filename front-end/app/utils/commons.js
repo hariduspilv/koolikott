@@ -663,7 +663,7 @@ class Controller {
         return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'
     }
     isPortfolio({ type }) {
-        return type === '.Portfolio' || type === '.ReducedPortfolio' || type === '.AdminPortfolio'
+        return type === '.Portfolio' || type === '.PortfolioLog' || type === '.ReducedPortfolio' || type === '.AdminPortfolio'
     }
     getCorrectLanguageTitle({ title, titles, language } = {}) {
         return !this.dependencyExists('translationService')

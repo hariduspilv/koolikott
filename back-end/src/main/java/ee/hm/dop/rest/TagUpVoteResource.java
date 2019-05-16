@@ -1,9 +1,7 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.TagUpVote;
-import ee.hm.dop.model.User;
+import ee.hm.dop.dao.LearningObjectLogDao;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.metadata.TagService;
@@ -28,6 +26,8 @@ public class TagUpVoteResource extends BaseResource {
     private LearningObjectService learningObjectService;
     @Inject
     private TagService tagService;
+    @Inject
+    private LearningObjectLogDao learningObjectLogDao;
 
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
@@ -57,14 +57,22 @@ public class TagUpVoteResource extends BaseResource {
     @PermitAll
     @Path("report")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId) {
+    public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId, @QueryParam("portfolioLog") boolean portfolioLog) {
         if (learningObjectId == null) {
             throw badRequest("LearningObject query param is required");
         }
         User user = getLoggedInUser();
-        LearningObject learningObject = learningObjectService.get(learningObjectId, user);
-        if (learningObject != null) {
-            return convertForms(user, learningObject);
+
+        if (!portfolioLog) {
+            LearningObject learningObject = learningObjectService.get(learningObjectId, user);
+            if (learningObject != null) {
+                return convertForms(user, learningObject);
+            }
+        } else {
+            LearningObjectLog learningObjectLog = learningObjectLogDao.findById(learningObjectId);
+            if (learningObjectLog != null) {
+                return convertForms(user, learningObjectLog);
+            }
         }
         return Collections.emptyList();
     }
@@ -86,6 +94,14 @@ public class TagUpVoteResource extends BaseResource {
                 .collect(Collectors.toList());
     }
 
+    private List<TagUpVoteForm> convertForms(User user, LearningObjectLog learningObject) {
+        return learningObject
+                .getTags()
+                .stream()
+                .map(tag -> convertForm(user, learningObject, tag))
+                .collect(Collectors.toList());
+    }
+
     private TagUpVoteForm convertForm(User user, LearningObject learningObject, Tag tag) {
         TagUpVoteForm form = new TagUpVoteForm();
         form.tag = tag;
@@ -93,6 +109,15 @@ public class TagUpVoteResource extends BaseResource {
         if (form.upVoteCount > 0) {
             form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
         }
+        return form;
+    }
+    private TagUpVoteForm convertForm(User user, LearningObjectLog learningObject, Tag tag) { //TODO
+        TagUpVoteForm form = new TagUpVoteForm();
+        form.tag = tag;
+//        form.upVoteCount = tagUpVoteService.getUpVoteCountFor(tag, learningObject);
+//        if (form.upVoteCount > 0) {
+//            form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
+//        }
         return form;
     }
 

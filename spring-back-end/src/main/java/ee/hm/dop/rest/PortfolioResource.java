@@ -1,9 +1,6 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.PortfolioCopier;
@@ -11,14 +8,10 @@ import ee.hm.dop.service.content.PortfolioGetter;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserService;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -70,6 +63,21 @@ public class PortfolioResource extends BaseResource {
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio update(@RequestBody Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
+    }
+
+    @GetMapping("getPortfolioHistoryAll")
+    public List<PortfolioLog> getPortfolioHistoryAll(@RequestParam("portfolioId") Long portfolioId) {
+        List<PortfolioLog> portfolioLog = portfolioGetter.getPortfolioHistoryAll(portfolioId);
+        if (portfolioLog == null || portfolioLog.isEmpty())
+            throw badRequest("No portfoliologs for portfolio with id: " + portfolioId);
+        return portfolioLog;
+    }
+
+    @GetMapping("getPortfolioHistory")
+    public PortfolioLog getPortfolioHistory(@RequestParam("portfolioHistoryId") Long portfolioHistoryId) {
+        PortfolioLog portfolioLog = portfolioGetter.getPortfolioHistory(portfolioHistoryId);
+        if (portfolioLog == null) throw badRequest("No such portfoliolog with id: " + portfolioHistoryId);
+        return portfolioLog;
     }
 
 /*    @PostMapping

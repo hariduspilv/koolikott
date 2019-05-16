@@ -24,8 +24,11 @@ class controller extends Controller {
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
-            if (newValue !== oldValue)
+            if (newValue !== oldValue) {
+                this.historySelectionInProgress = true;
+                this.$rootScope.$broadcast('portfolioHistory:loadHistory');
                 this.eventService.notify('portfolio:reloadTaxonObject')
+            }
         })
         this.$scope.$watch('portfolio.taxon.id', (newValue, oldValue) => {
             if (newValue !== oldValue)
@@ -129,7 +132,8 @@ class controller extends Controller {
                     this.storageService.setPortfolio(portfolio)
             })
     }
-    getPortfolioEducationalContexts() {
+
+     getPortfolioEducationalContexts() {
         if (!this.portfolio || !this.portfolio.taxons)
             return
 
@@ -165,6 +169,12 @@ class controller extends Controller {
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
             })
     }
+
+    showPortfolioHistoryDialog() {
+        // this.historySelectionInProgress = true;
+        this.$rootScope.$broadcast('portfolioHistory:show');
+    }
+
     confirmPortfolioDeletion() {
         this.dialogService.showDeleteConfirmationDialog(
             'PORTFOLIO_CONFIRM_DELETE_DIALOG_TITLE',
@@ -239,11 +249,13 @@ controller.$inject = [
     'taxonService',
     'taxonGroupingService',
     'eventService',
-    'portfolioService'
+    'portfolioService',
+    '$timeout'
 ]
 component('dopPortfolioSummaryCard', {
     bindings: {
         portfolio: '=',
+        showLogSelect: '=',
     },
     templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller

@@ -8,18 +8,18 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
+import static ee.hm.dop.model.LearningObject.LO_ALLOWED_HTML_TAGS_POLICY;
 import static javax.persistence.CascadeType.ALL;
 import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Portfolio extends LearningObject implements Searchable, IPortfolio {
+public class PortfolioLog extends LearningObjectLog implements Searchable, IPortfolio {
 
     @Column(nullable = false)
     private String title;
@@ -31,7 +31,7 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     @Fetch(FetchMode.SELECT)
     @JoinColumn(name = "portfolio")
     @OrderColumn(name = "chapterOrder")
-    private List<Chapter> chapters;
+    private List<ChapterLog> chapters;
 
     @ManyToOne
     @JoinColumn(name = "originalCreator", nullable = false)
@@ -58,11 +58,11 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
         this.summary = getSanitizedHTML(summary);
     }
 
-    public List<Chapter> getChapters() {
+    public List<ChapterLog> getChapters() {
         return chapters;
     }
 
-    public void setChapters(List<Chapter> chapters) {
+    public void setChapters(List<ChapterLog> chapters) {
         this.chapters = chapters;
     }
 
@@ -89,3 +89,4 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
         this.publishedAt = publishedAt;
     }
 }
+

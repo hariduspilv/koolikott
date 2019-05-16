@@ -6,6 +6,8 @@ class controller extends Controller {
         super(...args)
         this.$rootScope.isFullScreen = false
 
+        this.$scope.showLogSelect = false;
+
         window.addEventListener('scroll', (e) => {
             this.handleScroll(e);
         });
@@ -38,12 +40,12 @@ class controller extends Controller {
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
 
         this.$scope.$watch(() => this.storageService.getPortfolio(), (newPortfolio, oldPortfolio) => {
-            this.eventService.notify('portfolio:reloadTaxonObject')
+            this.eventService.notify('portfolio:reloadTaxonObject');
 
             if (newPortfolio !== oldPortfolio) {
                 this.setPortfolio(newPortfolio)
             }
-        })
+        });
         this.$scope.$watch(() => this.$location.search().id, (newValue, oldValue) => {
             if (newValue !== oldValue)
                 this.$route.reload()
@@ -60,6 +62,43 @@ class controller extends Controller {
             if (!_.isEqual(value, this.$scope.portfolio))
                 this.setPortfolio(value)
         })
+        this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
+        // this.$scope.$on('portfolioHistory:loadHistory',this.loadHistory.bind(this));
+
+        // this.$scope.$on('portfolioHistory:loadHistory',(evt, value) => {
+        //     if (!_.isEqual(value, this.$scope.portfolio))
+        //         this.setPortfolio(value)
+        // });56325
+
+        this.$scope.$watch('portfolio', (newValue, oldValue) => {
+            if (newValue !== oldValue) {
+                if (newValue.type === '.PortfolioLog') {
+                    this.eventService.notify('portfolio:reloadTaxonObject');
+                    this.setPortfolio(this.$scope.portfolio)
+                }
+            }
+        });
+    }
+
+    showPortfolioHistoryLog() {
+        this.$scope.showPortfolioHistoryDialog = true;
+        this.showLogSelect = true;
+        this.$scope.showLogSelect = true;
+        // let menu = document.getElementById('historymenu');
+        // this.$timeout(() => {
+        //     menu.dispatchEvent(this.returnEvent());
+        // }, 400);
+    }
+
+    returnEvent() {
+        let event;
+        if (typeof (MouseEvent) === 'function') {
+            event = new MouseEvent('click');
+        } else {
+            event = document.createEvent('MouseEvent');
+            event.initEvent('click', true, true);
+        }
+        return event;
     }
 
     handleScroll(e) {

@@ -1,14 +1,13 @@
 package ee.hm.dop.dao;
 
-import java.security.InvalidParameterException;
-import java.util.List;
-
-import javax.persistence.TypedQuery;
-
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.TagUpVote;
 import ee.hm.dop.model.User;
+
+import javax.persistence.TypedQuery;
+import java.security.InvalidParameterException;
+import java.util.List;
 
 public class TagUpVoteDao extends AbstractDao<TagUpVote> {
 
