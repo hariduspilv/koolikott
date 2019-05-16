@@ -49,23 +49,21 @@ public class PortfolioResource extends BaseResource {
     @GET
     @Path("getPortfolioHistoryAll")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<PortfolioLog> getPortfolioHistoryAll(@QueryParam("portfolioId") long portfolioId) {
-        return portfolioGetter.getPortfolioHistoryAll(portfolioId);//TODO check such id
+    public List<PortfolioLog> getPortfolioHistoryAll(@QueryParam("portfolioId") Long portfolioId) {
+        List<PortfolioLog> portfolioLog = portfolioGetter.getPortfolioHistoryAll(portfolioId);
+        if (portfolioLog == null || portfolioLog.isEmpty())
+            throw badRequest("No portfoliologs for portfolio with id: " + portfolioId);
+        return portfolioLog;
     }
 
     @GET
     @Path("getPortfolioHistory")
     @Produces(MediaType.APPLICATION_JSON)
-    public PortfolioLog getPortfolioHistory(@QueryParam("portfolioHistoryId") long portfolioHistoryId) {
-        return portfolioGetter.getPortfolioHistory(portfolioHistoryId);//TODO check such id
+    public PortfolioLog getPortfolioHistory(@QueryParam("portfolioHistoryId") Long portfolioHistoryId) {
+        PortfolioLog portfolioLog = portfolioGetter.getPortfolioHistory(portfolioHistoryId);
+        if (portfolioLog == null) throw badRequest("No such portfoliolog with id: " + portfolioHistoryId);
+        return portfolioLog;
     }
-
-//    @POST
-//    @Path("history/restore")
-//    @Produces(MediaType.APPLICATION_JSON)
-//    public Portfolio setPortfolioLogToPortfolio(@QueryParam("id") long id) {
-//        return portfolioGetter.setPortfolioHistory(id);//TODO check such id
-//    }
 
     @GET
     @Path("getByCreator/count")

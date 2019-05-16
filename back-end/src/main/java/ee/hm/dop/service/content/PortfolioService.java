@@ -51,11 +51,11 @@ public class PortfolioService {
         ValidatorUtil.mustNotHaveId(portfolio);
         validateTitle(portfolio);
 
-//        return save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
-        Portfolio portfolio1 = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
-        PortfolioLog created = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolio1),creator,creator); // portfolioHistory
-
-        return portfolio1;
+        Portfolio portfolioCreated = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+        PortfolioLog portfolioLogCreated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated));
+        if (portfolioLogCreated == null)
+            logger.info("Can not create new portfoliolog with id: " + portfolioCreated.getId());
+        return portfolioCreated;
     }
 
     public Portfolio update(Portfolio portfolio, User user) {
@@ -67,8 +67,10 @@ public class PortfolioService {
         logger.info("Portfolio materials updating started. Portfolio id= " + portfolio.getId());
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
 
-        PortfolioLog updated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio), user, user); // portfolioHistory
-        logger.info("Portfolio with id: " + portfolio.getId() + " history log added"); // TODO
+        PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio));
+        if (portfolioLogUpdated == null)
+            logger.info("Can not create new portfoliolog with id: " + portfolioLogUpdated.getId());
+        logger.info("Portfolio with id: " + portfolio.getId() + " history log added");
 
         portfolioMaterialService.update(portfolio);
         logger.info("Portfolio materials updating ended");
@@ -107,13 +109,8 @@ public class PortfolioService {
         return createdPortfolio;
     }
 
-    private PortfolioLog savePortfolioLog(PortfolioLog portfolio, User creator, User originalCreator){
-        portfolio.setViews(0L);
-        portfolio.setCreator(creator);
-        portfolio.setOriginalCreator(originalCreator);
-        portfolio.setVisibility(Visibility.PRIVATE);
+    private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {
         portfolio.setAdded(now());
-
         return portfolioLogDao.createOrUpdate(portfolio);
     }
 

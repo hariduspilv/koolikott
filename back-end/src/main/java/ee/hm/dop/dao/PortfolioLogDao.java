@@ -4,20 +4,13 @@ import ee.hm.dop.model.PortfolioLog;
 
 import java.util.List;
 
-import static org.joda.time.DateTime.now;
-
 public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
 
     public Class<PortfolioLog> entity() {
         return PortfolioLog.class;
     }
 
-    public PortfolioLog createOrUpdate(PortfolioLog entity) {
-        entity.setPublishedAt(now());
-        return super.createOrUpdate(entity);
-    }
-
-    public List<PortfolioLog> findByIdAllPortfolioLOgs(Long learningObjectId) {
+    public List<PortfolioLog> findByIdAllPortfolioLogs(Long learningObjectId) {
         return getEntityManager()
                 .createQuery("" +
                                 "SELECT p FROM PortfolioLog p \n" +
@@ -25,6 +18,5 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
                         , PortfolioLog.class)
                 .setParameter("id", learningObjectId)
                 .getResultList();
-
     }
 }

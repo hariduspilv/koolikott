@@ -114,8 +114,6 @@ public class PortfolioConverter {
     private static ChapterBlockLog apply(ChapterBlock chapter) {
         ChapterBlockLog chapterLog = new ChapterBlockLog();
         chapterLog.setId(chapter.getId());
-        chapterLog.setHtmlContent(chapter.getHtmlContent());
-
         return chapterLog;
     }
 }

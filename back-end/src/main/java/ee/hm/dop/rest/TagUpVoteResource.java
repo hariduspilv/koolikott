@@ -57,13 +57,13 @@ public class TagUpVoteResource extends BaseResource {
     @PermitAll
     @Path("report")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId, @QueryParam("isPortfolio") boolean isPortfolio) {
+    public List<TagUpVoteForm> getTagUpVotesReport(@QueryParam("learningObject") Long learningObjectId, @QueryParam("portfolioLog") boolean portfolioLog) {
         if (learningObjectId == null) {
             throw badRequest("LearningObject query param is required");
         }
         User user = getLoggedInUser();
 
-        if (isPortfolio) {
+        if (portfolioLog) {
             LearningObject learningObject = learningObjectService.get(learningObjectId, user);
             if (learningObject != null) {
                 return convertForms(user, learningObject);
@@ -95,7 +95,9 @@ public class TagUpVoteResource extends BaseResource {
     }
 
     private List<TagUpVoteForm> convertForms(User user, LearningObjectLog learningObject) {
-        return learningObject.getTags().stream()
+        return learningObject
+                .getTags()
+                .stream()
                 .map(tag -> convertForm(user, learningObject, tag))
                 .collect(Collectors.toList());
     }

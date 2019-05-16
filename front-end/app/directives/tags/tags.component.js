@@ -75,10 +75,10 @@ class controller extends Controller {
         }
 
         this.serverCallService
-            .makeGet('rest/tagUpVotes/report', { learningObject: id,isPortfolio: isPortfolio})
+            .makeGet('rest/tagUpVotes/report', { learningObject: id,portfolioLog: portfolioLog})
             .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
-
+                this.$scope.isPortfolioLog = portfolioLog;
                 if (sorted.length > 10) {
                     this.allUpvotes = sorted
                     this.$scope.upvotes = this.allUpvotes.slice(0, 10)
@@ -111,10 +111,10 @@ class controller extends Controller {
             })
     }
     isAllowedToAdd() {
-        return this.authenticatedUserService.isUserPlus()
+        return this.authenticatedUserService.isUserPlus() || !this.$scope.isPortfolioLog
     }
     isAllowedToRemove() {
-        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject);
+        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject) || !this.$scope.isPortfolioLog;
     }
     isDeleteQueryRunning(){
         return this.deleteQueryIsRunning
