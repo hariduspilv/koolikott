@@ -4,10 +4,6 @@ angular.module('koolikottApp').controller('showPortfolioLogController', [
     '$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter',
     function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter) {
 
-        function init() {
-            if (!$scope.portfolio) return;
-        }
-
         $scope.setPortfolioHistoryToRestore = function () {
             let url = 'rest/portfolio/update';
             $scope.portfolio.type = '.Portfolio';
@@ -21,7 +17,7 @@ angular.module('koolikottApp').controller('showPortfolioLogController', [
                 });
         }
 
-        $scope.hide = function (){
+        $scope.hide = function () {
             return false;
         };
 
@@ -33,6 +29,5 @@ angular.module('koolikottApp').controller('showPortfolioLogController', [
             $mdDialog.hide();
         };
 
-        init();
     }
 ]);

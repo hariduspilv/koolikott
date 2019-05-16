@@ -3,29 +3,30 @@
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
       <div>
-        <h2 data-translate="OLED_KINDEL"></h2>
+        <h2 data-translate="LOG_ARE_YOU_SURE"></h2>
       </div>
       <span flex></span>
     </div>
   </md-toolbar>
   <div>
     <md-content class="md-padding send-mail-ie">
-      <div layout-xs="column" layout="column" layout-align-xs="start stretch" layout-align="start stretch" flex-order="1"
+      <div layout-xs="column" layout="column" layout-align-xs="start stretch" layout-align="start stretch"
+           flex-order="1"
            flex-order-gt-sm="2" flex="100">
         <md-input-container class="md-block animate-if remaining-charaters-wrapper label-top-ie" flex>
-          <h2>"Kogumiku versiooniks jääb {{formatDateToTimeDayMonthYear(portfolio.createdAt)}} {{portfolio.creator.username}} poolt loodud versioon. Tänane versioon kas kustutatakse või jäetakse veel 5 päevaks kättesaadavaks - otsustab klient</h2>
-          <div layout="row" layout-align="space-between center" layout-xs="column" layout-align-xs="end center">
+          <h2 class="final-step">{{('LOG_VERSION_STAY' | translate) + ' ' + (portfolio.createdAt | date:'dd.MM.yyyy HH:mm:ss') + ' ' + portfolio.creator.username + ' ' + ('LOG_VERSION_STAY_EXTRA' | translate)}}</h2>
+          <div layout="row" layout-align="end center" layout-xs="row" layout-align-xs="center center">
             <md-dialog-actions style="padding: 0px">
               <span flex></span>
-              <md-button aria-label="Tühista kogumiku taastamine" id="send-email-cancel-button"
+              <md-button aria-label="Tühista kogumiku taastamine" id="portfolio-restore-cancel-button"
                          data-ng-click="cancel()">
-                <span data-translate="LOOBUN"></span>
+                <span data-translate="LOG_GIVEUP"></span>
               </md-button>
               <md-button class="md-raised md-primary"
                          data-ng-click="setPortfolioHistoryToRestore()"
-                         aria-label="Send mail"
+                         aria-label="restore portfolio"
               >
-                <span data-translate="KINNITAN"></span>
+                <span data-translate="LOG_CONFIRM"></span>
               </md-button>
               <md-progress-circular class="md-accent ng-hide"
                                     md-mode="indeterminate"

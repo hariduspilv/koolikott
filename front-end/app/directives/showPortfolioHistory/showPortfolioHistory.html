@@ -1,20 +1,21 @@
 <div data-layout="column" data-ng-show="showLogSelect">
   <md-toolbar class="error-message" data-md-colors="{ 'background-color': 'grey-900' }">
-    <div data-ng-click="$ctrl.showSelection()" class="md-toolbar-tools" data-layout="row">
-      <h2><span>{{selectedPortfolioLog ? 'Seisuga '+ $ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt) : 'Ajalugu'}}</span>
-      </h2>
-      <div>
-        <md-button class="md-grey" data-ng-click="$ctrl.restoreSelectedPortfolio()">
+    <div layout-align="space-between center" data-ng-click="$ctrl.showSelection()" class="md-toolbar-tools"
+         data-layout="row" layout-align-xs="center center" layout-xs="column">
+      <h2>{{selectedPortfolioLog ? ('LOG_MOMENT' | translate) + ' - ' +
+        $ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt) : ('LOG_HISTORY' | translate)}}</h2>
+      <div layout-align="end center" layout-align-xs="center center" layout-xs="row" layout="row">
+        <md-button class="md-grey button-less-wider" data-ng-click="$ctrl.restoreSelectedPortfolio()">
           <md-icon>history</md-icon>
         </md-button>
-        <md-button class="md-grey" data-ng-click="$ctrl.closePortfolioRestore()">
+        <md-button class="md-grey button-less-wider" data-ng-click="$ctrl.closePortfolioRestore()">
           <md-icon>close</md-icon>
         </md-button>
       </div>
     </div>
   </md-toolbar>
   <md-select
-    data-placeholder="Vali versioon"
+    placeholder="{{'LOG_CHOOSE' | translate}}"
     data-ng-show="selectionMade"
     id="historymenu"
     data-ng-model="selectedPortfolioLog"
@@ -22,7 +23,9 @@
     data-ng-change="$ctrl.selectPortfolioLog(selectedPortfolioLog)">
     <md-option
       data-ng-value="opt"
-      data-ng-repeat="opt in data">{{$ctrl.formatDateToTimeDayMonthYear(opt.createdAt)}}&nbsp&nbsp&nbsp{{opt.creator.username}}</md-option>
+      data-ng-repeat="opt in data">
+      {{$ctrl.formatDateToTimeDayMonthYear(opt.createdAt) + '  ' + opt.creator.username}}
+    </md-option>
   </md-select>
 </div>
 
