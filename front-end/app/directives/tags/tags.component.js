@@ -11,6 +11,8 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.getTagUpVotes()
 
+        this.isPortfolioLog = false;
+
         this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this))
         this.$rootScope.$on('tags:focusInput', () => {
             let numAttempts = 0
@@ -63,11 +65,9 @@ class controller extends Controller {
     }
 
     getTagUpVotes() {
-        let isPortfolio;
         const {id, type} = this.learningObject || {}
 
-        isPortfolio = (type === '.Portfolio');
-
+        let portfolioLog = (type === '.PortfolioLog');
         if (!id) {
             this.$scope.upvotes = undefined
             this.allUpvotes = undefined
@@ -75,10 +75,10 @@ class controller extends Controller {
         }
 
         this.serverCallService
-            .makeGet('rest/tagUpVotes/report', { learningObject: id,portfolioLog: portfolioLog})
+            .makeGet('rest/tagUpVotes/report', {learningObject: id, portfolioLog: portfolioLog})
             .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
-                this.$scope.isPortfolioLog = portfolioLog;
+                this.$scope.isPortfolioLog = this.portfolioLog;
                 if (sorted.length > 10) {
                     this.allUpvotes = sorted
                     this.$scope.upvotes = this.allUpvotes.slice(0, 10)
@@ -111,10 +111,10 @@ class controller extends Controller {
             })
     }
     isAllowedToAdd() {
-        return this.authenticatedUserService.isUserPlus() || !this.$scope.isPortfolioLog
+        return this.authenticatedUserService.isUserPlus() && !this.$scope.isPortfolioLog
     }
     isAllowedToRemove() {
-        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject) || !this.$scope.isPortfolioLog;
+        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject) && !this.$scope.isPortfolioLog;
     }
     isDeleteQueryRunning(){
         return this.deleteQueryIsRunning

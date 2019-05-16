@@ -1,7 +1,9 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.PortfolioLog;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.permission.PortfolioPermission;
@@ -44,12 +46,19 @@ public class PortfolioService {
     private PortfolioCopier portfolioCopier;
     @Inject
     private PortfolioMaterialService portfolioMaterialService;
+    @Inject
+    private PortfolioLogDao portfolioLogDao;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
         ValidatorUtil.mustNotHaveId(portfolio);
         validateTitle(portfolio);
-        return save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+
+        Portfolio portfolioCreated = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+        PortfolioLog portfolioLogCreated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated));
+        if (portfolioLogCreated == null)
+            logger.info("Can not create new portfoliolog with id: " + portfolioCreated.getId());
+        return portfolioCreated;
     }
 
     public Portfolio update(Portfolio portfolio, User user) {
@@ -61,6 +70,11 @@ public class PortfolioService {
         logger.info("Portfolio materials updating started. Portfolio id= " + portfolio.getId());
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
 
+        PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio));
+        if (portfolioLogUpdated == null)
+            logger.info("Can not create new portfoliolog with id: " + portfolioLogUpdated.getId());
+        logger.info("Portfolio with id: " + portfolio.getId() + " history log added");
+
         portfolioMaterialService.update(portfolio);
         logger.info("Portfolio materials updating ended");
 
@@ -68,6 +82,7 @@ public class PortfolioService {
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
 
         solrEngineService.updateIndex();
+
         return updatedPortfolio;
     }
 
@@ -80,6 +95,11 @@ public class PortfolioService {
         copy.setChapters(portfolioCopier.copyChapters(originalPortfolio.getChapters()));
 
         return save(copy, loggedInUser, originalPortfolio.getCreator());
+    }
+
+    private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {
+        portfolio.setAdded(now());
+        return portfolioLogDao.createOrUpdate(portfolio);
     }
 
     private Portfolio save(Portfolio portfolio, User creator, User originalCreator) {

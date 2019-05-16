@@ -63,7 +63,7 @@ public class TagUpVoteResource extends BaseResource {
         }
         User user = getLoggedInUser();
 
-        if (portfolioLog) {
+        if (!portfolioLog) {
             LearningObject learningObject = learningObjectService.get(learningObjectId, user);
             if (learningObject != null) {
                 return convertForms(user, learningObject);

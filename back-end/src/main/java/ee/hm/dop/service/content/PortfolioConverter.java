@@ -29,6 +29,8 @@ public class PortfolioConverter {
         PortfolioLog portfolioLog = new PortfolioLog();
         portfolioLog.setLearningObject(portfolio.getId());
         portfolioLog.setCreator(portfolio.getCreator());
+        portfolioLog.setVisibility(portfolio.getVisibility());
+        portfolioLog.setOriginalCreator(portfolio.getOriginalCreator());
         return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
 
@@ -75,7 +77,8 @@ public class PortfolioConverter {
         to.setTags(from.getTags());
         to.setTargetGroups(from.getTargetGroups());
         to.setTaxons(from.getTaxons());
-        List<ChapterLog> chapterLogs = from.getChapters().stream()
+        List<ChapterLog> chapterLogs = from.getChapters()
+                .stream()
                 .map(convertChapterToLog)
                 .collect(Collectors.toList());
         to.setChapters(chapterLogs);
@@ -114,6 +117,7 @@ public class PortfolioConverter {
     private static ChapterBlockLog apply(ChapterBlock chapter) {
         ChapterBlockLog chapterLog = new ChapterBlockLog();
         chapterLog.setId(chapter.getId());
+        chapterLog.setHtmlContent(chapter.getHtmlContent());
         return chapterLog;
     }
 }
