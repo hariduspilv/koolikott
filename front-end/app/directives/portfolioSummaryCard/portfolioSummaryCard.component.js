@@ -127,9 +127,11 @@ class controller extends Controller {
         this.updateChaptersStateFromEditors()
         this.serverCallService
             .makePost('rest/portfolio/update', this.storageService.getPortfolio())
-            .then(({ data: portfolio }) => {
-                if (portfolio)
-                    this.storageService.setPortfolio(portfolio)
+            .then(({data: portfolio}) => {
+                if (portfolio) {
+                    this.storageService.setPortfolio(portfolio);
+                    this.toastService.show('PORTFOLIO_SAVED');
+                }
             })
     }
 

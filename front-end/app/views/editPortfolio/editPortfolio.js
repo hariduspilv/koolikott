@@ -10,7 +10,7 @@ class controller extends Controller {
             ? this.setPortfolio(storedPortfolio, true)
             : this.fetchPortfolio()
 
-        // this.startAutosave()
+        this.startAutosave()
 
         this.$scope.toggleSidenav = (menuId) => this.$mdSidenav(menuId).toggle()
         this.$scope.closeSidenav = (menuId) => this.$mdSidenav(menuId).close()
@@ -114,18 +114,21 @@ class controller extends Controller {
         this.serverCallService
             .makePost('rest/portfolio/update', this.$scope.portfolio)
             .then(({ data: portfolio }) => {
-                if (portfolio)
+                if (portfolio) {
                     this.isAutoSaving
                         ? this.$rootScope.$broadcast('portfolio:autoSave')
-                        : this.setPortfolio(portfolio)
+                        : this.setPortfolio(portfolio);
+                    this.toastService.show('PORTFOLIO_SAVED')
+                }
             })
     }
     startAutosave() { //TODO siin on kogumiku autosave
         this.autoSaveInterval = this.$interval(() => {
             this.isAutoSaving = true
 
-            if (this.$scope.portfolio && !this.$scope.portfolio.deleted)
-                this.updatePortfolio()
+            if (this.$scope.portfolio && !this.$scope.portfolio.deleted) {
+                this.updatePortfolio();
+            }
         }, 20e3) // 20 secs
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {

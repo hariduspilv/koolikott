@@ -188,6 +188,7 @@ class controller extends Controller {
             }
 
             this.getTagUpVotes()
+            this.toastService.show('PORTFOLIO_SAVED')
         }
     }
     reportTag(evt) {
