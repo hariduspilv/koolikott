@@ -160,14 +160,17 @@ class controller extends Controller {
                         this.addTagSuccess(portfolio)
                         this.deleteQueryIsRunning = false
                     })
+                    .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'));
             }
         }
     }
+
     addTag() {
         if (this.newTag && this.newTag.tagName && this.learningObject && this.learningObject.id) {
             this.serverCallService
                 .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
-                .then(({ data }) => this.addTagSuccess(data))
+                .then(({data}) => this.addTagSuccess(data))
+                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'));
             this.newTag.tagName = null
         }
     }

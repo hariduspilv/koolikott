@@ -10,7 +10,7 @@ class controller extends Controller {
             ? this.setPortfolio(storedPortfolio, true)
             : this.fetchPortfolio()
 
-        this.startAutosave()
+        // this.startAutosave()//TODO autosave ja manuaalne kustutamine tekitab jama
 
         this.$scope.toggleSidenav = (menuId) => this.$mdSidenav(menuId).toggle()
         this.$scope.closeSidenav = (menuId) => this.$mdSidenav(menuId).close()
@@ -121,6 +121,8 @@ class controller extends Controller {
                     this.toastService.show('PORTFOLIO_AUTOSAVED')
                 }
             })
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
+
     }
     startAutosave() { //TODO siin on kogumiku autosave
         this.autoSaveInterval = this.$interval(() => {
