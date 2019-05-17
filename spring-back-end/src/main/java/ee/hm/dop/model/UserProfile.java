@@ -10,9 +10,9 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
-import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -38,7 +38,7 @@ public class UserProfile implements AbstractEntity{
     @Column
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
-    private DateTime lastUpdate;
+    private LocalDateTime lastUpdate;
 
 
     @Transient
@@ -73,11 +73,11 @@ public class UserProfile implements AbstractEntity{
         this.role = role;
     }
 
-    public DateTime getLastUpdate() {
+    public LocalDateTime getLastUpdate() {
         return lastUpdate;
     }
 
-    public void setLastUpdate(DateTime lastUpdate) {
+    public void setLastUpdate(LocalDateTime lastUpdate) {
         this.lastUpdate = lastUpdate;
     }
 

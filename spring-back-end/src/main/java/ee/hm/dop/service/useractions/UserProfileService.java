@@ -7,16 +7,15 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.UserProfile;
 import ee.hm.dop.model.ehis.InstitutionEhis;
-import ee.hm.dop.model.enums.UserRole;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
 import ee.hm.dop.service.ehis.EhisInstitutionService;
 import ee.hm.dop.service.metadata.TaxonService;
-import org.joda.time.DateTime;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
@@ -28,6 +27,7 @@ import java.util.stream.Collectors;
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
 
 @Service
+@Transactional
 public class UserProfileService {
 
     @Inject
@@ -48,7 +48,7 @@ public class UserProfileService {
 
         updateUser(userProfile, user);
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
-        if (dbUserEmail != null && !dbUserEmail.getEmail().equals(validateEmail(userProfile.getEmail()))) {
+        if (dbUserEmail != null && dbUserEmail.getEmail() != null && !dbUserEmail.getEmail().equals(validateEmail(userProfile.getEmail()))) {
             dbUserEmail.setPin(PinGeneratorService.generatePin());
             sendMailService.sendEmail(sendMailService.sendPinToUser(dbUserEmail, userProfile.getEmail()));
             userEmailDao.createOrUpdate(dbUserEmail);
@@ -60,13 +60,13 @@ public class UserProfileService {
 
         UserProfile dbUserProfile = userProfileDao.findByUser(user);
         if (dbUserProfile != null) {
-            dbUserProfile.setLastUpdate(DateTime.now());
+            dbUserProfile.setLastUpdate(LocalDateTime.now());
             dbUserProfile.setRole(userProfile.getRole());
             dbUserProfile.setCustomRole(userProfile.getCustomRole());
             userProfileDao.createOrUpdate(dbUserProfile);
             return response;
         }
-        userProfile.setLastUpdate(DateTime.now());
+        userProfile.setLastUpdate(LocalDateTime.now());
         userProfileDao.createOrUpdate(userProfile);
         return response;
 
