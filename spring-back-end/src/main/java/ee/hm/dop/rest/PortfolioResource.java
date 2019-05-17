@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
 import ee.hm.dop.service.content.PortfolioCopier;
@@ -11,6 +12,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
@@ -66,8 +69,17 @@ public class PortfolioResource extends BaseResource {
     }
 
     @GetMapping("getPortfolioHistoryAll")
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public List<PortfolioLog> getPortfolioHistoryAll(@RequestParam("portfolioId") Long portfolioId) {
-        List<PortfolioLog> portfolioLog = portfolioGetter.getPortfolioHistoryAll(portfolioId);
+        List<PortfolioLog> portfolioLog;
+        if (getLoggedInUser().getRole().equals(Role.ADMIN)) {
+            portfolioLog = portfolioGetter.getPortfolioHistoryAll(portfolioId);
+        } else if (getLoggedInUser().getRole().equals(Role.MODERATOR)) {
+            portfolioLog = portfolioGetter.findByIdAndCreatorAllPortfolioLogs(portfolioId, getLoggedInUser());
+        } else {
+            throw new WebApplicationException("User has no access", Response.Status.FORBIDDEN);
+        }
+
         if (portfolioLog == null || portfolioLog.isEmpty())
             throw badRequest("No portfoliologs for portfolio with id: " + portfolioId);
         return portfolioLog;

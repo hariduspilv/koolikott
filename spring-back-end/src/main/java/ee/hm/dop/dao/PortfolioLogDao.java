@@ -24,6 +24,18 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
                 .getResultList();
     }
 
+    public List<PortfolioLog> findByIdAndCreatorAllPortfolioLogs(Long learningObjectId, Long creatorid) {
+        return getEntityManager()
+                .createQuery("" +
+                                "SELECT p FROM PortfolioLog p \n" +
+                                " WHERE p.learningObject = :learningObjectId" +
+                                " AND p.creator = :creatorid"
+                        , PortfolioLog.class)
+                .setParameter("learningObjectId", learningObjectId)
+                .setParameter("creatorid", creatorid)
+                .getResultList();
+    }
+
     @Override
     public PortfolioLog createOrUpdate(PortfolioLog entity) {
         entity.setLastInteraction(now());

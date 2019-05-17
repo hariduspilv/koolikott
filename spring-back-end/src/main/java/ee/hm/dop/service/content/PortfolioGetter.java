@@ -50,6 +50,10 @@ public class PortfolioGetter {
         return portfolioLogDao.findByIdAllPortfolioLogs(portfolioId);
     }
 
+    public List<PortfolioLog> findByIdAndCreatorAllPortfolioLogs(Long portfolioId, User user) {
+        return portfolioLogDao.findByIdAndCreatorAllPortfolioLogs(portfolioId, user.getId());
+    }
+
     public PortfolioLog getPortfolioHistory(long portfolioHistoryId) {
         return portfolioLogDao.findById(portfolioHistoryId);
     }
