@@ -19,7 +19,7 @@ import static javax.persistence.FetchType.EAGER;
 
 @Entity
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PortfolioLog extends LearningObjectLog implements Searchable, IPortfolio {
+public class PortfolioLog extends LearningObjectLog  {
 
     @Column(nullable = false)
     private String title;

@@ -31,12 +31,12 @@ public class LearningObjectResource extends BaseResource {
     private LearningObjectService learningObjectService;
 
     @PUT
-    @Path("{learningObjectId}/tags")
+    @Path("{learningObject}/tags")
     @RolesAllowed({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public LearningObject addTag(@PathParam("learningObjectId") Long learningObjectId, Tag newTag) {
-        return tagService.addRegularTag(learningObjectId, newTag, getLoggedInUser());
+    public LearningObject addTag(@PathParam("learningObject") Long learningObject, Tag newTag) {
+        return tagService.addRegularTag(learningObject, newTag, getLoggedInUser());
     }
 
     @GET

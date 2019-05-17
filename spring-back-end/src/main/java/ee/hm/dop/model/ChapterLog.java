@@ -14,7 +14,7 @@ import static javax.persistence.FetchType.EAGER;
 public class ChapterLog implements AbstractEntity  {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column
