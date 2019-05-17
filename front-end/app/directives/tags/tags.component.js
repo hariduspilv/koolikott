@@ -171,26 +171,25 @@ class controller extends Controller {
             this.newTag.tagName = null
         }
     }
+
     addTagSuccess(learningObject) {
         if (this.learningObject) {
-            const { tags, taxons, targetGroups, resourceTypes, changed } = learningObject
-            Object.assign(this.learningObject, { tags, taxons, targetGroups, resourceTypes, changed })
+            const {tags, taxons, targetGroups, resourceTypes, changed} = learningObject
+            Object.assign(this.learningObject, {tags, taxons, targetGroups, resourceTypes, changed})
 
             if (!this.learningObject.source && learningObject.uploadedFile)
                 this.learningObject.source = learningObject.uploadedFile.url
 
             if (this.isPortfolio(this.learningObject)) {
                 this.storageService.setPortfolio(this.learningObject);
-                this.updatePortfolio()
-                // this.$rootScope.$broadcast('tags:updatePortfolio');
-            } else  if (this.isMaterial(this.learningObject)){
+                this.$rootScope.$broadcast('tags:updatePortfolio');
+            } else if (this.isMaterial(this.learningObject)) {
                 this.storageService.setMaterial(this.learningObject)
             }
-
             this.getTagUpVotes()
-            this.toastService.show('PORTFOLIO_SAVED')
         }
     }
+
     reportTag(evt) {
         !this.authenticatedUserService.isAuthenticated()
             ? this.showLoginDialog(evt)

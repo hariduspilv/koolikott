@@ -59,9 +59,12 @@ class controller extends Controller {
             this.$timeout.cancel(this.increaseViewCountPromise)
         )
         this.$scope.$on('tags:updatePortfolio', (evt, value) => {
-            if (!_.isEqual(value, this.$scope.portfolio))
-                this.setPortfolio(value)
-        })
+            if (!_.isEqual(value, this.$scope.portfolio)) {
+                this.eventService.notify('portfolio:reloadTaxonObject')
+                this.setPortfolio(this.$scope.portfolio)
+                this.toastService.show('PORTFOLIO_SAVED')
+            }
+        });
         this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
         // this.$scope.$on('portfolioHistory:loadHistory',this.loadHistory.bind(this));
 

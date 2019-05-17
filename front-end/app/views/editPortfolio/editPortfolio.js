@@ -118,7 +118,7 @@ class controller extends Controller {
                     this.isAutoSaving
                         ? this.$rootScope.$broadcast('portfolio:autoSave')
                         : this.setPortfolio(portfolio);
-                    this.toastService.show('PORTFOLIO_SAVED')
+                    this.toastService.show('PORTFOLIO_AUTOSAVED')
                 }
             })
     }
