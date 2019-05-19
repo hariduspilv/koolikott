@@ -57,7 +57,7 @@ public class PortfolioService {
         Portfolio portfolioCreated = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
         PortfolioLog portfolioLogCreated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated));
         if (portfolioLogCreated == null)
-            logger.info("Can not create new portfoliolog with id: " + portfolioCreated.getId());
+            logger.error("Can not create new portfoliolog with id: " + portfolioCreated.getId());
         return portfolioCreated;
     }
 
@@ -72,7 +72,7 @@ public class PortfolioService {
 
         PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio));
         if (portfolioLogUpdated == null)
-            logger.info("Can not create new portfoliolog with id: " + portfolioLogUpdated.getId());
+            logger.error("Can not create new portfoliolog with id: " + portfolioLogUpdated.getId());
         logger.info("Portfolio with id: " + portfolio.getId() + " history log added");
 
         portfolioMaterialService.update(portfolio);

@@ -1,4 +1,6 @@
-<md-dialog aria-label="Kogumiku ajaloo taastamise modaalaken" flex-gt-sm="75" flex id="send-email-modal"
+<md-dialog aria-label="Kogumiku ajaloo taastamise modaalaken"
+           flex-gt-sm="75"
+           flex id="send-email-modal"
            class=" creator-email-dialog creator-email-full-screen">
   <md-toolbar class="md-accent">
     <div class="md-toolbar-tools" flex>
@@ -10,15 +12,22 @@
   </md-toolbar>
   <div>
     <md-content class="md-padding send-mail-ie">
-      <div layout-xs="column" layout="column" layout-align-xs="start stretch" layout-align="start stretch"
+      <div layout-xs="column"
+           layout="column"
+           layout-align-xs="start stretch"
+           layout-align="start stretch"
            flex-order="1"
            flex-order-gt-sm="2" flex="100">
         <md-input-container class="md-block animate-if remaining-charaters-wrapper label-top-ie" flex>
           <h2 class="final-step">{{('LOG_VERSION_STAY' | translate) + ' ' + (portfolio.createdAt | date:'dd.MM.yyyy HH:mm:ss') + ' ' + portfolio.creator.username + ' ' + ('LOG_VERSION_STAY_EXTRA' | translate)}}</h2>
-          <div layout="row" layout-align="end center" layout-xs="row" layout-align-xs="center center">
+          <div layout="row"
+               layout-align="end center"
+               layout-xs="row"
+               layout-align-xs="center center">
             <md-dialog-actions style="padding: 0px">
               <span flex></span>
-              <md-button aria-label="Tühista kogumiku taastamine" id="portfolio-restore-cancel-button"
+              <md-button aria-label="Tühista kogumiku taastamine"
+                         id="portfolio-restore-cancel-button"
                          data-ng-click="cancel()">
                 <span data-translate="LOG_GIVEUP"></span>
               </md-button>

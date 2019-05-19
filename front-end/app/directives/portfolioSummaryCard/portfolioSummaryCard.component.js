@@ -257,7 +257,7 @@ controller.$inject = [
 component('dopPortfolioSummaryCard', {
     bindings: {
         portfolio: '=',
-        showLogSelect: '=',
+        showlogselect: '=',
     },
     templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller

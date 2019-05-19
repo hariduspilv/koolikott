@@ -6,7 +6,7 @@ class controller extends Controller {
         super(...args)
         this.$rootScope.isFullScreen = false
 
-        this.$scope.showLogSelect = false;
+        this.$scope.showlogselect = false;
 
         window.addEventListener('scroll', (e) => {
             this.handleScroll(e);
@@ -66,27 +66,19 @@ class controller extends Controller {
             }
         });
         this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
-        // this.$scope.$on('portfolioHistory:loadHistory',this.loadHistory.bind(this));
-
-        // this.$scope.$on('portfolioHistory:loadHistory',(evt, value) => {
-        //     if (!_.isEqual(value, this.$scope.portfolio))
-        //         this.setPortfolio(value)
-        // });56325
 
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
-            if (newValue !== oldValue) {
-                if (newValue.type === '.PortfolioLog') {
-                    this.eventService.notify('portfolio:reloadTaxonObject');
-                    this.setPortfolio(this.$scope.portfolio)
-                }
+            if (newValue !== oldValue && (newValue.type === '.PortfolioLog' || oldValue.type === '.PortfolioLog')) {
+                this.eventService.notify('portfolio:reloadTaxonObject');
+                this.setPortfolio(this.$scope.portfolio)
             }
         });
     }
 
     showPortfolioHistoryLog() {
         this.$scope.showPortfolioHistoryDialog = true;
-        this.showLogSelect = true;
-        this.$scope.showLogSelect = true;
+        this.showlogselect = true;
+        this.$scope.showlogselect = true;
         // let menu = document.getElementById('historymenu');
         // this.$timeout(() => {
         //     menu.dispatchEvent(this.returnEvent());
