@@ -76,8 +76,6 @@ class controller extends Controller {
     }
 
     showPortfolioHistoryLog() {
-        this.$scope.showPortfolioHistoryDialog = true;
-        this.showlogselect = true;
         this.$scope.showlogselect = true;
         // let menu = document.getElementById('historymenu');
         // this.$timeout(() => {

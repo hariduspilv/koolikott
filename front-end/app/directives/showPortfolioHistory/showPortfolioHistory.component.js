@@ -5,6 +5,7 @@
             this.$scope.$on('portfolioHistory:show', this.getPortfolioLogs.bind(this));
             this.$scope.showlogselect = true;
             this.$scope.selectionMade = true;
+            this.selectPortfolioLog();
         }
 
         selectPortfolioLog(selectedPortfolioLog) {
@@ -32,13 +33,14 @@
                 scope
             })
                 .then(() => {
-                    this.$scope.showlogselect = false;
+                    this.showlogselect = false;
                 })
         }
 
         closePortfolioRestore() {
-            this.$scope.showlogselect = false;
+            this.showlogselect = false;
             this.portfolio = this.$scope.originalPortfolio;
+            this.$rootScope.$broadcast('portfolioHistory:hide');
         }
 
         getPortfolioLogs() {

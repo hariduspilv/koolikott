@@ -16,6 +16,7 @@ class controller extends Controller {
             'CCBYNCND': ['by', 'nc', 'nd']
         };
 
+        this.$scope.showEditModeButton = true
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
 
@@ -25,7 +26,6 @@ class controller extends Controller {
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
             if (newValue !== oldValue) {
-                this.historySelectionInProgress = true;
                 this.$rootScope.$broadcast('portfolioHistory:loadHistory');
                 this.eventService.notify('portfolio:reloadTaxonObject')
             }
@@ -38,6 +38,8 @@ class controller extends Controller {
             if (currentValue !== previousValue)
                 this.$scope.portfolio = currentValue
         }, true)
+
+        this.$scope.$on('portfolioHistory:hide', this.hidePortfolioHistory.bind(this));
 
         this.$scope.portfolio = this.portfolio
         this.$scope.pageUrl = this.$location.absUrl()
@@ -89,6 +91,10 @@ class controller extends Controller {
     $doCheck() {
         if (this.$scope.portfolio !== this.portfolio)
             this.$scope.portfolio = this.portfolio
+    }
+
+    hidePortfolioHistory(){
+        this.$scope.showEditModeButton = true
     }
 
     canEdit() {
@@ -173,7 +179,8 @@ class controller extends Controller {
     }
 
     showPortfolioHistoryDialog() {
-        // this.historySelectionInProgress = true;
+        this.showlogselect = true;
+        this.$scope.showEditModeButton = false
         this.$rootScope.$broadcast('portfolioHistory:show');
     }
 
