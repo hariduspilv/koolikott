@@ -41,8 +41,12 @@ class controller extends Controller {
 
         this.$scope.$on('portfolioHistory:hide', this.hidePortfolioHistory.bind(this));
 
+        this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this))
+
         this.$scope.portfolio = this.portfolio
         this.$scope.pageUrl = this.$location.absUrl()
+
+        this.$scope.isAutoSaving = false;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -132,13 +136,18 @@ class controller extends Controller {
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
+            .makePost(`rest/portfolio/update/${this.$scope.isAutoSaving}`,
+                this.storageService.getPortfolio())
             .then(({data: portfolio}) => {
                 if (portfolio) {
                     this.storageService.setPortfolio(portfolio);
                     this.toastService.show('PORTFOLIO_SAVED');
                 }
             })
+    }
+
+    getHistoryType(){
+        this.$scope.isAutoSaving = true;
     }
 
      getPortfolioEducationalContexts() {

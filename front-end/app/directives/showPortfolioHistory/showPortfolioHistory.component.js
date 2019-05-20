@@ -26,6 +26,8 @@
             const scope = this.$scope.$new(true);
             scope.portfolio = this.portfolio;
             scope.showlogselect = this.$scope.showlogselect;
+            this.$rootScope.$broadcast('portfolioHistory:hide');
+
 
             this.$mdDialog.show({
                 templateUrl: 'directives/showPortfolioHistory/showPortfolioLogConfirm.html',

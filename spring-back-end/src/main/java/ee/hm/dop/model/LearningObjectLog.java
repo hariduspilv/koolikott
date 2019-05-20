@@ -141,6 +141,9 @@ public abstract class LearningObjectLog implements Searchable, ILearningObject {
     @JoinColumn(name = "licenseType")
     private LicenseType licenseType;
 
+    @Column
+    private Boolean isAutoSaved;
+
     public LocalDateTime getCreatedAt() {
         return createdAt;
     }
@@ -297,4 +300,11 @@ public abstract class LearningObjectLog implements Searchable, ILearningObject {
         this.licenseType = licenseType;
     }
 
+    public Boolean getAutoSaved() {
+        return isAutoSaved;
+    }
+
+    public void setAutoSaved(Boolean autoSaved) {
+        isAutoSaved = autoSaved;
+    }
 }

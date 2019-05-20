@@ -38,7 +38,6 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
 
     @Override
     public PortfolioLog createOrUpdate(PortfolioLog entity) {
-        entity.setLastInteraction(now());
         return super.createOrUpdate(entity);
     }
 }

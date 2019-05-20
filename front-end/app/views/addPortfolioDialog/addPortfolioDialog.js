@@ -12,6 +12,8 @@ angular.module('koolikottApp')
                 $scope.$watch('newPicture', onNewPictureChange.bind(this));
                 $scope.$watchCollection('invalidPicture', onInvalidPictureChange.bind(this));
 
+                // $rootScope.$on('portfolio:autoSave', getHistoryLogType.bind(this))
+
                 function init() {
                     const portfolio = getPortfolio();
                     $scope.portfolio = portfolio;

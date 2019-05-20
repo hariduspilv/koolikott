@@ -40,14 +40,14 @@ public class TagService {
         return tagDao.findByName(name);
     }
 
-    public LearningObject addRegularTag(Long learningObjectId, Tag tag, User loggedInUser) {
+    public LearningObject addRegularTag(Long learningObjectId, Tag tag, User loggedInUser,Boolean isAutoSaving) {
         LearningObject learningObject = learningObjectService.get(learningObjectId, loggedInUser);
         ValidatorUtil.mustHaveEntity(learningObject, learningObjectId);
 
-        return addTag(learningObject, tag, loggedInUser);
+        return addTag(learningObject, tag, loggedInUser,isAutoSaving);
     }
 
-    private LearningObject addTag(LearningObject learningObject, Tag newTag, User user) {
+    private LearningObject addTag(LearningObject learningObject, Tag newTag, User user,Boolean isAutoSaving) {
         if (!learningObjectService.canAccess(user, learningObject)) {
             throw ValidatorUtil.permissionError();
         }
@@ -60,7 +60,7 @@ public class TagService {
         tags.add(newTag);
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
         Portfolio portfolio = portfolioDao.findById(updatedLearningObject.getId());
-        portfolioService.update(portfolio, user);
+        portfolioService.update(portfolio, user,isAutoSaving);
         solrEngineService.updateIndex();
 
         return updatedLearningObject;

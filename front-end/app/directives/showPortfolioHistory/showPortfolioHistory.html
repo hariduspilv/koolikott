@@ -22,9 +22,9 @@
     ng-model-options="{trackBy: '$value.id'}"
     data-ng-change="$ctrl.selectPortfolioLog(selectedPortfolioLog)">
     <md-option
-      data-ng-value="opt"
-      data-ng-repeat="opt in data">
-      {{$ctrl.formatDateToTimeDayMonthYear(opt.createdAt) + '  ' + opt.creator.username}}
+      data-ng-value="historylog"
+      data-ng-repeat="historylog in data">
+      {{$ctrl.formatDateToTimeDayMonthYear(historylog.createdAt) + '  ' + historylog.creator.username}} {{historylog.autoSaved == true ? 'automaatne salvestus' : 'manuaalne salvestus'}}
     </md-option>
   </md-select>
 </div>

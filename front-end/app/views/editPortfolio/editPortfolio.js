@@ -10,7 +10,7 @@ class controller extends Controller {
             ? this.setPortfolio(storedPortfolio, true)
             : this.fetchPortfolio()
 
-        // this.startAutosave()//TODO autosave ja manuaalne kustutamine tekitab jama
+        this.startAutosave()//TODO autosave ja manuaalne kustutamine tekitab jama
 
         this.$scope.toggleSidenav = (menuId) => this.$mdSidenav(menuId).toggle()
         this.$scope.closeSidenav = (menuId) => this.$mdSidenav(menuId).close()
@@ -112,7 +112,7 @@ class controller extends Controller {
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost('rest/portfolio/update', this.$scope.portfolio)
+            .makePost(`rest/portfolio/update/${this.isAutoSaving}`, this.$scope.portfolio)
             .then(({ data: portfolio }) => {
                 if (portfolio) {
                     this.isAutoSaving

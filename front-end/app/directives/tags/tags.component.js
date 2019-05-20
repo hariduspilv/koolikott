@@ -11,7 +11,10 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.getTagUpVotes()
 
-        this.isPortfolioLog = false;
+        this.$scope.isAutoSaving = false;
+        this.$scope.isPortfolioLog = false;
+
+        this.$rootScope.$on('portfolio:autoSave', this.getHistoryLogType.bind(this))
 
         this.$rootScope.$on('tags:resetTags', this.getTagUpVotes.bind(this))
         this.$rootScope.$on('tags:focusInput', () => {
@@ -49,6 +52,12 @@ class controller extends Controller {
             this._previousTags = this.learningObject.tags
         }
     }
+
+    getHistoryLogType(){
+        this.$scope.isAutoSaving = true;
+
+    }
+
     onLoginSuccess() {
         if (
             window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
@@ -74,11 +83,13 @@ class controller extends Controller {
             return
         }
 
+        this.$scope.isPortfolioLog = portfolioLog;
+
         this.serverCallService
             .makeGet('rest/tagUpVotes/report', {learningObject: id, portfolioLog: portfolioLog})
             .then(({ data: tags }) => {
                 let sorted = this.sortTagsByUpVoteCount(tags)
-                this.$scope.isPortfolioLog = this.portfolioLog;
+
                 if (sorted.length > 10) {
                     this.allUpvotes = sorted
                     this.$scope.upvotes = this.allUpvotes.slice(0, 10)
@@ -155,7 +166,7 @@ class controller extends Controller {
             } else if (this.isPortfolio(this.learningObject)) {
                 this.updateChaptersStateFromEditors()
                 this.serverCallService
-                    .makePost('rest/portfolio/update', this.learningObject)
+                    .makePost(`rest/portfolio/update/${this.$scope.isAutoSaving}`,this.learningObject)
                     .then(({ data: portfolio }) => {
                         this.addTagSuccess(portfolio)
                         this.deleteQueryIsRunning = false
@@ -168,7 +179,7 @@ class controller extends Controller {
     addTag() {
         if (this.newTag && this.newTag.tagName && this.learningObject && this.learningObject.id) {
             this.serverCallService
-                .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
+                .makePut(`rest/learningObject/${this.learningObject.id}/tags/${this.$scope.isAutoSaving}`, JSON.stringify(this.newTag.tagName))
                 .then(({data}) => this.addTagSuccess(data))
                 .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'));
             this.newTag.tagName = null

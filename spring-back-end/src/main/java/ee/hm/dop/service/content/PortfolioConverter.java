@@ -23,12 +23,13 @@ public class PortfolioConverter {
         return setCommonFields(safePortfolio, portfolio);
     }
 
-    public PortfolioLog setFieldsToNewPortfolioLog(Portfolio portfolio) {
+    public PortfolioLog setFieldsToNewPortfolioLog(Portfolio portfolio, Boolean isAutoSaving) {
         PortfolioLog portfolioLog = new PortfolioLog();
         portfolioLog.setLearningObject(portfolio.getId());
         portfolioLog.setCreator(portfolio.getCreator());
         portfolioLog.setVisibility(portfolio.getVisibility());
         portfolioLog.setOriginalCreator(portfolio.getOriginalCreator());
+        portfolioLog.setAutoSaved(isAutoSaving);
         return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
 
