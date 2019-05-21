@@ -77,6 +77,8 @@
         '$mdDialog',
         'serverCallService',
         '$rootScope',
+        '$translate',
+        'translationService',
     ]
     component('dopShowPortfolioHistory', {
         bindings: {

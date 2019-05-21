@@ -24,5 +24,13 @@ angular.module('koolikottApp').controller('showPortfolioLogController', [
         $scope.cancel = function () {
             $mdDialog.hide();
         };
+
+        $scope.setDialogInformation = function () {
+            this.$translate('LOG_VERSION_STAY').then((value) => {
+                this.$scope.confirmationNotice = (value.replace('${createdAtDate}', this.formatDateToDayMonthYear(this.portfolio.createdAt))
+                    .replace('${createdAtTime}', this.formatDateToTime(this.portfolio.createdAt))
+                    .replace('${creator}', this.portfolio.creator.username));
+            })
+        }
     }
 ]);
