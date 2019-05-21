@@ -8,13 +8,27 @@
             this.selectPortfolioLog();
         }
 
+        // selclicked(){//TODO ajutiselt proovida vel  siis kustutada
+        //     var bodyRect = document.body.getBoundingClientRect();
+        //     var myElement = document.getElementsByClassName('sel');
+        //     var containerTop = myElement[0].getBoundingClientRect().top - bodyRect.top + 'px';
+            // var myContainer = document.getElementById('minudiv');
+            // var myContainer = document.getElementsByClassName('.md-select-menu-container');
+            // var myContainer = document.getElementById('historymenu');
+            // setTimeout(function () {
+            //     var myContainer = document.getElementsByClassName('.md-select-menu-container');
+            //     angular.element(myContainer).css({'top':containerTop});
+            // },50);
+        // }
+
         selectPortfolioLog(selectedPortfolioLog) {
             if (!this.$scope.originalPortfolio) {
                 this.$scope.originalPortfolio = this.portfolio;
             }
             if (selectedPortfolioLog) {
                 this.portfolio = selectedPortfolioLog;
-                this.$scope.selectionMade = false;
+                // this.selclicked()
+                // this.$scope.selectionMade = false;
             }
         }
 

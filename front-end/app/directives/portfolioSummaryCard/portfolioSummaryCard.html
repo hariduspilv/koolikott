@@ -53,8 +53,8 @@
                   <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item>
-                <md-button data-ng-if="isAdminOrModerator()" data-ng-click="$ctrl.showPortfolioHistoryDialog()">
+              <md-menu-item data-ng-if="isOwner()">
+                <md-button data-ng-click="$ctrl.showPortfolioHistoryDialog()">
                   <md-icon md-menu-align-target>history</md-icon>
                   <span data-translate="PORTFOLIO_SHOW_HISTORY"></span>
                 </md-button>

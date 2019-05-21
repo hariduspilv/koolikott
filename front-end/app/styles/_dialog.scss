@@ -233,7 +233,7 @@ body > .md-dialog-container {
     @media (min-width: $layout-breakpoint-lg) {
       max-width: 45% !important;
     }
-    @media (max-width: $layout-breakpoint-lg)  {
+    @media (max-width: $layout-breakpoint-lg) {
       max-width: 65% !important;
     }
     @media (max-width: $layout-breakpoint-md) {
@@ -243,7 +243,7 @@ body > .md-dialog-container {
   .send-mail-ie {
     height: 295px
   }
-  .sent-email-color-black{
+  .sent-email-color-black {
     color: black;
   }
 
@@ -254,6 +254,23 @@ body > .md-dialog-container {
   .button-less-wider {
     min-width: 50px
   }
+}
+
+.selectdropdown md-select-menu {
+  margin-top: 30px !important;
+  max-height: 390px;
+}
+
+.selectdropdown md-content {
+  max-height: 390px;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  overflow: auto;
+}
+
+.selectdropdown md-option {
+  padding: 10px 0;
+  height: auto;
 }
 
 

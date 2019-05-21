@@ -131,7 +131,7 @@ class controller extends Controller {
             if (this.$scope.portfolio && !this.$scope.portfolio.deleted) {
                 this.updatePortfolio();
             }
-        }, 20e3) // 20 secs
+        }, 900000) // 15 mins
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
         if (chapterIdx === -1)

@@ -19,7 +19,7 @@
            flex-order="1"
            flex-order-gt-sm="2" flex="100">
         <md-input-container class="md-block animate-if remaining-charaters-wrapper label-top-ie" flex>
-          <h2 class="final-step">{{('LOG_VERSION_STAY' | translate) + ' ' + (portfolio.createdAt | date:'dd.MM.yyyy HH:mm:ss') + ' ' + portfolio.creator.username + ' ' + ('LOG_VERSION_STAY_EXTRA' | translate)}}</h2>
+          <h2 class="final-step">{{('LOG_VERSION_STAY' | translate) + ' ' + (portfolio.createdAt | date:'dd.MM.yyyy HH:mm:ss') + ' ' + portfolio.creator.username + ' ' + ('LOG_VERSION_STAY_EXTRA' | translate)}} {{historylog.autoSaved == true ? 'automaatne salvestus' : 'manuaalne salvestus'}}</h2>//TODO tõlge
           <div layout="row"
                layout-align="end center"
                layout-xs="row"

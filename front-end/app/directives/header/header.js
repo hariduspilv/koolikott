@@ -330,15 +330,16 @@ class controller extends Controller {
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
+            .makePost(`rest/portfolio/update/${false}`, this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
                 if (portfolio) this.storageService.setPortfolio(portfolio)
             })
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
     }
     saveAndExit() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
+            .makePost(`rest/portfolio/update/${false}`, this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
                 if (portfolio) {
                     this.toastService.show('PORTFOLIO_SAVED')
@@ -350,6 +351,8 @@ class controller extends Controller {
                     this.$route.reload()
                 }
             })
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
+
     }
     invokeInkRippleOnSaveButton() {
         const saveBtn = document.querySelector('.header-save-button')

@@ -26,13 +26,15 @@ class controller extends Controller {
         portfolioClone.visibility = state
 
         this.serverCallService
-            .makePost('rest/portfolio/update', portfolioClone)
+            .makePost(`rest/portfolio/update/${false}`, portfolioClone)
             .then(({ data }) => {
                 if (data) {
                     this.locals.portfolio.visibility = data.visibility
                     this.toastService.show('PORTFOLIO_SAVED')
                 }
             })
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
+
         this.locals.setShareParams(this.locals.item)
         this.$mdDialog.cancel()
     }

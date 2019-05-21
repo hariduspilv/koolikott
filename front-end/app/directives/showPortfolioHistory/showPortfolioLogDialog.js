@@ -13,7 +13,8 @@ angular.module('koolikottApp').controller('showPortfolioLogController', [
                         $scope.showLogSelect = false;
                         $mdDialog.hide();
                     }
-                });
+                })
+                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
         };
 
         $scope.hide = function () {
