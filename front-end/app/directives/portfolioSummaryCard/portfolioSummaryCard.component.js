@@ -50,6 +50,7 @@ class controller extends Controller {
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
+        this.$scope.isOwner= this.isOwner.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
         this.$scope.isLoggedIn = this.isLoggedIn.bind(this)
         this.$scope.isRestricted = this.isRestricted.bind(this)
@@ -110,10 +111,8 @@ class controller extends Controller {
     }
     isOwner() {
         return !this.authenticatedUserService.isAuthenticated()
-            ? false
-            : this.portfolio && this.portfolio.creator
-                ? this.portfolio.creator.id === this.authenticatedUserService.getUser().id
-                : false
+            ? false : this.portfolio && this.portfolio.creator
+                ? this.portfolio.creator.id === this.authenticatedUserService.getUser().id : false
     }
     isAdmin() {
         return this.authenticatedUserService.isAdmin()

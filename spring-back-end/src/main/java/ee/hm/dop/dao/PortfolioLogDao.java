@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.PortfolioLog;
+import ee.hm.dop.model.User;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
                 .getResultList();
     }
 
-    public List<PortfolioLog> findByIdAndCreatorAllPortfolioLogs(Long learningObjectId, Long creatorid) {
+    public List<PortfolioLog> findByIdAndCreatorAllPortfolioLogs(Long learningObjectId, User creatorid) {
         return getEntityManager()
                 .createQuery("" +
                                 "SELECT p FROM PortfolioLog p \n" +

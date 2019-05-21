@@ -5,7 +5,7 @@
       <h2>{{selectedPortfolioLog ? ('LOG_MOMENT' | translate) + ' - ' +
         $ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt) : ('LOG_HISTORY' | translate)}}</h2>
       <div layout-align="end center" layout-align-xs="center center" layout-xs="row" layout="row">
-        <md-button class="md-grey button-less-wider" data-ng-click="$ctrl.restoreSelectedPortfolio()" style="min-width: 50px">
+        <md-button ng-show="data.length > 0" class="md-grey button-less-wider" data-ng-click="$ctrl.restoreSelectedPortfolio()" style="min-width: 50px">
           <md-icon>history</md-icon>
         </md-button>
         <md-button class="md-grey button-less-wider" data-ng-click="$ctrl.closePortfolioRestore()" style="min-width: 50px">
@@ -27,7 +27,7 @@
       data-ng-value="historylog"
       data-ng-repeat="historylog in data">
       {{$ctrl.formatDateToTimeDayMonthYear(historylog.createdAt) + ' ' + historylog.creator.username}}
-      {{historylog.autoSaved == true ? 'automaatne salvestus' : 'manuaalne salvestus'}}
+      {{historylog.autoSaved == true ? ('LOG_AUTO_SAVE' | translate) : ('LOG_AUTO_MANUAL' | translate)}}
     </md-option>
   </md-select>
   </div>
