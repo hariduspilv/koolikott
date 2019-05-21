@@ -15,7 +15,7 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
         return PortfolioLog.class;
     }
 
-    public List<PortfolioLog> findByIdAllPortfolioLogs(Long learningObjectId) {
+    public List<PortfolioLog> findAllPortfolioLogsByLoId(Long learningObjectId) {
         return getEntityManager()
                 .createQuery("" +
                                 "SELECT p FROM PortfolioLog p \n" +
@@ -25,7 +25,7 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
                 .getResultList();
     }
 
-    public List<PortfolioLog> findByIdAndCreatorAllPortfolioLogs(Long learningObjectId, User creatorid) {
+    public List<PortfolioLog> findPortfolioLogsByLoIdAndUserId(Long learningObjectId, User creatorid) {
         return getEntityManager()
                 .createQuery("" +
                                 "SELECT p FROM PortfolioLog p \n" +

@@ -1,6 +1,10 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.PortfolioLog;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
@@ -9,13 +13,20 @@ import ee.hm.dop.service.content.PortfolioGetter;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserService;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
@@ -80,7 +91,7 @@ public class PortfolioResource extends BaseResource {
             throw new WebApplicationException("User has no access", Response.Status.FORBIDDEN);
         }
 
-        if (portfolioLog == null || portfolioLog.isEmpty())
+        if (portfolioLog == null || isEmpty(portfolioLog))
             throw badRequest("No portfoliologs for portfolio with id: " + portfolioId);
         return portfolioLog;
     }

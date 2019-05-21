@@ -47,11 +47,11 @@ public class PortfolioGetter {
     }
 
     public List<PortfolioLog> getPortfolioHistoryAll(Long portfolioId) {
-        return portfolioLogDao.findByIdAllPortfolioLogs(portfolioId);
+        return portfolioLogDao.findAllPortfolioLogsByLoId(portfolioId);
     }
 
     public List<PortfolioLog> findByIdAndCreatorAllPortfolioLogs(Long portfolioId, User user) {
-        return portfolioLogDao.findByIdAndCreatorAllPortfolioLogs(portfolioId, user);
+        return portfolioLogDao.findPortfolioLogsByLoIdAndUserId(portfolioId, user);
     }
 
     public PortfolioLog getPortfolioHistory(long portfolioHistoryId) {

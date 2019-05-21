@@ -71,7 +71,7 @@ public class TagUpVoteResource extends BaseResource {
         } else {
             LearningObjectLog learningObjectLog = learningObjectLogDao.findById(learningObjectId);
             if (learningObjectLog != null) {
-                return convertForms(user, learningObjectLog);
+                return convertForms(learningObjectLog);
             }
         }
         return Collections.emptyList();
@@ -102,21 +102,17 @@ public class TagUpVoteResource extends BaseResource {
         return form;
     }
 
-    private List<TagUpVoteForm> convertForms(User user, LearningObjectLog learningObject) {
+    private List<TagUpVoteForm> convertForms(LearningObjectLog learningObject) {
         return learningObject
                 .getTags()
                 .stream()
-                .map(tag -> convertForm(user, learningObject, tag))
+                .map(this::convertForm)
                 .collect(Collectors.toList());
     }
 
-    private TagUpVoteForm convertForm(User user, LearningObjectLog learningObject, Tag tag) { //TODO
+    private TagUpVoteForm convertForm(Tag tag) {
         TagUpVoteForm form = new TagUpVoteForm();
         form.tag = tag;
-//        form.upVoteCount = tagUpVoteService.getUpVoteCountFor(tag, learningObject);
-//        if (form.upVoteCount > 0) {
-//            form.tagUpVote = tagUpVoteService.getTagUpVote(tag, learningObject, user);
-//        }
         return form;
     }
 

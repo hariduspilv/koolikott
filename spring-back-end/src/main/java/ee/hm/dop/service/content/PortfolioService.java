@@ -71,9 +71,7 @@ public class PortfolioService {
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
 
         PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio, isAutoSaving));
-        if (portfolioLogUpdated == null)
-            logger.error("Can not create new portfoliolog with id: " + portfolioLogUpdated.getId());
-        logger.info("Portfolio with id: " + portfolio.getId() + " history log added");
+        logger.info("Portfolio with id: " + portfolio.getId() + " ,history log with id:" + portfolioLogUpdated.getId() + " added");
 
         portfolioMaterialService.update(portfolio);
         logger.info("Portfolio materials updating ended");
