@@ -96,28 +96,30 @@ public class PortfolioConverter {
         return to;
     }
 
-    private Function<Chapter, ChapterLog> convertChapterToLog = new Function<Chapter, ChapterLog>() {
-        public ChapterLog apply(Chapter chapter) {
-            ChapterLog chapterLog = new ChapterLog();
-            chapterLog.setId(chapter.getId());
-            chapterLog.setTitle(chapter.getTitle());
+    private Function<Chapter, ChapterLog> convertChapterToLog = this::convertChapter;
 
-            List<ChapterBlockLog> chapterBlockLogs = chapter.getBlocks().stream()
-                    .map(convertChapterBlockToLog)
-                    .collect(Collectors.toList());
-
-            chapterLog.setBlocks(chapterBlockLogs);
-
-            return chapterLog;
-        }
-    };
-
-    private Function<ChapterBlock, ChapterBlockLog> convertChapterBlockToLog = PortfolioConverter::apply;
-
-    private static ChapterBlockLog apply(ChapterBlock chapter) {
-        ChapterBlockLog chapterLog = new ChapterBlockLog();
+    private ChapterLog convertChapter(Chapter chapter) {
+        ChapterLog chapterLog = new ChapterLog();
         chapterLog.setId(chapter.getId());
-        chapterLog.setHtmlContent(chapter.getHtmlContent());
+        chapterLog.setTitle(chapter.getTitle());
+
+        List<ChapterBlockLog> chapterBlockLogs = chapter
+                .getBlocks()
+                .stream()
+                .map(convertChapterBlockToLog)
+                .collect(Collectors.toList());
+
+        chapterLog.setBlocks(chapterBlockLogs);
+
         return chapterLog;
+    }
+
+    private Function<ChapterBlock, ChapterBlockLog> convertChapterBlockToLog = PortfolioConverter::convertChapterBlock;
+
+    private static ChapterBlockLog convertChapterBlock(ChapterBlock chapter) {
+        ChapterBlockLog chapterBlockLog = new ChapterBlockLog();
+        chapterBlockLog.setId(chapter.getId());
+        chapterBlockLog.setHtmlContent(chapter.getHtmlContent());
+        return chapterBlockLog;
     }
 }
