@@ -21,6 +21,8 @@ public class CronProcesses {
     @Inject
     private AuthenticationStateCleanerProperties authenticationStateCleanerProperties;
     @Inject
+    private PortfolioLogCleanerProperties portfolioLogCleanerProperties;
+    @Inject
     private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
     @Inject
     private AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
@@ -30,6 +32,8 @@ public class CronProcesses {
     private AuthenticatedUserCleaner authenticatedUserCleaner;
     @Inject
     private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
+    @Inject
+    private PortfolioLogCleaner portfolioLogCleaner;
 
     @Scheduled(cron = "${cron.materialSync.scheduledTime}")
     public void synchronizeMaterialsExecutor() {
@@ -63,6 +67,13 @@ public class CronProcesses {
     public void ehisInstitutionUpdateExecutor() {
         if (ehisInstitutionProperties.isEnabled()) {
             ehisInstitutionUpdateExecutor.run();
+        }
+    }
+
+    @Scheduled(cron = "${cron.portfolioLogStateCleaner.scheduledTime}")
+    public void portfolioLogCleaner() {
+        if (portfolioLogCleanerProperties.isEnabled()) {
+            portfolioLogCleaner.run();
         }
     }
 }

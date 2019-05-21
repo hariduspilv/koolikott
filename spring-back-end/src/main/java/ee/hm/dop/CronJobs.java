@@ -3,6 +3,7 @@ package ee.hm.dop;
 import ee.hm.dop.service.synchronizer.AuthenticatedUserCleaner;
 import ee.hm.dop.service.synchronizer.AuthenticationStateCleaner;
 import ee.hm.dop.service.synchronizer.AutomaticallyAcceptReviewableChange;
+import ee.hm.dop.service.synchronizer.PortfolioLogCleaner;
 import ee.hm.dop.service.synchronizer.SynchronizeMaterialsExecutor;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +17,7 @@ public class CronJobs {
     private AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
     private AuthenticationStateCleaner authenticationStateCleaner;
     private AuthenticatedUserCleaner authenticatedUserCleaner;
+    private PortfolioLogCleaner portfolioLogCleaner;
 
     @Scheduled(cron = "0 0 1 * * *")
     public void synchronizeMaterialsExecutor() {
@@ -35,5 +37,10 @@ public class CronJobs {
     @Scheduled(cron = "0 0 4 * * *")
     public void authenticatedUserCleaner() {
         authenticatedUserCleaner.run();
+    }
+
+    @Scheduled(cron = "0 0 5 * * *")
+    public void portfolioLogCleaner() {
+        portfolioLogCleaner.run();
     }
 }
