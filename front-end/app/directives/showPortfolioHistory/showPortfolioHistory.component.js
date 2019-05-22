@@ -27,8 +27,7 @@
             }
             if (selectedPortfolioLog) {
                 this.portfolio = selectedPortfolioLog;
-                // this.selclicked()
-                // this.$scope.selectionMade = false;
+                this.$scope.showConfirmButton = true;
             }
         }
 
@@ -61,6 +60,10 @@
 
         getPortfolioLogs() {
             let urlEnd = this.portfolio.type === '.Portfolio' ? this.portfolio.id : this.portfolio.learningObject;
+
+            if (!this.$scope.originalPortfolio) {
+                this.$scope.originalPortfolio = this.portfolio;
+            }
 
             let url = 'rest/portfolio/getPortfolioHistoryAll?portfolioId=' + urlEnd;
             this.serverCallService.makeGet(url)

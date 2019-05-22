@@ -65,19 +65,21 @@ class controller extends Controller {
                 this.toastService.show('PORTFOLIO_SAVED')
             }
         });
-        this.$scope.$on('portfolioHistory:show',this.showPortfolioHistoryLog.bind(this));
+        this.$scope.$on('portfolioHistory:show', this.showPortfolioHistoryLog.bind(this));
 
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
-            if (newValue !== oldValue && (newValue.type === '.PortfolioLog' || oldValue.type === '.PortfolioLog')) {
-                this.eventService.notify('portfolio:reloadTaxonObject');
-                this.setPortfolio(this.$scope.portfolio)
+            if (newValue !== oldValue && (newValue !== null || oldValue !== null)) {
+                if (newValue.type === '.PortfolioLog' || oldValue.type === '.PortfolioLog') {
+                    this.eventService.notify('portfolio:reloadTaxonObject');
+                    this.setPortfolio(this.$scope.portfolio)
+                }
             }
         });
     }
 
     showPortfolioHistoryLog() {
         this.$scope.showlogselect = true;
-        // let menu = document.getElementById('historymenu');
+        // let menu = document.getElementById('historymenu');//TODO later to delete
         // this.$timeout(() => {
         //     menu.dispatchEvent(this.returnEvent());
         // }, 400);

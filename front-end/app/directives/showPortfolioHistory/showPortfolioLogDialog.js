@@ -22,6 +22,7 @@
                     if (data) {
                         this.$scope.showLogSelect = false;
                         this.$mdDialog.hide();
+                        this.toastService.show('PORTFOLIO_SAVED')
                     }
                 })
                 .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
