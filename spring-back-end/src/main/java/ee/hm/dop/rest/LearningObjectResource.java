@@ -29,10 +29,10 @@ public class LearningObjectResource extends BaseResource {
     @Inject
     private LearningObjectService learningObjectService;
 
-    @PutMapping("{learningObject}/tags/{isAutoSaving}")
+    @PutMapping("{learningObject}/tags")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public LearningObject addTag(@PathVariable("learningObject") Long learningObject, @RequestBody Tag newTag,@PathVariable("isAutoSaving") Boolean isAutoSaving) {
-        return tagService.addRegularTag(learningObject, newTag, getLoggedInUser(),isAutoSaving);
+    public LearningObject addTag(@PathVariable("learningObject") Long learningObject, @RequestBody Tag newTag) {
+        return tagService.addRegularTag(learningObject, newTag, getLoggedInUser());
     }
 
     @GetMapping("favorite")

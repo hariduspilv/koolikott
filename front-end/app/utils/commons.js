@@ -854,6 +854,13 @@ class Controller {
             : formatDay(date.getDate()) + "." + formatMonth(date.getMonth() + 1) + "." + date.getFullYear()
     }
 
+    formatDateToTime(dateString) {
+        var date = new Date(dateString);
+        return isNaN(date)
+            ? ''
+            : date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+    }
+
     formatDateToTimeDayMonthYear(dateString) {
         const date = new Date(dateString)
 

@@ -111,8 +111,9 @@ class controller extends Controller {
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
+        this.$scope.portfolio.saveType = this.isAutoSaving;
         this.serverCallService
-            .makePost(`rest/portfolio/update/${this.isAutoSaving}`, this.$scope.portfolio)
+            .makePost(`rest/portfolio/update`, this.$scope.portfolio)
             .then(({ data: portfolio }) => {
                 if (portfolio) {
                     this.isAutoSaving

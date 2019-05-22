@@ -55,13 +55,11 @@ public class PortfolioService {
         validateTitle(portfolio);
 
         Portfolio portfolioCreated = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
-        PortfolioLog portfolioLogCreated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated, false));
-        if (portfolioLogCreated == null)
-            logger.error("Can not create new portfoliolog with id: " + portfolioCreated.getId());
+        PortfolioLog portfolioLogCreated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated));
         return portfolioCreated;
     }
 
-    public Portfolio update(Portfolio portfolio, User user, Boolean isAutoSaving) {
+    public Portfolio update(Portfolio portfolio, User user) {
         TextFieldUtil.cleanTextFields(portfolio);
 
         Portfolio originalPortfolio = portfolioConverter.setFieldsToExistingPortfolio(validateUpdate(portfolio, user), portfolio);
@@ -70,7 +68,7 @@ public class PortfolioService {
         logger.info("Portfolio materials updating started. Portfolio id= " + portfolio.getId());
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
 
-        PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio, isAutoSaving));
+        PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio));
         logger.info("Portfolio with id: " + portfolio.getId() + " ,history log with id:" + portfolioLogUpdated.getId() + " added");
 
         portfolioMaterialService.update(portfolio);

@@ -3,7 +3,7 @@
     class controller extends Controller {
         $onInit() {
             this.$scope.$on('portfolioHistory:show', this.getPortfolioLogs.bind(this));
-            this.$scope.showlogselect = true;
+            // this.$scope.showlogselect = true;
             this.$scope.selectionMade = true;
             this.selectPortfolioLog();
         }
@@ -42,11 +42,11 @@
             scope.showlogselect = this.$scope.showlogselect;
             this.$rootScope.$broadcast('portfolioHistory:hide');
 
-
             this.$mdDialog.show({
                 templateUrl: 'directives/showPortfolioHistory/showPortfolioLogConfirm.html',
                 controller: 'showPortfolioLogController',
-                scope
+                scope,
+                controllerAs: '$ctrl',
             })
                 .then(() => {
                     this.showlogselect = false;

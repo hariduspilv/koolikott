@@ -19,10 +19,7 @@
            flex-order="1"
            flex-order-gt-sm="2" flex="100">
         <md-input-container class="md-block animate-if remaining-charaters-wrapper label-top-ie" flex>
-<!--          <h2 class="final-step">{{('LOG_VERSION_STAY' | translate) + ' ' + (portfolio.createdAt | date:'dd.MM.yyyy HH:mm:ss') + ' ' + portfolio.creator.username-->
-<!--            + ' ' + ('LOG_VERSION_STAY_EXTRA' | translate)}}</h2>-->
-
-          <h2 class="final-step" data-ng-bind-html="confirmationNotice"></h2>
+          <p><span data-ng-bind-html="confirmationNotice"></span></p>
           <div layout="row"
                layout-align="end center"
                layout-xs="row"
@@ -35,7 +32,7 @@
                 <span data-translate="LOG_GIVEUP"></span>
               </md-button>
               <md-button class="md-raised md-primary"
-                         data-ng-click="setPortfolioHistoryToRestore()"
+                         data-ng-click="$ctrl.setPortfolioHistoryToRestore()"
                          aria-label="restore portfolio"
               >
                 <span data-translate="LOG_CONFIRM"></span>

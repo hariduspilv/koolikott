@@ -1,36 +1,51 @@
 'use strict';
 
-angular.module('koolikottApp').controller('showPortfolioLogController', [
-    '$scope', '$mdDialog', 'serverCallService',
-    function ($scope, $mdDialog, serverCallService) {
+{
+    class controller extends Controller {
+        constructor(...args) {
+            super(...args)
 
-        $scope.setPortfolioHistoryToRestore = function () {
-            $scope.portfolio.type = '.Portfolio';
-            $scope.portfolio.id = this.portfolio.learningObject;
-            serverCallService.makePost(`rest/portfolio/update/${false}`, $scope.portfolio)
+            this.setDialogInformation();
+
+            this.$scope.cancel = () => {
+                this.$mdDialog.hide()
+            }
+        }
+
+        setPortfolioHistoryToRestore() {
+            let url = `rest/portfolio/update`;
+            this.$scope.portfolio.type = '.Portfolio';
+            this.$scope.portfolio.id = this.$scope.portfolio.learningObject;
+            this.$scope.portfolio.saveType = 'MANUAL';
+            this.serverCallService.makePost(url, this.$scope.portfolio)
                 .then(({data}) => {
                     if (data) {
-                        $scope.showLogSelect = false;
-                        $mdDialog.hide();
+                        this.$scope.showLogSelect = false;
+                        this.$mdDialog.hide();
                     }
                 })
                 .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
-        };
+        }
 
-        $scope.hide = function () {
+        hide() {
             return false;
-        };
+        }
 
-        $scope.cancel = function () {
-            $mdDialog.hide();
-        };
-
-        $scope.setDialogInformation = function () {
+        setDialogInformation() {
             this.$translate('LOG_VERSION_STAY').then((value) => {
-                this.$scope.confirmationNotice = (value.replace('${createdAtDate}', this.formatDateToDayMonthYear(this.portfolio.createdAt))
-                    .replace('${createdAtTime}', this.formatDateToTime(this.portfolio.createdAt))
-                    .replace('${creator}', this.portfolio.creator.username));
+                this.$scope.confirmationNotice = (value.replace('${createdAtDate}', this.formatDateToDayMonthYear(this.$scope.portfolio.createdAt))
+                    .replace('${createdAtTime}', this.formatDateToTime(this.$scope.portfolio.createdAt))
+                    .replace('${creator}', this.$scope.portfolio.creator.name + ' ' + this.$scope.portfolio.creator.surname));
             })
         }
     }
-]);
+
+    controller.$inject = [
+        '$scope',
+        '$mdDialog',
+        'serverCallService',
+        'toastService',
+        '$translate',
+    ]
+    angular.module('koolikottApp').controller('showPortfolioLogController', controller)
+}

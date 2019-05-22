@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.enums.SaveType;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -141,8 +142,8 @@ public abstract class LearningObjectLog implements Searchable, ILearningObject {
     @JoinColumn(name = "licenseType")
     private LicenseType licenseType;
 
-    @Column
-    private Boolean isAutoSaved;
+    @Enumerated(EnumType.STRING)
+    private SaveType saveType;
 
     public LocalDateTime getCreatedAt() {
         return createdAt;
@@ -300,11 +301,11 @@ public abstract class LearningObjectLog implements Searchable, ILearningObject {
         this.licenseType = licenseType;
     }
 
-    public Boolean getAutoSaved() {
-        return isAutoSaved;
+    public SaveType getSaveType() {
+        return saveType;
     }
 
-    public void setAutoSaved(Boolean autoSaved) {
-        isAutoSaved = autoSaved;
+    public void setSaveType(SaveType saveType) {
+        this.saveType = saveType;
     }
 }

@@ -44,6 +44,7 @@ class controller extends Controller {
         this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this))
 
         this.$scope.portfolio = this.portfolio
+        this.$scope.showlogselect = this.showlogselect
         this.$scope.pageUrl = this.$location.absUrl()
 
         this.$scope.isAutoSaving = false;
@@ -135,7 +136,7 @@ class controller extends Controller {
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost(`rest/portfolio/update/${this.$scope.isAutoSaving}`,
+            .makePost(`rest/portfolio/update`,
                 this.storageService.getPortfolio())
             .then(({data: portfolio}) => {
                 if (portfolio) {
@@ -188,7 +189,6 @@ class controller extends Controller {
     }
 
     showPortfolioHistoryDialog() {
-        this.showlogselect = true;
         this.$scope.showEditModeButton = false
         this.$rootScope.$broadcast('portfolioHistory:show');
     }
@@ -273,7 +273,6 @@ controller.$inject = [
 component('dopPortfolioSummaryCard', {
     bindings: {
         portfolio: '=',
-        showlogselect: '=',
     },
     templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller

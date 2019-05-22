@@ -33,13 +33,11 @@ public class FirstReview implements AbstractEntity {
     private User reviewedBy;
 
     @Column
-
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime reviewedAt;
 
     @Column(nullable = false)
-
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime createdAt;

@@ -104,11 +104,11 @@ angular.module('koolikottApp')
                 }
 
                 $scope.update = function () {
-                    updateOrCopy(`rest/portfolio/update/${false}`, $scope.update);
+                    updateOrCopy(`rest/portfolio/update`, $scope.update);
                 };
 
                 $scope.copy = function () {
-                    updateOrCopy(`rest/portfolio/update/${false}`, $scope.copy);
+                    updateOrCopy(`rest/portfolio/update`, $scope.copy);
                 };
 
                 function updateOrCopy(url, func) {
@@ -123,6 +123,7 @@ angular.module('koolikottApp')
                         $scope.portfolio.targetGroups = $scope.newPortfolio.targetGroups;
                         $scope.portfolio.tags = $scope.newPortfolio.tags;
                         $scope.portfolio.licenseType = $scope.newPortfolio.licenseType;
+                        $scope.portfolio.saveType = 'MANUAL';
 
                         if ($scope.newPortfolio.picture) {
                             $scope.portfolio.picture = $scope.newPortfolio.picture;

@@ -73,10 +73,10 @@ public class PortfolioResource extends BaseResource {
         return portfolioService.create(portfolio, getLoggedInUser());
     }
 
-    @PostMapping("update/{isAutoSaving}")
+    @PostMapping("update")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public Portfolio update(@RequestBody Portfolio portfolio, @PathVariable("isAutoSaving") Boolean isAutoSaving) {
-        return portfolioService.update(portfolio, getLoggedInUser(), isAutoSaving);
+    public Portfolio update(@RequestBody Portfolio portfolio) {
+        return portfolioService.update(portfolio, getLoggedInUser());
     }
 
     @GetMapping("getPortfolioHistoryAll")

@@ -24,9 +24,9 @@ class controller extends Controller {
     updatePortfolio(state) {
         const portfolioClone = angular.copy(this.locals.portfolio)
         portfolioClone.visibility = state
-
+        this.locals.portfolio.saveType = 'MANUAL';
         this.serverCallService
-            .makePost(`rest/portfolio/update/${false}`, portfolioClone)
+            .makePost(`rest/portfolio/update`, portfolioClone)
             .then(({ data }) => {
                 if (data) {
                     this.locals.portfolio.visibility = data.visibility

@@ -11,7 +11,7 @@ class controller extends Controller {
         this.$rootScope.$on('materialEditModalClosed', this.getTagUpVotes.bind(this))
         this.getTagUpVotes()
 
-        this.$scope.isAutoSaving = false;
+        this.$scope.isAutoSaving = 'MANUAL';
         this.$scope.isPortfolioLog = false;
 
         this.$rootScope.$on('portfolio:autoSave', this.getHistoryLogType.bind(this))
@@ -54,7 +54,7 @@ class controller extends Controller {
     }
 
     getHistoryLogType(){
-        this.$scope.isAutoSaving = true;
+        this.$scope.isAutoSaving = 'AUTO';
 
     }
 
@@ -165,8 +165,9 @@ class controller extends Controller {
                     })
             } else if (this.isPortfolio(this.learningObject)) {
                 this.updateChaptersStateFromEditors()
+                this.learningObject.saveType = this.$scope.isAutoSaving;
                 this.serverCallService
-                    .makePost(`rest/portfolio/update/${this.$scope.isAutoSaving}`,this.learningObject)
+                    .makePost(`rest/portfolio/update`,this.learningObject)
                     .then(({ data: portfolio }) => {
                         this.addTagSuccess(portfolio)
                         this.deleteQueryIsRunning = false
@@ -178,8 +179,9 @@ class controller extends Controller {
 
     addTag() {
         if (this.newTag && this.newTag.tagName && this.learningObject && this.learningObject.id) {
+            this.learningObject.saveType = this.$scope.isAutoSaving;
             this.serverCallService
-                .makePut(`rest/learningObject/${this.learningObject.id}/tags/${this.$scope.isAutoSaving}`, JSON.stringify(this.newTag.tagName))
+                .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
                 .then(({data}) => this.addTagSuccess(data))
                 .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'));
             this.newTag.tagName = null
