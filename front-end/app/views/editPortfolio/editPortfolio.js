@@ -111,7 +111,7 @@ class controller extends Controller {
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
-        this.$scope.portfolio.saveType = this.isAutoSaving;
+        this.$scope.portfolio.saveType = this.isAutoSaving ? 'AUTO': 'MANUAL';
         this.serverCallService
             .makePost(`rest/portfolio/update`, this.$scope.portfolio)
             .then(({ data: portfolio }) => {
@@ -132,7 +132,7 @@ class controller extends Controller {
             if (this.$scope.portfolio && !this.$scope.portfolio.deleted) {
                 this.updatePortfolio();
             }
-        }, 900000) // 15 mins
+        }, 20000) // 15 mins
     }
     onInsertExistingMaterials(evt, chapterIdx, selectedMaterials) {
         if (chapterIdx === -1)

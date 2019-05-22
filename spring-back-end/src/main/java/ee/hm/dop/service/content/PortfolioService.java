@@ -22,6 +22,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 
+import static ee.hm.dop.model.enums.SaveType.MANUAL;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
 
@@ -55,6 +56,7 @@ public class PortfolioService {
         validateTitle(portfolio);
 
         Portfolio portfolioCreated = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
+        portfolioCreated.setSaveType(MANUAL);
         PortfolioLog portfolioLogCreated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated));
         return portfolioCreated;
     }
@@ -67,6 +69,8 @@ public class PortfolioService {
 
         logger.info("Portfolio materials updating started. Portfolio id= " + portfolio.getId());
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
+
+        updatedPortfolio.setSaveType(portfolio.getSaveType());
 
         PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio));
         logger.info("Portfolio with id: " + portfolio.getId() + " ,history log with id:" + portfolioLogUpdated.getId() + " added");

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.enums.SaveType;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
@@ -179,6 +180,10 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     @Transient
     private Boolean favorite;
+
+    @Transient
+    @Enumerated(EnumType.STRING)
+    private SaveType saveType;
 
     public Long getId() {
         return id;
@@ -394,5 +399,13 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setLicenseType(LicenseType licenseType) {
         this.licenseType = licenseType;
+    }
+
+    public SaveType getSaveType() {
+        return saveType;
+    }
+
+    public void setSaveType(SaveType saveType) {
+        this.saveType = saveType;
     }
 }

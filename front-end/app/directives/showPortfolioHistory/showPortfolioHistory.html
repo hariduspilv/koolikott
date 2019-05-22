@@ -26,7 +26,7 @@
       data-ng-value="historylog"
       data-ng-repeat="historylog in data">
       {{$ctrl.formatDateToTimeDayMonthYear(historylog.createdAt) + ' ' + historylog.creator.name + ' ' + historylog.creator.surname }}
-      {{historylog.autoSaved == true ? '(' + ('LOG_AUTO_SAVE' | translate) : '(' + ('LOG_AUTO_MANUAL' | translate) + ')'}}
+      {{historylog.saveType === 'AUTO' ? '(' + ('LOG_AUTO_SAVE' | translate) + ')': '(' + ('LOG_AUTO_MANUAL' | translate) + ')'}}
     </md-option>
   </md-select>
   </div>

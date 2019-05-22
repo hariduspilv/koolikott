@@ -2,14 +2,12 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.SaveType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,7 +28,7 @@ public class PortfolioConverter {
         portfolioLog.setCreator(portfolio.getCreator());
         portfolioLog.setVisibility(portfolio.getVisibility());
         portfolioLog.setOriginalCreator(portfolio.getOriginalCreator());
-        portfolioLog.setSaveType(SaveType.MANUAL);
+        portfolioLog.setSaveType(portfolio.getSaveType());
         return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
 
@@ -42,7 +40,7 @@ public class PortfolioConverter {
         to.setTaxons(from.getTaxons());
         List<ChapterLog> chapterLogs = from.getChapters()
                 .stream()
-                .map(convertChapterToLog)
+                .map(this::convertChapter)
                 .collect(Collectors.toList());
         to.setChapters(chapterLogs);
         to.setPicture((OriginalPicture) from.getPicture());
@@ -96,8 +94,6 @@ public class PortfolioConverter {
         return to;
     }
 
-    private Function<Chapter, ChapterLog> convertChapterToLog = this::convertChapter;
-
     private ChapterLog convertChapter(Chapter chapter) {
         ChapterLog chapterLog = new ChapterLog();
         chapterLog.setId(chapter.getId());
@@ -106,17 +102,14 @@ public class PortfolioConverter {
         List<ChapterBlockLog> chapterBlockLogs = chapter
                 .getBlocks()
                 .stream()
-                .map(convertChapterBlockToLog)
+                .map(this::convertChapterBlock)
                 .collect(Collectors.toList());
 
         chapterLog.setBlocks(chapterBlockLogs);
-
         return chapterLog;
     }
 
-    private Function<ChapterBlock, ChapterBlockLog> convertChapterBlockToLog = PortfolioConverter::convertChapterBlock;
-
-    private static ChapterBlockLog convertChapterBlock(ChapterBlock chapter) {
+    private ChapterBlockLog convertChapterBlock(ChapterBlock chapter) {
         ChapterBlockLog chapterBlockLog = new ChapterBlockLog();
         chapterBlockLog.setId(chapter.getId());
         chapterBlockLog.setHtmlContent(chapter.getHtmlContent());
