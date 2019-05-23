@@ -16,6 +16,7 @@ import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -31,7 +32,7 @@ import static javax.persistence.FetchType.EAGER;
 @Entity
 @Table(name = "LearningObject_Log")
 @Inheritance(strategy = InheritanceType.JOINED)
-public abstract class LearningObjectLog implements Searchable, ILearningObject {
+public abstract class LearningObjectLog implements Searchable, ILearningObject, Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
