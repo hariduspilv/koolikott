@@ -1,6 +1,6 @@
 SET foreign_key_checks = 0;
 
-call insert_translation('LOG_MOMENT', 'Seisuga', 'As of');
+call insert_translation('LOG_MOMENT', 'Seisuga', 'Saved on');
 call insert_translation('LOG_HISTORY', 'Ajalugu', 'History');
 call insert_translation('LOG_CHOOSE', 'Vali versioon', 'Choose version');
 call insert_translation('LOG_AUTO_SAVE', 'automaatselt salvestatud', 'autosaved');
@@ -14,5 +14,9 @@ call insert_translation('LOG_VERSION_STAY', 'Määra <strong>${createdAtDate} ke
 salvestatud kogumik praeguseks kogumiku versiooniks?',
     'Set the portfolio saved on <strong>${createdAtDate} at ${createdAtTime}</strong> by <strong>${creator}</strong> as the current version of the portfolio?');
 call insert_translation('LOG_ARE_YOU_SURE', 'Kas oled kindel?', 'Are you sure?');
+
+UPDATE Translation SET translation = 'Et saaksid E-koolikotti kasutada, on meil vaja sinu isikuandmeid. Palun loe alltoodud teavet isikuandmete töötlemise kohta. Nõustumisel kinnitad, et oled infoga tutvunud.' WHERE translationKey = 'AGREEMENT_DIALOG_TEXT' AND translationGroup = 1;
+UPDATE Translation SET translation = 'Et saaksid E-koolikotti kasutada, on meil vaja sinu isikuandmeid. Palun loe alltoodud teavet isikuandmete töötlemise kohta. Nõustumisel kinnitad, et oled infoga tutvunud.' WHERE translationKey = 'AGREEMENT_DIALOG_TEXT' AND translationGroup = 2;
+
 
 SET foreign_key_checks = 1;
