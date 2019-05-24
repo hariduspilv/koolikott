@@ -98,7 +98,6 @@ public class PortfolioService {
     }
 
     private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {
-        portfolio.setPublishedAt(now());
         return portfolioLogDao.createOrUpdate(portfolio);
     }
 
