@@ -79,21 +79,6 @@ class controller extends Controller {
 
     showPortfolioHistoryLog() {
         this.$scope.showlogselect = true;
-        // let menu = document.getElementById('historymenu');//TODO later to delete
-        // this.$timeout(() => {
-        //     menu.dispatchEvent(this.returnEvent());
-        // }, 400);
-    }
-
-    returnEvent() {
-        let event;
-        if (typeof (MouseEvent) === 'function') {
-            event = new MouseEvent('click');
-        } else {
-            event = document.createEvent('MouseEvent');
-            event.initEvent('click', true, true);
-        }
-        return event;
     }
 
     handleScroll(e) {

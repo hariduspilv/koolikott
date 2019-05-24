@@ -254,6 +254,12 @@ body > .md-dialog-container {
   .button-less-wider {
     min-width: 50px
   }
+
+}
+.mdselect-placeholder-text {
+  .md-select-value.md-select-placeholder {
+    color: rgba(0, 0, 0, 0.77) !important;
+  }
 }
 
 .selectdropdown md-select-menu {

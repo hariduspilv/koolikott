@@ -30,7 +30,8 @@ public class PortfolioConverter {
         portfolioLog.setVisibility(portfolio.getVisibility());
         portfolioLog.setOriginalCreator(portfolio.getOriginalCreator());
         portfolioLog.setSaveType(portfolio.getSaveType());
-        portfolioLog.setPublishedAt(now());
+        portfolioLog.setPublishedAt(portfolio.getPublishedAt());
+        portfolioLog.setCreatedAt(now());
         return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
 

@@ -3,23 +3,9 @@
     class controller extends Controller {
         $onInit() {
             this.$scope.$on('portfolioHistory:show', this.getPortfolioLogs.bind(this));
-            // this.$scope.showlogselect = true;
-            this.$scope.selectionMade = true;
             this.selectPortfolioLog();
+            this.$scope.showConfirmButton = false;
         }
-
-        // selclicked(){//TODO ajutiselt proovida vel  siis kustutada
-        //     var bodyRect = document.body.getBoundingClientRect();
-        //     var myElement = document.getElementsByClassName('sel');
-        //     var containerTop = myElement[0].getBoundingClientRect().top - bodyRect.top + 'px';
-            // var myContainer = document.getElementById('minudiv');
-            // var myContainer = document.getElementsByClassName('.md-select-menu-container');
-            // var myContainer = document.getElementById('historymenu');
-            // setTimeout(function () {
-            //     var myContainer = document.getElementsByClassName('.md-select-menu-container');
-            //     angular.element(myContainer).css({'top':containerTop});
-            // },50);
-        // }
 
         selectPortfolioLog(selectedPortfolioLog) {
             if (!this.$scope.originalPortfolio) {
@@ -29,10 +15,6 @@
                 this.portfolio = selectedPortfolioLog;
                 this.$scope.showConfirmButton = true;
             }
-        }
-
-        showSelection() {
-            this.$scope.selectionMade = !this.$scope.selectionMade;
         }
 
         restoreSelectedPortfolio() {
@@ -49,12 +31,16 @@
             })
                 .then(() => {
                     this.showlogselect = false;
+                    this.$scope.showConfirmButton = false;
+                    this.$scope.selectedPortfolioLog = undefined;
                 })
         }
 
         closePortfolioRestore() {
             this.showlogselect = false;
             this.portfolio = this.$scope.originalPortfolio;
+            this.$scope.selectedPortfolioLog = undefined;
+            this.$scope.showConfirmButton = false;
             this.$rootScope.$broadcast('portfolioHistory:hide');
         }
 

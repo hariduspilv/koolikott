@@ -20,7 +20,7 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
                 .createQuery("" +
                                 "SELECT p FROM PortfolioLog p \n" +
                                 "   WHERE p.learningObject = :id " +
-                                "ORDER BY p.publishedAt DESC"
+                                "ORDER BY p.createdAt DESC"
                         , PortfolioLog.class)
                 .setParameter("id", learningObjectId)
                 .getResultList();

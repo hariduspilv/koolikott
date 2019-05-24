@@ -122,7 +122,7 @@ class controller extends Controller {
                     this.toastService.show('PORTFOLIO_AUTOSAVED')
                 }
             })
-            .catch(() => this.toastService.show('PORTFOLIO_AUTOSAVE_FAILED'))
+            .catch(() => this.toastService.show('PORTFOLIO_AUTOSAVE_FAILED'),15000)
 
     }
     startAutosave() { //TODO siin on kogumiku autosave

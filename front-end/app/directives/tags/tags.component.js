@@ -172,7 +172,7 @@ class controller extends Controller {
                         this.addTagSuccess(portfolio)
                         this.deleteQueryIsRunning = false
                     })
-                    .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'));
+                    .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'),15000);
             }
         }
     }
@@ -183,7 +183,7 @@ class controller extends Controller {
             this.serverCallService
                 .makePut(`rest/learningObject/${this.learningObject.id}/tags`, JSON.stringify(this.newTag.tagName))
                 .then(({data}) => this.addTagSuccess(data))
-                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'));
+                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'),15000);
             this.newTag.tagName = null
         }
     }
