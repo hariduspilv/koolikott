@@ -129,6 +129,10 @@ public abstract class AbstractDao<Entity extends AbstractEntity> {
         getEntityManager().remove(entity);
     }
 
+    public void remove(Object entity) {
+        getEntityManager().remove(entity);
+    }
+
     public Object getCount() {
         return getEntityManager().createQuery(countSelect()).getSingleResult();
     }

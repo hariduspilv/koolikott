@@ -79,12 +79,12 @@ public class PortfolioResource extends BaseResource {
     }
 
     @GetMapping("getPortfolioHistoryAll")
-    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR,RoleString.USER})
     public List<PortfolioLog> getPortfolioHistoryAll(@RequestParam("portfolioId") Long portfolioId) {
         List<PortfolioLog> portfolioLog;
         if (getLoggedInUser().getRole().equals(Role.ADMIN)) {
             portfolioLog = portfolioGetter.getPortfolioHistoryAll(portfolioId);
-        } else if (getLoggedInUser().getRole().equals(Role.MODERATOR)) {
+        } else if (getLoggedInUser().getRole().equals(Role.MODERATOR) || getLoggedInUser().getRole().equals(Role.USER)) {
             portfolioLog = portfolioGetter.findByIdAndCreatorAllPortfolioLogs(portfolioId, getLoggedInUser());
         } else {
             throw new WebApplicationException("User has no access", Response.Status.FORBIDDEN);

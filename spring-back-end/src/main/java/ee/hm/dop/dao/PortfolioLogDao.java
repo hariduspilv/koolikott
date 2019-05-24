@@ -19,7 +19,8 @@ public class PortfolioLogDao extends AbstractDao<PortfolioLog> {
         return getEntityManager()
                 .createQuery("" +
                                 "SELECT p FROM PortfolioLog p \n" +
-                                "   WHERE p.learningObject = :id "
+                                "   WHERE p.learningObject = :id " +
+                                "ORDER BY p.publishedAt DESC"
                         , PortfolioLog.class)
                 .setParameter("id", learningObjectId)
                 .getResultList();

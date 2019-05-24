@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ public class PortfolioConverter {
         portfolioLog.setVisibility(portfolio.getVisibility());
         portfolioLog.setOriginalCreator(portfolio.getOriginalCreator());
         portfolioLog.setSaveType(portfolio.getSaveType());
+        portfolioLog.setPublishedAt(LocalDateTime.from(ZonedDateTime.now()));
         return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
 

@@ -25,4 +25,5 @@ public class PortfolioLogCleanerDao extends AbstractDao<PortfolioLog> {
                 .getSingleResult())
                 .longValue();
     }
+
 }
