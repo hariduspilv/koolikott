@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.time.LocalDateTime.now;
 
 @Service
 @Transactional
@@ -30,7 +30,7 @@ public class PortfolioConverter {
         portfolioLog.setVisibility(portfolio.getVisibility());
         portfolioLog.setOriginalCreator(portfolio.getOriginalCreator());
         portfolioLog.setSaveType(portfolio.getSaveType());
-        portfolioLog.setPublishedAt(LocalDateTime.from(ZonedDateTime.now()));
+        portfolioLog.setPublishedAt(now());
         return setCommonFieldsToPortfolioLog(portfolioLog, portfolio);
     }
 
@@ -66,7 +66,7 @@ public class PortfolioConverter {
     }
 
     private void setUpdateFields(Portfolio to, Portfolio from) {
-        if (changesToPublic(to, from)) to.setPublishedAt(LocalDateTime.now());
+        if (changesToPublic(to, from)) to.setPublishedAt(now());
         to.setVisibility(from.getVisibility());
         to.setPublicationConfirmed(from.isPublicationConfirmed());
     }
