@@ -256,9 +256,17 @@ body > .md-dialog-container {
   }
 
 }
+
 .mdselect-placeholder-text {
   .md-select-value.md-select-placeholder {
     color: rgba(0, 0, 0, 0.77) !important;
+    padding-left: 15px !important
+  }
+}
+
+.mdselect-placeholder-text {
+  .md-select-value {
+    padding-left: 15px !important
   }
 }
 
@@ -267,17 +275,20 @@ body > .md-dialog-container {
   max-height: 390px;
 }
 
+.selectdropdown {
+  .md-select-value {
+    padding-left: 10px !important;
+  }
+}
+
 .selectdropdown md-content {
   max-height: 390px;
   padding-top: 0 !important;
   padding-bottom: 0 !important;
+  padding-left: 10px !important;
   overflow: auto;
 }
 
-.selectdropdown md-option {
-  padding: 10px 0;
-  height: auto;
-}
 
 
 
