@@ -67,6 +67,8 @@ class controller extends Controller {
         });
         this.$scope.$on('portfolioHistory:show', this.showPortfolioHistoryLog.bind(this));
 
+        this.$scope.$on('portfolioHistory:hide', this.showOtherBanners.bind(this));
+
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
             if (newValue !== oldValue && (newValue !== null || oldValue !== null)) {
                 if (newValue.type === '.PortfolioLog' || oldValue.type === '.PortfolioLog') {
@@ -79,6 +81,10 @@ class controller extends Controller {
 
     showPortfolioHistoryLog() {
         this.$scope.showlogselect = true;
+    }
+
+    showOtherBanners() {
+        this.$scope.showlogselect = false;
     }
 
     handleScroll(e) {
