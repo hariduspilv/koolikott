@@ -48,6 +48,7 @@ class controller extends Controller {
         this.$scope.pageUrl = this.$location.absUrl()
 
         this.$scope.isAutoSaving = false;
+        this.$scope.showLogButton = true;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -101,6 +102,7 @@ class controller extends Controller {
 
     hidePortfolioHistory(){
         this.$scope.showEditModeButton = true
+        this.$scope.showLogButton = true;
     }
 
     canEdit() {
@@ -190,6 +192,8 @@ class controller extends Controller {
 
     showPortfolioHistoryDialog() {
         this.$scope.showEditModeButton = false
+        this.$scope.showLogButton = false;
+
         this.$rootScope.$broadcast('portfolioHistory:show');
     }
 
