@@ -331,7 +331,7 @@ class controller extends Controller {
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost(`rest/portfolio/update`, this.storageService.getPortfolio())
+            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
                 if (portfolio) this.storageService.setPortfolio(portfolio)
             })
@@ -340,7 +340,7 @@ class controller extends Controller {
     saveAndExit() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost(`rest/portfolio/update`, this.storageService.getPortfolio())
+            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
                 if (portfolio) {
                     this.toastService.show('PORTFOLIO_SAVED')
