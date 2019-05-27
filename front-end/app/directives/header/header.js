@@ -335,7 +335,7 @@ class controller extends Controller {
             .then(({ data: portfolio }) => {
                 if (portfolio) this.storageService.setPortfolio(portfolio)
             })
-            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'),15000)
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
     }
     saveAndExit() {
         this.updateChaptersStateFromEditors()
@@ -352,7 +352,7 @@ class controller extends Controller {
                     this.$route.reload()
                 }
             })
-            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'),15000)
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
 
     }
     invokeInkRippleOnSaveButton() {

@@ -144,7 +144,7 @@ class controller extends Controller {
                     this.toastService.show('PORTFOLIO_SAVED');
                 }
             })
-            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'),15000)
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
     }
 
     getHistoryType(){
