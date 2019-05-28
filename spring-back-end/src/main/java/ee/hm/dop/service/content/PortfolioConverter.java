@@ -102,7 +102,6 @@ public class PortfolioConverter {
     private ChapterLog convertChapter(Chapter chapter) {
         if (chapter != null) {
             ChapterLog chapterLog = new ChapterLog();
-            chapterLog.setId(chapter.getId());
             chapterLog.setTitle(chapter.getTitle());
 
             List<ChapterBlockLog> chapterBlockLogs = chapter
@@ -119,7 +118,6 @@ public class PortfolioConverter {
 
     private ChapterBlockLog convertChapterBlock(ChapterBlock chapter) {
         ChapterBlockLog chapterBlockLog = new ChapterBlockLog();
-        chapterBlockLog.setId(chapter.getId());
         chapterBlockLog.setHtmlContent(chapter.getHtmlContent());
         return chapterBlockLog;
     }
