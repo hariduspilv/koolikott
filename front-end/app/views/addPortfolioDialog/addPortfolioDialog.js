@@ -245,6 +245,7 @@ angular.module('koolikottApp')
                 function createPortfolioFailed() {
                     console.log('Creating portfolio failed.');
                     toastService.show('PORTFOLIO_SAVE_FAILED', 15000);
+                    $mdDialog.hide();
                 }
 
                 function hasCorrectTaxon() {
