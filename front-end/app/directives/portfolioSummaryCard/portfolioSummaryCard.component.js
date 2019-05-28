@@ -40,8 +40,7 @@ class controller extends Controller {
         }, true)
 
         this.$scope.$on('portfolioHistory:hide', this.hidePortfolioHistory.bind(this));
-
-        this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this))
+        this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this));
 
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
@@ -187,13 +186,14 @@ class controller extends Controller {
                 this.$rootScope.learningObjectDeleted = true
                 this.$location.url('/portfolio?id=' + this.$route.current.params.id)
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                this.$rootScope.$broadcast('portfolioHistory:closeLogBanner')
+
             })
     }
 
     showPortfolioHistoryDialog() {
-        this.$scope.showEditModeButton = false
+        this.$scope.showEditModeButton = false;
         this.$scope.showLogButton = false;
-
         this.$rootScope.$broadcast('portfolioHistory:show');
     }
 
@@ -212,6 +212,9 @@ class controller extends Controller {
                 this.portfolio.deleted = false
                 this.$rootScope.learningObjectDeleted = false
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                this.$rootScope.$broadcast('portfolioHistory:show')
+                this.$scope.showEditModeButton = true;
+                this.$scope.showLogButton = true;
             })
     }
     markReviewed() {
