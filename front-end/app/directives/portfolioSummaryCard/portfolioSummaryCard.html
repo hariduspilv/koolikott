@@ -59,7 +59,7 @@
                   <span data-translate="PORTFOLIO_SHOW_HISTORY"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item data-ng-if="canEdit() && !isAdminButtonsShowing() && !portfolio.deleted">
+              <md-menu-item data-ng-if="canEdit() && !isAdminButtonsShowing() && !portfolio.deleted && showDeleteButton">
                 <md-button data-ng-click="confirmPortfolioDeletion()">
                   <md-icon md-menu-align-target>delete</md-icon>
                   <span data-translate="PORTFOLIO_DELETE"></span>

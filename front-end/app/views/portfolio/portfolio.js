@@ -69,8 +69,8 @@ class controller extends Controller {
         this.$scope.$on('portfolioHistory:closeLogBanner', this.closeLogBanner.bind(this));
 
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
-            if (newValue !== oldValue && (newValue !== null || oldValue !== null)) {
-                if (newValue.type === '.PortfolioLog' || oldValue.type === '.PortfolioLog') {
+            if (newValue !== oldValue) {
+                if (newValue && newValue.type === '.PortfolioLog' || oldValue && oldValue.type === '.PortfolioLog') {
                     this.eventService.notify('portfolio:reloadTaxonObject');
                     this.setPortfolio(this.$scope.portfolio)
                 }

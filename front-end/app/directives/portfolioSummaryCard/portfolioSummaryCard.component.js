@@ -41,6 +41,7 @@ class controller extends Controller {
 
         this.$scope.$on('portfolioHistory:hide', this.showEditAndLogButtons.bind(this));
         this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this));
+        this.$rootScope.$on('portfolioHistory:hideDeleteButton', this.hideDeleteButton.bind(this));
 
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
@@ -48,6 +49,7 @@ class controller extends Controller {
 
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
+        this.$scope.showDeleteButton = true;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -102,6 +104,17 @@ class controller extends Controller {
     showEditAndLogButtons(){
         this.$scope.showEditModeButton = true
         this.$scope.showLogButton = true;
+        this.$scope.showDeleteButton = true;
+    }
+
+    showPortfolioHistoryDialog() {
+        this.$scope.showEditModeButton = false;
+        this.$scope.showLogButton = false;
+        this.$rootScope.$broadcast('portfolioHistory:show');
+    }
+
+    hideDeleteButton() {
+        this.$scope.showDeleteButton = false;
     }
 
     canEdit() {
@@ -187,14 +200,9 @@ class controller extends Controller {
                 this.$location.url('/portfolio?id=' + this.$route.current.params.id)
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 this.$rootScope.$broadcast('portfolioHistory:closeLogBanner')
-
+                this.$scope.showEditModeButton = false;
+                this.$scope.showLogButton = false;
             })
-    }
-
-    showPortfolioHistoryDialog() {
-        this.$scope.showEditModeButton = false;
-        this.$scope.showLogButton = false;
-        this.$rootScope.$broadcast('portfolioHistory:show');
     }
 
     confirmPortfolioDeletion() {
