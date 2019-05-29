@@ -39,7 +39,7 @@ class controller extends Controller {
                 this.$scope.portfolio = currentValue
         }, true)
 
-        this.$scope.$on('portfolioHistory:hide', this.hidePortfolioHistory.bind(this));
+        this.$scope.$on('portfolioHistory:hide', this.showEditAndLogButtons.bind(this));
         this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this));
 
         this.$scope.portfolio = this.portfolio
@@ -99,7 +99,7 @@ class controller extends Controller {
             this.$scope.portfolio = this.portfolio
     }
 
-    hidePortfolioHistory(){
+    showEditAndLogButtons(){
         this.$scope.showEditModeButton = true
         this.$scope.showLogButton = true;
     }

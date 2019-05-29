@@ -342,6 +342,7 @@ class controller extends Controller {
                 this.$rootScope.learningObjectUnreviewed = false
                 this.$rootScope.learningObjectChanged = false
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                this.$rootScope.$broadcast('portfolioHistory:hide');
             })
         }
     }
