@@ -119,6 +119,7 @@ public class PortfolioConverter {
     private ChapterBlockLog convertChapterBlock(ChapterBlock chapter) {
         ChapterBlockLog chapterBlockLog = new ChapterBlockLog();
         chapterBlockLog.setHtmlContent(chapter.getHtmlContent());
+        chapterBlockLog.setNarrow(chapter.isNarrow());
         return chapterBlockLog;
     }
 }
