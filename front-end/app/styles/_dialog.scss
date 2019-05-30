@@ -243,6 +243,11 @@ body > .md-dialog-container {
   .send-mail-ie {
     height: 295px
   }
+
+  .log-history-ie-modal-height {
+    height: 100px
+  }
+
   .sent-email-color-black {
     color: black;
   }
@@ -254,7 +259,6 @@ body > .md-dialog-container {
   .button-less-wider {
     min-width: 50px
   }
-
 }
 
 .mdselect-placeholder-text {
@@ -263,7 +267,6 @@ body > .md-dialog-container {
     padding-left: 15px !important
   }
 }
-
 .mdselect-placeholder-text {
   .md-select-value {
     padding-left: 15px !important

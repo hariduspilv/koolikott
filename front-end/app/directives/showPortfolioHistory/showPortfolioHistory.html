@@ -25,8 +25,14 @@
     <md-option
       data-ng-value="historylog"
       data-ng-repeat="historylog in data">
-      {{$ctrl.formatDateToTimeDayMonthYear(historylog.createdAt) +  '&emsp;' +  '&emsp;' +  '&emsp;' + historylog.creator.name + ' ' + historylog.creator.surname }}
+      <span>
+      {{$ctrl.formatDateToTimeDayMonthYear(historylog.createdAt) +  '&emsp;' +  '&emsp;' + historylog.creator.name + ' ' + historylog.creator.surname }}
       {{historylog.saveType === 'AUTO' ? '(' + ('LOG_AUTO_SAVE' | translate) + ')': '(' + ('LOG_AUTO_MANUAL' | translate) + ')'}}
+      </span>
+      &emsp;
+      <span>
+      {{$first ? '(' +('LOG_CURRENT_VERSION' | translate) + ')':''}}
+      </span>
     </md-option>
   </md-select>
   </div>
