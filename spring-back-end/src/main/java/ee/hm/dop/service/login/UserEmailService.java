@@ -48,7 +48,8 @@ public class UserEmailService {
         if (userEmail == null) {
             throw notFound("User email not found");
         }
-        return userEmail;
+        else
+            return userEmail;
     }
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
@@ -92,8 +93,14 @@ public class UserEmailService {
         if (user == null)
             throw badRequest("User is null, can't find e-mail of null");
 
-        return userEmailDao.findByUser(user).getEmail();
-
+        if (userEmailDao.findByUser(user) != null) {
+            if (userEmailDao.findByUser(user).getEmail() == null)
+                throw badRequest("Useremail is null, can't find e-mail");
+            else
+                return userEmailDao.findByUser(user).getEmail();
+        } else {
+            throw badRequest("Useremail is null, can't find e-mail");
+        }
     }
 
     public UserEmail save(UserEmail userEmail) {

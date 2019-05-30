@@ -76,10 +76,12 @@ public class UserProfileService {
         User user = userDao.findUserById(loggedInUser.getId());
         UserProfile userProfile = userProfileDao.findByUser(user);
         if (userProfile == null)
-            return null;
+            throw badRequest("Userprofile not created");
 
+        UserEmail userEmail = userEmailDao.findByUser(user);
         userProfile.setInstitutions(user.getInstitutions());
         userProfile.setTaxons(user.getTaxons());
+        userProfile.setEmail(userEmail.getEmail());
         return userProfile;
     }
 

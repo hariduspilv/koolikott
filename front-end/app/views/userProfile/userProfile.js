@@ -23,7 +23,7 @@
             this.getUserEmail();
             this.getUserProfile();
 
-            this.$scope.location = this.$location
+            this.$scope.location = this.$location;
         }
 
         isModerator() {
@@ -58,7 +58,7 @@
             this.userEmailService.getEmail()
                 .then((response) => {
                     if (response.status === 200) {
-                        this.$scope.userEmail = response.data
+                        this.$scope.userEmail = response.data.email
                     }
                 })
         }
@@ -79,32 +79,36 @@
             this.$scope.userProfile.email = this.$scope.userEmail;
             this.$scope.isSaving = true;
             this.userEmailService.checkDuplicateEmailForProfile(this.$scope.userEmail)
-                .then( response => {
+                .then(response => {
                     if (response.status === 200) {
-                        this.serverCallService.makePost('rest/userProfile', this.$scope.userProfile)
-                            .then( response => {
-                                this.$scope.isSaving = false;
-                                if (response.status === 201) {
-                                    this.showEmailValidationModal()
-                                } else if (response.status === 200) {
-                                    this.toastService.show('USER_PROFILE_UPDATED')
-                                }
-                            })
-                            .catch( (e) => {
-                                this.$scope.isSaving = false;
-                                console.log(e)
-                                    this.toastService.show('USER_PROFILE_UPDATE_FAILED')
-                            })
+                        this.showEmailValidationModal();
                     }
                 })
-                .catch( () => {
+                .catch(() => {
                     this.$scope.isSaving = false;
                     this.$scope.userProfileForm.email.$setValidity('validationError', false);
+                    this.toastService.show('USER_PROFILE_UPDATE_FAILED')
+                });
+        }
+
+        saveUserProfile() {
+            this.serverCallService.makePost('rest/userProfile', this.$scope.userProfile)
+                .then(response => {
+                    this.$scope.isSaving = false;
+                    if (response.status === 201) {
+                        this.toastService.show('USER_PROFILE_UPDATED')
+                    } else if (response.status === 200) {
+                        this.toastService.show('USER_PROFILE_UPDATED')
+                    }
+                })
+                .catch((e) => {
+                    this.$scope.isSaving = false;
+                    console.log(e)
                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
                 })
         }
 
-         showEmailValidationModal() {
+        showEmailValidationModal() {
             this.$mdDialog.show({
                 templateUrl: 'views/emailValidation/emailValidationDialog.html',
                 controller: 'emailValidationController',
@@ -112,9 +116,16 @@
                 escapeToClose: false,
             }).then(res => {
                 if (res)
-                    this.toastService.show('USER_PROFILE_UPDATED')
+                    this.saveUserProfile();
+                else {
+                    this.$scope.isSaving = false;
+                    this.toastService.show('USER_PROFILE_UPDATE_FAILED')
+                }
             })
-         }
+                .catch((e) => {
+                    console.log(e);
+                })
+        }
 
         setRole() {
             if (_.isEmpty(this.$scope.roles.filter(role => (role.checked)))) {
@@ -140,14 +151,19 @@
                 .then( response => {
                     if (response.status === 200) {
                         this.$scope.userProfile = response.data;
+                        this.$scope.userEmail = response.data.email;
                         if (!!this.$scope.userProfile.role)
                             this.activateRole(this.$scope.userProfile.role);
                         if (_.isEmpty(this.$scope.userProfile.institutions[0]))
                             this.$scope.userProfile.institutions.push({});
                         if (_.isEmpty(this.$scope.userProfile.taxons[0]))
                             this.$scope.userProfile.taxons.push({})
-
                     }
+                })
+                .catch(() => {
+                        this.activateRole(this.$scope.userProfile.role);
+                        this.$scope.userProfile.institutions.push({});
+                        this.$scope.userProfile.taxons.push({})
                 })
         }
 
@@ -173,7 +189,7 @@
         }
 
         isSubmitDisabled() {
-            return !this.$scope.userProfileForm.$valid || this.$scope.isSaving
+            return !this.$scope.userProfileForm.$valid || this.$scope.isSaving;
         }
 
         cancelProfileEdit() {
