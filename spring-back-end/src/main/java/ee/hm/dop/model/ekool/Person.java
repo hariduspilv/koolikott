@@ -1,5 +1,8 @@
 package ee.hm.dop.model.ekool;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Person {
 
     private String firstName;
