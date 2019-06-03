@@ -160,11 +160,7 @@
                             this.$scope.userProfile.taxons.push({})
                     }
                 })
-                .catch(() => {
-                        this.activateRole(this.$scope.userProfile.role);
-                        this.$scope.userProfile.institutions.push({});
-                        this.$scope.userProfile.taxons.push({})
-                })
+                .catch()
         }
 
         activateRole(role) {

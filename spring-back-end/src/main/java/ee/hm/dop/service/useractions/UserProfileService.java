@@ -72,17 +72,17 @@ public class UserProfileService {
 
     }
 
-    public UserProfile getUserProfile(User loggedInUser) {
+    public ResponseEntity<UserProfile> getUserProfile(User loggedInUser) {
         User user = userDao.findUserById(loggedInUser.getId());
         UserProfile userProfile = userProfileDao.findByUser(user);
         if (userProfile == null)
-            throw badRequest("Userprofile not created");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
 
         UserEmail userEmail = userEmailDao.findByUser(user);
         userProfile.setInstitutions(user.getInstitutions());
         userProfile.setTaxons(user.getTaxons());
         userProfile.setEmail(userEmail.getEmail());
-        return userProfile;
+        return  ResponseEntity.ok().body(userProfile);
     }
 
     private void createUserEmail(User user, UserProfile userProfile) {
