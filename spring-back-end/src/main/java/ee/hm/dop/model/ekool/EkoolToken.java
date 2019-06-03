@@ -1,7 +1,9 @@
 package ee.hm.dop.model.ekool;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class EkoolToken {
 
     @JsonProperty("access_token")

@@ -13,7 +13,7 @@
             data-object="portfolio"
           ></dop-share>
           <dop-send-email
-            ng-if="isAdminOrModerator() && !$root.isEditPortfolioMode && !$root.isFullScreen"
+            ng-if="isAdminOrModerator() && !$root.isEditPortfolioMode && !$root.isFullScreen && showSendEmailButton"
             id="send-email"
             data-learning-object="portfolio">
           </dop-send-email>
@@ -77,7 +77,7 @@
                 dop-recommend
                 data-portfolio="portfolio"
                 data-on-change="setRecommendation(recommendation)"
-                data-ng-if="isAdmin()"
+                data-ng-if="isAdmin() && showRecommendButton"
               ></md-menu-item>
               <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
               <md-menu-item

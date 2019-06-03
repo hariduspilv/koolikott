@@ -39,9 +39,9 @@ class controller extends Controller {
                 this.$scope.portfolio = currentValue
         }, true)
 
-        this.$scope.$on('portfolioHistory:hide', this.showEditAndLogButtons.bind(this));
+        this.$scope.$on('portfolioHistory:hide', this.showButtons.bind(this));
         this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this));
-        this.$rootScope.$on('portfolioHistory:hideDeleteButton', this.hideDeleteButton.bind(this));
+        this.$rootScope.$on('portfolioHistory:hideDeleteButton', this.hideButtons.bind(this));
 
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
@@ -50,6 +50,8 @@ class controller extends Controller {
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
         this.$scope.showDeleteButton = true;
+        this.$scope.showSendEmailButton = true;
+        this.$scope.showRecommendButton = true;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -101,10 +103,12 @@ class controller extends Controller {
             this.$scope.portfolio = this.portfolio
     }
 
-    showEditAndLogButtons(){
+    showButtons(){
         this.$scope.showEditModeButton = true
         this.$scope.showLogButton = true;
         this.$scope.showDeleteButton = true;
+        this.$scope.showSendEmailButton = true;
+        this.$scope.showRecommendButton = true;
     }
 
     showPortfolioHistoryDialog() {
@@ -113,8 +117,10 @@ class controller extends Controller {
         this.$rootScope.$broadcast('portfolioHistory:show');
     }
 
-    hideDeleteButton() {
+    hideButtons() {
         this.$scope.showDeleteButton = false;
+        this.$scope.showSendEmailButton = false;
+        this.$scope.showRecommendButton = false;
     }
 
     canEdit() {
