@@ -23,7 +23,6 @@ public class MediaResource extends BaseResource {
     private MediaService mediaService;
 
     @GetMapping
-
     public Media get(@RequestParam("id") long mediaId) {
         return mediaService.get(mediaId);
     }
@@ -32,7 +31,6 @@ public class MediaResource extends BaseResource {
     @RequestMapping("create")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
-
     public Media createMedia(@RequestBody Media media) {
         return mediaService.save(media, getLoggedInUser());
     }
@@ -41,7 +39,6 @@ public class MediaResource extends BaseResource {
     @RequestMapping("update")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     @Consumes(MediaType.APPLICATION_JSON)
-
     public Media updateMedia(@RequestBody Media media) {
         return mediaService.update(media, getLoggedInUser());
     }

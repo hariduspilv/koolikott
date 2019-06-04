@@ -77,7 +77,7 @@
               <md-divider class="md-default-theme"></md-divider>
               <div data-ng-if="relatedPortfolios.length > 0" class="portfolio-material" data-layout="column">
                 <span data-translate="PORTFOLIO_RELATED_PORTFOLIOS"></span>
-                    <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limit : startFrom " flex data-layout="row">
+                    <div data-ng-repeat="portfolio in relatedPortfolios | limitTo : limit : startFrom " data-layout="row">
                       <a data-ng-class="{'link-is-grey': $ctrl.userCanClickPortfolio(portfolio) === 'none'}"
                         data-ng-style="{'pointer-events':$ctrl.userCanClickPortfolio(portfolio)}"
                         target="_blank"

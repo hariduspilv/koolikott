@@ -24,14 +24,12 @@ public class UserManualsAdminResource extends BaseResource {
     private UserManualsService userManualsService;
 
     @GetMapping
-
     public List<UserManuals> getUserManuals() {
         return userManualsService.findAllUserManuals();
     }
 
     @PostMapping
     @Secured({RoleString.ADMIN})
-
     @Consumes(MediaType.APPLICATION_JSON)
     public UserManuals saveUserManual(@RequestBody UserManuals userManuals) {
         return userManualsService.save(userManuals, getLoggedInUser());

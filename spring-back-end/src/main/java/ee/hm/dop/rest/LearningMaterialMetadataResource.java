@@ -59,7 +59,7 @@ public class LearningMaterialMetadataResource extends BaseResource{
         if (taxons == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        CacheControl cacheControl = CacheControl.maxAge(120, TimeUnit.SECONDS);
+        CacheControl cacheControl = CacheControl.maxAge(MAX_AGE_120, TimeUnit.SECONDS);
         return ResponseEntity.ok().cacheControl(cacheControl).body(taxons);
     }
 

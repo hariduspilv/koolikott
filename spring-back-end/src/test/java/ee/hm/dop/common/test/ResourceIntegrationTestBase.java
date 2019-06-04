@@ -7,7 +7,6 @@ import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.User;
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
-import ee.hm.dop.rest.filter.SecurityFilter;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.config.Configuration;
@@ -82,7 +81,7 @@ public abstract class ResourceIntegrationTestBase implements BaseClassForTests {
     public void logout() {
         if (authenticationFilter != null) {
             Response response = doPost(LOGOUT);
-            if (SecurityFilter.HTTP_AUTHENTICATION_TIMEOUT == response.getStatus()) {
+            if (Status.UNAUTHORIZED.getStatusCode() == response.getStatus()) {
                 //ignored as test user has already logged out
                 //tests have same user logging in and out multiple times
             } else {
