@@ -105,7 +105,7 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
-        portfolioMaterialService.save(portfolio);
+        portfolioMaterialService.save(createdPortfolio);
         return createdPortfolio;
     }
 
