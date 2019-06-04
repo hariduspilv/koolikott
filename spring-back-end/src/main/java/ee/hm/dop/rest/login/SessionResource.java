@@ -24,7 +24,7 @@ import static java.lang.String.format;
 
 @RestController
 @RequestMapping("user")
-@Secured({ RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR })
+@Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
 public class SessionResource extends BaseResource {
 
     private static Logger logger = LoggerFactory.getLogger(SessionResource.class);

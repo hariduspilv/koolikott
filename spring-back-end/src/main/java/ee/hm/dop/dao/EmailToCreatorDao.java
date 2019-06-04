@@ -17,7 +17,7 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
     private static final String SELECT_COUNT_ETC = "SELECT count(*) FROM EmailToCreator e";
     private static final String WHERE_E_SENDER_ID_USER = " WHERE e.senderId= :user ";
     private static final String JOIN_USER = " JOIN User U ON e.user = U.id";
-    private static final String SEARCH_CONDITION_BY_NAME = " AND (LOWER(U.userName) LIKE :searchObject";
+    private static final String SEARCH_CONDITION_BY_NAME = " AND (LOWER(U.name) LIKE :searchObject OR LOWER(U.surName) LIKE :searchObject OR CONCAT(LOWER(U.name), ' ', LOWER(U.surName)) LIKE :searchObject) ";
     private static final String GROUP_BY_ETC_ID = " GROUP BY e.id ";
     private static final String SEARCH_CONDITION_BY_LO_TITLE = " OR e.learningObjectId IN (" +
             "SELECT LO.id FROM LearningObject LO\n " +
@@ -30,7 +30,7 @@ public class EmailToCreatorDao extends AbstractDao<EmailToCreator> {
             " JOIN Material_Title MT ON M.id = MT.material\n" +
             " JOIN LanguageString LS ON MT.title = LS.id\n" +
             " WHERE LS.lang = :transgroup\n" +
-            " AND LOWER(LS.textValue) LIKE :searchObject))";
+            " AND LOWER(LS.textValue) LIKE :searchObject)";
 
     private static final String SORT_BY_TITLE = " JOIN LearningObject lob ON e.learningObjectId = lob.id\n" +
             "WHERE e.senderId= :user" +

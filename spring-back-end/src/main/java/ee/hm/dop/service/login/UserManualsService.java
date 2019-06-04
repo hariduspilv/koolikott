@@ -4,17 +4,13 @@ import ee.hm.dop.dao.UserManualsDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.UserManuals;
 import ee.hm.dop.utils.UrlUtil;
-
-import java.time.LocalDateTime;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static ee.hm.dop.utils.UserUtil.mustBeAdmin;

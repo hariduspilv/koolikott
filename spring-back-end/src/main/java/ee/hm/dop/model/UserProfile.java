@@ -10,16 +10,20 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Getter
+@Setter
 @Entity
 public class UserProfile implements AbstractEntity{
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne
@@ -52,64 +56,4 @@ public class UserProfile implements AbstractEntity{
     @Transient
     private String email;
 
-    @Override
-    public Long getId() {
-        return id;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public UserRole getRole() {
-        return role;
-    }
-
-    public void setRole(UserRole role) {
-        this.role = role;
-    }
-
-    public LocalDateTime getLastUpdate() {
-        return lastUpdate;
-    }
-
-    public void setLastUpdate(LocalDateTime lastUpdate) {
-        this.lastUpdate = lastUpdate;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public List<Taxon> getTaxons() {
-        return taxons;
-    }
-
-    public void setTaxons(List<Taxon> taxons) {
-        this.taxons = taxons;
-    }
-
-    public List<InstitutionEhis> getInstitutions() {
-        return institutions;
-    }
-
-    public void setInstitutions(List<InstitutionEhis> institutions) {
-        this.institutions = institutions;
-    }
-
-    public String getCustomRole() {
-        return customRole;
-    }
-
-    public void setCustomRole(String customRole) {
-        this.customRole = customRole;
-    }
 }

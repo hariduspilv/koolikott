@@ -76,11 +76,13 @@ public class UserProfileService {
         User user = userDao.findUserById(loggedInUser.getId());
         UserProfile userProfile = userProfileDao.findByUser(user);
         if (userProfile == null)
-            return null;
+            throw badRequest("No profile found");
 
+        UserEmail userEmail = userEmailDao.findByUser(user);
         userProfile.setInstitutions(user.getInstitutions());
         userProfile.setTaxons(user.getTaxons());
-        return userProfile;
+        userProfile.setEmail(userEmail.getEmail());
+        return  userProfile;
     }
 
     private void createUserEmail(User user, UserProfile userProfile) {
@@ -110,7 +112,7 @@ public class UserProfileService {
             dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
             userDao.createOrUpdate(dbUser);
         } else {
-            throw badRequest("User not found");
+            throw  badRequest("User not found");
         }
     }
 

@@ -48,10 +48,6 @@ public class BaseResource {
         return URLDecoder.decode(string, UTF_8);
     }
 
-    protected Response redirect(URI authenticationUri) {
-        return Response.temporaryRedirect(authenticationUri).build();
-    }
-
     protected HttpServletRequest getRequest() {
         return request;
     }
@@ -62,6 +58,10 @@ public class BaseResource {
 
     public ResponseStatusException badRequest(String message) {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+    }
+
+    public ResponseStatusException forbidden(String message) {
+        return new ResponseStatusException(HttpStatus.FORBIDDEN, message);
     }
 
     public ResponseStatusException notFound() {

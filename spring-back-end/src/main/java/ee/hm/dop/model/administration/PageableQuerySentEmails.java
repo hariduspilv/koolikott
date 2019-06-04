@@ -63,9 +63,9 @@ public class PageableQuerySentEmails extends PageableQuery {
     public String order() {
 
         if (orderByEmailReceiver()) {
-            return "ORDER BY min(U.surName) " + sort.name();
+            return "ORDER BY LOWER(min(U.surName)) " + sort.name() + ", LOWER(min(U.name)) " + sort.name();
         } else if (orderByEmailReceiverDesc()) {
-            return "ORDER BY max(U.surName)" + sort.name();
+            return "ORDER BY LOWER(max(U.surName))" + sort.name() + ", LOWER(max(U.name)) " + sort.name();
         } else if (orderByLoTitle()) {
             return "ORDER BY e.id " + sort.name();
         } else if (orderByLoTitleDesc()) {

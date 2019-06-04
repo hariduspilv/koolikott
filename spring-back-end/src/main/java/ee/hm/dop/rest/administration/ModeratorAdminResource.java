@@ -1,5 +1,6 @@
 package ee.hm.dop.rest.administration;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
@@ -24,12 +25,11 @@ public class ModeratorAdminResource extends BaseResource {
     @GetMapping
     @Secured({RoleString.ADMIN,RoleString.MODERATOR})
     public List<User> getModerators() {
-        if (getLoggedInUser().getRole() == Role.MODERATOR) {
-            List<User> userList = new ArrayList<>();
-            userList.add(getLoggedInUser());
-            return userList;
+        User loggedInUser = getLoggedInUser();
+        if (loggedInUser.getRole() == Role.MODERATOR) {
+            return Lists.newArrayList(loggedInUser);
         } else {
-            return userService.getModerators(getLoggedInUser());
+            return userService.getModerators(loggedInUser);
         }
     }
 
