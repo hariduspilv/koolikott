@@ -61,7 +61,8 @@ public class LearningObjectResource extends BaseResource {
 
     @GetMapping("usersFavorite")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
-    public SearchResult getUsersFavorites(@RequestParam(value = "start", defaultValue = "0") int start, @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
+    public SearchResult getUsersFavorites(@RequestParam(value = "start", defaultValue = "0") int start,
+                                          @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
         SearchResult result = userFavoriteService.getUserFavoritesSearchResult(getLoggedInUser(), 0, 2147483647);
         result.getItems().sort(Comparator.comparing(Searchable::getType).reversed());
         int stop = min(start + NumberUtils.zvl(maxResults, 12), result.getItems().size());

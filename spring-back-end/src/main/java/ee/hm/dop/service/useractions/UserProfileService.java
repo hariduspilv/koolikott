@@ -112,7 +112,7 @@ public class UserProfileService {
             dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
             userDao.createOrUpdate(dbUser);
         } else {
-            throw badRequest("User not found");
+            throw  badRequest("User not found");
         }
     }
 

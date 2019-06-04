@@ -23,7 +23,6 @@ public class AgreementAdminResource extends BaseResource {
 
     @GetMapping
     @Secured({RoleString.ADMIN})
-
     public List<Agreement> getAgreements() {
         return agreementService.findAllValid(getLoggedInUser());
     }
@@ -31,14 +30,12 @@ public class AgreementAdminResource extends BaseResource {
     @PostMapping
     @RequestMapping("validate")
     @Secured({RoleString.ADMIN})
-
     public boolean validate(@RequestBody Agreement agreement) {
         return agreementService.isValid(agreement, getLoggedInUser());
     }
 
     @PostMapping
     @Secured({RoleString.ADMIN})
-
     public Agreement saveAgreement(@RequestBody Agreement agreement) {
         return agreementService.save(agreement, getLoggedInUser());
     }
