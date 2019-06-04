@@ -52,6 +52,7 @@ class controller extends Controller {
         this.$scope.showDeleteButton = true;
         this.$scope.showSendEmailButton = true;
         this.$scope.showRecommendButton = true;
+        this.$scope.showReportImproperButton = true;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -109,6 +110,7 @@ class controller extends Controller {
         this.$scope.showDeleteButton = true;
         this.$scope.showSendEmailButton = true;
         this.$scope.showRecommendButton = true;
+        this.$scope.showReportImproperButton = true;
     }
 
     showPortfolioHistoryDialog() {
@@ -121,6 +123,7 @@ class controller extends Controller {
         this.$scope.showDeleteButton = false;
         this.$scope.showSendEmailButton = false;
         this.$scope.showRecommendButton = false;
+        this.$scope.showReportImproperButton = false;
     }
 
     canEdit() {

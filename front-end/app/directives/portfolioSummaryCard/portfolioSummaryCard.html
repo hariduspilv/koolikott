@@ -82,7 +82,7 @@
               <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
               <md-menu-item
                 dop-report-improper
-                data-ng-if="!isAdminOrModerator()"
+                data-ng-if="!isAdminOrModerator() && showReportImproperButton"
                 data-learning-object="portfolio"
               ></md-menu-item>
             </md-menu-content>
