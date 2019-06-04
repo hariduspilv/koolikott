@@ -442,7 +442,7 @@ function toggleFullScreen() {
 
     fullScreenRemoveChapterMargin();
     fullScreenExpandSummary();
-    window.dispatchEvent(new Event('resize'));
+    setTimeout(() => window.dispatchEvent(new Event('resize')),50);
 }
 
 function fullScreenRemoveChapterMargin() {
