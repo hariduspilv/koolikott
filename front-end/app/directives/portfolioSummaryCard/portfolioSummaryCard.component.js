@@ -277,7 +277,6 @@ controller.$inject = [
     '$scope',
     '$location',
     '$mdDialog',
-    '$rootScope',
     'authenticatedUserService',
     '$route',
     'dialogService',
