@@ -48,10 +48,6 @@ public class BaseResource {
         return URLDecoder.decode(string, UTF_8);
     }
 
-    protected Response redirect(URI authenticationUri) {
-        return Response.temporaryRedirect(authenticationUri).build();
-    }
-
     protected HttpServletRequest getRequest() {
         return request;
     }
