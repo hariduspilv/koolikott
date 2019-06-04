@@ -441,7 +441,8 @@ function toggleFullScreen() {
     getFlexElements().forEach(el => resize(el, "fullscreen-flex"));
 
     fullScreenRemoveChapterMargin();
-    fullScreenExpandSummary()
+    fullScreenExpandSummary();
+    setTimeout(() => window.dispatchEvent(new Event('resize')),400);
 }
 
 function fullScreenRemoveChapterMargin() {

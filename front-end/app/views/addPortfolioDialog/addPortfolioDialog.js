@@ -1,8 +1,8 @@
 angular.module('koolikottApp')
     .controller('addPortfolioDialogController',
         [
-            '$scope', '$mdDialog', '$location', '$translate', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService', 'metadataService', 'authenticatedUserService', 'locals',
-            function ( $scope, $mdDialog, $location, $translate, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService, metadataService, authenticatedUserService, locals) {
+            '$scope', '$mdDialog', '$location', '$translate', 'serverCallService', '$rootScope', 'storageService', '$timeout', 'pictureUploadService', '$filter', 'translationService', 'textAngularManager', 'taxonService', 'eventService', 'metadataService', 'authenticatedUserService', 'locals','toastService',
+            function ( $scope, $mdDialog, $location, $translate, serverCallService, $rootScope, storageService, $timeout, pictureUploadService, $filter, translationService, textAngularManager, taxonService, eventService, metadataService, authenticatedUserService, locals,toastService) {
                 $scope.isSaving = false;
                 $scope.showHints = true;
                 $scope.isTouched = {};
@@ -244,6 +244,7 @@ angular.module('koolikottApp')
 
                 function createPortfolioFailed() {
                     console.log('Creating portfolio failed.');
+                    toastService.show('PORTFOLIO_SAVE_FAILED', 15000);
                 }
 
                 function hasCorrectTaxon() {

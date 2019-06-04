@@ -26,7 +26,7 @@ public class LearningObjectLogDao extends AbstractDao<LearningObjectLog> {
     public List<PortfolioLog> findAllByDate(LocalDateTime dateTime) {
         return getEntityManager()
                 .createQuery("SELECT log FROM PortfolioLog log " +
-                        "WHERE log.publishedAt < :deleteTime", PortfolioLog.class)
+                        "WHERE log.createdAt < :deleteTime", PortfolioLog.class)
                 .setParameter("deleteTime", dateTime)
                 .getResultList();
     }

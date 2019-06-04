@@ -41,11 +41,13 @@ public class PortfolioConverter {
         to.setTags(from.getTags());
         to.setTargetGroups(from.getTargetGroups());
         to.setTaxons(from.getTaxons());
-        List<ChapterLog> chapterLogs = from.getChapters()
-                .stream()
-                .map(this::convertChapter)
-                .collect(Collectors.toList());
-        to.setChapters(chapterLogs);
+        if (from.getChapters().size() != 0) {
+            List<ChapterLog> chapterLogs = from.getChapters()
+                    .stream()
+                    .map(this::convertChapter)
+                    .collect(Collectors.toList());
+            to.setChapters(chapterLogs);
+        }
         to.setPicture((OriginalPicture) from.getPicture());
         to.setLicenseType(from.getLicenseType());
         if (from.getPicture() != null) {
@@ -98,24 +100,26 @@ public class PortfolioConverter {
     }
 
     private ChapterLog convertChapter(Chapter chapter) {
-        ChapterLog chapterLog = new ChapterLog();
-        chapterLog.setId(chapter.getId());
-        chapterLog.setTitle(chapter.getTitle());
+        if (chapter != null) {
+            ChapterLog chapterLog = new ChapterLog();
+            chapterLog.setTitle(chapter.getTitle());
 
-        List<ChapterBlockLog> chapterBlockLogs = chapter
-                .getBlocks()
-                .stream()
-                .map(this::convertChapterBlock)
-                .collect(Collectors.toList());
+            List<ChapterBlockLog> chapterBlockLogs = chapter
+                    .getBlocks()
+                    .stream()
+                    .map(this::convertChapterBlock)
+                    .collect(Collectors.toList());
 
-        chapterLog.setBlocks(chapterBlockLogs);
-        return chapterLog;
+            chapterLog.setBlocks(chapterBlockLogs);
+            return chapterLog;
+        }
+        return null;
     }
 
     private ChapterBlockLog convertChapterBlock(ChapterBlock chapter) {
         ChapterBlockLog chapterBlockLog = new ChapterBlockLog();
-        chapterBlockLog.setId(chapter.getId());
         chapterBlockLog.setHtmlContent(chapter.getHtmlContent());
+        chapterBlockLog.setNarrow(chapter.isNarrow());
         return chapterBlockLog;
     }
 }

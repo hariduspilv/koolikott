@@ -39,15 +39,19 @@ class controller extends Controller {
                 this.$scope.portfolio = currentValue
         }, true)
 
-        this.$scope.$on('portfolioHistory:hide', this.hidePortfolioHistory.bind(this));
-
-        this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this))
+        this.$scope.$on('portfolioHistory:hide', this.showButtons.bind(this));
+        this.$rootScope.$on('portfolio:autoSave', this.getHistoryType.bind(this));
+        this.$rootScope.$on('portfolioHistory:hideDeleteButton', this.hideButtons.bind(this));
 
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
         this.$scope.pageUrl = this.$location.absUrl()
 
         this.$scope.isAutoSaving = false;
+        this.$scope.showLogButton = true;
+        this.$scope.showDeleteButton = true;
+        this.$scope.showSendEmailButton = true;
+        this.$scope.showRecommendButton = true;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -99,8 +103,24 @@ class controller extends Controller {
             this.$scope.portfolio = this.portfolio
     }
 
-    hidePortfolioHistory(){
+    showButtons(){
         this.$scope.showEditModeButton = true
+        this.$scope.showLogButton = true;
+        this.$scope.showDeleteButton = true;
+        this.$scope.showSendEmailButton = true;
+        this.$scope.showRecommendButton = true;
+    }
+
+    showPortfolioHistoryDialog() {
+        this.$scope.showEditModeButton = false;
+        this.$scope.showLogButton = false;
+        this.$rootScope.$broadcast('portfolioHistory:show');
+    }
+
+    hideButtons() {
+        this.$scope.showDeleteButton = false;
+        this.$scope.showSendEmailButton = false;
+        this.$scope.showRecommendButton = false;
     }
 
     canEdit() {
@@ -144,7 +164,7 @@ class controller extends Controller {
                     this.toastService.show('PORTFOLIO_SAVED');
                 }
             })
-            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
     }
 
     getHistoryType(){
@@ -185,12 +205,10 @@ class controller extends Controller {
                 this.$rootScope.learningObjectDeleted = true
                 this.$location.url('/portfolio?id=' + this.$route.current.params.id)
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                this.$rootScope.$broadcast('portfolioHistory:closeLogBanner')
+                this.$scope.showEditModeButton = false;
+                this.$scope.showLogButton = false;
             })
-    }
-
-    showPortfolioHistoryDialog() {
-        this.$scope.showEditModeButton = false
-        this.$rootScope.$broadcast('portfolioHistory:show');
     }
 
     confirmPortfolioDeletion() {
@@ -208,6 +226,9 @@ class controller extends Controller {
                 this.portfolio.deleted = false
                 this.$rootScope.learningObjectDeleted = false
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                this.$rootScope.$broadcast('portfolioHistory:show')
+                this.$scope.showEditModeButton = true;
+                this.$scope.showLogButton = true;
             })
     }
     markReviewed() {
@@ -234,7 +255,7 @@ class controller extends Controller {
         )
     }
     dotsAreShowing () {
-        return this.$rootScope.learningObjectDeleted === false || this.authenticatedUserService.isAdmin();
+        return this.$rootScope.learningObjectDeleted === false || this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator();
     };
     setRecommendation(recommendation) {
         if (this.portfolio)
@@ -256,7 +277,6 @@ controller.$inject = [
     '$scope',
     '$location',
     '$mdDialog',
-    '$rootScope',
     'authenticatedUserService',
     '$route',
     'dialogService',

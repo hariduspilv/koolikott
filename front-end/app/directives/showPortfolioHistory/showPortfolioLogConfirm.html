@@ -11,7 +11,7 @@
     </div>
   </md-toolbar>
   <div>
-    <md-content class="md-padding send-mail-ie">
+    <md-content class="md-padding log-history-ie-modal-height">
       <div layout-xs="column"
            layout="column"
            layout-align-xs="start stretch"
@@ -24,27 +24,27 @@
                layout-align="end center"
                layout-xs="row"
                layout-align-xs="center center">
-            <md-dialog-actions style="padding: 0px">
-              <span flex></span>
-              <md-button aria-label="Tühista kogumiku taastamine"
-                         id="portfolio-restore-cancel-button"
-                         data-ng-click="cancel()">
-                <span data-translate="LOG_GIVEUP"></span>
-              </md-button>
-              <md-button class="md-raised md-primary"
-                         data-ng-click="$ctrl.setPortfolioHistoryToRestore()"
-                         aria-label="restore portfolio"
-              >
-                <span data-translate="LOG_CONFIRM"></span>
-              </md-button>
-              <md-progress-circular class="md-accent ng-hide"
-                                    md-mode="indeterminate"
-                                    md-diameter="40"
-                                    data-ng-show="isSaving"></md-progress-circular>
-            </md-dialog-actions>
           </div>
         </md-input-container>
       </div>
     </md-content>
+    <md-dialog-actions >
+      <span flex></span>
+      <md-button aria-label="Tühista kogumiku taastamine"
+                 id="portfolio-restore-cancel-button"
+                 data-ng-click="cancel()">
+        <span data-translate="LOG_GIVEUP"></span>
+      </md-button>
+      <md-button class="md-raised md-primary"
+                 data-ng-click="$ctrl.setPortfolioHistoryToRestore()"
+                 aria-label="restore portfolio"
+      >
+        <span data-translate="LOG_CONFIRM"></span>
+      </md-button>
+      <md-progress-circular class="md-accent ng-hide"
+                            md-mode="indeterminate"
+                            md-diameter="40"
+                            data-ng-show="isSaving"></md-progress-circular>
+    </md-dialog-actions>
   </div>
 </md-dialog>

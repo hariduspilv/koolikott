@@ -13,7 +13,7 @@
             data-object="portfolio"
           ></dop-share>
           <dop-send-email
-            ng-if="isAdminOrModerator() && !$root.isEditPortfolioMode && !$root.isFullScreen"
+            ng-if="isAdminOrModerator() && !$root.isEditPortfolioMode && !$root.isFullScreen && showSendEmailButton"
             id="send-email"
             data-learning-object="portfolio">
           </dop-send-email>
@@ -53,13 +53,13 @@
                   <span data-translate="PORTFOLIO_EDIT_METADATA"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item data-ng-if="(isAdmin() || isOwner()) && !$root.isEditPortfolioMode">
+              <md-menu-item data-ng-if="(isAdmin() || isOwner()) && !$root.isEditPortfolioMode && showLogButton">
                 <md-button data-ng-click="$ctrl.showPortfolioHistoryDialog()">
                   <md-icon md-menu-align-target>history</md-icon>
                   <span data-translate="PORTFOLIO_SHOW_HISTORY"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item data-ng-if="canEdit() && !isAdminButtonsShowing() && !portfolio.deleted">
+              <md-menu-item data-ng-if="canEdit() && !isAdminButtonsShowing() && !portfolio.deleted && showDeleteButton">
                 <md-button data-ng-click="confirmPortfolioDeletion()">
                   <md-icon md-menu-align-target>delete</md-icon>
                   <span data-translate="PORTFOLIO_DELETE"></span>
@@ -77,7 +77,7 @@
                 dop-recommend
                 data-portfolio="portfolio"
                 data-on-change="setRecommendation(recommendation)"
-                data-ng-if="isAdmin()"
+                data-ng-if="isAdmin() && showRecommendButton"
               ></md-menu-item>
               <md-menu-divider data-ng-if="!isAdminOrModerator()"></md-menu-divider>
               <md-menu-item

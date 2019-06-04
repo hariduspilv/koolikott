@@ -14,6 +14,7 @@
             if (selectedPortfolioLog) {
                 this.portfolio = selectedPortfolioLog;
                 this.$scope.showConfirmButton = true;
+                this.$rootScope.$broadcast('portfolioHistory:hideDeleteButton');
             }
         }
 

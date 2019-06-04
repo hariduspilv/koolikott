@@ -178,6 +178,7 @@ class controller extends Controller {
         }
 
         this.$scope.saveAndExitPortfolio = () => {
+            this.storageService.getPortfolio().saveType = 'MANUAL';
             if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
                 this.storageService.getPortfolio().publicationConfirmed = true;
                 return this.saveAndExit();
@@ -330,16 +331,16 @@ class controller extends Controller {
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost(`rest/portfolio/update`, this.storageService.getPortfolio())
+            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
                 if (portfolio) this.storageService.setPortfolio(portfolio)
             })
-            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
     }
     saveAndExit() {
         this.updateChaptersStateFromEditors()
         this.serverCallService
-            .makePost(`rest/portfolio/update`, this.storageService.getPortfolio())
+            .makePost('rest/portfolio/update', this.storageService.getPortfolio())
             .then(({ data: portfolio }) => {
                 if (portfolio) {
                     this.toastService.show('PORTFOLIO_SAVED')
@@ -351,7 +352,7 @@ class controller extends Controller {
                     this.$route.reload()
                 }
             })
-            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED'))
+            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
 
     }
     invokeInkRippleOnSaveButton() {
