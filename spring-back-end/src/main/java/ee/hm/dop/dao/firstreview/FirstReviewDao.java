@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import javax.inject.Inject;
 import javax.persistence.Query;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
@@ -166,7 +167,13 @@ public class FirstReviewDao extends AbstractDao<FirstReview> {
     }
 
     private Query addUserTaxons(PageableQuery params, Query query) {
-        return query.setParameter("usertaxons", taxonDao.getUserTaxonWithChildren(params.getUsers()));
+
+        List<Long> tempLong = new ArrayList<>();
+        tempLong.add(-1L);
+        if ((taxonDao.getUserTaxonWithChildren(params.getUsers())).size() > 0)
+            return query.setParameter("usertaxons", taxonDao.getUserTaxonWithChildren(params.getUsers()));
+        else
+            return query.setParameter("usertaxons", tempLong);
     }
 
     private Query addTaxons(PageableQuery params, Query query) {
