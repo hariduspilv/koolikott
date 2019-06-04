@@ -4,7 +4,7 @@
     <h2 class="chapter-title" data-ng-class="{'placeholder-title': !chapter.title}" data-ng-bind="chapterTitle"></h2>
     <div class="chapter-blocks">
       <div
-        class="chapter-block word-break"
+        class="chapter-block word-break-all"
         data-ng-repeat="block in chapter.blocks track by $index"
         data-ng-class="$ctrl.getBlockClassNames($index)"
         data-ng-bind-html="block.htmlContent"
