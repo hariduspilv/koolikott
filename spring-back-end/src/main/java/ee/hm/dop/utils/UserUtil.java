@@ -7,9 +7,6 @@ import ee.hm.dop.model.interfaces.ILearningObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
-
 public class UserUtil {
 
     public static final String MUST_BE_ADMIN = "Logged in user must be admin.";

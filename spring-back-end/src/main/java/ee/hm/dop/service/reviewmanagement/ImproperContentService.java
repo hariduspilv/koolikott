@@ -10,15 +10,13 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
-
-import java.time.LocalDateTime;
-
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,7 +54,7 @@ public class ImproperContentService {
             }
         }
         if (CollectionUtils.isEmpty(saved.getReportingReasons())) {
-            throw new WebApplicationException("no reason specified", Response.Status.BAD_REQUEST);
+            throw badRequest("no reason specified");
         }
         improperContentDao.createOrUpdate(saved);
         return saved;
@@ -72,11 +70,15 @@ public class ImproperContentService {
 
     private LearningObject findValid(ImproperContent improperContent, User creator, LearningObject learningObject1) {
         if (improperContent == null || learningObject1 == null) {
-            throw new WebApplicationException("Invalid Improper object.", Response.Status.BAD_REQUEST);
+            throw badRequest("Invalid Improper object.");
         }
         LearningObject learningObject = learningObjectService.get(learningObject1.getId(), creator);
         ValidatorUtil.mustHaveEntity(learningObject, learningObject1.getId());
         return learningObject;
+    }
+
+    private ResponseStatusException badRequest(String s) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
     }
 
 }
