@@ -64,6 +64,10 @@ public class BaseResource {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
     }
 
+    public ResponseStatusException forbidden(String message) {
+        return new ResponseStatusException(HttpStatus.FORBIDDEN, message);
+    }
+
     public ResponseStatusException notFound() {
         return new ResponseStatusException(HttpStatus.NOT_FOUND);
     }

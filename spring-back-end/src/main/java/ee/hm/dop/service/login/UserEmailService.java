@@ -6,12 +6,12 @@ import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.SendMailService;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -200,16 +200,16 @@ public class UserEmailService {
         }
     }
 
-    private WebApplicationException forbidden(String s) {
-        return new WebApplicationException(s, Response.Status.FORBIDDEN);
+    private ResponseStatusException forbidden(String s) {
+        return new ResponseStatusException(HttpStatus.FORBIDDEN, s);
     }
 
-    private WebApplicationException badRequest(String s) {
-        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
+    private ResponseStatusException badRequest(String s) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
     }
 
-    private WebApplicationException notFound(String s) {
-        return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    private ResponseStatusException notFound(String s) {
+        return new ResponseStatusException(HttpStatus.NOT_FOUND, s);
     }
 
     public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {

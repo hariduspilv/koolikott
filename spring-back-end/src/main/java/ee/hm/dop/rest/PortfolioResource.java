@@ -1,10 +1,6 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.PortfolioLog;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.content.LearningObjectAdministrationService;
@@ -12,17 +8,12 @@ import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioGetter;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.util.List;
 
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
@@ -87,7 +78,7 @@ public class PortfolioResource extends BaseResource {
         } else if (getLoggedInUser().getRole().equals(Role.MODERATOR) || getLoggedInUser().getRole().equals(Role.USER)) {
             portfolioLog = portfolioGetter.findByIdAndCreatorAllPortfolioLogs(portfolioId, getLoggedInUser());
         } else {
-            throw new WebApplicationException("User has no access", Response.Status.FORBIDDEN);
+            throw forbidden("User has no access");
         }
 
         if (portfolioLog == null || isEmpty(portfolioLog))
@@ -102,6 +93,7 @@ public class PortfolioResource extends BaseResource {
         return portfolioLog;
     }
 
+
 /*    @PostMapping
     @RequestMapping("copy")
     @Consumes(MediaType.APPLICATION_JSON)
@@ -110,7 +102,6 @@ public class PortfolioResource extends BaseResource {
     public Portfolio copy(@RequestBody Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
     }*/
-
     @PostMapping("delete")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject delete(@RequestBody Portfolio portfolio) {

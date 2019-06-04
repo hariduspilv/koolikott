@@ -1,12 +1,13 @@
 package ee.hm.dop.utils;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.AbstractEntity;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Material;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.util.function.Function;
 
 public class ValidatorUtil {

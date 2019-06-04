@@ -20,7 +20,7 @@ public class UserProfileResource extends BaseResource {
     }
 
     @GetMapping
-    public ResponseEntity<UserProfile> getUserProfile() {
+    public UserProfile getUserProfile() {
         return userProfileService.getUserProfile(getLoggedInUser());
     }
 
