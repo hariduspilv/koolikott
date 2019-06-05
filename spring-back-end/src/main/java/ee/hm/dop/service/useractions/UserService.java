@@ -1,5 +1,6 @@
 package ee.hm.dop.service.useractions;
 
+import com.google.common.collect.Lists;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
@@ -70,7 +71,14 @@ public class UserService {
     }
 
     public List<User> getModerators(User loggedInUser) {
-        return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersByRole(Role.MODERATOR) : null;
+        if (UserUtil.isAdmin(loggedInUser)) {
+            return userDao.getUsersByRole(Role.MODERATOR);
+        } else if (UserUtil.isModerator(loggedInUser)) {
+            User byId = userDao.findById(loggedInUser.getId());
+            return Lists.newArrayList(byId);
+        } else  {
+            return null;
+        }
     }
 
     public Long getModeratorsCount(User loggedInUser) {
