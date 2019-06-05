@@ -24,6 +24,7 @@ import javax.ws.rs.ext.Provider;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Type;
 
+//todo doesn't work with spring
 @Produces({"application/atom+xml", "application/atom+xml;type=entry", "application/json"})
 @Consumes({"application/atom+xml", "application/atom+xml;type=entry"})
 @Provider

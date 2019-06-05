@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.Produces;
 
 @RestController
 @RequestMapping("comment")
@@ -23,8 +21,6 @@ public class CommentResource extends BaseResource {
     private CommentService commentService;
 
     @PostMapping
-    @Consumes("application/json")
-    @Produces("application/json")
     public LearningObject addComment(@RequestBody AddComment form) {
         return commentService.addComment(form.getComment(), form.getLearningObject(), getLoggedInUser());
     }

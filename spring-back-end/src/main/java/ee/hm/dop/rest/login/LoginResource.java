@@ -25,8 +25,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
 import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -108,14 +106,12 @@ public class LoginResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("harid")
-    @Produces(MediaType.APPLICATION_JSON)
     public RedirectView haridAuthenticate() throws URISyntaxException {
         return new RedirectView(getHaridAuthenticationURI().toString());
     }
 
     @GetMapping
     @RequestMapping("harid/success")
-    @Produces(MediaType.APPLICATION_JSON)
     public RedirectView haridAuthenticateSuccess(@RequestParam(value = "code", required = false) String code) throws URISyntaxException {
         return code != null ? authenticateWithHaridToken(code) : redirectToHarid();
     }
