@@ -2,7 +2,9 @@
 {
     class controller extends Controller {
         $onInit() {
-            this.$scope.$on('portfolioHistory:show', this.getPortfolioLogs.bind(this));
+            this.$rootScope.$on('portfolioHistory:show', this.getPortfolioLogs.bind(this));
+            this.$rootScope.$on('portfolioHistory:hideLogSelect', this.hideLogSelect.bind(this));
+
             this.selectPortfolioLog();
             this.$scope.showConfirmButton = false;
         }
@@ -18,11 +20,14 @@
             }
         }
 
+        hideLogSelect(){
+            this.showlogselect = false;
+
+        }
         restoreSelectedPortfolio() {
             const scope = this.$scope.$new(true);
             scope.portfolio = this.portfolio;
             scope.showlogselect = this.$scope.showlogselect;
-            this.$rootScope.$broadcast('portfolioHistory:hide');
 
             this.$mdDialog.show({
                 templateUrl: 'directives/showPortfolioHistory/showPortfolioLogConfirm.html',
@@ -30,10 +35,11 @@
                 scope,
                 controllerAs: '$ctrl',
             })
-                .then(() => {
-                    this.showlogselect = false;
-                    this.$scope.showConfirmButton = false;
-                    this.$scope.selectedPortfolioLog = undefined;
+                .then((e) => {
+                    if (!e) {
+                        this.showlogselect = false;
+                        this.$rootScope.$broadcast('portfolioHistory:hide');
+                    }
                 })
         }
 

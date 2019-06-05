@@ -4,12 +4,12 @@
     class controller extends Controller {
         constructor(...args) {
             super(...args)
-
             this.setDialogInformation();
+        }
 
-            this.$scope.cancel = () => {
-                this.$mdDialog.hide()
-            }
+        cancell() {
+            this.$mdDialog.hide(event);
+            return event;
         }
 
         setPortfolioHistoryToRestore() {
@@ -25,11 +25,7 @@
                         this.toastService.show('PORTFOLIO_SAVED')
                     }
                 })
-                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
-        }
-
-        hide() {
-            return false;
+                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED', 15000))
         }
 
         setDialogInformation() {
