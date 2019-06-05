@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @RestController
@@ -30,7 +28,6 @@ public class UserManualsAdminResource extends BaseResource {
 
     @PostMapping
     @Secured({RoleString.ADMIN})
-    @Consumes(MediaType.APPLICATION_JSON)
     public UserManuals saveUserManual(@RequestBody UserManuals userManuals) {
         return userManualsService.save(userManuals, getLoggedInUser());
     }

@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
 
 @RestController
 @RequestMapping("media")
@@ -30,7 +28,6 @@ public class MediaResource extends BaseResource {
     @PostMapping
     @RequestMapping("create")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
     public Media createMedia(@RequestBody Media media) {
         return mediaService.save(media, getLoggedInUser());
     }
@@ -38,7 +35,6 @@ public class MediaResource extends BaseResource {
     @PostMapping
     @RequestMapping("update")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
     public Media updateMedia(@RequestBody Media media) {
         return mediaService.update(media, getLoggedInUser());
     }

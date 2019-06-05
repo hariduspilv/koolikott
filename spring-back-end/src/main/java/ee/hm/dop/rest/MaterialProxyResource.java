@@ -11,9 +11,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import java.io.IOException;
 
 @RestController
@@ -25,7 +22,6 @@ public class MaterialProxyResource extends BaseResource {
     private MaterialProxy materialProxy;
 
     @GetMapping
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
     public ResponseEntity<?> getProxyUrl(@RequestParam("id") Long id, @RequestParam("url") String url_param) throws IOException {
         if (StringUtils.isBlank(url_param) || url_param.equals("undefined")) {
             return materialProxy.noContent();

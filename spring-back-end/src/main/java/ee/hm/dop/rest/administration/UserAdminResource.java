@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 @RestController
@@ -32,7 +30,6 @@ public class UserAdminResource extends BaseResource {
 
     @PostMapping
     @Secured(RoleString.ADMIN)
-    @Consumes(MediaType.APPLICATION_JSON)
     public User updateUser(@RequestBody User user) {
         mustHaveUser(user);
         return userService.update(user, getLoggedInUser());
@@ -41,7 +38,6 @@ public class UserAdminResource extends BaseResource {
     @PostMapping
     @RequestMapping("restrictUser")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
     public User restrictUser(@RequestBody User user) {
         mustHaveUser(user);
         return userService.restrictUser(user);
@@ -50,7 +46,6 @@ public class UserAdminResource extends BaseResource {
     @PostMapping
     @RequestMapping("removeRestriction")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    @Consumes(MediaType.APPLICATION_JSON)
     public User removeRestriction(@RequestBody User user) {
         mustHaveUser(user);
         return userService.removeRestriction(user);
