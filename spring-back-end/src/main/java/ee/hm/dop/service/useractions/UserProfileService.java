@@ -79,6 +79,12 @@ public class UserProfileService {
         if (userProfile == null && userEmail == null) {
             throw badRequest("No profile found");
         }
+
+        if (userProfile == null) {
+            userProfile = new UserProfile();
+            userProfile.setUser(user);
+        }
+
         if (!user.getInstitutions().isEmpty() || user.getInstitutions() != null) {
             userProfile.setInstitutions(user.getInstitutions());
         }
