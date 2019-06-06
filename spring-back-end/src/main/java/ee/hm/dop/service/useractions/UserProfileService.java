@@ -79,10 +79,16 @@ public class UserProfileService {
         if (userProfile == null && userEmail == null) {
             throw badRequest("No profile found");
         }
-        Objects.requireNonNull(userProfile).setInstitutions(user.getInstitutions());
-        userProfile.setTaxons(user.getTaxons());
-        userProfile.setEmail(userEmail.getEmail());
-        return  userProfile;
+        if (!user.getInstitutions().isEmpty() || user.getInstitutions() != null) {
+            userProfile.setInstitutions(user.getInstitutions());
+        }
+        if (user.getTaxons() != null) {
+            userProfile.setTaxons(user.getTaxons());
+        }
+        if (userEmail.getEmail() != null) {
+            userProfile.setEmail(userEmail.getEmail());
+        }
+        return userProfile;
     }
 
     private void createUserEmail(User user, UserProfile userProfile) {
