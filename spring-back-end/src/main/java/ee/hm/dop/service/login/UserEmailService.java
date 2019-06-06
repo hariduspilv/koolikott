@@ -4,8 +4,9 @@ import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQuerySentEmails;
+import ee.hm.dop.service.MailBuilder;
 import ee.hm.dop.service.PinGeneratorService;
-import ee.hm.dop.service.SendMailService;
+import ee.hm.dop.service.MailSender;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,7 +33,9 @@ public class UserEmailService {
     @Inject
     private UserDao userDao;
     @Inject
-    private SendMailService sendMailService;
+    private MailSender mailSender;
+    @Inject
+    private MailBuilder mailBuilder;
     @Inject
     private EmailToCreatorDao emailToCreatorDao;
     @Inject
@@ -71,7 +74,7 @@ public class UserEmailService {
         emailToCreator.setSentTries(0);
         emailToCreator.setSender(userSender);
 
-        if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
+        if (mailSender.sendEmail(mailBuilder.sendEmailToCreator(emailToCreator))) {
             emailToCreator.setSentAt(LocalDateTime.now());
             emailToCreator.setSentSuccessfully(true);
             emailToCreator.setSentTries(1);
@@ -81,7 +84,7 @@ public class UserEmailService {
             emailToCreator.setSentTries(2);
             emailToCreator.setSentAt(LocalDateTime.now());
             emailToCreator.setErrorMessage("Failed to send email to creator");
-            if (!sendMailService.sendEmail(sendMailService.sendEmailToSupportWhenSendEmailToCreatorFailed(emailToCreator))) {
+            if (!mailSender.sendEmail(mailBuilder.sendEmailToSupportWhenSendEmailToCreatorFailed(emailToCreator))) {
                 emailToCreator.setErrorMessage("Failed to send email to creator");
                 emailToCreator.setSentTries(3);
             }
@@ -176,7 +179,7 @@ public class UserEmailService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, email));
+        mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail, email));
         userEmail.setEmail("");
         return userEmail;
     }
@@ -187,7 +190,7 @@ public class UserEmailService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
+        mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail));
         userEmail.setEmail("");
         return userEmail;
     }

@@ -8,8 +8,9 @@ import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.UserProfile;
 import ee.hm.dop.model.ehis.InstitutionEhis;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.MailBuilder;
 import ee.hm.dop.service.PinGeneratorService;
-import ee.hm.dop.service.SendMailService;
+import ee.hm.dop.service.MailSender;
 import ee.hm.dop.service.ehis.EhisInstitutionService;
 import ee.hm.dop.service.metadata.TaxonService;
 import org.springframework.http.HttpStatus;
@@ -25,7 +26,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
-import static org.apache.commons.collections4.CollectionUtils.isEmpty;
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 @Service
 @Transactional
@@ -38,7 +39,9 @@ public class UserProfileService {
     @Inject
     private UserEmailDao userEmailDao;
     @Inject
-    private SendMailService sendMailService;
+    private MailSender mailSender;
+    @Inject
+    private MailBuilder mailBuilder;
     @Inject
     private EhisInstitutionService ehisInstitutionService;
     @Inject
@@ -51,7 +54,7 @@ public class UserProfileService {
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
         if (dbUserEmail != null && dbUserEmail.getEmail() != null && !dbUserEmail.getEmail().equals(validateEmail(userProfile.getEmail()))) {
             dbUserEmail.setPin(PinGeneratorService.generatePin());
-            sendMailService.sendEmail(sendMailService.sendPinToUser(dbUserEmail, userProfile.getEmail()));
+            mailSender.sendEmail(mailBuilder.sendPinToUser(dbUserEmail, userProfile.getEmail()));
             userEmailDao.createOrUpdate(dbUserEmail);
             response = ResponseEntity.status(HttpStatus.CREATED).build();
         } else if (dbUserEmail == null ){
@@ -86,10 +89,10 @@ public class UserProfileService {
             userProfile.setUser(user);
         }
 
-        if (isEmpty(user.getInstitutions())) {
+        if (isNotEmpty(user.getInstitutions())) {
             userProfile.setInstitutions(user.getInstitutions());
         }
-        if (isEmpty(user.getTaxons())) {
+        if (isNotEmpty(user.getTaxons())) {
             userProfile.setTaxons(user.getTaxons());
         }
         if (userEmail.getEmail() != null) {
@@ -106,7 +109,7 @@ public class UserProfileService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setEmail(null);
-        if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, userProfile.getEmail()))){
+        if (mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail, userProfile.getEmail()))){
             userEmailDao.createOrUpdate(userEmail);
         }
     }
