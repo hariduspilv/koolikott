@@ -93,7 +93,6 @@ public class GetMaterialConnectorTest {
 
         replay(getMaterialConnector, repository);
 
-        repository.getBaseURL();
         Document doc = getMaterialConnector.getMaterial(repository, IDENTIFIER);
 
         verify(getMaterialConnector, repository);

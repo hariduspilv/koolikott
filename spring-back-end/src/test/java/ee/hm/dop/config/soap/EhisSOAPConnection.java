@@ -30,7 +30,7 @@ public class EhisSOAPConnection implements SOAPConnectionMockI {
         try (InputStream soapMessageIS = EhisSOAPConnection.class.getResourceAsStream(fileName)) {
             if (soapMessageIS == null) return null;
             return MessageFactory.newInstance().createMessage(new MimeHeaders(), soapMessageIS);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
             return null;
         }
     }

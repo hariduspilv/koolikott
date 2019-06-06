@@ -57,7 +57,7 @@ public class PortfolioService {
 
         Portfolio portfolioCreated = save(portfolioConverter.setFieldsToNewPortfolio(portfolio), creator, creator);
         portfolioCreated.setSaveType(MANUAL);
-        PortfolioLog portfolioLogCreated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated));
+        savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(portfolioCreated));
         return portfolioCreated;
     }
 
