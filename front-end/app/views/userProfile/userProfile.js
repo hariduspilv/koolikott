@@ -167,9 +167,9 @@
                         this.$scope.userEmail = response.data.email;
                         if (!!this.$scope.userProfile.role)
                             this.activateRole(this.$scope.userProfile.role);
-                        if (_.isEmpty(this.$scope.userProfile.institutions[0]))
+                        if (!this.$scope.userProfile.institutions || _.isEmpty(this.$scope.userProfile.institutions[0]))
                             this.$scope.userProfile.institutions.push({});
-                        if (_.isEmpty(this.$scope.userProfile.taxons[0]))
+                        if (!this.$scope.userProfile.taxons || _.isEmpty(this.$scope.userProfile.taxons[0]))
                             this.$scope.userProfile.taxons.push({})
                     }
                 })
