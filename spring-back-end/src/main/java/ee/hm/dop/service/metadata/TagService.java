@@ -62,8 +62,10 @@ public class TagService {
         tags.add(newTag);
         LearningObject updatedLearningObject = learningObjectDao.createOrUpdate(learningObject);
         Portfolio portfolio = portfolioDao.findById(updatedLearningObject.getId());
-        portfolio.setSaveType(MANUAL);
-        portfolioService.update(portfolio, user);
+        if (portfolio != null) {
+            portfolio.setSaveType(MANUAL);
+            portfolioService.update(portfolio, user);
+        }
         solrEngineService.updateIndex();
 
         return updatedLearningObject;

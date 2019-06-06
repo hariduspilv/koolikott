@@ -106,8 +106,9 @@ public class UserProfileService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setEmail(null);
-        if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, userProfile.getEmail())));
+        if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, userProfile.getEmail()))){
             userEmailDao.createOrUpdate(userEmail);
+        }
     }
 
     private void updateUser(UserProfile userProfile, User user) {
@@ -129,20 +130,12 @@ public class UserProfileService {
         }
     }
 
-    private void setTaxons(UserProfile userProfile, User dbUser) {
-        dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
-    }
-
     private List<Taxon> getTaxons(List<Taxon> taxons) {
         if (taxons.stream().noneMatch(Objects::nonNull)) {
             return null;
         }
         List<Long> ids = taxons.stream().filter(Objects::nonNull).map(Taxon::getId).filter(Objects::nonNull).collect(Collectors.toList());
         return taxonService.getTaxonById(ids);
-    }
-
-    private void setInstitutions(UserProfile userProfile, User dbUser) {
-        dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
     }
 
     private List<InstitutionEhis> getInstitutionEhis(List<InstitutionEhis> institutions) {

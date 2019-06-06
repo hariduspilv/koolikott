@@ -67,13 +67,13 @@ public class MaterialResource extends BaseResource {
 
     @GetMapping("getBySource")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public List<Material> getMaterialsByUrl(@RequestParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+    public List<Material> getMaterialsByUrl(@RequestParam("source") String materialSource) throws UnsupportedEncodingException {
         return materialGetter.getBySource(decode(materialSource), GetMaterialStrategy.ONLY_EXISTING);
     }
 
     @GetMapping("getOneBySource")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public Material getMaterialByUrl(@RequestParam("source") @Encoded String materialSource) throws UnsupportedEncodingException {
+    public Material getMaterialByUrl(@RequestParam("source") String materialSource) throws UnsupportedEncodingException {
         return materialGetter.getAnyBySource(decode(materialSource), GetMaterialStrategy.INCLUDE_DELETED);
     }
 
