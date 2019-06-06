@@ -86,7 +86,7 @@ module.exports = function (grunt) {
                 //local
                 {context: '/rest', host: 'localhost', port: 8080},
                 //local-spring
-                //  {context: '/rest', host: 'localhost', port: 8100}
+                 {context: '/rest', host: 'localhost', port: 8100}
             ],
             livereload: {
                 options: {

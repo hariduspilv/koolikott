@@ -37,6 +37,7 @@
             })
                 .then((e) => {
                     if (!e) {
+                        this.$scope.originalPortfolio = this.portfolio;
                         this.showlogselect = false;
                         this.$scope.selectedPortfolioLog = undefined;
                         this.$rootScope.$broadcast('portfolioHistory:hide');
