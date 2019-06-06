@@ -26,7 +26,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
-import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
 
 @Service
 @Transactional
@@ -79,26 +78,17 @@ public class UserProfileService {
     public UserProfile getUserProfile(User loggedInUser) {
         User user = userDao.findUserById(loggedInUser.getId());
         UserProfile userProfile = userProfileDao.findByUser(user);
+        UserProfile newUserProfile = new UserProfile();
         UserEmail userEmail = userEmailDao.findByUser(user);
         if (userProfile == null && userEmail == null) {
             throw badRequest("No profile found");
         }
 
         if (userProfile == null) {
-            userProfile = new UserProfile();
-            userProfile.setUser(user);
+            return setNewUserParameters(user, newUserProfile, userEmail);
         }
 
-        if (isNotEmpty(user.getInstitutions())) {
-            userProfile.setInstitutions(user.getInstitutions());
-        }
-        if (isNotEmpty(user.getTaxons())) {
-            userProfile.setTaxons(user.getTaxons());
-        }
-        if (userEmail.getEmail() != null) {
-            userProfile.setEmail(userEmail.getEmail());
-        }
-        return userProfile;
+        return setExistingUserParameters(user, userProfile, userEmail);
     }
 
     private void createUserEmail(User user, UserProfile userProfile) {
@@ -132,8 +122,22 @@ public class UserProfileService {
                 dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
             userDao.createOrUpdate(dbUser);
         } else {
-            throw  badRequest("User not found");
+            throw badRequest("User not found");
         }
+    }
+
+    private UserProfile setNewUserParameters(User user, UserProfile newUserProfile, UserEmail userEmail) {
+        newUserProfile.setUser(user);
+        newUserProfile.setEmail(userEmail.getEmail());
+        return newUserProfile;
+    }
+
+    private UserProfile setExistingUserParameters(User user, UserProfile userProfile, UserEmail userEmail) {
+        userProfile.setUser(user);
+        userProfile.setInstitutions(user.getInstitutions());
+        userProfile.setTaxons(user.getTaxons());
+        userProfile.setEmail(userEmail.getEmail());
+        return userProfile;
     }
 
     private List<Taxon> getTaxons(List<Taxon> taxons) {
