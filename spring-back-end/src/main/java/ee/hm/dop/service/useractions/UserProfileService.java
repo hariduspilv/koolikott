@@ -119,14 +119,17 @@ public class UserProfileService {
         if (dbUser != null) {
             if (userProfile.getRole() != null) {
                 if (userProfile.getRole().needsInstitutions()) {
-                    dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
+                    if (userProfile.getInstitutions() != null) {
+                        dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
+                    }
                 } else {
                     dbUser.setInstitutions(null);
                 }
             } else {
                 dbUser.setInstitutions(null);
             }
-            dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
+            if (userProfile.getTaxons() != null)
+                dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
             userDao.createOrUpdate(dbUser);
         } else {
             throw  badRequest("User not found");
