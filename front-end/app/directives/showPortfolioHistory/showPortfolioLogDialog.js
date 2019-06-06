@@ -7,7 +7,7 @@
             this.setDialogInformation();
         }
 
-        cancell() {
+        cancel() {
             this.$mdDialog.hide(event);
             return event;
         }

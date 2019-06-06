@@ -25,6 +25,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
+import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 @Service
 @Transactional
@@ -85,10 +86,10 @@ public class UserProfileService {
             userProfile.setUser(user);
         }
 
-        if (!user.getInstitutions().isEmpty() || user.getInstitutions() != null) {
+        if (isEmpty(user.getInstitutions())) {
             userProfile.setInstitutions(user.getInstitutions());
         }
-        if (user.getTaxons() != null) {
+        if (isEmpty(user.getTaxons())) {
             userProfile.setTaxons(user.getTaxons());
         }
         if (userEmail.getEmail() != null) {

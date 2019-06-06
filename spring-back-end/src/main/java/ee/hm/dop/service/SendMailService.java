@@ -46,15 +46,13 @@ public class SendMailService {
     }
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
-        List<AttachmentResource> collect = new ArrayList<>();
-        collect = getAttachmentResources(customerSupport, collect);
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("e-Koolikott: " + customerSupport.getSubject())
                 .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
                         "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
-                .withAttachments(collect)
+                .withAttachments(getAttachmentResources(customerSupport, new ArrayList<>()))
                 .buildEmail();
     }
 
