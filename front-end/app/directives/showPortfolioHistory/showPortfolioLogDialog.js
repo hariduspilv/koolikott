@@ -22,10 +22,13 @@
                     if (data) {
                         this.$scope.showLogSelect = false;
                         this.$mdDialog.hide();
-                        this.toastService.show('PORTFOLIO_SAVED')
+                        this.toastService.show('PORTFOLIO_SAVED');
+                        this.$rootScope.$broadcast('portfolioHistory:hide');
                     }
                 })
-                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED', 15000))
+                .catch(() => {
+                    this.toastService.show('PORTFOLIO_SAVE_FAILED', 15000);
+                })
         }
 
         setDialogInformation() {
@@ -39,6 +42,7 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
         '$mdDialog',
         'serverCallService',
         'toastService',
