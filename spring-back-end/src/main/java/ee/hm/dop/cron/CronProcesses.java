@@ -2,37 +2,25 @@ package ee.hm.dop.cron;
 
 import ee.hm.dop.config.cronExecutorsProperties.*;
 import ee.hm.dop.service.synchronizer.*;
+import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
-
 @Service
+@AllArgsConstructor
 public class CronProcesses {
 
-    @Inject
     private EhisInstitutionProperties ehisInstitutionProperties;
-    @Inject
     private MaterialSyncProperties materialSyncProperties;
-    @Inject
     private AcceptReviewableChangeProperties acceptReviewableChangeProperties;
-    @Inject
     private AuthenticatedUserCleanerProperties authenticatedUserCleanerProperties;
-    @Inject
     private AuthenticationStateCleanerProperties authenticationStateCleanerProperties;
-    @Inject
     private PortfolioLogCleanerProperties portfolioLogCleanerProperties;
-    @Inject
     private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
-    @Inject
     private AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
-    @Inject
     private AuthenticationStateCleaner authenticationStateCleaner;
-    @Inject
     private AuthenticatedUserCleaner authenticatedUserCleaner;
-    @Inject
     private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
-    @Inject
     private PortfolioLogCleaner portfolioLogCleaner;
 
     @Scheduled(cron = "${cron.materialSync.scheduledTime}")
