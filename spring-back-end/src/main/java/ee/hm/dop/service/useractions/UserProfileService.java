@@ -75,11 +75,11 @@ public class UserProfileService {
     public UserProfile getUserProfile(User loggedInUser) {
         User user = userDao.findUserById(loggedInUser.getId());
         UserProfile userProfile = userProfileDao.findByUser(user);
-        if (userProfile == null)
-            throw badRequest("No profile found");
-
         UserEmail userEmail = userEmailDao.findByUser(user);
-        userProfile.setInstitutions(user.getInstitutions());
+        if (userProfile == null && userEmail == null) {
+            throw badRequest("No profile found");
+        }
+        Objects.requireNonNull(userProfile).setInstitutions(user.getInstitutions());
         userProfile.setTaxons(user.getTaxons());
         userProfile.setEmail(userEmail.getEmail());
         return  userProfile;

@@ -79,16 +79,29 @@
             this.$scope.userProfile.email = this.$scope.userEmail;
             this.$scope.isSaving = true;
             this.userEmailService.checkDuplicateEmailForProfile(this.$scope.userEmail)
-                .then(response => {
+                .then( response => {
                     if (response.status === 200) {
-                        this.showEmailValidationModal();
+                        this.serverCallService.makePost('rest/userProfile', this.$scope.userProfile)
+                            .then( response => {
+                                this.$scope.isSaving = false;
+                                if (response.status === 201) {
+                                    this.showEmailValidationModal()
+                                } else if (response.status === 200) {
+                                    this.toastService.show('USER_PROFILE_UPDATED')
+                                }
+                            })
+                            .catch( (e) => {
+                                this.$scope.isSaving = false;
+                                console.log(e)
+                                this.toastService.show('USER_PROFILE_UPDATE_FAILED')
+                            })
                     }
                 })
-                .catch(() => {
+                .catch( () => {
                     this.$scope.isSaving = false;
                     this.$scope.userProfileForm.email.$setValidity('validationError', false);
                     this.toastService.show('USER_PROFILE_UPDATE_FAILED')
-                });
+                })
         }
 
         saveUserProfile() {
