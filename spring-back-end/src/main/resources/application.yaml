@@ -24,6 +24,10 @@ spring:
   jackson:
     deserialization:
       fail-on-unknown-properties: false
+  http:
+    encoding:
+      enabled: true
+      charset: UTF-8
 
 search:
   server: http://localhost:8983/solr/dop/

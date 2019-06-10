@@ -1,12 +1,12 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.config.security.DopPrincipal;
 import ee.hm.dop.config.security.DopUserDetails;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.ConfigurationProperties;
 import lombok.extern.slf4j.Slf4j;
-import ee.hm.dop.config.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.server.ResponseStatusException;
@@ -14,9 +14,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.Response;
 import java.io.UnsupportedEncodingException;
-import java.net.URI;
 import java.net.URLDecoder;
 
 @Slf4j
@@ -48,10 +46,6 @@ public class BaseResource {
         return URLDecoder.decode(string, UTF_8);
     }
 
-    protected Response redirect(URI authenticationUri) {
-        return Response.temporaryRedirect(authenticationUri).build();
-    }
-
     protected HttpServletRequest getRequest() {
         return request;
     }
@@ -62,6 +56,10 @@ public class BaseResource {
 
     public ResponseStatusException badRequest(String message) {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
+    }
+
+    public ResponseStatusException forbidden(String message) {
+        return new ResponseStatusException(HttpStatus.FORBIDDEN, message);
     }
 
     public ResponseStatusException notFound() {

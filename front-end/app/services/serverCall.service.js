@@ -23,12 +23,12 @@ class controller extends Controller {
             return this.$http(config).catch(response => {
                 switch (response.status) {
                     case 419:
-                        this.authenticatedUserService.removeAuthenticatedUser()
-                        break
-                    case 401:
                         if (window.location.hostname === 'spring.oxygen.netgroupdigital.com'){
                             this.authenticatedUserService.removeAuthenticatedUser()
                         }
+                        break
+                    case 401:
+                        this.authenticatedUserService.removeAuthenticatedUser()
                     case 403:
                         this.$location.url('/')
                 }

@@ -25,10 +25,6 @@ import org.springframework.web.servlet.view.RedirectView;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
 import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -110,15 +106,13 @@ public class LoginResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("harid")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response haridAuthenticate() throws URISyntaxException {
-        return redirect(getHaridAuthenticationURI());
+    public RedirectView haridAuthenticate() throws URISyntaxException {
+        return new RedirectView(getHaridAuthenticationURI().toString());
     }
 
     @GetMapping
     @RequestMapping("harid/success")
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response haridAuthenticateSuccess(@QueryParam("code") String code) throws URISyntaxException {
+    public RedirectView haridAuthenticateSuccess(@RequestParam(value = "code", required = false) String code) throws URISyntaxException {
         return code != null ? authenticateWithHaridToken(code) : redirectToHarid();
     }
 
@@ -163,16 +157,16 @@ public class LoginResource extends BaseResource {
         return getServerAddress() + EKOOL_CALLBACK_PATH;
     }
 
-    private Response redirectToHarid() throws URISyntaxException {
-        return redirect(getHaridAuthenticationURI());
+    private RedirectView redirectToHarid() throws URISyntaxException {
+        return new RedirectView(getHaridAuthenticationURI().toString());
     }
 
     private URI getHaridAuthenticationURI() throws URISyntaxException {
         return new URI(format(HARID_AUTHENTICATION_URL, haridService.getAuthorizationUrl(), haridService.getClientId(), getHaridCallbackUrl()));
     }
 
-    private Response authenticateWithHaridToken(String token) throws URISyntaxException {
-        return redirect(getHaridLocation(token));
+    private RedirectView authenticateWithHaridToken(String token) throws URISyntaxException {
+        return new RedirectView(getHaridLocation(token).toString());
     }
 
     private String getHaridCallbackUrl() {

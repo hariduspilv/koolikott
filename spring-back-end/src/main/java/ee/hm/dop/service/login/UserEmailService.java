@@ -4,14 +4,15 @@ import ee.hm.dop.dao.*;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQuerySentEmails;
+import ee.hm.dop.service.MailBuilder;
 import ee.hm.dop.service.PinGeneratorService;
-import ee.hm.dop.service.SendMailService;
+import ee.hm.dop.service.MailSender;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,7 +33,9 @@ public class UserEmailService {
     @Inject
     private UserDao userDao;
     @Inject
-    private SendMailService sendMailService;
+    private MailSender mailSender;
+    @Inject
+    private MailBuilder mailBuilder;
     @Inject
     private EmailToCreatorDao emailToCreatorDao;
     @Inject
@@ -48,7 +51,8 @@ public class UserEmailService {
         if (userEmail == null) {
             throw notFound("User email not found");
         }
-        return userEmail;
+        else
+            return userEmail;
     }
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
@@ -70,7 +74,7 @@ public class UserEmailService {
         emailToCreator.setSentTries(0);
         emailToCreator.setSender(userSender);
 
-        if (sendMailService.sendEmail(sendMailService.sendEmailToCreator(emailToCreator))) {
+        if (mailSender.sendEmail(mailBuilder.sendEmailToCreator(emailToCreator))) {
             emailToCreator.setSentAt(LocalDateTime.now());
             emailToCreator.setSentSuccessfully(true);
             emailToCreator.setSentTries(1);
@@ -80,7 +84,7 @@ public class UserEmailService {
             emailToCreator.setSentTries(2);
             emailToCreator.setSentAt(LocalDateTime.now());
             emailToCreator.setErrorMessage("Failed to send email to creator");
-            if (!sendMailService.sendEmail(sendMailService.sendEmailToSupportWhenSendEmailToCreatorFailed(emailToCreator))) {
+            if (!mailSender.sendEmail(mailBuilder.sendEmailToSupportWhenSendEmailToCreatorFailed(emailToCreator))) {
                 emailToCreator.setErrorMessage("Failed to send email to creator");
                 emailToCreator.setSentTries(3);
             }
@@ -92,8 +96,14 @@ public class UserEmailService {
         if (user == null)
             throw badRequest("User is null, can't find e-mail of null");
 
-        return userEmailDao.findByUser(user).getEmail();
-
+        if (userEmailDao.findByUser(user) != null) {
+            if (userEmailDao.findByUser(user).getEmail() == null)
+                throw badRequest("Useremail is null, can't find e-mail");
+            else
+                return userEmailDao.findByUser(user).getEmail();
+        } else {
+            throw badRequest("Useremail is null, can't find e-mail");
+        }
     }
 
     public UserEmail save(UserEmail userEmail) {
@@ -169,7 +179,7 @@ public class UserEmailService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, email));
+        mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail, email));
         userEmail.setEmail("");
         return userEmail;
     }
@@ -180,7 +190,7 @@ public class UserEmailService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setPin(PinGeneratorService.generatePin());
-        sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail));
+        mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail));
         userEmail.setEmail("");
         return userEmail;
     }
@@ -193,16 +203,16 @@ public class UserEmailService {
         }
     }
 
-    private WebApplicationException forbidden(String s) {
-        return new WebApplicationException(s, Response.Status.FORBIDDEN);
+    private ResponseStatusException forbidden(String s) {
+        return new ResponseStatusException(HttpStatus.FORBIDDEN, s);
     }
 
-    private WebApplicationException badRequest(String s) {
-        return new WebApplicationException(s, Response.Status.BAD_REQUEST);
+    private ResponseStatusException badRequest(String s) {
+        return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
     }
 
-    private WebApplicationException notFound(String s) {
-        return new WebApplicationException(s, Response.Status.NOT_FOUND);
+    private ResponseStatusException notFound(String s) {
+        return new ResponseStatusException(HttpStatus.NOT_FOUND, s);
     }
 
     public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {

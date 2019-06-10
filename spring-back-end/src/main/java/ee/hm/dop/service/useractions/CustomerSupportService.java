@@ -3,7 +3,8 @@ package ee.hm.dop.service.useractions;
 import ee.hm.dop.dao.CustomerSupportDao;
 import ee.hm.dop.model.CustomerSupport;
 import ee.hm.dop.model.User;
-import ee.hm.dop.service.SendMailService;
+import ee.hm.dop.service.MailBuilder;
+import ee.hm.dop.service.MailSender;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 
@@ -25,9 +26,10 @@ public class CustomerSupportService {
 
     @Inject
     private CustomerSupportDao customerSupportDao;
-
     @Inject
-    private SendMailService sendMailService;
+    private MailSender mailSender;
+    @Inject
+    private MailBuilder mailBuilder;
 
     public CustomerSupport save(CustomerSupport customerSupport, User user) {
 
@@ -40,8 +42,8 @@ public class CustomerSupportService {
         customerSupport.setUser(user);
         customerSupport.setSentTries(0);
 
-        if (sendMailService.sendEmail(sendMailService.composeEmailToUser(customerSupport))) {
-            sendMailService.sendEmail(sendMailService.composeEmailToSupport(customerSupport));
+        if (mailSender.sendEmail(mailBuilder.composeEmailToUser(customerSupport))) {
+            mailSender.sendEmail(mailBuilder.composeEmailToSupport(customerSupport));
             customerSupport.setSentAt(LocalDateTime.now());
             customerSupport.setSentSuccessfully(true);
             customerSupport.setSentTries(1);
@@ -50,7 +52,7 @@ public class CustomerSupportService {
             customerSupport.setSentTries(2);
             customerSupport.setSentAt(LocalDateTime.now());
             customerSupport.setErrorMessage("Failed to send mail to user");
-            if (!sendMailService.sendEmail(sendMailService.composeEmailToSupportWhenSendFailed(customerSupport))) {
+            if (!mailSender.sendEmail(mailBuilder.composeEmailToSupportWhenSendFailed(customerSupport))) {
                 customerSupport.setErrorMessage("Failed to send email to HITSA support");
                 customerSupport.setSentTries(3);
             }

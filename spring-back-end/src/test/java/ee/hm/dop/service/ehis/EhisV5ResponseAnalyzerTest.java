@@ -31,7 +31,7 @@ public class EhisV5ResponseAnalyzerTest extends DatabaseTestBase {
         return factory.createMessage(new MimeHeaders(), new ByteArrayInputStream(xml.getBytes(Charset.forName("UTF-8"))));
     }
 
-    public static String user = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><isik>\n" +
+    public final static String  user = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><isik>\n" +
             "                    <isikukood>45805217556</isikukood>\n" +
             "                    <eesnimi>EN_134163</eesnimi>\n" +
             "                    <perenimi>PN_134163</perenimi>\n" +
@@ -52,7 +52,7 @@ public class EhisV5ResponseAnalyzerTest extends DatabaseTestBase {
             "                    </oppeasutused>\n" +
             "                </isik>" ;
 
-    public static String role_response = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+    public final static String role_response = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
             "    <soapenv:Header>\n" +
             "                  <xtee:asutus xmlns:xtee=\"http://x-tee.riik.ee/xsd/xtee.xsd\"\n" +
             "                     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +
@@ -99,7 +99,7 @@ public class EhisV5ResponseAnalyzerTest extends DatabaseTestBase {
             "    </soapenv:Body>\n" +
             "</soapenv:Envelope>";
 
-    public static String fail_response = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
+    public final static String fail_response = "<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\">\n" +
             "    <soapenv:Header>\n" +
             "                  <xtee:asutus xmlns:xtee=\"http://x-tee.riik.ee/xsd/xtee.xsd\"\n" +
             "                     xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\"\n" +

@@ -1,7 +1,9 @@
 package ee.hm.dop.model.stuudium;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class StuudiumUser {
 
     @JsonProperty("idcode")

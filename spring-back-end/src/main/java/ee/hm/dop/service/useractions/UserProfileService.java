@@ -8,8 +8,9 @@ import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.model.UserProfile;
 import ee.hm.dop.model.ehis.InstitutionEhis;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.MailBuilder;
 import ee.hm.dop.service.PinGeneratorService;
-import ee.hm.dop.service.SendMailService;
+import ee.hm.dop.service.MailSender;
 import ee.hm.dop.service.ehis.EhisInstitutionService;
 import ee.hm.dop.service.metadata.TaxonService;
 import org.springframework.http.HttpStatus;
@@ -37,7 +38,9 @@ public class UserProfileService {
     @Inject
     private UserEmailDao userEmailDao;
     @Inject
-    private SendMailService sendMailService;
+    private MailSender mailSender;
+    @Inject
+    private MailBuilder mailBuilder;
     @Inject
     private EhisInstitutionService ehisInstitutionService;
     @Inject
@@ -50,7 +53,7 @@ public class UserProfileService {
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
         if (dbUserEmail != null && dbUserEmail.getEmail() != null && !dbUserEmail.getEmail().equals(validateEmail(userProfile.getEmail()))) {
             dbUserEmail.setPin(PinGeneratorService.generatePin());
-            sendMailService.sendEmail(sendMailService.sendPinToUser(dbUserEmail, userProfile.getEmail()));
+            mailSender.sendEmail(mailBuilder.sendPinToUser(dbUserEmail, userProfile.getEmail()));
             userEmailDao.createOrUpdate(dbUserEmail);
             response = ResponseEntity.status(HttpStatus.CREATED).build();
         } else if (dbUserEmail == null ){
@@ -75,12 +78,17 @@ public class UserProfileService {
     public UserProfile getUserProfile(User loggedInUser) {
         User user = userDao.findUserById(loggedInUser.getId());
         UserProfile userProfile = userProfileDao.findByUser(user);
-        if (userProfile == null)
-            return null;
+        UserProfile newUserProfile = new UserProfile();
+        UserEmail userEmail = userEmailDao.findByUser(user);
+        if (userProfile == null && userEmail == null) {
+            throw badRequest("No profile found");
+        }
 
-        userProfile.setInstitutions(user.getInstitutions());
-        userProfile.setTaxons(user.getTaxons());
-        return userProfile;
+        if (userProfile == null) {
+            return setNewUserParameters(user, newUserProfile, userEmail);
+        }
+
+        return setExistingUserParameters(user, userProfile, userEmail);
     }
 
     private void createUserEmail(User user, UserProfile userProfile) {
@@ -91,8 +99,9 @@ public class UserProfileService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setEmail(null);
-        if (sendMailService.sendEmail(sendMailService.sendPinToUser(userEmail, userProfile.getEmail())));
+        if (mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail, userProfile.getEmail()))){
             userEmailDao.createOrUpdate(userEmail);
+        }
     }
 
     private void updateUser(UserProfile userProfile, User user) {
@@ -100,22 +109,35 @@ public class UserProfileService {
         if (dbUser != null) {
             if (userProfile.getRole() != null) {
                 if (userProfile.getRole().needsInstitutions()) {
-                    dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
+                    if (userProfile.getInstitutions() != null) {
+                        dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
+                    }
                 } else {
                     dbUser.setInstitutions(null);
                 }
             } else {
                 dbUser.setInstitutions(null);
             }
-            dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
+            if (userProfile.getTaxons() != null)
+                dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
             userDao.createOrUpdate(dbUser);
         } else {
             throw badRequest("User not found");
         }
     }
 
-    private void setTaxons(UserProfile userProfile, User dbUser) {
-        dbUser.setTaxons(getTaxons(userProfile.getTaxons()));
+    private UserProfile setNewUserParameters(User user, UserProfile newUserProfile, UserEmail userEmail) {
+        newUserProfile.setUser(user);
+        newUserProfile.setEmail(userEmail.getEmail());
+        return newUserProfile;
+    }
+
+    private UserProfile setExistingUserParameters(User user, UserProfile userProfile, UserEmail userEmail) {
+        userProfile.setUser(user);
+        userProfile.setInstitutions(user.getInstitutions());
+        userProfile.setTaxons(user.getTaxons());
+        userProfile.setEmail(userEmail.getEmail());
+        return userProfile;
     }
 
     private List<Taxon> getTaxons(List<Taxon> taxons) {
@@ -124,10 +146,6 @@ public class UserProfileService {
         }
         List<Long> ids = taxons.stream().filter(Objects::nonNull).map(Taxon::getId).filter(Objects::nonNull).collect(Collectors.toList());
         return taxonService.getTaxonById(ids);
-    }
-
-    private void setInstitutions(UserProfile userProfile, User dbUser) {
-        dbUser.setInstitutions(getInstitutionEhis(userProfile.getInstitutions()));
     }
 
     private List<InstitutionEhis> getInstitutionEhis(List<InstitutionEhis> institutions) {

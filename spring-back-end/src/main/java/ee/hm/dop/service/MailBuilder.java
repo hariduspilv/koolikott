@@ -1,17 +1,14 @@
 package ee.hm.dop.service;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.AttachedFile;
 import ee.hm.dop.model.CustomerSupport;
 import ee.hm.dop.model.EmailToCreator;
 import ee.hm.dop.model.UserEmail;
 import ee.hm.dop.utils.DateUtils;
-import ee.hm.dop.config.Configuration;
-import org.simplejavamail.MailException;
 import org.simplejavamail.email.AttachmentResource;
 import org.simplejavamail.email.Email;
 import org.simplejavamail.email.EmailBuilder;
-import org.simplejavamail.mailer.MailerBuilder;
-import org.simplejavamail.mailer.config.TransportStrategy;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -23,16 +20,17 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static ee.hm.dop.utils.ConfigurationProperties.EMAIL_ADDRESS;
+import static ee.hm.dop.utils.ConfigurationProperties.EMAIL_NO_REPLY_ADDRESS;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
 @Service
-public class SendMailService {
+public class MailBuilder {
 
     @Inject
     private Configuration configuration;
 
-    private static final Logger logger = LoggerFactory.getLogger(SendMailService.class);
+    private static final Logger logger = LoggerFactory.getLogger(MailSender.class);
     private static final String BREAK = "<br/>";
 
     public Email composeEmailToUser(CustomerSupport customerSupport) {
@@ -46,26 +44,24 @@ public class SendMailService {
     }
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
-        List<AttachmentResource> collect = new ArrayList<>();
-        collect = getAttachmentResources(customerSupport, collect);
         return EmailBuilder.startingBlank()
                 .from("e-Koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("e-Koolikott: " + customerSupport.getSubject())
                 .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
                         "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
-                .withAttachments(collect)
+                .withAttachments(getAttachmentResources(customerSupport))
                 .buildEmail();
     }
 
-    private List<AttachmentResource> getAttachmentResources(CustomerSupport customerSupport, List<AttachmentResource> collect) {
-        if (customerSupport.getFiles() != null) {
-            collect = customerSupport.getFiles().stream()
-                    .map(a -> decodeAttachment(a))
-                    .filter(Objects::nonNull)
-                    .collect(Collectors.toList());
+    private List<AttachmentResource> getAttachmentResources(CustomerSupport customerSupport) {
+        if (customerSupport.getFiles() == null) {
+            return new ArrayList<>();
         }
-        return collect;
+        return customerSupport.getFiles().stream()
+                .map(a -> decodeAttachment(a))
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
     }
 
     private AttachmentResource decodeAttachment(AttachedFile a) {
@@ -90,22 +86,6 @@ public class SendMailService {
                         + "Sisuga: " + customerSupport.getMessage() + BREAK
                         + "Pöördumine saadeti: " + DateUtils.toStringWithoutMillis(customerSupport.getSentAt()))
                 .buildEmail();
-    }
-
-    public boolean sendEmail(Email email) {
-        try {
-            MailerBuilder
-                    .withSMTPServer(configuration.getString(EMAIL_HOST), configuration.getInt(EMAIL_PORT), configuration.getString(EMAIL_USERNAME), configuration.getString(EMAIL_PASSWORD))
-                    .withTransportStrategy(TransportStrategy.valueOf(configuration.getString(EMAIL_TRANSPORT_STRATEGY)))
-                    .buildMailer()
-                    .sendMail(email);
-
-            return true;
-
-        } catch (MailException e) {
-            logger.info("Failed to send e-mail", e);
-            return false;
-        }
     }
 
     public Email sendPinToUser(UserEmail userEmail, UserEmail email) {

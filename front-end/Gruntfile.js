@@ -80,13 +80,13 @@ module.exports = function (grunt) {
                 //test
                 // {context: '/rest', host: 'test.oxygen.netgroupdigital.com', port: 8090},
                 //spring
-                // {context: '/rest', host: 'spring.oxygen.netgroupdigital.com', port: 8100},
+                // {context: '/rest', host: 'oxygen.netgroupdigital.com', port: 8100},
                 //clienttest
                 // {context: '/rest', host: 'dop.hm.ee', port: 8080},
                 //local
-                {context: '/rest', host: 'localhost', port: 8080},
+                // {context: '/rest', host: 'localhost', port: 8080},
                 //local-spring
-                //  {context: '/rest', host: 'localhost', port: 8100}
+                 {context: '/rest', host: 'localhost', port: 8100}
             ],
             livereload: {
                 options: {

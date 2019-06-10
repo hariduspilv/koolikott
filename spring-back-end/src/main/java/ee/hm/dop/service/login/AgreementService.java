@@ -3,17 +3,13 @@ package ee.hm.dop.service.login;
 import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.model.Agreement;
 import ee.hm.dop.model.User;
-
-import java.time.LocalDateTime;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 

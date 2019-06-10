@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.core.MediaType;
 
 @RestController
 @RequestMapping("impropers")
@@ -22,7 +20,6 @@ public class ImproperContentResource extends BaseResource {
     private ImproperContentService improperContentService;
 
     @PutMapping
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public ImproperContent setImproper(@RequestBody ImproperContent improperContent) {
         return improperContentService.save(improperContent, getLoggedInUser(), improperContent.getLearningObject());
@@ -30,7 +27,6 @@ public class ImproperContentResource extends BaseResource {
 
     @PutMapping
     @RequestMapping("setImproper")
-    @Consumes(MediaType.APPLICATION_JSON)
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public ImproperContent setImproper2(@RequestBody ImproperContentForm form) {
         return improperContentService.save(form.getImproperContent(), getLoggedInUser(), form.getLearningObject());

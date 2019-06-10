@@ -24,14 +24,6 @@ cron:
   portfolioLogStateCleaner:
     scheduledTime: 0 0 6 * * ?
     enabled: true
-taat:
-  sso: https://reos.taat.edu.ee/saml2/idp/SSOService.php
-  connectionId: https://oxygen.netgroupdigital.com/sp
-  assertionConsumerServiceIndex: 0
-
-  metadata:
-    filepath: reos_metadata.xml
-    entityID: https://reos.taat.edu.ee/saml2/idp/metadata.php
 
 keystore:
   filename: server.keystore
@@ -186,3 +178,6 @@ email:
 
 captcha:
   key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
+
+app:
+  devLogin: true

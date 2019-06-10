@@ -2,18 +2,19 @@ package ee.hm.dop.utils;
 
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 
 public class DateUtils {
 
-    public  static java.time.format.DateTimeFormatter formatter = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
+    public static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
             .withZone(ZoneId.of("UTC"));
 
 
-    public  static java.time.format.DateTimeFormatter formatterWithoutMillis = java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+    public static final DateTimeFormatter formatterWithoutMillis = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
             .withZone(ZoneId.of("UTC"));
 
 
-    public  static java.time.format.DateTimeFormatter ddMMyyyy_formatter = java.time.format.DateTimeFormatter.ofPattern("dd.MM.yyyy");
+    public static final DateTimeFormatter ddMMyyyy_formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
 
     public static String toString_ddMMyyyy(LocalDateTime dateTime) {
         return dateTime != null ? dateTime.format(ddMMyyyy_formatter) : "";

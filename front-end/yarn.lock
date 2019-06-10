@@ -1666,9 +1666,9 @@ d@~0.1.1:
   dependencies:
     es5-ext "~0.10.2"
 
-"dargs@git+https://github.com/christian-bromann/dargs":
+dargs@christian-bromann/dargs:
   version "4.0.1"
-  resolved "git+https://github.com/christian-bromann/dargs#7d6d4164a7c4106dbd14ef39ed8d95b7b5e9b770"
+  resolved "https://codeload.github.com/christian-bromann/dargs/tar.gz/7d6d4164a7c4106dbd14ef39ed8d95b7b5e9b770"
   dependencies:
     number-is-nan "^1.0.0"
 
@@ -2047,6 +2047,11 @@ es6-iterator@~2.0.3:
 es6-promise@^4.0.5:
   version "4.2.5"
   resolved "https://registry.yarnpkg.com/es6-promise/-/es6-promise-4.2.5.tgz#da6d0d5692efb461e082c14817fe2427d8f5d054"
+
+es6-shim@^0.35.4:
+  version "0.35.5"
+  resolved "https://registry.yarnpkg.com/es6-shim/-/es6-shim-0.35.5.tgz#46f59dc0a84a1c5029e8ff1166ca0a902077a9ab"
+  integrity sha512-E9kK/bjtCQRpN1K28Xh4BlmP8egvZBGJJ+9GtnzOwt7mdqtrjHFuVGr7QJfdjBIKqrlU5duPf3pCBoDrkjVYFg==
 
 es6-symbol@^3.1.1, es6-symbol@~3.1.1:
   version "3.1.1"

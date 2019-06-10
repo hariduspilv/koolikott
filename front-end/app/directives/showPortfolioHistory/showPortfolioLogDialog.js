@@ -4,12 +4,12 @@
     class controller extends Controller {
         constructor(...args) {
             super(...args)
-
             this.setDialogInformation();
+        }
 
-            this.$scope.cancel = () => {
-                this.$mdDialog.hide()
-            }
+        cancel() {
+            this.$mdDialog.hide(event);
+            return event;
         }
 
         setPortfolioHistoryToRestore() {
@@ -22,14 +22,13 @@
                     if (data) {
                         this.$scope.showLogSelect = false;
                         this.$mdDialog.hide();
-                        this.toastService.show('PORTFOLIO_SAVED')
+                        this.toastService.show('PORTFOLIO_SAVED');
+                        this.$rootScope.$broadcast('portfolioHistory:hide');
                     }
                 })
-                .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
-        }
-
-        hide() {
-            return false;
+                .catch(() => {
+                    this.toastService.show('PORTFOLIO_SAVE_FAILED', 15000);
+                })
         }
 
         setDialogInformation() {
@@ -43,6 +42,7 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
         '$mdDialog',
         'serverCallService',
         'toastService',
