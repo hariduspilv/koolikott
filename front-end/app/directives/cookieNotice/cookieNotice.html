@@ -1,4 +1,56 @@
-<div class="cookie-notice" data-ng-if="!hasCookie" layout="row" layout-align="space-between center">
+<div class="cookie-notice" data-ng-if="!hasCookie || isAdmin" layout="row" layout-align="space-between center">
   <span data-translate="COOKIE_AGREEMENT"></span>
-  <md-button class="md-raised md-primary" data-ng-click="$ctrl.saveUserCookie()"><span data-translate="COOKIE_AGREE"></span></md-button>
+  <md-button class="md-raised md-primary"
+             data-ng-click="$ctrl.saveUserCookie()">
+    <span data-translate="COOKIE_AGREE"></span>
+  </md-button>
+  <md-button class="md-button md-ink-ripple"
+             data-ng-if="$ctrl.isAdmin() && !editMode"
+             data-ng-click="$ctrl.editCookieNotice()">
+    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+    <md-tooltip><span data-translate="COOKIE_EDIT"></span></md-tooltip>
+  </md-button>
 </div>
+<form name="updateCookieNoticeForm" flex="100" class="flex flex-col" data-ng-if="iseditMode">
+  <md-dialog-content>
+    <div
+      layout="row"
+      layout-wrap>
+      <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
+           flex-order-gt-sm="2" flex="100">
+        <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+          <label data-translate="COOKIE_EDIT"></label>
+          <textarea
+            name="cookieText"
+            ng-model="cookieNotice">
+          </textarea>
+        </md-input-container>
+      </div>
+    </div>
+    <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
+         data-ng-if="iseditMode">
+      <md-button
+        aria-label="Cancel landing page edit"
+        id="landing-page-edit-cancel-button"
+        data-ng-click="$ctrl.cancelEdit()"
+      >
+        <span data-translate="BUTTON_CANCEL"></span>
+      </md-button>
+      <md-button
+        aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
+        class="md-primary"
+        data-ng-disabled="$ctrl.isSubmittEnabled()"
+        data-ng-click="$ctrl.save()"
+      >
+        <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
+        <md-icon>arrow_forward</md-icon>
+      </md-button>
+      <md-progress-circular
+        class="md-accent ng-hide"
+        md-mode="indeterminate"
+        md-diameter="40"
+        data-ng-show="isSaving"
+      ></md-progress-circular>
+    </div>
+  </md-dialog-content>
+</form>

@@ -7,6 +7,41 @@
             super(...args)
             this.$scope.hasCookie = false
             this.hasCookie()
+            this.$scope.cookieNotice = this.getTranslation('COOKIE_AGREEMENT');
+
+            this.$scope.isSubmittButtonEnabled = false;
+            this.$scope.isAgreed= false;
+
+            this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
+
+            this.$scope.$watch(() => this.$scope.cookieNotice, (selectedValue, previousValue) => {
+                if (selectedValue && (selectedValue !== previousValue)) {
+                    this.$scope.isSubmitButtonEnabled = true;
+                }
+            })
+        }
+
+        cancelEdit() {
+            this.$scope.iseditMode = false
+        }
+
+        save(){
+            this.$scope.isSaving = true;
+
+            this.serverCallService
+                .makePost('rest/translation/update', {notices: notices, descriptions: descriptions})
+                .then(response => {
+                    if (response.status === 204) {
+                        this.toastService.show('COOKIE_NOTICE_UPDATED')
+                        this.$scope.isSaving = false
+                        this.$scope.iseditMode = false
+                        // this.getNoticeAndTranslationString()
+                    }
+                })
+        }
+
+        isSubmittEnabled(){
+            return this.$scope.isSubmittButtonEnabled;
         }
 
         hasCookie() {
@@ -16,6 +51,10 @@
                 this.$scope.hasCookie = false
 
             return this.$scope.hasCookie;
+        }
+
+        getTranslation(key) {
+            return this.$filter('translate')(key)
         }
 
         backupFuncToGetUserIp() {
@@ -64,12 +103,22 @@
         getUserAgent() {
             return window.navigator.appVersion
         }
+
+        editCookieNotice() {
+            this.$scope.iseditMode = true
+        }
+
+        isAdmin() {
+            return this.authenticatedUserService.isAdmin()
+        }
     }
 
     controller.$inject = [
         'serverCallService',
         '$scope',
-        '$cookies'
+        '$cookies',
+        'authenticatedUserService',
+        '$filter'
     ]
     component('dopCookieNotice', {
         templateUrl: 'directives/cookieNotice/cookieNotice.html',
