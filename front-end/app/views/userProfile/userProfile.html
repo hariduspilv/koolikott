@@ -10,7 +10,7 @@
         <div data-layout="row" class="md-padding" data-ng-if="$root.userFirstLogin">
           <span data-translate="USER_PROFILE_FIRST_LOGIN_NOTICE"></span>
         </div>
-        <div data-layout="row" class="md-padding">
+        <div data-layout-gt-xs="row" data-layout="column" class="md-padding">
           <md-input-container class="md-block" flex-gt-xs>
             <label data-translate="USERNAME"></label>
             <input class="no-underline" value="{{user.username}}" disabled>
