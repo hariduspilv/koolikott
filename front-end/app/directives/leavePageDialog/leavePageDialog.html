@@ -1,0 +1,33 @@
+<md-dialog aria-label="Muudatuste salvestamise modaalaken" class="login-dialog">
+  <md-toolbar>
+    <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+      <div class="md-toolbar-tools" data-layout-align="space-between center">
+        <h2 data-translate="LEAVE_PAGE_DIALOG_HEADER"
+        ></h2>
+      </div>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <md-content data-layout-padding>
+      <p><span data-translate="LEAVE_PAGE_DIALOG_CONFIRMATION"></span></p>
+      <div id="location-restore-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
+        <md-button
+          id="location-restore-cancel-button"
+          class="md-raised md-secondary"
+          aria-label="Ei soovi"
+          data-ng-click="cancel()"
+        >
+          <span data-translate="LEAVE_PAGE_DIALOG_NO"></span>
+        </md-button>
+        <md-button
+          id="location-restore-accept-button"
+          class="md-raised md-primary"
+          aria-label="Jah soovin"
+          data-ng-click="agree()"
+        >
+          <span data-translate="LEAVE_PAGE_DIALOG_YES"></span>
+        </md-button>
+      </div>
+    </md-content>
+  </md-dialog-content>
+</md-dialog>

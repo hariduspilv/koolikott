@@ -5,6 +5,17 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
+        const listener = () => {
+            this.$mdDialog.show({
+                templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
+                controller: 'leavePageDialogController',
+                controllerAs: '$ctrl',
+            })
+            window.removeEventListener('popstate', listener, false)
+        };
+        history.pushState(null, document.title, location.href)
+        window.addEventListener('popstate', listener, false)
+
         const storedPortfolio = this.storageService.getPortfolio()
         storedPortfolio
             ? this.setPortfolio(storedPortfolio, true)
@@ -154,6 +165,7 @@ controller.$inject = [
     '$timeout',
     '$document',
     '$translate',
+    '$mdDialog',
     'authenticatedUserService',
     'dialogService',
     'serverCallService',
