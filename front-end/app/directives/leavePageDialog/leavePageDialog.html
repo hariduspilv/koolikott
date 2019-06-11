@@ -1,6 +1,6 @@
 <md-dialog aria-label="Muudatuste salvestamise modaalaken" class="login-dialog">
   <md-toolbar>
-    <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+    <div id="leavePageDialog" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
       <div class="md-toolbar-tools" data-layout-align="space-between center">
         <h2 data-translate="LEAVE_PAGE_DIALOG_HEADER"
         ></h2>
@@ -10,9 +10,9 @@
   <md-dialog-content>
     <md-content data-layout-padding>
       <p><span data-translate="LEAVE_PAGE_DIALOG_CONFIRMATION"></span></p>
-      <div id="location-restore-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
+      <div id="leavePageDialogButtons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
         <md-button
-          id="location-restore-cancel-button"
+          id="leavePageDialogCancelButton"
           class="md-raised md-secondary"
           aria-label="Ei soovi"
           data-ng-click="cancel()"
@@ -20,7 +20,7 @@
           <span data-translate="LEAVE_PAGE_DIALOG_NO"></span>
         </md-button>
         <md-button
-          id="location-restore-accept-button"
+          id="leavePageDialogAcceptButton"
           class="md-raised md-primary"
           aria-label="Jah soovin"
           data-ng-click="agree()"
