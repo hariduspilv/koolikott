@@ -329,8 +329,9 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
     };
 }]);
 
-app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', function ($rootScope, authenticatedUserService, $route, $location) {
+app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
+        $mdDialog.cancel()
         for (var i in $route.routes) {
             if (next.indexOf(i) !== -1) {
                 var permissions = $route.routes[i].permissions;
