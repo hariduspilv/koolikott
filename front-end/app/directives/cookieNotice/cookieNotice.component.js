@@ -7,41 +7,92 @@
             super(...args)
             this.$scope.hasCookie = false
             this.hasCookie()
-            this.$scope.cookieNotice = this.getTranslation('COOKIE_AGREEMENT');
+            this.isSubmittEnabled()
 
+            this.landingPageLanguages = ['ET', 'EN', 'RU'];
+            this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
+
+            this.$scope.currentLanguage = this.translationService.getLanguage();
+            this.$scope.iseditMode = false;
+            this.$scope.cookieNotice = {}
+            // this.$scope.cookieNotice.text = this.getTranslation('COOKIE_AGREEMENT');
+            this.getCookieNoticeTranslations();
             this.$scope.isSubmittButtonEnabled = false;
-            this.$scope.isAgreed= false;
 
             this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
 
-            this.$scope.$watch(() => this.$scope.cookieNotice, (selectedValue, previousValue) => {
+            this.$scope.isAgreed= false;
+
+            this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
                 if (selectedValue && (selectedValue !== previousValue)) {
-                    this.$scope.isSubmitButtonEnabled = true;
+                    this.$scope.isSubmittButtonEnabled = true;
+                    // this.isSubmittEnabled = () => this.$scope.isSubmittButtonEnabled = true;
                 }
             })
         }
 
+        getCookieNoticeTranslations() {
+            this.serverCallService.
+            makeGet('rest/translation/getTranslationForTranslationObject',
+                {
+                // translationKey: this.$scope.cookieNotice.translationKey,
+                translationKey: 'COOKIE_AGREEMENT',
+                // languageKey: this.$scope.currentLanguage,
+                languageKey: this.$scope.activeNoticeAndDescriptionLanguage,
+            })
+                .then((data) => {
+                    if (data)
+                        this.$scope.cookieNotice.text = data
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+        }
+
+        toggleNoticeAndDescriptionLanguageInputs(lang) {
+            this.$scope.activeNoticeAndDescriptionLanguage = lang
+            this.getCookieNoticeTranslations();
+        }
+
+        // isLangFilled(lang) {
+        //     let isFilled = false;
+        //
+        //     Object.keys(this.$scope.noticesAndDescriptions).forEach(key => {
+        //         if (lang === key && !!this.$scope.noticesAndDescriptions[key].description) {
+        //             isFilled = true;
+        //         }
+        //     });
+        //
+        //     return isFilled;
+        // }
+
         cancelEdit() {
             this.$scope.iseditMode = false
+            this.$scope.isSubmittButtonEnabled = false;
         }
 
         save(){
             this.$scope.isSaving = true;
-
+            this.$scope.cookieNotice.translationKey = 'COOKIE_AGREEMENT';
             this.serverCallService
-                .makePost('rest/translation/update', {notices: notices, descriptions: descriptions})
+                .makePost('rest/translation/updateTranslation',
+                    {
+                        translationKey: this.$scope.cookieNotice.translationKey,
+                        languageKey: this.$scope.currentLanguage,
+                        translation: this.$scope.cookieNotice.text
+                    })
                 .then(response => {
-                    if (response.status === 204) {
+                    if (response.status === 200) {
                         this.toastService.show('COOKIE_NOTICE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.iseditMode = false
-                        // this.getNoticeAndTranslationString()
+                        this.$scope.cookieNotice.text = () => this.getTranslation('COOKIE_AGREEMENT');
                     }
                 })
         }
 
         isSubmittEnabled(){
-            return this.$scope.isSubmittButtonEnabled;
+            return !this.$scope.isSubmittButtonEnabled;
         }
 
         hasCookie() {
@@ -105,6 +156,7 @@
         }
 
         editCookieNotice() {
+            this.$scope.cookieNotice.text = this.getTranslation('COOKIE_AGREEMENT');
             this.$scope.iseditMode = true
         }
 
@@ -114,11 +166,14 @@
     }
 
     controller.$inject = [
+        '$translate',
         'serverCallService',
         '$scope',
         '$cookies',
         'authenticatedUserService',
-        '$filter'
+        '$filter',
+        'translationService',
+        'toastService'
     ]
     component('dopCookieNotice', {
         templateUrl: 'directives/cookieNotice/cookieNotice.html',

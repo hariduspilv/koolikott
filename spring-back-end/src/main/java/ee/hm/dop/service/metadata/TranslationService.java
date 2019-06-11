@@ -63,4 +63,12 @@ public class TranslationService {
     public List<LandingPageString> list(String key) {
         return translationGroupDao.getTranslations(key);
     }
+
+    public void updateTranslation(TranslationObject translationObject) {
+        translationGroupDao.updateTranslation(translationObject.getTranslation(), translationObject.getTranslationKey(), translationObject.getLanguageKey());
+    }
+
+    public String getTranslations(TranslationObject translationObject) {
+        return translationGroupDao.getTranslationByKeyAndLangcode(translationObject.getTranslationKey(),translationObject.getTranslationWithId());
+    }
 }

@@ -1,6 +1,7 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.LandingPageObject;
+import ee.hm.dop.model.TranslationObject;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.metadata.TranslationService;
 import org.springframework.http.CacheControl;
@@ -30,6 +31,12 @@ public class TranslationResource {
     }
 
     @GetMapping
+    @RequestMapping("getTranslationForTranslationObject")
+    public String getTranslationForLanguage(TranslationObject translationObject) {
+        return translationService.getTranslations(translationObject);
+    }
+
+    @GetMapping
     @RequestMapping("landingPage")
     public ResponseEntity<LandingPageObject> getTranslations() {
         return ResponseEntity.ok().cacheControl(CacheControl.maxAge(0, TimeUnit.SECONDS)).body(translationService.getTranslations());
@@ -48,4 +55,10 @@ public class TranslationResource {
         translationService.update(landingPageObject);
     }
 
+    @PostMapping
+    @RequestMapping("updateTranslation")
+    @Secured(RoleString.ADMIN)
+    public void updateTranslation(@RequestBody TranslationObject translationObject) {
+        translationService.updateTranslation(translationObject);
+    }
 }
