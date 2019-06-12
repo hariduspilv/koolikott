@@ -551,7 +551,7 @@
             this.serverCallService
                 .makePost('rest/translation/update', {notices: notices, descriptions: descriptions})
                 .then(response => {
-                    if (response.status === 204) {
+                    if (response.status === 200) {
                         this.toastService.show('LANDING_PAGE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.isEditMode = false
