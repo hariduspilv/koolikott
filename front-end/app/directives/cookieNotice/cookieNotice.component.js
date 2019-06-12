@@ -15,7 +15,6 @@
             this.$scope.currentLanguage = this.translationService.getLanguage();
             this.$scope.iseditMode = false;
             this.$scope.cookieNotice = {}
-            // this.$scope.cookieNotice.text = this.getTranslation('COOKIE_AGREEMENT');
             this.getCookieNoticeTranslations();
             this.$scope.isSubmittButtonEnabled = false;
 
@@ -35,14 +34,12 @@
             this.serverCallService.
             makeGet('rest/translation/getTranslationForTranslationObject',
                 {
-                // translationKey: this.$scope.cookieNotice.translationKey,
                 translationKey: 'COOKIE_AGREEMENT',
-                // languageKey: this.$scope.currentLanguage,
                 languageKey: this.$scope.activeNoticeAndDescriptionLanguage,
             })
-                .then((data) => {
-                    if (data)
-                        this.$scope.cookieNotice.text = data
+                .then((response) => {
+                    if (response)
+                        this.$scope.cookieNotice.text = response.data
                 })
                 .catch(e => {
                     console.log(e)
@@ -71,7 +68,7 @@
             this.$scope.isSubmittButtonEnabled = false;
         }
 
-        save(){
+        savve(){
             this.$scope.isSaving = true;
             this.$scope.cookieNotice.translationKey = 'COOKIE_AGREEMENT';
             this.serverCallService
@@ -86,7 +83,7 @@
                         this.toastService.show('COOKIE_NOTICE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.iseditMode = false
-                        this.$scope.cookieNotice.text = () => this.getTranslation('COOKIE_AGREEMENT');
+                        // this.$scope.cookieNotice.text = () => this.getTranslation('COOKIE_AGREEMENT'); // miks ei tööta
                     }
                 })
         }
@@ -156,7 +153,7 @@
         }
 
         editCookieNotice() {
-            this.$scope.cookieNotice.text = this.getTranslation('COOKIE_AGREEMENT');
+            // this.$scope.cookieNotice.text = this.getTranslation('COOKIE_AGREEMENT');
             this.$scope.iseditMode = true
         }
 
@@ -166,6 +163,7 @@
     }
 
     controller.$inject = [
+        '$http',
         '$translate',
         'serverCallService',
         '$scope',

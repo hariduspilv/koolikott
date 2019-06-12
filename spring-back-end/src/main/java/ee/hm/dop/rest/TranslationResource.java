@@ -5,6 +5,7 @@ import ee.hm.dop.model.TranslationObject;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.metadata.TranslationService;
 import org.springframework.http.CacheControl;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,8 +31,7 @@ public class TranslationResource {
         return translationService.getTranslationsFor(language);
     }
 
-    @GetMapping
-    @RequestMapping("getTranslationForTranslationObject")
+    @GetMapping(value = "getTranslationForTranslationObject", produces = MediaType.TEXT_PLAIN_VALUE)
     public String getTranslationForLanguage(TranslationObject translationObject) {
         return translationService.getTranslations(translationObject);
     }
