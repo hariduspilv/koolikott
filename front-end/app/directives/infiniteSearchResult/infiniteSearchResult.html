@@ -66,11 +66,10 @@
                 <textarea name="notice"
                           ng-model="noticesAndDescriptions[lang].notice"
                           id="add-landing-page-notice-input"
-                rows="2"></textarea>
+                          rows="2"></textarea>
               </md-input-container>
             </div>
           </div>
-
         </div>
       </div>
       <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
@@ -127,6 +126,7 @@
     <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>
   </md-button>
 </div>
+<data-dop-startpage-intro></data-dop-startpage-intro>
 <div data-ng-if="sorting || !searching">
   <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
@@ -188,90 +188,92 @@
   </div>
 </div>
 <div>
-<div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="margin-top-36 card-container"
-     data-layout="column">
-  <div data-layout="row" data-layout-align="space-between center" flex data-ng-if="!editMode">
-    <span data-ng-bind="filteredTitle.text"></span>
-    <md-button data-ng-click="$ctrl.editFilteredGroup()">
-      <md-icon class="material-icons">edit</md-icon>
-      <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
-    </md-button>
-  </div>
-<!--  edit part-->
-  <div data-ng-if="editMode" layout="row" layout-align="center center">
-    <form name="updateFilteredTitleForm" flex="100" class="flex flex-col">
-      <md-dialog-content>
-        <div
-          data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
-          data-ng-if="lang === activeNoticeAndDescriptionLanguage && editMode"
-          layout="row"
-          layout-wrap>
-          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
-               flex-order="2"
-               flex-order-gt-sm="2" flex="100" data-ng-if="editMode">
-            <md-input-container class="md-block animate-if" flex>
-              <label data-translate="COOKIE_TEXT_LABEL"></label>
-              <textarea
-                name="filteredTitle"
-                ng-model="filteredTitle.text"
-                required></textarea>
-            </md-input-container>
+  <!--  väljatoodud materjalide osa-->
+  <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()"
+       class="margin-top-36 card-container"
+       data-layout="column">
+    <div data-layout="row" data-layout-align="space-between center" flex data-ng-if="!editMode">
+      <span data-ng-bind="filteredTitle.text"></span>
+      <md-button data-ng-click="$ctrl.editFilteredGroup()">
+        <md-icon class="material-icons">edit</md-icon>
+        <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
+      </md-button>
+    </div>
+    <!--  edit part-->
+    <div data-ng-if="editMode" layout="row" layout-align="center center">
+      <form name="updateFilteredTitleForm" flex="100" class="flex flex-col">
+        <md-dialog-content>
+          <div
+            data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
+            data-ng-if="lang === activeNoticeAndDescriptionLanguage2 && editMode"
+            layout="row"
+            layout-wrap>
+            <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
+                 flex-order="2"
+                 flex-order-gt-sm="2" flex="100" data-ng-if="editMode">
+              <md-input-container class="md-block animate-if" flex>
+                <label data-translate="COOKIE_TEXT_LABEL"></label>
+                <textarea
+                  name="filteredTitle"
+                  ng-model="filteredTitle.text"
+                  required></textarea>
+              </md-input-container>
+            </div>
+            <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
+                 data-ng-if="editMode">
+              <!-- Landing page language -->
+              <md-button
+                class="button-material-language"
+                data-ng-repeat="_lang in $ctrl.landingPageLanguages track by $index"
+                data-ng-class="{'is-selected': lang === _lang}"
+                data-ng-click="$ctrl.toggleNoticeAndDescriptionLanguageInputs2(_lang)"
+                flex-gt-xs="{{ activeNoticeAndDescriptionLanguage2 === _lang ? '40' : '30' }}"
+              >
+                <span data-ng-bind="_lang"></span>
+                <md-icon class="button-material-language__icon"
+                         data-ng-if="$ctrl.isLangFilled(_lang) || activeNoticeAndDescriptionLanguage2 === _lang">done
+                </md-icon>
+              </md-button>
+              <!--        katkestamise nupud-->
+              <md-button
+                data-ng-click="$ctrl.cancelEditMode()"
+              >
+                <span data-translate="BUTTON_CANCEL"></span>
+              </md-button>
+              <md-button
+                aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
+                class="md-primary"
+                data-ng-disabled="$ctrl.isSubmittEnabled()"
+                data-ng-click="$ctrl.saveFilteredTitle()"
+              >
+                <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
+                <md-icon>arrow_forward</md-icon>
+              </md-button>
+              <md-progress-circular
+                class="md-accent ng-hide"
+                md-mode="indeterminate"
+                md-diameter="40"
+                data-ng-show="isSaving"
+              ></md-progress-circular>
+            </div>
           </div>
-          <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
-               data-ng-if="editMode">
-            <!-- Landing page language -->
-            <md-button
-              class="button-material-language"
-              data-ng-repeat="_lang in $ctrl.landingPageLanguages track by $index"
-              data-ng-class="{'is-selected': lang === _lang}"
-              data-ng-click="$ctrl.toggleNoticeAndDescriptionLanguageInputs(_lang)"
-              flex-gt-xs="{{ activeNoticeAndDescriptionLanguage === _lang ? '40' : '30' }}"
-            >
-              <span data-ng-bind="_lang"></span>
-              <md-icon class="button-material-language__icon"
-                       data-ng-if="$ctrl.isLangFilled(_lang) || activeNoticeAndDescriptionLanguage === _lang">done
-              </md-icon>
-            </md-button>
-            <!--        katkestamise nupud-->
-            <md-button
-              data-ng-click="$ctrl.cancelEditMode()"
-            >
-              <span data-translate="BUTTON_CANCEL"></span>
-            </md-button>
-            <md-button
-              aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
-              class="md-primary"
-              data-ng-disabled="$ctrl.isSubmittEnabled()"
-              data-ng-click="$ctrl.saveFilteredTitle()"
-            >
-              <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
-              <md-icon>arrow_forward</md-icon>
-            </md-button>
-            <md-progress-circular
-              class="md-accent ng-hide"
-              md-mode="indeterminate"
-              md-diameter="40"
-              data-ng-show="isSaving"
-            ></md-progress-circular>
-          </div>
-        </div>
-      </md-dialog-content>
-    </form>
-  </div>
-  <div data-layout="row">
-    <div
-      data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
-      class="card-container__item" flex-xs="100" data-layout="row">
-      <dop-card-sm learning-object="item"></dop-card-sm>
+        </md-dialog-content>
+      </form>
+    </div>
+    <div data-layout="row">
+      <div
+        data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
+        class="card-container__item" flex-xs="100" data-layout="row">
+        <dop-card-sm learning-object="item"></dop-card-sm>
+      </div>
     </div>
   </div>
-</div>
 
-<div data-ng-if="!$ctrl.allResultsLoaded() && searching">
-  <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
-     data-translate="SEARCH_LOADING"></p>
-  <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
-    <md-progress-circular></md-progress-circular>
+  <div data-ng-if="!$ctrl.allResultsLoaded() && searching">
+    <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
+       data-translate="SEARCH_LOADING"></p>
+    <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
+      <md-progress-circular></md-progress-circular>
+    </div>
   </div>
-</div>
 </div>

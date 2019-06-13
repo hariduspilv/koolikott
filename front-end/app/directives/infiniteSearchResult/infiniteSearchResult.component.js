@@ -14,6 +14,7 @@
             this.$scope.currentLanguage = this.translationService.getLanguage();
             // if(this.$scope.currentLanguage)
             this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
+            this.$scope.activeNoticeAndDescriptionLanguage2 = this.landingPageLanguages[0];
             this.$scope.filteredTitle = {}
             this.getFrontPageTitleTranslations()
 
@@ -454,6 +455,11 @@
 
         toggleNoticeAndDescriptionLanguageInputs(lang) {
             this.$scope.activeNoticeAndDescriptionLanguage = lang
+            // this.getFrontPageTitleTranslations();
+        }
+
+        toggleNoticeAndDescriptionLanguageInputs2(lang) {
+            this.$scope.activeNoticeAndDescriptionLanguage2 = lang
             this.getFrontPageTitleTranslations();
         }
 
@@ -591,7 +597,7 @@
             if (this.$scope.afterSave) {
                 languageKey = this.$scope.currentLanguage;
             } else {
-                languageKey = this.$scope.activeNoticeAndDescriptionLanguage;
+                languageKey = this.$scope.activeNoticeAndDescriptionLanguage2;
             }
 
             this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
@@ -619,7 +625,7 @@
                 .makePost('rest/translation/updateTranslation',
                     {
                         translationKey: this.$scope.filteredTitle.translationKey,
-                        languageKey: this.$scope.activeNoticeAndDescriptionLanguage,
+                        languageKey: this.$scope.activeNoticeAndDescriptionLanguage2,
                         translation: this.$scope.filteredTitle.text
                     })
                 .then(response => {
