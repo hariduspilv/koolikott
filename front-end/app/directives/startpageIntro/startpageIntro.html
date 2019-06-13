@@ -9,17 +9,19 @@
         </md-button>
       </md-card-actions>
       <md-card-content>
-        <span data-ng-if="!editMode" data-ng-bind-html="introPage.text"></span>
+        <div data-ng-if="!editMode" data-ng-bind-html="introPage.text"></div>
         <!-- Edit mode -->
-        <form name="startPageForm">
-          <div class="portfolio-chapter card-lg faq-font">
-            <div data-ng-if="true">
+        <div data-ng-if="editMode" layout="row" layout-align="center center">
+          <form name="startPageForm" flex="100" class="flex flex-col">
+            <div class="portfolio-chapter card-lg faq-font">
               <div
-                data-ng-repeat="lang in languagess track by $index"
+                data-ng-repeat="lang in $ctrl.languagess track by $index"
+                data-ng-if="lang === activeNoticeAndDescriptionLang && editMode"
                 layout="row"
                 layout-wrap>
-                <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-gt-sm="50"
+                <div layout="column" layout-align="start center" layout-gt-xs="row" flex="100" flex-gt-sm="50"
                      flex-order="1">
+                  <!-- Landing page language -->
                   <md-button
                     class="button-material-language"
                     data-ng-repeat="_lang in $ctrl.languagess track by $index"
@@ -28,12 +30,13 @@
                     flex-gt-xs="{{ activeNoticeAndDescriptionLang === _lang ? '40' : '30' }}"
                   >
                     <span data-ng-bind="_lang"></span>
+                    <md-icon class="button-material-language__icon">done</md-icon>
                   </md-button>
                 </div>
               </div>
               <div layout="row">
                 <div layout-xs="column" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
-                     flex-order-gt-sm="2" flex="100" data-ng-if="true">
+                     flex-order-gt-sm="2" flex="100">
                   <div class="md-block animate-if remaining-charaters-wrapper" flex>
                     <trix-editor class="term-block" angular-trix ng-model="introPage.text"></trix-editor>
                   </div>
@@ -42,14 +45,15 @@
               <div>
                 <md-input-container layout-fill>
                   <label></label>
-                  <textarea type="text" ng-model="newUserManual.url"
+                  <textarea type="text"
+                            ng-model="video.url"
                             placeholder="{{ 'HTTP_WORD' | translate }}">
-            </textarea>
+                  </textarea>
                 </md-input-container>
               </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </md-card-content>
       <md-card-actions>
         <div data-layout="row" data-layout-align="space-between center" data-ng-if="editMode">

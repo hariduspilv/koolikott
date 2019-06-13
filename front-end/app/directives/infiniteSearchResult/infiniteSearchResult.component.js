@@ -10,8 +10,21 @@
             if (this.isLandingPage()) {
                 this.getNoticeAndTranslationString()
             }
-            this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0]
-            this.$rootScope.$on('logout:success', () =>  this.$scope.isEditMode = false);
+
+            this.$scope.currentLanguage = this.translationService.getLanguage();
+            // if(this.$scope.currentLanguage)
+            this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
+            this.$scope.filteredTitle = {}
+            this.getFrontPageTitleTranslations()
+
+            this.$scope.editMode = false;
+            this.$rootScope.$on('logout:success', () => this.$scope.isEditMode = false);
+        }
+
+        convertLanguageStrings(lang) {
+            if (lang === 'est') return 'ET'
+            else if (lang === 'rus') return 'RU'
+            else if (lang === 'eng') return 'EN'
         }
 
         $onDestroy() {
@@ -19,7 +32,6 @@
             this.searchService.setIsExact('');
             this.searchService.setDetails('');
         }
-
 
 
         $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home}) {
@@ -442,6 +454,7 @@
 
         toggleNoticeAndDescriptionLanguageInputs(lang) {
             this.$scope.activeNoticeAndDescriptionLanguage = lang
+            this.getFrontPageTitleTranslations();
         }
 
         isLangFilled(lang) {
@@ -466,7 +479,7 @@
                     this.$scope.notice = data.notices.find(obj => {
                         return obj.language === this.translationService.getLanguage()
                     }).text
-            })
+                })
         }
 
         setNoticesAndDescriptions() {
@@ -565,11 +578,65 @@
             return this.$scope.$ctrl.home
         }
 
-
         maintenanceVisible() {
             return this.$scope.visible = !this.$scope.visible
+        }
+
+        editFilteredGroup() {
+            this.$scope.editMode = true;
+        }
+
+        getFrontPageTitleTranslations() {
+            let languageKey
+            if (this.$scope.afterSave) {
+                languageKey = this.$scope.currentLanguage;
+            } else {
+                languageKey = this.$scope.activeNoticeAndDescriptionLanguage;
+            }
+
+            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
+                {
+                    translationKey: 'FRONT_PAGE_FILTERED_TITLE',
+                    languageKey: languageKey,
+                })
+                .then((response) => {
+                    if (response)
+                        this.$scope.filteredTitle.text = response.data
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+        }
+
+        cancelEditMode() {
+            this.$scope.editMode = false
+        }
+
+        saveFilteredTitle() {
+            this.$scope.isSaving = true;
+            this.$scope.filteredTitle.translationKey = 'FRONT_PAGE_FILTERED_TITLE';
+            this.serverCallService
+                .makePost('rest/translation/updateTranslation',
+                    {
+                        translationKey: this.$scope.filteredTitle.translationKey,
+                        languageKey: this.$scope.activeNoticeAndDescriptionLanguage,
+                        translation: this.$scope.filteredTitle.text
+                    })
+                .then(response => {
+                    if (response.status === 200) {
+                        this.toastService.show('COOKIE_NOTICE_UPDATED')
+                        this.$scope.isSaving = false
+                        this.$scope.editMode = false
+                        this.$scope.afterSave = true;
+                        this.getFrontPageTitleTranslations();
+                        this.$scope.afterSave = false;
+                        // this.$scope.currentLanguage = this.translationService.getLanguage();
+                        // this.$scope.currentLanguage = this.convertLanguageStrings(this.$scope.currentLanguage);
+                        // this.$scope.activeNoticeAndDescriptionLanguage = this.convertLanguageStrings(this.$scope.currentLanguage);
+                    }
+                })
+        }
     }
-}
 
     controller.$inject = [
         '$scope',

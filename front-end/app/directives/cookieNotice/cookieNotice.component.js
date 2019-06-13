@@ -10,6 +10,7 @@
             this.isSubmittEnabled()
 
             this.landingPageLanguages = ['ET', 'EN', 'RU'];
+
             this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
 
             this.$scope.currentLanguage = this.translationService.getLanguage();
@@ -20,7 +21,7 @@
 
             this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
 
-            this.$scope.isAgreed= false;
+            this.$scope.isAgreed = false;
 
             this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
                 if (selectedValue && (selectedValue !== previousValue)) {
@@ -30,13 +31,25 @@
             })
         }
 
+        convertLanguageStrings(lang) {
+            if (lang === 'est') return 'ET'
+            else if (lang === 'rus') return 'RU'
+            else if (lang === 'eng') return 'EN'
+        }
+
         getCookieNoticeTranslations() {
-            this.serverCallService.
-            makeGet('rest/translation/getTranslationForTranslationObject',
+            let languageKey
+            if (this.$scope.afterSave) {
+                languageKey = this.$scope.currentLanguage;
+            } else {
+                languageKey = this.$scope.activeNoticeAndDescriptionLanguage;
+            }
+
+            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
                 {
-                translationKey: 'COOKIE_AGREEMENT',
-                languageKey: this.$scope.activeNoticeAndDescriptionLanguage,
-            })
+                    translationKey: 'COOKIE_AGREEMENT',
+                    languageKey: languageKey,
+                })
                 .then((response) => {
                     if (response)
                         this.$scope.cookieNotice.text = response.data
@@ -51,31 +64,19 @@
             this.getCookieNoticeTranslations();
         }
 
-        // isLangFilled(lang) {
-        //     let isFilled = false;
-        //
-        //     Object.keys(this.$scope.noticesAndDescriptions).forEach(key => {
-        //         if (lang === key && !!this.$scope.noticesAndDescriptions[key].description) {
-        //             isFilled = true;
-        //         }
-        //     });
-        //
-        //     return isFilled;
-        // }
-
         cancelEdit() {
             this.$scope.iseditMode = false
             this.$scope.isSubmittButtonEnabled = false;
         }
 
-        savve(){
+        savve() {
             this.$scope.isSaving = true;
             this.$scope.cookieNotice.translationKey = 'COOKIE_AGREEMENT';
             this.serverCallService
                 .makePost('rest/translation/updateTranslation',
                     {
                         translationKey: this.$scope.cookieNotice.translationKey,
-                        languageKey: this.$scope.currentLanguage,
+                        languageKey: this.$scope.activeNoticeAndDescriptionLanguage,
                         translation: this.$scope.cookieNotice.text
                     })
                 .then(response => {
@@ -83,12 +84,14 @@
                         this.toastService.show('COOKIE_NOTICE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.iseditMode = false
-                        // this.$scope.cookieNotice.text = () => this.getTranslation('COOKIE_AGREEMENT'); // miks ei tööta
+                        this.$scope.afterSave = true;
+                        this.getCookieNoticeTranslations();
+                        this.$scope.afterSave = false;
                     }
                 })
         }
 
-        isSubmittEnabled(){
+        isSubmittEnabled() {
             return !this.$scope.isSubmittButtonEnabled;
         }
 
@@ -153,7 +156,6 @@
         }
 
         editCookieNotice() {
-            // this.$scope.cookieNotice.text = this.getTranslation('COOKIE_AGREEMENT');
             this.$scope.iseditMode = true
         }
 

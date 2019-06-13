@@ -16,6 +16,7 @@ public class TranslationObject implements Serializable {
     private String languageKey;
 
     public long getTranslationWithId() {
+
         if (languageKey.equalsIgnoreCase("ET") || languageKey.equalsIgnoreCase("est") )
             return 1L;
         else if (languageKey.equalsIgnoreCase("RU")) {
@@ -24,4 +25,16 @@ public class TranslationObject implements Serializable {
             return 3L;
         } else return 0;
     }
+
+    public String transformLanguageKey() {
+
+        if (languageKey.equalsIgnoreCase("ET") || languageKey.equalsIgnoreCase("est") )
+            return "est";
+        else if (languageKey.equalsIgnoreCase("RU") || languageKey.equalsIgnoreCase("rus") ) {
+            return "rus";
+        } else if (languageKey.equalsIgnoreCase("EN") || languageKey.equalsIgnoreCase("eng") ) {
+            return "eng";
+        } else return null;
+    }
+
 }
