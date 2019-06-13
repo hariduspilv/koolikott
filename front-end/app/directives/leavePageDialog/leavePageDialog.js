@@ -7,11 +7,10 @@
 
             this.$scope.agree = () => {
                 this.$mdDialog.hide();
-                history.back()
             }
 
             this.$scope.cancel = () => {
-                this.$mdDialog.hide();
+                this.$mdDialog.cancel();
             }
         }
     }
@@ -19,9 +18,6 @@
     controller.$inject = [
         '$scope',
         '$mdDialog',
-        '$location',
-        '$translate',
-        '$rootScope',
     ]
 
     angular.module('koolikottApp').controller('leavePageDialogController', controller)
