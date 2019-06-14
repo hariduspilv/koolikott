@@ -16,7 +16,6 @@
             this.$scope.isSubmittButtonEnabled = false;
             this.$scope.video = {};
             this.$scope.video.url = () => this.getVideoUrl();
-
             // this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
         }
 
@@ -53,8 +52,6 @@
                 .catch(e => {
                     console.log(e)
                 })
-
-
         }
 
         save(){
@@ -70,10 +67,9 @@
                     })
                 .then(response => {
                     if (response.status === 200) {
-                        // this.toastService.show('COOKIE_NOTICE_UPDATED')
+                        this.toastService.show('COOKIE_NOTICE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
-                        // this.$scope.cookieNotice.text = () => this.getTranslation('COOKIE_AGREEMENT'); // miks ei tööta
                     }
                 })
             this.serverCallService
@@ -85,10 +81,9 @@
                     })
                 .then(response => {
                     if (response.status === 200) {
-                        // this.toastService.show('COOKIE_NOTICE_UPDATED')
+                        this.toastService.show('COOKIE_NOTICE_UPDATED')
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
-                        // this.$scope.cookieNotice.text = () => this.getTranslation('COOKIE_AGREEMENT'); // miks ei tööta
                     }
                 })
         }
@@ -122,7 +117,7 @@
         getCurrentLanguage() {
             return this.translationService.getLanguage()
         }
-            }
+    }
 
     controller.$inject = [
         '$http',

@@ -67,6 +67,7 @@
         cancelEdit() {
             this.$scope.iseditMode = false
             this.$scope.isSubmittButtonEnabled = false;
+            this.moveNavbarHeaderUp();
         }
 
         savve() {
@@ -149,6 +150,9 @@
             this.$cookies.put('userAgent', this.getUserAgent())
             this.$cookies.put('time', new Date().toLocaleString())
             this.hasCookie()
+            // if(this.$scope.hasCookie && !this.isAdmin()){//TODO
+            //     this.moveNavbarHeaderUpForNotAdmin();
+            // }
         }
 
         getUserAgent() {
@@ -157,6 +161,21 @@
 
         editCookieNotice() {
             this.$scope.iseditMode = true
+            this.moveNavbarHeaderDown();
+        }
+
+        moveNavbarHeaderDown(){
+            const headerElement = document.getElementById('md-toolbar-header');
+            headerElement.style.top = 98 + 'px';
+        }
+        moveNavbarHeaderUp(){
+            const headerElement = document.getElementById('md-toolbar-header');
+            headerElement.style.top = 58 + 'px';
+        }
+
+        moveNavbarHeaderUpForNotAdmin(){
+            const headerElement = document.getElementById('md-toolbar-header');
+            headerElement.style.top = 0 + 'px';
         }
 
         isAdmin() {

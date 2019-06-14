@@ -1,36 +1,29 @@
 <div data-layout="row" data-layout-align="space-between center">
-  <h1 id="search-result-title" class="md-headline"
+  <h2 id="search-result-title" class="md-headline padding-left-16"
       data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
-      data-ng-bind-html="title"></h1>
-  <h1 id="exact-search-result-title" class="md-headline"
+      data-ng-bind-html="title"></h2>
+  <h2 id="exact-search-result-title" class="md-headline padding-left-16"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
-      data-ng-bind-html="exactTitle"></h1>
-  <h1 data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"
-      class="md-headline"
-      data-ng-bind="notice"></h1>
+      data-ng-bind-html="exactTitle"></h2>
+  <p data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"
+      class="padding-left-16"
+      data-ng-bind="notice"
+  style="font-weight: normal"></p>
+  <md-button style="min-width: 36px"
+             data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"
+             data-ng-click="$ctrl.editLandingPage()"
+             id="landing-page-edit">
+    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+    <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>
+  </md-button>
   <!-- Edit landing page description and notice -->
-  <form name="updateLandingPageForm" flex="100" class="flex flex-col" data-ng-if="isEditMode">
+  <form name="updateLandingPageForm" flex="100" class="flex flex-col" data-ng-if="isEditMode && $ctrl.isAdmin()">
     <md-dialog-content>
       <div
         data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
         data-ng-if="lang === activeNoticeAndDescriptionLanguage && isEditMode"
         layout="row"
         layout-wrap>
-        <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
-             flex-order-gt-sm="2" flex="100" data-ng-if="isEditMode">
-          <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-            <label data-translate="LANDING_PAGE_DESCRIPTION_ADMIN"></label>
-            <textarea
-              name="description"
-              id="add-description"
-              ng-model="noticesAndDescriptions[lang].description" id="add-material-description-input"
-              required></textarea>
-            <div data-ng-messages="updateLandingPageForm.description.$error">
-              <div data-ng-message="required" data-translate="LANDING_PAGE_DESCRIPTION_IS_MANDATORY"></div>
-            </div>
-          </md-input-container>
-
-        </div>
         <div layout="column" layout-align="center center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
              data-ng-if="isEditMode">
           <!-- Landing page language -->
@@ -117,14 +110,14 @@
 </div>
 <div data-layout="row" data-layout-align="space-between center">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
-  <p data-ng-if="description && !isEditMode && $ctrl.isLandingPage() && !filter" data-ng-bind="description"></p>
-  <md-button style="min-width: 36px"
-             data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"
-             data-ng-click="$ctrl.editLandingPage()"
-             id="landing-page-edit">
-    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
-    <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>
-  </md-button>
+<!--  <p data-ng-if="description && !isEditMode && $ctrl.isLandingPage() && !filter" data-ng-bind="description" class="padding-left-16"></p>-->
+<!--  <md-button style="min-width: 36px"-->
+<!--             data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"-->
+<!--             data-ng-click="$ctrl.editLandingPage()"-->
+<!--             id="landing-page-edit">-->
+<!--    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>-->
+<!--    <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>-->
+<!--  </md-button>-->
 </div>
 <data-dop-startpage-intro></data-dop-startpage-intro>
 <div data-ng-if="sorting || !searching">
@@ -193,14 +186,14 @@
        class="margin-top-36 card-container"
        data-layout="column">
     <div data-layout="row" data-layout-align="space-between center" flex data-ng-if="!editMode">
-      <span data-ng-bind="filteredTitle.text"></span>
-      <md-button data-ng-click="$ctrl.editFilteredGroup()">
+      <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
+      <md-button data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
         <md-icon class="material-icons">edit</md-icon>
         <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
       </md-button>
     </div>
     <!--  edit part-->
-    <div data-ng-if="editMode" layout="row" layout-align="center center">
+    <div class="padding-left-16" data-ng-if="editMode" layout="row" layout-align="center center">
       <form name="updateFilteredTitleForm" flex="100" class="flex flex-col">
         <md-dialog-content>
           <div
@@ -216,6 +209,7 @@
                 <textarea
                   name="filteredTitle"
                   ng-model="filteredTitle.text"
+                  maxlength="50"
                   required></textarea>
               </md-input-container>
             </div>

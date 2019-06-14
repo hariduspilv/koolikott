@@ -1,9 +1,10 @@
 <div
-  data-ng-if="!iseditMode"
-  class="cookie-notice" data-ng-if="!hasCookie || isAdmin" layout="row" layout-align="space-between center">
+  class="cookie-notice"
+  data-ng-if="!hasCookie || ($ctrl.isAdmin() && hasCookie) && !iseditMode"
+  layout="row" layout-align="space-between center">
   <span data-ng-bind="cookieNotice.text"></span>
   <div>
-    <md-button data-ng-show="hasCookie"
+    <md-button data-ng-show="!hasCookie"
                class="md-raised md-primary"
                data-ng-click="$ctrl.saveUserCookie()">
       <span data-translate="COOKIE_AGREE"></span>
