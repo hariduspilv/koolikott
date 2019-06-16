@@ -32,9 +32,10 @@
                     languageKey: this.$scope.activeNoticeAndDescriptionLang,
                 })
                 .then((response) => {
-                    if (response)
-                        this.$scope.introPage.text = response.data
-                })
+                    if (response) {
+                        this.$scope.introPage.text = response.data.translation;
+                    }
+                    })
                 .catch(e => {
                     console.log(e)
                 })
@@ -46,7 +47,7 @@
                 })
                 .then((response) => {
                     if (response) {
-                        this.$scope.video.url = response.data
+                        this.$scope.video.url = response.data.translation
                     }
                 })
                 .catch(e => {

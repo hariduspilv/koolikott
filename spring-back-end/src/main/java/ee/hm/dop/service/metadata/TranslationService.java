@@ -68,7 +68,7 @@ public class TranslationService {
         translationGroupDao.updateTranslation(translationObject.getTranslation(), translationObject.getTranslationKey(), translationObject.transformLanguageKey());
     }
 
-    public String getTranslations(TranslationObject translationObject) {
-        return translationGroupDao.getTranslationByKeyAndLangcode(translationObject.getTranslationKey(),translationObject.getTranslationWithId());
+    public TranslationObject getTranslations(TranslationObject translationObject) {
+        return translationGroupDao.getTranslationByKeyAndLangcode(translationObject.getTranslationWithId(), translationObject.getTranslationKey());
     }
 }

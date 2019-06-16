@@ -5,6 +5,7 @@ import ee.hm.dop.dao.AbstractDao;
 import ee.hm.dop.model.LandingPageString;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
+import ee.hm.dop.model.TranslationObject;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
@@ -89,6 +90,30 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
             Clob singleResult = (Clob) result;
             return singleResult.getSubString(1, (int) singleResult.length());
         } catch (RuntimeException | SQLException ignored) {
+            return null;
+        }
+    }
+
+    public TranslationObject getTranslationByKeyAndLangcode(Long langCode, String translationKey) {
+        TranslationObject to = new TranslationObject();
+        try {
+            Object result = entityManager
+                    .createNativeQuery("SELECT t.translation FROM Translation t " +
+                            "WHERE t.translationKey = :translationKey " +
+                            "AND t.translationGroup = :translationGroup")
+                    .setParameter("translationKey", translationKey)
+                    .setParameter("translationGroup", langCode)
+                    .getSingleResult();
+            if (result instanceof String) {
+                to.setTranslation((String) result);
+                to.setTranslationKey(translationKey);
+                to.setLanguageKey(to.transformLanguageKey2(langCode));
+                return to;
+            } else {
+                return null;
+            }
+
+        } catch (RuntimeException e) {
             return null;
         }
     }

@@ -31,8 +31,8 @@ public class TranslationResource {
         return translationService.getTranslationsFor(language);
     }
 
-    @GetMapping(value = "getTranslationForTranslationObject", produces = MediaType.TEXT_PLAIN_VALUE)
-    public String getTranslationForLanguage(TranslationObject translationObject) {
+    @GetMapping(value = "getTranslationForTranslationObject")
+    public TranslationObject getTranslationForLanguage(TranslationObject translationObject) {
         return translationService.getTranslations(translationObject);
     }
 

@@ -607,7 +607,7 @@
                 })
                 .then((response) => {
                     if (response)
-                        this.$scope.filteredTitle.text = response.data
+                        this.$scope.filteredTitle.text = response.data.translation
                 })
                 .catch(e => {
                     console.log(e)

@@ -23,18 +23,22 @@
 
             this.$scope.isAgreed = false;
 
+            // this.$rootScope.$on('logout:success', this.moveNavbarHeaderUpForNotAdmin());
+
             this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
                 if (selectedValue && (selectedValue !== previousValue)) {
                     this.$scope.isSubmittButtonEnabled = true;
                     // this.isSubmittEnabled = () => this.$scope.isSubmittButtonEnabled = true;
                 }
-            })
-        }
+            });
 
-        convertLanguageStrings(lang) {
-            if (lang === 'est') return 'ET'
-            else if (lang === 'rus') return 'RU'
-            else if (lang === 'eng') return 'EN'
+            this.$scope.$watch(() => this.$scope.hasCookie, (selectedValue) => {
+                if (selectedValue === true && !this.isAdmin()) {
+                    this.$timeout(() => {
+                        this.transformLayoutBeceuseOfCookie()
+                    }, 1000);
+                }
+            });
         }
 
         getCookieNoticeTranslations() {
@@ -52,7 +56,7 @@
                 })
                 .then((response) => {
                     if (response)
-                        this.$scope.cookieNotice.text = response.data
+                        this.$scope.cookieNotice.text = response.data.translation
                 })
                 .catch(e => {
                     console.log(e)
@@ -88,12 +92,22 @@
                         this.$scope.afterSave = true;
                         this.getCookieNoticeTranslations();
                         this.$scope.afterSave = false;
+                        this.moveNavbarHeaderUp();
                     }
                 })
         }
 
         isSubmittEnabled() {
             return !this.$scope.isSubmittButtonEnabled;
+        }
+
+        transformLayoutBeceuseOfCookie() {
+
+            if (this.$scope.hasCookie && !this.isAdmin()) {//TODO
+                // this.getToolbar().then(() => {
+                this.moveNavbarHeaderUpForNotAdmin();
+                // })
+            }
         }
 
         hasCookie() {
@@ -150,9 +164,9 @@
             this.$cookies.put('userAgent', this.getUserAgent())
             this.$cookies.put('time', new Date().toLocaleString())
             this.hasCookie()
-            // if(this.$scope.hasCookie && !this.isAdmin()){//TODO
-            //     this.moveNavbarHeaderUpForNotAdmin();
-            // }
+            if (this.$scope.hasCookie && !this.isAdmin()) {//TODO
+                this.moveNavbarHeaderUpForNotAdmin();
+            }
         }
 
         getUserAgent() {
@@ -164,19 +178,33 @@
             this.moveNavbarHeaderDown();
         }
 
-        moveNavbarHeaderDown(){
+        moveNavbarHeaderDown() {
             const headerElement = document.getElementById('md-toolbar-header');
+            const sidenavElement = document.getElementById('sidebar-left');
+            sidenavElement.classList.remove('sidenav-cookie-related');
             headerElement.style.top = 98 + 'px';
-        }
-        moveNavbarHeaderUp(){
-            const headerElement = document.getElementById('md-toolbar-header');
-            headerElement.style.top = 58 + 'px';
+            sidenavElement.style.top = 98 + 'px';
         }
 
-        moveNavbarHeaderUpForNotAdmin(){
+        moveNavbarHeaderUp() {
             const headerElement = document.getElementById('md-toolbar-header');
-            headerElement.style.top = 0 + 'px';
+            const sidenavElement = document.getElementById('sidebar-left');
+            headerElement.style.top = 58 + 'px';
+            sidenavElement.style.top = 58 + 'px';
         }
+
+        moveNavbarHeaderUpForNotAdmin() {
+            const headerElement = document.getElementById('md-toolbar-header');
+            const mainContent = document.getElementById('main-content');
+            const sidenavElement = document.getElementById('sidebar-left');
+            sidenavElement.classList.remove('sidenav-cookie-related');
+
+            headerElement.style.top = 0 + 'px';
+            mainContent.style.paddingTop = 0 + 'px';
+            sidenavElement.classList.add('sidenav-cookie-related-upper');
+            sidenavElement.style.top = 0 + 'px';
+        }
+
 
         isAdmin() {
             return this.authenticatedUserService.isAdmin()
@@ -192,7 +220,8 @@
         'authenticatedUserService',
         '$filter',
         'translationService',
-        'toastService'
+        'toastService',
+        '$timeout'
     ]
     component('dopCookieNotice', {
         templateUrl: 'directives/cookieNotice/cookieNotice.html',
