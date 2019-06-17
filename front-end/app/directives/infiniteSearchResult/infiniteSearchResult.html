@@ -21,7 +21,7 @@
     <md-dialog-content>
       <div
         data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
-        data-ng-if="lang === activeNoticeAndDescriptionLanguage && isEditMode"
+        data-ng-if="lang === maintenanceLanguage && isEditMode"
         layout="row"
         layout-wrap data-layout-align="space-between center">
         <div layout="row" layout-align="end center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
@@ -32,12 +32,12 @@
             data-ng-repeat="_lang in $ctrl.landingPageLanguages track by $index"
             data-ng-class="{'is-selected': lang === _lang}"
             data-ng-click="$ctrl.toggleNoticeAndDescriptionLanguageInputs(_lang)"
-            flex-gt-xs="{{ activeNoticeAndDescriptionLanguage === _lang ? '40' : '30' }}"
+            flex-gt-xs="{{ maintenanceLanguage === _lang ? '40' : '30' }}"
             aria-label="{{ _lang }} button"
           >
             <span data-ng-bind="_lang"></span>
             <md-icon class="button-material-language__icon"
-                     data-ng-if="$ctrl.isLangFilled(_lang) || activeNoticeAndDescriptionLanguage === _lang">done
+                     data-ng-if="$ctrl.isLangFilled(_lang) || maintenanceLanguage === _lang">done
             </md-icon>
           </md-button>
           <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
@@ -198,7 +198,7 @@
         <md-dialog-content>
           <div
             data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
-            data-ng-if="lang === activeNoticeAndDescriptionLanguage2 && editMode"
+            data-ng-if="lang === headlineLanguage && editMode"
             layout="row"
             layout-wrap>
             <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
@@ -221,14 +221,13 @@
                 data-ng-repeat="_lang in $ctrl.landingPageLanguages track by $index"
                 data-ng-class="{'is-selected': lang === _lang}"
                 data-ng-click="$ctrl.toggleNoticeAndDescriptionLanguageInputs2(_lang)"
-                flex-gt-xs="{{ activeNoticeAndDescriptionLanguage2 === _lang ? '40' : '30' }}"
+                flex-gt-xs="{{ headlineLanguage === _lang ? '40' : '30' }}"
               >
                 <span data-ng-bind="_lang"></span>
                 <md-icon class="button-material-language__icon"
-                         data-ng-if="$ctrl.isLangFilled(_lang) || activeNoticeAndDescriptionLanguage2 === _lang">done
+                         data-ng-if="$ctrl.isLangFilled(_lang) || headlineLanguage === _lang">done
                 </md-icon>
               </md-button>
-              <!--        katkestamise nupud-->
               <md-button
                 data-ng-click="$ctrl.cancelEditMode()"
               >

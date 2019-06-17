@@ -64,11 +64,11 @@ public class TranslationService {
         return translationGroupDao.getTranslations(key);
     }
 
-    public void updateTranslation(TranslationObject translationObject) {
-        translationGroupDao.updateTranslation(translationObject.getTranslation(), translationObject.getTranslationKey(), translationObject.transformLanguageKey());
+    public void updateTranslation(TranslationDto translationDto) {
+        translationGroupDao.updateTranslation(translationDto.getTranslation(), translationDto.getTranslationKey(), translationDto.getLanguageKey());
     }
 
-    public TranslationObject getTranslations(TranslationObject translationObject) {
-        return translationGroupDao.getTranslationByKeyAndLangcode(translationObject.getTranslationWithId(), translationObject.getTranslationKey());
+    public String getTranslations(String tr_key, String lng_code) {
+        return translationGroupDao.getTranslationByKeyAndLangcode(tr_key, languageDao.findIdByCode(lng_code));
     }
 }

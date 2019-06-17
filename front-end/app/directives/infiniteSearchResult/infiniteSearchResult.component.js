@@ -12,8 +12,8 @@
             }
 
             this.$scope.currentLanguage = this.translationService.getLanguage();
-            this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
-            this.$scope.activeNoticeAndDescriptionLanguage2 = this.landingPageLanguages[0];
+            this.$scope.maintenanceLanguage = this.landingPageLanguages[0];
+            this.$scope.headlineLanguage = this.landingPageLanguages[0];
             this.$scope.filteredTitle = {}
             this.getFrontPageTitleTranslations()
 
@@ -445,11 +445,11 @@
         }
 
         toggleNoticeAndDescriptionLanguageInputs(lang) {
-            this.$scope.activeNoticeAndDescriptionLanguage = lang
+            this.$scope.maintenanceLanguage = lang
         }
 
         toggleNoticeAndDescriptionLanguageInputs2(lang) {
-            this.$scope.activeNoticeAndDescriptionLanguage2 = lang
+            this.$scope.headlineLanguage = lang
             this.getFrontPageTitleTranslations();
         }
 
@@ -586,21 +586,18 @@
             if (this.$scope.afterSave) {
                 languageKey = this.$scope.currentLanguage;
             } else {
-                languageKey = this.$scope.activeNoticeAndDescriptionLanguage2;
+                languageKey = this.$scope.headlineLanguage;
             }
 
-            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
-                {
-                    translationKey: 'FRONT_PAGE_FILTERED_TITLE',
-                    languageKey: languageKey,
-                })
-                .then((response) => {
-                    if (response)
-                        this.$scope.filteredTitle.text = response.data.translation
-                })
-                .catch(e => {
-                    console.log(e)
-                })
+            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject', {
+                translationKey: 'FRONT_PAGE_FILTERED_TITLE',
+                languageKey: languageKey,
+            }).then((response) => {
+                if (response)
+                    this.$scope.filteredTitle.text = response.data
+            }).catch(e => {
+                console.log(e)
+            })
         }
 
         cancelEditMode() {
@@ -611,22 +608,20 @@
             this.$scope.isSaving = true;
             this.$scope.filteredTitle.translationKey = 'FRONT_PAGE_FILTERED_TITLE';
             this.serverCallService
-                .makePost('rest/translation/updateTranslation',
-                    {
-                        translationKey: this.$scope.filteredTitle.translationKey,
-                        languageKey: this.$scope.activeNoticeAndDescriptionLanguage2,
-                        translation: this.$scope.filteredTitle.text
-                    })
-                .then(response => {
-                    if (response.status === 200) {
-                        this.toastService.show('COOKIE_NOTICE_UPDATED')
-                        this.$scope.isSaving = false
-                        this.$scope.editMode = false
-                        this.$scope.afterSave = true;
-                        this.getFrontPageTitleTranslations();
-                        this.$scope.afterSave = false;
-                    }
-                })
+                .makePost('rest/translation/updateTranslation', {
+                    translationKey: this.$scope.filteredTitle.translationKey,
+                    languageKey: this.$scope.headlineLanguage,
+                    translation: this.$scope.filteredTitle.text
+                }).then(response => {
+                if (response.status === 200) {
+                    this.toastService.show('COOKIE_NOTICE_UPDATED')
+                    this.$scope.isSaving = false
+                    this.$scope.editMode = false
+                    this.$scope.afterSave = true;
+                    this.getFrontPageTitleTranslations();
+                    this.$scope.afterSave = false;
+                }
+            })
         }
     }
 

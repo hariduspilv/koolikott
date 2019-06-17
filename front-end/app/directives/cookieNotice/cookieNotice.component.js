@@ -10,7 +10,7 @@
             this.isSubmittEnabled()
 
             this.landingPageLanguages = ['ET', 'EN', 'RU'];
-            this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
+            this.$scope.maintenanceLanguage = this.landingPageLanguages[0];
 
             this.$scope.currentLanguage = this.translationService.getLanguage();
             this.$scope.iseditMode = false;
@@ -22,7 +22,7 @@
             this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
 
             this.$rootScope.$on('logout:success', this.moveNavbarHeaderUpForNotAdmin.bind(this));
-            this.$rootScope.$on('cookie:showCookieNotice', this.$timeout(() => {this.moveNavbarHeaderDownIfNoCookieExists()},1000));
+            this.$rootScope.$on('cookie:showCookieNotice', this.$timeout(() => {this.moveNavbarHeaderUp()},1000));
 
             this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
                 if (selectedValue && (selectedValue !== previousValue)) {
@@ -36,7 +36,7 @@
             if (this.$scope.afterSave) {
                 languageKey = this.$scope.currentLanguage;
             } else {
-                languageKey = this.$scope.activeNoticeAndDescriptionLanguage;
+                languageKey = this.$scope.maintenanceLanguage;
             }
 
             this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
@@ -46,7 +46,7 @@
                 })
                 .then((response) => {
                     if (response)
-                        this.$scope.cookieNotice.text = response.data.translation
+                        this.$scope.cookieNotice.text = response.data
                 })
                 .catch(e => {
                     console.log(e)
@@ -54,7 +54,7 @@
         }
 
         toggleNoticeAndDescriptionLanguageInputs(lang) {
-            this.$scope.activeNoticeAndDescriptionLanguage = lang
+            this.$scope.maintenanceLanguage = lang
             this.getCookieNoticeTranslations();
         }
 
@@ -71,7 +71,7 @@
                 .makePost('rest/translation/updateTranslation',
                     {
                         translationKey: this.$scope.cookieNotice.translationKey,
-                        languageKey: this.$scope.activeNoticeAndDescriptionLanguage,
+                        languageKey: this.$scope.maintenanceLanguage,
                         translation: this.$scope.cookieNotice.text
                     })
                 .then(response => {
@@ -167,17 +167,10 @@
             sidenavElement.style.top = 98 + 'px';
         }
 
-        moveNavbarHeaderDownIfNoCookieExists() {
-            const headerElement = document.getElementById('md-toolbar-header');
-            const sidenavElement = document.getElementById('sidebar-left');
-            sidenavElement.classList.remove('sidenav-cookie-related-upper');
-            headerElement.style.top = 58 + 'px';
-            sidenavElement.style.top = 58 + 'px';
-        }
-
         moveNavbarHeaderUp() {
             const headerElement = document.getElementById('md-toolbar-header');
             const sidenavElement = document.getElementById('sidebar-left');
+            sidenavElement.classList.remove('sidenav-cookie-related-upper');
             headerElement.style.top = 58 + 'px';
             sidenavElement.style.top = 58 + 'px';
         }

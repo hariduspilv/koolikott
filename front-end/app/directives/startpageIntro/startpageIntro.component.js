@@ -18,9 +18,7 @@
         }
 
         getVideoUrl() {
-            return this.$translate.instant(
-                'FRONT_PAGE_VIDEO_URL'
-            )
+            return this.$translate.instant('FRONT_PAGE_VIDEO_URL')
         }
 
         getStartPageIntroTranslations() {
@@ -31,7 +29,7 @@
                 })
                 .then((response) => {
                     if (response) {
-                        this.$scope.introPage.text = response.data.translation;
+                        this.$scope.introPage.text = response.data
                     }
                 })
                 .catch(e => {
@@ -45,7 +43,7 @@
                 })
                 .then((response) => {
                     if (response) {
-                        this.$scope.video.url = response.data.translation
+                        this.$scope.video.url = response.data
                     }
                 })
                 .catch(e => {
