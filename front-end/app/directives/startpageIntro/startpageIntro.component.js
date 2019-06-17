@@ -5,18 +5,16 @@
 
         constructor(...args) {
             super(...args)
-            // this.isSubmittEnabled()
             this.languagess = ['ET', 'EN', 'RU'];
             this.$scope.activeNoticeAndDescriptionLang = this.languagess[0];
 
             this.$scope.introPage = {};
-            this.getStartPageIntroTranslationss();
+            this.getStartPageIntroTranslations();
             this.$scope.currentLanguage = this.translationService.getLanguage();
             this.$scope.editMode = false;
             this.$scope.isSubmittButtonEnabled = false;
             this.$scope.video = {};
             this.$scope.video.url = () => this.getVideoUrl();
-            // this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
         }
 
         getVideoUrl() {
@@ -25,7 +23,7 @@
             )
         }
 
-        getStartPageIntroTranslationss() {
+        getStartPageIntroTranslations() {
             this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
                 {
                     translationKey: 'INTRO_TEXT',
@@ -35,7 +33,7 @@
                     if (response) {
                         this.$scope.introPage.text = response.data.translation;
                     }
-                    })
+                })
                 .catch(e => {
                     console.log(e)
                 })
@@ -72,7 +70,7 @@
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
                     }
-                })
+                });
             this.serverCallService
                 .makePost('rest/translation/updateTranslation',
                     {
@@ -86,7 +84,7 @@
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
                     }
-                })
+                });
         }
 
         cancelEdit() {
@@ -100,7 +98,7 @@
 
         toggleNoticeAndDescriptionLanguageInputss(lang) {
             this.$scope.activeNoticeAndDescriptionLang = lang
-            this.getStartPageIntroTranslationss();
+            this.getStartPageIntroTranslations();
         }
 
         isSubmittEnabled() {

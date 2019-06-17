@@ -39,7 +39,7 @@
 <![endif]-->
 <img data-ng-if="!hasAppInitated" id="preloader" class="preloader" src="utils/preloader/ring.gif" alt="Loading...">
 
-<data-dop-cookie-notice class="cookie-parent"></data-dop-cookie-notice>
+<data-dop-cookie-notice data-ng-if="showCookieBanner" class="cookie-parent"></data-dop-cookie-notice>
 <data-dop-column-layout data-ng-if="hasAppInitated" layout-fill></data-dop-column-layout>
 <data-dop-main-fab-button data-ng-show="!isProfile"></data-dop-main-fab-button>
 <data-dop-scroll-top data-ng-show="!isProfile"></data-dop-scroll-top>

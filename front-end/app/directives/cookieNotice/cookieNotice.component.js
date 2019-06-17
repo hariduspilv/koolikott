@@ -10,7 +10,6 @@
             this.isSubmittEnabled()
 
             this.landingPageLanguages = ['ET', 'EN', 'RU'];
-
             this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
 
             this.$scope.currentLanguage = this.translationService.getLanguage();
@@ -18,25 +17,16 @@
             this.$scope.cookieNotice = {}
             this.getCookieNoticeTranslations();
             this.$scope.isSubmittButtonEnabled = false;
+            this.$scope.isAgreed = false;
 
             this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
 
-            this.$scope.isAgreed = false;
-
-            // this.$rootScope.$on('logout:success', this.moveNavbarHeaderUpForNotAdmin());
+            this.$rootScope.$on('logout:success', this.moveNavbarHeaderUpForNotAdmin.bind(this));
+            this.$rootScope.$on('cookie:showCookieNotice', this.$timeout(() => {this.moveNavbarHeaderDownIfNoCookieExists()},1000));
 
             this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
                 if (selectedValue && (selectedValue !== previousValue)) {
                     this.$scope.isSubmittButtonEnabled = true;
-                    // this.isSubmittEnabled = () => this.$scope.isSubmittButtonEnabled = true;
-                }
-            });
-
-            this.$scope.$watch(() => this.$scope.hasCookie, (selectedValue) => {
-                if (selectedValue === true && !this.isAdmin()) {
-                    this.$timeout(() => {
-                        this.transformLayoutBeceuseOfCookie()
-                    }, 1000);
                 }
             });
         }
@@ -101,21 +91,8 @@
             return !this.$scope.isSubmittButtonEnabled;
         }
 
-        transformLayoutBeceuseOfCookie() {
-
-            if (this.$scope.hasCookie && !this.isAdmin()) {//TODO
-                // this.getToolbar().then(() => {
-                this.moveNavbarHeaderUpForNotAdmin();
-                // })
-            }
-        }
-
         hasCookie() {
-            if (!!this.$cookies.get('userAgent'))
-                this.$scope.hasCookie = true
-            else
-                this.$scope.hasCookie = false
-
+            this.$scope.hasCookie = !!this.$cookies.get('userAgent');
             return this.$scope.hasCookie;
         }
 
@@ -164,9 +141,13 @@
             this.$cookies.put('userAgent', this.getUserAgent())
             this.$cookies.put('time', new Date().toLocaleString())
             this.hasCookie()
-            if (this.$scope.hasCookie && !this.isAdmin()) {//TODO
+            if (this.$scope.hasCookie && !this.isAdmin()) {
                 this.moveNavbarHeaderUpForNotAdmin();
             }
+        }
+
+        isAdmin() {
+            return this.authenticatedUserService.isAdmin()
         }
 
         getUserAgent() {
@@ -184,6 +165,14 @@
             sidenavElement.classList.remove('sidenav-cookie-related');
             headerElement.style.top = 98 + 'px';
             sidenavElement.style.top = 98 + 'px';
+        }
+
+        moveNavbarHeaderDownIfNoCookieExists() {
+            const headerElement = document.getElementById('md-toolbar-header');
+            const sidenavElement = document.getElementById('sidebar-left');
+            sidenavElement.classList.remove('sidenav-cookie-related-upper');
+            headerElement.style.top = 58 + 'px';
+            sidenavElement.style.top = 58 + 'px';
         }
 
         moveNavbarHeaderUp() {
@@ -204,16 +193,12 @@
             sidenavElement.classList.add('sidenav-cookie-related-upper');
             sidenavElement.style.top = 0 + 'px';
         }
-
-
-        isAdmin() {
-            return this.authenticatedUserService.isAdmin()
-        }
     }
 
     controller.$inject = [
         '$http',
         '$translate',
+        '$rootScope',
         'serverCallService',
         '$scope',
         '$cookies',

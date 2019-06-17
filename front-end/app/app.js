@@ -298,7 +298,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
 
             $rootScope.hasAppInitated = true;
 
-            window.onbeforeunload = function() {
+            window.onbeforeunload = function () {
                 userLocatorService.saveUserLocation()
             }
         });
@@ -372,4 +372,15 @@ app.run(['$templateCache', '$sce', '$templateRequest', function ($templateCache,
 
 app.run(['$translate', function ($translate) {
     configureTextAngular(provideProvider, $translate);
+}]);
+
+app.run(['$rootScope', '$cookies','authenticatedUserService', function ($rootScope, $cookies,authenticatedUserService) {
+
+    $rootScope.isCookie = !!$cookies.get('userAgent');
+    $rootScope.isAdmin = authenticatedUserService.isAdmin();
+
+    if (!$rootScope.isCookie || $rootScope.isAdmin) {
+        $rootScope.showCookieBanner = true;
+        $rootScope.$broadcast('cookie:showCookieNotice');
+    }
 }]);

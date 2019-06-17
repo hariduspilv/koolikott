@@ -1,5 +1,5 @@
-<div data-layout="row" data-layout-align="space-between center">
-  <md-content class="md-padding" layout-xs="column" data-layout="row" flex>
+<div data-layout="row" data-layout-align="space-between center" data-layout-xs="column" style="margin-top: 30px">
+  <md-content class="md-padding" data-layout-xs="column" data-layout="row" flex>
     <md-card flex="50">
       <md-card-actions layout="row" layout-align="start center" style="margin: 0px !important;">
         <md-button data-ng-if="!editMode && $ctrl.isAdmin()"
@@ -84,6 +84,7 @@
     </md-card>
     <md-card flex="50" class="card-sm-frontpage _md layout-xs-row layout-column">
       <div class="embedded-material">
+        <div class="embed-responsive embed-responsive-16by9">
         <div class="embed-responsive-container">
           <youtube-video
             video-url="video.url"
@@ -91,6 +92,7 @@
             player-height="'432'"
             class="embed-item embed-responsive-item"
           ></youtube-video>
+        </div>
         </div>
       </div>
     </md-card>

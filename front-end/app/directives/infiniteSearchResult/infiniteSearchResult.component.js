@@ -12,7 +12,6 @@
             }
 
             this.$scope.currentLanguage = this.translationService.getLanguage();
-            // if(this.$scope.currentLanguage)
             this.$scope.activeNoticeAndDescriptionLanguage = this.landingPageLanguages[0];
             this.$scope.activeNoticeAndDescriptionLanguage2 = this.landingPageLanguages[0];
             this.$scope.filteredTitle = {}
@@ -20,12 +19,6 @@
 
             this.$scope.editMode = false;
             this.$rootScope.$on('logout:success', () => this.$scope.isEditMode = false);
-        }
-
-        convertLanguageStrings(lang) {
-            if (lang === 'est') return 'ET'
-            else if (lang === 'rus') return 'RU'
-            else if (lang === 'eng') return 'EN'
         }
 
         $onDestroy() {
@@ -446,16 +439,13 @@
         }
 
         cancelEdit() {
-
             this.$scope.isEditMode = false
             this.$scope.visible = false
             this.setNoticesAndDescriptions()
         }
 
-
         toggleNoticeAndDescriptionLanguageInputs(lang) {
             this.$scope.activeNoticeAndDescriptionLanguage = lang
-            // this.getFrontPageTitleTranslations();
         }
 
         toggleNoticeAndDescriptionLanguageInputs2(lang) {
@@ -489,7 +479,6 @@
         }
 
         setNoticesAndDescriptions() {
-
             this.serverCallService
                 .makeGet('rest/translation/landingPage/admin')
                 .then(({data}) => {
@@ -636,9 +625,6 @@
                         this.$scope.afterSave = true;
                         this.getFrontPageTitleTranslations();
                         this.$scope.afterSave = false;
-                        // this.$scope.currentLanguage = this.translationService.getLanguage();
-                        // this.$scope.currentLanguage = this.convertLanguageStrings(this.$scope.currentLanguage);
-                        // this.$scope.activeNoticeAndDescriptionLanguage = this.convertLanguageStrings(this.$scope.currentLanguage);
                     }
                 })
         }
