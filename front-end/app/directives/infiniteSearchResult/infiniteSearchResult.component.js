@@ -614,7 +614,7 @@
                     translation: this.$scope.filteredTitle.text
                 }).then(response => {
                 if (response.status === 200) {
-                    this.toastService.show('COOKIE_NOTICE_UPDATED')
+                    this.toastService.show('FRONT_PAGE_HEADLINE_TITLE_UPDATED')
                     this.$scope.isSaving = false
                     this.$scope.editMode = false
                     this.$scope.afterSave = true;
@@ -622,6 +622,7 @@
                     this.$scope.afterSave = false;
                 }
             })
+                .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
         }
     }
 

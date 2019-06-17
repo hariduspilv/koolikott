@@ -64,25 +64,27 @@
                     })
                 .then(response => {
                     if (response.status === 200) {
-                        this.toastService.show('COOKIE_NOTICE_UPDATED')
+                        this.toastService.show('FRONT_PAGE_CHANGES_SAVED')
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
                     }
-                });
+                }).catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
+
             this.serverCallService
                 .makePost('rest/translation/updateTranslation',
                     {
-                        translationKey: this.$scope.video.translationKey ,
+                        translationKey: this.$scope.video.translationKey,
                         languageKey: this.$scope.activeNoticeAndDescriptionLang,
                         translation: this.$scope.video.url
                     })
                 .then(response => {
                     if (response.status === 200) {
-                        this.toastService.show('COOKIE_NOTICE_UPDATED')
+                        this.toastService.show('FRONT_PAGE_CHANGES_SAVED')
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
                     }
-                });
+                })
+                .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
         }
 
         cancelEdit() {

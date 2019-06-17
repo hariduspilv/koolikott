@@ -85,6 +85,7 @@
                         this.moveNavbarHeaderUp();
                     }
                 })
+                .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
         }
 
         isSubmittEnabled() {
