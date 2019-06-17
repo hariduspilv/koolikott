@@ -30,6 +30,17 @@ public class LanguageDao extends AbstractDao<Language> {
                 .getSingleResult();
     }
 
+    public String findCodeByCode(String langCode) {
+        if (langCode.equalsIgnoreCase("ET")) {
+            langCode = "est";
+        } else if (langCode.equalsIgnoreCase("RU")) {
+            langCode = "rus";
+        } else if (langCode.equalsIgnoreCase("EN")) {
+            langCode = "eng";
+        }
+        return langCode;
+    }
+
     @Override
     public List<Language> findAll() {
         return getEntityManager()

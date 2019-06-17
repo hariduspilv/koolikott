@@ -65,7 +65,7 @@ public class TranslationService {
     }
 
     public void updateTranslation(TranslationDto translationDto) {
-        translationGroupDao.updateTranslation(translationDto.getTranslation(), translationDto.getTranslationKey(), translationDto.getLanguageKey());
+        translationGroupDao.updateTranslation(translationDto.getTranslation(), translationDto.getTranslationKey(), languageDao.findCodeByCode(translationDto.getLanguageKey()));
     }
 
     public String getTranslations(String tr_key, String lng_code) {
