@@ -1,11 +1,10 @@
 <div data-layout="row" data-layout-align="space-between center" data-layout-xs="column" style="margin-top: 30px">
   <md-content class="md-padding" data-layout-xs="column" data-layout="row" flex>
     <md-card flex="50">
-      <md-card-actions layout="row" layout-align="start center" style="margin: 0px !important;">
+      <md-card-actions layout="row" layout-align="end center" style="margin: 0px !important;">
         <md-button data-ng-if="!editMode && $ctrl.isAdmin()"
                    data-ng-click="$ctrl.editIntroPage()">
-          <md-icon class="material-icons">edit</md-icon>
-          <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
+          <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
         </md-button>
       </md-card-actions>
       <md-card-content>
@@ -33,7 +32,7 @@
               <div layout="row" layout-xs="column">
                 <div layout-xs="column" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
                      flex-order-gt-sm="2" flex="100">
-                    <trix-editor class="term-block" angular-trix ng-model="introPage.text"></trix-editor>
+                    <trix-editor ng-if="true" class="term-block" angular-trix ng-model="introPage.text"></trix-editor>
                 </div>
               </div>
               <div style="margin-top: 20px" data-layout="row" data-layout-xs="column" data-layout-align="space-between center">
