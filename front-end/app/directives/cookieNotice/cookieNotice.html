@@ -2,7 +2,7 @@
   class="cookie-notice"
   data-ng-if="!hasCookie || ($ctrl.isAdmin() && hasCookie && !iseditMode)"
   layout="row" layout-align="space-between center">
-  <span data-ng-bind="cookieNotice.text"></span>
+  <span data-ng-bind-html="cookieNotice.text"></span>
   <div>
     <md-button data-ng-show="!hasCookie"
                class="md-raised md-primary"
