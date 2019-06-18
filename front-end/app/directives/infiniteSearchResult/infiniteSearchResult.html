@@ -185,7 +185,7 @@
   <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()"
        class="margin-top-36 card-container"
        data-layout="column">
-    <div data-layout="row" data-layout-align="space-between center" flex data-ng-if="!editMode">
+    <div data-layout="row" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
       <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
       <md-button data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
         <md-icon class="material-icons">edit</md-icon>
@@ -193,7 +193,7 @@
       </md-button>
     </div>
     <!--  edit part-->
-    <div class="padding-left-16" data-ng-if="editMode" layout="row" layout-align="center center">
+    <div class="padding-left-16" data-ng-if="editMode && $ctrl.isLandingPage() && $ctrl.isAdmin()" layout="row" layout-align="center center">
       <form name="updateFilteredTitleForm" flex="100" class="flex flex-col">
         <md-dialog-content>
           <div
