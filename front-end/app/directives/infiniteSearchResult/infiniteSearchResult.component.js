@@ -583,7 +583,7 @@
 
         getFrontPageTitleTranslations() {
             let languageKey
-            if (this.$scope.afterSave) {
+            if (!this.$scope.editMode) {
                 languageKey = this.$scope.currentLanguage;
             } else {
                 languageKey = this.$scope.headlineLanguage;

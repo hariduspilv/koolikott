@@ -18,6 +18,7 @@
             this.getCookieNoticeTranslations();
             this.$scope.isSubmittButtonEnabled = false;
             this.$scope.isAgreed = false;
+            this.$scope.afterSave = false;
 
             this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
 
@@ -33,7 +34,7 @@
 
         getCookieNoticeTranslations() {
             let languageKey
-            if (this.$scope.afterSave) {
+            if (!this.$scope.iseditMode) {
                 languageKey = this.$scope.currentLanguage;
             } else {
                 languageKey = this.$scope.maintenanceLanguage;

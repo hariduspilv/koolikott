@@ -22,10 +22,17 @@
         }
 
         getStartPageIntroTranslations() {
+            let languageKey
+            if (!this.$scope.editMode) {
+                languageKey = this.translationService.getLanguage();
+            } else {
+                languageKey = this.$scope.activeNoticeAndDescriptionLang;
+            }
+
             this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
                 {
                     translationKey: 'INTRO_TEXT',
-                    languageKey: this.$scope.activeNoticeAndDescriptionLang,
+                    languageKey: languageKey,
                 })
                 .then((response) => {
                     if (response) {
@@ -39,7 +46,7 @@
             this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
                 {
                     translationKey: 'FRONT_PAGE_VIDEO_URL',
-                    languageKey: this.$scope.activeNoticeAndDescriptionLang,
+                    languageKey: languageKey,
                 })
                 .then((response) => {
                     if (response) {
