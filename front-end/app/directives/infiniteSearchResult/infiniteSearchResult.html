@@ -253,10 +253,10 @@
         </md-dialog-content>
       </form>
     </div>
-    <div data-layout="row">
+    <div data-layout="row" data-layout-xs="column">
       <div
         data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
-        class="card-container__item" flex-xs="100" data-layout="row">
+        class="card-container__item" flex-xs="100" data-layout="row" data-layout-xs="column">
         <dop-card-sm learning-object="item"></dop-card-sm>
       </div>
     </div>
