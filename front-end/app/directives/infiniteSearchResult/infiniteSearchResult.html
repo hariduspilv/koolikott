@@ -119,7 +119,7 @@
 <!--    <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>-->
 <!--  </md-button>-->
 </div>
-<data-dop-startpage-intro></data-dop-startpage-intro>
+<data-dop-startpage-intro data-ng-if="$ctrl.isLandingPage()"></data-dop-startpage-intro>
 <div data-ng-if="sorting || !searching">
   <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
