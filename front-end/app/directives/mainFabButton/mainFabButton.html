@@ -5,7 +5,7 @@
   <md-fab-trigger>
     <md-button ng-show="hasPermission()" aria-label="Lisa kogumik" class="md-fab main-fab"
                data-ng-click="isOpen && showAddPortfolioDialog($event)" id="add-portfolio">
-      <md-tooltip md-direction="left">
+      <md-tooltip md-direction="left" md-delay="150">
         <span data-translate="ADD_PORTFOLIO"></span>
       </md-tooltip>
       <md-icon class="fab-closed-icon">add</md-icon>
@@ -16,7 +16,7 @@
     <md-button aria-label="Lisa material" class="md-fab md-mini main-fab__btn"
                data-ng-click="showAddMaterialDialog($event)"
                data-ng-show="hasPermission()" id="add-material">
-      <md-tooltip md-direction="left">
+      <md-tooltip md-direction="left" md-delay="150">
         <span data-translate="ADD_MATERIAL"></span>
       </md-tooltip>
       <md-icon>note_add</md-icon>

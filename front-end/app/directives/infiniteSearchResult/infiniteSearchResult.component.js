@@ -567,6 +567,10 @@
                         this.getNoticeAndTranslationString()
                     }
                 })
+                .catch(() => {
+                    this.$scope.isSaving = false
+                    this.toastService.show('LANDING_PAGE_UPDATE_FAILED')
+                })
         }
 
         isLandingPage() {
