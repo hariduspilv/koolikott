@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @Transactional
@@ -68,7 +67,24 @@ public class TranslationService {
         translationGroupDao.updateTranslation(translationDto.getTranslation(), translationDto.getTranslationKey(), languageDao.findCodeByCode(translationDto.getLanguageKey()));
     }
 
+    public void updateTranslations(TranslationsDto translationsDtos) {
+        for (int i = 0; i < translationsDtos.getTranslations().size(); i++) {
+            translationGroupDao.updateTranslation(
+                    translationsDtos.getTranslations().get(i),
+                    translationsDtos.getTranslationKey(),
+                    languageDao.findCodeByCode(translationsDtos.getLanguageKeys().get(i)));
+        }
+    }
+
     public String getTranslations(String tr_key, String lng_code) {
         return translationGroupDao.getTranslationByKeyAndLangcode(tr_key, languageDao.findIdByCode(lng_code));
+    }
+
+    public List<String> getTranslations(String tr_key) {
+        return translationGroupDao.getTranslationsForKey(Arrays.asList(tr_key));
+    }
+
+    public List<String> getAllTranslations(String tr_key) {
+        return translationGroupDao.getTranslationsForKey(Collections.singletonList(tr_key));
     }
 }

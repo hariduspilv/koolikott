@@ -5,15 +5,19 @@
 
         constructor(...args) {
             super(...args)
-            this.languagess = ['ET', 'EN', 'RU'];
+            this.languagess = ['ET','RU','EN'];
             this.$scope.activeNoticeAndDescriptionLang = this.languagess[0];
+            this.$scope.currentLanguage = this.translationService.getLanguage();
 
             this.$scope.introPage = {};
-            this.getStartPageIntroTranslations();
-            this.$scope.currentLanguage = this.translationService.getLanguage();
+            this.$scope.video = {};
+            this.$scope.intropageContent = {}
+            this.$scope.intropageVideoUrl = {}
+
+            this.getStartPageIntroText();
+            this.getAllStartPageIntroTranslations();
             this.$scope.editMode = false;
             this.$scope.isSubmittButtonEnabled = false;
-            this.$scope.video = {};
             this.$scope.video.url = () => this.getVideoUrl();
         }
 
@@ -21,7 +25,7 @@
             return this.$translate.instant('FRONT_PAGE_VIDEO_URL')
         }
 
-        getStartPageIntroTranslations() {
+        getStartPageIntroText() {
             let languageKey
             if (!this.$scope.editMode) {
                 languageKey = this.translationService.getLanguage();
@@ -58,16 +62,56 @@
                 })
         }
 
+        getAllStartPageIntroTranslations() {
+            this.serverCallService.makeGet('rest/translation/getAllTranslations',
+                {
+                    translationKey: 'INTRO_TEXT',
+                })
+                .then((response) => {
+                    if (response) {
+                        this.languagess.forEach((key, i) => {
+                            this.$scope.intropageContent[key] = response.data[i]
+                        });
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+
+            this.serverCallService.makeGet('rest/translation/getAllTranslations',
+                {
+                    translationKey: 'FRONT_PAGE_VIDEO_URL',
+                })
+                .then((response) => {
+                    if (response) {
+                        this.languagess.forEach((key, i) => {
+                            this.$scope.intropageVideoUrl[key] = response.data[i]
+                        });
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                })
+        }
+
         save(){
             this.$scope.isSaving = true;
             this.$scope.introPage.translationKey = 'INTRO_TEXT';
             this.$scope.video.translationKey = 'FRONT_PAGE_VIDEO_URL';
+
+            this.$scope.intropageContent[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.introPage.text;
+            this.$scope.intropageVideoUrl[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.video.url;
+
+            const LANGS = Object.keys(this.$scope.intropageContent);
+            const VALUES_CONTENT = Object.values(this.$scope.intropageContent);
+            const VALUES_URL = Object.values(this.$scope.intropageVideoUrl);
+
             this.serverCallService
-                .makePost('rest/translation/updateTranslation',
+                .makePost('rest/translation/updateTranslations',
                     {
+                        translations: VALUES_CONTENT,
                         translationKey: this.$scope.introPage.translationKey,
-                        languageKey: this.$scope.activeNoticeAndDescriptionLang,
-                        translation: this.$scope.introPage.text
+                        languageKeys: LANGS
                     })
                 .then(response => {
                     if (response.status === 200) {
@@ -78,11 +122,11 @@
                 }).catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
 
             this.serverCallService
-                .makePost('rest/translation/updateTranslation',
+                .makePost('rest/translation/updateTranslations',
                     {
+                        translations: VALUES_URL,
                         translationKey: this.$scope.video.translationKey,
-                        languageKey: this.$scope.activeNoticeAndDescriptionLang,
-                        translation: this.$scope.video.url
+                        languageKeys: LANGS
                     })
                 .then(response => {
                     if (response.status === 200) {
@@ -95,7 +139,12 @@
         }
 
         cancelEdit() {
+            this.$scope.introPage = {};
+            this.$scope.video = {};
             this.$scope.editMode = false
+            this.$scope.activeNoticeAndDescriptionLang = this.languagess[0];
+            this.getAllStartPageIntroTranslations();
+            this.getStartPageIntroText();
             this.$scope.isSubmittButtonEnabled = false;
         }
 
@@ -103,9 +152,12 @@
             this.$scope.editMode = true
         }
 
-        toggleNoticeAndDescriptionLanguageInputss(lang) {
+        toggleIntroPageLanguageInputs(lang) {
+            this.$scope.intropageContent[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.introPage.text;
+            this.$scope.intropageVideoUrl[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.video.url;
             this.$scope.activeNoticeAndDescriptionLang = lang
-            this.getStartPageIntroTranslations();
+            this.$scope.introPage.text = this.$scope.intropageContent[lang];
+            this.$scope.video.url = this.$scope.intropageVideoUrl[lang];
         }
 
         isSubmittEnabled() {

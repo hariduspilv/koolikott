@@ -9,13 +9,17 @@
             this.hasCookie()
             this.isSubmittEnabled()
 
-            this.landingPageLanguages = ['ET', 'EN', 'RU'];
+            this.landingPageLanguages = ['ET', 'RU', 'EN',];
             this.$scope.maintenanceLanguage = this.landingPageLanguages[0];
-
             this.$scope.currentLanguage = this.translationService.getLanguage();
+
             this.$scope.iseditMode = false;
             this.$scope.cookieNotice = {}
-            this.getCookieNoticeTranslations();
+            this.$scope.cookie = {}
+
+            this.getCookieNoticeText();
+            this.getTranslationsForAllLanguages();
+
             this.$scope.isSubmittButtonEnabled = false;
             this.$scope.isAgreed = false;
             this.$scope.afterSave = false;
@@ -23,7 +27,9 @@
             this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
 
             this.$rootScope.$on('logout:success', this.moveNavbarHeaderUpForNotAdmin.bind(this));
-            this.$rootScope.$on('cookie:showCookieNotice', this.$timeout(() => {this.moveNavbarHeaderUp()},1000));
+            this.$rootScope.$on('cookie:showCookieNotice', this.$timeout(() => {
+                this.moveNavbarHeaderUp()
+            }, 1000));
 
             this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
                 if (selectedValue && (selectedValue !== previousValue)) {
@@ -32,18 +38,28 @@
             });
         }
 
-        getCookieNoticeTranslations() {
-            let languageKey
-            if (!this.$scope.iseditMode) {
-                languageKey = this.$scope.currentLanguage;
-            } else {
-                languageKey = this.$scope.maintenanceLanguage;
-            }
+        getTranslationsForAllLanguages() {
+            this.serverCallService.makeGet('rest/translation/getAllTranslations',
+                {
+                    translationKey: 'COOKIE_AGREEMENT',
+                })
+                .then((response) => {
+                    if (response) {
+                        this.landingPageLanguages.forEach((key, i) => {
+                            this.$scope.cookie[key] = response.data[i]
+                        });
+                    }
+                })
+                .catch(e => {
+                    console.log(e)
+                });
+        }
 
+        translationFunction(lang) {
             this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
                 {
                     translationKey: 'COOKIE_AGREEMENT',
-                    languageKey: languageKey,
+                    languageKey: lang,
                 })
                 .then((response) => {
                     if (response)
@@ -54,13 +70,28 @@
                 })
         }
 
+        getCookieNoticeText() {
+            let languageKey
+            if (!this.$scope.iseditMode) {
+                languageKey = this.$scope.currentLanguage;
+            } else {
+                languageKey = this.$scope.maintenanceLanguage;
+            }
+            this.translationFunction(languageKey);
+        }
+
         toggleNoticeAndDescriptionLanguageInputs(lang) {
-            this.$scope.maintenanceLanguage = lang
-            this.getCookieNoticeTranslations();
+            this.$scope.cookie[this.$scope.maintenanceLanguage] = this.$scope.cookieNotice.text;
+            this.$scope.maintenanceLanguage = lang;
+            this.$scope.cookieNotice.text = this.$scope.cookie[lang];
         }
 
         cancelEdit() {
+            this.$scope.cookie = {}
             this.$scope.iseditMode = false
+            this.$scope.maintenanceLanguage = this.landingPageLanguages[0];
+            this.getTranslationsForAllLanguages();
+            this.translationFunction(this.landingPageLanguages[0]);
             this.$scope.isSubmittButtonEnabled = false;
             this.moveNavbarHeaderUp();
         }
@@ -68,12 +99,17 @@
         savve() {
             this.$scope.isSaving = true;
             this.$scope.cookieNotice.translationKey = 'COOKIE_AGREEMENT';
+            this.$scope.cookie[this.$scope.maintenanceLanguage] = this.$scope.cookieNotice.text;
+
+            const LANGS = Object.keys(this.$scope.cookie);
+            const VALUES = Object.values(this.$scope.cookie);
+
             this.serverCallService
-                .makePost('rest/translation/updateTranslation',
+                .makePost('rest/translation/updateTranslations',
                     {
+                        translations: VALUES,
                         translationKey: this.$scope.cookieNotice.translationKey,
-                        languageKey: this.$scope.maintenanceLanguage,
-                        translation: this.$scope.cookieNotice.text
+                        languageKeys: LANGS
                     })
                 .then(response => {
                     if (response.status === 200) {
@@ -81,7 +117,7 @@
                         this.$scope.isSaving = false
                         this.$scope.iseditMode = false
                         this.$scope.afterSave = true;
-                        this.getCookieNoticeTranslations();
+                        this.getTranslationsForAllLanguages();
                         this.$scope.afterSave = false;
                         this.moveNavbarHeaderUp();
                     }

@@ -24,7 +24,7 @@
         data-ng-if="lang === maintenanceLanguage && isEditMode"
         layout="row"
         layout-wrap data-layout-align="space-between center">
-        <div layout="row" layout-align="end center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
+        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100"  flex-order="1"
              data-ng-if="isEditMode">
           <!-- Landing page language -->
           <md-button
@@ -67,28 +67,15 @@
             ></md-progress-circular>
           </div>
         </div>
-        <div data-flex-order="3" flex="100" class="flex flex-col">
-          <div layout="column" layout-align="start start"
-               data-ng-if="isEditMode">
-            <md-button
-              aria-label="Ava/sulge hooldusteade"
-              id="open-additional-info"
-              class="md-primary no-margin"
-              data-ng-click="$ctrl.maintenanceVisible()"
-            >
-              <span data-translate="LANDING_PAGE_MAINTENANCE_NOTICE"></span>
-              <md-icon>{{ visible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
-            </md-button>
-            <div data-ng-if="visible" class="maintenance-width">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                <textarea name="notice"
-                          ng-model="noticesAndDescriptions[lang].notice"
-                          id="add-landing-page-notice-input"
-                          rows="2"></textarea>
-              </md-input-container>
-            </div>
+        <div data-flex-order="3" flex="100" layout="row">
+            <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                <textarea
+                  name="notice"
+                  ng-model="noticesAndDescriptions[lang].notice"
+                  id="add-landing-page-notice-input"
+                ></textarea>
+            </md-input-container>
           </div>
-        </div>
       </div>
     </md-dialog-content>
   </form>
@@ -224,7 +211,7 @@
               aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
               class="md-primary"
               data-ng-disabled="$ctrl.isSubmittEnabled()"
-              data-ng-click="$ctrl.saveFilteredTitle()"
+              data-ng-click="$ctrl.saveFilteredTitles()"
             >
               <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
               <md-icon>arrow_forward</md-icon>
