@@ -19,6 +19,7 @@
             this.$scope.editMode = false;
             this.$scope.isSubmittButtonEnabled = false;
             this.$scope.video.url = () => this.getVideoUrl();
+            this.$rootScope.$on('logout:success', () => this.$scope.editMode = false)
         }
 
         getVideoUrl() {
@@ -178,6 +179,7 @@
     }
 
     controller.$inject = [
+        '$rootScope',
         '$http',
         '$translate',
         'serverCallService',
