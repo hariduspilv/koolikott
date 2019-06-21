@@ -1,8 +1,9 @@
 <div data-layout="row" data-layout-align="space-between center" data-layout-xs="column" style="margin-top: 30px">
-  <md-content class="md-padding" data-layout-xs="column" data-layout="row" flex>
-    <md-card flex="50">
+  <md-content layout-fill data-layout-align="center center" class="md-padding" data-layout-xs="column" data-layout="row"
+              flex>
+    <md-card flex="100" style="overflow: auto;height: 400px;">
       <md-card-actions layout="row" layout-align="end center" style="margin: 0px !important;">
-        <md-button data-ng-if="!editMode && $ctrl.isAdmin()"
+        <md-button style="margin-top: 30px" data-ng-if="!editMode && $ctrl.isAdmin()"
                    data-ng-click="$ctrl.editIntroPage()">
           <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
         </md-button>
@@ -81,17 +82,13 @@
         </div>
       </md-card-content>
     </md-card>
-    <md-card flex="50" class="card-sm-frontpage _md layout-xs-row layout-column">
-      <div class="embedded-material">
-        <div class="embed-responsive embed-responsive-16by9">
+    <md-card flex="100" class="card-sm-frontpage _md layout-xs-row layout-column" style="justify-content: center">
+      <div class="embed-responsive-frontpage-video embed-responsive-16by9">
         <div class="embed-responsive-container">
           <youtube-video
             video-url="video.url"
-            player-width="'527'"
-            player-height="'432'"
             class="embed-item embed-responsive-item"
           ></youtube-video>
-        </div>
         </div>
       </div>
     </md-card>

@@ -212,12 +212,10 @@
 }
 
 .card-sm-frontpage {
-  width: 80%;
-  overflow: hidden;
+  width: 100%;
+  overflow: auto;
   position: relative;
   flex-direction: column;
-
-
 
   @media (min-width: $layout-breakpoint-xs) {
     width: 466px;
@@ -245,7 +243,6 @@
 
   md-card-content {
     height: 100%;
-    padding-bottom: 10px;
 
     .ua-safari & {
       @media (max-width: $layout-breakpoint-xs - 1) {
@@ -265,7 +262,7 @@
 
   .card__content-wrapper {
     @media (min-width: $layout-breakpoint-xs) {
-      height: 100%;
+      height: 90%;
     }
   }
 
