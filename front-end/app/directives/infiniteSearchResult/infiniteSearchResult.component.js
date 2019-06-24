@@ -6,22 +6,27 @@
             super(...args)
 
             this.landingPageLanguages = ['ET', 'EN', 'RU']
-            this.frontPageLanguages = ['ET','RU','EN']
             this.initEmptyLandingPageEdit()
             if (this.isLandingPage()) {
                 this.getNoticeAndTranslationString()
             }
 
             this.$scope.currentLanguage = this.translationService.getLanguage();
-            this.$scope.maintenanceLanguage = this.landingPageLanguages[0];
-            this.$scope.headlineLanguage = this.frontPageLanguages[0];
             this.$scope.filteredTitle = {}
             this.$scope.highligthTitle = {}
             this.getFrontPageTitleTranslations()
             this.getAllFrontPageTitleTranslations()
+            this.headlineAndMaintananceLanguage()
 
             this.$scope.editMode = false;
             this.$rootScope.$on('logout:success', () => this.$scope.isEditMode = false);
+        }
+
+        headlineAndMaintananceLanguage() {
+            if (this.$scope.currentLanguage) {
+                this.$scope.headlineLanguage = this.convertLanguage(this.$scope.currentLanguage);
+                this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
+            }
         }
 
         $onDestroy() {
@@ -445,6 +450,7 @@
             this.$scope.isEditMode = false
             this.$scope.visible = false
             this.setNoticesAndDescriptions()
+            this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
         }
 
         toggleNoticeAndDescriptionLanguageInputs(lang) {
@@ -569,6 +575,7 @@
                         this.$scope.isEditMode = false
                         this.$scope.visible = false
                         this.getNoticeAndTranslationString()
+                        this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
                     }
                 })
                 .catch(() => {
@@ -590,14 +597,9 @@
         }
 
         getFrontPageTitleTranslations() {
-            let languageKey
-            if (!this.$scope.editMode) {
-                languageKey = this.$scope.currentLanguage;
-            } else {
-                languageKey = this.$scope.headlineLanguage;
-            }
+            let languageKey = this.$scope.editMode ? this.$scope.headlineLanguage : this.$scope.currentLanguage;
 
-            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject', {
+            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationKey', {
                 translationKey: 'FRONT_PAGE_FILTERED_TITLE',
                 languageKey: languageKey,
             }).then((response) => {
@@ -615,9 +617,9 @@
                 })
                 .then((response) => {
                     if (response) {
-                        this.frontPageLanguages.forEach((key, i) => {
-                            this.$scope.highligthTitle[key] = response.data[i]
-                        });
+                        this.$scope.highligthTitle.ET = response.data[0];
+                        this.$scope.highligthTitle.RU = response.data[1];
+                        this.$scope.highligthTitle.EN = response.data[2];
                     }
                 })
                 .catch(e => {
@@ -628,15 +630,14 @@
         cancelEditMode() {
             this.$scope.highligthTitle = {}
             this.$scope.editMode = false
-            this.$scope.headlineLanguage = this.frontPageLanguages[0];
             this.getAllFrontPageTitleTranslations();
             this.getFrontPageTitleTranslations();
+            this.$scope.headlineLanguage = this.convertLanguage(this.$scope.currentLanguage);
         }
 
         saveFilteredTitles() {
             this.$scope.isSaving = true;
             this.$scope.filteredTitle.translationKey = 'FRONT_PAGE_FILTERED_TITLE';
-
             this.$scope.highligthTitle[this.$scope.headlineLanguage] = this.$scope.filteredTitle.text;
 
             const LANGS = Object.keys(this.$scope.highligthTitle);
@@ -654,13 +655,13 @@
                     this.$scope.editMode = false
                     this.$scope.afterSave = true;
                     this.getAllFrontPageTitleTranslations();
+                    this.getFrontPageTitleTranslations();
+                    this.$scope.headlineLanguage = this.convertLanguage(this.$scope.currentLanguage);
                     this.$scope.afterSave = false;
                 }
             })
                 .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
         }
-
-
     }
 
     controller.$inject = [

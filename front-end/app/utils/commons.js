@@ -1157,6 +1157,14 @@ class Controller {
         const currentIsAll = groupId === 'all';
         return !currentIsAll && allActiveExists || currentIsAll && !allActiveExists;
     }
+    convertLanguage(lang) {
+        if (lang === 'est')
+            return 'ET'
+        else if (lang === 'rus')
+            return 'RU'
+        else if (lang === 'eng')
+            return 'EN'
+    }
 }
 
 

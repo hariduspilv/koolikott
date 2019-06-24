@@ -2,12 +2,19 @@ package ee.hm.dop.service.metadata;
 
 import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.LandingPageObject;
+import ee.hm.dop.model.LandingPageString;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.TranslationGroup;
+import ee.hm.dop.model.TranslationsDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Transactional
@@ -63,8 +70,10 @@ public class TranslationService {
         return translationGroupDao.getTranslations(key);
     }
 
-    public void updateTranslation(TranslationDto translationDto) {
-        translationGroupDao.updateTranslation(translationDto.getTranslation(), translationDto.getTranslationKey(), languageDao.findCodeByCode(translationDto.getLanguageKey()));
+    public void updateTranslation(TranslationsDto translationsDto) {
+        translationGroupDao.updateTranslation(translationsDto.getTranslations().get(0),
+                translationsDto.getTranslationKey(),
+                languageDao.findCodeByCode(translationsDto.getLanguageKeys().get(0)));
     }
 
     public void updateTranslations(TranslationsDto translationsDtos) {
@@ -76,15 +85,11 @@ public class TranslationService {
         }
     }
 
-    public String getTranslations(String tr_key, String lng_code) {
-        return translationGroupDao.getTranslationByKeyAndLangcode(tr_key, languageDao.findIdByCode(lng_code));
+    public String getTranslations(String translationKey, String languageCode) {
+        return translationGroupDao.getTranslationByKeyAndLangcode(translationKey, languageDao.findIdByCode(languageCode));
     }
 
-    public List<String> getTranslations(String tr_key) {
-        return translationGroupDao.getTranslationsForKey(Arrays.asList(tr_key));
-    }
-
-    public List<String> getAllTranslations(String tr_key) {
-        return translationGroupDao.getTranslationsForKey(Collections.singletonList(tr_key));
+    public List<String> getAllTranslations(String translationKey) {
+        return translationGroupDao.getTranslationsForKey(Collections.singletonList(translationKey));
     }
 }

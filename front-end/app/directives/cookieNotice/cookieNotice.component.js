@@ -7,10 +7,9 @@
             super(...args)
             this.$scope.hasCookie = false
             this.hasCookie()
-            this.isSubmittEnabled()
+            this.isSubmitEnabled()
 
-            this.landingPageLanguages = ['ET', 'RU', 'EN',];
-            this.$scope.maintenanceLanguage = this.landingPageLanguages[0];
+            this.landingPageLanguages = ['ET', 'EN', 'RU'];
             this.$scope.currentLanguage = this.translationService.getLanguage();
 
             this.$scope.iseditMode = false;
@@ -19,6 +18,7 @@
 
             this.getCookieNoticeText();
             this.getTranslationsForAllLanguages();
+            this.maintananceLang();
 
             this.$scope.isSubmittButtonEnabled = false;
             this.$scope.isAgreed = false;
@@ -38,6 +38,11 @@
             });
         }
 
+        maintananceLang() {
+            if (this.$scope.currentLanguage)
+                this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
+        }
+
         getTranslationsForAllLanguages() {
             this.serverCallService.makeGet('rest/translation/getAllTranslations',
                 {
@@ -45,9 +50,9 @@
                 })
                 .then((response) => {
                     if (response) {
-                        this.landingPageLanguages.forEach((key, i) => {
-                            this.$scope.cookie[key] = response.data[i]
-                        });
+                        this.$scope.cookie.ET = response.data[0];
+                        this.$scope.cookie.RU = response.data[1];
+                        this.$scope.cookie.EN = response.data[2];
                     }
                 })
                 .catch(e => {
@@ -55,8 +60,8 @@
                 });
         }
 
-        translationFunction(lang) {
-            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
+        getTranslationByKey(lang) {
+            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationKey',
                 {
                     translationKey: 'COOKIE_AGREEMENT',
                     languageKey: lang,
@@ -71,13 +76,8 @@
         }
 
         getCookieNoticeText() {
-            let languageKey
-            if (!this.$scope.iseditMode) {
-                languageKey = this.$scope.currentLanguage;
-            } else {
-                languageKey = this.$scope.maintenanceLanguage;
-            }
-            this.translationFunction(languageKey);
+            let languageKey = this.$scope.iseditMode ? this.$scope.maintenanceLanguage : this.$scope.currentLanguage;
+            this.getTranslationByKey(languageKey);
         }
 
         toggleNoticeAndDescriptionLanguageInputs(lang) {
@@ -89,14 +89,14 @@
         cancelEdit() {
             this.$scope.cookie = {}
             this.$scope.iseditMode = false
-            this.$scope.maintenanceLanguage = this.landingPageLanguages[0];
             this.getTranslationsForAllLanguages();
-            this.translationFunction(this.landingPageLanguages[0]);
+            this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
+            this.getCookieNoticeText()
             this.$scope.isSubmittButtonEnabled = false;
             this.moveNavbarHeaderUp();
         }
 
-        savve() {
+        save() {
             this.$scope.isSaving = true;
             this.$scope.cookieNotice.translationKey = 'COOKIE_AGREEMENT';
             this.$scope.cookie[this.$scope.maintenanceLanguage] = this.$scope.cookieNotice.text;
@@ -118,6 +118,8 @@
                         this.$scope.iseditMode = false
                         this.$scope.afterSave = true;
                         this.getTranslationsForAllLanguages();
+                        this.getCookieNoticeText()
+                        this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
                         this.$scope.afterSave = false;
                         this.moveNavbarHeaderUp();
                     }
@@ -125,7 +127,7 @@
                 .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
         }
 
-        isSubmittEnabled() {
+        isSubmitEnabled() {
             return !this.$scope.isSubmittButtonEnabled;
         }
 

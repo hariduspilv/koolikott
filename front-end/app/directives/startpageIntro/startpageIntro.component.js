@@ -5,8 +5,7 @@
 
         constructor(...args) {
             super(...args)
-            this.languagess = ['ET','RU','EN'];
-            this.$scope.activeNoticeAndDescriptionLang = this.languagess[0];
+            this.languagess = ['ET', 'EN', 'RU'];
             this.$scope.currentLanguage = this.translationService.getLanguage();
 
             this.$scope.introPage = {};
@@ -16,10 +15,16 @@
 
             this.getStartPageIntroText();
             this.getAllStartPageIntroTranslations();
+            this.maintananceLang();
             this.$scope.editMode = false;
             this.$scope.isSubmittButtonEnabled = false;
             this.$scope.video.url = () => this.getVideoUrl();
             this.$rootScope.$on('logout:success', () => this.$scope.editMode = false)
+        }
+
+        maintananceLang() {
+            if (this.$scope.currentLanguage)
+                this.$scope.maintananceLang = this.convertLanguage(this.$scope.currentLanguage);
         }
 
         getVideoUrl() {
@@ -27,14 +32,9 @@
         }
 
         getStartPageIntroText() {
-            let languageKey
-            if (!this.$scope.editMode) {
-                languageKey = this.translationService.getLanguage();
-            } else {
-                languageKey = this.$scope.activeNoticeAndDescriptionLang;
-            }
+            let languageKey = this.$scope.editMode ? this.$scope.maintananceLang : this.$scope.currentLanguage;
 
-            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
+            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationKey',
                 {
                     translationKey: 'INTRO_TEXT',
                     languageKey: languageKey,
@@ -48,7 +48,7 @@
                     console.log(e)
                 })
 
-            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationObject',
+            this.serverCallService.makeGet('rest/translation/getTranslationForTranslationKey',
                 {
                     translationKey: 'FRONT_PAGE_VIDEO_URL',
                     languageKey: languageKey,
@@ -69,11 +69,9 @@
                     translationKey: 'INTRO_TEXT',
                 })
                 .then((response) => {
-                    if (response) {
-                        this.languagess.forEach((key, i) => {
-                            this.$scope.intropageContent[key] = response.data[i]
-                        });
-                    }
+                    this.$scope.intropageContent.ET = response.data[0];
+                    this.$scope.intropageContent.RU = response.data[1];
+                    this.$scope.intropageContent.EN = response.data[2];
                 })
                 .catch(e => {
                     console.log(e)
@@ -84,24 +82,22 @@
                     translationKey: 'FRONT_PAGE_VIDEO_URL',
                 })
                 .then((response) => {
-                    if (response) {
-                        this.languagess.forEach((key, i) => {
-                            this.$scope.intropageVideoUrl[key] = response.data[i]
-                        });
-                    }
+                    this.$scope.intropageVideoUrl.ET = response.data[0];
+                    this.$scope.intropageVideoUrl.RU = response.data[1];
+                    this.$scope.intropageVideoUrl.EN = response.data[2];
                 })
                 .catch(e => {
                     console.log(e)
                 })
         }
 
-        save(){
+        save() {
             this.$scope.isSaving = true;
             this.$scope.introPage.translationKey = 'INTRO_TEXT';
             this.$scope.video.translationKey = 'FRONT_PAGE_VIDEO_URL';
 
-            this.$scope.intropageContent[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.introPage.text;
-            this.$scope.intropageVideoUrl[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.video.url;
+            this.$scope.intropageContent[this.$scope.maintananceLang] = this.$scope.introPage.text;
+            this.$scope.intropageVideoUrl[this.$scope.maintananceLang] = this.$scope.video.url;
 
             const LANGS = Object.keys(this.$scope.intropageContent);
             const VALUES_CONTENT = Object.values(this.$scope.intropageContent);
@@ -119,8 +115,11 @@
                         this.toastService.show('FRONT_PAGE_CHANGES_SAVED')
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
+                        this.getStartPageIntroText();
+                        this.$scope.maintananceLang = this.convertLanguage(this.$scope.currentLanguage);
                     }
-                }).catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
+                })
+                .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
 
             this.serverCallService
                 .makePost('rest/translation/updateTranslations',
@@ -134,6 +133,8 @@
                         this.toastService.show('FRONT_PAGE_CHANGES_SAVED')
                         this.$scope.isSaving = false
                         this.$scope.editMode = false
+                        this.getStartPageIntroText();
+                        this.$scope.maintananceLang = this.convertLanguage(this.$scope.currentLanguage);
                     }
                 })
                 .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
@@ -143,7 +144,7 @@
             this.$scope.introPage = {};
             this.$scope.video = {};
             this.$scope.editMode = false
-            this.$scope.activeNoticeAndDescriptionLang = this.languagess[0];
+            this.$scope.maintananceLang = this.convertLanguage(this.$scope.currentLanguage);
             this.getAllStartPageIntroTranslations();
             this.getStartPageIntroText();
             this.$scope.isSubmittButtonEnabled = false;
@@ -154,9 +155,9 @@
         }
 
         toggleIntroPageLanguageInputs(lang) {
-            this.$scope.intropageContent[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.introPage.text;
-            this.$scope.intropageVideoUrl[this.$scope.activeNoticeAndDescriptionLang] = this.$scope.video.url;
-            this.$scope.activeNoticeAndDescriptionLang = lang
+            this.$scope.intropageContent[this.$scope.maintananceLang] = this.$scope.introPage.text;
+            this.$scope.intropageVideoUrl[this.$scope.maintananceLang] = this.$scope.video.url;
+            this.$scope.maintananceLang = lang
             this.$scope.introPage.text = this.$scope.intropageContent[lang];
             this.$scope.video.url = this.$scope.intropageVideoUrl[lang];
         }

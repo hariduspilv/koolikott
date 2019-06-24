@@ -16,7 +16,7 @@
             <div class="portfolio-chapter card-lg faq-font">
               <div
                 data-ng-repeat="lang in $ctrl.languagess track by $index"
-                data-ng-if="lang === activeNoticeAndDescriptionLang && editMode"
+                data-ng-if="lang === maintananceLang && editMode"
                 layout="row" layout-xs="column" data-layout-align="space-between center" flex>
                   <!-- Landing page language -->
                   <md-button
@@ -24,7 +24,7 @@
                     data-ng-repeat="_lang in $ctrl.languagess track by $index"
                     data-ng-class="{'is-selected': lang === _lang}"
                     data-ng-click="$ctrl.toggleIntroPageLanguageInputs(_lang)"
-                    flex-gt-xs="{{ activeNoticeAndDescriptionLang === _lang ? '40' : '30' }}"
+                    flex-gt-xs="{{ maintananceLang === _lang ? '40' : '30' }}"
                   >
                     <span data-ng-bind="_lang"></span>
                     <md-icon class="button-material-language__icon">done</md-icon>
