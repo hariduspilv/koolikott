@@ -1,9 +1,9 @@
 <div data-layout="row" data-layout-align="space-between center" data-layout-xs="column" style="margin-top: 30px">
   <md-content layout-fill data-layout-align="center center" class="md-padding" data-layout-xs="column" data-layout="row"
               flex>
-    <md-card flex="100" style="overflow: auto;height: 400px;">
+    <md-card flex="100" style="overflow: auto;height: 400px;width: 100%;">
       <md-card-actions layout="row" layout-align="end center" style="margin: 0px !important;">
-        <md-button style="margin-top: 30px" data-ng-if="!editMode && $ctrl.isAdmin()"
+        <md-button style="min-width: 36px;" data-ng-if="!editMode && $ctrl.isAdmin()"
                    data-ng-click="$ctrl.editIntroPage()">
           <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
         </md-button>
@@ -82,7 +82,7 @@
         </div>
       </md-card-content>
     </md-card>
-    <md-card flex="100" class="card-sm-frontpage _md layout-xs-row layout-column" style="justify-content: center">
+    <md-card flex="100" class="card-sm-frontpage _md layout-xs-row layout-column" style="justify-content: center; overflow: hidden">
       <div class="embed-responsive-frontpage-video embed-responsive-16by9">
         <div class="embed-responsive-container">
           <youtube-video

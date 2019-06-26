@@ -226,8 +226,8 @@ function isProfileOrSendEmailPath(path) {
     return path === '/profile' || path === '/dashboard/sentEmails';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies) {
         $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
@@ -256,6 +256,12 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isUserTabOpen
             $rootScope.isAdminTabOpen
             $rootScope.isTaxonomyOpen
+            $rootScope.isCookie = !!$cookies.get('userAgent');
+
+            if (!$rootScope.isCookie || $rootScope.isAdmin) {
+                $rootScope.showCookieBanner = true;
+                $rootScope.$broadcast('cookie:showCookieNotice');
+            }
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
                 $location.path('/' + user.username + '/portfolios');
@@ -372,15 +378,4 @@ app.run(['$templateCache', '$sce', '$templateRequest', function ($templateCache,
 
 app.run(['$translate', function ($translate) {
     configureTextAngular(provideProvider, $translate);
-}]);
-
-app.run(['$rootScope', '$cookies','authenticatedUserService', function ($rootScope, $cookies,authenticatedUserService) {
-
-    $rootScope.isCookie = !!$cookies.get('userAgent');
-    $rootScope.isAdmin = authenticatedUserService.isAdmin();
-
-    if (!$rootScope.isCookie || $rootScope.isAdmin) {
-        $rootScope.showCookieBanner = true;
-        $rootScope.$broadcast('cookie:showCookieNotice');
-    }
 }]);
