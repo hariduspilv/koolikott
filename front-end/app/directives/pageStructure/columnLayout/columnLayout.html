@@ -5,8 +5,10 @@
     id="main-content"
     class="content-container"
     data-ng-view data-ng-class="{'nav-open': isSidenavOpen}"
+    data-ng-style="modifyMargin() && {'padding-top': '0px'}"
     autoscroll="true"
     role="main"
   ></div>
+  $root.showCookieBanner
   <dop-tour></dop-tour>
 </div>

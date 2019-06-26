@@ -225,6 +225,8 @@
             mainContent.style.paddingTop = 0 + 'px';
             sidenavElement.classList.add('sidenav-cookie-related-upper');
             sidenavElement.style.top = 0 + 'px';
+            if (this.hasCookie())
+                this.$rootScope.showCookieBanner = false
         }
     }
 

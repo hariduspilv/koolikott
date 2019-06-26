@@ -16,9 +16,15 @@ class controller extends Controller {
         this.$scope.$watch(() => this.$location.path(), (path) =>
             this.$scope.isEditPortfolio = path === '/portfolio/edit'
         )
+
+        this.$scope.modifyMargin = () => {
+            return !this.$rootScope.showCookieBanner && this.$location.path() === '/';
+        }
+
     }
 }
 controller.$inject = [
+    '$rootScope',
     '$scope',
     '$location',
     '$mdSidenav',
