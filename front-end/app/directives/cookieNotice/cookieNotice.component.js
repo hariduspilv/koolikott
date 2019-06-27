@@ -222,7 +222,7 @@
             sidenavElement.classList.remove('sidenav-cookie-related');
 
             headerElement.style.top = 0 + 'px';
-            mainContent.style.paddingTop = 0 + 'px';
+            // mainContent.style.paddingTop = 0 + 'px';
             sidenavElement.classList.add('sidenav-cookie-related-upper');
             sidenavElement.style.top = 0 + 'px';
             if (this.hasCookie())

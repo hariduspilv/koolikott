@@ -18,7 +18,7 @@ class controller extends Controller {
         )
 
         this.$scope.modifyMargin = () => {
-            return !this.$rootScope.showCookieBanner && this.$location.path() === '/';
+            return !this.$rootScope.showCookieBanner && (this.$location.path().includes('/search/') || this.$location.path() === '/')
         }
 
     }
