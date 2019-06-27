@@ -12,7 +12,7 @@
             this.landingPageLanguages = ['ET', 'EN', 'RU'];
             this.$scope.currentLanguage = this.translationService.getLanguage();
 
-            this.$scope.iseditMode = false;
+            this.$scope.isEditMode = false;
             this.$scope.cookieNotice = {}
             this.$scope.cookie = {}
 
@@ -76,7 +76,7 @@
         }
 
         getCookieNoticeText() {
-            let languageKey = this.$scope.iseditMode ? this.$scope.maintenanceLanguage : this.$scope.currentLanguage;
+            let languageKey = this.$scope.isEditMode ? this.$scope.maintenanceLanguage : this.$scope.currentLanguage;
             this.getTranslationByKey(languageKey);
         }
 
@@ -88,7 +88,7 @@
 
         cancelEdit() {
             this.$scope.cookie = {}
-            this.$scope.iseditMode = false
+            this.$scope.isEditMode = false
             this.getTranslationsForAllLanguages();
             this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
             this.getCookieNoticeText()
@@ -115,7 +115,7 @@
                     if (response.status === 200) {
                         this.toastService.show('COOKIE_NOTICE_UPDATED')
                         this.$scope.isSaving = false
-                        this.$scope.iseditMode = false
+                        this.$scope.isEditMode = false
                         this.$scope.afterSave = true;
                         this.getTranslationsForAllLanguages();
                         this.getCookieNoticeText()
@@ -186,6 +186,10 @@
             }
         }
 
+        showCookieNotice() {
+            return (!this.$scope.hasCookie && !this.$scope.isEditMode) || !this.$scope.isEditMode
+        }
+
         isAdmin() {
             return this.authenticatedUserService.isAdmin()
         }
@@ -195,7 +199,7 @@
         }
 
         editCookieNotice() {
-            this.$scope.iseditMode = true
+            this.$scope.isEditMode = true
             this.moveNavbarHeaderDown();
         }
 
@@ -221,12 +225,13 @@
             const sidenavElement = document.getElementById('sidebar-left');
             sidenavElement.classList.remove('sidenav-cookie-related');
 
-            headerElement.style.top = 0 + 'px';
-            // mainContent.style.paddingTop = 0 + 'px';
-            sidenavElement.classList.add('sidenav-cookie-related-upper');
-            sidenavElement.style.top = 0 + 'px';
-            if (this.hasCookie())
+            if (this.hasCookie()) {
                 this.$rootScope.showCookieBanner = false
+                headerElement.style.top = 0 + 'px';
+                // mainContent.style.paddingTop = 0 + 'px';
+                sidenavElement.classList.add('sidenav-cookie-related-upper');
+                sidenavElement.style.top = 0 + 'px';
+            }
         }
     }
 

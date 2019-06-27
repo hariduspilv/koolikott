@@ -4,6 +4,17 @@
   padding-left: 24px;
   padding-bottom: 5px;
   padding-top: 5px;
+
+  @media (max-width: $layout-breakpoint-sm) {
+    max-height: 58px;
+    overflow: auto;
+  }
+}
+
+.hide-edit-btn {
+  @media (max-width: $layout-breakpoint-sm) {
+    visibility: hidden;
+  }
 }
 
 .cookie-parent {

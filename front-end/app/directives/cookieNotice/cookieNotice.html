@@ -1,33 +1,33 @@
 <div
   class="cookie-notice"
-  data-ng-if="!hasCookie || ($ctrl.isAdmin() && hasCookie && !iseditMode)"
-  layout="row" layout-align="space-between center">
+  data-ng-if="$ctrl.showCookieNotice()"
+  layout="column" data-layout-gt-sm="row" layout-align="space-between center">
   <span data-ng-bind-html="cookieNotice.text"></span>
-  <div>
+  <div data-layout="row">
     <md-button data-ng-show="!hasCookie"
                class="md-raised md-primary"
                data-ng-click="$ctrl.saveUserCookie()">
       <span data-translate="COOKIE_AGREE"></span>
     </md-button>
-    <md-button class="md-button md-ink-ripple"
-               data-ng-if="$ctrl.isAdmin() && !iseditMode"
+    <md-button class="md-button md-ink-ripple hide-edit-btn"
+               data-ng-if="$ctrl.isAdmin() && !isEditMode"
                data-ng-click="$ctrl.editCookieNotice()">
       <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
       <md-tooltip><span data-translate="COOKIE_EDIT"></span></md-tooltip>
     </md-button>
   </div>
 </div>
-<div data-ng-if="iseditMode" layout="row" layout-align="center center">
+<div data-ng-if="isEditMode" layout="row" layout-align="center center">
   <form name="updateCookieNoticeForm" flex="100" class="flex flex-col">
     <md-dialog-content>
       <div
         data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
-        data-ng-if="lang === maintenanceLanguage && iseditMode"
+        data-ng-if="lang === maintenanceLanguage && isEditMode"
         layout="row"
         layout-wrap>
         <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
              flex-order="2"
-             flex-order-gt-sm="2" flex="100" data-ng-if="iseditMode">
+             flex-order-gt-sm="2" flex="100" data-ng-if="isEditMode">
           <md-input-container class="md-block animate-if" flex>
             <label data-translate="COOKIE_TEXT_LABEL"></label>
             <textarea
@@ -37,7 +37,7 @@
           </md-input-container>
         </div>
         <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
-             data-ng-if="iseditMode">
+             data-ng-if="isEditMode">
           <!-- Landing page language -->
           <md-button
             class="button-material-language"
