@@ -6,9 +6,9 @@
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
       data-ng-bind-html="exactTitle"></h2>
   <p data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"
-      class="padding-left-16"
-      data-ng-bind="notice"
-  style="font-weight: normal"></p>
+     class="padding-left-16"
+     data-ng-bind="notice"
+     style="font-weight: normal"></p>
   <md-button style="min-width: 36px"
              data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"
              data-ng-click="$ctrl.editLandingPage()"
@@ -24,7 +24,7 @@
         data-ng-if="lang === maintenanceLanguage && isEditMode"
         layout="row"
         layout-wrap data-layout-align="space-between center">
-        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100"  flex-order="1"
+        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-order="1"
              data-ng-if="isEditMode">
           <!-- Landing page language -->
           <md-button
@@ -40,42 +40,44 @@
                      data-ng-if="$ctrl.isLangFilled(_lang) || maintenanceLanguage === _lang">done
             </md-icon>
           </md-button>
-          <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
-               data-ng-if="isEditMode">
-            <md-button
-              aria-label="Cancel landing page edit"
-              id="landing-page-edit-cancel-button"
-              data-ng-click="$ctrl.cancelEdit()"
-            >
-              <span data-translate="BUTTON_CANCEL"></span>
-            </md-button>
-            <md-button
-              aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
-              id="update-landing-page"
-              class="md-primary"
-              data-ng-disabled="$ctrl.isSubmitDisabled() || isSaving"
-              data-ng-click="$ctrl.save()"
-            >
-              <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
-              <md-icon>arrow_forward</md-icon>
-            </md-button>
-            <md-progress-circular
-              class="md-accent ng-hide"
-              md-mode="indeterminate"
-              md-diameter="40"
-              data-ng-show="isSaving"
-            ></md-progress-circular>
-          </div>
+
         </div>
-        <div data-flex-order="3" flex="100" layout="row">
-            <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+        <div data-flex-order="5" flex="100" layout="row">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                 <textarea
                   name="notice"
                   ng-model="noticesAndDescriptions[lang].notice"
                   id="add-landing-page-notice-input"
                 ></textarea>
-            </md-input-container>
-          </div>
+          </md-input-container>
+        </div>
+      </div>
+      <div layout="row" data-flex-order="4" layout-align="end center"
+           class="md-padding md-padding-horizontal-double"
+           data-ng-if="isEditMode">
+        <md-button
+          aria-label="Cancel landing page edit"
+          id="landing-page-edit-cancel-button"
+          data-ng-click="$ctrl.cancelEdit()"
+        >
+          <span data-translate="BUTTON_CANCEL"></span>
+        </md-button>
+        <md-button
+          aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
+          id="update-landing-page"
+          class="md-primary"
+          data-ng-disabled="$ctrl.isSubmitDisabled() || isSaving"
+          data-ng-click="$ctrl.save()"
+        >
+          <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
+          <md-icon>arrow_forward</md-icon>
+        </md-button>
+        <md-progress-circular
+          class="md-accent ng-hide"
+          md-mode="indeterminate"
+          md-diameter="40"
+          data-ng-show="isSaving"
+        ></md-progress-circular>
       </div>
     </md-dialog-content>
   </form>
@@ -159,7 +161,7 @@
   </div>
 </div>
 <div>
-  <div data-layout="row" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
+  <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
     <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
     <md-button data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
       <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
@@ -202,34 +204,37 @@
                        data-ng-if="$ctrl.isLangFilled(_lang) || headlineLanguage === _lang">done
               </md-icon>
             </md-button>
-            <md-button
-              data-ng-click="$ctrl.cancelEditMode()"
-            >
-              <span data-translate="BUTTON_CANCEL"></span>
-            </md-button>
-            <md-button
-              aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
-              class="md-primary"
-              data-ng-disabled="$ctrl.isSubmittEnabled()"
-              data-ng-click="$ctrl.saveFilteredTitles()"
-            >
-              <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
-              <md-icon>arrow_forward</md-icon>
-            </md-button>
-            <md-progress-circular
-              class="md-accent ng-hide"
-              md-mode="indeterminate"
-              md-diameter="40"
-              data-ng-show="isSaving"
-            ></md-progress-circular>
           </div>
+        </div>
+        <div data-layout="row" data-flex-order="4" layout-align="end center"
+                  class="md-padding md-padding-horizontal-double">
+          <md-button
+            data-ng-click="$ctrl.cancelEditMode()"
+          >
+            <span data-translate="BUTTON_CANCEL"></span>
+          </md-button>
+          <md-button
+            aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
+            class="md-primary"
+            data-ng-disabled="$ctrl.isSubmittEnabled()"
+            data-ng-click="$ctrl.saveFilteredTitles()"
+          >
+            <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
+            <md-icon>arrow_forward</md-icon>
+          </md-button>
+          <md-progress-circular
+            class="md-accent ng-hide"
+            md-mode="indeterminate"
+            md-diameter="40"
+            data-ng-show="isSaving"
+          ></md-progress-circular>
         </div>
       </md-dialog-content>
     </form>
   </div>
   <!--  väljatoodud materjalide osa-->
   <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()"
-       class="margin-top-36 card-container">
+       class="card-container">
     <div
       data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
       class="card-container__item padding-left-20" flex-xs="100">
