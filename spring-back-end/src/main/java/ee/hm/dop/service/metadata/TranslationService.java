@@ -15,6 +15,7 @@ import javax.inject.Inject;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional
@@ -76,13 +77,13 @@ public class TranslationService {
                 languageDao.findCodeByCode(translationsDto.getLanguageKeys().get(0)));
     }
 
-    public void updateTranslations(TranslationsDto translationsDtos) {
-        for (int i = 0; i < translationsDtos.getTranslations().size(); i++) {
-            translationGroupDao.updateTranslation(
-                    translationsDtos.getTranslations().get(i),
-                    translationsDtos.getTranslationKey(),
-                    languageDao.findCodeByCode(translationsDtos.getLanguageKeys().get(i)));
-        }
+    public void updateTranslations(TranslationsDto translations) {
+        IntStream.range(0, translations.getTranslations().size())
+                .forEach(index ->
+                        translationGroupDao.updateTranslation(
+                                translations.getTranslations().get(index),
+                                translations.getTranslationKey(),
+                                languageDao.findCodeByCode(translations.getLanguageKeys().get(index))));
     }
 
     public String getTranslations(String translationKey, String languageCode) {
