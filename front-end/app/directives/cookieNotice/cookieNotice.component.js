@@ -124,7 +124,10 @@
                         this.moveNavbarHeaderUp();
                     }
                 })
-                .catch(() => this.toastService.show('USER_PROFILE_UPDATE_FAILED', 2000));
+                .catch(() => {
+                    this.toastService.show('COOKIE_NOTICE_UPDATED_FAILED', 2000)
+                    this.$scope.isSaving = false
+                })
         }
 
         isSubmitEnabled() {

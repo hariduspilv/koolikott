@@ -163,7 +163,7 @@
 <div>
   <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
     <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
-    <md-button data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
+    <md-button style="min-width: 36px" data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
       <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
       <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
     </md-button>
