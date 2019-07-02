@@ -5,6 +5,20 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
+        /*const listener = () => {
+            this.$mdDialog.show({
+                templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
+                controller: 'leavePageDialogController',
+                controllerAs: '$ctrl',
+            }).then(() => {
+                window.removeEventListener('popstate', listener, false)
+                history.back()
+            }, () => history.pushState(null, document.title, location.href))
+        };
+        if (this.visitedAddMaterialPageCookieExists())
+            history.pushState(null, document.title, location.href)
+        window.addEventListener('popstate', listener, false)*/
+
         const storedPortfolio = this.storageService.getPortfolio()
         storedPortfolio
             ? this.setPortfolio(storedPortfolio, true)
@@ -23,9 +37,10 @@ class controller extends Controller {
             () => this.storageService.getPortfolio(),
             (portfolio) => this.$scope.portfolio = portfolio
         )
-        this.$scope.$on('$destroy', () =>
+        this.$scope.$on('$destroy', () => {
             this.$interval.cancel(this.autoSaveInterval)
-        )
+            // window.removeEventListener('popstate', listener, false)
+        })
 
         // Create a new chapter if user wishes to add their chosen materials to a new chapter.
         this.unsubscribeInsertMaterials = this.$rootScope.$on(
@@ -144,6 +159,9 @@ class controller extends Controller {
                 )
             )
     }
+    /*visitedAddMaterialPageCookieExists() {
+        return (document.cookie.match(/^(?:.*;)?\s*visitedAddMaterialPage\s*=\s*([^;]+)(?:.*)?$/)||[,null])[1] == null
+    }*/
 }
 controller.$inject = [
     '$scope',
@@ -154,6 +172,7 @@ controller.$inject = [
     '$timeout',
     '$document',
     '$translate',
+    '$mdDialog',
     'authenticatedUserService',
     'dialogService',
     'serverCallService',

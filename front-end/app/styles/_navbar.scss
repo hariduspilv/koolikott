@@ -118,7 +118,8 @@ md-toolbar.navbar.md-gray {
 .navbar-search {
   border-radius: 2px;
   padding: 4px 0;
-  background: rgba(255,255,255,.15);
+  background: #f3f6fb;
+  color: rgba(0, 0, 0, 0.77);
 
   .nav-search__autocomplete {
     background-color: transparent;
@@ -140,14 +141,14 @@ md-toolbar.navbar.md-gray {
       height: 40px;
       padding: 0;
       border: 0;
-      color: #fff;
+      color: rgba(0, 0, 0, 0.77);
 
       &[disabled] {
         background-image: none;
       }
 
       &::placeholder {
-        color: rgba(255,255,255, .6);
+        color: rgba(0,0,0, .77);
       }
     }
 

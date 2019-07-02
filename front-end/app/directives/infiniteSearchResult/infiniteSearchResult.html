@@ -1,38 +1,30 @@
-<data-dop-cookie-notice class="cookie-parent"></data-dop-cookie-notice>
-<div data-layout="row" data-layout-align="space-between center">
-  <h1 id="search-result-title" class="md-headline"
+<div data-layout="row" data-layout-align="space-between center" style="margin-top: 35px">
+  <h2 id="search-result-title" class="md-headline padding-left-16"
       data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
-      data-ng-bind-html="title"></h1>
-  <h1 id="exact-search-result-title" class="md-headline"
+      data-ng-bind-html="title"></h2>
+  <h2 id="exact-search-result-title" class="md-headline padding-left-16"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
-      data-ng-bind-html="exactTitle"></h1>
-  <h1 data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"
-      class="md-headline"
-      data-ng-bind="notice"></h1>
+      data-ng-bind-html="exactTitle"></h2>
+  <p data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"
+     class="padding-left-16"
+     data-ng-bind="notice"
+     style="font-weight: normal"></p>
+  <md-button style="min-width: 36px"
+             data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"
+             data-ng-click="$ctrl.editLandingPage()"
+             id="landing-page-edit">
+    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+    <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>
+  </md-button>
   <!-- Edit landing page description and notice -->
-  <form name="updateLandingPageForm" flex="100" class="flex flex-col" data-ng-if="isEditMode">
+  <form name="updateLandingPageForm" flex="100" class="flex flex-col" data-ng-if="isEditMode && $ctrl.isAdmin()">
     <md-dialog-content>
       <div
         data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
-        data-ng-if="lang === activeNoticeAndDescriptionLanguage && isEditMode"
+        data-ng-if="lang === maintenanceLanguage && isEditMode"
         layout="row"
-        layout-wrap>
-        <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
-             flex-order-gt-sm="2" flex="100" data-ng-if="isEditMode">
-          <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-            <label data-translate="LANDING_PAGE_DESCRIPTION_ADMIN"></label>
-            <textarea
-              name="description"
-              id="add-description"
-              ng-model="noticesAndDescriptions[lang].description" id="add-material-description-input"
-              required></textarea>
-            <div data-ng-messages="updateLandingPageForm.description.$error">
-              <div data-ng-message="required" data-translate="LANDING_PAGE_DESCRIPTION_IS_MANDATORY"></div>
-            </div>
-          </md-input-container>
-
-        </div>
-        <div layout="column" layout-align="center center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
+        layout-wrap data-layout-align="space-between center">
+        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-order="1"
              data-ng-if="isEditMode">
           <!-- Landing page language -->
           <md-button
@@ -40,41 +32,28 @@
             data-ng-repeat="_lang in $ctrl.landingPageLanguages track by $index"
             data-ng-class="{'is-selected': lang === _lang}"
             data-ng-click="$ctrl.toggleNoticeAndDescriptionLanguageInputs(_lang)"
-            flex-gt-xs="{{ activeNoticeAndDescriptionLanguage === _lang ? '40' : '30' }}"
+            flex-gt-xs="{{ maintenanceLanguage === _lang ? '40' : '30' }}"
             aria-label="{{ _lang }} button"
           >
             <span data-ng-bind="_lang"></span>
             <md-icon class="button-material-language__icon"
-                     data-ng-if="$ctrl.isLangFilled(_lang) || activeNoticeAndDescriptionLanguage === _lang">done
+                     data-ng-if="$ctrl.isLangFilled(_lang) || maintenanceLanguage === _lang">done
             </md-icon>
           </md-button>
-        </div>
-        <div data-flex-order="3" flex="100" class="flex flex-col">
-          <div layout="column" layout-align="start start"
-               data-ng-if="isEditMode">
-            <md-button
-              aria-label="Ava/sulge hooldusteade"
-              id="open-additional-info"
-              class="md-primary no-margin"
-              data-ng-click="$ctrl.maintenanceVisible()"
-            >
-              <span data-translate="LANDING_PAGE_MAINTENANCE_NOTICE"></span>
-              <md-icon>{{ visible ? 'arrow_downward' : 'arrow_forward' }}</md-icon>
-            </md-button>
-            <div data-ng-if="visible" class="maintenance-width">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                <label data-translate="LANDING_PAGE_MAINTENANCE_NOTICE"></label>
-                <textarea name="notice"
-                          ng-model="noticesAndDescriptions[lang].notice"
-                          id="add-landing-page-notice-input"
-                rows="2"></textarea>
-              </md-input-container>
-            </div>
-          </div>
 
         </div>
+        <div data-flex-order="5" flex="100" layout="row">
+          <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+                <textarea
+                  name="notice"
+                  ng-model="noticesAndDescriptions[lang].notice"
+                  id="add-landing-page-notice-input"
+                ></textarea>
+          </md-input-container>
+        </div>
       </div>
-      <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
+      <div layout="row" data-flex-order="4" layout-align="end center"
+           class="md-padding md-padding-horizontal-double"
            data-ng-if="isEditMode">
         <md-button
           aria-label="Cancel landing page edit"
@@ -119,15 +98,8 @@
 </div>
 <div data-layout="row" data-layout-align="space-between center">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
-  <p data-ng-if="description && !isEditMode && $ctrl.isLandingPage() && !filter" data-ng-bind="description"></p>
-  <md-button style="min-width: 36px"
-             data-ng-if="$ctrl.isAdmin() && !isEditMode && !filter && !searching && $ctrl.isLandingPage()"
-             data-ng-click="$ctrl.editLandingPage()"
-             id="landing-page-edit">
-    <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
-    <md-tooltip><span data-translate="LANDING_PAGE_EDIT"></span></md-tooltip>
-  </md-button>
 </div>
+<data-dop-startpage-intro data-ng-if="$ctrl.isLandingPage()"></data-dop-startpage-intro>
 <div data-ng-if="sorting || !searching">
   <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
     <section data-layout="row" data-layout-xs="column" layout-wrap>
@@ -188,17 +160,92 @@
     </section>
   </div>
 </div>
-<div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()" class="margin-top-36 card-container">
-  <div data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
-       class="card-container__item" flex-xs="100">
-    <dop-card-sm learning-object="item"></dop-card-sm>
+<div>
+  <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
+    <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
+    <md-button style="min-width: 36px" data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
+      <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+      <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
+    </md-button>
   </div>
-</div>
-
-<div data-ng-if="!$ctrl.allResultsLoaded() && searching">
-  <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
-     data-translate="SEARCH_LOADING"></p>
-  <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
-    <md-progress-circular></md-progress-circular>
+  <div class="padding-left-16" data-ng-if="editMode && $ctrl.isLandingPage() && $ctrl.isAdmin()" layout="row"
+       layout-align="center center">
+    <form name="updateFilteredTitleForm" flex="100" class="flex flex-col">
+      <md-dialog-content>
+        <div
+          data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
+          data-ng-if="lang === headlineLanguage && editMode"
+          layout="row"
+          layout-wrap>
+          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
+               flex-order="2"
+               flex-order-gt-sm="2" flex="100" data-ng-if="editMode">
+            <md-input-container class="md-block animate-if" flex>
+              <label data-translate="TITLE"></label>
+              <textarea
+                name="filteredTitle"
+                ng-model="filteredTitle.text"
+                maxlength="50"
+              ></textarea>
+            </md-input-container>
+          </div>
+          <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-order="1"
+               data-ng-if="editMode">
+            <!-- Landing page language -->
+            <md-button
+              class="button-material-language"
+              data-ng-repeat="_lang in $ctrl.landingPageLanguages track by $index"
+              data-ng-class="{'is-selected': lang === _lang}"
+              data-ng-click="$ctrl.toggleNoticeAndDescriptionLanguageInputs2(_lang)"
+              flex-gt-xs="{{ headlineLanguage === _lang ? '40' : '30' }}"
+            >
+              <span data-ng-bind="_lang"></span>
+              <md-icon class="button-material-language__icon"
+                       data-ng-if="$ctrl.isLangFilled(_lang) || headlineLanguage === _lang">done
+              </md-icon>
+            </md-button>
+          </div>
+        </div>
+        <div data-layout="row" data-flex-order="4" layout-align="end center"
+                  class="md-padding md-padding-horizontal-double">
+          <md-button
+            data-ng-click="$ctrl.cancelEditMode()"
+          >
+            <span data-translate="BUTTON_CANCEL"></span>
+          </md-button>
+          <md-button
+            aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
+            class="md-primary"
+            data-ng-disabled="$ctrl.isSubmittEnabled()"
+            data-ng-click="$ctrl.saveFilteredTitles()"
+          >
+            <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
+            <md-icon>arrow_forward</md-icon>
+          </md-button>
+          <md-progress-circular
+            class="md-accent ng-hide"
+            md-mode="indeterminate"
+            md-diameter="40"
+            data-ng-show="isSaving"
+          ></md-progress-circular>
+        </div>
+      </md-dialog-content>
+    </form>
+  </div>
+  <!--  väljatoodud materjalide osa-->
+  <div data-infinite-scroll-immediate-check="true" data-infinite-scroll="nextPage()"
+       class="card-container">
+    <div
+      data-ng-repeat="item in items | itemGroupFilter:filterGroups:filterGroupsExact:showFilterGroups track by $index"
+      class="card-container__item padding-left-20" flex-xs="100">
+      <dop-card-sm learning-object="item"></dop-card-sm>
+    </div>
+  </div>
+  <div data-ng-if="!$ctrl.allResultsLoaded() && searching">
+    <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
+       data-translate="SEARCH_LOADING"></p>
+    <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
+      <md-progress-circular></md-progress-circular>
+    </div>
   </div>
 </div>

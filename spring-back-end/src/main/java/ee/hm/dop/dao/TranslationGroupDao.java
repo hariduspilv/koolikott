@@ -1,15 +1,12 @@
 package ee.hm.dop.dao;
 
 import com.google.common.collect.Lists;
-import ee.hm.dop.dao.AbstractDao;
 import ee.hm.dop.model.LandingPageString;
 import ee.hm.dop.model.Language;
 import ee.hm.dop.model.TranslationGroup;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
-import javax.inject.Inject;
-import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.NonUniqueResultException;
 import java.sql.Clob;
@@ -73,7 +70,6 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
         }
     }
 
-
     public String getTranslationByKeyAndLangcode(String translationKey, Long langCode) {
         try {
             Object result = entityManager
@@ -83,7 +79,7 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
                     .setParameter("translationKey", translationKey)
                     .setParameter("translationGroup", langCode)
                     .getSingleResult();
-            if (result instanceof String){
+            if (result instanceof String) {
                 return (String) result;
             }
             Clob singleResult = (Clob) result;
@@ -103,7 +99,6 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
                 .setParameter("translationKey", translationKey)
                 .setParameter("languageKey", languageKey)
                 .executeUpdate();
-
     }
 
     public List<LandingPageString> getTranslations(String translationKey) {
@@ -133,5 +128,4 @@ public class TranslationGroupDao extends AbstractDao<TranslationGroup> {
         }
         return "";
     }
-
 }

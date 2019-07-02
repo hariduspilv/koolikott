@@ -1,10 +1,11 @@
-<div class="main-container" data-ng-style="{'margin-top': $root.detailedSearchHeight + 'px'}">
+<div id="column-layout-main-div" class="main-container" data-ng-style="{'margin-top': $root.detailedSearchHeight + 'px'}" style="padding-top: 40px !important;">
   <dop-header class="nav-position"></dop-header>
   <dop-sidenav data-is-edit-portfolio="isEditPortfolio"></dop-sidenav>
   <div
     id="main-content"
     class="content-container"
     data-ng-view data-ng-class="{'nav-open': isSidenavOpen}"
+    data-ng-style="modifyMargin() && {'padding-top': '0px'}"
     autoscroll="true"
     role="main"
   ></div>

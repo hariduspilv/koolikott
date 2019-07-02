@@ -14,8 +14,7 @@ public class SoapConnectionConfig {
     @Bean
     public synchronized SOAPConnection soapConnection() {
         try {
-            SOAPConnectionFactory connectionFactory = SOAPConnectionFactory.newInstance();
-            return connectionFactory.createConnection();
+            return SOAPConnectionFactory.newInstance().createConnection();
         } catch (Exception e) {
             throw new RuntimeException("Error creating new SOAP connection.");
         }

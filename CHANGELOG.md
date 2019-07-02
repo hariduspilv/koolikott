@@ -1,3 +1,12 @@
+## e-Koolikott [1.37.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793)
+
+### Muutunud
+* Küpsiste teavitusriba headeris [EK-530](https://projektid.hitsa.ee/jira/browse/EK-530)
+* Hooldusteate teksti ja modifitseerimise muudatused [EK-531](https://projektid.hitsa.ee/jira/browse/EK-531)
+* Avalehe uus komponent meedia ja teksti kuvamiseks  [EK-532](https://projektid.hitsa.ee/jira/browse/EK-532)
+* Esiletõstetud õppevara sektsioonile pealkirja lisamise/muutmise funktsionaalsus [EK-533](https://projektid.hitsa.ee/jira/browse/EK-533)
+* Otsingukasti visuaali muudatused [EK-537](https://projektid.hitsa.ee/jira/browse/EK-537)
+
 ## e-Koolikott [1.36.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793)
 
 ### Muutunud

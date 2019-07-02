@@ -1,4 +1,78 @@
-<div class="cookie-notice" data-ng-if="!hasCookie" layout="row" layout-align="space-between center">
-  <span data-translate="COOKIE_AGREEMENT"></span>
-  <md-button class="md-raised md-primary" data-ng-click="$ctrl.saveUserCookie()"><span data-translate="COOKIE_AGREE"></span></md-button>
+<div
+  class="cookie-notice"
+  data-ng-if="$ctrl.showCookieNotice()"
+  layout="column" data-layout-gt-sm="row" layout-align="space-between center">
+  <span data-ng-bind-html="cookieNotice.text"></span>
+  <div data-layout="row">
+    <md-button data-ng-show="!hasCookie"
+               class="md-raised md-primary"
+               data-ng-click="$ctrl.saveUserCookie()">
+      <span data-translate="COOKIE_AGREE"></span>
+    </md-button>
+    <md-button class="md-button md-ink-ripple hide-edit-btn"
+               data-ng-if="$ctrl.isAdmin() && !isEditMode"
+               data-ng-click="$ctrl.editCookieNotice()">
+      <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
+      <md-tooltip><span data-translate="COOKIE_EDIT"></span></md-tooltip>
+    </md-button>
+  </div>
+</div>
+<div data-ng-if="isEditMode" layout="row" layout-align="center center">
+  <form name="updateCookieNoticeForm" flex="100" class="flex flex-col">
+    <md-dialog-content>
+      <div
+        data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
+        data-ng-if="lang === maintenanceLanguage && isEditMode"
+        layout="row"
+        layout-wrap>
+        <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
+             flex-order="2"
+             flex-order-gt-sm="2" flex="100" data-ng-if="isEditMode">
+          <md-input-container class="md-block animate-if" flex>
+            <label data-translate="COOKIE_TEXT_LABEL"></label>
+            <textarea
+              name="cookieNotice"
+              ng-model="cookieNotice.text"
+              required></textarea>
+          </md-input-container>
+        </div>
+        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
+             data-ng-if="isEditMode">
+          <!-- Landing page language -->
+          <md-button
+            class="button-material-language"
+            data-ng-repeat="_lang in $ctrl.landingPageLanguages track by $index"
+            data-ng-class="{'is-selected': lang === _lang}"
+            data-ng-click="$ctrl.toggleNoticeAndDescriptionLanguageInputs(_lang)"
+            flex-gt-xs="{{ maintenanceLanguage === _lang ? '40' : '30' }}"
+          >
+            <span data-ng-bind="_lang"></span>
+            <md-icon class="button-material-language__icon"
+                     data-ng-if="$ctrl.isLangFilled(_lang) || maintenanceLanguage === _lang">done
+            </md-icon>
+          </md-button>
+          <md-button
+            data-ng-click="$ctrl.cancelEdit()"
+          >
+            <span data-translate="BUTTON_CANCEL"></span>
+          </md-button>
+          <md-button
+            aria-label="{{ 'BUTTON_UPDATE_LANDING_PAGE' | translate }}"
+            class="md-primary"
+            data-ng-disabled="$ctrl.isSubmitEnabled()"
+            data-ng-click="$ctrl.save()"
+          >
+            <span data-translate="{{ 'BUTTON_UPDATE_LANDING_PAGE' }}"></span>
+            <md-icon>arrow_forward</md-icon>
+          </md-button>
+          <md-progress-circular
+            class="md-accent ng-hide"
+            md-mode="indeterminate"
+            md-diameter="40"
+            data-ng-show="isSaving"
+          ></md-progress-circular>
+        </div>
+      </div>
+    </md-dialog-content>
+  </form>
 </div>

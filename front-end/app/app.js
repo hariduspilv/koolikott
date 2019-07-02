@@ -226,8 +226,8 @@ function isProfileOrSendEmailPath(path) {
     return path === '/profile' || path === '/dashboard/sentEmails';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService) {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies) {
         $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
@@ -256,6 +256,12 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isUserTabOpen
             $rootScope.isAdminTabOpen
             $rootScope.isTaxonomyOpen
+            $rootScope.isCookie = !!$cookies.get('userAgent');
+
+            if (!$rootScope.isCookie || $rootScope.isAdmin) {
+                $rootScope.showCookieBanner = true;
+                $rootScope.$broadcast('cookie:showCookieNotice');
+            }
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
                 $location.path('/' + user.username + '/portfolios');
@@ -298,7 +304,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
 
             $rootScope.hasAppInitated = true;
 
-            window.onbeforeunload = function() {
+            window.onbeforeunload = function () {
                 userLocatorService.saveUserLocation()
             }
         });
@@ -329,8 +335,11 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
     };
 }]);
 
-app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', function ($rootScope, authenticatedUserService, $route, $location) {
+app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
+        $mdDialog.cancel();
+        /*if (!location.href.includes('/portfolio/edit'))
+            document.cookie = 'visitedAddMaterialPage=false; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=/';*/
         for (var i in $route.routes) {
             if (next.indexOf(i) !== -1) {
                 var permissions = $route.routes[i].permissions;

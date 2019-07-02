@@ -1,14 +1,28 @@
 .cookie-notice {
 
   background-color: $gray-500-light;
-  padding-left: 10px;
+  padding-left: 24px;
   padding-bottom: 5px;
   padding-top: 5px;
+
+  @media (max-width: $layout-breakpoint-sm) {
+    max-height: 58px;
+    overflow: auto;
+  }
+}
+
+.hide-edit-btn {
+  @media (max-width: $layout-breakpoint-sm) {
+    visibility: hidden;
+  }
 }
 
 .cookie-parent {
   width: 100%;
-  margin: 5px
+  z-index: 6;
+  background-color: rgb(207, 207, 207);
+  position: fixed !important;
+  top:0px;
 }
 
 

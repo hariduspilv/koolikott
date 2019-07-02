@@ -2,13 +2,20 @@ package ee.hm.dop.service.metadata;
 
 import ee.hm.dop.dao.LanguageDao;
 import ee.hm.dop.dao.TranslationGroupDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.LandingPageObject;
+import ee.hm.dop.model.LandingPageString;
+import ee.hm.dop.model.Language;
+import ee.hm.dop.model.LanguageString;
+import ee.hm.dop.model.TranslationGroup;
+import ee.hm.dop.model.TranslationsDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.IntStream;
 
 @Service
 @Transactional
@@ -62,5 +69,28 @@ public class TranslationService {
 
     public List<LandingPageString> list(String key) {
         return translationGroupDao.getTranslations(key);
+    }
+
+    public void updateTranslation(TranslationsDto translationsDto) {
+        translationGroupDao.updateTranslation(translationsDto.getTranslations().get(0),
+                translationsDto.getTranslationKey(),
+                languageDao.findCodeByCode(translationsDto.getLanguageKeys().get(0)));
+    }
+
+    public void updateTranslations(TranslationsDto translations) {
+        IntStream.range(0, translations.getTranslations().size())
+                .forEach(index ->
+                        translationGroupDao.updateTranslation(
+                                translations.getTranslations().get(index),
+                                translations.getTranslationKey(),
+                                languageDao.findCodeByCode(translations.getLanguageKeys().get(index))));
+    }
+
+    public String getTranslations(String translationKey, String languageCode) {
+        return translationGroupDao.getTranslationByKeyAndLangcode(translationKey, languageDao.findIdByCode(languageCode));
+    }
+
+    public List<String> getAllTranslations(String translationKey) {
+        return translationGroupDao.getTranslationsForKey(Collections.singletonList(translationKey));
     }
 }
