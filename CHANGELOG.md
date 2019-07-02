@@ -21,8 +21,8 @@
 ## e-Koolikott [1.35.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10789)
 
 ### Muutunud
-* Minu saadetud teated (https://projektid.hitsa.ee/pages/viewpage.action?spaceKey=koolikott&title=Minu+saadetud+teated)
-* Kasutajatoe f-se avamine kõikidele sisselogitud kasutajatele[EK-428](https://projektid.hitsa.ee/jira/browse/EK-428)
+* Minu saadetud teated [EK-367] (https://projektid.hitsa.ee/jira/browse/EK-367)
+* Kasutajatoe f-se avamine kõikidele sisselogitud kasutajatele [EK-428](https://projektid.hitsa.ee/jira/browse/EK-428)
 * Plumbri muudatuste järelanalüüs veebruari raporti põhjal [EK-292](https://projektid.hitsa.ee/jira/browse/EK-292)
 
 ## e-Koolikott [1.34.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10781) (Toodangusse paigaldatud 23.04.2019)
