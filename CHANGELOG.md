@@ -6,17 +6,17 @@
 * Avalehe uus komponent meedia ja teksti kuvamiseks  [EK-532](https://projektid.hitsa.ee/jira/browse/EK-532)
 * Esiletõstetud õppevara sektsioonile pealkirja lisamise/muutmise funktsionaalsus [EK-533](https://projektid.hitsa.ee/jira/browse/EK-533)
 * Otsingukasti visuaali muudatused [EK-537](https://projektid.hitsa.ee/jira/browse/EK-537)
+* Spring Boot kasutuselevõtuga seotud tööd [EK-361](https://projektid.hitsa.ee/jira/browse/EK-361)
 
 ## e-Koolikott [1.36.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793)
 
 ### Muutunud
-* Kogumike ajaloo salvestamine ja taastamine (https://projektid.hitsa.ee/pages/viewpage.action?pageId=34120370)
 * Kogumike ajaloo taastamine > Kogumiku salvestamine [EK-56](https://projektid.hitsa.ee/jira/browse/EK-56)
 * Kogumike ajaloo taastamine > Ajaloo kuvamine [EK-58](https://projektid.hitsa.ee/jira/browse/EK-58)
 * Kogumike ajaloo taastamine > Ajaloo taastamine [EK-442](https://projektid.hitsa.ee/jira/browse/EK-442)
 * Kogumike ajaloo taastamine > Eelvaate kuvamine, kinnitamine [EK-455](https://projektid.hitsa.ee/jira/browse/EK-455)
 * Kogumiku ajaloo kustutamine [EK-473](https://projektid.hitsa.ee/jira/browse/EK-473)
-* Spring Boot kasutuselevõtuga seotud tööd
+* Spring Boot kasutuselevõtuga seotud tööd [EK-361](https://projektid.hitsa.ee/jira/browse/EK-361)
 
 ## e-Koolikott [1.35.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10789)
 
