@@ -122,6 +122,7 @@
                         this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
                         this.$scope.afterSave = false;
                         this.moveNavbarHeaderUp();
+                        this.$scope.isSubmittButtonEnabled = false
                     }
                 })
                 .catch(() => {
