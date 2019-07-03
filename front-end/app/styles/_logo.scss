@@ -10,6 +10,7 @@ a.logo {
 .logo {
   font-size: 1.8em;
   display: inline-block;
+  cursor: pointer;
   &:before {
     content: '\e800';
     display: block;

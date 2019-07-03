@@ -40,7 +40,7 @@
         <li class="sidenav__item" layout="column">
           <a id="faq" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/faq')}"
-             data-ng-href="/faq"
+             data-ng-click="confirm('/faq')"
             >
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">forum</md-icon>
@@ -51,7 +51,7 @@
         <li class="sidenav__item" layout="column">
           <a id="userManual" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/usermanuals')}"
-             data-ng-href="/usermanuals"
+             data-ng-click="confirm('/usermanuals')"
              >
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">library_books</md-icon>
@@ -63,7 +63,7 @@
         <li class="sidenav__item" layout="column">
           <a id="terms" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/terms')}"
-             data-ng-href="/terms"
+             data-ng-click="confirm('/terms')"
           >
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">assignment</md-icon>

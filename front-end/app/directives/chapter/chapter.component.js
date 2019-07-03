@@ -759,7 +759,7 @@ class controller extends Controller {
             document.getElementById('header-search-input').focus()
             this.$rootScope.$broadcast('detailedSearch:search')
         })
-        // document.cookie = 'visitedAddMaterialPage=true;'
+        document.cookie = 'visitedAddMaterialPage=true'
     }
     onInsertExistingMaterials(evt, chapterIdx, materials) {
         /**

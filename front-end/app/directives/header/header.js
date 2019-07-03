@@ -71,6 +71,9 @@ class controller extends Controller {
         this.closeDetailedSearch = this.closeDetailedSearch.bind(this)
         this.$scope.closeDetailedSearch = this.closeDetailedSearch
 
+        this.$scope.goBack = this.goBack.bind(this)
+        this.$scope.gotoFrontPage = this.gotoFrontPage.bind(this)
+
         this.openMobileSearch = this.openMobileSearch.bind(this)
         this.$scope.openMobileSearch = this.openMobileSearch
 
@@ -293,6 +296,22 @@ class controller extends Controller {
         const shouldBeGrouped = this.searchService.shouldBeGrouped()
         this.searchService.setIsGrouped(shouldBeGrouped)
         this.$location.url(this.searchService.getURL())
+    }
+    goBack(){
+        history.back();
+    }
+    gotoFrontPage() {
+        if (this.$rootScope.isEditPortfolioMode && location.href.includes('/portfolio/edit')) {
+            this.$mdDialog.show({
+                templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
+                controller: 'leavePageDialogController',
+                controllerAs: '$ctrl',
+            }).then(() => {
+                window.location.href = '/'
+            })
+        }
+    else
+        window.location.href = '/'
     }
     closeDetailedSearch() {
         this.$timeout(() => {
