@@ -5,7 +5,7 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
-        /*const listener = () => {
+        const listener = () => {
             this.$mdDialog.show({
                 templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
                 controller: 'leavePageDialogController',
@@ -15,9 +15,9 @@ class controller extends Controller {
                 history.back()
             }, () => history.pushState(null, document.title, location.href))
         };
-        if (this.visitedAddMaterialPageCookieExists())
+        if (!this.visitedAddMaterialPageCookieExists())
             history.pushState(null, document.title, location.href)
-        window.addEventListener('popstate', listener, false)*/
+        window.addEventListener('popstate', listener, false)
 
         const storedPortfolio = this.storageService.getPortfolio()
         storedPortfolio
@@ -39,7 +39,7 @@ class controller extends Controller {
         )
         this.$scope.$on('$destroy', () => {
             this.$interval.cancel(this.autoSaveInterval)
-            // window.removeEventListener('popstate', listener, false)
+            window.removeEventListener('popstate', listener, false)
         })
 
         // Create a new chapter if user wishes to add their chosen materials to a new chapter.
@@ -159,9 +159,9 @@ class controller extends Controller {
                 )
             )
     }
-    /*visitedAddMaterialPageCookieExists() {
-        return (document.cookie.match(/^(?:.*;)?\s*visitedAddMaterialPage\s*=\s*([^;]+)(?:.*)?$/)||[,null])[1] == null
-    }*/
+    visitedAddMaterialPageCookieExists() {
+        return (document.cookie.match(/^(?:.*;)?\s*visitedAddMaterialPage\s*=\s*([^;]+)(?:.*)?$/)||[,null])[1] !== null
+    }
 }
 controller.$inject = [
     '$scope',

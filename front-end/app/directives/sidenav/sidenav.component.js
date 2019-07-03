@@ -40,6 +40,7 @@ class controller extends Controller {
         this.$scope.closeOtherTabs = this.closeOtherTabs.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
         this.$scope.isAdminUser = this.isAdminUser.bind(this)
+        this.$scope.confirm = this.confirm.bind(this)
 
         this.$scope.$on('dashboard:adminCountsUpdated', this.updateAdminCounts.bind(this))
         this.$rootScope.$on('login:success', this.userChange.bind(this));
@@ -215,6 +216,19 @@ class controller extends Controller {
             .then(data => {
                 this.$scope.userManualsCount = data.data.length
             })
+    }
+    confirm(href) {
+        if (this.$rootScope.isEditPortfolioMode) {
+            this.$mdDialog.show({
+                templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
+                controller: 'leavePageDialogController',
+                controllerAs: '$ctrl',
+            }).then(() => {
+                window.location.href = href
+            })
+        }
+        else
+            window.location.href = href
     }
 }
 controller.$inject = [
