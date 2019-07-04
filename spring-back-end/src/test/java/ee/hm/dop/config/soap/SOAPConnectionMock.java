@@ -10,7 +10,6 @@ import javax.xml.soap.SOAPMessage;
 import java.util.HashMap;
 import java.util.Map;
 
-import static ee.hm.dop.utils.ConfigurationProperties.EHIS_ENDPOINT;
 import static ee.hm.dop.utils.ConfigurationProperties.MOBILEID_ENDPOINT;
 
 @Component
@@ -21,7 +20,6 @@ public class SOAPConnectionMock extends SOAPConnection {
 
     public SOAPConnectionMock(Configuration configuration) {
         endpoints.put(configuration.getString(MOBILEID_ENDPOINT), new MobileIdSOAPConnection());
-        endpoints.put(configuration.getString(EHIS_ENDPOINT), new EhisSOAPConnection());
     }
 
     @Override

@@ -29,16 +29,7 @@ public interface ConfigurationProperties {
     String MOBILEID_NAMESPACE_URI = "mobileID.namespace.uri";
     String MOBILEID_MESSAGE_TO_DISPLAY = "mobileID.messageToDisplay";
 
-    // EHIS V5
-    String XTEE_NAMESPACE_PREFIX = "xtee.namespace.prefix";
-    String XTEE_NAMESPACE_URI = "xtee.namespace.uri";
-    String EHIS_ENDPOINT = "ehis.endpoint";
-    String EHIS_INSTITUTION = "ehis.institution";
-    String EHIS_SYSTEM_NAME = "ehis.system.name";
-    String EHIS_SERVICE_NAME = "ehis.service.name";
-
     // EHIS V6
-    String XROAD_EHIS_USE_V6 = "xroad.ehis.use.v6";
     String XROAD_EHIS_V6_NAMESPACE_XTEE_URI = "xroad.ehis.v6.namespace.xtee.uri";
     String XROAD_EHIS_V6_NAMESPACE_XTEE_PREFIX = "xroad.ehis.v6.namespace.xtee.prefix";
     String XROAD_EHIS_V6_NAMESPACE_XRO_URI = "xroad.ehis.v6.namespace.xro.uri";

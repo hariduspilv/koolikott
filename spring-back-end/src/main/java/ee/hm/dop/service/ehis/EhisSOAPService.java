@@ -21,10 +21,8 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.nio.charset.StandardCharsets;
 
-import static ee.hm.dop.utils.ConfigurationProperties.EHIS_ENDPOINT;
 import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_CONNECT;
 import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_READ;
-import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_USE_V6;
 import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_V6_ENDPOINT;
 import static java.lang.String.format;
 
@@ -42,24 +40,14 @@ public class EhisSOAPService implements IEhisSOAPService {
     @Inject
     private SOAPConnection connection;
     @Inject
-    private EhisV5RequestBuilder ehisV5RequestBuilder;
-    @Inject
     private EhisV6RequestBuilder ehisV6RequestBuilder;
-    @Inject
-    private EhisV5ResponseAnalyzer ehisV5ResponseAnalyzer;
     @Inject
     private EhisV6ResponseAnalyzer ehisV6ResponseAnalyzer;
 
     @Override
     public Person getPersonInformation(String idCode) {
         try {
-            boolean useV6 = configuration.getBoolean(XROAD_EHIS_USE_V6);
-            SOAPMessage message;
-            if (useV6) {
-                message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
-            } else {
-                message = ehisV5RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
-            }
+            SOAPMessage message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
 
             if (logger.isInfoEnabled()) {
                 log(message, "Sending message to EHIS: %s");
@@ -75,12 +63,7 @@ public class EhisSOAPService implements IEhisSOAPService {
                 return null;
             }
 
-            String xmlResponse;
-            if (useV6) {
-                xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
-            } else {
-                xmlResponse = ehisV5ResponseAnalyzer.parseSOAPResponse(response);
-            }
+            String xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
 
             logger.info(format("Received response from EHIS: %s", xmlResponse));
             return ehisParser.parse(xmlResponse);
@@ -104,8 +87,7 @@ public class EhisSOAPService implements IEhisSOAPService {
     }
 
     private SOAPMessage sendSOAPMessage(SOAPMessage message) throws SOAPException, IOException {
-        boolean useV6 = configuration.getBoolean(XROAD_EHIS_USE_V6);
-        String endpoint = useV6 ? configuration.getString(XROAD_EHIS_V6_ENDPOINT) : configuration.getString(EHIS_ENDPOINT);
+        String endpoint = configuration.getString(XROAD_EHIS_V6_ENDPOINT);
 
 //        return connection.call(message, endpoint);
         try {
