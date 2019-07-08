@@ -1,7 +1,7 @@
 <div data-layout="column">
   <md-toolbar class="error-message" data-md-colors="{ 'background-color': 'grey-900' }">
-    <div layout-align="space-between center" class="md-toolbar-tools"
-         data-layout="row" layout-align-xs="center center" layout-xs="column">
+    <div layout-align="space-between center" class="md-toolbar-tools history"
+         data-layout="row" layout-align-xs="center center">
       <h2>{{selectedPortfolioLog ? ('LOG_MOMENT' | translate) + ' - ' +
         $ctrl.formatDateToTimeDayMonthYear(selectedPortfolioLog.createdAt) : ('LOG_HISTORY' | translate)}}</h2>
       <div layout-align="end center" layout-align-xs="center center" layout-xs="row" layout="row">
