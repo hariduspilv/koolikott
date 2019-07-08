@@ -17,6 +17,12 @@
   }
 }
 
+.history {
+  @media (max-width: $layout-breakpoint-xs) {
+    display: contents;
+  }
+}
+
 .toolbar-add-materials__button {
   min-width: unset;
 }
