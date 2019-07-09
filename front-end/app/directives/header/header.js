@@ -24,7 +24,7 @@ class controller extends Controller {
         this.$scope.suggest.selectedItem = null
         this.$scope.canShowTour = false
         this.$scope.isMobileView = false
-        this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
+        this.$scope.isAdmin = this.isAdmin.bind(this)
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
 
         // @see https://github.com/angular/material/issues/8308#issuecomment-216308108
@@ -296,6 +296,9 @@ class controller extends Controller {
         const shouldBeGrouped = this.searchService.shouldBeGrouped()
         this.searchService.setIsGrouped(shouldBeGrouped)
         this.$location.url(this.searchService.getURL())
+    }
+    isAdmin() {
+        return this.authenticatedUserService.isAdmin()
     }
     goBack(){
         history.back();

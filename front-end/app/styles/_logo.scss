@@ -1,112 +1,65 @@
-a.logo {
-  text-decoration: none;
-  color: #fff;
-  &:hover {
-    color: inherit;
-    transition:color 0.55s $swift-ease-out-timing-function;
-  }
+.ekoolikott-logo {
+     width: 172px;
+     height: 27px;
+     margin: 0;
+
+     &-white {
+          @extend .ekoolikott-logo;
+          background: url("../images/ekoolikott-logo-white.svg") no-repeat center;
+
+          @media (max-width: $layout-breakpoint-sm) {
+               width: 48px;
+               height: 48px;
+               background: url("../images/ekoolikott-symbol-white.svg") no-repeat center;
+          }
+     }
+
+     &-black {
+          @extend .ekoolikott-logo;
+          background: url("../images/ekoolikott-logo-black.svg") no-repeat center;
+     }
+
+     &-colored {
+          @extend .ekoolikott-logo;
+          background: url("../images/ekoolikott-logo-colored.svg") no-repeat center;
+
+          @media (max-width: $layout-breakpoint-sm) {
+               width: 48px;
+               height: 48px;
+               background: url("../images/ekoolikott-symbol-colored.svg") no-repeat center;
+          }
+     }
+
+     &-white-slogan {
+          @extend .ekoolikott-logo;
+          height: 39px;
+          background: url("../images/ekoolikott-logo-white-slogan.svg") no-repeat center;
+
+          @media (max-width: $layout-breakpoint-sm) {
+               width: 48px;
+               height: 48px;
+               background: url("../images/ekoolikott-symbol-white.svg") no-repeat center;
+          }
+     }
+
+     &-colored-slogan {
+          @extend .ekoolikott-logo;
+          height: 39px;
+          background: url("../images/ekoolikott-logo-colored-slogan.svg") no-repeat center;
+
+          @media (max-width: $layout-breakpoint-sm) {
+               width: 48px;
+               height: 48px;
+               background: url("../images/ekoolikott-symbol-colored.svg") no-repeat center;
+          }
+     }
 }
 
-.logo {
-  font-size: 1.8em;
-  display: inline-block;
-  cursor: pointer;
-  &:before {
-    content: '\e800';
-    display: block;
-    font-family: "fontello";
-  }
-  @media (min-width: $layout-breakpoint-sm) {
-    &:before  {
-      content: '\e801';
-    }
-  }
-}
-
-
-.logo.logo-bw {
-  color: rgba(0,0,0, .7);
-  font-size: 1.5em;
-  &:before {
-    content: '\e801';
-  }
-}
-
-.shadow-primary {
-  text-shadow: long-shadow(
-  $direction: 42deg,
-  $length: 60px,
-  $color: darken($color-primary, 5%),
-  $fade: true
-  );
-}
-
-.shadow-admin  {
-  text-shadow: long-shadow(
-  $direction: 42deg,
-  $length: 60px,
-  $color: darken($color-admin, 10%),
-  $fade: true
-  );
-}
-
-.shadow-deleted {
-  text-shadow: long-shadow(
-  $direction: 42deg,
-  $length: 60px,
-  $color: darken($color-deleted, 10%),
-  $fade: true
-  );
-}
-
-.shadow-edit  {
-  text-shadow: long-shadow(
-  $direction: 42deg,
-  $length: 60px,
-  $color: darken($color-accent, 10%),
-  $fade: true
-  );
-}
-
-
-// Temporary fix for logo color
-.navbar.md-primary {
-  .logo {
-    text-shadow: long-shadow(
-            $direction: 42deg,
-            $length: 60px,
-            $color: darken($color-primary, 5%),
-            $fade: true
-    );
-  }
-}
-.navbar.md-accent {
-  .logo {
-    text-shadow: long-shadow(
-            $direction: 42deg,
-            $length: 60px,
-            $color: darken($color-accent, 10%),
-            $fade: true
-    );
-  }
-}
-.navbar.md-red {
-  .logo {
-    text-shadow: long-shadow(
-            $direction: 42deg,
-            $length: 60px,
-            $color: darken($color-admin, 10%),
-            $fade: true
-    );
-  }
-}
-.navbar.md-gray {
-  .logo {
-    text-shadow: long-shadow(
-            $direction: 42deg,
-            $length: 60px,
-            $color: darken($color-deleted, 10%),
-            $fade: true
-    );
-  }
+.navbar-logo-area .md-button {
+     margin-right: 0;
+     @media (max-width: $layout-breakpoint-sm) {
+          margin: 0 4px;
+          padding-left: 0;
+          min-width: 48px;
+     }
 }

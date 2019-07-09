@@ -25,10 +25,13 @@
         </md-button>
         <!-- logo -->
         <div class="navbar-logo-main" data-ng-if="!isEditModeAndNotEditView">
-          <md-tooltip>
-            <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
-          </md-tooltip>
-          <a data-ng-click="gotoFrontPage(); closeDetailedSearch()" class="logo" id="logo"></a>
+          <md-button data-ng-click="gotoFrontPage(); closeDetailedSearch()">
+              <md-icon class="ekoolikott-logo-white-slogan" data-ng-if="!isAdmin()"></md-icon>
+              <md-icon class="ekoolikott-logo-white" data-ng-if="isAdmin()"></md-icon>
+              <md-tooltip>
+                <span data-translate="HEADER_TOOLTIP_GO_TO_LANDING_PAGE"></span>
+              </md-tooltip>
+          </md-button>
         </div>
       </div>
     </div>
