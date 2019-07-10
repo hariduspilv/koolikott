@@ -1,4 +1,4 @@
-## e-Koolikott [1.37.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793)
+## e-Koolikott [1.37.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793) (Toodangusse paigaldatud 09.07.2019)
 
 ### Muutunud
 * Küpsiste teavitusriba headeris [EK-530](https://projektid.hitsa.ee/jira/browse/EK-530)
@@ -8,7 +8,7 @@
 * Otsingukasti visuaali muudatused [EK-537](https://projektid.hitsa.ee/jira/browse/EK-537)
 * Spring Boot kasutuselevõtuga seotud tööd [EK-361](https://projektid.hitsa.ee/jira/browse/EK-361)
 
-## e-Koolikott [1.36.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793)
+## e-Koolikott [1.36.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793) (Toodangusse paigaldatud 09.07.2019)
 
 ### Muutunud
 * Kogumike ajaloo taastamine > Kogumiku salvestamine [EK-56](https://projektid.hitsa.ee/jira/browse/EK-56)
