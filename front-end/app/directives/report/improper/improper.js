@@ -155,8 +155,6 @@ class controller extends Controller {
     }
     sendReport() {
         const data = Object.assign({}, this.$scope.data)
-
-        console.log('PUT rest/impropers', data)
         this.serverCallService
             .makePut('rest/impropers', data)
             .then(({ status }) => {
@@ -171,6 +169,11 @@ class controller extends Controller {
                     this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
                 }
             })
+        if (!this.isAdminOrModerator())
+            window.location.href = '/'
+    }
+    isAdminOrModerator() {
+        return this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()
     }
 }
 controller.$inject = [

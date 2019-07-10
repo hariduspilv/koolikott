@@ -177,35 +177,37 @@ class controller extends Controller {
             const { messageKey } = this.$scope
             this.$scope.messageKey = ''
 
-            this.serverCallService
-                .makeGet('rest/admin/improper/'+this.data.id)
-                .then(({ data: reports }) => {
-                    if (Array.isArray(reports) && reports.length) {
-                        const done = (reasons = '') => {
-                            !setMessage
-                                ? this.$scope.messageKey = messageKey
-                                : this.$scope.message = reports[0].reportingText
-                                    ? reasons.join(', ')+': '+reports[0].reportingText
-                                    : reasons.join(', ')
+            if (this.isAdmin || this.isModerator) {
+                this.serverCallService
+                    .makeGet('rest/admin/improper/' + this.data.id)
+                    .then(({data: reports}) => {
+                            if (Array.isArray(reports) && reports.length) {
+                                const done = (reasons = '') => {
+                                    !setMessage
+                                        ? this.$scope.messageKey = messageKey
+                                        : this.$scope.message = reports[0].reportingText
+                                        ? reasons.join(', ') + ': ' + reports[0].reportingText
+                                        : reasons.join(', ')
 
-                            if (!this.listeningResize) {
-                                this.listeningResize = true
-                                window.addEventListener('resize', this.onWindowResizeReports)
+                                    if (!this.listeningResize) {
+                                        this.listeningResize = true
+                                        window.addEventListener('resize', this.onWindowResizeReports)
+                                    }
+                                    this.onWindowResizeReports()
+                                }
+
+                                !reports[0].reportingReasons
+                                    ? done()
+                                    : Promise
+                                        .all(reports[0].reportingReasons.map(r => this.$translate(r.reason)))
+                                        .then(done)
+
+                                this.$scope.reports = reports
                             }
-                            this.onWindowResizeReports()
-                        }
-
-                        !reports[0].reportingReasons
-                            ? done()
-                            : Promise
-                                .all(reports[0].reportingReasons.map(r => this.$translate(r.reason)))
-                                .then(done)
-
-                        this.$scope.reports = reports
-                    }
-                }, () =>
-                    this.$scope.messageKey = messageKey
-                )
+                        }, () =>
+                            this.$scope.messageKey = messageKey
+                    )
+            }
         }
     }
     getChanges() {
