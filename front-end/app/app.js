@@ -335,14 +335,11 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
     };
 }]);
 
-app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog) {
+app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', '$cookies', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog, $cookies) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
         $mdDialog.cancel();
-        let paths = ['/', '/faq', '/usermanuals', 'terms'];
         if (!location.href.includes('/portfolio/edit'))
-            for (let i = 0; i < paths.length; i++)
-                document.cookie = 'visitedAddMaterialPage=false; expires=Thu, 01 Jan 1970 00:00:01 GMT; path=' + paths[i];
-
+            $cookies.remove('visitedAddMaterialPage')
         for (var i in $route.routes) {
             if (next.indexOf(i) !== -1) {
                 var permissions = $route.routes[i].permissions;

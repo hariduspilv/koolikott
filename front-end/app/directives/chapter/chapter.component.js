@@ -759,7 +759,7 @@ class controller extends Controller {
             document.getElementById('header-search-input').focus()
             this.$rootScope.$broadcast('detailedSearch:search')
         })
-        document.cookie = 'visitedAddMaterialPage=true'
+        this.$cookies.put('visitedAddMaterialPage', true)
     }
     onInsertExistingMaterials(evt, chapterIdx, materials) {
         /**
@@ -944,6 +944,7 @@ controller.$inject = [
     '$translate',
     '$mdDialog',
     '$compile',
+    '$cookies',
     'dialogService',
     'iconService',
     'serverCallService',

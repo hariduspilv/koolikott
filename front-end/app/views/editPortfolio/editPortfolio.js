@@ -15,7 +15,7 @@ class controller extends Controller {
                 history.back()
             }, () => history.pushState(null, document.title, location.href))
         };
-        if (!this.visitedAddMaterialPageCookieExists())
+        if (!this.$cookies.get('visitedAddMaterialPage'))
             history.pushState(null, document.title, location.href)
         window.addEventListener('popstate', listener, false)
 
@@ -159,9 +159,6 @@ class controller extends Controller {
                 )
             )
     }
-    visitedAddMaterialPageCookieExists() {
-        return (document.cookie.match(/^(?:.*;)?\s*visitedAddMaterialPage\s*=\s*([^;]+)(?:.*)?$/)||[,null])[1] !== null
-    }
 }
 controller.$inject = [
     '$scope',
@@ -173,6 +170,7 @@ controller.$inject = [
     '$document',
     '$translate',
     '$mdDialog',
+    '$cookies',
     'authenticatedUserService',
     'dialogService',
     'serverCallService',
