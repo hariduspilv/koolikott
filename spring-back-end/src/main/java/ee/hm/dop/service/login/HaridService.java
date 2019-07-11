@@ -1,5 +1,6 @@
 package ee.hm.dop.service.login;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.harid.HarIdCode;
 import ee.hm.dop.model.harid.HarIdUser;
@@ -19,8 +20,7 @@ import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
 import java.nio.charset.StandardCharsets;
-
-import ee.hm.dop.config.Configuration;
+import java.util.Base64;
 
 import static ee.hm.dop.utils.ConfigurationProperties.HARID_CLIENT_ID;
 import static ee.hm.dop.utils.ConfigurationProperties.HARID_CLIENT_SECRET;
@@ -30,7 +30,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.HARID_URL_TOKEN;
 import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.xml.security.utils.Base64.encode;
 
 @Service
 @Transactional
@@ -105,11 +104,6 @@ public class HaridService {
 
     private String generateAuthHeaderHash() {
         String authHeader = format("%s:%s", getClientId(), getClientSecret());
-        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
-    }
-
-    private void logAsString(String reason, Response response) {
-        response.bufferEntity();
-        logger.info(reason + " " + response.readEntity(String.class));
+        return Base64.getEncoder().encodeToString(authHeader.getBytes(StandardCharsets.UTF_8));
     }
 }
