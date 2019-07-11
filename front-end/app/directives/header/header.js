@@ -83,7 +83,11 @@ class controller extends Controller {
             if (emptySearch) this.$scope.detailedSearch.accessor.clearSimpleSearch()
         }
 
-        this.$scope.$on('detailedSearch:open', () => this.$scope.detailedSearch.isVisible = true)
+        this.$scope.$on('detailedSearch:open', () => {
+            this.$scope.detailedSearch.isVisible = true
+            if (this.cookieParentExists())
+                this.moveDetailedSearchDown()
+        })
         this.$scope.$on('detailedSearch:close', () => this.$scope.detailedSearch.isVisible = false)
         this.$scope.$on('detailedSearch:empty', this.closeDetailedSearch)
         this.$scope.$on('mobileSearch:open', this.openMobileSearch)
@@ -315,6 +319,20 @@ class controller extends Controller {
         }
     else
         window.location.href = '/'
+    }
+
+    moveDetailedSearchDown() {
+        const detailedSearchElement = document.getElementById('detailedSearch')
+        const cookieEditModeElement = document.getElementById('cookieEditMode')
+
+        if (cookieEditModeElement !== null && cookieEditModeElement.offsetWidth > 0 &&
+            cookieEditModeElement.offsetHeight > 0)
+            detailedSearchElement.style.top = 98 + 'px'
+        else detailedSearchElement.style.top = 58 + 'px'
+    }
+    cookieParentExists() {
+        const cookieParentElement = document.getElementById('cookieParent')
+        return cookieParentElement.offsetWidth > 0 && cookieParentElement.offsetHeight > 0
     }
     closeDetailedSearch() {
         this.$timeout(() => {

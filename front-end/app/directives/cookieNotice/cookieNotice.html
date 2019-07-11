@@ -1,5 +1,6 @@
 <div
   class="cookie-notice"
+  id="cookieNotice"
   data-ng-if="$ctrl.showCookieNotice()"
   layout="column" data-layout-gt-sm="row" layout-align="space-between center">
   <span data-ng-bind-html="cookieNotice.text"></span>
@@ -17,7 +18,7 @@
     </md-button>
   </div>
 </div>
-<div data-ng-if="isEditMode" layout="row" layout-align="center center">
+<div data-ng-if="isEditMode" layout="row" layout-align="center center" id="cookieEditMode">
   <form name="updateCookieNoticeForm" flex="100" class="flex flex-col">
     <md-dialog-content>
       <div
