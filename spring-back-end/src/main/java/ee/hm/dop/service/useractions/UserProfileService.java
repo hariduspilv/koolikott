@@ -85,10 +85,10 @@ public class UserProfileService {
         }
 
         if (userProfile == null) {
-            return setNewUserParameters(user, newUserProfile, userEmail);
+            return setUserParameters(user, newUserProfile, userEmail);
         }
 
-        return setExistingUserParameters(user, userProfile, userEmail);
+        return setUserParameters(user, userProfile, userEmail);
     }
 
     private void createUserEmail(User user, UserProfile userProfile) {
@@ -99,9 +99,8 @@ public class UserProfileService {
         userEmail.setActivatedAt(null);
         userEmail.setCreatedAt(LocalDateTime.now());
         userEmail.setEmail(null);
-        if (mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail, userProfile.getEmail()))){
-            userEmailDao.createOrUpdate(userEmail);
-        }
+        mailSender.sendEmail(mailBuilder.sendPinToUser(userEmail, userProfile.getEmail()));
+        userEmailDao.createOrUpdate(userEmail);
     }
 
     private void updateUser(UserProfile userProfile, User user) {
@@ -126,13 +125,7 @@ public class UserProfileService {
         }
     }
 
-    private UserProfile setNewUserParameters(User user, UserProfile newUserProfile, UserEmail userEmail) {
-        newUserProfile.setUser(user);
-        newUserProfile.setEmail(userEmail.getEmail());
-        return newUserProfile;
-    }
-
-    private UserProfile setExistingUserParameters(User user, UserProfile userProfile, UserEmail userEmail) {
+    private UserProfile setUserParameters(User user, UserProfile userProfile, UserEmail userEmail) {
         userProfile.setUser(user);
         userProfile.setInstitutions(user.getInstitutions());
         userProfile.setTaxons(user.getTaxons());
