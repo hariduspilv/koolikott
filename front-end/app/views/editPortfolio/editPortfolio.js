@@ -15,7 +15,7 @@ class controller extends Controller {
                 history.back()
             }, () => history.pushState(null, document.title, location.href))
         };
-        if (!this.$cookies.get('visitedAddMaterialPage'))
+        if (!this.$cookies.get('visitedAddMaterialPage') && !this.$cookies.get('savedPortfolio'))
             history.pushState(null, document.title, location.href)
         window.addEventListener('popstate', listener, false)
 

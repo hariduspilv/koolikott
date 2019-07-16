@@ -185,6 +185,7 @@ class controller extends Controller {
         }
 
         this.$scope.saveAndExitPortfolio = () => {
+            this.$cookies.put('savedPortfolio', true);
             this.storageService.getPortfolio().saveType = 'MANUAL';
             if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
                 this.storageService.getPortfolio().publicationConfirmed = true;
@@ -440,6 +441,7 @@ controller.$inject = [
     '$translate',
     '$mdSidenav',
     '$mdComponentRegistry',
+    '$cookies',
     'translationService',
     'searchService',
     'authenticationService',

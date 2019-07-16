@@ -338,8 +338,10 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
 app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', '$cookies', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog, $cookies) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
         $mdDialog.cancel();
-        if (!location.href.includes('/portfolio/edit'))
-            $cookies.remove('visitedAddMaterialPage')
+        if (!location.href.includes('/portfolio/edit')) {
+            $cookies.remove('savedPortfolio');
+            $cookies.remove('visitedAddMaterialPage');
+        }
         for (var i in $route.routes) {
             if (next.indexOf(i) !== -1) {
                 var permissions = $route.routes[i].permissions;
