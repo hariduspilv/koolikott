@@ -29,6 +29,8 @@
             this.$rootScope.$on('logout:success', this.moveNavbarHeaderUpForNotAdmin.bind(this));
             this.$rootScope.$on('cookie:showCookieNotice', this.$timeout(() => {
                 this.moveNavbarHeaderUp()
+                this.moveDetailedSearchUp()
+                this.moveAddMaterialsToolbarUp()
             }, 1000));
 
             this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
@@ -94,6 +96,8 @@
             this.getCookieNoticeText()
             this.$scope.isSubmittButtonEnabled = false;
             this.moveNavbarHeaderUp();
+            this.moveDetailedSearchUp();
+            this.moveAddMaterialsToolbarUp();
         }
 
         save() {
@@ -122,6 +126,8 @@
                         this.$scope.maintenanceLanguage = this.convertLanguage(this.$scope.currentLanguage);
                         this.$scope.afterSave = false;
                         this.moveNavbarHeaderUp();
+                        this.moveDetailedSearchUp()
+                        this.moveAddMaterialsToolbarUp()
                         this.$scope.isSubmittButtonEnabled = false
                     }
                 })
@@ -205,6 +211,8 @@
         editCookieNotice() {
             this.$scope.isEditMode = true
             this.moveNavbarHeaderDown();
+            this.moveDetailedSearchDown();
+            this.moveAddMaterialsToolbarDown();
         }
 
         moveNavbarHeaderDown() {
@@ -214,13 +222,30 @@
             headerElement.style.top = 98 + 'px';
             sidenavElement.style.top = 98 + 'px';
         }
-
+        moveDetailedSearchDown() {
+            const detailedSearchElement = document.getElementById('detailedSearch');
+            detailedSearchElement.style.top = 98 + 'px';
+        }
+        moveAddMaterialsToolbarDown() {
+            const addMaterialsToolbarElement = document.getElementById('addMaterialsToolbar');
+            if (addMaterialsToolbarElement !== null)
+                addMaterialsToolbarElement.style.top = 98 + 'px';
+        }
         moveNavbarHeaderUp() {
             const headerElement = document.getElementById('md-toolbar-header');
             const sidenavElement = document.getElementById('sidebar-left');
             sidenavElement.classList.remove('sidenav-cookie-related-upper');
             headerElement.style.top = 58 + 'px';
             sidenavElement.style.top = 58 + 'px';
+        }
+        moveDetailedSearchUp() {
+            const detailedSearchElement = document.getElementById('detailedSearch');
+            detailedSearchElement.style.top = 58 + 'px';
+        }
+        moveAddMaterialsToolbarUp() {
+            const addMaterialsToolbarElement = document.getElementById('addMaterialsToolbar');
+            if (addMaterialsToolbarElement !== null)
+                addMaterialsToolbarElement.style.top = 58 + 'px';
         }
 
         moveNavbarHeaderUpForNotAdmin() {

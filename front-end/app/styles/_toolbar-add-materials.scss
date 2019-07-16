@@ -17,6 +17,10 @@
   }
 }
 
+.opacity-transparent {
+  box-shadow: 0px 1px 3px 0px transparent, 0px 1px 1px 0px transparent, 0px 2px 1px -1px transparent;
+}
+
 .history {
   @media (max-width: $layout-breakpoint-xs) {
     display: contents;
