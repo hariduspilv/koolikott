@@ -9,6 +9,23 @@ class controller extends Controller {
             this.chapter = window.embedInsertionChapterIdx || -1;
         } else
             this.loadUserPortfolios()
+
+        this.$rootScope.$watch('selectedMaterials.length', (newLen) => {
+            if (newLen > 0) {
+                const addMaterialsToolbarElement = document.getElementById('addMaterialsToolbar')
+                const cookieParentElement = document.getElementById('cookieParent')
+                const cookieEditModeElement = document.getElementById('cookieEditMode')
+
+                if (cookieParentElement !== null && addMaterialsToolbarElement !== null) {
+                    if (cookieEditModeElement !== null &&
+                        addMaterialsToolbarElement.style.top !== '98px')
+                        addMaterialsToolbarElement.style.top = 98 + 'px'
+                    else if (cookieEditModeElement === null &&
+                        addMaterialsToolbarElement.style.top !== '58px')
+                        addMaterialsToolbarElement.style.top = 58 + 'px'
+                }
+            }
+        }, false)
     }
     loadUserPortfolios() {
         const fail = () => {
