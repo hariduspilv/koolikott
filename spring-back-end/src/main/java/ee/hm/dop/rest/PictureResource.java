@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.enums.RoleString;
@@ -8,29 +9,19 @@ import ee.hm.dop.service.files.PictureSaver;
 import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.files.UploadedFileService;
 import lombok.extern.slf4j.Slf4j;
-import ee.hm.dop.config.Configuration;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import java.io.ByteArrayInputStream;
 
 import static ee.hm.dop.utils.ConfigurationProperties.MAX_FILE_SIZE;
-import static ee.hm.dop.utils.DOPFileUtils.read;
 import static org.apache.commons.codec.binary.Base64.decodeBase64;
 
 @Slf4j
@@ -62,11 +53,11 @@ public class PictureResource extends BaseResource {
         return getPictureResponseWithCache(pictureService.getThumbnailByName(pictureName, size), pictureName);
     }
 
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public Picture uploadPicture(@RequestParam("picture") MultipartFile fileInputStream) {
+    public Picture uploadPicture(@RequestParam("picture") String pictureAsString) {
         try {
-            byte[] dataBase64 = read(fileInputStream.getInputStream(), configuration.getInt(MAX_FILE_SIZE));
+            byte[] dataBase64 = pictureAsString.getBytes();
             byte[] data = decodeBase64(dataBase64);
 
             Picture picture = new OriginalPicture();
