@@ -61,12 +61,14 @@
           <span data-ng-bind="userManual.title"></span>
         </td>
         <td md-cell class="dashboard-cell td-word-wrap">
-          <a target="_blank" href="{{userManual.url.startsWith('http') ? userManual.url : 'http://' + userManual.url}}">
+          <a target="_blank" href="{{userManual.url.startsWith('http') ? userManual.url : 'http://' + userManual.url}}"
+          rel="nofollow">
             <span data-ng-bind="userManual.url"></span>
           </a>
         </td>
         <td md-cell class="dashboard-cell td-word-wrap">
-          <a target="_blank" href="{{userManual.textUrl.startsWith('http') ? userManual.textUrl : 'http://' + userManual.textUrl}}">
+          <a target="_blank" href="{{userManual.textUrl.startsWith('http') ? userManual.textUrl : 'http://' + userManual.textUrl}}"
+          rel="nofollow">
             <span data-ng-bind="userManual.textUrl"></span>
           </a>
         </td>

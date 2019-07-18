@@ -5,7 +5,8 @@
     data-ng-href="{{link}}"
     data-ng-click="$event.stopPropagation()"
     target="_blank"
-    >
+    rel="nofollow"
+  >
     <h5 class="chapter-embed-card__title" data-ng-bind="title"></h5>
   </a>
   <div class="chapter-embed-card__mid-row">
@@ -26,6 +27,7 @@
         target="_blank"
         data-ng-click="$event.stopPropagation()"
         data-translate="LICENSETYPE_{{ licenseTypeName || defaultLicenseTypeName }}"
+        rel="nofollow"
       ></a>
     </div>
   </div>
@@ -36,6 +38,7 @@
       data-ng-click="$event.stopPropagation()"
       target="_blank"
       data-ng-bind="sourceLink.text"
+      rel="nofollow"
     ></a>
   </p>
 </div>

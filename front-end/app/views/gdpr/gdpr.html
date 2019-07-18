@@ -95,7 +95,8 @@
       </tr>
       <tr md-row data-ng-repeat="agreement in data track by $index">
         <td md-cell class="dashboard-cell">
-          <a target="_blank" href="{{agreement.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}">
+          <a target="_blank" href="{{agreement.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}"
+          rel="nofollow">
             <span data-ng-bind="agreement.url"></span>
           </a>
         </td>
