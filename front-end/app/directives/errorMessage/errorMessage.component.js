@@ -132,14 +132,20 @@ class controller extends Controller {
 
         if (!this.$rootScope.learningObjectPrivate) {
             this.bannerType =
-                this.$rootScope.learningObjectImproper ? 'showImproper' :
-                this.$rootScope.learningObjectUnreviewed ? 'showUnreviewed' :
-                this.$rootScope.learningObjectChanged && 'showChanged'
+                this.$rootScope.learningObjectDeleted ? 'showDeleted' :
+                    this.$rootScope.learningObjectImproper ? 'showImproper' :
+                        this.$rootScope.learningObjectUnreviewed ? 'showUnreviewed' :
+                            this.$rootScope.learningObjectChanged && 'showChanged'
 
             // make sure if deleted then show deleted stuff
             if (this.$rootScope.learningObjectDeleted)
                 this.bannerType = 'showDeleted';
 
+            if (this.bannerType)
+                this.setState(...VIEW_STATE_MAP[this.bannerType])
+        }
+        if (this.$rootScope.learningObjectPrivate && this.$rootScope.learningObjectDeleted) {
+            this.bannerType = this.$rootScope.learningObjectDeleted ? 'showDeleted' : undefined;
             if (this.bannerType)
                 this.setState(...VIEW_STATE_MAP[this.bannerType])
         }
