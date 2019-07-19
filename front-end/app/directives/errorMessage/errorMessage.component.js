@@ -145,9 +145,7 @@ class controller extends Controller {
                 this.setState(...VIEW_STATE_MAP[this.bannerType])
         }
         if (this.$rootScope.learningObjectPrivate && this.$rootScope.learningObjectDeleted) {
-            this.bannerType = this.$rootScope.learningObjectDeleted ? 'showDeleted' : undefined;
-            if (this.bannerType)
-                this.setState(...VIEW_STATE_MAP[this.bannerType])
+                this.setState(...VIEW_STATE_MAP['showDeleted'])
         }
     }
     setState(icon, messageKey, buttons, cb) {
