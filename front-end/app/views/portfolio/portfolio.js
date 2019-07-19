@@ -169,6 +169,7 @@ class controller extends Controller {
     }
 
     setPortfolio(portfolio, isLocallyStored = true) {
+        this.$rootScope.tabTitle = portfolio.title;
         this.$scope.portfolio = portfolio
         this.storageService.setPortfolio(portfolio)
 

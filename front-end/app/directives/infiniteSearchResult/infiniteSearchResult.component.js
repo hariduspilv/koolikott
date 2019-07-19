@@ -14,6 +14,7 @@
             this.$scope.currentLanguage = this.translationService.getLanguage();
             this.$scope.filteredTitle = {}
             this.$scope.highligthTitle = {}
+            this.$scope.searchKeyWord = ""
             this.getFrontPageTitleTranslations()
             this.getAllFrontPageTitleTranslations()
             this.headlineAndMaintananceLanguage()
@@ -105,9 +106,21 @@
         }
 
         setTitle() {
-            this.$translate.onReady().then(() =>
-                this.$scope.title = this.buildTitle(this.title, this.totalResults, this.titleTranslations)
-            )
+            this.$translate.onReady().then(() => {
+
+                this.$scope.title = (this.buildTitle(this.title, this.totalResults, this.titleTranslations))
+                if (this.$scope.searchKeyWord) {
+                    if (this.$scope.headlineLanguage === 'ET') {
+                        this.$rootScope.tabTitle = `Otsing: ${this.$scope.searchKeyWord}`;
+                    } else if (this.$scope.headlineLanguage === 'EN') {
+                        this.$rootScope.tabTitle = `Search: ${this.$scope.searchKeyWord}`;
+                    } else if (this.$scope.headlineLanguage === 'RU') {
+                        this.$rootScope.tabTitle = `Поиск: ${this.$scope.searchKeyWord}`;
+                    }
+                } else {
+                    this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
+                }
+            })
         }
 
         setPhraseTitleExact() {
@@ -123,6 +136,7 @@
         }
 
         buildTitle(title, results, translations) {
+            this.$scope.searchKeyWord = this.searchService.getQuery()
             let t = (key) => this.$translate.instant(key);
             return title ? t(title) :
                 this.$scope.searching ? t('SEARCH_RESULTS') :

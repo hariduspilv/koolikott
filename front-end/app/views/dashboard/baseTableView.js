@@ -64,6 +64,7 @@
             const [titleTranslationKey, url, sort, backendPagination, userPage] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
 
             this.$scope.titleTranslationKey = titleTranslationKey;
+            this.$translate(titleTranslationKey).then((translation) => this.$rootScope.tabTitle = translation);
             this.sortedBy = sort;
             this.restUri = url;
             this.isBackendPagination = backendPagination;
@@ -501,6 +502,7 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
         '$location',
         '$filter',
         '$mdDialog',

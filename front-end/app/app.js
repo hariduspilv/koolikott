@@ -27,6 +27,7 @@ let app = angular.module('koolikottApp', [
 
 let provideProvider = null;
 
+
 app.config([
     '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$translateProvider', '$sceProvider', '$mdThemingProvider', '$httpProvider', '$mdDateLocaleProvider', '$anchorScrollProvider', '$qProvider',
     function ($locationProvider, $controllerProvider, $compileProvider, $filterProvider, $provide, $translateProvider, $sceProvider, $mdThemingProvider, $httpProvider, $mdDateLocaleProvider, $anchorScrollProvider, $qProvider) {
@@ -257,6 +258,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isAdminTabOpen
             $rootScope.isTaxonomyOpen
             $rootScope.isCookie = !!$cookies.get('userAgent');
+            $rootScope.tabTitle = 'e-Koolikott';
 
             if (!$rootScope.isCookie || $rootScope.isAdmin) {
                 $rootScope.showCookieBanner = true;
@@ -333,6 +335,7 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
         var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';
         $location.url(prevUrl);
     };
+
 }]);
 
 app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', '$cookies', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog, $cookies) {

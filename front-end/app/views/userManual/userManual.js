@@ -5,6 +5,7 @@
         constructor(...args) {
             super(...args)
             this.getUserManuals();
+            this.$translate('USER_MANUALS_HEADING').then((translation) => this.$rootScope.tabTitle = translation);
         }
 
         getUserManuals() {
@@ -19,6 +20,8 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
+        '$translate',
         'serverCallService',
         'authenticatedUserService',
         'userManualsAdminService'

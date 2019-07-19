@@ -8,6 +8,7 @@
             this.initNewTerm()
             this.$scope.editMode = false
             this.refreshOnFirstLoad()
+            this.$translate('TERMS_HEADER').then((translation) => this.$rootScope.tabTitle = translation);
         }
 
         refreshOnFirstLoad() {
@@ -73,6 +74,8 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
+        '$translate',
         'serverCallService',
         'authenticatedUserService',
         'termsService',

@@ -19,6 +19,7 @@
             this.$scope.perPage = 20
             this.$scope.page = 1
             this.$scope.numPages = 1
+            this.$translate('USER_MANUALS_HEADING').then((translation) => this.$rootScope.tabTitle = translation);
 
             // Set the info text height in pixels for css-animatable collapse
             this.setInfoTextHeight = this.setInfoTextHeight.bind(this)
@@ -98,6 +99,7 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
         '$translate',
         'serverCallService',
         'sortService',

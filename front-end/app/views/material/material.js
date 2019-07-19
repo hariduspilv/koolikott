@@ -53,7 +53,6 @@ angular.module('koolikottApp')
             } else {
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
-
             $scope.$watch(() => {
                 return $scope.material;
             }, () => {
@@ -177,6 +176,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
                 if ($scope.material)
+                    $rootScope.tabTitle = $scope.material.titles[0].text;
                     materialService.increaseViewCount($scope.material);
 
             }
@@ -229,8 +229,6 @@ angular.module('koolikottApp')
                     .then(response => {
                         $scope.showUnreviewedLO = response.data;
                     })
-
-
                 }
             }
 
