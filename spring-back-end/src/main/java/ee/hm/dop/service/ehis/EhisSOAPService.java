@@ -53,7 +53,10 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(message, "Sending message to EHIS: %s");
             }
 
+            logger.info("SOAPMESSAGE created: " + message);
             SOAPMessage response = sendSOAPMessage(message);
+
+            logger.info("SOAPresponse : " + response);
 
             if (logger.isInfoEnabled()) {
                 log(response, "Received response from EHIS: %s");
