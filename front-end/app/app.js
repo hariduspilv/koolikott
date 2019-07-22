@@ -227,8 +227,8 @@ function isProfileOrSendEmailPath(path) {
     return path === '/profile' || path === '/dashboard/sentEmails';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies) {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies','$translate',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies, $translate) {
         $rootScope.$on('$routeChangeSuccess', function () {
             var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
 
@@ -259,6 +259,10 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isTaxonomyOpen
             $rootScope.isCookie = !!$cookies.get('userAgent');
             $rootScope.tabTitle = 'e-Koolikott';
+            $rootScope.applicationDescription ='';
+
+            $translate('HTML_META_DESCRIPTION').then((translation) => $rootScope.applicationDescription = translation);
+
 
             if (!$rootScope.isCookie || $rootScope.isAdmin) {
                 $rootScope.showCookieBanner = true;
