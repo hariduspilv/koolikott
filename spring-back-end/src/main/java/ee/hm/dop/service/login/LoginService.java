@@ -157,6 +157,7 @@ public class LoginService {
     }
 
     private User getExistingOrNewUser(String idCode, String firstname, String surname) {
+        logger.info("Starting finding user by id. Idcode: " + idCode + " firstname: " + firstname + " surname: " + surname);
         User existingUser = userService.getUserByIdCode(idCode);
         if (existingUser != null) {
             return existingUser;
