@@ -44,6 +44,7 @@ public class UserService {
         user.setIdCode(idCode);
         user.setName(name);
         user.setSurname(surname);
+        logger.info("System created new user" + user);
         return create(user);
     }
 

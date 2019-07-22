@@ -159,6 +159,7 @@ public class LoginService {
         if (existingUser != null) {
             return existingUser;
         }
+        logger.info("Starting creating new user");
         userService.create(idCode, firstname, surname);
         User newUser = userService.getUserByIdCode(idCode);
         if (newUser == null) {
