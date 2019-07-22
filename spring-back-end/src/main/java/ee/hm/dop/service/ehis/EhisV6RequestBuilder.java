@@ -28,7 +28,9 @@ public class EhisV6RequestBuilder {
         logger.info("SOAPMESSAGE messagesoappart: " + message.getSOAPPart().getContent());
         logger.info("SOAPMESSAGE messagesoapbody: " + message.getSOAPBody());
         logger.info("SOAPMESSAGE messagesoapheader: " + message.getSOAPHeader());
-        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelope: " + message.getSOAPPart().getEnvelope());
+        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelopeGetValue: " + message.getSOAPPart().getEnvelope().getBody().getValue());
+        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelopeBody: " + message.getSOAPPart().getEnvelope().getBody());
+        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelopeValue: " + message.getSOAPPart().getEnvelope().getValue());
 
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
