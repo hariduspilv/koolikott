@@ -54,6 +54,7 @@ public class EhisSOAPService implements IEhisSOAPService {
                 log(message, "Sending message to EHIS: %s");
             }
 
+
             logger.info("SOAPMESSAGE created: " + message);
             SOAPMessage response = sendSOAPMessage(message);
 
@@ -73,7 +74,7 @@ public class EhisSOAPService implements IEhisSOAPService {
             return ehisParser.parse(xmlResponse);
         } catch (Exception e) {
             if (environment.acceptsProfiles(Profiles.of("it", "test"))) {
-                logger.error("Error getting User information from EHIS. {}", e.getMessage());
+                logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
                 return null;
             }
             logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
