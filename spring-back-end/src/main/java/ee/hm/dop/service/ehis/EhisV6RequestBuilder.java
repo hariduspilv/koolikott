@@ -30,22 +30,19 @@ public class EhisV6RequestBuilder {
         logger.info("SOAPMESSAGE messagesoapheader: " + message.getSOAPHeader());
         logger.info("SOAPMESSAGE messagesoapaprtgetEnvelope: " + message.getSOAPPart().getEnvelope());
 
-        SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
+        if (message.getSOAPPart().getEnvelope() != null) {
+            message.getSOAPPart().getEnvelope().addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
+            message.getSOAPPart().getEnvelope().addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
+            message.getSOAPPart().getEnvelope().addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
+            logger.info("SOAPMESSAGE envelopebody: " + message.getSOAPPart().getEnvelope().getBody());
+            logger.info("SOAPMESSAGE enveloheader: " + message.getSOAPPart().getEnvelope().getHeader());
 
-//        if (envelope != null) {
-//            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
-//            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
-//            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
-//            logger.info("SOAPMESSAGE envelopebody: " + envelope.getBody());
-//            logger.info("SOAPMESSAGE enveloheader: " + envelope.getHeader());
-//
-//            populateHeader(envelope, idCode);
-//            populateBody(idCode, envelope);
-//
-//            return message;
-//        }
-//        else return null;
-        return null;
+            populateHeader(message.getSOAPPart().getEnvelope(), idCode);
+            populateBody(idCode, message.getSOAPPart().getEnvelope());
+
+            return message;
+        }
+        else return null;
     }
 
     private void populateHeader(SOAPEnvelope envelope, String idCode) throws SOAPException {
