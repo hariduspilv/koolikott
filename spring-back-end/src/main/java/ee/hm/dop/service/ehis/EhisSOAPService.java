@@ -50,28 +50,31 @@ public class EhisSOAPService implements IEhisSOAPService {
             logger.info("SOAP: started soap logic with id: " + idCode);
             SOAPMessage message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
 
-            if (logger.isInfoEnabled()) {
-                log(message, "Sending message to EHIS: %s");
+            if (message != null) {
+
+                if (logger.isInfoEnabled()) {
+                    log(message, "Sending message to EHIS: %s");
+                }
+
+
+                logger.info("SOAPMESSAGE created: " + message);
+                SOAPMessage response = sendSOAPMessage(message);
+
+                logger.info("SOAPresponse : " + response);
+
+                if (logger.isInfoEnabled()) {
+                    log(response, "Received response from EHIS: %s");
+                }
+
+                if (environment.acceptsProfiles(Profiles.of("it")) && response == null) {
+                    return null;
+                }
+
+                String xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
+
+                logger.info(format("Received response from EHIS: %s", xmlResponse));
+                return ehisParser.parse(xmlResponse);
             }
-
-
-            logger.info("SOAPMESSAGE created: " + message);
-            SOAPMessage response = sendSOAPMessage(message);
-
-            logger.info("SOAPresponse : " + response);
-
-            if (logger.isInfoEnabled()) {
-                log(response, "Received response from EHIS: %s");
-            }
-
-            if (environment.acceptsProfiles(Profiles.of("it")) && response == null) {
-                return null;
-            }
-
-            String xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
-
-            logger.info(format("Received response from EHIS: %s", xmlResponse));
-            return ehisParser.parse(xmlResponse);
         } catch (Exception e) {
             if (environment.acceptsProfiles(Profiles.of("it", "test"))) {
                 logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
@@ -80,6 +83,7 @@ public class EhisSOAPService implements IEhisSOAPService {
             logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
             return null;
         }
+        return new Person();
     }
 
     private void log(SOAPMessage message, String msg) throws SOAPException, IOException {
