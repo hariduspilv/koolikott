@@ -1,6 +1,8 @@
 package ee.hm.dop.service.ehis;
 
 import ee.hm.dop.config.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,16 +18,19 @@ import static ee.hm.dop.utils.ConfigurationProperties.*;
 @Transactional
 public class EhisV6RequestBuilder {
 
+    private static Logger logger = LoggerFactory.getLogger(EhisV6RequestBuilder.class);
+
     @Inject
     private Configuration configuration;
 
     public SOAPMessage createGetPersonInformationSOAPMessage(String idCode) throws SOAPException {
         SOAPMessage message = MessageFactory.newInstance().createMessage();
-
+        logger.info("SOAPMESSAGE message: " + message);
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
         envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
         envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
         envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
+        logger.info("SOAPMESSAGE envelope: " + envelope);
 
         populateHeader(envelope, idCode);
         populateBody(idCode, envelope);

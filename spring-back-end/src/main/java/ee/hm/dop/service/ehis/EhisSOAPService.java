@@ -47,6 +47,7 @@ public class EhisSOAPService implements IEhisSOAPService {
     @Override
     public Person getPersonInformation(String idCode) {
         try {
+            logger.info("SOAP: started soap logic with id: " + idCode);
             SOAPMessage message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
 
             if (logger.isInfoEnabled()) {
