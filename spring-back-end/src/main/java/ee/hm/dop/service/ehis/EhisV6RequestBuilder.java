@@ -30,15 +30,17 @@ public class EhisV6RequestBuilder {
         logger.info("SOAPMESSAGE messagesoapheader: " + message.getSOAPHeader());
         logger.info("SOAPMESSAGE messagesoapaprtgetEnvelope: " + message.getSOAPPart().getEnvelope());
 
-        if (message.getSOAPPart().getEnvelope() != null) {
-            message.getSOAPPart().getEnvelope().addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
-            message.getSOAPPart().getEnvelope().addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
-            message.getSOAPPart().getEnvelope().addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
-            logger.info("SOAPMESSAGE envelopebody: " + message.getSOAPPart().getEnvelope().getBody());
-            logger.info("SOAPMESSAGE enveloheader: " + message.getSOAPPart().getEnvelope().getHeader());
+        SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
-            populateHeader(message.getSOAPPart().getEnvelope(), idCode);
-            populateBody(idCode, message.getSOAPPart().getEnvelope());
+        if (envelope != null) {
+            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
+            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
+            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
+            logger.info("SOAPMESSAGE envelopebody: " + envelope.getBody());
+            logger.info("SOAPMESSAGE enveloheader: " + envelope.getHeader());
+
+            populateHeader(envelope, idCode);
+            populateBody(idCode, envelope);
 
             return message;
         }
@@ -55,36 +57,38 @@ public class EhisV6RequestBuilder {
         headerValues.put("userId", idCode);
         headerValues.put("id", UUID.randomUUID().toString());
 
-        SOAPHeader header = envelope.getHeader();
-        for (Map.Entry<String, String> headerValue : headerValues.entrySet()) {
-            QName elementName = envelope.createQName(headerValue.getKey(), xro);
-            header.addHeaderElement(elementName).addTextNode(headerValue.getValue());
+        if(envelope.getHeader() != null) {
+            SOAPHeader header = envelope.getHeader();
+            for (Map.Entry<String, String> headerValue : headerValues.entrySet()) {
+                QName elementName = envelope.createQName(headerValue.getKey(), xro);
+                header.addHeaderElement(elementName).addTextNode(headerValue.getValue());
+            }
+
+            QName service = envelope.createQName("service", xro);
+            QName objectType = envelope.createQName("objectType", iden);
+            SOAPElement serviceElement = header.addHeaderElement(service).addAttribute(objectType, "SERVICE");
+
+            Map<String, String> serviceValues = new LinkedHashMap<>();
+            serviceValues.put("xRoadInstance", c(XROAD_EHIS_V6_SERVICE_INSTACE));
+            serviceValues.put("memberClass", c(XROAD_EHIS_V6_SERVICE_MEMBER_CLASS));
+            serviceValues.put("memberCode", c(XROAD_EHIS_V6_SERVICE_MEMBER_CODE));
+            serviceValues.put("subsystemCode", c(XROAD_EHIS_V6_SERVICE_SUBSYSTEM_CODE));
+            serviceValues.put("serviceCode", c(XROAD_EHIS_V6_SERVICE_SERVICE_NAME));
+            serviceValues.put("serviceVersion", c(XROAD_EHIS_V6_SERVICE_SERVICE_VERSION));
+
+            addElements(envelope, iden, serviceElement, serviceValues);
+
+            QName client = envelope.createQName("client", xro);
+            SOAPElement clientElement = header.addHeaderElement(client).addAttribute(objectType, "SUBSYSTEM");
+
+            Map<String, String> clientValues = new LinkedHashMap<>();
+            clientValues.put("xRoadInstance", c(XROAD_EHIS_V6_SUBSYSTEM_INSTANCE));
+            clientValues.put("memberClass", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CLASS));
+            clientValues.put("memberCode", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CODE));
+            clientValues.put("subsystemCode", c(XROAD_EHIS_V6_SUBSYSTEM_SUBSYSTEM_CODE));
+
+            addElements(envelope, iden, clientElement, clientValues);
         }
-
-        QName service = envelope.createQName("service", xro);
-        QName objectType = envelope.createQName("objectType", iden);
-        SOAPElement serviceElement = header.addHeaderElement(service).addAttribute(objectType, "SERVICE");
-
-        Map<String, String> serviceValues = new LinkedHashMap<>();
-        serviceValues.put("xRoadInstance", c(XROAD_EHIS_V6_SERVICE_INSTACE));
-        serviceValues.put("memberClass", c(XROAD_EHIS_V6_SERVICE_MEMBER_CLASS));
-        serviceValues.put("memberCode", c(XROAD_EHIS_V6_SERVICE_MEMBER_CODE));
-        serviceValues.put("subsystemCode", c(XROAD_EHIS_V6_SERVICE_SUBSYSTEM_CODE));
-        serviceValues.put("serviceCode", c(XROAD_EHIS_V6_SERVICE_SERVICE_NAME));
-        serviceValues.put("serviceVersion", c(XROAD_EHIS_V6_SERVICE_SERVICE_VERSION));
-
-        addElements(envelope, iden, serviceElement, serviceValues);
-
-        QName client = envelope.createQName("client", xro);
-        SOAPElement clientElement = header.addHeaderElement(client).addAttribute(objectType, "SUBSYSTEM");
-
-        Map<String, String> clientValues = new LinkedHashMap<>();
-        clientValues.put("xRoadInstance", c(XROAD_EHIS_V6_SUBSYSTEM_INSTANCE));
-        clientValues.put("memberClass", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CLASS));
-        clientValues.put("memberCode", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CODE));
-        clientValues.put("subsystemCode", c(XROAD_EHIS_V6_SUBSYSTEM_SUBSYSTEM_CODE));
-
-        addElements(envelope, iden, clientElement, clientValues);
     }
 
     private void addElements(SOAPEnvelope envelope, String iden, SOAPElement serviceElement, Map<String, String> values) throws SOAPException {
