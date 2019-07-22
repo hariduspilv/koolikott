@@ -21,9 +21,7 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.nio.charset.StandardCharsets;
 
-import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_CONNECT;
-import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_READ;
-import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_V6_ENDPOINT;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 
 @Service
@@ -47,19 +45,14 @@ public class EhisSOAPService implements IEhisSOAPService {
     @Override
     public Person getPersonInformation(String idCode) {
         try {
-            logger.info("SOAP: started soap logic with id: " + idCode);
             SOAPMessage message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
-            logger.info("SOAP: created soap message is : " + message);
             if (message != null) {
 
                 if (logger.isInfoEnabled()) {
                     log(message, "Sending message to EHIS: %s");
                 }
 
-                logger.info("SOAPMESSAGE created: " + message);
                 SOAPMessage response = sendSOAPMessage(message);
-
-                logger.info("SOAPresponse : " + response);
 
                 if (logger.isInfoEnabled()) {
                     log(response, "Received response from EHIS: %s");

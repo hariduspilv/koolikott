@@ -9,8 +9,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
@@ -25,28 +27,21 @@ public class EhisV6RequestBuilder {
 
     public SOAPMessage createGetPersonInformationSOAPMessage(String idCode) throws SOAPException {
         SOAPMessage message = MessageFactory.newInstance().createMessage();
-        logger.info("SOAPMESSAGE messagesoappart: " + message.getSOAPPart().getContent());
-        logger.info("SOAPMESSAGE messagesoapbody: " + message.getSOAPBody());
-        logger.info("SOAPMESSAGE messagesoapheader: " + message.getSOAPHeader());
-        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelopeGetValue: " + message.getSOAPPart().getEnvelope().getBody().getValue());
-        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelopeBody: " + message.getSOAPPart().getEnvelope().getBody());
-        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelopeValue: " + message.getSOAPPart().getEnvelope().getValue());
-
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
         if (message.getSOAPPart().getEnvelope().getValue() != null) {
+            logger.info("EhisV6ReguestBuilder: SOAP message envelope has value - " + message.getSOAPPart().getEnvelope().getValue() + " for person with idCode: " + idCode);
             envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
             envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
             envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
-            logger.info("SOAPMESSAGE envelopebody: " + envelope.getBody());
-            logger.info("SOAPMESSAGE enveloheader: " + envelope.getHeader());
 
             populateHeader(envelope, idCode);
             populateBody(idCode, envelope);
-
             return message;
+        } else {
+            logger.info("EhisV6ReguestBuilder: SOAP message envelope has no value - " + message.getSOAPPart().getEnvelope().getValue() + " for person with idCode: " + idCode);
+            return null;
         }
-        else return null;
     }
 
     private void populateHeader(SOAPEnvelope envelope, String idCode) throws SOAPException {
@@ -59,38 +54,36 @@ public class EhisV6RequestBuilder {
         headerValues.put("userId", idCode);
         headerValues.put("id", UUID.randomUUID().toString());
 
-        if(envelope.getHeader() != null) {
-            SOAPHeader header = envelope.getHeader();
-            for (Map.Entry<String, String> headerValue : headerValues.entrySet()) {
-                QName elementName = envelope.createQName(headerValue.getKey(), xro);
-                header.addHeaderElement(elementName).addTextNode(headerValue.getValue());
-            }
-
-            QName service = envelope.createQName("service", xro);
-            QName objectType = envelope.createQName("objectType", iden);
-            SOAPElement serviceElement = header.addHeaderElement(service).addAttribute(objectType, "SERVICE");
-
-            Map<String, String> serviceValues = new LinkedHashMap<>();
-            serviceValues.put("xRoadInstance", c(XROAD_EHIS_V6_SERVICE_INSTACE));
-            serviceValues.put("memberClass", c(XROAD_EHIS_V6_SERVICE_MEMBER_CLASS));
-            serviceValues.put("memberCode", c(XROAD_EHIS_V6_SERVICE_MEMBER_CODE));
-            serviceValues.put("subsystemCode", c(XROAD_EHIS_V6_SERVICE_SUBSYSTEM_CODE));
-            serviceValues.put("serviceCode", c(XROAD_EHIS_V6_SERVICE_SERVICE_NAME));
-            serviceValues.put("serviceVersion", c(XROAD_EHIS_V6_SERVICE_SERVICE_VERSION));
-
-            addElements(envelope, iden, serviceElement, serviceValues);
-
-            QName client = envelope.createQName("client", xro);
-            SOAPElement clientElement = header.addHeaderElement(client).addAttribute(objectType, "SUBSYSTEM");
-
-            Map<String, String> clientValues = new LinkedHashMap<>();
-            clientValues.put("xRoadInstance", c(XROAD_EHIS_V6_SUBSYSTEM_INSTANCE));
-            clientValues.put("memberClass", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CLASS));
-            clientValues.put("memberCode", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CODE));
-            clientValues.put("subsystemCode", c(XROAD_EHIS_V6_SUBSYSTEM_SUBSYSTEM_CODE));
-
-            addElements(envelope, iden, clientElement, clientValues);
+        SOAPHeader header = envelope.getHeader();
+        for (Map.Entry<String, String> headerValue : headerValues.entrySet()) {
+            QName elementName = envelope.createQName(headerValue.getKey(), xro);
+            header.addHeaderElement(elementName).addTextNode(headerValue.getValue());
         }
+
+        QName service = envelope.createQName("service", xro);
+        QName objectType = envelope.createQName("objectType", iden);
+        SOAPElement serviceElement = header.addHeaderElement(service).addAttribute(objectType, "SERVICE");
+
+        Map<String, String> serviceValues = new LinkedHashMap<>();
+        serviceValues.put("xRoadInstance", c(XROAD_EHIS_V6_SERVICE_INSTACE));
+        serviceValues.put("memberClass", c(XROAD_EHIS_V6_SERVICE_MEMBER_CLASS));
+        serviceValues.put("memberCode", c(XROAD_EHIS_V6_SERVICE_MEMBER_CODE));
+        serviceValues.put("subsystemCode", c(XROAD_EHIS_V6_SERVICE_SUBSYSTEM_CODE));
+        serviceValues.put("serviceCode", c(XROAD_EHIS_V6_SERVICE_SERVICE_NAME));
+        serviceValues.put("serviceVersion", c(XROAD_EHIS_V6_SERVICE_SERVICE_VERSION));
+
+        addElements(envelope, iden, serviceElement, serviceValues);
+
+        QName client = envelope.createQName("client", xro);
+        SOAPElement clientElement = header.addHeaderElement(client).addAttribute(objectType, "SUBSYSTEM");
+
+        Map<String, String> clientValues = new LinkedHashMap<>();
+        clientValues.put("xRoadInstance", c(XROAD_EHIS_V6_SUBSYSTEM_INSTANCE));
+        clientValues.put("memberClass", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CLASS));
+        clientValues.put("memberCode", c(XROAD_EHIS_V6_SUBSYSTEM_MEMBER_CODE));
+        clientValues.put("subsystemCode", c(XROAD_EHIS_V6_SUBSYSTEM_SUBSYSTEM_CODE));
+
+        addElements(envelope, iden, clientElement, clientValues);
     }
 
     private void addElements(SOAPEnvelope envelope, String iden, SOAPElement serviceElement, Map<String, String> values) throws SOAPException {

@@ -4,23 +4,14 @@ import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.rest.BaseResource;
-import ee.hm.dop.service.login.EkoolService;
-import ee.hm.dop.service.login.HaridService;
-import ee.hm.dop.service.login.LoginService;
-import ee.hm.dop.service.login.MobileIDLoginService;
-import ee.hm.dop.service.login.StuudiumService;
+import ee.hm.dop.service.login.*;
 import ee.hm.dop.service.login.dto.IdCardInfo;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.inject.Inject;
@@ -29,9 +20,7 @@ import javax.xml.soap.SOAPException;
 import java.net.URI;
 import java.net.URISyntaxException;
 
-import static ee.hm.dop.rest.login.IdCardUtil.SSL_CLIENT_S_DN;
-import static ee.hm.dop.rest.login.IdCardUtil.getInfo;
-import static ee.hm.dop.rest.login.IdCardUtil.isAuthValid;
+import static ee.hm.dop.rest.login.IdCardUtil.*;
 import static java.lang.String.format;
 
 @RestController
