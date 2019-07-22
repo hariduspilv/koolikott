@@ -4,12 +4,7 @@ import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
 import ee.hm.dop.dao.UserEmailDao;
-import ee.hm.dop.model.Agreement;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserEmail;
-import ee.hm.dop.model.User_Agreement;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
@@ -23,14 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
-import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
-import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
+import static ee.hm.dop.service.login.dto.UserStatus.*;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.*;
+import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service
@@ -58,10 +50,8 @@ public class LoginService {
     private UserEmailDao userEmailDao;
 
     public UserStatus login(String idCode, String name, String surname, LoginFrom loginFrom) {
-        logger.info("Start finding latest agreement");
         Agreement latestAgreement = agreementDao.findLatestAgreement();
         if (latestAgreement == null) {
-            logger.info("No agreement, starting login");
             return loggedIn(finalizeLogin(idCode, name, surname, loginFrom));
         }
         User user = userService.getUserByIdCode(idCode);
@@ -157,12 +147,10 @@ public class LoginService {
     }
 
     private User getExistingOrNewUser(String idCode, String firstname, String surname) {
-        logger.info("Starting finding user by id. Idcode: " + idCode + " firstname: " + firstname + " surname: " + surname);
         User existingUser = userService.getUserByIdCode(idCode);
         if (existingUser != null) {
             return existingUser;
         }
-        logger.info("Starting creating new user");
         userService.create(idCode, firstname, surname);
         User newUser = userService.getUserByIdCode(idCode);
         if (newUser == null) {

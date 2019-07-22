@@ -39,7 +39,7 @@ public class EhisV6RequestBuilder {
             populateBody(idCode, envelope);
             return message;
         } else {
-            logger.info("EhisV6ReguestBuilder: SOAP message envelope has no value - " + message.getSOAPPart().getEnvelope().getValue() + " for person with idCode: " + idCode);
+            logger.info("EhisV6ReguestBuilder: SOAP message envelope has no value for person with idCode: " + idCode);
             return null;
         }
     }
