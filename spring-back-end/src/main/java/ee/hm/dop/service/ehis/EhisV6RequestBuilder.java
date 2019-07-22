@@ -32,19 +32,20 @@ public class EhisV6RequestBuilder {
 
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
-        if (envelope != null) {
-            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
-            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
-            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
-            logger.info("SOAPMESSAGE envelopebody: " + envelope.getBody());
-            logger.info("SOAPMESSAGE enveloheader: " + envelope.getHeader());
-
-            populateHeader(envelope, idCode);
-            populateBody(idCode, envelope);
-
-            return message;
-        }
-        else return null;
+//        if (envelope != null) {
+//            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
+//            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
+//            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
+//            logger.info("SOAPMESSAGE envelopebody: " + envelope.getBody());
+//            logger.info("SOAPMESSAGE enveloheader: " + envelope.getHeader());
+//
+//            populateHeader(envelope, idCode);
+//            populateBody(idCode, envelope);
+//
+//            return message;
+//        }
+//        else return null;
+        return null;
     }
 
     private void populateHeader(SOAPEnvelope envelope, String idCode) throws SOAPException {
