@@ -34,7 +34,7 @@ public class EhisV6RequestBuilder {
 
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
-        if (envelope != null) {
+        if (message.getSOAPPart().getEnvelope().getValue() != null) {
             envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
             envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
             envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
