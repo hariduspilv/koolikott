@@ -25,7 +25,10 @@ public class EhisV6RequestBuilder {
 
     public SOAPMessage createGetPersonInformationSOAPMessage(String idCode) throws SOAPException {
         SOAPMessage message = MessageFactory.newInstance().createMessage();
-        logger.info("SOAPMESSAGE message: " + message);
+        logger.info("SOAPMESSAGE messagesoappart: " + message.getSOAPPart());
+        logger.info("SOAPMESSAGE messagesoapbody: " + message.getSOAPBody());
+        logger.info("SOAPMESSAGE messagesoapheader: " + message.getSOAPHeader());
+        logger.info("SOAPMESSAGE messagesoapaprtgetEnvelope: " + message.getSOAPPart().getEnvelope());
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
 
         if (envelope != null) {
