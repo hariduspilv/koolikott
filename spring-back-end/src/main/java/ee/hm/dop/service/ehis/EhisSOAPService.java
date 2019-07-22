@@ -49,13 +49,12 @@ public class EhisSOAPService implements IEhisSOAPService {
         try {
             logger.info("SOAP: started soap logic with id: " + idCode);
             SOAPMessage message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
-
+            logger.info("SOAP: created soap message is : " + message);
             if (message != null) {
 
                 if (logger.isInfoEnabled()) {
                     log(message, "Sending message to EHIS: %s");
                 }
-
 
                 logger.info("SOAPMESSAGE created: " + message);
                 SOAPMessage response = sendSOAPMessage(message);
@@ -75,6 +74,8 @@ public class EhisSOAPService implements IEhisSOAPService {
                 logger.info(format("Received response from EHIS: %s", xmlResponse));
                 return ehisParser.parse(xmlResponse);
             }
+            else return new Person();
+
         } catch (Exception e) {
             if (environment.acceptsProfiles(Profiles.of("it", "test"))) {
                 logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
@@ -83,7 +84,6 @@ public class EhisSOAPService implements IEhisSOAPService {
             logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
             return null;
         }
-        return new Person();
     }
 
     private void log(SOAPMessage message, String msg) throws SOAPException, IOException {
