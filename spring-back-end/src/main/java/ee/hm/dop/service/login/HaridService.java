@@ -52,10 +52,13 @@ public class HaridService {
     public UserStatus authenticate(String code, String redirectUrl) {
         HarIdCode harIdCode = getHarIdCode(code, redirectUrl);
         HarIdUser harIdUser = getHaridUser(harIdCode);
+        logger.info("Harid code: " + harIdCode);
+        logger.info("Harid user: " + harIdUser);
         if (isBlank(harIdUser.getIdCode())) {
             logger.info("HarIdUser doesnt have idcode");
             return UserStatus.missingHarIdCode();
         }
+        logger.info("Starting login process. harIdUser Idcode: "+ harIdUser.getIdCodeNumbers() + " harIdUser firstname: " + harIdUser.getFirstName() + " harIdUser lastname"+ harIdUser.getLastName());
         return loginService.login(harIdUser.getIdCodeNumbers(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
     }
 

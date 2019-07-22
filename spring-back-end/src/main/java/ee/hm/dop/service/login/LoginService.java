@@ -58,8 +58,10 @@ public class LoginService {
     private UserEmailDao userEmailDao;
 
     public UserStatus login(String idCode, String name, String surname, LoginFrom loginFrom) {
+        logger.info("Start finding latest agreement");
         Agreement latestAgreement = agreementDao.findLatestAgreement();
         if (latestAgreement == null) {
+            logger.info("No agreement, starting login");
             return loggedIn(finalizeLogin(idCode, name, surname, loginFrom));
         }
         User user = userService.getUserByIdCode(idCode);

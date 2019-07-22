@@ -175,6 +175,7 @@ public class LoginResource extends BaseResource {
 
     private URI getHaridLocation(String token) throws URISyntaxException {
         try {
+            logger.info("Print out oxygen url: " + getHaridCallbackUrl());
             return redirectSuccess(haridService.authenticate(token, getHaridCallbackUrl()));
         } catch (Exception e) {
             logger.error("harId login failed", e);
