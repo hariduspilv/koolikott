@@ -70,6 +70,7 @@
     <a
       data-ng-href="{{url}}"
       data-ng-bind="displayUrl ? displayUrl : url"
+      onclick="captureOutboundLink(this.href)"
       target="_blank"
       class="embedded-material__link md-primary"
       rel="nofollow"

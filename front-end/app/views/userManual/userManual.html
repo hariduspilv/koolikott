@@ -24,6 +24,7 @@
                 <a
                   href="{{video.textUrl.startsWith('http') ? video.textUrl : 'http://' + video.textUrl}}"
                   data-ng-click="$event.stopPropagation()"
+                  onclick="captureOutboundLink(this.href)"
                   target="_blank"
                   data-ng-bind="'USER_GUIDE_HITSA_PAGE' | translate"
                   rel="nofollow"

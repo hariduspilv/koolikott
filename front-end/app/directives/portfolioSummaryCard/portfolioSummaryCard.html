@@ -255,6 +255,7 @@
                 </span>
                 <span data-ng-if="!getLicenseIconList().length" data-ng-switch data-on="portfolio.licenseType.name">
                   <a data-ng-switch-when="Youtube" href="//www.youtube.com/static?template=terms"
+                     onclick="captureOutboundLink(this.href)"
                      data-translate="LICENSETYPE_{{portfolio.licenseType.name.toUpperCase()}}" target="_blank"
                      rel="nofollow"></a>
                   <span data-ng-switch-default data-translate="LICENSETYPE_{{portfolio.licenseType.name.toUpperCase()}}"></span>

@@ -4,6 +4,7 @@
   <a
     data-ng-href="{{link}}"
     data-ng-click="$event.stopPropagation()"
+    onclick="captureOutboundLink(this.href)"
     target="_blank"
     rel="nofollow"
   >
@@ -26,6 +27,7 @@
         data-ng-href="{{$ctrl.getLicenseTypeLink()}}"
         target="_blank"
         data-ng-click="$event.stopPropagation()"
+        onclick="captureOutboundLink(this.href)"
         data-translate="LICENSETYPE_{{ licenseTypeName || defaultLicenseTypeName }}"
         rel="nofollow"
       ></a>
@@ -36,6 +38,7 @@
     <a
       data-ng-href="{{sourceLink.url}}"
       data-ng-click="$event.stopPropagation()"
+      onclick="captureOutboundLink(this.href)"
       target="_blank"
       data-ng-bind="sourceLink.text"
       rel="nofollow"

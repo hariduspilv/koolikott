@@ -382,5 +382,9 @@ angular.module('koolikottApp')
             $scope.$on('$destroy', () =>
                 storageService.setMaterial(null)
             )
+
+            $scope.captureOutboundLink = function(url) {
+                window.captureOutboundLink(url);
+            };
         }
     ]);
