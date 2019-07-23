@@ -4,12 +4,7 @@ import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.AuthenticationStateDao;
 import ee.hm.dop.dao.UserAgreementDao;
 import ee.hm.dop.dao.UserEmailDao;
-import ee.hm.dop.model.Agreement;
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.AuthenticationState;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserEmail;
-import ee.hm.dop.model.User_Agreement;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
@@ -23,14 +18,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
-import static ee.hm.dop.service.login.dto.UserStatus.loggedIn;
-import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsExistingUser;
-import static ee.hm.dop.service.login.dto.UserStatus.missingPermissionsNewUser;
+import static ee.hm.dop.service.login.dto.UserStatus.*;
 import static java.lang.String.format;
-import static java.time.LocalDateTime.*;
+import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.StringUtils.isNotEmpty;
 
 @Service

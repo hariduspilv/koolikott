@@ -1,14 +1,18 @@
 package ee.hm.dop.service.ehis;
 
 import ee.hm.dop.config.Configuration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import javax.xml.namespace.QName;
 import javax.xml.soap.*;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 
@@ -16,21 +20,28 @@ import static ee.hm.dop.utils.ConfigurationProperties.*;
 @Transactional
 public class EhisV6RequestBuilder {
 
+    private static Logger logger = LoggerFactory.getLogger(EhisV6RequestBuilder.class);
+
     @Inject
     private Configuration configuration;
 
     public SOAPMessage createGetPersonInformationSOAPMessage(String idCode) throws SOAPException {
         SOAPMessage message = MessageFactory.newInstance().createMessage();
-
         SOAPEnvelope envelope = message.getSOAPPart().getEnvelope();
-        envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
-        envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
-        envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
 
-        populateHeader(envelope, idCode);
-        populateBody(idCode, envelope);
+        if (message.getSOAPPart().getEnvelope().getValue() != null) {
+            logger.info("EhisV6ReguestBuilder: SOAP message envelope has value - " + message.getSOAPPart().getEnvelope().getValue() + " for person with idCode: " + idCode);
+            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_XRO_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_XRO_URI));
+            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_IDEN_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_IDEN_URI));
+            envelope.addNamespaceDeclaration(c(XROAD_EHIS_V6_NAMESPACE_EHIS_PREFIX), c(XROAD_EHIS_V6_NAMESPACE_EHIS_URI));
 
-        return message;
+            populateHeader(envelope, idCode);
+            populateBody(idCode, envelope);
+            return message;
+        } else {
+            logger.info("EhisV6ReguestBuilder: SOAP message envelope has no value for person with idCode: " + idCode);
+            return null;
+        }
     }
 
     private void populateHeader(SOAPEnvelope envelope, String idCode) throws SOAPException {
