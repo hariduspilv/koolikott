@@ -10,6 +10,7 @@ class controller extends Controller {
             this.getUsersMaterials();
             this.getUsersPortfolios();
         }
+
     }
 
     getUser() {
@@ -59,7 +60,7 @@ class controller extends Controller {
 
     getUserFail() {
         console.log('Getting user failed.');
-        this.$location.url('/');
+        this.$location.url('/404');
     }
 
     getUsersMaterialsFail() {

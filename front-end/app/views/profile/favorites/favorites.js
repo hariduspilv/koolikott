@@ -3,7 +3,7 @@
 angular.module('koolikottApp')
 .controller('userFavoritesController',
 [
-    '$scope',
+    '$scope', '$rootScope',
     function ($scope) {
         $scope.cache = false;
         $scope.url = "rest/learningObject/usersFavorite";
@@ -12,3 +12,4 @@ angular.module('koolikottApp')
         };
     }
 ]);
+
