@@ -183,7 +183,6 @@ class controller extends Controller {
                 },
                 targetBlank: true
             })
-
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
             editor.subscribe('blur', this.onBlurBlock.bind(this, idx))
 

@@ -5,12 +5,17 @@ angular.module('koolikottApp')
         '$routeProvider',
         function ($routeProvider) {
 
-            $routeProvider.otherwise('/');
+            $routeProvider.otherwise('/404');
 
             $routeProvider
                 .when('/', {
                     templateUrl: 'views/home/home.html',
                     controller: 'homeController',
+                    controllerAs: '$ctrl'
+                })
+                .when('/404', {
+                    templateUrl: 'views/404/404.html',
+                    controller: '404Controller',
                     controllerAs: '$ctrl'
                 })
                 .when('/search/result', {

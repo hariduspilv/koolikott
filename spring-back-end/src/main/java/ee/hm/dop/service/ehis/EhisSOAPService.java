@@ -21,9 +21,7 @@ import java.net.URLConnection;
 import java.net.URLStreamHandler;
 import java.nio.charset.StandardCharsets;
 
-import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_CONNECT;
-import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_TIMEOUT_READ;
-import static ee.hm.dop.utils.ConfigurationProperties.XROAD_EHIS_V6_ENDPOINT;
+import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 
 @Service
@@ -48,28 +46,32 @@ public class EhisSOAPService implements IEhisSOAPService {
     public Person getPersonInformation(String idCode) {
         try {
             SOAPMessage message = ehisV6RequestBuilder.createGetPersonInformationSOAPMessage(idCode);
+            if (message != null) {
 
-            if (logger.isInfoEnabled()) {
-                log(message, "Sending message to EHIS: %s");
+                if (logger.isInfoEnabled()) {
+                    log(message, "Sending message to EHIS: %s");
+                }
+
+                SOAPMessage response = sendSOAPMessage(message);
+
+                if (logger.isInfoEnabled()) {
+                    log(response, "Received response from EHIS: %s");
+                }
+
+                if (environment.acceptsProfiles(Profiles.of("it")) && response == null) {
+                    return null;
+                }
+
+                String xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
+
+                logger.info(format("Received response from EHIS: %s", xmlResponse));
+                return ehisParser.parse(xmlResponse);
             }
+            else return new Person();
 
-            SOAPMessage response = sendSOAPMessage(message);
-
-            if (logger.isInfoEnabled()) {
-                log(response, "Received response from EHIS: %s");
-            }
-
-            if (environment.acceptsProfiles(Profiles.of("it")) && response == null) {
-                return null;
-            }
-
-            String xmlResponse = ehisV6ResponseAnalyzer.parseSOAPResponse(response);
-
-            logger.info(format("Received response from EHIS: %s", xmlResponse));
-            return ehisParser.parse(xmlResponse);
         } catch (Exception e) {
             if (environment.acceptsProfiles(Profiles.of("it", "test"))) {
-                logger.error("Error getting User information from EHIS. {}", e.getMessage());
+                logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);
                 return null;
             }
             logger.error("Error getting User information from EHIS. {}", e.getMessage(), e);

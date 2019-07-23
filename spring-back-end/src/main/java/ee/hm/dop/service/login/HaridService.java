@@ -52,10 +52,13 @@ public class HaridService {
     public UserStatus authenticate(String code, String redirectUrl) {
         HarIdCode harIdCode = getHarIdCode(code, redirectUrl);
         HarIdUser harIdUser = getHaridUser(harIdCode);
+        logger.info("Harid code: " + harIdCode);
+        logger.info("Harid user: " + harIdUser);
         if (isBlank(harIdUser.getIdCode())) {
             logger.info("HarIdUser doesnt have idcode");
             return UserStatus.missingHarIdCode();
         }
+        logger.info("Starting login process. harIdUser Idcode: "+ harIdUser.getIdCodeNumbers() + " harIdUser firstname: " + harIdUser.getFirstName() + " harIdUser lastname"+ harIdUser.getLastName());
         return loginService.login(harIdUser.getIdCodeNumbers(), harIdUser.getFirstName(), harIdUser.getLastName(), LoginFrom.HAR_ID);
     }
 
@@ -69,6 +72,7 @@ public class HaridService {
                 .request()
                 .header("Authorization", "Basic " + generateAuthHeaderHash())
                 .post(Entity.entity(params, APPLICATION_FORM_URLENCODED_TYPE));
+        logAsString("haridCode",response);
         return response.readEntity(HarIdCode.class);
     }
 
@@ -79,6 +83,7 @@ public class HaridService {
                 .header("Content-type", "application/x-www-form-urlencoded")
                 .accept(MediaType.APPLICATION_JSON)
                 .get();
+        logAsString("haridPerson",response);
         return response.readEntity(HarIdUser.class);
     }
 
@@ -105,5 +110,10 @@ public class HaridService {
     private String generateAuthHeaderHash() {
         String authHeader = format("%s:%s", getClientId(), getClientSecret());
         return Base64.getEncoder().encodeToString(authHeader.getBytes(StandardCharsets.UTF_8));
+    }
+
+    private void logAsString(String reason, Response response) {
+            response.bufferEntity();
+            logger.info(reason + " " + response.readEntity(String.class));
     }
 }

@@ -128,7 +128,6 @@ public class UploadedFileService {
     }
 
     public ResponseEntity<InputStreamResource> returnFileStream(String mediaType, String fileName, File file) {
-        try {
             try {
                 InputStreamResource resource = new InputStreamResource(new FileInputStream(file));
 
@@ -143,10 +142,6 @@ public class UploadedFileService {
                 log.info("Downloading file failed: {}", e.getMessage(), e);
                 return null;
             }
-        } catch (Exception e) {
-            log.info("Downloading file failed: {}", e.getMessage(), e);
-            return null;
-        }
     }
 
     public ResponseEntity<InputStreamResource> returnFileStreamForPic(String mediaType, String fileName, long length, InputStream stream) {

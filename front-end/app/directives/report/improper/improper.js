@@ -125,7 +125,9 @@ class controller extends Controller {
             escapeToClose: true,
             targetEvent
         })
-        .catch(this.removeHash)
+        // .catch(this.removeHash)
+        .catch(err =>
+            console.log(err));
 
         setTimeout(() =>
             setTimeout(() =>
