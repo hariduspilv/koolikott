@@ -122,7 +122,7 @@ angular.module('koolikottApp')
                 if (isEmpty(material)) {
                     console.log('No data returned by getting material. Redirecting to landing page');
                     toastService.show('ERROR_MATERIAL_NOT_FOUND');
-                    $location.url("/");
+                    window.location.replace('/404');
                 } else {
                     $scope.material = material;
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
@@ -135,7 +135,7 @@ angular.module('koolikottApp')
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');
                 toastService.show('ERROR_MATERIAL_NOT_FOUND');
-                $location.url("/");
+                window.location.replace('/404');
             }
 
             function processMaterial() {

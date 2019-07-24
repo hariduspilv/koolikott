@@ -18,7 +18,6 @@ class controller extends Controller {
         else config.params = params;
 
         if (transformRequest) config.transformRequest = transformRequest;
-
         if (!successCallback)
             return this.$http(config).catch(response => {
                 switch (response.status) {
@@ -27,6 +26,9 @@ class controller extends Controller {
                             this.authenticatedUserService.removeAuthenticatedUser()
                         }
                         break
+                    case 400:
+                    case 404:
+                        window.location.replace('/404')
                     case 401:
                         this.authenticatedUserService.removeAuthenticatedUser()
                     case 403:

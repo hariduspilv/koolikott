@@ -41,7 +41,7 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public SearchResult getByCreator(@QueryParam("username") String username, @QueryParam("start") int start, @QueryParam("maxResults") int maxResults) {
         User creator = getValidCreator(username);
-        if (creator == null) throw badRequest("User does not exist with this username parameter");
+        if (creator == null) throw notFound();
 
         return portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
     }
@@ -70,7 +70,7 @@ public class PortfolioResource extends BaseResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Long getByCreatorCount(@QueryParam("username") String username) {
         User creator = getValidCreator(username);
-        if (creator == null) throw badRequest("User does not exist with this username parameter");
+        if (creator == null) throw notFound();
         return portfolioGetter.getCountByCreator(creator);
     }
 

@@ -84,7 +84,7 @@ public class UserEmailResource extends BaseResource {
                                  @RequestParam("lang") int lang) {
         PageableQuerySentEmails pageableQuery = new PageableQuerySentEmails(page, itemSortedBy, query, lang);
         if (!pageableQuery.isValid()) {
-            throw badRequest("Query parameters invalid");
+            throw notFound();
         }
         return userEmailService.getUserEmail(getLoggedInUser(), pageableQuery);
     }

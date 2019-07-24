@@ -41,11 +41,11 @@ public class TagUpVoteResource extends BaseResource {
         }
         LearningObject learningObject = learningObjectService.get(tagUpVote.getLearningObject().getId(), getLoggedInUser());
         if (learningObject == null) {
-            throw badRequest("No such learning object");
+            throw notFound();
         }
         Tag tag = tagService.getTagByName(tagUpVote.getTag().getName());
         if (tag == null) {
-            throw badRequest("No such tag");
+            throw notFound();
         }
 
         TagUpVote trustTagUpVote = new TagUpVote();

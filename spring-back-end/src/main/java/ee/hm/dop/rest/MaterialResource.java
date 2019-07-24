@@ -78,7 +78,7 @@ public class MaterialResource extends BaseResource {
     }
 
     private User getValidCreator(@RequestParam("username") String username) {
-        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
+        if (isBlank(username)) throw notFound();
         return userService.getUserByUsername(username);
     }
 

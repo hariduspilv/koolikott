@@ -86,7 +86,7 @@ class controller extends Controller {
     fetchPortfolio() {
         const fail = () => {
             this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
-            this.$location.url('/')
+            this.$location.url('/404')
         }
         this.serverCallService
             .makeGet('rest/portfolio?id=' + this.$route.current.params.id)

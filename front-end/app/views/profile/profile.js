@@ -60,7 +60,6 @@ class controller extends Controller {
 
     getUserFail() {
         console.log('Getting user failed.');
-        this.$location.url('/404');
     }
 
     getUsersMaterialsFail() {
