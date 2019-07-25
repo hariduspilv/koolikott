@@ -1,5 +1,6 @@
 ## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008)
 
+### Muutunud
 * Kasutajaprofiili juvipakkuvate teemade ja koolide lisamise parandus [EK-478](https://projektid.hitsa.ee/jira/browse/EK-478)
 * Kogumiku muutmisvaatest lahkudes kuvatakse kasutajale kinnitusküsimus [EK-499](https://projektid.hitsa.ee/jira/browse/EK-499)
 * Esilehe muudatus - uus logo [EK-541](https://projektid.hitsa.ee/jira/browse/EK-541)
@@ -8,14 +9,6 @@
 * Githubis raporteeritud turvavigade eemaldamine  [EK-608](https://projektid.hitsa.ee/jira/browse/EK-608)
 * Materjalile pisipildi lisamise ebaõnnestumisel veateate kuvamine  [EK-620](https://projektid.hitsa.ee/jira/browse/EK-620)
 * Suurema kui 1mb faili üleslaadimise ja küsimise parandus  [EK-621](https://projektid.hitsa.ee/jira/browse/EK-621)
-
-### Muutunud
-* Küpsiste teavitusriba headeris [EK-530](https://projektid.hitsa.ee/jira/browse/EK-530)
-* Hooldusteate teksti ja modifitseerimise muudatused [EK-531](https://projektid.hitsa.ee/jira/browse/EK-531)
-* Avalehe uus komponent meedia ja teksti kuvamiseks [EK-532](https://projektid.hitsa.ee/jira/browse/EK-532)
-* Esiletõstetud õppevara sektsioonile pealkirja lisamise/muutmise funktsionaalsus [EK-533](https://projektid.hitsa.ee/jira/browse/EK-533)
-* Otsingukasti visuaali muudatused [EK-537](https://projektid.hitsa.ee/jira/browse/EK-537)
-* Spring Boot kasutuselevõtuga seotud tööd [EK-361](https://projektid.hitsa.ee/jira/browse/EK-361)
 
 ## e-Koolikott [1.37.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793) (Toodangusse paigaldatud 09.07.2019)
 
