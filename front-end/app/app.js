@@ -261,6 +261,13 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.tabTitle = 'e-Koolikott';
             $rootScope.applicationDescription ='';
 
+            if(user){
+                window.dataLayer = window.dataLayer || [];
+                window.dataLayer.push({
+                    'userId' : `${user.id}` //this number must be replaced with an actual User ID
+                })
+            }
+
             $translate('HTML_META_DESCRIPTION').then((translation) => $rootScope.applicationDescription = translation);
 
 
