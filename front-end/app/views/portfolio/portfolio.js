@@ -127,7 +127,7 @@ class controller extends Controller {
         const { id } = this.$route.current.params
         const fail = () => {
             this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
-            this.$location.url('/404')
+            window.location.replace('/404')
         }
         if (id) {
             this.serverCallService

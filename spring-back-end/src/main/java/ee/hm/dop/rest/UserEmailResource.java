@@ -30,7 +30,7 @@ public class UserEmailResource extends BaseResource {
         if (userEmailService.hasEmail(userEmail)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PostMapping("check")
@@ -84,7 +84,7 @@ public class UserEmailResource extends BaseResource {
                                  @RequestParam("lang") int lang) {
         PageableQuerySentEmails pageableQuery = new PageableQuerySentEmails(page, itemSortedBy, query, lang);
         if (!pageableQuery.isValid()) {
-            throw notFound();
+            throw badRequest("Query parameters invalid");
         }
         return userEmailService.getUserEmail(getLoggedInUser(), pageableQuery);
     }

@@ -30,7 +30,7 @@ public class UserResource extends BaseResource {
     @GetMapping
     public User get(@RequestParam("username") String username) {
         if (isBlank(username)) {
-            throw notFound();
+            throw badRequest("Username parameter is mandatory.");
         }
         return userService.getUserByUsername(username);
     }
@@ -52,7 +52,7 @@ public class UserResource extends BaseResource {
     public String getUserLocation() {
         User loggedInUser = getLoggedInUser();
         if (isBlank(loggedInUser.getLocation())) {
-            throw notFound();
+            throw badRequest("Username parameter is mandatory.");
         }
         return loggedInUser.getLocation();
     }

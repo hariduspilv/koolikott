@@ -109,7 +109,7 @@ public class PortfolioResource extends BaseResource {
     }
 
     private User getValidCreator(@RequestParam("username") String username) {
-        if (isBlank(username)) throw notFound();
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         return userService.getUserByUsername(username);
     }
 }

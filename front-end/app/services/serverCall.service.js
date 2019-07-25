@@ -26,7 +26,6 @@ class controller extends Controller {
                             this.authenticatedUserService.removeAuthenticatedUser()
                         }
                         break
-                    case 400:
                     case 404:
                         window.location.replace('/404')
                     case 401:
