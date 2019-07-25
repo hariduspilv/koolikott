@@ -182,6 +182,7 @@
                             console.log(err)
                         })
                 })
+            this.moveDetailedSearchTop();
             this.moveNavBarHeaderTop();
             this.moveAddMaterialsToolbarTop();
         }
@@ -260,6 +261,11 @@
             sidenavElement.classList.remove('sidenav-cookie-related-upper');
             headerElement.style.top = '0';
             sidenavElement.style.top = '0';
+        }
+        moveDetailedSearchTop() {
+            const detailedSearchElement = document.getElementById('detailedSearch');
+            if (detailedSearchElement !== null)
+                detailedSearchElement.style.top = '0';
         }
         moveNavbarHeaderUpForNotAdmin() {
             const headerElement = document.getElementById('md-toolbar-header');
