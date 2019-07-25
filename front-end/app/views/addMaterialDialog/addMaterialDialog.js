@@ -99,7 +99,7 @@ class controller extends Controller {
                             this.$scope.showErrorOverlay = false
                         } else {
                             this.$scope.showErrorOverlay = true
-                            this.toastService.show('MATERIAL_FAIL_UPLOAD_FAIL')
+                            this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL')
                         }
                     }, () => this.$scope.showErrorOverlay = false
                 )
@@ -121,11 +121,11 @@ class controller extends Controller {
                     if (data.cause == 'filename too long') {
                         this.$scope.addMaterialForm.source.$setValidity('filenameTooLong', false)
                         this.$scope.addMaterialForm.source.$setTouched()
-                        this.toastService.show('MATERIAL_FAIL_UPLOAD_FAIL')
+                        this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL')
                     }
                     this.$scope.uploadingFile = false
                 })
-                .catch(this.toastService.show('MATERIAL_FAIL_UPLOAD_FAIL'))
+                .catch(this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL'))
         }
     }
 
