@@ -1,11 +1,11 @@
 ## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008)
 
 ### Muutunud
-* Kasutajaprofiili juvipakkuvate teemade ja koolide lisamise parandus [EK-478](https://projektid.hitsa.ee/jira/browse/EK-478)
+* Kasutajaprofiili huvipakkuvate teemade ja koolide lisamise parandus [EK-478](https://projektid.hitsa.ee/jira/browse/EK-478)
 * Kogumiku muutmisvaatest lahkudes kuvatakse kasutajale kinnitusküsimus [EK-499](https://projektid.hitsa.ee/jira/browse/EK-499)
 * Esilehe muudatus - uus logo [EK-541](https://projektid.hitsa.ee/jira/browse/EK-541)
 * Kogumiku ajaloo taastamise banneri muudatused  [EK-559](https://projektid.hitsa.ee/jira/browse/EK-559)
-* Materjali ja kogumiku pildi pisipildi lisamise parandus  [EK-607](https://projektid.hitsa.ee/jira/browse/EK-607)
+* Materjali ja kogumiku pisipildi lisamise parandus  [EK-607](https://projektid.hitsa.ee/jira/browse/EK-607)
 * Githubis raporteeritud turvavigade eemaldamine  [EK-608](https://projektid.hitsa.ee/jira/browse/EK-608)
 * Materjalile pisipildi lisamise ebaõnnestumisel veateate kuvamine  [EK-620](https://projektid.hitsa.ee/jira/browse/EK-620)
 * Suurema kui 1mb faili üleslaadimise ja küsimise parandus  [EK-621](https://projektid.hitsa.ee/jira/browse/EK-621)
