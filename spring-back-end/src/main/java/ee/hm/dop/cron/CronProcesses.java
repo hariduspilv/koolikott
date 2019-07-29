@@ -22,6 +22,8 @@ public class CronProcesses {
     private AuthenticatedUserCleaner authenticatedUserCleaner;
     private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
     private PortfolioLogCleaner portfolioLogCleaner;
+    private GenerateSitemapXmlsExecutor generateSitemapXmlsExecutor;
+    private GenerateSitemapXmlsExecutorProperties generateSitemapXmlsExecutorProperties;
 
     @Scheduled(cron = "${cron.materialSync.scheduledTime}")
     public void synchronizeMaterialsExecutor() {
@@ -62,6 +64,13 @@ public class CronProcesses {
     public void portfolioLogCleaner() {
         if (portfolioLogCleanerProperties.isEnabled()) {
             portfolioLogCleaner.run();
+        }
+    }
+
+    @Scheduled(cron = "${cron.sitemapsXmlsGenerator.scheduledTime}")
+    public void sitemapsXmlsGenerator() {
+        if (generateSitemapXmlsExecutorProperties.isEnabled()) {
+            generateSitemapXmlsExecutor.run();
         }
     }
 }

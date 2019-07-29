@@ -4,9 +4,11 @@ import com.redfin.sitemapgenerator.ChangeFreq;
 import com.redfin.sitemapgenerator.SitemapIndexGenerator;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
-import ee.hm.dop.dao.LanguageStringDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.UserDao;
+import ee.hm.dop.model.MaterialTitle;
+import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,38 +17,38 @@ import java.io.File;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.redfin.sitemapgenerator.WebSitemapUrl.Options;
 
 @Service
 @Transactional
 public class SitemapService {
 
-    private static final Logger logger = LoggerFactory.getLogger(SitemapService.class);
-
     private static final String BASE_URL = "http://localhost:3001"; //TODO
+    private static final String PATH_NAME = "/home/marekr/Proged/front-end"; //TODO
+    private static final String FAQ = "faq";
+    private static final String USER_MANUALS = "usermanuals";
+    private static final String TERMS = "terms";
+    private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS);
 
     @Inject
-    private LanguageStringDao languageStringDao;
+    private SitemapServiceCache sitemapServiceCache;
+    @Inject
+    private PortfolioDao portfolioDao;
+    @Inject
+    private UserDao userDao;
 
-    public void createSitemap() throws MalformedURLException, ParseException {
-        String pathname = "/home/marekr/Proged/spring-back-end/src/main/resources"; //TODO
-
-        File file = new File(pathname);
-        String urlString;
+    public int createSitemap() throws MalformedURLException, ParseException {
+        File file = new File(PATH_NAME);
         int nrOfUrl = 0;
 
-        logger.info("SITEMAP: started portfolio_daily generator");
-        WebSitemapGenerator webSitemapGeneratorPortfolio = WebSitemapGenerator
-                .builder(BASE_URL, file)
-                .fileNamePrefix("/portfolio_daily")
-//                .gzip(true)
-                .build();
+        WebSitemapGenerator webSitemapGeneratorPortfolio = generatePrefixSpecific("/portfolios", file);
 
-        List<String> portfolioTitles = languageStringDao.findAllPortfolioTitles();
-        for (String s : portfolioTitles) {
-            urlString = BASE_URL + "/portfolio_daily/" + s;
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(urlString)
-                    .lastMod(String.valueOf(LocalDateTime.now()))
+        for (Portfolio portfolio : portfolioDao.findAll()) {
+            WebSitemapUrl wsmUrl = new Options(BASE_URL + "/portfolio/" + portfolio.getId() + "-" + portfolio.getTitle())
+                    .lastMod(String.valueOf(portfolio.getUpdated()))
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
                     .build();
@@ -55,19 +57,12 @@ public class SitemapService {
         }
         webSitemapGeneratorPortfolio.write();
 
+        WebSitemapGenerator webSitemapGeneratorMaterial = generatePrefixSpecific("/materials", file);
 
-        logger.info("SITEMAP: started material_daily generator");
-        WebSitemapGenerator webSitemapGeneratorMaterial = WebSitemapGenerator
-                .builder(BASE_URL, file)
-                .fileNamePrefix("/material_daily")
-//                .gzip(true)
-                .build();
-
-        List<String> materialTitles = languageStringDao.findAllMaterialTitles();
-        for (String s : materialTitles) {
-            urlString = BASE_URL + "/material_daily/" + s;
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(urlString)
-                    .lastMod(String.valueOf(LocalDateTime.now()))
+        List<MaterialTitle> materialTitles = sitemapServiceCache.findAllMaterialsTitles();
+        for (MaterialTitle s : materialTitles) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/material/" + s.getId() + "-" + s.getText())
+                    .lastMod(String.valueOf(LocalDateTime.now())) // TODO
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
                     .build();
@@ -76,13 +71,46 @@ public class SitemapService {
         }
         webSitemapGeneratorMaterial.write();
 
-        File outFile = new File(pathname + "/sitemaps_index.xml");
-        SitemapIndexGenerator sitemapIndexGenerator = new SitemapIndexGenerator(BASE_URL, outFile);
-        sitemapIndexGenerator.addUrl(BASE_URL + "/portfolio_daily.xml");
-        sitemapIndexGenerator.addUrl(BASE_URL + "/material_daily.xml");
-        sitemapIndexGenerator.write();
+        WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("/users", file);
+        for (User s : userDao.findAll()) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + s.getUsername())
+                    .lastMod(String.valueOf(LocalDateTime.now())) //TODO
+                    .priority(0.9)
+                    .changeFreq(ChangeFreq.DAILY)
+                    .build();
 
-        logger.info("SITEMAP: sitemapIndex generator ended");
-        logger.info("SITEMAP: added " + nrOfUrl + " urls");
+            webSitemapGeneratorUsers.addUrl(wsmUrl);
+            nrOfUrl++;
+        }
+        webSitemapGeneratorUsers.write();
+
+        WebSitemapGenerator webSitemapGeneratorOther = generatePrefixSpecific("/otherUrls", file);
+        for (String u : URLS) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + u)
+                    .lastMod(String.valueOf(LocalDateTime.now())) // TODO
+                    .priority(0.9)
+                    .changeFreq(ChangeFreq.DAILY)
+                    .build();
+            webSitemapGeneratorOther.addUrl(wsmUrl);
+            nrOfUrl++;
+        }
+        webSitemapGeneratorOther.write();
+
+        File outFile = new File(PATH_NAME + "/sitemaps_index.xml");
+        SitemapIndexGenerator sitemapIndexGenerator = new SitemapIndexGenerator(BASE_URL, outFile);
+        sitemapIndexGenerator.addUrl(BASE_URL + "/portfolios.xml");
+        sitemapIndexGenerator.addUrl(BASE_URL + "/materials.xml");
+        sitemapIndexGenerator.addUrl(BASE_URL + "/otherUrls.xml");
+        sitemapIndexGenerator.addUrl(BASE_URL + "/users.xml");
+        sitemapIndexGenerator.write();
+        return nrOfUrl;
+    }
+
+    private WebSitemapGenerator generatePrefixSpecific(String prefix, File file) throws MalformedURLException {
+        return WebSitemapGenerator
+                .builder(BASE_URL, file)
+                .fileNamePrefix(prefix)
+//                .gzip(true)
+                .build();
     }
 }
