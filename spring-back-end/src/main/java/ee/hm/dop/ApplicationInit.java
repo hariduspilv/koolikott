@@ -18,6 +18,7 @@ public class ApplicationInit {
     private AuthenticatedUserCleaner authenticatedUserCleaner;
     private EhisInstitutionUpdateExecutor ehisInstitutionUpdateExecutor;
     private UpdatePortfolioMaterialsExecutor updatePortfolioMaterialsExecutor;
+    private GenerateSitemapXmlsExecutor generateSitemapXmlsExecutor;
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
@@ -27,5 +28,6 @@ public class ApplicationInit {
         authenticatedUserCleaner.runAsync();
         ehisInstitutionUpdateExecutor.runAsync();
         updatePortfolioMaterialsExecutor.runAsync();
+        generateSitemapXmlsExecutor.runAsync();
     }
 }
