@@ -16,7 +16,8 @@
 
      &-sidenav {
           @extend .ekoolikott-logo;
-          background: url("../images/ekoolikott-logo-white.svg") no-repeat center;
+          height: 39px;
+          background: url("../images/ekoolikott-logo-white-slogan.svg") no-repeat center;
      }
 
      &-colored {
