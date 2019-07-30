@@ -28,8 +28,9 @@ public class MaterialTitleDao extends AbstractDao<LanguageString> {
 
     public List<MaterialTitle> findAllMaterialTitles() {
         List<MaterialTitle> materialTitleList = new ArrayList<>();
-        List<Object[]> resultList = getEntityManager().createNativeQuery(
-                "select LS.textValue as lang, M.id\n" +
+        List<Object[]> resultList = getEntityManager()
+                .createNativeQuery(
+                "select LS.textValue as lang, M.id,LO.updated,LO.added\n" +
                         " from LearningObject LO\n" +
                         " join Material M on LO.id = M.id\n" +
                         " join Material_Title MT on M.id = MT.material\n" +
@@ -39,7 +40,7 @@ public class MaterialTitleDao extends AbstractDao<LanguageString> {
                 .getResultList();
 
         for (Object[] objects : resultList) {
-            materialTitleList.add(new MaterialTitle(String.valueOf(objects[0]), ((BigInteger) objects[1]).longValue()));
+            materialTitleList.add(new MaterialTitle(String.valueOf(objects[0]), ((BigInteger) objects[1]).longValue(),objects[2] == null ? String.valueOf(objects[3]): String.valueOf(objects[2])));
         }
         return materialTitleList;
     }

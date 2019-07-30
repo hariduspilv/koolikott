@@ -13,4 +13,5 @@ public class MaterialTitle {
 
     String text;
     Long id;
+    String time;
 }

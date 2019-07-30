@@ -48,7 +48,7 @@ public class SitemapService {
 
         for (Portfolio portfolio : portfolioDao.findAll()) {
             WebSitemapUrl wsmUrl = new Options(BASE_URL + "/portfolio/" + portfolio.getId() + "-" + portfolio.getTitle())
-                    .lastMod(String.valueOf(portfolio.getUpdated()))
+                    .lastMod(portfolio.getUpdated() == null ? String.valueOf(portfolio.getAdded()) : String.valueOf(portfolio.getUpdated()))
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
                     .build();
@@ -60,9 +60,9 @@ public class SitemapService {
         WebSitemapGenerator webSitemapGeneratorMaterial = generatePrefixSpecific("/materials", file);
 
         List<MaterialTitle> materialTitles = sitemapServiceCache.findAllMaterialsTitles();
-        for (MaterialTitle s : materialTitles) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/material/" + s.getId() + "-" + s.getText())
-                    .lastMod(String.valueOf(LocalDateTime.now())) // TODO
+        for (MaterialTitle materialTitle : materialTitles) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/material/" + materialTitle.getId() + "-" + materialTitle.getText())
+                    .lastMod(materialTitle.getTime())
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
                     .build();
@@ -72,8 +72,8 @@ public class SitemapService {
         webSitemapGeneratorMaterial.write();
 
         WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("/users", file);
-        for (User s : userDao.findAll()) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + s.getUsername())
+        for (User user : userDao.findAll()) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + user.getUsername())
                     .lastMod(String.valueOf(LocalDateTime.now())) //TODO
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
@@ -85,8 +85,8 @@ public class SitemapService {
         webSitemapGeneratorUsers.write();
 
         WebSitemapGenerator webSitemapGeneratorOther = generatePrefixSpecific("/otherUrls", file);
-        for (String u : URLS) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + u)
+        for (String url : URLS) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + url)
                     .lastMod(String.valueOf(LocalDateTime.now())) // TODO
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
