@@ -23,11 +23,11 @@ node {
                         .inside("-e DBPORT=3316") {
                             stage('Verify') {
                                 sh 'ls -la'
-                                sh './mvnw clean test -X '
+                                sh 'cd spring-back-end && ./mvnw clean test'
                                 archiveArtifacts artifacts: '/target/surefire-reports/**/*'
                             }
                             stage('Package') {
-                                sh './mvnw clean package -DskipTests=true'
+                                sh 'cd spring-back-end && ./mvnw clean package -DskipTests=true'
                                 archiveArtifacts artifacts: '/target/*.jar'
                             }
                         }
