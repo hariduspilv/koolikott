@@ -11,7 +11,7 @@ properties([
 
 
 node {
-    def scmVars = git branch: env.BRANCH_NAME, credentialsId: 'cc6e1565-c495-4f0d-b96a-74c0c8f151f2', url: 'git@github.com:hariduspilv/koolikott.git'
+    def scmVars = git branch: env.BRANCH_NAME, credentialsId: 'koolikott-github-token', url: 'git@github.com:hariduspilv/koolikott.git'
     def solrOxygenUrl = 'solr@oxygen.netgroupdigital.com'
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
     def adminOxygenUrl = 'netgroup@oxygen.netgroupdigital.com'
