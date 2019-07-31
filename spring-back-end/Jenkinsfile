@@ -19,16 +19,17 @@ node {
 
     docker.image('mariadb:10.3.13')
             .withRun("-p 3316:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dop") { c ->
-                docker.image('openjdk:8-jdk-slim') {
-                    stage('Verify') {
-                        sh 'cd spring-back-end && ./mvnw clean test -X'
-                        archiveArtifacts artifacts: 'spring-back-end/target/surefire-reports/**/*'
-                    }
-                    stage('Package') {
-                        sh 'cd spring-back-end && ./mvnw clean package -DskipTests=true'
-                        archiveArtifacts artifacts: 'spring-back-end/target/spring-kott.jar'
-                    }
-                }
+                docker.image('openjdk:8-jdk-slim')
+                        .inside() {
+                            stage('Verify') {
+                                sh 'cd spring-back-end && ./mvnw clean test -X'
+                                archiveArtifacts artifacts: 'spring-back-end/target/surefire-reports/**/*'
+                            }
+                            stage('Package') {
+                                sh 'cd spring-back-end && ./mvnw clean package -DskipTests=true'
+                                archiveArtifacts artifacts: 'spring-back-end/target/spring-kott.jar'
+                            }
+                        }
             }
 
     stage('Copy solr config') {
