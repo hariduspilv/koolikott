@@ -18,7 +18,7 @@ node {
     def adminOxygenUrl = 'netgroup@oxygen.netgroupdigital.com'
 
     docker.image('mariadb:10.3.13')
-            .withRun("p 3316:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dop") { c ->
+            .withRun("-p 3316:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dop") { c ->
                 docker.image('openjdk:8-jdk-slim') {
                     stage('Verify') {
                         sh 'cd spring-back-end && ./mvnw clean test -X'
