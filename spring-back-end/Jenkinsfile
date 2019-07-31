@@ -1,0 +1,49 @@
+properties([
+        [
+                $class  : 'BuildDiscarderProperty',
+                strategy: [
+                        $class               : 'LogRotator',
+                        artifactDaysToKeepStr: '20', artifactNumToKeepStr: '2',
+                        daysToKeepStr        : '20', numToKeepStr: '8'
+                ]
+        ]
+])
+
+
+node {
+    def scmVars = git branch: env.BRANCH_NAME, credentialsId: 'cc6e1565-c495-4f0d-b96a-74c0c8f151f2', url: 'git@github.com:hariduspilv/koolikott.git'
+    def solrOxygenUrl = 'solr@oxygen.netgroupdigital.com'
+    def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
+    def adminOxygenUrl = 'netgroup@oxygen.netgroupdigital.com'
+
+    docker.image('mariadb:10.3.13')
+            .withRun("-e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dop") { c ->
+                docker.image('openjdk:8-jdk-slim')
+                        .inside("-e DBPORT=3316") {
+                            stage('Verify') {
+                                sh './mvnw clean test -X '
+                                archiveArtifacts artifacts: '/target/surefire-reports/**/*'
+                            }
+
+                            stage('Package') {
+                                sh './mvnw clean package -DskipTests=true'
+                                archiveArtifacts artifacts: '/target/*.jar'
+                            }
+                        }
+            }
+
+    stage('Copy solr config') {
+        sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr-7.4.0/server/solr/" //todo replace solr w symlink
+        sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
+    }
+
+    stage('Deploy jar file') {
+        sh "scp -r spring-back-end/target/spring-kott-jar ${dopOxygenUrl}:app/"
+        sh "ssh -t ${adminOxygenUrl} /bin/bash <<'ENDSSH'"
+        sh "sudo service kottspring restart"
+    }
+
+    stage('Cleanup') {
+        sh 'docker volume rm \$(docker volume ls -q | awk \'{print $2}\') || true'
+    }
+}
