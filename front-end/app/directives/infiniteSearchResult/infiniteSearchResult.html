@@ -24,7 +24,7 @@
         data-ng-if="lang === maintenanceLanguage && isEditMode"
         layout="row"
         layout-wrap data-layout-align="space-between center">
-        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-order="1"
+        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100"
              data-ng-if="isEditMode">
           <!-- Landing page language -->
           <md-button
@@ -42,7 +42,7 @@
           </md-button>
 
         </div>
-        <div data-flex-order="5" flex="100" layout="row">
+        <div flex="100" layout="row">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                 <textarea
                   name="notice"
@@ -52,7 +52,7 @@
           </md-input-container>
         </div>
       </div>
-      <div layout="row" data-flex-order="4" layout-align="end center"
+      <div layout="row" layout-align="end center"
            class="md-padding md-padding-horizontal-double"
            data-ng-if="isEditMode">
         <md-button
@@ -161,7 +161,8 @@
   </div>
 </div>
 <div>
-  <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
+  <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex
+       data-ng-if="!editMode && $ctrl.isLandingPage()">
     <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
     <md-button style="min-width: 36px" data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
       <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
@@ -178,8 +179,8 @@
           layout="row"
           layout-wrap>
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
-               flex-order="2"
-               flex-order-gt-sm="2" flex="100" data-ng-if="editMode">
+
+               flex="100" data-ng-if="editMode">
             <md-input-container class="md-block animate-if" flex>
               <label data-translate="TITLE"></label>
               <textarea
@@ -189,7 +190,7 @@
               ></textarea>
             </md-input-container>
           </div>
-          <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-order="1"
+          <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100"
                data-ng-if="editMode">
             <!-- Landing page language -->
             <md-button
@@ -206,8 +207,8 @@
             </md-button>
           </div>
         </div>
-        <div data-layout="row" data-flex-order="4" layout-align="end center"
-                  class="md-padding md-padding-horizontal-double">
+        <div data-layout="row" layout-align="end center"
+             class="md-padding md-padding-horizontal-double">
           <md-button
             data-ng-click="$ctrl.cancelEditMode()"
           >
