@@ -385,6 +385,7 @@
                         <artifactId>cobertura-maven-plugin</artifactId>
                         <version>2.7</version>
                         <configuration>
+                            <skip>true</skip>
                             <formats>
                                 <format>xml</format>
                             </formats>
