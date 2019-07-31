@@ -1,21 +1,21 @@
+## e-Koolikott [1.38.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11020)
+
+### Muutunud
+* Esilehe videokasti suuruse muudatused [EK-629](https://projektid.hitsa.ee/jira/browse/EK-629)
+* Logo vahetus menüü responsive vaates [EK-632](https://projektid.hitsa.ee/jira/browse/EK-632)
+* Kogumike täisekraan-vaate parandus [EK-633](https://projektid.hitsa.ee/jira/browse/EK-633)
+
 ## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008)
 
-* Kasutajaprofiili juvipakkuvate teemade ja koolide lisamise parandus [EK-478](https://projektid.hitsa.ee/jira/browse/EK-478)
+### Muutunud
+* Kasutajaprofiili huvipakkuvate teemade ja koolide lisamise parandus [EK-478](https://projektid.hitsa.ee/jira/browse/EK-478)
 * Kogumiku muutmisvaatest lahkudes kuvatakse kasutajale kinnitusküsimus [EK-499](https://projektid.hitsa.ee/jira/browse/EK-499)
 * Esilehe muudatus - uus logo [EK-541](https://projektid.hitsa.ee/jira/browse/EK-541)
 * Kogumiku ajaloo taastamise banneri muudatused  [EK-559](https://projektid.hitsa.ee/jira/browse/EK-559)
-* Materjali ja kogumiku pildi pisipildi lisamise parandus  [EK-607](https://projektid.hitsa.ee/jira/browse/EK-607)
+* Materjali ja kogumiku pisipildi lisamise parandus  [EK-607](https://projektid.hitsa.ee/jira/browse/EK-607)
 * Githubis raporteeritud turvavigade eemaldamine  [EK-608](https://projektid.hitsa.ee/jira/browse/EK-608)
 * Materjalile pisipildi lisamise ebaõnnestumisel veateate kuvamine  [EK-620](https://projektid.hitsa.ee/jira/browse/EK-620)
 * Suurema kui 1mb faili üleslaadimise ja küsimise parandus  [EK-621](https://projektid.hitsa.ee/jira/browse/EK-621)
-
-### Muutunud
-* Küpsiste teavitusriba headeris [EK-530](https://projektid.hitsa.ee/jira/browse/EK-530)
-* Hooldusteate teksti ja modifitseerimise muudatused [EK-531](https://projektid.hitsa.ee/jira/browse/EK-531)
-* Avalehe uus komponent meedia ja teksti kuvamiseks [EK-532](https://projektid.hitsa.ee/jira/browse/EK-532)
-* Esiletõstetud õppevara sektsioonile pealkirja lisamise/muutmise funktsionaalsus [EK-533](https://projektid.hitsa.ee/jira/browse/EK-533)
-* Otsingukasti visuaali muudatused [EK-537](https://projektid.hitsa.ee/jira/browse/EK-537)
-* Spring Boot kasutuselevõtuga seotud tööd [EK-361](https://projektid.hitsa.ee/jira/browse/EK-361)
 
 ## e-Koolikott [1.37.0](https://projektid.hitsa.ee/jira/projects/EK/versions/10793) (Toodangusse paigaldatud 09.07.2019)
 
