@@ -22,6 +22,8 @@ node {
                 docker.image('openjdk:8-jdk-slim')
                         .inside("-e DBPORT=3316") {
                             stage('Verify') {
+                                sh 'echo hello'
+                                sh 'echo $PWD'
                                 sh './mvnw clean test -X '
                                 archiveArtifacts artifacts: '/target/surefire-reports/**/*'
                             }
