@@ -128,6 +128,59 @@ angular.module('koolikottApp')
                     $scope.material = material;
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
+                        //metaandmete lisamine
+
+                        $rootScope.structuredData = {
+
+                            "@context": "http://schema.org/",
+                            "@type": "CreativeWork",
+                            "author": {
+                                "@type": "Person",
+                                "name": $scope.material.authors[0].name + $scope.material.authors[0].surname
+                            },
+                            "url": $scope.pageUrl,
+                            "publisher": {
+                                "@type": "Organization",
+                                "name": material.publishers[0]
+                            },
+                            "audience": {
+                                "@type": "Audience",
+                                "audienceType": material.targetGroups[0]
+                            },
+                            "dateCreated": material.issueDate,
+                            "datePublished": material.added,
+                            "thumbnailUrl": "https://e-koolikott.ee/thumbnails/hulgasumboolika.png",
+                            "license": "http://creativecommons.org/licenses/by/4.0/",
+                            "typicalAgeRange": "15-18",
+                            "interactionCount": "878 UserPageVisits",
+                            "headline": "Hulgasümboolika",
+                            "keywords": material.tags[0],
+                            "text": "Lai matemaatika 1. kursuse \"Avaldised ja arvuhulgad\" esimene osa. Õpitulemus: õpilane tunneb hulgasümboolikat.",
+                            "inLanguage": material.language,
+                            "review": {
+                                "@type": "Review",
+                                "reviewRating": {
+                                    "@type": "Rating",
+                                    "ratingValue": "5",
+                                    "bestRating": "5"
+                                },
+                                "author": {
+                                    "@type": "Person",
+                                    "name": "Hindaja 1"
+                                },
+                                "datePublished": "2018-08-27",
+                                "reviewBody": "Vastab nõuetele",
+                                "publisher": {
+                                    "@type": "Organization",
+                                    "name": "e-koolikott.ee"
+                                }
+                            }
+                        };
+                        // $rootScope.metaTitle = $scope.material.titles[0].text;
+                        // $rootScope.metaAuthor = $scope.material.authors[0].name + $scope.material.authors[0].surname;
+                        // $rootScope.metaPublisher = $scope.material.publishers[0];
+                        // $rootScope.metaAudience = $scope.material.targetGroups;
+                        // $rootScope.metaKeywords = $scope.material.tags[0];
                     }
                     init();
                 }

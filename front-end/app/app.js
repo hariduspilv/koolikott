@@ -23,6 +23,7 @@ let app = angular.module('koolikottApp', [
     'auto-tab',
     'ngCookies',
     'angularTrix',
+    'updateMeta',
 ]);
 
 let provideProvider = null;
