@@ -34,20 +34,20 @@ node {
             }
 
     stage('Copy solr config') {
-        if (env.BRANCH_NAME == 'jenkins') {
+        //if (env.BRANCH_NAME === 'jenkins') {
             deploy(hostname, env.appHome, env.appName)
             sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr-7.4.0/server/solr/"
             //todo replace solr w symlink
             sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
-        }
+        //}
     }
 
     stage('Deploy jar file') {
-        if (env.BRANCH_NAME == 'jenkins') {
+        //if (env.BRANCH_NAME === 'jenkins') {
             sh "scp -r spring-back-end/target/spring-kott-jar ${dopOxygenUrl}:app/"
             sh "ssh -t ${adminOxygenUrl} /bin/bash <<'ENDSSH'"
             sh "sudo service kottspring restart"
-        }
+        //}
     }
 
     stage('Cleanup') {
