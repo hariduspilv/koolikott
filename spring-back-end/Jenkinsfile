@@ -34,10 +34,8 @@ node {
             }
 
     stage('Copy solr config') {
-        when {
-            expression {
-                return $ { env.BRANCH_NAME } == 'develop'
-            }
+        when{
+            branch: 'develop'
         }
         sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr-7.4.0/server/solr/"
         //todo replace solr w symlink
