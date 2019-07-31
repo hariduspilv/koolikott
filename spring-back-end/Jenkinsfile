@@ -19,9 +19,8 @@ node {
 
     docker.image('mariadb:10.3.13')
             .withRun("-p 3316:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dop") { c ->
-                sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
                 docker.image('openjdk:8-jdk-slim')
-                        .inside("--link ${c.id}:127.0.0.1") {
+                        .inside("--link ${c.id}:127.0.0.1 -e DBPORT=3316") {
                             stage('Verify') {
                                 sh 'cd spring-back-end && ./mvnw clean test -X'
                                 archiveArtifacts artifacts: 'spring-back-end/target/surefire-reports/**/*'
