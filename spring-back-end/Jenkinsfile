@@ -11,7 +11,8 @@ properties([
 
 
 node {
-    def scmVars = git branch: env.BRANCH_NAME, credentialsId: 'koolikott-github', url: 'git@github.com:hariduspilv/koolikott.git'
+    git branch: env.BRANCH_NAME,
+            url: 'git@github.com:hariduspilv/koolikott.git'
     def solrOxygenUrl = 'solr@oxygen.netgroupdigital.com'
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
     def adminOxygenUrl = 'netgroup@oxygen.netgroupdigital.com'
@@ -34,18 +35,19 @@ node {
 
     stage('Copy solr config') {
         when {
-            expression{
-                return ${env.BRANCH_NAME} == 'develop'
+            expression {
+                return $ { env.BRANCH_NAME } == 'develop'
             }
         }
-        sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr-7.4.0/server/solr/" //todo replace solr w symlink
+        sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr-7.4.0/server/solr/"
+        //todo replace solr w symlink
         sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
     }
 
     stage('Deploy jar file') {
         when {
-            expression{
-                return ${env.BRANCH_NAME} == 'develop'
+            expression {
+                return $ { env.BRANCH_NAME } == 'develop'
             }
         }
         sh "scp -r spring-back-end/target/spring-kott-jar ${dopOxygenUrl}:app/"
