@@ -1,8 +1,8 @@
-<div data-layout="row" data-layout-align="space-between center" data-layout-xs="column" style="margin-top: -1px">
+<div data-layout="row" data-layout-align="space-between center" data-layout-xs="column" style="margin-top: -1px; display: -webkit-flex">
   <md-content layout-fill data-layout-align="center center" class="md-padding" data-layout-xs="column" data-layout="row"
-              flex>
-    <md-card flex="100" style="overflow: auto;height: 400px;width: 100%;">
-      <md-card-actions layout="row" layout-align="end center" style="margin: 0px !important;">
+              flex style="display: -webkit-flex">
+    <md-card flex="100" style="overflow: auto;height: 300px;width: 100%;">
+      <md-card-actions layout="row" layout-align="end center" style="margin: 0px !important; display: -webkit-flex">
         <md-button style="min-width: 36px;" data-ng-if="!editMode && $ctrl.isAdmin()"
                    data-ng-click="$ctrl.editIntroPage()">
           <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
@@ -11,13 +11,13 @@
       <md-card-content>
         <div data-ng-if="!editMode" data-ng-bind-html="introPage.text"></div>
         <!-- Edit mode -->
-        <div data-ng-if="editMode" layout="row" layout-align="center center">
+        <div data-ng-if="editMode" layout="row" layout-align="center center" style="display: -webkit-flex">
           <form name="startPageForm" flex="100" class="flex flex-col">
             <div class="portfolio-chapter card-lg faq-font">
               <div
                 data-ng-repeat="lang in $ctrl.languagess track by $index"
                 data-ng-if="lang === maintananceLang && editMode"
-                layout="row" layout-xs="column" data-layout-align="space-between center" flex>
+                layout="row" layout-xs="column" data-layout-align="space-between center" flex style="display: -webkit-flex">
                   <!-- Landing page language -->
                   <md-button
                     class="button-material-language"
@@ -30,13 +30,13 @@
                     <md-icon class="button-material-language__icon">done</md-icon>
                   </md-button>
               </div>
-              <div layout="row" layout-xs="column">
+              <div layout="row" layout-xs="column" style="display: -webkit-flex">
                 <div layout-xs="column" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
                      flex-order-gt-sm="2" flex="100">
                     <trix-editor ng-if="true" class="term-block" angular-trix ng-model="introPage.text"></trix-editor>
                 </div>
               </div>
-              <div style="margin-top: 20px" data-layout="row" data-layout-xs="column" data-layout-align="space-between center">
+              <div style="margin-top: 20px" data-layout="row" data-layout-xs="column" data-layout-align="space-between center" style="display: -webkit-flex">
                 <md-input-container layout-fill>
                   <label><span data-translate="FRONT_PAGE_VIDEO_URL_LABEL"></span></label>
                   <textarea type="text"
@@ -48,8 +48,8 @@
                 </md-input-container>
                 <div>
                 <md-card-actions style="margin: 0px !important;">
-                  <div data-layout="row" data-layout-align="space-between center" data-ng-if="editMode">
-                    <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double">
+                  <div data-layout="row" data-layout-align="space-between center" data-ng-if="editMode" style="display: -webkit-flex">
+                    <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double" style="display: -webkit-flex">
                       <md-button
                         aria-label="Cancel term edit"
                         data-ng-click="$ctrl.cancelEdit()"

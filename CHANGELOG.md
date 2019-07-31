@@ -1,3 +1,10 @@
+## e-Koolikott [1.38.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11020)
+
+### Muutunud
+* Esilehe videokasti suuruse muudatused [EK-629](https://projektid.hitsa.ee/jira/browse/EK-629)
+* Logo vahetus menüü responsive vaates [EK-632](https://projektid.hitsa.ee/jira/browse/EK-632)
+* Kogumike täisekraan-vaate parandus [EK-633](https://projektid.hitsa.ee/jira/browse/EK-633)
+
 ## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008)
 
 ### Muutunud
