@@ -22,14 +22,14 @@ node {
                 docker.image('openjdk:8-jdk-slim')
                         .inside("-e DBPORT=3316") {
                             stage('Verify') {
-                                sh 'echo hello'
                                 sh 'echo $PWD'
-                                sh './mvnw clean test -X '
+                                sh 'spring-back-end/mvnw clean test -X '
                                 archiveArtifacts artifacts: '/target/surefire-reports/**/*'
                             }
 
                             stage('Package') {
-                                sh './mvnw clean package -DskipTests=true'
+                                sh 'echo $PWD'
+                                sh 'spring-back-end/mvnw clean package -DskipTests=true'
                                 archiveArtifacts artifacts: '/target/*.jar'
                             }
                         }
