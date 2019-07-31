@@ -21,15 +21,16 @@ node {
             .withRun("-e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dop") { c ->
                 docker.image('openjdk:8-jdk-slim')
                         .inside("-e DBPORT=3316") {
-                            stage('Verify') {
+                            stage('Navigage to spring-back-end') {
+                                sh 'cd spring-back-end'
                                 sh 'echo $PWD'
-                                sh 'spring-back-end/mvnw clean test -X '
+                            }
+                            stage('Verify') {
+                                sh './mvnw clean test -X '
                                 archiveArtifacts artifacts: '/target/surefire-reports/**/*'
                             }
-
                             stage('Package') {
-                                sh 'echo $PWD'
-                                sh 'spring-back-end/mvnw clean package -DskipTests=true'
+                                sh './mvnw clean package -DskipTests=true'
                                 archiveArtifacts artifacts: '/target/*.jar'
                             }
                         }
