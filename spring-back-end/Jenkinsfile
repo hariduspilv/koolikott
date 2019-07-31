@@ -33,11 +33,21 @@ node {
             }
 
     stage('Copy solr config') {
+        when {
+            expression{
+                return ${env.BRANCH_NAME} == 'develop'
+            }
+        }
         sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr-7.4.0/server/solr/" //todo replace solr w symlink
         sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
     }
 
     stage('Deploy jar file') {
+        when {
+            expression{
+                return ${env.BRANCH_NAME} == 'develop'
+            }
+        }
         sh "scp -r spring-back-end/target/spring-kott-jar ${dopOxygenUrl}:app/"
         sh "ssh -t ${adminOxygenUrl} /bin/bash <<'ENDSSH'"
         sh "sudo service kottspring restart"
