@@ -1,4 +1,4 @@
-<div data-layout="row" data-layout-align="space-between center" style="margin-top: 35px">
+<div data-layout="row" data-layout-align="space-between center" style="margin-top: 35px; display: -webkit-flex">
   <h2 id="search-result-title" class="md-headline padding-left-16"
       data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
       data-ng-bind-html="title"></h2>
@@ -23,8 +23,8 @@
         data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
         data-ng-if="lang === maintenanceLanguage && isEditMode"
         layout="row"
-        layout-wrap data-layout-align="space-between center">
-        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100"
+        layout-wrap data-layout-align="space-between center" style="display: -webkit-flex">
+        <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-order="1"
              data-ng-if="isEditMode">
           <!-- Landing page language -->
           <md-button
@@ -42,7 +42,7 @@
           </md-button>
 
         </div>
-        <div flex="100" layout="row">
+        <div data-flex-order="5" flex="100" layout="row" style="display: -webkit-flex">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
                 <textarea
                   name="notice"
@@ -52,9 +52,9 @@
           </md-input-container>
         </div>
       </div>
-      <div layout="row" layout-align="end center"
+      <div layout="row" data-flex-order="4" layout-align="end center"
            class="md-padding md-padding-horizontal-double"
-           data-ng-if="isEditMode">
+           data-ng-if="isEditMode" style="display: -webkit-flex">
         <md-button
           aria-label="Cancel landing page edit"
           id="landing-page-edit-cancel-button"
@@ -96,13 +96,13 @@
     </md-select>
   </md-input-container>
 </div>
-<div data-layout="row" data-layout-align="space-between center">
+<div data-layout="row" data-layout-align="space-between center" style="display: -webkit-flex">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
 </div>
 <data-dop-startpage-intro data-ng-if="$ctrl.isLandingPage()"></data-dop-startpage-intro>
 <div data-ng-if="sorting || !searching">
-  <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
-    <section data-layout="row" data-layout-xs="column" layout-wrap>
+  <div data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row" style="display: -webkit-flex">
+    <section data-layout="row" data-layout-xs="column" layout-wrap style="display: -webkit-flex">
       <div class="margin-right-15" data-ng-repeat="(groupId, groupValue) in filterGroupsExact">
         <span data-ng-style="(groupValue.isPortfolioActive || groupValue.isMaterialActive) && {'font-weight':'bold'}"
               data-translate="{{groupValue.name}}"></span>
@@ -131,8 +131,8 @@
   </div>
   <h1 id="similar-search-result-title" class="md-headline"
       data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h1>
-  <div data-ng-if="$ctrl.showDefaultGroupButtons()" id="grouping-selection-buttons" data-layout="row">
-    <section data-layout="row" data-layout-xs="column" layout-wrap>
+  <div data-ng-if="$ctrl.showDefaultGroupButtons()" id="grouping-selection-buttons" data-layout="row" style="display: -webkit-flex">
+    <section data-layout="row" data-layout-xs="column" layout-wrap style="display: -webkit-flex">
       <div class="margin-right-15" data-ng-repeat="(groupId, groupValue) in filterGroups">
         <span data-ng-style="(groupValue.isPortfolioActive || groupValue.isMaterialActive) && {'font-weight':'bold'}"
               data-translate="{{groupValue.name}}"></span>
@@ -161,8 +161,7 @@
   </div>
 </div>
 <div>
-  <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex
-       data-ng-if="!editMode && $ctrl.isLandingPage()">
+  <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
     <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
     <md-button style="min-width: 36px" data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
       <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
@@ -170,17 +169,17 @@
     </md-button>
   </div>
   <div class="padding-left-16" data-ng-if="editMode && $ctrl.isLandingPage() && $ctrl.isAdmin()" layout="row"
-       layout-align="center center">
+       layout-align="center center" style="display: -webkit-flex">
     <form name="updateFilteredTitleForm" flex="100" class="flex flex-col">
       <md-dialog-content>
         <div
           data-ng-repeat="lang in $ctrl.landingPageLanguages track by $index"
           data-ng-if="lang === headlineLanguage && editMode"
           layout="row"
-          layout-wrap>
+          layout-wrap style="display: -webkit-flex">
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="space-around center"
-
-               flex="100" data-ng-if="editMode">
+               flex-order="2"
+               flex-order-gt-sm="2" flex="100" data-ng-if="editMode" style="display: -webkit-flex">
             <md-input-container class="md-block animate-if" flex>
               <label data-translate="TITLE"></label>
               <textarea
@@ -190,7 +189,7 @@
               ></textarea>
             </md-input-container>
           </div>
-          <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100"
+          <div layout="column" layout-align="end center" layout-gt-xs="row" flex="100" flex-order="1"
                data-ng-if="editMode">
             <!-- Landing page language -->
             <md-button
@@ -207,8 +206,8 @@
             </md-button>
           </div>
         </div>
-        <div data-layout="row" layout-align="end center"
-             class="md-padding md-padding-horizontal-double">
+        <div data-layout="row" data-flex-order="4" layout-align="end center"
+                  class="md-padding md-padding-horizontal-double" style="display: -webkit-flex">
           <md-button
             data-ng-click="$ctrl.cancelEditMode()"
           >
@@ -244,7 +243,7 @@
   </div>
   <div data-ng-if="!$ctrl.allResultsLoaded() && searching">
     <p data-ng-if="start !== 0" class="md-body-2 md-button md-primary" layout="row" layout-align="center center"
-       data-translate="SEARCH_LOADING"></p>
+       data-translate="SEARCH_LOADING" style="display: -webkit-flex"></p>
     <div data-ng-if="start === 0" layout="column" layout-align="center center" class="min-height-500">
       <md-progress-circular></md-progress-circular>
     </div>
