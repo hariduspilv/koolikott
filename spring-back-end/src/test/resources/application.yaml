@@ -38,22 +38,22 @@ cron:
     threadNamePrefix: KottCron-
   materialSync:
     scheduledTime: 0 0 1 * * ?
-    enabled : true
+    enabled : false
   acceptReviewableChange:
     scheduledTime: 0 0 2 * * ?
-    enabled : true
+    enabled : false
   authenticationStateCleaner:
     scheduledTime: 0 0 3 * * ?
-    enabled : true
+    enabled : false
   authenticatedUserCleaner:
     scheduledTime: 0 0 4 * * ?
-    enabled : true
+    enabled : false
   ehisInstitution:
     scheduledTime: 0 0 5 * * ?
-    enabled : true
+    enabled : false
   portfolioLogStateCleaner:
     scheduledTime: 0 0 6 * * ?
-    enabled: true
+    enabled: false
 
 keystore:
   filename: server.keystore
