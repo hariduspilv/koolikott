@@ -9,12 +9,7 @@
     }
 
     controller.$inject = [
-        '$scope',
         '$rootScope',
-        '$translate',
-        'serverCallService',
-        'authenticatedUserService',
-        'userManualsAdminService'
     ]
     angular.module('koolikottApp').controller('404Controller', controller)
 }
