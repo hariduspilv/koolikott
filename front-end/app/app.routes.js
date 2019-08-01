@@ -24,7 +24,37 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     reloadOnSearch: false,
                 })
+                .when('/material/:id', {
+                    templateUrl: 'views/material/material.html',
+                    controller: 'materialController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/material/:id-:name', {
+                    templateUrl: 'views/material/material.html',
+                    controller: 'materialController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
                 .when('/material', {
+                    templateUrl: 'views/material/material.html',
+                    controller: 'materialController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/oppematerjal/:id', {
+                    templateUrl: 'views/material/material.html',
+                    controller: 'materialController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/oppematerjal/:id-:name', {
+                    templateUrl: 'views/material/material.html',
+                    controller: 'materialController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/oppematerjal', {
                     templateUrl: 'views/material/material.html',
                     controller: 'materialController',
                     controllerAs: '$ctrl',
@@ -35,17 +65,53 @@ angular.module('koolikottApp')
                     controller: 'helpController',
                     controllerAs: '$ctrl'
                 })
-                .when('/portfolio', {
-                    templateUrl: 'views/portfolio/portfolio.html',
-                    controller: 'portfolioController',
-                    controllerAs: '$ctrl',
-                    reloadOnSearch: false
-                })
                 .when('/portfolio/edit', {
                     templateUrl: 'views/editPortfolio/editPortfolio.html',
                     controller: 'editPortfolioController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
+                })
+                .when('/portfolio/:id', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/portfolio/:id-:name', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/portfolio', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false,
+                })
+                .when('/kogumik/muuda/:id', {
+                    templateUrl: 'views/editPortfolio/editPortfolio.html',
+                    controller: 'editPortfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/kogumik/:id', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/kogumik/:id-:name', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/kogumik', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false,
                 })
                 .when('/dashboard', {
                     templateUrl: 'views/dashboard/dashboard.html',
@@ -162,6 +228,24 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                 })
                 .when('/:username/favorites', {
+                    templateUrl: 'views/profile/favorites/favorites.html',
+                    controller: 'userFavoritesController',
+                    controllerAs: '$ctrl',
+                    resolve: UserPathResolver
+
+                })
+                .when('/:username/oppematerjalid', {
+                    templateUrl: 'views/profile/materials/materials.html',
+                    controller: 'userMaterialsController',
+                    controllerAs: '$ctrl',
+                    resolve: UserPathResolver
+                })
+                .when('/:username/kogumikud', {
+                    templateUrl: 'views/profile/portfolios/portfolios.html',
+                    controller: 'userPortfoliosController',
+                    controllerAs: '$ctrl',
+                })
+                .when('/:username/lemmikud', {
                     templateUrl: 'views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
                     controllerAs: '$ctrl',

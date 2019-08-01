@@ -53,6 +53,7 @@ class controller extends Controller {
         this.$scope.$watch(() => this.$location.url(), () => {
             this.$rootScope.isViewPortfolioAndEdit = (
                 this.$location.url().indexOf('/portfolio') !== -1 ||
+                this.$location.url().indexOf('/kogumik/') !== -1 ||
                 this.$location.url().indexOf('/search') !== -1
             )
         }, true)
@@ -110,7 +111,9 @@ class controller extends Controller {
         const { username } = this.$scope.user
         const userLocations = [
             `/${username}/portfolios`,
+            `/${username}/kogumikud`,
             `/${username}/materials`,
+            `/${username}/oppematerjalid`,
             `/${username}/favorites`
         ]
         return userLocations.includes(location)

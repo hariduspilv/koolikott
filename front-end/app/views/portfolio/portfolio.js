@@ -52,8 +52,9 @@ class controller extends Controller {
         }, true)
 
         this.$scope.$on('$routeChangeStart', () => {
-            if (!this.$location.url().startsWith('/portfolio/edit?id='))
+            if ((!this.$location.url().startsWith('/portfolio/') && (!this.$location.url().startsWith('/kogumik/')))) {
                 this.setPortfolio(null)
+            }
         })
         this.$scope.$on('$destroy', () =>
             this.$timeout.cancel(this.increaseViewCountPromise)
@@ -106,9 +107,9 @@ class controller extends Controller {
                 }
                 let title = $(el).find('h2').text()
                 title = this.replaceSpacesAndCharacters(title)
-                let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title + '#' + el.id;
+                let url = `${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${el.id}`
 
-                if (!window.location.href.includes(title) && this.$location.path() === '/portfolio') {
+                if (!window.location.href.includes(title) && this.$location.path().startsWith('/kogumik')) {
                     this.$location.url(url)
                     history.pushState({}, '', url)
                 }
@@ -124,7 +125,7 @@ class controller extends Controller {
     }
 
     getPortfolio() {
-        const { id } = this.$route.current.params
+        const id = this.$route.current.params.id.split('-')[0]
         const fail = () => {
             this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
             window.location.replace('/404')
@@ -169,35 +170,40 @@ class controller extends Controller {
     }
 
     setPortfolio(portfolio, isLocallyStored = true) {
-        this.$rootScope.tabTitle = portfolio.title;
-        this.$scope.portfolio = portfolio
-        this.storageService.setPortfolio(portfolio)
+        if (portfolio) {
+            this.$scope.portfolio = portfolio
+            this.$rootScope.portfolio = portfolio
+            this.$rootScope.tabTitle = portfolio.title;
+            this.storageService.setPortfolio(portfolio)
 
-        this.$scope.learningObject = portfolio
+            this.$location.url(this.getUrl(portfolio))
+            this.$scope.learningObject = portfolio
 
-        this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
-        this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
-        this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
-        this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
-        this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
-        if (!isLocallyStored){
-            this.showUnreviewedMessage(portfolio.id);
+            this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
+            this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
+            this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
+            this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
+            this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
+            if (!isLocallyStored){
+                this.showUnreviewedMessage(portfolio.id);
+            }
+
+            if (!isLocallyStored && portfolio && portfolio.chapters) {
+                portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
+
+                // add id attributes to all subchapters derived from subchapter titles
+                this.$timeout(() =>
+                    this.$timeout(() => {
+                        const entries = (selector, el = document) => el.querySelectorAll(selector).entries()
+                        for (let [idx, el] of entries('.portfolio-chapter'))
+                            for (let [subIdx, subEl] of entries('.subchapter', el)) {
+                                subEl.id = this.getSlug(`alapeatukk-${idx + 1}-${subIdx + 1}`)
+                            }
+                    }, 1000)
+                )
+            }
+            this.$rootScope.$broadcast('portfolioChanged')
         }
-
-        if (!isLocallyStored && portfolio && portfolio.chapters) {
-            portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
-
-            // add id attributes to all subchapters derived from subchapter titles
-            this.$timeout(() =>
-                this.$timeout(() => {
-                    const entries = (selector, el = document) => el.querySelectorAll(selector).entries()
-                    for (let [idx, el] of entries('.portfolio-chapter'))
-                        for (let [subIdx, subEl] of entries('.subchapter', el))
-                            subEl.id = this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
-                })
-            )
-        }
-        this.$rootScope.$broadcast('portfolioChanged')
     }
 }
 controller.$inject = [

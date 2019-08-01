@@ -115,7 +115,7 @@ angular.module('koolikottApp')
             }
 
             function getMaterial(success, fail) {
-                materialService.getMaterialById($route.current.params.id).then(success, fail)
+                materialService.getMaterialById($route.current.params.id.split('-')[0]).then(success, fail)
             }
 
             function getMaterialSuccess(material) {

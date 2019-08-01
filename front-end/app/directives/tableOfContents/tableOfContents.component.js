@@ -25,17 +25,14 @@ class controller extends Controller {
 
         this.$scope.gotoChapter = (slug, title, evt) => {
             evt.preventDefault()
-            
-            const titleForUrl = this.replaceSpacesAndCharacters(title)
 
-            if (this.$location.url().includes('#subchapter') && !this.$location.url().includes('&chapterName')) {
-                history.pushState({}, '', this.$location.url().split('#subchapter')[0] + '&chapterName=' + titleForUrl + '#'+slug)
-            } else if (!title && this.$location.url().includes('#subchapter')) {
-                history.pushState({}, '', this.$location.url().split('#subchapter')[0] + '#' + slug)
+            if ((this.$location.url().includes('#alapeatukk') && !this.$location.url().includes('&chapterName'))
+                || (!title && this.$location.url().includes('#alapeatukk'))) {
+                history.pushState({}, '', this.$location.url().split('#alapeatukk')[0] + '#' + slug)
             } else if (!title && this.$location.url().includes('&chapterName')) {
                 history.pushState({}, '', this.$location.url().split('#')[0] + '#' + slug)
             } else {
-                history.pushState({}, '', this.$location.url().split('&chapterName')[0] + '&chapterName=' + titleForUrl + '#' + slug)
+                history.pushState({}, '',`${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${slug}`)
             }
 
             this.scrollToElement('#'+slug, 500, 80)
@@ -45,8 +42,8 @@ class controller extends Controller {
 
 
         }
-       this.$scope.makeChapterUrl = (slug, title) => {
-            return this.$location.absUrl().split('&chapterName')[0] + '&chapterName=' + this.replaceSpacesAndCharacters(title) + '#' + slug
+       this.$scope.makeChapterUrl = (slug) => {
+            return this.$location.absUrl().split('#')[0] + '-' + this.replaceSpacesAndCharacters(this.$scope.portfolio.title) + '#' + slug
         }
     }
 
@@ -73,7 +70,7 @@ class controller extends Controller {
                     let subIdx = 0
                     return {
                         title: title || this.$translate.instant('PORTFOLIO_ENTER_CHAPTER_TITLE'),
-                        slug: this.getSlug(`chapter-${idx + 1}`),
+                        slug: this.getSlug(`peatukk-${idx + 1}`),
                         subChapters: blocks.reduce((subchapters, { htmlContent }) => {
                             const wrapper = document.createElement('div')
                             wrapper.innerHTML = htmlContent
@@ -82,7 +79,7 @@ class controller extends Controller {
                                     subIdx++
                                     return {
                                         title: el.textContent || this.$translate.instant('PORTFOLIO_ENTER_SUBCHAPTER_TITLE'),
-                                        slug: this.getSlug(`subchapter-${idx + 1}-${subIdx}`)
+                                        slug: this.getSlug(`alapeatukk-${idx + 1}-${subIdx}`)
                                     }
                                 })
                             )

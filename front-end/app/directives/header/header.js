@@ -162,7 +162,7 @@ class controller extends Controller {
             this.setLanguage(language)
         }, true)
 
-        this.$scope.getShareUrl = this.$location.protocol()+'://'+this.$location.host()+'/portfolio?id='+this.$location.search().id
+        this.$scope.getShareUrl = this.$location.protocol()+'://'+this.$location.host()+'/kogumik/'+this.$location.search().id
 
         this.$scope.makePublic = () => {
             this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
@@ -211,14 +211,14 @@ class controller extends Controller {
         }
 
         this.$scope.$watch(() => this.$location.path(), (params) => {
-            if (params.indexOf('/portfolio') > -1 || params.indexOf('/material') > -1)
+            if (params.indexOf('/kogumik') > -1 || params.indexOf('/oppematerjal') > -1)
                 this.$scope.detailedSearch.isVisible = false
         })
 
         this.$scope.$watch(() => [this.$location.url(), this.$rootScope.isEditPortfolioMode], () => {
             this.$scope.isEditModeAndNotEditView = (
-                this.$rootScope.isEditPortfolioMode &&
-                this.$location.url().indexOf('/portfolio/edit') !== 0
+                (this.$rootScope.isEditPortfolioMode && this.$location.url().indexOf('/portfolio/edit') !== 0) &&
+                (this.$rootScope.isEditPortfolioMode && this.$location.url().indexOf('/kogumik/muuda') !== 0)
             )
         }, true)
 
@@ -254,8 +254,8 @@ class controller extends Controller {
 
         const path = this.$location.path()
         const isDashboard = path.startsWith('/dashboard')
-        const isMaterial = path.startsWith('/material')
-        const isPortfolio = path.startsWith('/portfolio')
+        const isMaterial = path.startsWith('/material') || path.startsWith('/oppematerjal')
+        const isPortfolio = path.startsWith('/portfolio') || path.startsWith('/kogumik')
 
         if (!isMaterial && !isPortfolio && !isDashboard) return setDefault()
 
@@ -309,7 +309,8 @@ class controller extends Controller {
         history.back();
     }
     gotoFrontPage() {
-        if (this.$rootScope.isEditPortfolioMode && location.href.includes('/portfolio/edit')) {
+        if ((this.$rootScope.isEditPortfolioMode && location.href.includes('/portfolio/edit')) ||
+            this.$rootScope.isEditPortfolioMode && location.href.includes('/kogumik/muuda')) {
             this.$mdDialog.show({
                 templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
                 controller: 'leavePageDialogController',
@@ -386,7 +387,7 @@ class controller extends Controller {
                 if (portfolio) {
                     this.toastService.show('PORTFOLIO_SAVED')
                     this.storageService.setPortfolio(null)
-                    this.$location.url('/portfolio?id=' + portfolio.id)
+                    this.$location.url('/kogumik/' + portfolio.id)
                     this.searchService.setIsFavorites(false)
                     this.searchService.setIsRecommended(false)
                     this.dontSearch = true // otherwise reload will trigger search if search has values

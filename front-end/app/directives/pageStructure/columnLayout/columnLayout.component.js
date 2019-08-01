@@ -14,7 +14,7 @@ class controller extends Controller {
         })
 
         this.$scope.$watch(() => this.$location.path(), (path) =>
-            this.$scope.isEditPortfolio = path === '/portfolio/edit'
+            this.$scope.isEditPortfolio = path === '/portfolio/edit' || path.contains('/kogumik/muuda')
         )
 
         this.$scope.modifyMargin = () => {

@@ -9,11 +9,11 @@ angular.module('koolikottApp')
         serverCallService.makeGet('rest/dev/login/' + idCode)
             .then( function(data) {
                     $rootScope.showLocationDialog = false;
-                    $rootScope.afterAuthRedirectURL = "/portfolios";
+                    $rootScope.afterAuthRedirectURL = '/';
                     authenticationService.loginSuccess(data.data);
                 }, function() {
                     authenticationService.loginFail()
-                    $location.url("/");
+                    $location.url('/');
                 }
             )
         ;

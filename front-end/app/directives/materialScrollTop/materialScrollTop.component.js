@@ -8,7 +8,8 @@
         }
 
         showScrollTopHigher() {
-            return this.authenticatedUserService.isAuthenticated() && this.$location.path() !== '/portfolio/edit'
+            return this.authenticatedUserService.isAuthenticated() &&
+                this.$location.path() !== '/portfolio/edit' && !this.$location.path().contains('/kogumik/muuda')
         }
     }
 

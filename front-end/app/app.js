@@ -211,12 +211,12 @@ function isViewMaterialPage(path) {
     return path === '/material';
 }
 
-function isViewPortfolioPage(path) {
-    return path === '/portfolio';
+function isViewPortfolioPage(path, user) {
+    return user && path.contains('/kogumik') && !path.contains(user.username);
 }
 
 function isEditPortfolioPage(path) {
-    return path === '/portfolio/edit';
+    return path === '/portfolio/edit' ||path.contains('/kogumik/muuda');
 }
 
 function isHomePage(path) {
@@ -230,7 +230,7 @@ function isProfileOrSendEmailPath(path) {
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies','$translate',
     function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies, $translate) {
         $rootScope.$on('$routeChangeSuccess', function () {
-            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material", "/kogumik/muuda"];
 
             var path = $location.path();
             var user = authenticatedUserService.getUser();
@@ -248,7 +248,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             }
             $rootScope.isProfile = isProfileOrSendEmailPath(path)
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
-            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
+            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path, user);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
@@ -277,7 +277,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             }
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
-                $location.path('/' + user.username + '/portfolios');
+                $location.path('/' + user.username);
             }
 
             if ($rootScope.justLoggedIn && $rootScope.isAdmin) {
@@ -352,7 +352,7 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
 app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', '$cookies', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog, $cookies) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
         $mdDialog.cancel();
-        if (!location.href.includes('/portfolio/edit')) {
+        if (!location.href.includes('/portfolio/edit') || !location.href.includes('/kogumik/muuda')) {
             $cookies.remove('savedPortfolio');
             $cookies.remove('visitedAddMaterialPage');
         }
