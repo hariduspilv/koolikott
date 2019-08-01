@@ -110,7 +110,7 @@
       data-ng-bind-html="title"></h1>
 </div>
 <div data-layout="row" data-layout-align="space-between center">
-  <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
+  <h2 class="md-headline padding-left-16" data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
 </div>
 <data-dop-startpage-intro data-ng-if="$ctrl.isLandingPage()"></data-dop-startpage-intro>
 <div data-ng-if="sorting || !searching">
