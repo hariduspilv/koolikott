@@ -1,7 +1,7 @@
 <div data-layout="column" data-layout-gt-sm="row" data-ng-cloak id="portfolio-parent" data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
   <div flex-gt-sm="75">
     <dop-error-message ng-show="showUnreviewedPortfolio && !showlogselect" data="portfolio" id="dop-error"></dop-error-message>
-    <dop-show-portfolio-history data-ng-show="showlogselect" showlogselect="showlogselect" portfolio="portfolio" id="dop-portfolio-history"></dop-show-portfolio-history>
+    <dop-show-portfolio-history ng-if="showlogselect" showlogselect="showlogselect" portfolio="portfolio" id="dop-portfolio-history"></dop-show-portfolio-history>
     <data-dop-portfolio-summary-card
       comment="newComment"
       data-portfolio="portfolio"

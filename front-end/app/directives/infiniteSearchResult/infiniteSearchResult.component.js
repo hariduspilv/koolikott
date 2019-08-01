@@ -37,7 +37,7 @@
         }
 
 
-        $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home}) {
+        $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home, searchpage}) {
             if (title && title.currentValue !== title.previousValue) this.setTitle()
             if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitleExact()
             if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitleSimilar()
@@ -46,6 +46,7 @@
             if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
             if (notice && notice.currentValue !== notice.previousValue) this.$scope.notice = notice.currentValue
             if (home && home.currentValue !== home.previousValue) this.$scope.home = home.currentValue
+            if (searchpage && searchpage.currentValue !== searchpage.previousValue) this.$scope.searchpage = searchpage.currentValue
 
             if (params && !params.isFirstChange() && this.params) {
                 const c = params.currentValue;
@@ -139,7 +140,7 @@
             this.$scope.searchKeyWord = this.searchService.getQuery()
             let t = (key) => this.$translate.instant(key);
             return title ? t(title) :
-                this.$scope.searching ? t('SEARCH_RESULTS') :
+                this.$scope.searching ? '' :
                     this.replaceTitleContent(results, t, this.searchService.getQuery(), translations)
         }
 
@@ -174,7 +175,10 @@
         }
 
         search(isNewSearch) {
-            if (isNewSearch) this.setParams()
+            if (isNewSearch) {
+                this.setParams()
+                this.$scope.educationLevel = ''
+            }
             if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
 
             this.$scope.searching = true
@@ -183,6 +187,13 @@
             this.params.limit = this.maxResults
             this.params.maxResults = this.maxResults
             this.params.start = this.$scope.start
+
+            let taxonId
+            if (this.params.taxon) {
+                taxonId = this.params.taxon[0]
+            }
+            if (taxonId < 10) this.$scope.educationLevel = this.$translate.instant((this.taxonService.getFullTaxon(taxonId)).name)
+
 
             this.serverCallService.makeGet(this.url, this.params).then(({data}) => {
                 this.params.isGrouped ? this.groupedSearchSuccess(data) : this.searchSuccess(data)
@@ -602,6 +613,10 @@
             return this.$scope.$ctrl.home
         }
 
+        isSearchPage() {
+            return this.$scope.$ctrl.searchpage
+        }
+
         maintenanceVisible() {
             return this.$scope.visible = !this.$scope.visible
         }
@@ -691,6 +706,7 @@
         'authenticatedUserService',
         'toastService',
         'translationService',
+        'taxonService'
     ]
     component('dopInfiniteSearchResult', {
         bindings: {
@@ -704,6 +720,7 @@
             exactTitle: '<',
             similarTitle: '<',
             home: '<',
+            searchpage: '<'
         },
         templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
         controller

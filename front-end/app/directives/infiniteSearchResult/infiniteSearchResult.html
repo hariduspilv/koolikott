@@ -1,7 +1,10 @@
 <div data-layout="row" data-layout-align="space-between center" style="margin-top: 35px">
-  <h2 id="search-result-title" class="md-headline padding-left-16"
+  <h1 id="landing-page-title" class="md-headline padding-left-16"
+      ng-if="$ctrl.isLandingPage()"
       data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
-      data-ng-bind-html="title"></h2>
+      data-ng-bind-html="title"></h1>
+  <h1 class="md-headline padding-left-16" data-translate="SEARCH_RESULTS" data-ng-if="!educationLevel && $ctrl.isSearchPage()"></h1>
+  <h1 class="md-headline padding-left-16" ng-if="educationLevel" data-ng-bind="educationLevel"></h1>
   <h2 id="exact-search-result-title" class="md-headline padding-left-16"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
       data-ng-bind-html="exactTitle"></h2>
@@ -95,6 +98,16 @@
       ></md-option>
     </md-select>
   </md-input-container>
+</div>
+<p id="search-result-paragraph" class="md-headline padding-left-16"
+   data-ng-if="$ctrl.isSearchPage()"
+   data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
+   data-ng-bind-html="title"></p>
+<div data-ng-if="!$ctrl.isLandingPage()">
+  <h1 data-ng-if="!$ctrl.isSearchPage()"
+      id="search-result-title" class="md-headline padding-left-16"
+      data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
+      data-ng-bind-html="title"></h1>
 </div>
 <div data-layout="row" data-layout-align="space-between center">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
