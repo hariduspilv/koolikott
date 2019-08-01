@@ -34,8 +34,7 @@ node {
 
     stage('Copy solr config') {
         if (env.BRANCH_NAME == 'develop') {
-            sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr-7.4.0/server/solr/"
-            //todo replace solr w symlink
+            sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
             sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
         } else {
             sh 'echo solr copy disabled'
