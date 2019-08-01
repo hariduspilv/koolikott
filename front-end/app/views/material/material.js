@@ -130,34 +130,42 @@ angular.module('koolikottApp')
                         $rootScope.selectedSingleMaterial = $scope.material;
                         //metaandmete lisamine
 
-                        $rootScope.structuredData = {
+                            $scope.authors = $scope.material.authors.map(author => `${author.name} ${author.surname}`);
+                            $scope.targets = material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup));
+                            $scope.audienceType = material.targetGroups.map(targetGroup => getAudienceType(targetGroup));
+                            $scope.publishers = material.publishers.map(publisher => publisher.name);
 
-                            "@context": "http://schema.org/",
-                            "@type": "CreativeWork",
-                            "author": {
-                                "@type": "Person",
-                                "name": $scope.material.authors[0].name + $scope.material.authors[0].surname
+                        $scope.structuredData = {
+
+                            '@context': 'http://schema.org/',
+                            '@type': "CreativeWork",
+                            'author': {
+                                '@type': 'Person',
+                                'name': $scope.authors
                             },
-                            "url": $scope.pageUrl,
-                            "publisher": {
-                                "@type": "Organization",
-                                "name": material.publishers[0]
+                            'url': $scope.pageUrl,
+                            'publisher': {
+                                '@type': 'Organization',
+                                'name': $scope.publishers
                             },
-                            "audience": {
-                                "@type": "Audience",
-                                "audienceType": material.targetGroups[0]
+                            'audience': {
+                                '@type': 'Audience',
+                                'audienceType': $scope.audienceType
                             },
-                            "dateCreated": material.issueDate,
-                            "datePublished": material.added,
-                            "thumbnailUrl": "https://e-koolikott.ee/thumbnails/hulgasumboolika.png",
-                            "license": "http://creativecommons.org/licenses/by/4.0/",
-                            "typicalAgeRange": "15-18",
-                            "interactionCount": "878 UserPageVisits",
-                            "headline": "Hulgasümboolika",
-                            "keywords": material.tags[0],
-                            "text": "Lai matemaatika 1. kursuse \"Avaldised ja arvuhulgad\" esimene osa. Õpitulemus: õpilane tunneb hulgasümboolikat.",
-                            "inLanguage": material.language,
-                            "review": {
+                            'dateCreated': material.issueDate,
+                            'datePublished': material.added,
+                            'thumbnailUrl': '',
+                            'license': material.licenseType.name,
+                            'typicalAgeRange': $scope.targets,
+                            'interactionCount': material.views,
+                            'headline': material.titles[0].text,
+                            'keywords': material.tags,
+                            'text': material.descriptions[0].text,
+                            'inLanguage': material.language
+                        }
+
+                        if (material.peerReviews.length > 0) {
+                            $scope.structuredData.review = {
                                 "@type": "Review",
                                 "reviewRating": {
                                     "@type": "Rating",
@@ -168,19 +176,14 @@ angular.module('koolikottApp')
                                     "@type": "Person",
                                     "name": "Hindaja 1"
                                 },
-                                "datePublished": "2018-08-27",
+                                "datePublished": "",
                                 "reviewBody": "Vastab nõuetele",
                                 "publisher": {
                                     "@type": "Organization",
                                     "name": "e-koolikott.ee"
                                 }
                             }
-                        };
-                        // $rootScope.metaTitle = $scope.material.titles[0].text;
-                        // $rootScope.metaAuthor = $scope.material.authors[0].name + $scope.material.authors[0].surname;
-                        // $rootScope.metaPublisher = $scope.material.publishers[0];
-                        // $rootScope.metaAudience = $scope.material.targetGroups;
-                        // $rootScope.metaKeywords = $scope.material.tags[0];
+                        }
                     }
                     init();
                 }

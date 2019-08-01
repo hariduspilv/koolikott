@@ -209,6 +209,41 @@ class controller extends Controller {
                 })
             )
         }
+
+        if (portfolio.targetGroups){
+            this.$scope.typicalAgeRange = this.getTypicalAgeRange(portfolio.targetGroups[0]);
+            this.$scope.audienceType = this.getAudienceType(portfolio.targetGroups[0]);
+        }
+
+        this.$scope.structuredData = {
+
+            '@context': 'http://schema.org/',
+            '@type': 'CreativeWork',
+            'author': {
+                '@type': 'Person',
+                'name': portfolio.creator.name + ' ' + portfolio.creator.surname
+            },
+            'url': portfolio.originalCreator.location,
+            'publisher': {
+                '@type': 'Organization',
+                'name': ''
+            },
+            "audience": {
+                "@type": "Audience",
+                "audienceType": this.$scope.audienceType
+            },
+            "dateCreated": portfolio.added,
+            "datePublished": portfolio.publishedAt,
+            "thumbnailUrl": "",
+            "license": portfolio.licenseType.name,
+            "typicalAgeRange": this.$scope.typicalAgeRange,
+            "interactionCount": portfolio.views,
+            "headline": portfolio.title,
+            "keywords": portfolio.tags,
+            "text": portfolio.summary,
+            "inLanguage": this.translationService.getLanguage()
+        };
+
         this.$rootScope.$broadcast('portfolioChanged')
     }
 }
@@ -223,6 +258,7 @@ controller.$inject = [
     'serverCallService',
     'storageService',
     'toastService',
+    'translationService'
 ]
 angular.module('koolikottApp').controller('portfolioController', controller)
 }

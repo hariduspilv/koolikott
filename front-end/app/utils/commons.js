@@ -500,6 +500,77 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
 }
 
+function getTypicalAgeRange(grade) {
+    let ageRange;
+    switch (grade) {
+        case 'GRADE1':
+            ageRange = '6-8';
+            break;
+        case 'GRADE2':
+            ageRange = '8-10';
+            break;
+        case 'GRADE3':
+            ageRange = '9-11';
+            break;
+        case 'GRADE4':
+            ageRange = '10-12';
+            break;
+        case 'GRADE5':
+            ageRange = '11-13';
+            break;
+        case 'GRADE6':
+            ageRange = '12-14';
+            break;
+        case 'GRADE7':
+            ageRange = '13-15';
+            break;
+        case 'GRADE8':
+            ageRange = '14-16';
+            break;
+        case 'GRADE9':
+            ageRange = '15-17';
+            break;
+    }
+    return ageRange;
+}
+
+function getAudienceType(grade){
+    let audience;
+    switch (grade) {
+        case 'GRADE1':
+            audience = 'Algkooliõpilased';
+            break;
+        case 'GRADE2':
+            audience = 'Algkooliõpilased';
+            break;
+        case 'GRADE3':
+            audience = 'Algkooliõpilased';
+            break;
+        case 'GRADE4':
+            audience = 'Põhikooliõpilased';
+            break;
+        case 'GRADE5':
+            audience = 'Põhikooliõpilased';
+            break;
+        case 'GRADE6':
+            audience = 'Põhikooliõpilased';
+            break;
+        case 'GRADE7':
+            audience = 'Põhikooliõpilased';
+            break;
+        case 'GRADE8':
+            audience = 'Põhikooliõpilased';
+            break;
+        case 'GRADE9':
+            audience = 'Põhikooliõpilased';
+            break;
+        default:
+            audience = 'Keskkooliõpilased';
+            break;
+    }
+    return audience;
+}
+
 function getSource(material) {
     if (!material) return;
     if (material.source) {
@@ -698,6 +769,78 @@ class Controller {
     replaceSpacesAndCharacters(title) {
         if (title)
             return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")
+    }
+
+
+    getTypicalAgeRange(grade) {
+        let ageRange;
+        switch (grade) {
+            case 'GRADE1':
+                ageRange = '6-8';
+                break;
+            case 'GRADE2':
+                ageRange = '8-10';
+                break;
+            case 'GRADE3':
+                ageRange = '9-11';
+                break;
+            case 'GRADE4':
+                ageRange = '10-12';
+                break;
+            case 'GRADE5':
+                ageRange = '11-13';
+                break;
+            case 'GRADE6':
+                ageRange = '12-14';
+                break;
+            case 'GRADE7':
+                ageRange = '13-15';
+                break;
+            case 'GRADE8':
+                ageRange = '14-16';
+                break;
+            case 'GRADE9':
+                ageRange = '15-17';
+                break;
+        }
+        return ageRange;
+    }
+
+    getAudienceType(grade){
+        let audience;
+        switch (grade) {
+            case 'GRADE1':
+                audience = 'Algkooliõpilased';
+                break;
+            case 'GRADE2':
+                audience = 'Algkooliõpilased';
+                break;
+            case 'GRADE3':
+                audience = 'Algkooliõpilased';
+                break;
+            case 'GRADE4':
+                audience = 'Põhikooliõpilased';
+                break;
+            case 'GRADE5':
+                audience = 'Põhikooliõpilased';
+                break;
+            case 'GRADE6':
+                audience = 'Põhikooliõpilased';
+                break;
+            case 'GRADE7':
+                audience = 'Põhikooliõpilased';
+                break;
+            case 'GRADE8':
+                audience = 'Põhikooliõpilased';
+                break;
+            case 'GRADE9':
+                audience = 'Põhikooliõpilased';
+                break;
+            default:
+                audience = 'Keskkooliõpilased';
+                break;
+        }
+        return audience;
     }
 
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
