@@ -18,31 +18,39 @@ pipeline {
     stages {
         def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
         stage('Download sources') {
-            git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
+            steps {
+                git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
+            }
         }
 
 
         stage('Install project dependencies') {
-            sh 'cd front-end && npm install --unsafe-perm'
-            sh 'cd front-end && npm run bower install --unsafe-perm'
+            steps {
+                sh 'cd front-end && npm install --unsafe-perm'
+                sh 'cd front-end && npm run bower install --unsafe-perm'
+            }
         }
 
         stage('Build project') {
-            if (env.BRANCH_NAME == 'master') {
-                sh 'cd front-end && npm run grunt package-live'
-            } else {
-                sh 'cd front-end && npm run grunt package'
+            steps {
+                if (env.BRANCH_NAME == 'master') {
+                    sh 'cd front-end && npm run grunt package-live'
+                } else {
+                    sh 'cd front-end && npm run grunt package'
+                }
+                archiveArtifacts artifacts: 'front-end/dist/kott.tar.gz'
             }
-            archiveArtifacts artifacts: 'front-end/dist/kott.tar.gz'
         }
 
         stage('Copy build files') {
-            if (env.BRANCH_NAME == 'develop') {
-                sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
-                sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:/"
-                sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
-            } else {
-                sh 'echo build files deploy disabled'
+            steps {
+                if (env.BRANCH_NAME == 'develop') {
+                    sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
+                    sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:/"
+                    sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
+                } else {
+                    sh 'echo build files deploy disabled'
+                }
             }
         }
     }
