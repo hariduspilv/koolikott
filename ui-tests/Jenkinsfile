@@ -21,7 +21,9 @@ pipeline {
         }
         stage('Run tests') {
             steps {
-                sh 'cd ui-tests && ./mvnw clean verify'
+                wrap([$class: 'Xvfb']) {
+                    sh 'cd ui-tests && ./mvnw clean verify'
+                }
                 //archiveArtifacts artifacts: 'ui-tests/target/surefire-reports/**/*'
             }
         }
