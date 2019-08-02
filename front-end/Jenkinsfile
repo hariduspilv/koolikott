@@ -15,7 +15,7 @@ node {
             url: 'https://github.com/hariduspilv/koolikott.git'
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
 
-    docker.image('nodejs:10.3.13') {
+    docker.image('nodejs:10.3.13').inside() {
         stage('Install global dependencies') {
             sh 'npm install -g bower'
             sh 'npm install -g grunt-cli'
@@ -25,8 +25,6 @@ node {
             sh 'bower install'
         }
         stage('Build project') {
-            sh 'npm install'
-            sh 'bower install'
             if (env.BRANCH_NAME == 'master') {
                 sh 'grunt package-live'
             } else {
