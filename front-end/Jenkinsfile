@@ -16,30 +16,16 @@ pipeline {
         HOME = '.'
     }
 
-    agent {
-        docker { image 'node:8' }
-    }
 
     stages {
-        stage('Download sources') {
+        stage('Front setup') {
+            agent {
+                docker { image 'node:8' }
+            }
             steps {
                 git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
-            }
-        }
-
-
-        stage('Install project dependencies') {
-            steps {
-                sh 'echo $PWD'
-                sh 'ls -la'
                 sh 'cd front-end && npm install'
                 sh 'cd front-end && npm run bower install'
-                sh 'ls -la'
-            }
-        }
-
-        stage('Build project') {
-            steps {
                 script {
                     if (env.BRANCH_NAME == 'master') {
                         sh 'cd front-end && npm run grunt package-live'
@@ -62,9 +48,7 @@ pipeline {
                     } else {
                         sh 'echo copy build files disabled'
                     }
-
                 }
-
             }
         }
     }
