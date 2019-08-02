@@ -44,7 +44,7 @@ pipeline {
                 script {
                     if (env.BRANCH_NAME == 'jenkins') {
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
-                        sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:/"
+                        sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
                     } else {
                         sh 'echo copy build files disabled'
