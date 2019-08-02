@@ -211,8 +211,8 @@ function isViewMaterialPage(path) {
     return path === '/material';
 }
 
-function isViewPortfolioPage(path) {
-    return path.contains('/kogumik/');
+function isViewPortfolioPage(path, user) {
+    return user && path.contains('/kogumik') && !path.contains(user.username);
 }
 
 function isEditPortfolioPage(path) {
@@ -248,7 +248,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             }
             $rootScope.isProfile = isProfileOrSendEmailPath(path)
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
-            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
+            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path, user);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
@@ -261,12 +261,11 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.tabTitle = 'e-Koolikott';
             $rootScope.applicationDescription ='';
 
-            gtag('config', 'UA-144179749-1', {'page_path': path});
 
             if(user){
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'userId' : `${user.id}`
+                    'userId' : `${user.id}` //this number must be replaced with an actual User ID
                 })
                 window.dataLayer.push({
                     'event': 'Pageview',
@@ -274,6 +273,9 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                     'pageTitle': $rootScope.tabTitle
                 });
             }
+
+            gtag('config', 'UA-144167571-1', {'page_path': path});
+
 
             $translate('HTML_META_DESCRIPTION').then((translation) => $rootScope.applicationDescription = translation);
 
