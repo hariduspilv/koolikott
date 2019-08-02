@@ -30,6 +30,7 @@ pipeline {
 
         stage('Install project dependencies') {
             steps {
+                sh 'echo $PWD'
                 sh 'ls -la'
                 sh 'cd front-end && npm install'
                 sh 'cd front-end && npm run bower install'
