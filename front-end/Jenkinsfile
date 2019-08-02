@@ -42,7 +42,7 @@ pipeline {
             agent any
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'jenkins') {
+                    if (env.BRANCH_NAME == 'develop') {
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
                         sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
