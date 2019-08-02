@@ -14,7 +14,6 @@ pipeline {
     agent any
 
     stages {
-       // tool name: 'Xvfb', type: 'org.jenkinsci.plugins.xvfb.XvfbInstallation'
         stage('Download code') {
             steps {
                 git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
@@ -25,7 +24,6 @@ pipeline {
                 wrap([$class: 'Xvfb']) {
                     sh 'cd ui-tests && ./mvnw clean verify'
                 }
-                //archiveArtifacts artifacts: 'ui-tests/target/surefire-reports/**/*'
             }
         }
     }
