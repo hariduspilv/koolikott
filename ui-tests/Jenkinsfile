@@ -14,9 +14,15 @@ pipeline {
     agent any
 
     stages {
+        stage('Download code') {
+            steps {
+                git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
+            }
+        }
         stage('Run tests') {
             steps {
-                sh 'echo 123'
+                sh 'cd ui-tests && ./mvnw clean test'
+                archiveArtifacts artifacts: 'ui-tests/target/surefire-reports/**/*'
             }
         }
     }
