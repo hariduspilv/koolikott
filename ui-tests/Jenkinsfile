@@ -21,8 +21,8 @@ pipeline {
         }
         stage('Run tests') {
             steps {
-                sh 'cd ui-tests && ./mvnw clean test'
-                archiveArtifacts artifacts: 'ui-tests/target/surefire-reports/**/*'
+                sh 'cd ui-tests && ./mvnw clean test -Dtest="ee/netgroup/htm/regression/*"'
+                //archiveArtifacts artifacts: 'ui-tests/target/surefire-reports/**/*'
             }
         }
     }
