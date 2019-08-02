@@ -211,8 +211,8 @@ function isViewMaterialPage(path) {
     return path === '/material';
 }
 
-function isViewPortfolioPage(path, user) {
-    return user && path.contains('/kogumik') && !path.contains(user.username);
+function isViewPortfolioPage(path) {
+    return path.contains('/kogumik/');
 }
 
 function isEditPortfolioPage(path) {
@@ -248,7 +248,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             }
             $rootScope.isProfile = isProfileOrSendEmailPath(path)
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
-            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path, user);
+            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
