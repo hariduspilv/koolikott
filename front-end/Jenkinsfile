@@ -39,6 +39,7 @@ pipeline {
         }
 
         stage('Copy build files') {
+            agent any
             steps {
                 script {
                     if (env.BRANCH_NAME == 'jenkins') {
