@@ -261,11 +261,18 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.tabTitle = 'e-Koolikott';
             $rootScope.applicationDescription ='';
 
+            gtag('config', 'UA-144179749-1', {'page_path': path});
+
             if(user){
                 window.dataLayer = window.dataLayer || [];
                 window.dataLayer.push({
-                    'userId' : `${user.id}` //this number must be replaced with an actual User ID
+                    'userId' : `${user.id}`
                 })
+                window.dataLayer.push({
+                    'event': 'Pageview',
+                    'pagePath': path,
+                    'pageTitle': $rootScope.tabTitle
+                });
             }
 
             $translate('HTML_META_DESCRIPTION').then((translation) => $rootScope.applicationDescription = translation);
