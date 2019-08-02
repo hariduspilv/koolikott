@@ -16,7 +16,7 @@ pipeline {
     }
 
     agent {
-        docker { image 'node:lts-alpine' }
+        docker { image 'node:current-alpine' }
     }
 
     stages {
