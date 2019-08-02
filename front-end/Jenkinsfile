@@ -11,8 +11,6 @@ properties([
 
 
 pipeline {
-    git branch: env.BRANCH_NAME,
-            url: 'https://github.com/hariduspilv/koolikott.git'
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
 
     agent {
@@ -20,6 +18,10 @@ pipeline {
     }
 
     stages {
+        stage('Download sources') {
+            git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
+        }
+
 
         stage('Install project dependencies') {
             sh 'cd front-end && npm install --unsafe-perm'
