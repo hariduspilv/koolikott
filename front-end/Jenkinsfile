@@ -29,6 +29,7 @@ pipeline {
 
         stage('Install project dependencies') {
             steps {
+                sh 'ls -la'
                 sh 'cd front-end && npm install --unsafe-perm'
                 sh 'cd front-end && npm run bower install --unsafe-perm'
             }
