@@ -1,0 +1,23 @@
+properties([
+        [
+                $class  : 'BuildDiscarderProperty',
+                strategy: [
+                        $class               : 'LogRotator',
+                        artifactDaysToKeepStr: '20', artifactNumToKeepStr: '2',
+                        daysToKeepStr        : '20', numToKeepStr: '8'
+                ]
+        ]
+])
+
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Run tests') {
+            steps {
+                sh 'echo 123'
+            }
+        }
+    }
+}
