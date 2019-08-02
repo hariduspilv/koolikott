@@ -96,6 +96,18 @@ angular.module('koolikottApp')
                 console.log("Content probing failed!");
             }
 
+            $scope.getMaterialEducationalContexts = () => {
+                let educationalContexts = [];
+                if (!$scope.material || !$scope.material.taxons) return;
+
+                $scope.material.taxons.forEach((taxon) => {
+                    let edCtx = taxonService.getEducationalContext(taxon);
+                    if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
+                });
+
+                return educationalContexts;
+            };
+
             $rootScope.$on('fullscreenchange', () => {
                 $scope.$apply(() => {
                     $scope.showMaterialContent = !$scope.showMaterialContent;
@@ -130,39 +142,14 @@ angular.module('koolikottApp')
                         $rootScope.selectedSingleMaterial = $scope.material;
                         //metaandmete lisamine
 
-                            $scope.authors = $scope.material.authors.map(author => `${author.name} ${author.surname}`);
-                            $scope.targets = material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup));
-                            $scope.audienceType = material.targetGroups.map(targetGroup => getAudienceType(targetGroup));
-                            $scope.publishers = material.publishers.map(publisher => publisher.name);
+                        $scope.authors = $scope.material.authors.map(author => `${author.name} ${author.surname}`);
+                        $scope.targets = material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup));
+                        $scope.audienceType = material.targetGroups.map(targetGroup => getAudienceType(targetGroup));
+                        $scope.publishers = material.publishers.map(publisher => publisher.name);
+                        $scope.titles = material.titles.map(title => title.text);
+                        $scope.descriptions = material.descriptions.map(description => description.text);
 
-                        $scope.structuredData = {
-
-                            '@context': 'http://schema.org/',
-                            '@type': "CreativeWork",
-                            'author': {
-                                '@type': 'Person',
-                                'name': $scope.authors
-                            },
-                            'url': $scope.pageUrl,
-                            'publisher': {
-                                '@type': 'Organization',
-                                'name': $scope.publishers
-                            },
-                            'audience': {
-                                '@type': 'Audience',
-                                'audienceType': $scope.audienceType
-                            },
-                            'dateCreated': material.issueDate,
-                            'datePublished': material.added,
-                            'thumbnailUrl': '',
-                            'license': material.licenseType.name,
-                            'typicalAgeRange': $scope.targets,
-                            'interactionCount': material.views,
-                            'headline': material.titles[0].text,
-                            'keywords': material.tags,
-                            'text': material.descriptions[0].text,
-                            'inLanguage': material.language
-                        }
+                        $scope.structuredData = createMetaData(material);
 
                         if (material.peerReviews.length > 0) {
                             $scope.structuredData.review = {
@@ -171,10 +158,6 @@ angular.module('koolikottApp')
                                     "@type": "Rating",
                                     "ratingValue": "5",
                                     "bestRating": "5"
-                                },
-                                "author": {
-                                    "@type": "Person",
-                                    "name": "Hindaja 1"
                                 },
                                 "datePublished": "",
                                 "reviewBody": "Vastab nõuetele",
@@ -187,6 +170,36 @@ angular.module('koolikottApp')
                     }
                     init();
                 }
+            }
+
+            function createMetaData(material) {
+                return {
+                    '@context': 'http://schema.org/',
+                    '@type': 'CreativeWork',
+                    'author': {
+                        '@type': 'Person',
+                        'name': $scope.authors
+                    },
+                    'url': $scope.pageUrl,
+                    'publisher': {
+                        '@type': 'Organization',
+                        'name': $scope.publishers
+                    },
+                    'audience': {
+                        '@type': 'Audience',
+                        'audienceType': $scope.educationalContextss //TODO
+                    },
+                    'dateCreated': formatIssueDate(material.issueDate),
+                    'datePublished': material.added,
+                    'thumbnailUrl': '',
+                    'license': material.licenseType.name,
+                    'typicalAgeRange': $scope.targets,
+                    'interactionCount': material.views,
+                    'headline': $scope.titles,
+                    'keywords': material.tags,
+                    'text': $scope.descriptions,
+                    'inLanguage': material.language
+                };
             }
 
             function getMaterialFail() {
@@ -243,17 +256,7 @@ angular.module('koolikottApp')
                 }
             };
 
-            $scope.getMaterialEducationalContexts = () => {
-                let educationalContexts = [];
-                if (!$scope.material || !$scope.material.taxons) return;
 
-                $scope.material.taxons.forEach((taxon) => {
-                    let edCtx = taxonService.getEducationalContext(taxon);
-                    if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
-                });
-
-                return educationalContexts;
-            };
 
             $scope.getCorrectLanguageString = (languageStringList) => {
                 if (languageStringList) {
@@ -285,8 +288,6 @@ angular.module('koolikottApp')
                     .then(response => {
                         $scope.showUnreviewedLO = response.data;
                     })
-
-
                 }
             }
 
