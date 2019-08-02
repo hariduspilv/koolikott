@@ -16,19 +16,15 @@ node {
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
 
     docker.image('node:lts-alpine').inside() {
-        stage('Install global dependencies') {
-            sh 'npm install -g bower'
-            sh 'npm install -g grunt-cli'
-        }
         stage('Install project dependencies') {
             sh 'npm install'
-            sh 'bower install'
+            sh 'npm run bower install'
         }
         stage('Build project') {
             if (env.BRANCH_NAME == 'master') {
-                sh 'grunt package-live'
+                sh 'npm run grunt package-live'
             } else {
-                sh 'grunt package'
+                sh 'npm run grunt package'
             }
             archiveArtifacts artifacts: 'front-end/dist/kott.tar.gz'
         }
