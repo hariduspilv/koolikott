@@ -16,6 +16,7 @@ pipeline {
         HOME = '.'
     }
 
+    agent none
 
     stages {
         stage('Front setup') {
@@ -38,7 +39,6 @@ pipeline {
         }
 
         stage('Copy build files') {
-            agent none
             steps {
                 script {
                     if (env.BRANCH_NAME == 'jenkins') {
