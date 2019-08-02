@@ -11,6 +11,10 @@ properties([
 
 
 pipeline {
+    environment {
+        dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
+    }
+
     agent {
         docker { image 'node:lts-alpine' }
     }
@@ -44,7 +48,6 @@ pipeline {
         }
 
         stage('Copy build files') {
-            def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
             steps {
                 when {
                     branch 'develop'
