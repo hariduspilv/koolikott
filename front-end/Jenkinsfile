@@ -1,0 +1,52 @@
+properties([
+        [
+                $class  : 'BuildDiscarderProperty',
+                strategy: [
+                        $class               : 'LogRotator',
+                        artifactDaysToKeepStr: '20', artifactNumToKeepStr: '2',
+                        daysToKeepStr        : '20', numToKeepStr: '8'
+                ]
+        ]
+])
+
+
+node {
+    git branch: env.BRANCH_NAME,
+            url: 'https://github.com/hariduspilv/koolikott.git'
+    def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
+
+    docker.image('nodejs:10.3.13') {
+        stage('Install global dependencies') {
+            sh 'npm install -g bower'
+            sh 'npm install -g grunt-cli'
+        }
+        stage('Install project dependencies') {
+            sh 'npm install'
+            sh 'bower install'
+        }
+        stage('Build project') {
+            sh 'npm install'
+            sh 'bower install'
+            if (env.BRANCH_NAME == 'master') {
+                sh 'grunt package-live'
+            } else {
+                sh 'grunt package'
+            }
+            archiveArtifacts artifacts: 'front-end/dist/kott.tar.gz'
+        }
+    }
+
+    stage('Copy build files') {
+        if (env.BRANCH_NAME == 'develop') {
+            sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
+            sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:/"
+            sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
+        } else {
+            sh 'echo build files deploy disabled'
+        }
+    }
+
+    stage('Cleanup') {
+        sh 'docker volume rm \$(docker volume ls -q | awk \'{print $2}\') || true'
+    }
+}
