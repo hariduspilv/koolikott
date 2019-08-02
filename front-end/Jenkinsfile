@@ -32,10 +32,12 @@ pipeline {
 
         stage('Build project') {
             steps {
-                if (env.BRANCH_NAME == 'master') {
-                    sh 'cd front-end && npm run grunt package-live'
-                } else {
-                    sh 'cd front-end && npm run grunt package'
+                script {
+                    if (env.BRANCH_NAME == 'master') {
+                        sh 'cd front-end && npm run grunt package-live'
+                    } else {
+                        sh 'cd front-end && npm run grunt package'
+                    }
                 }
                 archiveArtifacts artifacts: 'front-end/dist/kott.tar.gz'
             }
@@ -44,12 +46,14 @@ pipeline {
         stage('Copy build files') {
             def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
             steps {
-                if (env.BRANCH_NAME == 'develop') {
-                    sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
-                    sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:/"
-                    sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
-                } else {
-                    sh 'echo build files deploy disabled'
+                script {
+                    if (env.BRANCH_NAME == 'develop') {
+                        sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
+                        sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:/"
+                        sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
+                    } else {
+                        sh 'echo build files deploy disabled'
+                    }
                 }
             }
         }
