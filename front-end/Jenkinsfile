@@ -13,6 +13,7 @@ properties([
 pipeline {
     environment {
         dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
+        HOME = '.'
     }
 
     agent {
