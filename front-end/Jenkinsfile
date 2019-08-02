@@ -16,7 +16,6 @@ pipeline {
     }
 
     stages {
-        def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
         stage('Download sources') {
             steps {
                 git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
@@ -43,6 +42,7 @@ pipeline {
         }
 
         stage('Copy build files') {
+            def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
             steps {
                 if (env.BRANCH_NAME == 'develop') {
                     sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
