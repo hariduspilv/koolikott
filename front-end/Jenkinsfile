@@ -33,6 +33,7 @@ pipeline {
                 sh 'ls -la'
                 sh 'cd front-end && npm install'
                 sh 'cd front-end && npm run bower install'
+                sh 'ls -la'
             }
         }
 
