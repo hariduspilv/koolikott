@@ -15,7 +15,7 @@ node {
             url: 'https://github.com/hariduspilv/koolikott.git'
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
 
-    docker.image('node:lts-alpine').inside() {
+    docker.image('node:lts-alpine').withRun("-e USER=node").inside() {
         stage('Install project dependencies') {
             sh 'cd front-end && npm install --unsafe-perm'
             sh 'cd front-end && npm run bower install --unsafe-perm'
