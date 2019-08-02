@@ -12,6 +12,7 @@ properties([
 
 pipeline {
     agent any
+    tool name: '', type: 'org.jenkinsci.plugins.xvfb.XvfbInstallation'
 
     stages {
         stage('Download code') {
