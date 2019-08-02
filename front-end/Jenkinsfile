@@ -11,13 +11,12 @@ properties([
 
 
 pipeline {
-    def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
-
     agent {
         docker { image 'node:lts-alpine' }
     }
 
     stages {
+        def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
         stage('Download sources') {
             git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
         }
