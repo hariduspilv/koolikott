@@ -123,7 +123,6 @@ angular.module('koolikottApp')
                     $scope.material = newMaterial;
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
-                    // getMaterialRelatedPortfolios($scope.material.id)
                 }
             }
 
@@ -141,13 +140,6 @@ angular.module('koolikottApp')
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
                         //metaandmete lisamine
-
-                        $scope.authors = $scope.material.authors.map(author => `${author.name} ${author.surname}`);
-                        $scope.targets = material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup));
-                        $scope.audienceType = material.targetGroups.map(targetGroup => getAudienceType(targetGroup));
-                        $scope.publishers = material.publishers.map(publisher => publisher.name);
-                        $scope.titles = material.titles.map(title => title.text);
-                        $scope.descriptions = material.descriptions.map(description => description.text);
 
                         $scope.structuredData = createMetaData(material);
 
@@ -178,27 +170,27 @@ angular.module('koolikottApp')
                     '@type': 'CreativeWork',
                     'author': {
                         '@type': 'Person',
-                        'name': $scope.authors
+                        'name': material.authors.map(author => `${author.name} ${author.surname}`)
                     },
                     'url': $scope.pageUrl,
                     'publisher': {
                         '@type': 'Organization',
-                        'name': $scope.publishers
+                        'name': material.publishers.map(publisher => publisher.name)
                     },
                     'audience': {
                         '@type': 'Audience',
-                        'audienceType': $scope.educationalContextss //TODO
+                        'audienceType': ''//TODO
                     },
                     'dateCreated': formatIssueDate(material.issueDate),
                     'datePublished': material.added,
-                    'thumbnailUrl': '',
+                    'thumbnailUrl': '', //TODO?
                     'license': material.licenseType.name,
-                    'typicalAgeRange': $scope.targets,
+                    'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                     'interactionCount': material.views,
-                    'headline': $scope.titles,
+                    'headline': material.titles.map(title => title.text),
                     'keywords': material.tags,
-                    'text': $scope.descriptions,
-                    'inLanguage': material.language
+                    'text': material.descriptions.map(description => description.text),
+                    'inLanguage': convertLanguage(material.language)
                 };
             }
 
@@ -236,8 +228,6 @@ angular.module('koolikottApp')
                 processMaterial();
                 showUnreviewedMessage();
 
-                // getMaterialRelatedPortfolios($scope.material.id);
-
                 eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectPrivate = ["PRIVATE"].includes($scope.material.visibility);
@@ -255,8 +245,6 @@ angular.module('koolikottApp')
                     return licenceTypeMap[$scope.material.licenseType.name];
                 }
             };
-
-
 
             $scope.getCorrectLanguageString = (languageStringList) => {
                 if (languageStringList) {

@@ -152,7 +152,6 @@ class controller extends Controller {
                     fail
                 )
         }
-
     }
     increaseViewCount() {
         /**
@@ -210,38 +209,33 @@ class controller extends Controller {
             )
         }
 
-        if (portfolio.targetGroups){
-            this.$scope.typicalAgeRange = this.getTypicalAgeRange(portfolio.targetGroups[0]);
-            this.$scope.audienceType = this.getAudienceType(portfolio.targetGroups[0]);
-        }
-
         this.$scope.structuredData = {
 
             '@context': 'http://schema.org/',
             '@type': 'CreativeWork',
             'author': {
                 '@type': 'Person',
-                'name': portfolio.creator.name + ' ' + portfolio.creator.surname
+                'name': `${portfolio.creator.name} ${portfolio.creator.surname}`
             },
             'url': portfolio.originalCreator.location,
             'publisher': {
-                '@type': 'Organization',
-                'name': ''
+                '@type': 'Person',
+                'name': `${portfolio.originalCreator.name} ${portfolio.originalCreator.surname}`
             },
-            "audience": {
-                "@type": "Audience",
-                "audienceType": this.$scope.audienceType
+            'audience': {
+                '@type': "Audience",
+                'audienceType': ''
             },
-            "dateCreated": portfolio.added,
-            "datePublished": portfolio.publishedAt,
-            "thumbnailUrl": "",
-            "license": portfolio.licenseType.name,
-            "typicalAgeRange": this.$scope.typicalAgeRange,
-            "interactionCount": portfolio.views,
-            "headline": portfolio.title,
-            "keywords": portfolio.tags,
-            "text": portfolio.summary,
-            "inLanguage": this.translationService.getLanguage()
+            'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
+            'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
+            'thumbnailUrl': '',
+            'license': portfolio.licenseType.name,
+            'typicalAgeRange': portfolio.targetGroups.map(targetGroup => this.getTypicalAgeRange(targetGroup)),
+            'interactionCount': portfolio.views,
+            'headline': portfolio.title,
+            'keywords': portfolio.tags,
+            'text': portfolio.summary,
+            'inLanguage': this.convertLanguage(this.translationService.getLanguage())
         };
 
         this.$rootScope.$broadcast('portfolioChanged')
@@ -258,7 +252,8 @@ controller.$inject = [
     'serverCallService',
     'storageService',
     'toastService',
-    'translationService'
+    'translationService',
+    'taxonGroupingService'
 ]
 angular.module('koolikottApp').controller('portfolioController', controller)
 }

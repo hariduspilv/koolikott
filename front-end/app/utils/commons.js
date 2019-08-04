@@ -694,6 +694,15 @@ function countOccurrences(value, text) {
     return count;
 }
 
+function convertLanguage(lang) {
+    if (lang === 'est')
+        return 'ET'
+    else if (lang === 'rus')
+        return 'RU'
+    else if (lang === 'eng')
+        return 'EN'
+}
+
 /**
  *
  * Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
