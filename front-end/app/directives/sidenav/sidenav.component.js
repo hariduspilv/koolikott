@@ -110,7 +110,6 @@ class controller extends Controller {
     isUserLocation(location) {
         const { username } = this.$scope.user
         const userLocations = [
-            `/${username}/portfolios`,
             `/${username}/kogumikud`,
             `/${username}/materials`,
             `/${username}/oppematerjalid`,

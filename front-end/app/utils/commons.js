@@ -420,8 +420,7 @@ function classListNotContainsHidden(el) {
         document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
         let contentContainer = document.getElementsByClassName("content-container")[0];
         contentContainer.style.paddingTop = "1.5rem"
-        contentContainer.style.paddingLeft = window.location.href.includes('/portfolio?') ||
-            window.location.href.includes('/kogumik?') ? "calc(110px + 1rem)": "0";
+        contentContainer.style.paddingLeft = window.location.href.includes('/kogumik') ? "calc(110px + 1rem)": "0";
         contentContainer.style.paddingRight = "0";
     }, 300)
 }
@@ -692,8 +691,8 @@ class Controller {
     getLearningObjectUrl(learningObject) {
         if (learningObject)
             return this.isPortfolio(learningObject)
-                ? `/portfolio?name=${learningObject.titleForUrl}&id=${learningObject.id}`
-                : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id;
+                ? `/kogumik/${learningObject.id}-${learningObject.titleForUrl}`
+                : `/oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
     }
 
     replaceSpacesAndCharacters(title) {

@@ -254,8 +254,8 @@ class controller extends Controller {
 
         const path = this.$location.path()
         const isDashboard = path.startsWith('/dashboard')
-        const isMaterial = path.startsWith('/material') || path.startsWith('/oppematerjal')
-        const isPortfolio = path.startsWith('/portfolio') || path.startsWith('/kogumik')
+        const isMaterial = path.startsWith('/oppematerjal')
+        const isPortfolio = path.startsWith('/kogumik')
 
         if (!isMaterial && !isPortfolio && !isDashboard) return setDefault()
 

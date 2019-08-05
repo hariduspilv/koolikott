@@ -208,7 +208,7 @@ function isDashboardPage(path) {
 }
 
 function isViewMaterialPage(path) {
-    return path === '/material';
+    return path === '/oppematerjal';
 }
 
 function isViewPortfolioPage(path, user) {
@@ -216,7 +216,7 @@ function isViewPortfolioPage(path, user) {
 }
 
 function isEditPortfolioPage(path) {
-    return path === '/portfolio/edit' ||path.contains('/kogumik/muuda');
+    return  path.contains('/kogumik/muuda');
 }
 
 function isHomePage(path) {
@@ -230,7 +230,7 @@ function isProfileOrSendEmailPath(path) {
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies','$translate',
     function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies, $translate) {
         $rootScope.$on('$routeChangeSuccess', function () {
-            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material", "/kogumik/muuda"];
+            var editModeAllowed = ["/search/result", "/oppematerjal", "/kogumik/muuda"];
 
             var path = $location.path();
             var user = authenticatedUserService.getUser();
@@ -361,7 +361,7 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
 app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', '$cookies', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog, $cookies) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
         $mdDialog.cancel();
-        if (!location.href.includes('/portfolio/edit') || !location.href.includes('/kogumik/muuda')) {
+        if (!location.href.includes('/kogumik/muuda')) {
             $cookies.remove('savedPortfolio');
             $cookies.remove('visitedAddMaterialPage');
         }

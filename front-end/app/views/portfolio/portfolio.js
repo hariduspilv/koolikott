@@ -53,7 +53,7 @@ class controller extends Controller {
         }, true)
 
         this.$scope.$on('$routeChangeStart', () => {
-            if ((!this.$location.url().startsWith('/portfolio/') && (!this.$location.url().startsWith('/kogumik/')))) {
+            if (!this.$location.url().startsWith('/kogumik/')) {
                 this.setPortfolio(null)
             }
         })

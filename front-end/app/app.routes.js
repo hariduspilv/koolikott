@@ -65,12 +65,6 @@ angular.module('koolikottApp')
                     controller: 'helpController',
                     controllerAs: '$ctrl'
                 })
-                .when('/portfolio/edit', {
-                    templateUrl: 'views/editPortfolio/editPortfolio.html',
-                    controller: 'editPortfolioController',
-                    controllerAs: '$ctrl',
-                    reloadOnSearch: false
-                })
                 .when('/portfolio/:id', {
                     templateUrl: 'views/portfolio/portfolio.html',
                     controller: 'portfolioController',
@@ -226,13 +220,6 @@ angular.module('koolikottApp')
                     templateUrl: 'views/profile/portfolios/portfolios.html',
                     controller: 'userPortfoliosController',
                     controllerAs: '$ctrl',
-                })
-                .when('/:username/favorites', {
-                    templateUrl: 'views/profile/favorites/favorites.html',
-                    controller: 'userFavoritesController',
-                    controllerAs: '$ctrl',
-                    resolve: UserPathResolver
-
                 })
                 .when('/:username/oppematerjalid', {
                     templateUrl: 'views/profile/materials/materials.html',

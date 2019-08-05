@@ -26,11 +26,8 @@ class controller extends Controller {
         this.$scope.gotoChapter = (slug, title, evt) => {
             evt.preventDefault()
 
-            if ((this.$location.url().includes('#alapeatukk') && !this.$location.url().includes('&chapterName'))
-                || (!title && this.$location.url().includes('#alapeatukk'))) {
+            if (this.$location.url().includes('#alapeatukk') || (!title && this.$location.url().includes('#alapeatukk'))) {
                 history.pushState({}, '', this.$location.url().split('#alapeatukk')[0] + '#' + slug)
-            } else if (!title && this.$location.url().includes('&chapterName')) {
-                history.pushState({}, '', this.$location.url().split('#')[0] + '#' + slug)
             } else {
                 history.pushState({}, '',`${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${slug}`)
             }

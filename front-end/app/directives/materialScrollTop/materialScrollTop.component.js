@@ -9,7 +9,7 @@
 
         showScrollTopHigher() {
             return this.authenticatedUserService.isAuthenticated() &&
-                this.$location.path() !== '/portfolio/edit' && !this.$location.path().contains('/kogumik/muuda')
+               !this.$location.path().contains('/kogumik/muuda')
         }
     }
 
