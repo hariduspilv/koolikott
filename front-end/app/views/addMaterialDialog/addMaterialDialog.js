@@ -92,12 +92,16 @@ class controller extends Controller {
         if (currentValue)
             this.pictureUpload = this.pictureUploadService
                 .upload(currentValue)
-                .then(({ data }) => {
-                    this.$scope.material.picture.id = data.id
-                    this.$scope.material.picture.name = data.name
-                    this.$scope.showErrorOverlay = false
-                }, () =>
-                    this.$scope.showErrorOverlay = false
+                .then(({data}) => {
+                        if (data !== '') {
+                            this.$scope.material.picture.id = data.id
+                            this.$scope.material.picture.name = data.name
+                            this.$scope.showErrorOverlay = false
+                        } else {
+                            this.$scope.showErrorOverlay = true
+                            this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL')
+                        }
+                    }, () => this.$scope.showErrorOverlay = false
                 )
     }
     onNewFileChange(currentValue) {
@@ -117,9 +121,11 @@ class controller extends Controller {
                     if (data.cause == 'filename too long') {
                         this.$scope.addMaterialForm.source.$setValidity('filenameTooLong', false)
                         this.$scope.addMaterialForm.source.$setTouched()
+                        this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL')
                     }
                     this.$scope.uploadingFile = false
                 })
+                .catch(this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL'))
         }
     }
 

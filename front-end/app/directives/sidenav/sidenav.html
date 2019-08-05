@@ -7,14 +7,14 @@
             layout-align="space-between strech">
 
   <!-- Portfolio Header and Chapters -->
-  <md-toolbar class="sidenav__mobile-logo md-hue-1" layout="row" layout-align="center center" id="header-and-chapters">
+  <md-toolbar class="sidenav__mobile-logo" data-ng-class="{'logo-red': isHeaderRed, 'logo-gray':isHeaderGray, 'logo-edit':$root.isEditPortfolioMode}" layout="row" layout-align="center center" id="header-and-chapters" style="padding: 0 20px !important">
     <div>
       <md-icon class="material-icons pointer sidenav__icon" data-ng-click="toggleSidenav('left')">arrow_backward
       </md-icon>
       <md-tooltip><span data-translate="HEADER_TOOLTIP_CLOSE_SIDENAV"></span></md-tooltip>
     </div>
     <md-button data-ng-click="confirm('/')">
-      <md-icon class="ekoolikott-logo-black"></md-icon>
+      <md-icon class="ekoolikott-logo-sidenav"></md-icon>
     </md-button>
   </md-toolbar>
 

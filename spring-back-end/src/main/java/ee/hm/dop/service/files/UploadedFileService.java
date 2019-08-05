@@ -32,6 +32,7 @@ import java.util.concurrent.TimeUnit;
 
 import static ee.hm.dop.utils.ConfigurationProperties.DOCUMENT_MAX_FILE_SIZE;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static java.lang.String.format;
 
 @Slf4j
 @Service
@@ -139,7 +140,7 @@ public class UploadedFileService {
                         .contentType(MediaType.parseMediaType(mediaType))
                         .body(resource);
             } catch (Exception e) {
-                log.info("Downloading file failed: {}", e.getMessage(), e);
+                log.info(format("Downloading file failed: %s Media type: %s File name: %s", e.getMessage(), mediaType, fileName), e);
                 return null;
             }
     }

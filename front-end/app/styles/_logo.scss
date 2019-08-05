@@ -1,65 +1,78 @@
 .ekoolikott-logo {
-     width: 172px;
-     height: 27px;
-     margin: 0;
+  width: 172px;
+  height: 27px;
+  margin: 0;
 
-     &-white {
-          @extend .ekoolikott-logo;
-          background: url("../images/ekoolikott-logo-white.svg") no-repeat center;
+  &-white {
+    @extend .ekoolikott-logo;
+    background: url("../images/ekoolikott-logo-white.svg") no-repeat center;
 
-          @media (max-width: $layout-breakpoint-sm) {
-               width: 48px;
-               height: 48px;
-               background: url("../images/ekoolikott-symbol-white.svg") no-repeat center;
-          }
-     }
+    @media (max-width: $layout-breakpoint-sm) {
+      width: 48px;
+      height: 48px;
+      background: url("../images/ekoolikott-symbol-white.svg") no-repeat center;
+    }
+  }
 
-     &-black {
-          @extend .ekoolikott-logo;
-          background: url("../images/ekoolikott-logo-black.svg") no-repeat center;
-     }
+  &-sidenav {
+    @extend .ekoolikott-logo;
+    height: 39px;
+    background: url("../images/ekoolikott-logo-white-slogan.svg") no-repeat center;
+  }
 
-     &-colored {
-          @extend .ekoolikott-logo;
-          background: url("../images/ekoolikott-logo-colored.svg") no-repeat center;
+  &-colored {
+    @extend .ekoolikott-logo;
+    background: url("../images/ekoolikott-logo-colored.svg") no-repeat center;
 
-          @media (max-width: $layout-breakpoint-sm) {
-               width: 48px;
-               height: 48px;
-               background: url("../images/ekoolikott-symbol-colored.svg") no-repeat center;
-          }
-     }
+    @media (max-width: $layout-breakpoint-sm) {
+      width: 48px;
+      height: 48px;
+      background: url("../images/ekoolikott-symbol-colored.svg") no-repeat center;
+    }
+  }
 
-     &-white-slogan {
-          @extend .ekoolikott-logo;
-          height: 39px;
-          background: url("../images/ekoolikott-logo-white-slogan.svg") no-repeat center;
+  &-white-slogan {
+    @extend .ekoolikott-logo;
+    height: 39px;
+    background: url("../images/ekoolikott-logo-white-slogan.svg") no-repeat center;
 
-          @media (max-width: $layout-breakpoint-sm) {
-               width: 48px;
-               height: 48px;
-               background: url("../images/ekoolikott-symbol-white.svg") no-repeat center;
-          }
-     }
+    @media (max-width: $layout-breakpoint-sm) {
+      width: 48px;
+      height: 48px;
+      background: url("../images/ekoolikott-symbol-white.svg") no-repeat center;
+    }
+  }
 
-     &-colored-slogan {
-          @extend .ekoolikott-logo;
-          height: 39px;
-          background: url("../images/ekoolikott-logo-colored-slogan.svg") no-repeat center;
+  &-colored-slogan {
+    @extend .ekoolikott-logo;
+    height: 39px;
+    background: url("../images/ekoolikott-logo-colored-slogan.svg") no-repeat center;
 
-          @media (max-width: $layout-breakpoint-sm) {
-               width: 48px;
-               height: 48px;
-               background: url("../images/ekoolikott-symbol-colored.svg") no-repeat center;
-          }
-     }
+    @media (max-width: $layout-breakpoint-sm) {
+      width: 48px;
+      height: 48px;
+      background: url("../images/ekoolikott-symbol-colored.svg") no-repeat center;
+    }
+  }
 }
 
 .navbar-logo-area .md-button {
-     margin-right: 0;
-     @media (max-width: $layout-breakpoint-sm) {
-          margin: 0 4px;
-          padding-left: 0;
-          min-width: 48px;
-     }
+  margin-right: 0;
+  @media (max-width: $layout-breakpoint-sm) {
+    margin: 0 4px;
+    padding-left: 0;
+    min-width: 48px;
+  }
+}
+
+.logo-red {
+  background-color: #a2134c !important;
+}
+
+.logo-gray {
+  background-color: #949394 !important;
+}
+
+.logo-edit {
+  background-color: rgb(156, 39, 176) !important;
 }

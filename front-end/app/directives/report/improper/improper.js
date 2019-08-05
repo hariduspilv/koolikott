@@ -113,6 +113,12 @@ class controller extends Controller {
 
         this.addHash()
 
+        setTimeout(() => {
+            this.showLoginDialogAfterDelay(targetEvent);
+        }, 600)
+    }
+
+    showLoginDialogAfterDelay(targetEvent) {
         loginDialogController.$inject.push('title')
         this.loginDialog = this.$mdDialog.show({
             templateUrl: 'views/loginDialog/loginDialog.html',
@@ -125,9 +131,7 @@ class controller extends Controller {
             escapeToClose: true,
             targetEvent
         })
-        // .catch(this.removeHash)
-        .catch(err =>
-            console.log(err));
+            .catch(this.removeHash)
 
         setTimeout(() =>
             setTimeout(() =>
@@ -135,6 +139,7 @@ class controller extends Controller {
             )
         )
     }
+
     addHash() {
         window.history.replaceState(null, null,
             ('' + window.location).split('#')[0] + '#' + SHOW_GENERAL_REPORT_MODAL_HASH

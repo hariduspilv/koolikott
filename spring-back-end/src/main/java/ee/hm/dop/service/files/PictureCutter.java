@@ -73,11 +73,9 @@ public class PictureCutter {
     private static BufferedImage resizeImage(ImageInputStream imageInputStream, final int width) throws IOException {
         BufferedImage img = ImageIO.read(imageInputStream);
 
-        // Uploaded file is not an image
         if (img == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Uploaded file is not image");
         }
-
         int widthToScale, heightToScale;
 
         // Landscape

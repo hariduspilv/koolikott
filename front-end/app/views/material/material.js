@@ -323,7 +323,7 @@ angular.module('koolikottApp')
                 serverCallService
                     .makePost('rest/material/delete', { id: $scope.material.id, type: $scope.material.type })
                     .then(() => {
-                        toastService.showOnRouteChange('MATERIAL_DELETED')
+                        toastService.show('MATERIAL_DELETED');
                         $scope.material.deleted = true
                         $rootScope.learningObjectDeleted = true
                         $rootScope.$broadcast('dashboard:adminCountsUpdated')
