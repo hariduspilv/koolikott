@@ -3,6 +3,7 @@ package ee.hm.dop.rest;
 import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
+import ee.hm.dop.model.PictureUploadDto;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.enums.Size;
 import ee.hm.dop.service.files.PictureSaver;
@@ -55,9 +56,9 @@ public class PictureResource extends BaseResource {
 
     @PostMapping
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public Picture uploadPicture(@RequestParam("picture") String pictureAsString) {
+    public Picture uploadPicture(@RequestBody PictureUploadDto pictureUploadDto) {
         try {
-            byte[] dataBase64 = pictureAsString.getBytes();
+            byte[] dataBase64 = pictureUploadDto.getPicture().getBytes();
             byte[] data = decodeBase64(dataBase64);
 
             Picture picture = new OriginalPicture();

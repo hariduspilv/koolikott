@@ -7,6 +7,7 @@ class controller extends Controller {
         this.$rootScope.isFullScreen = false
 
         this.$scope.showlogselect = false;
+        this.$scope.showDeletedBanner = this.showDeletedBanner.bind(this);
 
         window.addEventListener('scroll', (e) => {
             this.handleScroll(e);
@@ -76,6 +77,18 @@ class controller extends Controller {
                 }
             }
         });
+
+        this.showDeletedBanner();
+    }
+
+    showDeletedBanner(){
+        return this.$rootScope.learningObjectDeleted && this.isOwner();
+    }
+
+    isOwner() {
+        return !this.authenticatedUserService.isAuthenticated()
+            ? false : this.portfolio && this.portfolio.creator
+                ? this.portfolio.creator.id === this.authenticatedUserService.getUser().id : false
     }
 
     showPortfolioHistoryLog() {

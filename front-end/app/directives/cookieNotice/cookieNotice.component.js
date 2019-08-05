@@ -182,6 +182,9 @@
                             console.log(err)
                         })
                 })
+            this.moveDetailedSearchTop();
+            this.moveNavBarHeaderTop();
+            this.moveAddMaterialsToolbarTop();
         }
 
         setCookie(ip) {
@@ -247,7 +250,23 @@
             if (addMaterialsToolbarElement !== null)
                 addMaterialsToolbarElement.style.top = 58 + 'px';
         }
-
+        moveAddMaterialsToolbarTop() {
+            const addMaterialsToolbarElement = document.getElementById('addMaterialsToolbar');
+            if (addMaterialsToolbarElement !== null)
+                addMaterialsToolbarElement.style.top = '0';
+        }
+        moveNavBarHeaderTop() {
+            const headerElement = document.getElementById('md-toolbar-header');
+            const sidenavElement = document.getElementById('sidebar-left');
+            sidenavElement.classList.remove('sidenav-cookie-related-upper');
+            headerElement.style.top = '0';
+            sidenavElement.style.top = '0';
+        }
+        moveDetailedSearchTop() {
+            const detailedSearchElement = document.getElementById('detailedSearch');
+            if (detailedSearchElement !== null)
+                detailedSearchElement.style.top = '0';
+        }
         moveNavbarHeaderUpForNotAdmin() {
             const headerElement = document.getElementById('md-toolbar-header');
             const mainContent = document.getElementById('main-content');
