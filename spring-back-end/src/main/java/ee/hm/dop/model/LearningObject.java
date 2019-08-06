@@ -17,8 +17,9 @@ import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Type;
+
 import java.time.LocalDateTime;
+
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
@@ -168,7 +169,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
      */
     @JsonIgnore
     @Column
-
     private LocalDateTime lastInteraction;
 
     @Column(nullable = false)
@@ -180,6 +180,12 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     @Transient
     private Boolean favorite;
+
+    @Transient
+    private String educationalContext;
+
+    @Transient
+    private String domain;
 
     @Transient
     @Enumerated(EnumType.STRING)
@@ -408,4 +414,21 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     public void setSaveType(SaveType saveType) {
         this.saveType = saveType;
     }
+
+    public String getEducationalContext() {
+        return educationalContext;
+    }
+
+    public void setEducationalContext(String educationalContext) {
+        this.educationalContext = educationalContext;
+    }
+
+    public String getDomain() {
+        return domain;
+    }
+
+    public void setDomain(String domain) {
+        this.domain = domain;
+    }
+
 }

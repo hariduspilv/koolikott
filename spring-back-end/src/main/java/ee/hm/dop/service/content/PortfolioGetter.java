@@ -3,7 +3,9 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
+import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -28,12 +30,17 @@ public class PortfolioGetter {
     private PortfolioPermission portfolioPermission;
     @Inject
     private PortfolioLogDao portfolioLogDao;
+    @Inject
+    private TaxonPositionDao taxonPositionDao;
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
+            setTaxonPosition(portfolioDao.findById(portfolioId));
+
             return portfolioDao.findById(portfolioId);
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
+        setTaxonPosition(portfolio);
         if (!portfolioPermission.canView(loggedInUser, portfolio)) {
             throw ValidatorUtil.permissionError();
         }
@@ -70,5 +77,11 @@ public class PortfolioGetter {
 
     public Portfolio findValid(Portfolio portfolio) {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
+    }
+
+    private void setTaxonPosition(Portfolio portfolio) {
+        TaxonPosition taxonPosition = taxonPositionDao.findByTaxon(portfolio.getTaxons().get(0));
+        portfolio.setEducationalContext(taxonPosition.getEducationalContext().getName());
+        portfolio.setDomain(taxonPosition.getDomain().getName());
     }
 }

@@ -139,28 +139,30 @@ angular.module('koolikottApp')
                     $scope.material = material;
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
-                        //metaandmete lisamine
 
-                        $scope.structuredData = createMetaData(material);
+                    }
+                    init();
 
-                        if (material.peerReviews.length > 0) {
-                            $scope.structuredData.review = {
-                                "@type": "Review",
-                                "reviewRating": {
-                                    "@type": "Rating",
-                                    "ratingValue": "5",
-                                    "bestRating": "5"
-                                },
-                                "datePublished": "",
-                                "reviewBody": "Vastab nõuetele",
-                                "publisher": {
-                                    "@type": "Organization",
-                                    "name": "e-koolikott.ee"
-                                }
+                    //metaandmete lisamine
+
+                    $scope.structuredData = createMetaData(material);
+
+                    if (material.peerReviews.length > 0) {
+                        $scope.structuredData.review = {
+                            "@type": "Review",
+                            "reviewRating": {
+                                "@type": "Rating",
+                                "ratingValue": "5",
+                                "bestRating": "5"
+                            },
+                            "datePublished": "",
+                            "reviewBody": "Vastab nõuetele",
+                            "publisher": {
+                                "@type": "Organization",
+                                "name": "e-koolikott.ee"
                             }
                         }
                     }
-                    init();
                 }
             }
 
@@ -179,11 +181,10 @@ angular.module('koolikottApp')
                     },
                     'audience': {
                         '@type': 'Audience',
-                        'audienceType': ''//TODO
+                        'audienceType': translateEducationalContext(material.educationalContext)
                     },
                     'dateCreated': formatIssueDate(material.issueDate),
                     'datePublished': material.added,
-                    'thumbnailUrl': '', //TODO?
                     'license': material.licenseType.name,
                     'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                     'interactionCount': material.views,

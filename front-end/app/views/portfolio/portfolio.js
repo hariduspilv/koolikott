@@ -223,8 +223,8 @@ class controller extends Controller {
                 'name': `${portfolio.originalCreator.name} ${portfolio.originalCreator.surname}`
             },
             'audience': {
-                '@type': "Audience",
-                'audienceType': ''
+                '@type': 'Audience',
+                'audienceType':this.translateEducationalContext(portfolio.educationalContext)
             },
             'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
             'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
