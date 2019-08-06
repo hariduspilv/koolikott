@@ -19,6 +19,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @Transactional
 public class MaterialGetter {
@@ -83,8 +85,17 @@ public class MaterialGetter {
     }
 
     private void setTaxonPosition(Material m) {
-        TaxonPosition taxonPosition = taxonPositionDao.findByTaxon(m.getTaxons().get(0));
-        m.setEducationalContext(taxonPosition.getEducationalContext().getName());
-        m.setDomain(taxonPosition.getDomain().getName());
+        List<TaxonPosition> taxonPosition = m.getTaxons()
+                .stream()
+                .map(taxonPositionDao::findByTaxon)
+                .collect(toList());
+
+        taxonPosition.forEach(tp -> {
+            ((List<String>) new ArrayList<String>()).add(tp.getEducationalContext().getName());
+            ((List<String>) new ArrayList<String>()).add(tp.getDomain().getName());
+        });
+        m.setDomain(new ArrayList<>());
+        m.setEducationalContext(new ArrayList<>());
+
     }
 }

@@ -182,10 +182,10 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     private Boolean favorite;
 
     @Transient
-    private String educationalContext;
+    private List<String> educationalContext;
 
     @Transient
-    private String domain;
+    private List<String> domain;
 
     @Transient
     @Enumerated(EnumType.STRING)
@@ -415,20 +415,19 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.saveType = saveType;
     }
 
-    public String getEducationalContext() {
+    public List<String> getEducationalContext() {
         return educationalContext;
     }
 
-    public void setEducationalContext(String educationalContext) {
+    public void setEducationalContext(List<String> educationalContext) {
         this.educationalContext = educationalContext;
     }
 
-    public String getDomain() {
+    public List<String> getDomain() {
         return domain;
     }
 
-    public void setDomain(String domain) {
+    public void setDomain(List<String> domain) {
         this.domain = domain;
     }
-
 }

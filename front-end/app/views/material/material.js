@@ -181,7 +181,7 @@ angular.module('koolikottApp')
                     },
                     'audience': {
                         '@type': 'Audience',
-                        'audienceType': translateEducationalContext(material.educationalContext)
+                        'audienceType': material.educationalContext.map(eduContext => translateEducationalContext(eduContext))
                     },
                     'dateCreated': formatIssueDate(material.issueDate),
                     'datePublished': material.added,
