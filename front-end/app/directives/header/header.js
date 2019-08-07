@@ -253,7 +253,7 @@ class controller extends Controller {
         if (!this.authenticatedUserService.isModeratorOrAdmin()) return setDefault()
 
         const path = this.$location.path()
-        const isDashboard = path.startsWith('/dashboard')
+        const isDashboard = path.startsWith('/toolaud')
         const isMaterial = path.startsWith('/oppematerjal')
         const isPortfolio = path.startsWith('/kogumik')
 

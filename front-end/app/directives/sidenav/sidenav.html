@@ -38,8 +38,8 @@
       <ul class="sidenav__list">
         <li class="sidenav__item" layout="column">
           <a id="faq" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/faq')}"
-             data-ng-click="confirm('/faq')"
+             data-ng-class="{'is-active': isLocationActive('/kkk')}"
+             data-ng-click="confirm('/kkk')"
             >
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">forum</md-icon>
@@ -49,8 +49,8 @@
         </li>
         <li class="sidenav__item" layout="column">
           <a id="userManual" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/usermanuals')}"
-             data-ng-click="confirm('/usermanuals')"
+             data-ng-class="{'is-active': isLocationActive('/videojuhendid')}"
+             data-ng-click="confirm('/videojuhendid')"
              >
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">library_books</md-icon>
@@ -61,8 +61,8 @@
         </li>
         <li class="sidenav__item" layout="column">
           <a id="terms" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/terms')}"
-             data-ng-click="confirm('/terms')"
+             data-ng-class="{'is-active': isLocationActive('/kasutustingimused')}"
+             data-ng-click="confirm('/kasutustingimused')"
           >
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">assignment</md-icon>
@@ -88,8 +88,8 @@
       <ul class="sidenav__list">
         <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
           <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/moderators')}"
-             data-ng-href="/dashboard/moderators"
+             data-ng-class="{'is-active': isLocationActive('/toolaud/aineeksperdid')}"
+             data-ng-href="/toolaud/aineeksperdid"
              data-ng-click="updateCount('moderators')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">face</md-icon>
@@ -101,8 +101,8 @@
         <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
           <a id="restrictedUsers" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/restrictedUsers')}"
-             data-ng-href="/dashboard/restrictedUsers" data-ng-click="updateCount('restrictedUsers')">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/piiratudKasutajad')}"
+             data-ng-href="/toolaud/piiratudKasutajad" data-ng-click="updateCount('restrictedUsers')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">block</md-icon>
               <span data-translate="RESTRICTED_USERS_TAB" class="sidenav__name"></span>
@@ -113,8 +113,8 @@
         <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
           <a id="deleted" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/deleted')}"
-             data-ng-href="/dashboard/deleted" data-ng-click="updateCount('deleted')">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/kustutatud')}"
+             data-ng-href="/toolaud/kustutatud" data-ng-click="updateCount('deleted')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">delete_forever</md-icon>
               <span data-translate="DELETED_LEARNING_OBJECTS" class="sidenav__name"></span>
@@ -125,8 +125,8 @@
         <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
           <a id="expertStatistics" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/stat/expert')}"
-             data-ng-href="/dashboard/stat/expert">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/statistika/ekspert')}"
+             data-ng-href="/toolaud/statistika/ekspert">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">insert_chart</md-icon>
               <span data-translate="EXPERT_STATISTICS" class="sidenav__name"></span>
@@ -136,8 +136,8 @@
         <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
           <a id="gdpr" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/gdpr')}"
-             data-ng-href="/dashboard/gdpr">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/gdpr')}"
+             data-ng-href="/toolaud/gdpr">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">gavel</md-icon>
               <span data-translate="GDPR_SIDEMENU" class="sidenav__name"></span>
@@ -147,8 +147,8 @@
         <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
           <a id="userManualsAdmin" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/usermanualsAdmin')}"
-             data-ng-href="/dashboard/usermanualsAdmin">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/videojuhendidAdmin')}"
+             data-ng-href="/toolaud/videojuhendidAdmin">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">library_books</md-icon>
               <span data-translate="USER_MANUAL_TAB" class="sidenav__name"></span>
@@ -208,8 +208,8 @@
         <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="improper" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/improper')}"
-             data-ng-href="/dashboard/improper" data-ng-click="updateCount('improper')">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/sobimatu')}"
+             data-ng-href="/toolaud/sobimatu" data-ng-click="updateCount('improper')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">warning</md-icon>
               <span data-translate="IMPROPER" class="sidenav__name"></span>
@@ -220,8 +220,8 @@
         <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="unReviewed" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/unReviewed')}"
-             data-ng-href="/dashboard/unReviewed" data-ng-click="updateCount('unReviewedLearningObjects')">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/kontrollimata')}"
+             data-ng-href="/toolaud/kontrollimata" data-ng-click="updateCount('unReviewedLearningObjects')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">lightbulb_outline</md-icon>
               <span data-translate="UNREVIEWED" class="sidenav__name"></span>
@@ -233,8 +233,8 @@
         <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="changes" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/changes')}"
-             data-ng-href="/dashboard/changes" data-ng-click="updateCount('changes')">
+             data-ng-class="{'is-active': isLocationActive('/toolaud/muudetud')}"
+             data-ng-href="/toolaud/muudetud" data-ng-click="updateCount('changes')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">autorenew</md-icon>
               <span data-translate="CHANGED_LEARNING_OBJECTS" class="sidenav__name"></span>
@@ -245,8 +245,8 @@
         <li class="sidenav__item" layout="column" data-ng-show="isAdminOrModerator()">
           <a id="sentEmails" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/dashboard/sentEmails')}"
-             data-ng-href="/dashboard/sentEmails"
+             data-ng-class="{'is-active': isLocationActive('/toolaud/saadetudKirjad')}"
+             data-ng-href="/toolaud/saadetudKirjad"
              data-ng-click="updateCount('sentEmails')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">email</md-icon>

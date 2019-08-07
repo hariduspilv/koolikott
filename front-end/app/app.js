@@ -204,15 +204,15 @@ function isViewMyProfilePage($location, user) {
 }
 
 function isDashboardPage(path) {
-    return path.indexOf("/dashboard") !== -1;
+    return path.indexOf('/toolaud') !== -1;
 }
 
 function isViewMaterialPage(path) {
     return path === '/oppematerjal';
 }
 
-function isViewPortfolioPage(path, user) {
-    return user && path.contains('/kogumik') && !path.contains(user.username);
+function isViewPortfolioPage(path) {
+    return path.contains('/kogumik/');
 }
 
 function isEditPortfolioPage(path) {
@@ -224,7 +224,7 @@ function isHomePage(path) {
 }
 
 function isProfileOrSendEmailPath(path) {
-    return path === '/profile' || path === '/dashboard/sentEmails';
+    return path === '/profiil' || path === '/toolaud/saadetudKirjad';
 }
 
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies','$translate',
