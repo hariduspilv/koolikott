@@ -4,6 +4,7 @@ import com.redfin.sitemapgenerator.ChangeFreq;
 import com.redfin.sitemapgenerator.SitemapIndexGenerator;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.MaterialTitle;
@@ -21,18 +22,23 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.redfin.sitemapgenerator.WebSitemapUrl.Options;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static ee.hm.dop.utils.ConfigurationProperties.SITEMAP_PATH;
 
 @Service
 @Transactional
 public class SitemapService {
 
-    private static final String BASE_URL = "http://localhost:3001"; //TODO
-    private static final String PATH_NAME = "/home/marekr/Proged/front-end"; //TODO
     private static final String FAQ = "faq";
     private static final String USER_MANUALS = "usermanuals";
     private static final String TERMS = "terms";
+    private static final String MATERIAL = "/material";
+    private static final String PORTFOLIO = "/portfolio";
+    private static final String USER = "/user";
     private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS);
 
+    @Inject
+    private Configuration configuration;
     @Inject
     private SitemapServiceCache sitemapServiceCache;
     @Inject
@@ -41,13 +47,14 @@ public class SitemapService {
     private UserDao userDao;
 
     public int createSitemap() throws MalformedURLException, ParseException {
-        File file = new File(PATH_NAME);
+        final String BASE_URL = configuration.getString(SERVER_ADDRESS);
+        File file = new File(configuration.getString(SITEMAP_PATH));
         int nrOfUrl = 0;
 
         WebSitemapGenerator webSitemapGeneratorPortfolio = generatePrefixSpecific("/portfolios", file);
 
         for (Portfolio portfolio : portfolioDao.findAll()) {
-            WebSitemapUrl wsmUrl = new Options(BASE_URL + "/portfolio/" + portfolio.getId() + "-" + portfolio.getTitle())
+            WebSitemapUrl wsmUrl = new Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + portfolio.getTitle())
                     .lastMod(portfolio.getUpdated() == null ? String.valueOf(portfolio.getAdded()) : String.valueOf(portfolio.getUpdated()))
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
@@ -61,7 +68,7 @@ public class SitemapService {
 
         List<MaterialTitle> materialTitles = sitemapServiceCache.findAllMaterialsTitles();
         for (MaterialTitle materialTitle : materialTitles) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/material/" + materialTitle.getId() + "-" + materialTitle.getText())
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + MATERIAL + materialTitle.getId() + "-" + materialTitle.getText())
                     .lastMod(materialTitle.getTime())
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
@@ -73,9 +80,9 @@ public class SitemapService {
 
         WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("/users", file);
         for (User user : userDao.findAll()) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + user.getUsername())
-                    .lastMod(String.valueOf(LocalDateTime.now())) //TODO
-                    .priority(0.9)
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + USER + user.getUsername())
+                    .lastMod(String.valueOf(LocalDateTime.now()))
+                    .priority(0.8)
                     .changeFreq(ChangeFreq.DAILY)
                     .build();
 
@@ -87,7 +94,7 @@ public class SitemapService {
         WebSitemapGenerator webSitemapGeneratorOther = generatePrefixSpecific("/otherUrls", file);
         for (String url : URLS) {
             WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + url)
-                    .lastMod(String.valueOf(LocalDateTime.now())) // TODO
+                    .lastMod(String.valueOf(LocalDateTime.now()))
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
                     .build();
@@ -96,7 +103,7 @@ public class SitemapService {
         }
         webSitemapGeneratorOther.write();
 
-        File outFile = new File(PATH_NAME + "/sitemaps_index.xml");
+        File outFile = new File(configuration.getString(SITEMAP_PATH) + "/sitemaps_index.xml");
         SitemapIndexGenerator sitemapIndexGenerator = new SitemapIndexGenerator(BASE_URL, outFile);
         sitemapIndexGenerator.addUrl(BASE_URL + "/portfolios.xml");
         sitemapIndexGenerator.addUrl(BASE_URL + "/materials.xml");
@@ -108,9 +115,9 @@ public class SitemapService {
 
     private WebSitemapGenerator generatePrefixSpecific(String prefix, File file) throws MalformedURLException {
         return WebSitemapGenerator
-                .builder(BASE_URL, file)
+                .builder(configuration.getString(SERVER_ADDRESS), file)
                 .fileNamePrefix(prefix)
-//                .gzip(true)
+//                .gzip(true)//TODO in case of need
                 .build();
     }
 }

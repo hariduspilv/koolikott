@@ -34,7 +34,12 @@ public class GenerateSitemapXmlsExecutor {
 
             logger.info("SITEMAP: sitemapIndex generator ended");
             logger.info("SITEMAP: added " + nrOfUrl + " urls");
-            logger.info("SITEMAP: sitemapIndex generator took " + durationOfSitemapGen + " seconds");
+            if (durationOfSitemapGen < 1) {
+                durationOfSitemapGen /= 1000;
+                logger.info(String.format("SITEMAP: sitemapIndex generator took %d milliseconds", durationOfSitemapGen));
+            } else {
+                logger.info(String.format("SITEMAP: sitemapIndex generator took %d seconds", durationOfSitemapGen));
+            }
 
         } catch (Exception e) {
             logger.error("Unexpected error while generating sitemaps", e);

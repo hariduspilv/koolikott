@@ -224,13 +224,13 @@ class controller extends Controller {
             },
             'audience': {
                 '@type': 'Audience',
-                'audienceType':this.translateEducationalContext(portfolio.educationalContext)
+                'audienceType': portfolio.educationalContext.map(eduContext => translateEducationalContext(eduContext))
             },
             'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
             'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
-            'thumbnailUrl': '',
+            'thumbnailUrl': '',//TODO
             'license': portfolio.licenseType.name,
-            'typicalAgeRange': portfolio.targetGroups.map(targetGroup => this.getTypicalAgeRange(targetGroup)),
+            'typicalAgeRange': portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
             'interactionCount': portfolio.views,
             'headline': portfolio.title,
             'keywords': portfolio.tags,

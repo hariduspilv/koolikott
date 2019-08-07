@@ -90,12 +90,14 @@ public class MaterialGetter {
                 .map(taxonPositionDao::findByTaxon)
                 .collect(toList());
 
+        List<String> eduContexts = new ArrayList<>();
+        List<String> domains = new ArrayList<>();
         taxonPosition.forEach(tp -> {
-            ((List<String>) new ArrayList<String>()).add(tp.getEducationalContext().getName());
-            ((List<String>) new ArrayList<String>()).add(tp.getDomain().getName());
+            eduContexts.add(tp.getEducationalContext().getName());
+            domains.add(tp.getDomain().getName());
         });
-        m.setDomain(new ArrayList<>());
-        m.setEducationalContext(new ArrayList<>());
+        m.setDomain(domains);
+        m.setEducationalContext(eduContexts);
 
     }
 }

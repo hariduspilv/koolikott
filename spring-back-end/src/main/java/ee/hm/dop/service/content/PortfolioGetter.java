@@ -16,7 +16,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
@@ -68,7 +69,7 @@ public class PortfolioGetter {
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
         return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
                 .filter(p -> portfolioPermission.canInteract(loggedInUser, p))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public Long getCountByCreator(User creator) {
@@ -80,8 +81,18 @@ public class PortfolioGetter {
     }
 
     private void setTaxonPosition(Portfolio portfolio) {
-        TaxonPosition taxonPosition = taxonPositionDao.findByTaxon(portfolio.getTaxons().get(0));
-        portfolio.setEducationalContext(taxonPosition.getEducationalContext().getName());
-        portfolio.setDomain(taxonPosition.getDomain().getName());
+        List<TaxonPosition> taxonPosition = portfolio.getTaxons()
+                .stream()
+                .map(taxonPositionDao::findByTaxon)
+                .collect(toList());
+
+        List<String> eduContexts = new ArrayList<>();
+        List<String> domains = new ArrayList<>();
+        taxonPosition.forEach(tp -> {
+            eduContexts.add(tp.getEducationalContext().getName());
+            domains.add(tp.getDomain().getName());
+        });
+        portfolio.setDomain(domains);
+        portfolio.setEducationalContext(eduContexts);
     }
 }

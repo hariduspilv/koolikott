@@ -185,6 +185,7 @@ angular.module('koolikottApp')
                     },
                     'dateCreated': formatIssueDate(material.issueDate),
                     'datePublished': material.added,
+                    'thumbnailUrl': '',//TODO
                     'license': material.licenseType.name,
                     'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                     'interactionCount': material.views,
