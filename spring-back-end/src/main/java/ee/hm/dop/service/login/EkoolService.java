@@ -99,7 +99,8 @@ public class EkoolService {
         String encodedWithNewEncoder = Base64.getEncoder().encodeToString(authHeader.getBytes(StandardCharsets.UTF_8));
         logger.info("encodedWithNewEncoder: " + encodedWithNewEncoder);
         logger.info("encodedWithOldEncoder: " + encode(authHeader.getBytes(StandardCharsets.UTF_8)));
-        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
+//        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
+        return encodedWithNewEncoder;
     }
 
     private void logAsString(String reason, Response response) {
