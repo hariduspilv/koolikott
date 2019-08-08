@@ -225,7 +225,7 @@ function isHomePage(path) {
 }
 
 function isProfileOrSendEmailPath(path) {
-    return path === '/profiil' || path === '/toolaud/saadetudKirjad';
+    return path === '/profiil' || path === '/toolaud/saadetud-teated';
 }
 
 app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies','$translate',

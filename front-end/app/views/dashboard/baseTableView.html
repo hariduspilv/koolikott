@@ -137,13 +137,13 @@
 
   <md-table-container class="table-container">
     <div data-ng-show="itemsCount" class="md-data-table">
-      <dop-unreviewed data-ng-if="$ctrl.viewPath == 'kontrollimata'"></dop-unreviewed>
-      <dop-improper data-ng-if="$ctrl.viewPath == 'sobimatu'"></dop-improper>
-      <dop-changed data-ng-if="$ctrl.viewPath == 'muudetud'"></dop-changed>
-      <dop-deleted data-ng-if="$ctrl.viewPath == 'kustutatud'"></dop-deleted>
+      <dop-unreviewed data-ng-if="$ctrl.viewPath == 'uus-oppevara'"></dop-unreviewed>
+      <dop-improper data-ng-if="$ctrl.viewPath == 'teatatud-oppevara'"></dop-improper>
+      <dop-changed data-ng-if="$ctrl.viewPath == 'muudetud-oppevara'"></dop-changed>
+      <dop-deleted data-ng-if="$ctrl.viewPath == 'kustutatud-oppevara'"></dop-deleted>
       <dop-users data-ng-if="$ctrl.viewPath == 'aineeksperdid'"></dop-users>
-      <dop-users data-ng-if="$ctrl.viewPath == 'piiratudKasutajad'"></dop-users>
-      <dop-sentemails data-ng-if="$ctrl.viewPath == 'saadetudKirjad'"></dop-sentemails>
+      <dop-users data-ng-if="$ctrl.viewPath == 'piiratud-kasutajad'"></dop-users>
+      <dop-sentemails data-ng-if="$ctrl.viewPath == 'saadetud-teated'"></dop-sentemails>
     </div>
     <!-- BEGIN Not found message after data is loaded but contains 0 items -->
     <div
