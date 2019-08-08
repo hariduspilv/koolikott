@@ -154,7 +154,7 @@ class controller extends Controller {
         return this.authenticatedUserService.isRestricted()
     }
     editPortfolio() {
-        this.$location.url('/portfolio/edit?id=' + this.$route.current.params.id)
+        this.$location.url('/kogumik/muuda/' + this.$route.current.params.id)
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
@@ -206,7 +206,7 @@ class controller extends Controller {
                 this.toastService.show('PORTFOLIO_DELETED')
                 this.portfolio.deleted = true
                 this.$rootScope.learningObjectDeleted = true
-                this.$location.url('/portfolio?id=' + this.$route.current.params.id)
+                this.$location.url('/kogumik/' + this.$route.current.params.id)
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 this.$rootScope.$broadcast('portfolioHistory:closeLogBanner')
                 this.$scope.showEditModeButton = false;

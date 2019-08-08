@@ -16,7 +16,7 @@
         </div>
         <div class="user-guide-padding">
           <div class="chapter-embed-card__caption chapter-embed-card__user-manual card-title-max-height-10">
-            <h4 class="chapter-embed-card__title user-guide-margin user-guide-title-layout" data-ng-bind="video.title"></h4>
+            <h2 class="md-title chapter-embed-card__title user-guide-margin user-guide-title-layout" data-ng-bind="video.title"></h2>
             <div>
               <p class="chapter-embed-card__source user-guide-margin user-guide-read-more-margins"
                  data-ng-if="video.textUrl">
@@ -24,8 +24,10 @@
                 <a
                   href="{{video.textUrl.startsWith('http') ? video.textUrl : 'http://' + video.textUrl}}"
                   data-ng-click="$event.stopPropagation()"
+                  onclick="captureOutboundLink(this.href)"
                   target="_blank"
                   data-ng-bind="'USER_GUIDE_HITSA_PAGE' | translate"
+                  rel="nofollow"
                 ></a>
               </p>
               <p class="user-guide-margin">

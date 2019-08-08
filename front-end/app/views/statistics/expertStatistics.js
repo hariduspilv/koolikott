@@ -25,6 +25,7 @@ class controller extends Controller {
         this.$scope.perPage = 100
         this.$scope.page = 1
         this.$scope.numPages = 1
+        this.$translate('EXPERT_STATISTICS').then((translation) => this.$rootScope.tabTitle = translation);
 
         this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
         this.$scope.$watch('params', this.onParamsChange.bind(this), true)
@@ -165,6 +166,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$rootScope',
     '$translate',
     'serverCallService',
     'sortService',

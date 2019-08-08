@@ -49,7 +49,7 @@
         }
 
         openNewTab() {
-            this.$window.open(window.location.origin + '/usermanuals', '_blank')
+            this.$window.open(window.location.origin + '/videojuhendid', '_blank')
             this.$scope.showUserManualsHelped = true
             this.$scope.allowDialogClose = false
         }

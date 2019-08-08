@@ -81,7 +81,7 @@
                       <a data-ng-class="{'link-is-grey': $ctrl.userCanClickPortfolio(portfolio) === 'none'}"
                         data-ng-style="{'pointer-events':$ctrl.userCanClickPortfolio(portfolio)}"
                         target="_blank"
-                        data-ng-href="{{'/portfolio?id=' + portfolio.id}}">{{portfolio.title}}<span class="span-margin-left" data-ng-if="$ctrl.userCanClickPortfolio(portfolio) === 'none'" data-translate="PORTFOLIO_PRIVATE"></span></a>
+                        data-ng-href="{{'/kogumik/' + portfolio.id}}">{{portfolio.title}}<span class="span-margin-left" data-ng-if="$ctrl.userCanClickPortfolio(portfolio) === 'none'" data-translate="PORTFOLIO_PRIVATE"></span></a>
                     </div>
               <div>
             <md-button 

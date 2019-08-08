@@ -99,7 +99,7 @@ angular.module('koolikottApp')
                             })
                         }
 
-                        $location.url('/portfolio/edit?id=' + portfolio.id)
+                        $location.url('/kogumik/muuda/' + portfolio.id)
                     }
                 }
 

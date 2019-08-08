@@ -145,7 +145,7 @@ angular.module('koolikottApp')
 
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
-                $location.url('/profile');
+                $location.url('/profiil');
                 $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
                 $location.url(localStorage.getItem(LOGIN_ORIGIN));

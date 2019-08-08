@@ -1,7 +1,7 @@
 <md-card class="md-data-table">
   <md-toolbar class="md-table-toolbar md-default">
     <div class="md-toolbar-tools">
-      <h2 class="md-headline" data-translate="GDPR_HEADING" data-flex></h2>
+      <h1 class="md-headline" data-translate="GDPR_HEADING" data-flex></h1>
       <md-button
         class="statistics-info-text-toggle text-small"
         data-md-colors="{color: 'grey-500'}"
@@ -95,7 +95,9 @@
       </tr>
       <tr md-row data-ng-repeat="agreement in data track by $index">
         <td md-cell class="dashboard-cell">
-          <a target="_blank" href="{{agreement.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}">
+          <a target="_blank" href="{{agreement.url.startsWith('http') ? agreement.url : 'http://' + agreement.url}}"
+             onclick="captureOutboundLink(this.href)"
+             rel="nofollow">
             <span data-ng-bind="agreement.url"></span>
           </a>
         </td>

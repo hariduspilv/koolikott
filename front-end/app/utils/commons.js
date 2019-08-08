@@ -420,7 +420,7 @@ function classListNotContainsHidden(el) {
         document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
         let contentContainer = document.getElementsByClassName("content-container")[0];
         contentContainer.style.paddingTop = "1.5rem"
-        contentContainer.style.paddingLeft = window.location.href.includes('/portfolio?') ? "calc(295px + 1rem)": "0";
+        contentContainer.style.paddingLeft = window.location.href.includes('/kogumik') ? "calc(110px + 1rem)": "0";
         contentContainer.style.paddingRight = "0";
     }, 300)
 }
@@ -765,22 +765,22 @@ class Controller {
     }
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
-            return 'material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
+            return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
         }
         else
-            return 'portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
+            return `kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`
     }
 
     getLearningObjectUrl(learningObject) {
         if (learningObject)
             return this.isPortfolio(learningObject)
-                ? `/portfolio?name=${learningObject.titleForUrl}&id=${learningObject.id}`
-                : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id;
+                ? `/kogumik/${learningObject.id}-${learningObject.titleForUrl}`
+                : `/oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
     }
 
     replaceSpacesAndCharacters(title) {
         if (title)
-            return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")
+            return unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "-")
     }
 
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {

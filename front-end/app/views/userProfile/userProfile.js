@@ -19,7 +19,7 @@
                 this.$scope.user = this.authenticatedUserService.getUser();
                 this.$rootScope.userFromAuthentication = this.$scope.user;
             }
-
+            this.$translate('USER_PROFILE_HEADER').then((translation) => this.$rootScope.tabTitle = translation);
             this.getUserEmail();
             this.getUserProfile();
 
@@ -220,6 +220,7 @@
     controller.$inject = [
         '$scope',
         '$rootScope',
+        '$translate',
         'serverCallService',
         'authenticatedUserService',
         'termsService',

@@ -53,7 +53,6 @@ angular.module('koolikottApp')
             } else {
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
-
             $scope.$watch(() => {
                 return $scope.material;
             }, () => {
@@ -127,14 +126,14 @@ angular.module('koolikottApp')
             }
 
             function getMaterial(success, fail) {
-                materialService.getMaterialById($route.current.params.id).then(success, fail)
+                materialService.getMaterialById($route.current.params.id.split('-')[0]).then(success, fail)
             }
 
             function getMaterialSuccess(material) {
                 if (isEmpty(material)) {
                     console.log('No data returned by getting material. Redirecting to landing page');
                     toastService.show('ERROR_MATERIAL_NOT_FOUND');
-                    $location.url("/");
+                    window.location.replace('/404');
                 } else {
                     $scope.material = material;
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
@@ -199,7 +198,7 @@ angular.module('koolikottApp')
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');
                 toastService.show('ERROR_MATERIAL_NOT_FOUND');
-                $location.url("/");
+                window.location.replace('/404');
             }
 
             function processMaterial() {
@@ -238,6 +237,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
                 if ($scope.material)
+                    $rootScope.tabTitle = $scope.material.titles[0].text;
                     materialService.increaseViewCount($scope.material);
 
             }
@@ -431,5 +431,9 @@ angular.module('koolikottApp')
             $scope.$on('$destroy', () =>
                 storageService.setMaterial(null)
             )
+
+            $scope.captureOutboundLink = function(url) {
+                window.captureOutboundLink(url);
+            };
         }
     ]);

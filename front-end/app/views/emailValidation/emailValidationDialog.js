@@ -20,7 +20,7 @@
             this.$scope.$watch(
                 () => this.authenticatedUserService.isAuthenticated(),
                 (newValue, oldValue) => {
-                    if (this.$location.path() !== '/profile') {
+                    if (this.$location.path() !== '/profiil') {
                         newValue === true && this.$mdDialog.hide(),
                             false
                     }
@@ -32,7 +32,7 @@
             }
 
             this.$scope.isValidateFromProfile = () => {
-                return this.$location.path() === '/profile'
+                return this.$location.path() === '/profiil'
             }
 
             this.$scope.checkPin = () => {

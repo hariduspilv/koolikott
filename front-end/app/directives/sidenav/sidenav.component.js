@@ -23,14 +23,14 @@ class controller extends Controller {
         ]
         // List of sidenav adminLocations
         this.adminLocations = [
-            '/dashboard/improper',
-            '/dashboard/unReviewed',
-            '/dashboard/changes',
-            '/dashboard/moderators',
-            '/dashboard/restrictedUsers',
-            '/dashboard/deleted',
-            '/dashboard/stat/expert',
-            '/dashboard/sentEmails',
+            '/toolaud/sobimatu',
+            '/toolaud/kontrollimata',
+            '/toolaud/muudetud',
+            '/toolaud/aineeksperdid',
+            '/toolaud/piiratudKasutajad',
+            '/toolaud/kustutatud',
+            '/toolaud/statistika/ekspert',
+            '/toolaud/saadetudKirjad',
         ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
@@ -53,6 +53,7 @@ class controller extends Controller {
         this.$scope.$watch(() => this.$location.url(), () => {
             this.$rootScope.isViewPortfolioAndEdit = (
                 this.$location.url().indexOf('/portfolio') !== -1 ||
+                this.$location.url().indexOf('/kogumik/') !== -1 ||
                 this.$location.url().indexOf('/search') !== -1
             )
         }, true)
@@ -95,22 +96,23 @@ class controller extends Controller {
             : this.$rootScope.learningObjectPrivate
                 ? false
                 : this.$rootScope.learningObjectDeleted
-                    ? menuLocation === '/dashboard/deleted'
+                    ? menuLocation === '/toolaud/kustutatud'
                     : this.$rootScope.learningObjectImproper
-                        ? menuLocation === '/dashboard/improper'
+                        ? menuLocation === '/toolaud/sobimatu'
                         : this.$rootScope.learningObjectUnreviewed
-                            ? menuLocation === '/dashboard/unReviewed'
+                            ? menuLocation === '/toolaud/kontrollimata'
                             : this.$rootScope.sentEmails
-                                ? menuLocation === '/dashboard/sentEmails'
+                                ? menuLocation === '/toolaud/saadetudKirjad'
                                 : this.$rootScope.learningObjectChanged
-                                    ? menuLocation === '/dashboard/changes'
+                                    ? menuLocation === '/toolaud/muudetud'
                                     : false
     }
     isUserLocation(location) {
         const { username } = this.$scope.user
         const userLocations = [
-            `/${username}/portfolios`,
+            `/${username}/kogumikud`,
             `/${username}/materials`,
+            `/${username}/oppematerjalid`,
             `/${username}/favorites`
         ]
         return userLocations.includes(location)

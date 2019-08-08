@@ -6,7 +6,7 @@
     data-ng-if="$ctrl.viewPath != 'moderators' && $ctrl.viewPath != 'restrictedUsers'"
   >
     <div class="md-toolbar-tools custom-table-padding" data-layout-xs="column" data-layout-align-xs="start start">
-      <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
+      <h1 class="md-headline" data-translate="{{titleTranslationKey}}"></h1>
       <form data-flex name="filter.form">
         <md-input-container>
           <label></label>
@@ -37,7 +37,7 @@
     data-ng-if="$ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'"
   >
     <div layout-margin>
-      <h2 class="md-title" data-translate="SEARCH_USERS"></h2>
+      <h1 class="md-title" data-translate="SEARCH_USERS"></h1>
     </div>
     <div class="md-toolbar-tools">
       <md-autocomplete
@@ -137,13 +137,13 @@
 
   <md-table-container class="table-container">
     <div data-ng-show="itemsCount" class="md-data-table">
-      <dop-unreviewed data-ng-if="$ctrl.viewPath == 'unReviewed'"></dop-unreviewed>
-      <dop-improper data-ng-if="$ctrl.viewPath == 'improper'"></dop-improper>
-      <dop-changed data-ng-if="$ctrl.viewPath == 'changes'"></dop-changed>
-      <dop-deleted data-ng-if="$ctrl.viewPath == 'deleted'"></dop-deleted>
-      <dop-users data-ng-if="$ctrl.viewPath == 'moderators'"></dop-users>
-      <dop-users data-ng-if="$ctrl.viewPath == 'restrictedUsers'"></dop-users>
-      <dop-sentemails data-ng-if="$ctrl.viewPath == 'sentEmails'"></dop-sentemails>
+      <dop-unreviewed data-ng-if="$ctrl.viewPath == 'kontrollimata'"></dop-unreviewed>
+      <dop-improper data-ng-if="$ctrl.viewPath == 'sobimatu'"></dop-improper>
+      <dop-changed data-ng-if="$ctrl.viewPath == 'muudetud'"></dop-changed>
+      <dop-deleted data-ng-if="$ctrl.viewPath == 'kustutatud'"></dop-deleted>
+      <dop-users data-ng-if="$ctrl.viewPath == 'aineeksperdid'"></dop-users>
+      <dop-users data-ng-if="$ctrl.viewPath == 'piiratudKasutajad'"></dop-users>
+      <dop-sentemails data-ng-if="$ctrl.viewPath == 'saadetudKirjad'"></dop-sentemails>
     </div>
     <!-- BEGIN Not found message after data is loaded but contains 0 items -->
     <div
@@ -152,10 +152,10 @@
       data-layout-align="center center"
       data-layout-padding
     >
-      <h4 data-translate="{{
+      <h2 class="md-body-2" data-translate="{{
         $ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'
           ? 'ERROR_USERS_NOT_FOUND' : $ctrl.viewPath == 'sentEmails' ? 'EMAIL_SENT_EMAIL_NOT_FOUND'  : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
-      ></h4>
+      ></h2>
     </div>
     <!-- END Not found message -->
   </md-table-container>

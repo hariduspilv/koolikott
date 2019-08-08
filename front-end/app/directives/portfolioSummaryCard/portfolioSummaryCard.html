@@ -194,7 +194,7 @@
           <span class="md-caption caption-light">
             <span data-translate="CREATOR"></span>:
           </span>
-          <a data-ng-href="/{{portfolio.creator.username}}/portfolios">
+          <a data-ng-href="/{{portfolio.creator.username}}">
             <span data-ng-bind="portfolio.creator.name"></span>
             <span data-ng-bind="portfolio.creator.surname"></span>
           </a>
@@ -205,7 +205,7 @@
           <span class="md-caption caption-light">
             <span data-translate="ORIGINAL_CREATOR"></span>:
           </span>
-          <a data-ng-href="/{{portfolio.originalCreator.username}}/portfolios">
+          <a data-ng-href="/{{portfolio.originalCreator.username}}">
             <span data-ng-bind="portfolio.originalCreator.name"></span>
             <span data-ng-bind="portfolio.originalCreator.surname"></span>
           </a>
@@ -255,7 +255,9 @@
                 </span>
                 <span data-ng-if="!getLicenseIconList().length" data-ng-switch data-on="portfolio.licenseType.name">
                   <a data-ng-switch-when="Youtube" href="//www.youtube.com/static?template=terms"
-                     data-translate="LICENSETYPE_{{portfolio.licenseType.name.toUpperCase()}}" target="_blank"></a>
+                     onclick="captureOutboundLink(this.href)"
+                     data-translate="LICENSETYPE_{{portfolio.licenseType.name.toUpperCase()}}" target="_blank"
+                     rel="nofollow"></a>
                   <span data-ng-switch-default data-translate="LICENSETYPE_{{portfolio.licenseType.name.toUpperCase()}}"></span>
                 </span>
                 <span data-ng-if="!portfolio.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
