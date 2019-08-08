@@ -500,6 +500,80 @@ function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
 }
 
+function getTypicalAgeRange(grade) {
+    let ageRange;
+    switch (grade) {
+        case ('PRESCHOOL'):
+            ageRange = '0-7';
+            break;
+        case ('LEVEL1'):
+            ageRange = '7-10';
+            break;
+        case ('LEVEL2'):
+            ageRange = '10-13';
+            break;
+        case ('LEVEL3'):
+            ageRange = '13-16';
+            break;
+        case ('ZERO_FIVE'):
+            ageRange = '0-5';
+            break;
+        case 'SIX_SEVEN':
+            ageRange = '6-7';
+            break;
+        case 'GRADE1':
+            ageRange = '7-8';
+            break;
+        case 'GRADE2':
+            ageRange = '8-9';
+            break;
+        case 'GRADE3':
+            ageRange = '9-10';
+            break;
+        case 'GRADE4':
+            ageRange = '10-11';
+            break;
+        case 'GRADE5':
+            ageRange = '11-12';
+            break;
+        case 'GRADE6':
+            ageRange = '12-13';
+            break;
+        case 'GRADE7':
+            ageRange = '13-14';
+            break;
+        case 'GRADE8':
+            ageRange = '15-16';
+            break;
+        case 'GRADE9':
+            ageRange = '15-16';
+            break;
+        case ('GYMNASIUM' || 'LEVEL_GYMNASIUM'):
+            ageRange = '16-19';
+            break;
+    }
+    return ageRange;
+}
+
+function translateEducationalContext(eduContext) {
+    let translation;
+    switch (eduContext) {
+        case ('SECONDARYEDUCATION'):
+            translation = 'Keskharidus';
+            break;
+        case ('BASICEDUCATION'):
+            translation = 'Põhiharidus';
+            break;
+        case ('PRESCHOOLEDUCATION'):
+            translation = 'Alusharidus';
+            break;
+        case ('VOCATIONALEDUCATION'):
+            translation = 'Kutseharidus';
+            break;
+    }
+    return translation;
+}
+
 function getSource(material) {
     if (!material) return;
     if (material.source) {
@@ -600,6 +674,15 @@ function countOccurrences(value, text) {
     }
 
     return count;
+}
+
+function convertLanguage(lang) {
+    if (lang === 'est')
+        return 'ET'
+    else if (lang === 'rus')
+        return 'RU'
+    else if (lang === 'eng')
+        return 'EN'
 }
 
 /**
