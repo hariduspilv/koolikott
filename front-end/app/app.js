@@ -275,8 +275,9 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 });
             }
 
-            gtag('config', 'UA-144167571-1', {'page_path': path});
-
+            if(window.location.hostname === 'e-koolikott.ee') {
+                gtag('config', 'UA-144167571-1', {'page_path': path});
+            }
 
             $translate('HTML_META_DESCRIPTION').then((translation) => $rootScope.applicationDescription = translation);
 
