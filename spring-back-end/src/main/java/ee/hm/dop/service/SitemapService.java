@@ -29,13 +29,28 @@ import static ee.hm.dop.utils.ConfigurationProperties.SITEMAP_PATH;
 @Transactional
 public class SitemapService {
 
-    private static final String FAQ = "faq";
-    private static final String USER_MANUALS = "usermanuals";
-    private static final String TERMS = "terms";
-    private static final String MATERIAL = "/material";
-    private static final String PORTFOLIO = "/portfolio";
-    private static final String USER = "/user";
-    private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS);
+    private static final String TERMS = "kasutustingimused";
+    private static final String USER_MANUALS = "videojuhendid";
+    private static final String FAQ = "kkk";
+    private static final String PROFILE = "profiil";
+
+    private static final String IMPROPER = "toolaud/sobimatu";
+    private static final String UNREVIEWED = "toolaud/kontrollimata";
+    private static final String CHANGES = "toolaud/muudetud";
+    private static final String SENTEMAILS = "toolaud/saadetudKirjad";
+
+    private static final String MODERATORS = "toolaud/aineeksperdid";
+    private static final String RESTRICTED_USERS = "toolaud/piiratudKasutajad";
+    private static final String DELETED = "toolaud/kustutatud";
+    private static final String STATS_EXPERT = "toolaud/statistika/ekspert";
+    private static final String GDPR = "toolaud/gdpr";
+    private static final String USER_MANUALS_ADMIN = "toolaud/videojuhendidAdmin";
+
+    private static final String MATERIAL = "/material/";
+    private static final String PORTFOLIO = "/portfolio/";
+    private static final String USER = "/user/";
+
+    private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS, PROFILE, IMPROPER, UNREVIEWED, CHANGES, SENTEMAILS, MODERATORS, RESTRICTED_USERS, DELETED, STATS_EXPERT, GDPR, USER_MANUALS_ADMIN);
 
     @Inject
     private Configuration configuration;
