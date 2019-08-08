@@ -226,11 +226,11 @@ class controller extends Controller {
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
-                window.location.href = href
+                 this.$location.url(href)
             })
         }
         else
-            window.location.href = href
+            this.$location.url(href)
     }
 }
 controller.$inject = [
@@ -243,6 +243,7 @@ controller.$inject = [
     'userDataService',
     'taxonService',
     'userManualsAdminService',
+    '$location'
 ]
 component('dopSidenav', {
     bindings: {

@@ -7,17 +7,7 @@
             this.getTerms()
             this.initNewTerm()
             this.$scope.editMode = false
-            this.refreshOnFirstLoad()
             this.$translate('TERMS_HEADER').then((translation) => this.$rootScope.tabTitle = translation);
-        }
-
-        refreshOnFirstLoad() {
-            if (!localStorage.getItem('firstLoad')) {
-                localStorage['firstLoad'] = true;
-                window.location.reload();
-            }
-            else
-                localStorage.removeItem('firstLoad');
         }
 
         initNewTerm() {
@@ -31,7 +21,6 @@
                 termLanguages: ['ET', 'EN', 'RU'],
                 edit: true,
                 new: true
-
             }
             this.$scope.newTerm.activeTermLanguage = this.$scope.newTerm.termLanguages[0]
         }
@@ -67,7 +56,6 @@
         removeTerm() {
             this.$scope.terms.pop()
             this.initNewTerm()
-
         }
 
     }
