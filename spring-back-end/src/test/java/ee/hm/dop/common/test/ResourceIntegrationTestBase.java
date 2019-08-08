@@ -131,7 +131,7 @@ public abstract class ResourceIntegrationTestBase implements BaseClassForTests {
     }
 
     protected Response doGet(String url, MediaType mediaType) {
-        return getTarget(url).request().accept(mediaType).get(Response.class);
+        return getTarget(url).request().accept(mediaType, MediaType.TEXT_PLAIN_TYPE).get(Response.class);
     }
 
     protected Response doGet(String url, MultivaluedMap<String, Object> headers, MediaType mediaType) {
@@ -157,7 +157,7 @@ public abstract class ResourceIntegrationTestBase implements BaseClassForTests {
     }
 
     protected Response doPost(String url, Entity<?> requestEntity, MediaType mediaType) {
-        return getTarget(url).request().accept(mediaType).post(requestEntity);
+        return getTarget(url).request().accept(mediaType, MediaType.TEXT_PLAIN_TYPE).post(requestEntity);
     }
 
     protected <T> T doPut(String url, Object json, Class<? extends T> clazz) {

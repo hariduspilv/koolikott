@@ -307,7 +307,7 @@ public class MaterialServiceTest {
             materialService.update(null, user, SearchIndexStrategy.UPDATE_INDEX);
             fail("Exception expected.");
         } catch (RuntimeException ex) {
-            assertEquals("Material not found", ex.getMessage());
+            assertEquals("400 BAD_REQUEST \"Material not found null\"", ex.getMessage());
         }
 
         verify(user);
