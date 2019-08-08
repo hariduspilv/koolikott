@@ -192,14 +192,23 @@
             if (this.params.taxon) {
                 taxonId = this.params.taxon[0]
             }
-            if (taxonId < 10) this.$scope.educationLevel = this.$translate.instant((this.taxonService.getFullTaxon(taxonId)).name)
 
+            this.getSearchTaxonHeader(taxonId);
 
             this.serverCallService.makeGet(this.url, this.params).then(({data}) => {
                 this.params.isGrouped ? this.groupedSearchSuccess(data) : this.searchSuccess(data)
             }, () => {
                 this.searchFail()
             })
+        }
+
+        getSearchTaxonHeader(taxonId) {
+            const fullTaxon = this.taxonService.getFullTaxon(taxonId)
+            if (fullTaxon) {
+                this.$scope.educationLevel = fullTaxon.taxonLevel === 'EDUCATIONAL_CONTEXT' ?
+                    this.$translate.instant(fullTaxon.name)
+                    : this.$translate.instant((fullTaxon.taxonLevel + '_' + fullTaxon.name).toUpperCase());
+            }
         }
 
         searchSuccess(data) {
