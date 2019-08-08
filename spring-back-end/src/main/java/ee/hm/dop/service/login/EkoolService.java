@@ -23,7 +23,6 @@ import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
 import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.xml.security.utils.Base64.encode;
 
 @Service
 @Transactional
@@ -49,7 +48,6 @@ public class EkoolService {
 
     public UserStatus authenticate(String code, String redirectUrl) {
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
-        logger.info("Ekool loginToken: " + ekoolToken);
         Person person = getPerson(ekoolToken);
         if (isBlank(person.getIdCode())) {
             return UserStatus.missingEkoolIdCode();
@@ -92,15 +90,8 @@ public class EkoolService {
     }
 
     private String generateAuthHeaderHash() {
-
-//        String authHeader = format("%s:%s", getClientId(), getClientSecret());
-        String authHeader = format("%s:%s", getClientId(), "ZS1rb29saWtvdHQ6MmEkMTBodlpjbmswR0h4Smw2WXFIbm5zMXJlOHBCV"); // 57 tähremärki
-
-        String encodedWithNewEncoder = Base64.getEncoder().encodeToString(authHeader.getBytes(StandardCharsets.UTF_8));
-        logger.info("encodedWithNewEncoder: " + encodedWithNewEncoder);
-        logger.info("encodedWithOldEncoder: " + encode(authHeader.getBytes(StandardCharsets.UTF_8)));
-//        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
-        return encodedWithNewEncoder;
+        String authHeader = format("%s:%s", getClientId(), getClientSecret());
+        return Base64.getEncoder().encodeToString(authHeader.getBytes(StandardCharsets.UTF_8));
     }
 
     private void logAsString(String reason, Response response) {
