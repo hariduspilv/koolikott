@@ -23,14 +23,14 @@ class controller extends Controller {
         ]
         // List of sidenav adminLocations
         this.adminLocations = [
-            '/toolaud/sobimatu',
-            '/toolaud/kontrollimata',
-            '/toolaud/muudetud',
+            '/toolaud/teatatud-oppevara',
+            '/toolaud/uus-oppevara',
+            '/toolaud/muudetud-oppevara',
             '/toolaud/aineeksperdid',
-            '/toolaud/piiratudKasutajad',
-            '/toolaud/kustutatud',
-            '/toolaud/statistika/ekspert',
-            '/toolaud/saadetudKirjad',
+            '/toolaud/piiratud-kasutajad',
+            '/toolaud/kustutatud-oppevara',
+            '/toolaud/ekspertide-statistika',
+            '/toolaud/saadetud-teated',
         ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
@@ -96,15 +96,15 @@ class controller extends Controller {
             : this.$rootScope.learningObjectPrivate
                 ? false
                 : this.$rootScope.learningObjectDeleted
-                    ? menuLocation === '/toolaud/kustutatud'
+                    ? menuLocation === '/toolaud/kustutatud-oppevara'
                     : this.$rootScope.learningObjectImproper
-                        ? menuLocation === '/toolaud/sobimatu'
+                        ? menuLocation === '/toolaud/teatatud-oppevara'
                         : this.$rootScope.learningObjectUnreviewed
-                            ? menuLocation === '/toolaud/kontrollimata'
+                            ? menuLocation === '/toolaud/uus-oppevara'
                             : this.$rootScope.sentEmails
-                                ? menuLocation === '/toolaud/saadetudKirjad'
+                                ? menuLocation === '/toolaud/saadetud-teated'
                                 : this.$rootScope.learningObjectChanged
-                                    ? menuLocation === '/toolaud/muudetud'
+                                    ? menuLocation === '/toolaud/muudetud-oppevara'
                                     : false
     }
     isUserLocation(location) {
