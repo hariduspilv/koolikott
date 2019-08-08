@@ -10,6 +10,7 @@ import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.MaterialTitle;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.utils.tokenizer.TitleUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,7 +70,7 @@ public class SitemapService {
         WebSitemapGenerator webSitemapGeneratorPortfolio = generatePrefixSpecific("/portfolios", file);
 
         for (Portfolio portfolio : portfolioDao.findAll()) {
-            WebSitemapUrl wsmUrl = new Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + portfolio.getTitle())
+            WebSitemapUrl wsmUrl = new Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + TitleUtils.replaceChars(portfolio.getTitle()))
                     .lastMod(portfolio.getUpdated() == null ? String.valueOf(portfolio.getAdded()) : String.valueOf(portfolio.getUpdated()))
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
@@ -83,7 +84,7 @@ public class SitemapService {
 
         List<MaterialTitle> materialTitles = sitemapServiceCache.findAllMaterialsTitles();
         for (MaterialTitle materialTitle : materialTitles) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + MATERIAL + materialTitle.getId() + "-" + materialTitle.getText())
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + MATERIAL + materialTitle.getId() + "-" + TitleUtils.replaceChars(materialTitle.getText()))
                     .lastMod(materialTitle.getTime())
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
