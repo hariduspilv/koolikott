@@ -49,6 +49,7 @@ public class EkoolService {
 
     public UserStatus authenticate(String code, String redirectUrl) {
         EkoolToken ekoolToken = getEkoolToken(code, redirectUrl);
+        logger.info("Ekool loginToken: " + ekoolToken);
         Person person = getPerson(ekoolToken);
         if (isBlank(person.getIdCode())) {
             return UserStatus.missingEkoolIdCode();
