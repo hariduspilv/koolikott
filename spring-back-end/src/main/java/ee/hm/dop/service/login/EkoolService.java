@@ -92,7 +92,10 @@ public class EkoolService {
     }
 
     private String generateAuthHeaderHash() {
-        String authHeader = format("%s:%s", getClientId(), getClientSecret());
+
+//        String authHeader = format("%s:%s", getClientId(), getClientSecret());
+        String authHeader = format("%s:%s", getClientId(), "ZS1rb29saWtvdHQ6MmEkMTBodlpjbmswR0h4Smw2WXFIbm5zMXJlOHBCV"); // 57 tähremärki
+
         String encodedWithNewEncoder = Base64.getEncoder().encodeToString(authHeader.getBytes(StandardCharsets.UTF_8));
         logger.info("encodedWithNewEncoder: " + encodedWithNewEncoder);
         logger.info("encodedWithOldEncoder: " + encode(authHeader.getBytes(StandardCharsets.UTF_8)));
