@@ -2,7 +2,9 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
+import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.permission.MaterialPermission;
 import ee.hm.dop.utils.UrlUtil;
@@ -17,6 +19,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 @Transactional
 public class MaterialGetter {
@@ -27,12 +31,18 @@ public class MaterialGetter {
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private MaterialPermission materialPermission;
+    @Inject
+    private TaxonPositionDao taxonPositionDao;
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
+            setTaxonPosition(materialDao.findById(materialId));
             return materialDao.findById(materialId);
         }
+
         Material material = materialDao.findByIdNotDeleted(materialId);
+        setTaxonPosition(material);
+
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
         }
@@ -72,5 +82,22 @@ public class MaterialGetter {
 
     public long getByCreatorSize(User creator) {
         return materialDao.findByCreatorSize(creator);
+    }
+
+    private void setTaxonPosition(Material m) {
+        List<TaxonPosition> taxonPosition = m.getTaxons()
+                .stream()
+                .map(taxonPositionDao::findByTaxon)
+                .collect(toList());
+
+        List<String> eduContexts = new ArrayList<>();
+        List<String> domains = new ArrayList<>();
+        taxonPosition.forEach(tp -> {
+            eduContexts.add(tp.getEducationalContext().getName());
+            domains.add(tp.getDomain().getName());
+        });
+        m.setDomain(domains);
+        m.setEducationalContext(eduContexts);
+
     }
 }

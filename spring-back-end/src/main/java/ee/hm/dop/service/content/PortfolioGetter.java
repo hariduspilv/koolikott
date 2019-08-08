@@ -3,7 +3,9 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
+import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -14,7 +16,8 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
@@ -28,12 +31,17 @@ public class PortfolioGetter {
     private PortfolioPermission portfolioPermission;
     @Inject
     private PortfolioLogDao portfolioLogDao;
+    @Inject
+    private TaxonPositionDao taxonPositionDao;
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
+            setTaxonPosition(portfolioDao.findById(portfolioId));
+
             return portfolioDao.findById(portfolioId);
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
+        setTaxonPosition(portfolio);
         if (!portfolioPermission.canView(loggedInUser, portfolio)) {
             throw ValidatorUtil.permissionError();
         }
@@ -61,7 +69,7 @@ public class PortfolioGetter {
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
         return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
                 .filter(p -> portfolioPermission.canInteract(loggedInUser, p))
-                .collect(Collectors.toList());
+                .collect(toList());
     }
 
     public Long getCountByCreator(User creator) {
@@ -70,5 +78,21 @@ public class PortfolioGetter {
 
     public Portfolio findValid(Portfolio portfolio) {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
+    }
+
+    private void setTaxonPosition(Portfolio portfolio) {
+        List<TaxonPosition> taxonPosition = portfolio.getTaxons()
+                .stream()
+                .map(taxonPositionDao::findByTaxon)
+                .collect(toList());
+
+        List<String> eduContexts = new ArrayList<>();
+        List<String> domains = new ArrayList<>();
+        taxonPosition.forEach(tp -> {
+            eduContexts.add(tp.getEducationalContext().getName());
+            domains.add(tp.getDomain().getName());
+        });
+        portfolio.setDomain(domains);
+        portfolio.setEducationalContext(eduContexts);
     }
 }

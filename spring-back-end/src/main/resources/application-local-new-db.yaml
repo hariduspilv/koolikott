@@ -2,6 +2,7 @@ server:
   servlet:
     contextPath: /rest
   port: 8100
+  addressurl: https://localhost:3001
 
 spring:
   profiles:

@@ -96,6 +96,18 @@ angular.module('koolikottApp')
                 console.log("Content probing failed!");
             }
 
+            $scope.getMaterialEducationalContexts = () => {
+                let educationalContexts = [];
+                if (!$scope.material || !$scope.material.taxons) return;
+
+                $scope.material.taxons.forEach((taxon) => {
+                    let edCtx = taxonService.getEducationalContext(taxon);
+                    if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
+                });
+
+                return educationalContexts;
+            };
+
             $rootScope.$on('fullscreenchange', () => {
                 $scope.$apply(() => {
                     $scope.showMaterialContent = !$scope.showMaterialContent;
@@ -111,7 +123,6 @@ angular.module('koolikottApp')
                     $scope.material = newMaterial;
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
-                    // getMaterialRelatedPortfolios($scope.material.id)
                 }
             }
 
@@ -128,9 +139,61 @@ angular.module('koolikottApp')
                     $scope.material = material;
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
+
                     }
                     init();
+
+                    //metaandmete lisamine
+
+                    $scope.structuredData = createMetaData(material);
+
+                    if (material.peerReviews.length > 0) {
+                        $scope.structuredData.review = {
+                            "@type": "Review",
+                            "reviewRating": {
+                                "@type": "Rating",
+                                "ratingValue": "5",
+                                "bestRating": "5"
+                            },
+                            "datePublished": "",
+                            "reviewBody": "Vastab nõuetele",
+                            "publisher": {
+                                "@type": "Organization",
+                                "name": "e-koolikott.ee"
+                            }
+                        }
+                    }
                 }
+            }
+
+            function createMetaData(material) {
+                return {
+                    '@context': 'http://schema.org/',
+                    '@type': 'CreativeWork',
+                    'author': {
+                        '@type': 'Person',
+                        'name': material.authors.map(author => `${author.name} ${author.surname}`)
+                    },
+                    'url': $scope.pageUrl,
+                    'publisher': {
+                        '@type': 'Organization',
+                        'name': material.publishers.map(publisher => publisher.name)
+                    },
+                    'audience': {
+                        '@type': 'Audience',
+                        'audienceType': material.educationalContext.map(eduContext => translateEducationalContext(eduContext))
+                    },
+                    'dateCreated': formatIssueDate(material.issueDate),
+                    'datePublished': material.added,
+                    'thumbnailUrl': '',//TODO
+                    'license': material.licenseType.name,
+                    'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+                    'interactionCount': material.views,
+                    'headline': material.titles.map(title => title.text),
+                    'keywords': material.tags,
+                    'text': material.descriptions.map(description => description.text),
+                    'inLanguage': convertLanguage(material.language)
+                };
             }
 
             function getMaterialFail() {
@@ -167,8 +230,6 @@ angular.module('koolikottApp')
                 processMaterial();
                 showUnreviewedMessage();
 
-                // getMaterialRelatedPortfolios($scope.material.id);
-
                 eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectPrivate = ["PRIVATE"].includes($scope.material.visibility);
@@ -185,18 +246,6 @@ angular.module('koolikottApp')
                 if ($scope.material && $scope.material.licenseType) {
                     return licenceTypeMap[$scope.material.licenseType.name];
                 }
-            };
-
-            $scope.getMaterialEducationalContexts = () => {
-                let educationalContexts = [];
-                if (!$scope.material || !$scope.material.taxons) return;
-
-                $scope.material.taxons.forEach((taxon) => {
-                    let edCtx = taxonService.getEducationalContext(taxon);
-                    if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
-                });
-
-                return educationalContexts;
             };
 
             $scope.getCorrectLanguageString = (languageStringList) => {
@@ -229,8 +278,6 @@ angular.module('koolikottApp')
                     .then(response => {
                         $scope.showUnreviewedLO = response.data;
                     })
-
-
                 }
             }
 

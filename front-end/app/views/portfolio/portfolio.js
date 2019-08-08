@@ -152,7 +152,6 @@ class controller extends Controller {
                     fail
                 )
         }
-
     }
     increaseViewCount() {
         /**
@@ -209,6 +208,36 @@ class controller extends Controller {
                 })
             )
         }
+
+        this.$scope.structuredData = {
+
+            '@context': 'http://schema.org/',
+            '@type': 'CreativeWork',
+            'author': {
+                '@type': 'Person',
+                'name': `${portfolio.creator.name} ${portfolio.creator.surname}`
+            },
+            'url': portfolio.originalCreator.location,
+            'publisher': {
+                '@type': 'Person',
+                'name': `${portfolio.originalCreator.name} ${portfolio.originalCreator.surname}`
+            },
+            'audience': {
+                '@type': 'Audience',
+                'audienceType': portfolio.educationalContext.map(eduContext => translateEducationalContext(eduContext))
+            },
+            'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
+            'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
+            'thumbnailUrl': '',//TODO
+            'license': portfolio.licenseType.name,
+            'typicalAgeRange': portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+            'interactionCount': portfolio.views,
+            'headline': portfolio.title,
+            'keywords': portfolio.tags,
+            'text': portfolio.summary,
+            'inLanguage': this.convertLanguage(this.translationService.getLanguage())
+        };
+
         this.$rootScope.$broadcast('portfolioChanged')
     }
 }
@@ -223,6 +252,8 @@ controller.$inject = [
     'serverCallService',
     'storageService',
     'toastService',
+    'translationService',
+    'taxonGroupingService'
 ]
 angular.module('koolikottApp').controller('portfolioController', controller)
 }

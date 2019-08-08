@@ -24,6 +24,9 @@ cron:
   portfolioLogStateCleaner:
     scheduledTime: 0 0 6 * * ?
     enabled: true
+  sitemapsXmlsGenerator:
+    scheduledTime: 0 0 7 * * ?
+    enabled: true
 
 keystore:
   filename: server.keystore
