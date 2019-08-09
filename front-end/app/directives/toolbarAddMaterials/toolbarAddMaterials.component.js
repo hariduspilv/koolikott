@@ -103,7 +103,7 @@ class controller extends Controller {
             insertAfterLocationChange(parseInt(this.chapter, 10))
             this.isSaving = false
             this.$rootScope.$broadcast('detailedSearch:empty')
-            this.$location.url('/kogumik/muuda' + portfolio.id)
+            this.$location.url('/kogumik/muuda/' + portfolio.id)
         }
     }
     portfolioSelectChange() {
