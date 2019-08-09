@@ -236,10 +236,10 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
-                if ($scope.material)
+                if ($scope.material) {
                     $rootScope.tabTitle = $scope.material.titles[0].text;
                     materialService.increaseViewCount($scope.material);
-
+                }
             }
 
             $scope.getLicenseIconList = () => {
@@ -253,6 +253,10 @@ angular.module('koolikottApp')
                     return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
                 }
             };
+
+            $scope.getMaterialTitleForImage = () => {
+                return $scope.getCorrectLanguageString($scope.material.titles).replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
+            }
 
             $scope.formatMaterialIssueDate = (issueDate) => formatIssueDate(issueDate);
             $scope.formatMaterialUpdatedDate = (updatedDate) => formatDateToDayMonthYear(updatedDate);

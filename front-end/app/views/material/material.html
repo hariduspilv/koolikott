@@ -131,6 +131,8 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               <!-- Image -->
               <img data-ng-src="rest/picture/thumbnail/lg/{{material.picture.name}}"
                    sizes="(max-width: 600px) 600px, 300px" data-ng-if="material.picture"
+                   title="{{getMaterialTitleForImage()}}"
+                   alt="{{getMaterialTitleForImage()}}"
                    data-ng-srcset="rest/picture/thumbnail/lg_xs/{{material.picture.name}} 600w,
                     rest/picture/thumbnail/lg/{{material.picture.name}} 300w"/>
               <!-- Pattern -->

@@ -24,9 +24,10 @@ class controller extends Controller {
                 : `card-cover portfolio`
         }
         this.$scope.learningObject = this.learningObject
+        this.$scope.learningObjectTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.learningObject))
     }
 }
-controller.$inject = ['$scope', 'iconService', 'authenticatedUserService']
+controller.$inject = ['$scope', 'iconService', 'authenticatedUserService', 'translationService']
 component('dopCardMedia', {
     bindings: {
         learningObject: '=',
