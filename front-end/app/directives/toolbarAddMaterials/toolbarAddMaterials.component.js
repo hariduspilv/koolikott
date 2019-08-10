@@ -42,11 +42,8 @@ class controller extends Controller {
             )
     }
     getPortfolioSelectLabel() {
-        return !this.portfolio
-            ? this.$translate.instant('CHOOSE_PORTFOLIO')
-            : this.portfolio == -1
-                ? this.$translate.instant('ADD_TO_NEW_PORTFOLIO')
-                : this.portfolio.title || ''
+        return this.$translate.instant('CHOOSE_PORTFOLIO')
+
     }
     getChapterSelectLabel() {
         return !this.chapter
