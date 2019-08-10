@@ -411,7 +411,7 @@
                                 isFilterMatch(data.username, query)
                             );
 
-                        const text = this.getCorrectLanguageTitle(data.learningObject);
+                        const text = this.getCorrectLanguageTitle(data);
 
                         if (text)
                             return isFilterMatch(text, query)
