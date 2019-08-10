@@ -69,10 +69,22 @@ class controller extends Controller {
 
                 if (200 <= status && status < 300) {
                     const downloadLink = document.createElement('a')
+                    var event = this.returnEvent();
                     downloadLink.href = `/rest/admin/statistics/export/download/${filename}`
-                    downloadLink.dispatchEvent(new MouseEvent('click'))
+                    downloadLink.dispatchEvent(event)
                 }
             })
+    }
+
+    returnEvent() {
+        var event;
+        if (typeof(MouseEvent) === 'function') {
+            event = new MouseEvent('click');
+        } else {
+            event = document.createEvent('MouseEvent');
+            event.initEvent('click', true, true);
+        }
+        return event;
     }
     // Copy filter values to POST params with one exception: params.users = [filter.user].
     onFilterChange(filter) {
