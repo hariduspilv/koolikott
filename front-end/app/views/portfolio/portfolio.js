@@ -212,40 +212,79 @@ class controller extends Controller {
                                 subEl.id = this.getSlug(`alapeatukk-${idx + 1}-${subIdx + 1}`)
                             }
                     }, 1000)
-            )
+                )
+            }
+
+            this.$scope.portfolioMetaData = this.createMetaData(portfolio);
+
+            this.$rootScope.$broadcast('portfolioChanged')
         }
-
-        this.$scope.structuredData = {
-
-            '@context': 'http://schema.org/',
-            '@type': 'CreativeWork',
-            'author': {
-                '@type': 'Person',
-                'name': `${portfolio.creator.name} ${portfolio.creator.surname}`
-            },
-            'url': portfolio.originalCreator.location,
-            'publisher': {
-                '@type': 'Person',
-                'name': `${portfolio.originalCreator.name} ${portfolio.originalCreator.surname}`
-            },
-            'audience': {
-                '@type': 'Audience',
-                'audienceType': portfolio.educationalContext.map(eduContext => translateEducationalContext(eduContext))
-            },
-            'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
-            'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
-            'thumbnailUrl': '',//TODO
-            'license': portfolio.licenseType.name,
-            'typicalAgeRange': portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
-            'interactionCount': portfolio.views,
-            'headline': portfolio.title,
-            'keywords': portfolio.tags,
-            'text': portfolio.summary,
-            'inLanguage': this.convertLanguage(this.translationService.getLanguage())
-        };
-
-        this.$rootScope.$broadcast('portfolioChanged')}
     }
+
+    createMetaData(portfolio) {
+        return [
+            {
+                '@context': 'http://schema.org/',
+                '@type': 'CreativeWork',
+                'author': {
+                    '@type': 'Person',
+                    'name': `${portfolio.creator.name} ${portfolio.creator.surname}`
+                },
+                'url': window.location.href,
+                'publisher': {
+                    '@type': 'Organization',
+                    'name': 'e-koolikott.ee'
+                },
+                'audience': {
+                    '@type': 'Audience',
+                    'audienceType': portfolio.taxonPositionDto.filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
+                        .map(eduContext => translateEducationalContext(eduContext.taxonLevelName))
+                },
+                'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
+                'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
+                'license': portfolio.licenseType.name,
+                'typicalAgeRange': portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+                'interactionCount': portfolio.views,
+                'headline': portfolio.title,
+                'keywords': portfolio.tags,
+                'text': portfolio.summary,
+                'inLanguage': this.convertLanguage(this.translationService.getLanguage())
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                'url': 'https://www.e-koolikott.ee/',
+                'potentialAction': {
+                    '@type': 'SearchAction',
+                    'target': 'https://query.e-koolikott.ee/search?q={search_term_string}',
+                    'query-input': 'required name=search_term_string'
+                }
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                'itemListElement': [{
+                    '@type': 'ListItem',
+                    'position': 1,
+                    'name': 'Haridustase',
+                    'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[0].taxonLevelId}`
+                }, {
+                    '@type': 'ListItem',
+                    'position': 2,
+                    'name': 'Valdkond',
+                    'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[1].taxonLevelId}`
+                }]
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                'url': 'https://e-koolikott.ee',
+                'logo': 'https://e-koolikott.ee/ekoolikott-logo.png'
+            }
+        ];
+    }
+
+
 }
 controller.$inject = [
     '$scope',
