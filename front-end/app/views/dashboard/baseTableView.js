@@ -105,7 +105,7 @@
         }
 
         getModeratorsAndAllUsers() {
-            if (this.viewPath === 'unReviewed') {
+            if (this.viewPath === 'uus-oppevara') {
                 this.getModerators();
             }
             if (this.userPage) {

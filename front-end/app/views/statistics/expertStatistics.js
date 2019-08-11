@@ -10,7 +10,7 @@ class controller extends Controller {
         this.$scope.isSubmitButtonEnabled = false
         this.$scope.isDownloadButtonEnabled = false;
         this.$scope.isExpertsSelectVisible = true
-        this.$scope.isTaxonSelectVisible = true
+
         this.$scope.params = {}
         this.$scope.filter = {
             from: moment().subtract(1, 'month').startOf('month').toDate(),
@@ -37,10 +37,15 @@ class controller extends Controller {
         this.$scope.$on('$destroy', () => window.removeEventListener('resize', this.setInfoTextHeight))
         setTimeout(this.setInfoTextHeight)
     }
+    isModerator() {
+        return this.authenticatedUserService.isModerator()
+    }
     getModerators() {
         this.serverCallService
             .makeGet('rest/admin/moderator')
-            .then(res => this.$scope.moderators = res.data)
+            .then(res => {
+                this.$scope.moderators = res.data
+            })
     }
     getStatistics() {
         this.$scope.fetching = true
@@ -182,6 +187,7 @@ controller.$inject = [
     '$translate',
     'serverCallService',
     'sortService',
+    'authenticatedUserService'
 ]
 angular.module('koolikottApp').controller('statisticsController', controller)
 }

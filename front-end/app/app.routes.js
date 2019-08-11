@@ -165,7 +165,7 @@ angular.module('koolikottApp')
                     templateUrl: 'views/statistics/expertStatistics.html',
                     controller: 'statisticsController',
                     controllerAs: '$ctrl',
-                    permissions: ['ADMIN']
+                    permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/toolaud/gdpr', {
                     templateUrl: 'views/gdpr/gdpr.html',

@@ -23,8 +23,7 @@ public class StatisticsDao {
                 "FROM FirstReview r\n" +
                 "  JOIN LearningObject lo ON r.learningObject = lo.id\n";
         String where = "WHERE r.reviewed = 1\n" +
-                "      AND r.reviewedBy IN (:users)\n" +
-                "      AND lo.deleted = 0\n";
+                "      AND r.reviewedBy IN (:users)\n";
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
@@ -37,7 +36,6 @@ public class StatisticsDao {
                 "  JOIN LearningObject lo ON r.learningObject = lo.id\n";
         String where = "WHERE r.reviewed = 1\n" +
                 "      AND r.reviewedBy IN (:users)\n" +
-                "      AND lo.deleted = 0\n" +
                 "      AND r.status IN ('ACCEPTED')\n";
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
@@ -65,8 +63,7 @@ public class StatisticsDao {
                 "  JOIN ReviewableChange r ON r.learningObject = lo.id\n";
         String where = "WHERE r.reviewed = 1\n" +
                 "      AND r.reviewedBy IN (:users)\n" +
-                "      AND r.status IN ('ACCEPTED')\n" +
-                "      AND lo.deleted = 0\n";
+                "      AND r.status IN ('ACCEPTED')\n";
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
@@ -80,8 +77,7 @@ public class StatisticsDao {
                 "  JOIN ReviewableChange r ON r.learningObject = lo.id\n";
         String where = "WHERE r.reviewed = 1\n" +
                 "      AND r.reviewedBy IN (:users)\n" +
-                "      AND r.status IN ('REJECTED')\n" +
-                "      AND lo.deleted = 0\n";
+                "      AND r.status IN ('REJECTED')\n" ;
         String groupBy = "GROUP BY r.reviewedBy";
         return query(select, where, groupBy, from, to, users, taxons, "r", "reviewedAt");
     }
@@ -92,8 +88,7 @@ public class StatisticsDao {
                 "  count(lo.id) AS c\n" +
                 "FROM LearningObject lo\n" +
                 "  JOIN Portfolio p ON lo.id = p.id\n";
-        String where = "WHERE lo.creator IN (:users)\n" +
-                "  AND lo.deleted = 0\n";
+        String where = "WHERE lo.creator IN (:users)\n";
         String groupBy = "GROUP BY lo.creator";
         return query(select, where, groupBy, from, to, users, taxons, "lo", "added");
     }
@@ -105,8 +100,7 @@ public class StatisticsDao {
                 "FROM LearningObject lo\n" +
                 "  JOIN Portfolio p ON lo.id = p.id\n";
         String where = "WHERE lo.creator IN (:users)\n" +
-                "  AND lo.visibility = 'PUBLIC'\n" +
-                "  AND lo.deleted = 0\n";
+                "  AND lo.visibility = 'PUBLIC'\n";
         String groupBy = "GROUP BY lo.creator";
         return query(select, where, groupBy, from, to, users, taxons, "lo", "added");
     }
@@ -117,8 +111,7 @@ public class StatisticsDao {
                 "  count(lo.id) AS c\n" +
                 "FROM LearningObject lo\n" +
                 "  JOIN Material m ON lo.id = m.id\n";
-        String where = "WHERE lo.creator IN (:users)\n" +
-                " AND lo.deleted = 0\n";
+        String where = "WHERE lo.creator IN (:users)\n";
         String groupBy = "GROUP BY lo.creator";
         return query(select, where, groupBy, from, to, users, taxons, "lo", "added");
     }

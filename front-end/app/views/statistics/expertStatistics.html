@@ -1,7 +1,7 @@
 <md-card class="md-data-table statistics-card">
   <md-toolbar class="md-table-toolbar md-default">
     <div class="md-toolbar-tools">
-      <h1 class="md-headline" data-translate="EXPERT_STATISTICS" data-flex></h1>
+      <h1 class="md-headline" data-translate="{{$ctrl.isModerator ? 'STATISTICS' : 'EXPERT_STATISTICS'}}" data-flex></h1>
       <md-button
         class="statistics-info-text-toggle text-small"
         data-md-colors="{color: 'grey-500'}"
@@ -51,19 +51,21 @@
           data-placeholder="{{'EXPERT' | translate}}"
           data-ng-model="filter.user"
           data-ng-model-options="{trackBy: '$value.id'}"
+          data-ng-disabled="$ctrl.isModerator()"
           aria-label="Vali ekspert"
           >
           <md-option
             data-ng-repeat="user in moderators"
             data-ng-value="user"
             data-ng-bind="user.name + ' ' + user.surname"
+            ng-selected="$ctrl.isModerator()"
           ></md-option>
         </md-select>
       </md-input-container>
       <span
         class="statistics-filter__conjunction statistics-filter__conjunction--or"
         data-translate="OR_WORD"
-        data-ng-show="isExpertsSelectVisible && isTaxonSelectVisible"
+        data-ng-show="isExpertsSelectVisible && isTaxonSelectVisible && !$ctrl.isModerator()"
       ></span>
       <dop-taxon-selector
         flex
@@ -71,7 +73,7 @@
         data-taxon="educationalContext"
         data-is-statistics-select="true"
         data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
-        data-ng-show="isTaxonSelectVisible"
+        data-ng-show="!$ctrl.isModerator()"
       ></dop-taxon-selector>
     </div>
     <div class="statistics-filter__buttons" data-layout="row" data-layout-align="end center">
