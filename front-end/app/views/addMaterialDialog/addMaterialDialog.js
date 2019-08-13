@@ -125,7 +125,7 @@ class controller extends Controller {
                     }
                     this.$scope.uploadingFile = false
                 })
-                .catch(this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL'))
+                // .catch(this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL'))
         }
     }
 
