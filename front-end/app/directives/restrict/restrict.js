@@ -4,11 +4,10 @@
 class controller extends Controller {
     $onInit() {
         if (this.$scope.learningObject && this.$scope.learningObject.creator) {
-            if (this.authenticatedUserService.isAdmin() &&
+            if (this.authenticatedUserService.isModeratorOrAdmin() &&
                 !this.authenticatedUserService.isOwner(this.$scope.learningObject)
             )
-
-            this.$scope.toggleRestrict = this.toggleRestrict.bind(this)
+                this.$scope.toggleRestrict = this.toggleRestrict.bind(this)
             this.setState(this.$scope.learningObject.creator)
         } else
             this.$scope.noCreator = true
