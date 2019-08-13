@@ -172,6 +172,39 @@ angular.module('koolikottApp')
             $timeout(() =>
                 $rootScope.$broadcast('login:success')
             )
+
+            switch ($rootScope.authenticationOption) {
+                case 'idCard':
+                    gtag('event', 'login', {
+                        'event_category': 'user',
+                        'event_label': 'ID-Card'
+                    });
+                    break;
+                case 'ekool':
+                    gtag('event', 'login', {
+                        'event_category': 'user',
+                        'event_label': 'ekool.eu'
+                    });
+                    break;
+                case 'stuudium':
+                    gtag('event', 'login', {
+                        'event_category': 'user',
+                        'event_label': 'stuudium.com'
+                    });
+                    break;
+                case 'harID':
+                    gtag('event', 'login', {
+                        'event_category': 'user',
+                        'event_label': 'HarID'
+                    });
+                    break;
+                case 'mID':
+                    gtag('event', 'login', {
+                        'event_category': 'user',
+                        'event_label': 'Mobile-ID'
+                    });
+                    break;
+            }
         }
 
         function disableLogin() {
