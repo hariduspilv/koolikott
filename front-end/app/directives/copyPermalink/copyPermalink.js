@@ -6,7 +6,21 @@ class controller extends Controller {
         if (!this.$scope.url)
             this.$scope.url = this.$location.absUrl()
 
-        this.$scope.showToast = () => this.toastService.show('COPY_PERMALINK_SUCCESS')
+        this.$scope.showToast = () => {
+            this.toastService.show('COPY_PERMALINK_SUCCESS')
+
+            if(this.$scope.url.contains('kogumik')){
+                gtag('event', 'copy', {
+                    'event_category': 'teaching portfolio',
+                    'event_label': 'link'
+                });
+            } else if (this.$scope.url.contains('oppematerjal')){
+                gtag('event', 'copy', {
+                    'event_category': 'teaching material',
+                    'event_label': 'link'
+                });
+            }
+        }
     }
 }
 controller.$inject = ['$scope', '$location', 'toastService']

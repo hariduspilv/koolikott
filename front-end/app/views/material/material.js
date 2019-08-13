@@ -315,8 +315,12 @@ angular.module('koolikottApp')
             $scope.toggleFullScreen = () => {
                 $rootScope.isFullScreen = !$rootScope.isFullScreen;
                 toggleFullScreen();
-                if ($rootScope.isFullScreen)
+                if ($rootScope.isFullScreen){
                     toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
+                    gtag('event', 'full-screen', {
+                        'event_category': 'teaching material',
+                    });
+                }
                 else {
                     toastService.hide()
                 }
@@ -325,6 +329,10 @@ angular.module('koolikottApp')
             $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
                 editMaterialScope.material = angular.copy($scope.material);
+
+                gtag('event', 'modify', {
+                    'event_category': 'teaching material'
+                });
 
                 $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
@@ -358,6 +366,11 @@ angular.module('koolikottApp')
             };
 
             $scope.confirmMaterialDeletion = () => {
+
+                gtag('event', 'delete', {
+                    'event_category': 'teaching material',
+                });
+
                 dialogService.showConfirmationDialog(
                     'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
                     'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',

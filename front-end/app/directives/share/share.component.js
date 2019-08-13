@@ -100,6 +100,19 @@ class controller extends Controller {
                         socialshareVia: this.FB_APP_ID
                     }
                 })
+
+                if(this.pageUrl.contains('kogumik')){
+                    gtag('event', 'share', {
+                        'event_category': 'teaching portfolio',
+                        'event_label': 'Facebook'
+                    });
+                } else if (this.pageUrl.contains('oppematerjal')){
+                    gtag('event', 'share', {
+                        'event_category': 'teaching material',
+                        'event_label': 'Facebook'
+                    });
+                }
+
                 break
             case 'twitter':
                 this.Socialshare.share({
@@ -109,6 +122,19 @@ class controller extends Controller {
                         socialshareText: this.$translate.instant('READING_RECOMMENDATION') + ': ' + this.title
                     }
                 })
+
+                if(this.pageUrl.contains('kogumik')){
+                    gtag('event', 'share', {
+                        'event_category': 'teaching portfolio',
+                        'event_label': 'Twitter'
+                    });
+                } else if (this.pageUrl.contains('oppematerjal')){
+                    gtag('event', 'share', {
+                        'event_category': 'teaching material',
+                        'event_label': 'Twitter'
+                    });
+                }
+
                 break
             case 'email':
                 this.Socialshare.share({
@@ -118,6 +144,19 @@ class controller extends Controller {
                         socialshareBody: this.$translate.instant('WELCOME_READ_HERE') + ': ' + this.pageUrl
                     }
                 })
+
+                if(this.pageUrl.contains('kogumik')){
+                    gtag('event', 'share', {
+                        'event_category': 'teaching portfolio',
+                        'event_label': 'E-mail'
+                    });
+                } else if (this.pageUrl.contains('oppematerjal')){
+                    gtag('event', 'share', {
+                        'event_category': 'teaching material',
+                        'event_label': 'E-mail'
+                    });
+                }
+
                 break
         }
     }
