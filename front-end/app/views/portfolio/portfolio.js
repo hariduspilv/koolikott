@@ -9,6 +9,13 @@ class controller extends Controller {
         this.$scope.showlogselect = false;
         this.$scope.showDeletedBanner = this.showDeletedBanner.bind(this);
 
+        if (this.$location.url().contains('#')) {
+            let splittedUrl = this.$location.url().split('#');
+            this.$rootScope.slug = splittedUrl[splittedUrl.length - 1]
+                    .replace('subchapter', 'alapeatukk')
+                    .replace('chapter', 'peatukk')
+        }
+
         window.addEventListener('scroll', (e) => {
             this.handleScroll(e);
         });
@@ -188,7 +195,8 @@ class controller extends Controller {
             this.$rootScope.tabTitle = portfolio.title;
             this.storageService.setPortfolio(portfolio)
 
-            this.$location.url(this.getUrl(portfolio))
+            let locationUrl = this.$rootScope.slug ? `${this.getUrl(portfolio)}#${this.$rootScope.slug}` : this.getUrl(portfolio)
+            this.$location.url(locationUrl)
             this.$scope.learningObject = portfolio
 
             this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
