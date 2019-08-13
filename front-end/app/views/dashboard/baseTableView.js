@@ -2,49 +2,49 @@
 
 {
     const DASHBOARD_VIEW_STATE_MAP = {
-        kontrollimata: [
+        'uus-oppevara': [
             'UNREVIEWED', // title translation key
             'firstReview/unReviewed', // rest URI (after 'rest/admin/')
             '-byCreatedAt', // default sort by (use leading minus for DESC)
             true, // backendPagination?
             false // userpage
         ],
-        saadetudKirjad: [
+        'saadetud-teated': [
             'EMAIL_SENT_EMAILS',
             'sentEmails',
             '-byEmailSentAt',
             true,
             false
         ],
-        sobimatu: [
+        'teatatud-oppevara': [
             'IMPROPER',
             'improper',
             '-byReportCount',
             false,
             false
         ],
-        muudetud: [
+        'muudetud-oppevara': [
             'CHANGED_LEARNING_OBJECTS',
             'changed',
             'byLastChangedAt',
             false,
             false
         ],
-        kustutatud: [
+        'kustutatud-oppevara': [
             'DELETED_LEARNING_OBJECTS',
             'deleted',
             'byUpdatedAt',
             false,
             false
         ],
-        aineeksperdid: [
+        'aineeksperdid': [
             'MODERATORS_TAB',
             'moderator',
             'byUsername',
             false,
             true
         ],
-        piiratudKasutajad: [
+        'piiratud-kasutajad': [
             'RESTRICTED_USERS_TAB',
             'restrictedUser',
             'byUsername',

@@ -113,7 +113,7 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/toolaud/sobimatu', {
+                .when('/toolaud/teatatud-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
@@ -125,7 +125,7 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/toolaud/kustutatud', {
+                .when('/toolaud/kustutatud-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
@@ -137,31 +137,31 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/toolaud/piiratudKasutajad', {
+                .when('/toolaud/piiratud-kasutajad', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/toolaud/muudetud', {
+                .when('/toolaud/muudetud-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/toolaud/kontrollimata', {
+                .when('/toolaud/uus-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/toolaud/saadetudKirjad', {
+                .when('/toolaud/saadetud-teated', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/toolaud/statistika/ekspert', {
+                .when('/toolaud/ekspertide-statistika', {
                     templateUrl: 'views/statistics/expertStatistics.html',
                     controller: 'statisticsController',
                     controllerAs: '$ctrl',
@@ -173,7 +173,7 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/toolaud/videojuhendidAdmin', {
+                .when('/toolaud/videojuhendid', {
                     templateUrl: 'views/userManualsAdmin/userManualsAdmin.html',
                     controller: 'userManualsAdminController',
                     controllerAs: '$ctrl',

@@ -10,6 +10,7 @@ import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.MaterialTitle;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
+import ee.hm.dop.utils.tokenizer.TitleUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,17 +35,17 @@ public class SitemapService {
     private static final String FAQ = "kkk";
     private static final String PROFILE = "profiil";
 
-    private static final String IMPROPER = "toolaud/sobimatu";
-    private static final String UNREVIEWED = "toolaud/kontrollimata";
-    private static final String CHANGES = "toolaud/muudetud";
-    private static final String SENTEMAILS = "toolaud/saadetudKirjad";
+    private static final String IMPROPER = "toolaud/teatatud-oppevara";
+    private static final String UNREVIEWED = "toolaud/uus-oppevara";
+    private static final String CHANGES = "toolaud/muudetud-oppevara";
+    private static final String SENTEMAILS = "toolaud/saadetud-teated";
 
     private static final String MODERATORS = "toolaud/aineeksperdid";
-    private static final String RESTRICTED_USERS = "toolaud/piiratudKasutajad";
-    private static final String DELETED = "toolaud/kustutatud";
-    private static final String STATS_EXPERT = "toolaud/statistika/ekspert";
+    private static final String RESTRICTED_USERS = "toolaud/piiratud-kasutajad";
+    private static final String DELETED = "toolaud/kustutatud-oppevara";
+    private static final String STATS_EXPERT = "toolaud/ekspertide-statistika";
     private static final String GDPR = "toolaud/gdpr";
-    private static final String USER_MANUALS_ADMIN = "toolaud/videojuhendidAdmin";
+    private static final String USER_MANUALS_ADMIN = "toolaud/videojuhendid";
 
     private static final String MATERIAL = "/material/";
     private static final String PORTFOLIO = "/portfolio/";
@@ -69,7 +70,7 @@ public class SitemapService {
         WebSitemapGenerator webSitemapGeneratorPortfolio = generatePrefixSpecific("/portfolios", file);
 
         for (Portfolio portfolio : portfolioDao.findAll()) {
-            WebSitemapUrl wsmUrl = new Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + portfolio.getTitle())
+            WebSitemapUrl wsmUrl = new Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + TitleUtils.replaceChars(portfolio.getTitle()))
                     .lastMod(portfolio.getUpdated() == null ? String.valueOf(portfolio.getAdded()) : String.valueOf(portfolio.getUpdated()))
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
@@ -83,7 +84,7 @@ public class SitemapService {
 
         List<MaterialTitle> materialTitles = sitemapServiceCache.findAllMaterialsTitles();
         for (MaterialTitle materialTitle : materialTitles) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + MATERIAL + materialTitle.getId() + "-" + materialTitle.getText())
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + MATERIAL + materialTitle.getId() + "-" + TitleUtils.replaceChars(materialTitle.getText()))
                     .lastMod(materialTitle.getTime())
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)

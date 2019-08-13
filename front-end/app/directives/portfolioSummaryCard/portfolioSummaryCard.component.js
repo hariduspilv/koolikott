@@ -35,8 +35,14 @@ class controller extends Controller {
                 $scope.portfolioSubject = this.taxonService.getSubject(this.portfolio.taxon)
         }, true)
         this.$scope.$watch(() => this.storageService.getPortfolio(), (currentValue, previousValue) => {
-            if (currentValue !== previousValue)
+            if (currentValue !== previousValue) {
                 this.$scope.portfolio = currentValue
+                if (this.getCorrectLanguageTitle(this.portfolio)) {
+                    this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
+                } else {
+                    this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
+                }
+            }
         }, true)
 
         this.$rootScope.$on('portfolioHistory:hide', this.showButtons.bind(this));
@@ -309,6 +315,7 @@ controller.$inject = [
     'taxonGroupingService',
     'eventService',
     'portfolioService',
+    'translationService',
     '$timeout'
 ]
 component('dopPortfolioSummaryCard', {
