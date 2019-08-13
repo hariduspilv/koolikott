@@ -155,6 +155,13 @@
                     }, () =>
                         this.$scope.isSaving = false
                 )
+
+            this.timeToSubmitQuestion = Math.round((new Date() - this.timeChatOpened) / 1000);
+
+            gtag('event', 'submit', {
+                'event_category': 'chat',
+                'value': this.timeToSubmitQuestion
+            });
         }
 
         getLoggedInUserData() {
@@ -175,6 +182,11 @@
         toggleCustomerSupportDialog() {
             this.getLoggedInUserData()
             this.$scope.showCustomerSupportDialog = true
+            this.timeChatOpened = new Date();
+
+            gtag('event', 'open', {
+                'event_category': 'chat',
+            });
         }
 
         isSendDisabled() {

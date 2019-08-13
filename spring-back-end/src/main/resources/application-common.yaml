@@ -184,3 +184,6 @@ captcha:
 
 app:
   devLogin: true
+
+sitemap:
+  path: front-end/app

@@ -21,6 +21,16 @@ class controller extends Controller {
             this.authenticatedUserService.isAuthenticated()
                 ? this.showReportDialog(evt)
                 : this.showLoginDialog(evt)
+
+            if(this.isPortfolio(this.$scope.learningObject)){
+                gtag('event', 'report', {
+                    'event_category': 'teaching portfolio',
+                });
+            } else if (this.isMaterial(this.$scope.learningObject)){
+                gtag('event', 'report', {
+                    'event_category': 'teaching material',
+                });
+            }
         }
 
         // auto-launch the report dialog upon login or page load if hash is found in location URL

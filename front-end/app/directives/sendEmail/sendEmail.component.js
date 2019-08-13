@@ -6,6 +6,19 @@
             super(...args)
 
             this.showLoEmailCodeDialog = () => {
+
+                if(this.$location.absUrl().contains('kogumik')){
+                    gtag('event', 'request', {
+                        'event_category': 'teaching portfolio',
+                        'event_label': 'Feedback to author'
+                    });
+                } else if (this.$location.absUrl().contains('oppematerjal')){
+                    gtag('event', 'request', {
+                        'event_category': 'teaching material',
+                        'event_label': 'Feedback to author'
+                    });
+                }
+
                 if (typeof this.learningObject.creator !== 'undefined' && this.learningObject.creator !== null) {
                     this.userEmailService.userHasEmail(this.learningObject.creator.id)
                         .then(response => {

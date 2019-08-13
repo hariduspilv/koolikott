@@ -47,6 +47,17 @@ class controller extends Controller {
                     && this.materialService.getMaterialById(this.learningObject.id).then(makePost)
 
             this.hasFavorited = true
+
+
+            if(this.isPortfolio(this.learningObject)){
+                gtag('event', 'bookmark', {
+                    'event_category': 'teaching portfolio'
+                });
+            } else if (this.isMaterial(this.learningObject)){
+                gtag('event', 'bookmark', {
+                    'event_category': 'teaching material'
+                });
+            }
         }
     }
     removeFavorite($event) {
@@ -77,7 +88,8 @@ controller.$inject = [
     'authenticatedUserService',
     'toastService',
     'materialService',
-    'portfolioService'
+    'portfolioService',
+    '$location',
 ]
 component('dopFavorite', {
     bindings: {

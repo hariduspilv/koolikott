@@ -14,6 +14,7 @@ class controller extends Controller {
 
         this.$scope.url = url
         this.$scope.deleted = this.data.deleted
+        this.$scope.materialTitle = this.getCurrentMaterialTitle()
 
         this.$scope.isAdminOrModerator = this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()
 
@@ -126,12 +127,18 @@ class controller extends Controller {
     getPDFJSURL(url) {
         return `/utils/pdfjs/web/viewer.html?file=${url}`
     }
+
+    getCurrentMaterialTitle() {
+        return this.replaceSpaces(this.getCorrectLanguageTitle(this.data))
+    }
 }
 controller.$inject = [
     '$scope',
+    '$rootScope',
     '$http',
     'authenticatedUserService',
     'serverCallService',
+    'translationService',
 ]
 component('dopEmbed', {
     bindings: {

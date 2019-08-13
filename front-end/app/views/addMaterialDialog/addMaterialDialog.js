@@ -362,6 +362,8 @@ class controller extends Controller {
         this.$scope.material.resourceTypes = []
         this.$scope.material.picture = {}
         this.$scope.issueDate = new Date()
+        this.$scope.timeAddMaterialOpen = new Date()
+        this.$scope.isNewMaterial = true;
         this.setTitlesAndDescriptions()
     }
     setTitlesAndDescriptions() {
@@ -761,6 +763,15 @@ class controller extends Controller {
                 []
             )
         ).then(save)
+
+        if(this.$scope.isNewMaterial){
+            this.$scope.timeToSubmitMaterial = Math.round((new Date() - this.$scope.timeAddMaterialOpen) / 1000);
+
+            gtag('event', 'create', {
+                'event_category': 'teaching material',
+                'value': this.$scope.timeToSubmitMaterial
+            });
+        }
     }
 }
 controller.$inject = [

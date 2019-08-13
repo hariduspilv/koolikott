@@ -783,6 +783,11 @@ class Controller {
             return unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "-")
     }
 
+    replaceSpaces(title) {
+        if (title)
+            return title.replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
+    }
+
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
         if (!values || values.length === 0)
             return

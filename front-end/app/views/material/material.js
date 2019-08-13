@@ -236,10 +236,10 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
-                if ($scope.material)
+                if ($scope.material) {
                     $rootScope.tabTitle = $scope.material.titles[0].text;
                     materialService.increaseViewCount($scope.material);
-
+                }
             }
 
             $scope.getLicenseIconList = () => {
@@ -253,6 +253,10 @@ angular.module('koolikottApp')
                     return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
                 }
             };
+
+            $scope.getMaterialTitleForImage = () => {
+                return $scope.getCorrectLanguageString($scope.material.titles).replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
+            }
 
             $scope.formatMaterialIssueDate = (issueDate) => formatIssueDate(issueDate);
             $scope.formatMaterialUpdatedDate = (updatedDate) => formatDateToDayMonthYear(updatedDate);
@@ -315,8 +319,12 @@ angular.module('koolikottApp')
             $scope.toggleFullScreen = () => {
                 $rootScope.isFullScreen = !$rootScope.isFullScreen;
                 toggleFullScreen();
-                if ($rootScope.isFullScreen)
+                if ($rootScope.isFullScreen){
                     toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
+                    gtag('event', 'full-screen', {
+                        'event_category': 'teaching material',
+                    });
+                }
                 else {
                     toastService.hide()
                 }
@@ -325,6 +333,10 @@ angular.module('koolikottApp')
             $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
                 editMaterialScope.material = angular.copy($scope.material);
+
+                gtag('event', 'modify', {
+                    'event_category': 'teaching material'
+                });
 
                 $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
@@ -358,6 +370,11 @@ angular.module('koolikottApp')
             };
 
             $scope.confirmMaterialDeletion = () => {
+
+                gtag('event', 'delete', {
+                    'event_category': 'teaching material',
+                });
+
                 dialogService.showConfirmationDialog(
                     'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
                     'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',

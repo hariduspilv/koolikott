@@ -1,7 +1,7 @@
 <div class="embedded-material">
   <div data-ng-if="type === 'PICTURE'" class="embedded-material__picture">
     <a data-ng-href="{{url}}" target="_blank">
-      <img data-ng-src="{{url}}" class="embedded-material__img"/>
+      <img title="{{materialTitle}}" alt="{{materialTitle}}" data-ng-src="{{url}}" class="embedded-material__img"/>
     </a>
   </div>
   <div data-ng-if="type === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">

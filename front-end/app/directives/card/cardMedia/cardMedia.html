@@ -28,6 +28,8 @@
     </md-icon>
 
     <img data-ng-if="learningObject.picture"
+         title="{{learningObjectTitle}}"
+         alt="{{learningObjectTitle}}"
       data-ng-src="rest/picture/thumbnail/lg/{{learningObject.picture.name}}"
       sizes="(max-width: 600) 600px, 300px"
       data-ng-srcset="rest/picture/thumbnail/lg/{{learningObject.picture.name}} 300w,
