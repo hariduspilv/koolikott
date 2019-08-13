@@ -146,9 +146,10 @@ angular.module('koolikottApp')
 
                     $scope.materialMetaData = createMetaData(material);
 
-                    if (material.peerReviews.length > 0) {
-                        return addPeerReview(material)
-                    }
+                    if (material.authors.length > 0) return addAuthors(material);
+                    if (material.peerReviews.length > 0) return addPeerReview(material);
+                    // if (material.taxonPositionDto.length > 0) return addBreadcrums(material)
+
                 }
             }
 
@@ -157,10 +158,6 @@ angular.module('koolikottApp')
                     {
                         '@context': 'http://schema.org/',
                         '@type': 'CreativeWork',
-                        'author': {
-                            '@type': 'Person',
-                            'name': material.authors.map(author => `${author.name} ${author.surname}`)
-                        },
                         'url': $scope.pageUrl,
                         'publisher': {
                             '@type': 'Organization',
@@ -168,7 +165,8 @@ angular.module('koolikottApp')
                         },
                         'audience': {
                             '@type': 'Audience',
-                            'audienceType': material.taxonPositionDto.filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
+                            'audienceType': material.taxonPositionDto
+                                .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
                                 .map(eduContext => translateEducationalContext(eduContext.taxonLevelName))
                         },
                         'dateCreated': formatIssueDate(material.issueDate),
@@ -230,6 +228,23 @@ angular.module('koolikottApp')
                 }
             }
 
+            function addAuthors(material) {
+                let authorsNames = [];
+
+                material.authors.map(materialAuthor => {
+                    const author = {};
+                    author['@type'] = 'Person';
+                    author[`name`] = `${materialAuthor.name} ${materialAuthor.surname}`;
+                    authorsNames.push(author);
+
+                });
+                $scope.materialMetaData[0].author = authorsNames;
+            }
+
+            // function addBreadcrums(){
+            //
+            // }
+
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');
                 toastService.show('ERROR_MATERIAL_NOT_FOUND');
@@ -273,7 +288,7 @@ angular.module('koolikottApp')
 
                 if ($scope.material)
                     $rootScope.tabTitle = $scope.material.titles[0].text;
-                    materialService.increaseViewCount($scope.material);
+                materialService.increaseViewCount($scope.material);
 
             }
 
@@ -300,19 +315,20 @@ angular.module('koolikottApp')
             $scope.getPublisherSearchURL = (name) => {
                 return `/search/result?q=publisher:"${name}"&type=all`;
             };
-
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
             $scope.isAdmin = () => authenticatedUserService.isAdmin();
             $scope.isModerator = () => authenticatedUserService.isModerator();
             $scope.isRestricted = () => authenticatedUserService.isRestricted();
+            $scope.isOwner= () => authenticatedUserService.isOwner($scope.material);
+
             $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
 
             function showUnreviewedMessage() {
                 if ($scope.material && $scope.material.id) {
                     serverCallService.makeGet('rest/learningObject/showUnreviewed?id=' + $scope.material.id)
-                    .then(response => {
-                        $scope.showUnreviewedLO = response.data;
-                    })
+                        .then(response => {
+                            $scope.showUnreviewedLO = response.data;
+                        })
                 }
             }
 

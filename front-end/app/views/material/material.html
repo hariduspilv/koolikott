@@ -91,7 +91,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                   <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
                   <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
                                 data-learning-object="material"></md-menu-item>
-                  <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
+                  <md-menu-item data-ng-if="material.creator && isAdmin() && !isOwner()" dop-restrict
                                 data-learning-object="material">
                   </md-menu-item>
                 </md-menu-content>
