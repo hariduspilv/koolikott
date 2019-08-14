@@ -279,7 +279,7 @@ class controller extends Controller {
                 '@context': 'https://schema.org',
                 '@type': 'Organization',
                 'url': 'https://e-koolikott.ee',
-                'logo': 'https://e-koolikott.ee/ekoolikott-logo.png'
+                'logo': 'https://e-koolikott.ee/ekoolikott.png'
             }
         ];
     }
