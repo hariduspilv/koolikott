@@ -106,7 +106,7 @@ class controller extends Controller {
                         'event_category': 'teaching portfolio',
                         'event_label': 'Facebook'
                     });
-                } else if (this.pageUrl.contains('oppematerjal')){
+                } else {
                     gtag('event', 'share', {
                         'event_category': 'teaching material',
                         'event_label': 'Facebook'

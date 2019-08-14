@@ -26,7 +26,7 @@ class controller extends Controller {
                 gtag('event', 'report', {
                     'event_category': 'teaching portfolio',
                 });
-            } else if (this.isMaterial(this.$scope.learningObject)){
+            } else {
                 gtag('event', 'report', {
                     'event_category': 'teaching material',
                 });

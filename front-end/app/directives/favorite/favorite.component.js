@@ -48,7 +48,6 @@ class controller extends Controller {
 
             this.hasFavorited = true
 
-
             if(this.isPortfolio(this.learningObject)){
                 gtag('event', 'bookmark', {
                     'event_category': 'teaching portfolio'
