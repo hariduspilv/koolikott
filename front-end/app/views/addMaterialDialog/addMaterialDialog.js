@@ -738,7 +738,7 @@ class controller extends Controller {
                         this.storageService.setMaterial(material)
 
                         if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
-                            const url = '/material?id=' + material.id
+                            const url = '/oppematerjal/' + material.id
 
                             if (this.$location.url() === url)
                                 return done()
