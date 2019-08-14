@@ -12,7 +12,7 @@
                         'event_category': 'teaching portfolio',
                         'event_label': 'Feedback to author'
                     });
-                } else if (this.$location.absUrl().contains('oppematerjal')){
+                } else {
                     gtag('event', 'request', {
                         'event_category': 'teaching material',
                         'event_label': 'Feedback to author'

@@ -12,7 +12,7 @@
                         'event_category': 'teaching portfolio',
                         'event_label': 'QR code'
                     });
-                } else if (this.location.contains('oppematerjal')){
+                } else {
                     gtag('event', 'show', {
                         'event_category': 'teaching material',
                         'event_label': 'QR code'
