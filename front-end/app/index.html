@@ -65,7 +65,25 @@
         The primary purpose of e-Koolikott is to allow accessing digital learning materials from a single point
         - the user no longer needs to search for materials in different portals."/>
   <meta property="og:image:secure_url" content="https://e-koolikott.ee/koolikott.png"/>
-  <script type="application/ld+json"></script>
+  <script type="application/ld+json">[
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "url": "https://e-koolikott.ee",
+      "logo": "https://e-koolikott.ee/ekoolikott.png"
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "url": "https://e-koolikott.ee/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://query.e-koolikott.ee/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+  ]
+  </script>
 </head>
 <body>
 
