@@ -283,8 +283,6 @@ class controller extends Controller {
             }
         ];
     }
-
-
 }
 controller.$inject = [
     '$scope',

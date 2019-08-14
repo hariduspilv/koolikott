@@ -146,9 +146,9 @@ angular.module('koolikottApp')
 
                     $scope.materialMetaData = createMetaData(material);
 
-                    if (material.authors.length > 0) return addAuthors(material);
+                    addAuthors(material);
+
                     if (material.peerReviews.length > 0) return addPeerReview(material);
-                    // if (material.taxonPositionDto.length > 0) return addBreadcrums(material)
 
                 }
             }
@@ -180,6 +180,12 @@ angular.module('koolikottApp')
                     },
                     {
                         '@context': 'https://schema.org',
+                        '@type': 'Organization',
+                        'url': 'https://e-koolikott.ee',
+                        'logo': 'https://e-koolikott.ee/ekoolikott-logo.png'
+                    },
+                    {
+                        '@context': 'https://schema.org',
                         '@type': 'WebSite',
                         'url': 'https://www.e-koolikott.ee/',
                         'potentialAction': {
@@ -195,19 +201,13 @@ angular.module('koolikottApp')
                             '@type': 'ListItem',
                             'position': 1,
                             'name': 'Haridustase',
-                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[0].taxonLevelId}`
+                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[0].taxonLevelId}`//TODO at the moment 1st taxonroute taken
                         }, {
                             '@type': 'ListItem',
                             'position': 2,
                             'name': 'Valdkond',
                             'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[1].taxonLevelId}`
                         }]
-                    },
-                    {
-                        '@context': 'https://schema.org',
-                        '@type': 'Organization',
-                        'url': 'https://e-koolikott.ee',
-                        'logo': 'https://e-koolikott.ee/ekoolikott-logo.png'
                     }
                 ]
             }
@@ -241,9 +241,6 @@ angular.module('koolikottApp')
                 $scope.materialMetaData[0].author = authorsNames;
             }
 
-            // function addBreadcrums(){
-            //
-            // }
 
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');
