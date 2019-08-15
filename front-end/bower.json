@@ -40,8 +40,8 @@
     "angular-recaptcha": "^4.2.0",
     "ng-file-model": "*",
     "angular-cookies": "1.7.6",
-    "angular-trix": "^1.0.2",
-    "angular-update-meta": "^2.1.0"
+    "angular-update-meta": "^2.1.0",
+    "angular-trix": "^1.0.2"
   },
   "appPath": "app",
   "moduleName": "ranitsApp",
