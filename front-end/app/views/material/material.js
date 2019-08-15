@@ -144,56 +144,103 @@ angular.module('koolikottApp')
 
                     //metaandmete lisamine
 
-                    $scope.structuredData = createMetaData(material);
+                    $scope.materialMetaData = createMetaData(material);
 
-                    if (material.peerReviews.length > 0) {
-                        $scope.structuredData.review = {
-                            "@type": "Review",
-                            "reviewRating": {
-                                "@type": "Rating",
-                                "ratingValue": "5",
-                                "bestRating": "5"
-                            },
-                            "datePublished": "",
-                            "reviewBody": "Vastab nõuetele",
-                            "publisher": {
-                                "@type": "Organization",
-                                "name": "e-koolikott.ee"
-                            }
-                        }
-                    }
+                    addAuthors(material);
+
+                    if (material.peerReviews.length > 0) return addPeerReview(material);
+
                 }
             }
 
             function createMetaData(material) {
-                return {
-                    '@context': 'http://schema.org/',
-                    '@type': 'CreativeWork',
-                    'author': {
-                        '@type': 'Person',
-                        'name': material.authors.map(author => `${author.name} ${author.surname}`)
+                return [
+                    {
+                        '@context': 'http://schema.org/',
+                        '@type': 'CreativeWork',
+                        'url': $scope.pageUrl,
+                        'publisher': {
+                            '@type': 'Organization',
+                            'name': 'e-koolikott.ee'
+                        },
+                        'audience': {
+                            '@type': 'Audience',
+                            'audienceType': material.taxonPositionDto
+                                .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
+                                .map(eduContext => translateEducationalContext(eduContext.taxonLevelName))
+                        },
+                        'dateCreated': formatIssueDate(material.issueDate),
+                        'datePublished': material.added,
+                        'license': material.licenseType.name,
+                        'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+                        'interactionCount': material.views,
+                        'headline': material.titles.map(title => title.text),
+                        'keywords': material.tags,
+                        'text': material.descriptions.map(description => description.text)
                     },
-                    'url': $scope.pageUrl,
+                    {
+                        '@context': 'https://schema.org',
+                        '@type': 'Organization',
+                        'url': 'https://e-koolikott.ee',
+                        'logo': 'https://e-koolikott.ee/ekoolikott.png'
+                    },
+                    {
+                        '@context': 'https://schema.org',
+                        '@type': 'WebSite',
+                        'url': 'https://www.e-koolikott.ee/',
+                        'potentialAction': {
+                            '@type': 'SearchAction',
+                            'target': 'https://query.e-koolikott.ee/search?q={search_term_string}',
+                            'query-input': 'required name=search_term_string'
+                        }
+                    },
+                    {
+                        '@context': 'https://schema.org',
+                        '@type': 'BreadcrumbList',
+                        'itemListElement': [{
+                            '@type': 'ListItem',
+                            'position': 1,
+                            'name': 'Haridustase',
+                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[0].taxonLevelId}`//TODO at the moment 1st taxonroute taken
+                        }, {
+                            '@type': 'ListItem',
+                            'position': 2,
+                            'name': 'Valdkond',
+                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[1].taxonLevelId}`
+                        }]
+                    }
+                ]
+            }
+
+            function addPeerReview() {
+                $scope.materialMetaData[0].review = {
+                    '@type': 'Review',
+                    'reviewRating': {
+                        '@type': 'Rating',
+                        'ratingValue': '5',
+                        'bestRating': '5'
+                    },
+                    'reviewBody': 'Vastab nõuetele',
                     'publisher': {
                         '@type': 'Organization',
-                        'name': material.publishers.map(publisher => publisher.name)
-                    },
-                    'audience': {
-                        '@type': 'Audience',
-                        'audienceType': material.educationalContext.map(eduContext => translateEducationalContext(eduContext))
-                    },
-                    'dateCreated': formatIssueDate(material.issueDate),
-                    'datePublished': material.added,
-                    'thumbnailUrl': '',//TODO
-                    'license': material.licenseType.name,
-                    'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
-                    'interactionCount': material.views,
-                    'headline': material.titles.map(title => title.text),
-                    'keywords': material.tags,
-                    'text': material.descriptions.map(description => description.text),
-                    'inLanguage': convertLanguage(material.language)
-                };
+                        'name': 'e-koolikott.ee'
+                    }
+                }
             }
+
+            function addAuthors(material) {
+                let authorsNames = [];
+
+                material.authors.map(materialAuthor => {
+                    const author = {};
+                    author['@type'] = 'Person';
+                    author[`name`] = `${materialAuthor.name} ${materialAuthor.surname}`;
+                    authorsNames.push(author);
+
+                });
+                $scope.materialMetaData[0].author = authorsNames;
+            }
+
 
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');
@@ -236,10 +283,10 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
 
-                if ($scope.material) {
+                if ($scope.material)
                     $rootScope.tabTitle = $scope.material.titles[0].text;
-                    materialService.increaseViewCount($scope.material);
-                }
+                materialService.increaseViewCount($scope.material);
+
             }
 
             $scope.getLicenseIconList = () => {
@@ -254,10 +301,6 @@ angular.module('koolikottApp')
                 }
             };
 
-            $scope.getMaterialTitleForImage = () => {
-                return $scope.getCorrectLanguageString($scope.material.titles).replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
-            }
-
             $scope.formatMaterialIssueDate = (issueDate) => formatIssueDate(issueDate);
             $scope.formatMaterialUpdatedDate = (updatedDate) => formatDateToDayMonthYear(updatedDate);
             $scope.isNullOrZeroLength = (arg) => !arg || !arg.length;
@@ -269,19 +312,20 @@ angular.module('koolikottApp')
             $scope.getPublisherSearchURL = (name) => {
                 return `/search/result?q=publisher:"${name}"&type=all`;
             };
-
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
             $scope.isAdmin = () => authenticatedUserService.isAdmin();
             $scope.isModerator = () => authenticatedUserService.isModerator();
             $scope.isRestricted = () => authenticatedUserService.isRestricted();
+            $scope.isOwner= () => authenticatedUserService.isOwner($scope.material);
+
             $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
 
             function showUnreviewedMessage() {
                 if ($scope.material && $scope.material.id) {
                     serverCallService.makeGet('rest/learningObject/showUnreviewed?id=' + $scope.material.id)
-                    .then(response => {
-                        $scope.showUnreviewedLO = response.data;
-                    })
+                        .then(response => {
+                            $scope.showUnreviewedLO = response.data;
+                        })
                 }
             }
 

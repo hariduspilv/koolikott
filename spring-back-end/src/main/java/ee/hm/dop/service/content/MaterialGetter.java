@@ -4,7 +4,9 @@ import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.taxon.TaxonLevel;
 import ee.hm.dop.model.taxon.TaxonPosition;
+import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.permission.MaterialPermission;
 import ee.hm.dop.utils.UrlUtil;
@@ -84,20 +86,26 @@ public class MaterialGetter {
         return materialDao.findByCreatorSize(creator);
     }
 
-    private void setTaxonPosition(Material m) {
-        List<TaxonPosition> taxonPosition = m.getTaxons()
+    private void setTaxonPosition(Material material) {
+        List<TaxonPosition> taxonPosition = material.getTaxons()
                 .stream()
                 .map(taxonPositionDao::findByTaxon)
                 .collect(toList());
 
-        List<String> eduContexts = new ArrayList<>();
-        List<String> domains = new ArrayList<>();
+        List<TaxonPositionDTO> taxonPositionDTOList = new ArrayList<>();
         taxonPosition.forEach(tp -> {
-            eduContexts.add(tp.getEducationalContext().getName());
-            domains.add(tp.getDomain().getName());
+            TaxonPositionDTO tpdEduContext = new TaxonPositionDTO();
+            tpdEduContext.setTaxonLevelId(tp.getEducationalContext().getId());
+            tpdEduContext.setTaxonLevelName(tp.getEducationalContext().getName());
+            tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
+            TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
+            tpdDomain.setTaxonLevelId(tp.getDomain().getId());
+            tpdDomain.setTaxonLevelName(tp.getDomain().getName());
+            tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
+            taxonPositionDTOList.add(tpdEduContext);
+            taxonPositionDTOList.add(tpdDomain);
         });
-        m.setDomain(domains);
-        m.setEducationalContext(eduContexts);
 
+        material.setTaxonPositionDto(taxonPositionDTOList);
     }
 }

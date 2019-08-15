@@ -579,16 +579,16 @@ function translateEducationalContext(eduContext) {
     let translation;
     switch (eduContext) {
         case ('SECONDARYEDUCATION'):
-            translation = 'Keskharidus';
+            translation = 'Keskkooliõpilased';
             break;
         case ('BASICEDUCATION'):
-            translation = 'Põhiharidus';
+            translation = 'Põhikooliõpilased';
             break;
         case ('PRESCHOOLEDUCATION'):
-            translation = 'Alusharidus';
+            translation = 'Lasteaialapsed';
             break;
         case ('VOCATIONALEDUCATION'):
-            translation = 'Kutseharidus';
+            translation = 'Kutsekooliõpilased';
             break;
     }
     return translation;
