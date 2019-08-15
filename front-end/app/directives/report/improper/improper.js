@@ -23,13 +23,9 @@ class controller extends Controller {
                 : this.showLoginDialog(evt)
 
             if(this.isPortfolio(this.$scope.learningObject)){
-                gtag('event', 'report', {
-                    'event_category': 'teaching portfolio',
-                });
+                gTagCaptureEvent('report', 'teaching portfolio')
             } else {
-                gtag('event', 'report', {
-                    'event_category': 'teaching material',
-                });
+                gTagCaptureEvent('report', 'teaching material')
             }
         }
 

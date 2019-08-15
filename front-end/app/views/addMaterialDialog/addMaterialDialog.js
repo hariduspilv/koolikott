@@ -738,7 +738,7 @@ class controller extends Controller {
                         this.storageService.setMaterial(material)
 
                         if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
-                            const url = '/material?id=' + material.id
+                            const url = '/oppematerjal/' + material.id
 
                             if (this.$location.url() === url)
                                 return done()
@@ -767,10 +767,7 @@ class controller extends Controller {
         if(this.$scope.isNewMaterial){
             this.$scope.timeToSubmitMaterial = Math.round((new Date() - this.$scope.timeAddMaterialOpen) / 1000);
 
-            gtag('event', 'create', {
-                'event_category': 'teaching material',
-                'value': this.$scope.timeToSubmitMaterial
-            });
+            gTagCaptureEventWithValue('create', 'teaching material', this.$scope.timeToSubmitMaterial)
         }
     }
 }
