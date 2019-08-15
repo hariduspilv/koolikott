@@ -209,7 +209,7 @@ function isDashboardPage(path) {
 }
 
 function isViewMaterialPage(path) {
-    return path === '/oppematerjal';
+    return path.contains('/oppematerjal');
 }
 
 function isViewPortfolioPage(path) {

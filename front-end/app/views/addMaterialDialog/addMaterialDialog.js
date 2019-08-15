@@ -1,6 +1,9 @@
 'use strict';
 
 {
+const VISIBILITY_PUBLIC = 'PUBLIC'
+const VISIBILITY_PRIVATE = 'PRIVATE'
+
 class controller extends Controller {
     constructor(...args) {
         super(...args)
@@ -696,6 +699,20 @@ class controller extends Controller {
             || this.$scope.isSaving
             || this.$scope.uploadingFile;
     }
+    updateMaterial(){
+        this.serverCallService
+            .makePost('rest/material/update', this.storageService.getMaterial())
+            .then(({ data: material }) => {
+                if (material) {
+                    this.storageService.setMaterial(null)
+                    this.$location.url('/oppematerjal/' + material.id)
+                    this.searchService.setIsFavorites(false)
+                    this.searchService.setIsRecommended(false)
+                    this.dontSearch = true // otherwise reload will trigger search if search has values
+                    this.$route.reload()
+                }
+            })
+    }
     save() {
         const save = () => {
             this.$scope.isSaving = true
@@ -738,7 +755,7 @@ class controller extends Controller {
                         this.storageService.setMaterial(material)
 
                         if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
-                            const url = '/material?id=' + material.id
+                            const url = '/oppematerjal/' + material.id
 
                             if (this.$location.url() === url)
                                 return done()
@@ -747,8 +764,22 @@ class controller extends Controller {
                                 unsubscribe()
                                 this.$timeout(done)
                             })
-                            this.$location.url(url)
+                            //this.$location.url(url)
                         }
+
+                        console.log(this.storageService.getMaterial().visibility)
+                        this.dialogService.showConfirmationDialog(
+                            "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
+                            "{{'PORTFOLIO_WARNING' | translate}}",
+                            "{{'PORTFOLIO_YES' | translate}}",
+                            "{{'PORTFOLIO_NO' | translate}}",
+                            () => {
+                                this.storageService.getMaterial().visibility = VISIBILITY_PUBLIC
+                                this.updateMaterial()
+                                console.log(this.storageService.getMaterial().visibility)
+                            },
+                            this.updateMaterial.bind(this)
+                        )
                     }
                     this.$scope.isSaving = false
                 }, () =>
@@ -795,6 +826,7 @@ controller.$inject = [
   'toastService',
   'translationService',
   'youtubeService',
+    'dialogService'
 ]
 angular.module('koolikottApp').controller('addMaterialDialogController', controller)
 }
