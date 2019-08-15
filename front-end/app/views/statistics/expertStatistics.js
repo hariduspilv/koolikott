@@ -74,7 +74,7 @@ class controller extends Controller {
 
                 if (200 <= status && status < 300) {
                     const downloadLink = document.createElement('a')
-                    var event = this.returnEvent();
+                    let event = this.returnEvent();
                     downloadLink.href = `/rest/admin/statistics/export/download/${filename}`
                     downloadLink.dispatchEvent(event)
                 }
@@ -82,7 +82,7 @@ class controller extends Controller {
     }
 
     returnEvent() {
-        var event;
+        let event;
         if (typeof(MouseEvent) === 'function') {
             event = new MouseEvent('click');
         } else {
