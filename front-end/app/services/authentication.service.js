@@ -51,10 +51,12 @@ angular.module('koolikottApp')
         function showGdprModalAndAct(userStatus) {
             hasEmail(userStatus)
             $rootScope.statusForDuplicateCheck = userStatus
+            $rootScope.userStatusOk = userStatus.statusOk
             $mdDialog.show({
                 templateUrl: 'views/agreement/agreementDialog.html',
                 controller: 'agreementDialogController',
                 controllerAs: '$ctrl',
+                escapeToClose: !userStatus.statusOk
             }).then((res)=>{
                 if (!res){
                     if (userStatus.existingUser){
@@ -346,6 +348,10 @@ angular.module('koolikottApp')
 
                 disableLogin();
                 serverCallService.makeGet("rest/login/mobileId", params, loginWithMobileIdSuccess, loginFail);
+            },
+
+            authenticate: function(userData) {
+                authenticateUser(userData)
             }
 
         };
