@@ -10,7 +10,7 @@
             this.$scope.url = 'rest/learningObject/getByCreatorAllLearningObjects';
             this.$scope.params = {
                 'username': this.$route.current.params.username,
-                'maxResults': 1000
+                'maxResults': 20
             };
         }
 
