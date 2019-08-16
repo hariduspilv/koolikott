@@ -146,9 +146,17 @@ public class LearningObjectResource extends BaseResource {
         SearchResult portfolios = portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
         SearchResult materials = materialGetter.getByCreatorResult(creator, start, maxResults);
         List<SearchResult> los = new ArrayList<>();
-        los.add(materials);
         los.add(portfolios);
+        los.add(materials);
         return los;
+    }
+
+    @GetMapping("getByCreatorAllLearningObjectsCount")
+    public Long getByCreator(@RequestParam("username") String username) {
+        User creator = getValidCreator(username);
+        if (creator == null) throw notFound();
+
+        return materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator);
     }
 
     private User getValidCreator(@RequestParam("username") String username) {

@@ -99,12 +99,14 @@ public class PortfolioGetter {
             tpdEduContext.setTaxonLevelId(tp.getEducationalContext().getId());
             tpdEduContext.setTaxonLevelName(tp.getEducationalContext().getName());
             tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
-            TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
-            tpdDomain.setTaxonLevelId(tp.getDomain().getId());
-            tpdDomain.setTaxonLevelName(tp.getDomain().getName());
-            tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
-            taxonPositionDTOList.add(tpdEduContext);
-            taxonPositionDTOList.add(tpdDomain);
+            if (tp.getDomain() != null) {
+                TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
+                tpdDomain.setTaxonLevelId(tp.getDomain().getId());
+                tpdDomain.setTaxonLevelName(tp.getDomain().getName());
+                tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
+                taxonPositionDTOList.add(tpdEduContext);
+                taxonPositionDTOList.add(tpdDomain);
+            }
         });
 
         portfolio.setTaxonPositionDto(taxonPositionDTOList);
