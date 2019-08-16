@@ -92,9 +92,9 @@ public class MailBuilder {
         return EmailBuilder.startingBlank()
                 .from("E-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(userEmail.getUser().getFullName(), email.getEmail())
-                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withSubject("E-Koolikotis e-posti kinnitamine")
                 .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
-                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Aitäh, et oled E-Koolikoti kasutaja!" + BREAK +
                         "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
                         BREAK +
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
@@ -107,9 +107,9 @@ public class MailBuilder {
         return EmailBuilder.startingBlank()
                 .from("E-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(userEmail.getUser().getFullName(), email)
-                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withSubject("E-Koolikotis e-posti kinnitamine")
                 .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
-                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Aitäh, et oled E-Koolikoti kasutaja!" + BREAK +
                         "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
                         BREAK +
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
@@ -122,9 +122,9 @@ public class MailBuilder {
         return EmailBuilder.startingBlank()
                 .from("E-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(userEmail.getUser().getFullName(), userEmail.getEmail())
-                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withSubject("E-Koolikotis e-posti kinnitamine")
                 .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
-                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Aitäh, et oled E-Koolikoti kasutaja!" + BREAK +
                         "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
                         BREAK +
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +

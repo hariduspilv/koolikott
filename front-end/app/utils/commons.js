@@ -54,6 +54,26 @@ if (typeof String.prototype.contains === 'undefined') {
     };
 }
 
+function gTagCaptureEvent(event, category) {
+    gtag('event', event, {
+        'event_category': category
+    })
+}
+
+function gTagCaptureEvent(event, category, label) {
+    gtag('event', event, {
+        'event_category': category,
+        'event_label': label
+    })
+}
+
+function gTagCaptureEventWithValue(event, category, value) {
+    gtag('event', event, {
+        'event_category': category,
+        'event_value': value
+    })
+}
+
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
 if (!Array.prototype.includes) {
     Object.defineProperty(Array.prototype, 'includes', {

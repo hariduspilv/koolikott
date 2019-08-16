@@ -75,10 +75,7 @@ angular.module('koolikottApp')
                     }
                     $scope.timeToSubmitPortfolio = Math.round((new Date() - $scope.timeAddPortfolioOpened) / 1000);
 
-                    gtag('event', 'create', {
-                        'event_category': 'teaching portfolio',
-                        'value': $scope.timeToSubmitPortfolio
-                    });
+                    gTagCaptureEventWithValue('create', 'teaching portfolio', $scope.timeToSubmitPortfolio)
                 };
 
                 $scope.deleteTaxon = function (index) {

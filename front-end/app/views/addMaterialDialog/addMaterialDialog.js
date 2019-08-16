@@ -767,10 +767,7 @@ class controller extends Controller {
         if(this.$scope.isNewMaterial){
             this.$scope.timeToSubmitMaterial = Math.round((new Date() - this.$scope.timeAddMaterialOpen) / 1000);
 
-            gtag('event', 'create', {
-                'event_category': 'teaching material',
-                'value': this.$scope.timeToSubmitMaterial
-            });
+            gTagCaptureEventWithValue('create', 'teaching material', this.$scope.timeToSubmitMaterial)
         }
     }
 }

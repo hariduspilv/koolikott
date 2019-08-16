@@ -124,10 +124,7 @@ class controller extends Controller {
         this.$scope.showLogButton = false;
         this.$rootScope.$broadcast('portfolioHistory:show');
 
-        gtag('event', 'show', {
-            'event_category': 'teaching portfolio',
-            'event_label': 'History'
-        });
+        gTagCaptureEvent('show', 'teaching portfolio', 'History')
     }
 
     hideButtons() {
@@ -167,9 +164,8 @@ class controller extends Controller {
     editPortfolio() {
         this.$location.url('/kogumik/muuda/' + this.$route.current.params.id)
 
-        gtag('event', 'modify', {
-            'event_category': 'teaching portfolio'
-        });
+        gTagCaptureEvent('modify', 'teaching portfolio')
+
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
@@ -235,11 +231,7 @@ class controller extends Controller {
             'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
             this.deletePortfolio
         )
-
-        gtag('event', 'delete', {
-            'event_category': 'teaching portfolio'
-        });
-
+        gTagCaptureEvent('delete', 'teaching portfolio')
     }
     restorePortfolio() {
         this.serverCallService
@@ -290,9 +282,8 @@ class controller extends Controller {
         toggleFullScreen();
         if (this.$rootScope.isFullScreen){
             this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
-            gtag('event', 'full-screen', {
-                'event_category': 'teaching portfolio',
-            });
+
+            gTagCaptureEvent('full-screen', 'teaching portfolio')
         }
         else {
             this.toastService.hide()
