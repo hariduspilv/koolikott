@@ -195,11 +195,30 @@
 
             this.getSearchTaxonHeader(taxonId);
 
-            this.serverCallService.makeGet(this.url, this.params).then(({data}) => {
-                this.params.isGrouped ? this.groupedSearchSuccess(data) : this.searchSuccess(data)
-            }, () => {
-                this.searchFail()
-            })
+            this.serverCallService.makeGet(this.url, this.params)
+                .then(({data}) => {
+                    if (data.length > 1) {
+                        const result = data.reduce((result, item) => {
+                            const existing = result.find(x => x.distinctIdCount === item.distinctIdCount);
+                            if (existing) {
+                                existing.distinctIdCount += item.distinctIdCount;
+                                existing.items.push(...item.items);
+                                existing.start += item.start;
+                                existing.totalResults += item.totalResults;
+                            } else {
+                                result.push(item);
+                            }
+                            return result;
+                        }, []);
+                        data = result[0];
+                    }
+
+                    this.params.isGrouped
+                        ? this.groupedSearchSuccess(data)
+                        : this.searchSuccess(data)
+                }, () => {
+                    this.searchFail()
+                })
         }
 
         getSearchTaxonHeader(taxonId) {
