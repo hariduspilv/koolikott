@@ -146,8 +146,8 @@ public class LearningObjectResource extends BaseResource {
         SearchResult portfolios = portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
         SearchResult materials = materialGetter.getByCreatorResult(creator, start, maxResults);
         List<SearchResult> los = new ArrayList<>();
-        los.add(materials);
         los.add(portfolios);
+        los.add(materials);
         return los;
     }
 
