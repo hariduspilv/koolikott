@@ -5,8 +5,6 @@ angular.module('koolikottApp')
         '$routeProvider',
         function ($routeProvider) {
 
-            $routeProvider.otherwise('/404');
-
             $routeProvider
                 .when('/', {
                     templateUrl: 'views/home/home.html',
@@ -178,7 +176,7 @@ angular.module('koolikottApp')
                     templateUrl: 'views/profile/materials/materials.html',
                     controller: 'userMaterialsController',
                     controllerAs: '$ctrl',
-                    resolve: UserPathResolver
+                    resolve: UserPathResolver,
                 })
                 .when('/:username/kogumikud', {
                     templateUrl: 'views/profile/portfolios/portfolios.html',
@@ -189,13 +187,15 @@ angular.module('koolikottApp')
                     templateUrl: 'views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
                     controllerAs: '$ctrl',
-                    resolve: UserPathResolver
-
+                    resolve: UserPathResolver,
                 })
                 .when('/dev/login/:idCode', {
                     templateUrl: 'views/dev/login/login.html',
                     controller: 'devLoginController',
                     controllerAs: '$ctrl'
+                })
+                .otherwise({
+                    redirectTo: '/404'
                 });
         }
     ]);
