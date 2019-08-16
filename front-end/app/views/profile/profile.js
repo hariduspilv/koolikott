@@ -1,17 +1,18 @@
 'use strict'
 
 {
-class controller extends Controller {
-    constructor(...args){
-        super(...args)
-        if (!this.$scope.user) this.getUser();
+    class controller extends Controller {
+        constructor(...args) {
+            super(...args)
+            if (!this.$scope.user) this.getUser();
 
-        if (this.$route.current.params.username) {
-            this.getUsersMaterials();
-            this.getUsersPortfolios();
+            this.$scope.cache = false;
+            this.$scope.url = 'rest/learningObject/getByCreatorAllLearningObjects';
+            this.$scope.params = {
+                'username': this.$route.current.params.username,
+                'maxResults': 1000
+            };
         }
-
-    }
 
     getUser() {
         const userParams = {
@@ -32,59 +33,19 @@ class controller extends Controller {
             })
     }
 
-    getUsersMaterials() {
-        this.serverCallService.makeGet("rest/material/getByCreator", this.params())
-            .then(({data}) => {
-                if (!isEmpty(data)) {
-                    this.$scope.materials = data.items;
-                } else {
-                    this.getUsersMaterialsFail();
-                }
-            }, () => {
-                this.getUsersMaterialsFail()
-            });
+        getUserFail() {
+            console.log('Getting user failed.');
+        }
     }
 
-    getUsersPortfolios() {
-        this.serverCallService.makeGet("rest/portfolio/getByCreator", this.params())
-            .then(({data}) => {
-                if (!isEmpty(data)) {
-                    this.$scope.portfolios = data.items;
-                } else {
-                    this.getUsersPortfoliosFail();
-                }
-            }, () => {
-                this.getUsersPortfoliosFail()
-            });
-    }
-
-    getUserFail() {
-        console.log('Getting user failed.');
-    }
-
-    getUsersMaterialsFail() {
-        console.log('Failed to get materials.');
-    }
-
-    getUsersPortfoliosFail() {
-        console.log('Failed to get portfolios.');
-    }
-
-    params() {
-        return {
-            'username': this.$route.current.params.username,
-            'maxResults': 1000
-        };
-    }
-}
-
-controller.$inject = [
-    '$scope',
-    '$route',
-    'authenticatedUserService',
-    'serverCallService',
-    '$location',
-    '$translate'
-]
-angular.module('koolikottApp').controller('profileController', controller)
+    controller.$inject = [
+        '$scope',
+        '$route',
+        'authenticatedUserService',
+        'serverCallService',
+        '$location',
+        '$translate',
+        'searchService'
+    ]
+    angular.module('koolikottApp').controller('profileController', controller)
 }

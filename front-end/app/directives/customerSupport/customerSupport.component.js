@@ -158,10 +158,7 @@
 
             this.timeToSubmitQuestion = Math.round((new Date() - this.timeChatOpened) / 1000);
 
-            gtag('event', 'submit', {
-                'event_category': 'chat',
-                'value': this.timeToSubmitQuestion
-            });
+            gTagCaptureEventWithValue('submit', 'chat', this.timeToSubmitQuestion)
         }
 
         getLoggedInUserData() {
@@ -184,9 +181,7 @@
             this.$scope.showCustomerSupportDialog = true
             this.timeChatOpened = new Date();
 
-            gtag('event', 'open', {
-                'event_category': 'chat',
-            });
+            gTagCaptureEvent('open', 'chat')
         }
 
         isSendDisabled() {

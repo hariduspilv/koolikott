@@ -73,7 +73,7 @@
         data-taxon="educationalContext"
         data-is-statistics-select="true"
         data-on-statistics-multiselect="$ctrl.onSelectTaxons(taxons)"
-        data-ng-show="!$ctrl.isModerator()"
+        data-ng-show="!$ctrl.isModerator() && isTaxonSelectVisible"
       ></dop-taxon-selector>
     </div>
     <div class="statistics-filter__buttons" data-layout="row" data-layout-align="end center">
