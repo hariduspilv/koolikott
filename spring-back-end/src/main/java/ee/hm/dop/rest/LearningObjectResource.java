@@ -151,6 +151,14 @@ public class LearningObjectResource extends BaseResource {
         return los;
     }
 
+    @GetMapping("getByCreatorAllLearningObjectsCount")
+    public Long getByCreator(@RequestParam("username") String username) {
+        User creator = getValidCreator(username);
+        if (creator == null) throw notFound();
+
+        return materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator);
+    }
+
     private User getValidCreator(@RequestParam("username") String username) {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         return userService.getUserByUsername(username);

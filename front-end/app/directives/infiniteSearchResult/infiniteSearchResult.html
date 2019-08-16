@@ -103,12 +103,6 @@
    data-ng-if="$ctrl.isSearchPage()"
    data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
    data-ng-bind-html="title"></p>
-<div data-ng-if="!$ctrl.isLandingPage()">
-  <h1 data-ng-if="!$ctrl.isSearchPage()"
-      id="search-result-title" class="md-headline padding-left-16"
-      data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
-      data-ng-bind-html="title"></h1>
-</div>
 <div data-layout="row" data-layout-align="space-between center">
   <h2 class="md-headline padding-left-16" data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
 </div>
