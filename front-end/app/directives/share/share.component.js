@@ -102,15 +102,9 @@ class controller extends Controller {
                 })
 
                 if(this.pageUrl.contains('kogumik')){
-                    gtag('event', 'share', {
-                        'event_category': 'teaching portfolio',
-                        'event_label': 'Facebook'
-                    });
+                    gTagCaptureEvent('share', 'teaching portfolio', 'Facebook')
                 } else {
-                    gtag('event', 'share', {
-                        'event_category': 'teaching material',
-                        'event_label': 'Facebook'
-                    });
+                    gTagCaptureEvent('share', 'teaching material', 'Facebook')
                 }
 
                 break
@@ -124,15 +118,9 @@ class controller extends Controller {
                 })
 
                 if(this.pageUrl.contains('kogumik')){
-                    gtag('event', 'share', {
-                        'event_category': 'teaching portfolio',
-                        'event_label': 'Twitter'
-                    });
+                    gTagCaptureEvent('share', 'teaching portfolio', 'Twitter')
                 } else if (this.pageUrl.contains('oppematerjal')){
-                    gtag('event', 'share', {
-                        'event_category': 'teaching material',
-                        'event_label': 'Twitter'
-                    });
+                    gTagCaptureEvent('share', 'teaching material', 'Twitter')
                 }
 
                 break
@@ -146,15 +134,9 @@ class controller extends Controller {
                 })
 
                 if(this.pageUrl.contains('kogumik')){
-                    gtag('event', 'share', {
-                        'event_category': 'teaching portfolio',
-                        'event_label': 'E-mail'
-                    });
+                    gTagCaptureEvent('share', 'teaching portfolio', 'E-mail')
                 } else if (this.pageUrl.contains('oppematerjal')){
-                    gtag('event', 'share', {
-                        'event_category': 'teaching material',
-                        'event_label': 'E-mail'
-                    });
+                    gTagCaptureEvent('share', 'teaching material', 'E-mail')
                 }
 
                 break

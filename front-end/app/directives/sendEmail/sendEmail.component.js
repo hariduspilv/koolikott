@@ -8,15 +8,9 @@
             this.showLoEmailCodeDialog = () => {
 
                 if(this.$location.absUrl().contains('kogumik')){
-                    gtag('event', 'request', {
-                        'event_category': 'teaching portfolio',
-                        'event_label': 'Feedback to author'
-                    });
+                    gTagCaptureEvent('request', 'teaching portfolio', 'Feedback to author')
                 } else {
-                    gtag('event', 'request', {
-                        'event_category': 'teaching material',
-                        'event_label': 'Feedback to author'
-                    });
+                    gTagCaptureEvent('request', 'teaching material', 'Feedback to author')
                 }
 
                 if (typeof this.learningObject.creator !== 'undefined' && this.learningObject.creator !== null) {

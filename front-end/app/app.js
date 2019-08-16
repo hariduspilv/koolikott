@@ -22,8 +22,8 @@ let app = angular.module('koolikottApp', [
     'vcRecaptcha',
     'auto-tab',
     'ngCookies',
-    'angularTrix',
     'updateMeta',
+    'angularTrix'
 ]);
 
 let provideProvider = null;
@@ -209,7 +209,7 @@ function isDashboardPage(path) {
 }
 
 function isViewMaterialPage(path) {
-    return path === '/oppematerjal';
+    return path.contains('/oppematerjal/');
 }
 
 function isViewPortfolioPage(path) {
@@ -270,7 +270,9 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 }
             }
 
-            $translate('HTML_META_DESCRIPTION').then((translation) => $rootScope.applicationDescription = translation);
+            $translate('HTML_META_DESCRIPTION').then((translation) => {
+                $rootScope.applicationDescription = translation
+            });
 
 
             if (!$rootScope.isCookie || $rootScope.isAdmin) {

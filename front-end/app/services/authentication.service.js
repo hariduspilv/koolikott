@@ -177,34 +177,19 @@ angular.module('koolikottApp')
 
             switch ($rootScope.authenticationOption) {
                 case 'idCard':
-                    gtag('event', 'login', {
-                        'event_category': 'user',
-                        'event_label': 'ID-Card'
-                    });
+                    gTagCaptureEvent('login', 'user', 'ID-Card')
                     break;
                 case 'ekool':
-                    gtag('event', 'login', {
-                        'event_category': 'user',
-                        'event_label': 'ekool.eu'
-                    });
+                    gTagCaptureEvent('login', 'user', 'ekool.eu')
                     break;
                 case 'stuudium':
-                    gtag('event', 'login', {
-                        'event_category': 'user',
-                        'event_label': 'stuudium.com'
-                    });
+                    gTagCaptureEvent('login', 'user', 'stuudium.com')
                     break;
                 case 'harID':
-                    gtag('event', 'login', {
-                        'event_category': 'user',
-                        'event_label': 'HarID'
-                    });
+                    gTagCaptureEvent('login', 'user', 'HarID')
                     break;
                 case 'mID':
-                    gtag('event', 'login', {
-                        'event_category': 'user',
-                        'event_label': 'Mobile-ID'
-                    });
+                    gTagCaptureEvent('login', 'user', 'Mobile-ID')
                     break;
             }
         }

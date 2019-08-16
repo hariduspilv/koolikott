@@ -31,6 +31,8 @@ public class DOPFileUtils {
 
     public static String probeForMediaType(String filename) {
         try {
+            logger.info("Filename is: " + filename.toLowerCase());
+            logger.info("Mimetype: " + Files.probeContentType(Paths.get(filename.toLowerCase())));
             return Files.probeContentType(Paths.get(filename.toLowerCase()));
         } catch (IOException e) {
             return MediaType.APPLICATION_OCTET_STREAM;
