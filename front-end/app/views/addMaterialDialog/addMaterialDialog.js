@@ -713,6 +713,21 @@ class controller extends Controller {
                 }
             })
     }
+
+    showMakePublicDialog() {
+        this.dialogService.showConfirmationDialog(
+            "{{'MATERIAL_MAKE_PUBLIC' | translate}}",
+            "{{'MATERIAL_WARNING' | translate}}",
+            "{{'MATERIAL_YES' | translate}}",
+            "{{'MATERIAL_NO' | translate}}",
+            () => {
+                this.storageService.getMaterial().visibility = VISIBILITY_PUBLIC
+                this.updateMaterial()
+            },
+            this.updateMaterial.bind(this)
+        )
+    }
+
     save() {
         const save = () => {
             this.$scope.isSaving = true
@@ -757,33 +772,23 @@ class controller extends Controller {
                         if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
                             const url = '/oppematerjal/' + material.id
 
-                            if (this.$location.url() === url)
-                                return done()
+                                if(this.storageService.getMaterial().visibility === 'PRIVATE'){
+                                    this.showMakePublicDialog()
+                                }
 
-                            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
-                                unsubscribe()
-                                this.$timeout(done)
-                            })
-                            //this.$location.url(url)
+                                if (this.$location.url() === url)
+                                    return done()
+
+                                const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
+                                    unsubscribe()
+                                    this.$timeout(done)
+                                })
+                                this.$location.url(url)
+                            }
                         }
-
-                        console.log(this.storageService.getMaterial().visibility)
-                        this.dialogService.showConfirmationDialog(
-                            "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
-                            "{{'PORTFOLIO_WARNING' | translate}}",
-                            "{{'PORTFOLIO_YES' | translate}}",
-                            "{{'PORTFOLIO_NO' | translate}}",
-                            () => {
-                                this.storageService.getMaterial().visibility = VISIBILITY_PUBLIC
-                                this.updateMaterial()
-                                console.log(this.storageService.getMaterial().visibility)
-                            },
-                            this.updateMaterial.bind(this)
-                        )
-                    }
-                    this.$scope.isSaving = false
-                }, () =>
-                    this.$scope.isSaving = false
+                        this.$scope.isSaving = false
+                    }, () =>
+                        this.$scope.isSaving = false
                 )
         }
         Promise.all(

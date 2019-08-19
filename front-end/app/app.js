@@ -262,13 +262,13 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.tabTitle = 'e-Koolikott';
             $rootScope.applicationDescription ='';
 
-            if (window.location.hostname === 'e-koolikott.ee') {
+            //if (window.location.hostname === 'e-koolikott.ee') {
                 if (user) {
                     gtag('config', 'UA-144167571-1', {'user_id': `${user.id}`, 'page_path': path});
                 } else {
                     gtag('config', 'UA-144167571-1', {'page_path': path});
                 }
-            }
+            //}
 
             $translate('HTML_META_DESCRIPTION').then((translation) => {
                 $rootScope.applicationDescription = translation

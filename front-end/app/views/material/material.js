@@ -30,6 +30,9 @@ angular.module('koolikottApp')
                 }
             });
 
+            const VISIBILITY_PUBLIC = 'PUBLIC'
+            const VISIBILITY_PRIVATE = 'PRIVATE'
+
             const licenceTypeMap = {
                 'CCBY': ['by'],
                 'CCBYSA': ['by', 'sa'],
@@ -279,7 +282,7 @@ angular.module('koolikottApp')
                 eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectPrivate = ["PRIVATE"].includes($scope.material.visibility);
-                console.log($scope.material.visibility);
+
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
@@ -289,6 +292,25 @@ angular.module('koolikottApp')
                 materialService.increaseViewCount($scope.material);
 
             }
+
+            $scope.makePrivate = () => {
+                updateMaterialVisibility(VISIBILITY_PRIVATE)
+            }
+
+            $scope.makePublic = () => {
+                updateMaterialVisibility(VISIBILITY_PUBLIC)
+            }
+
+            function updateMaterialVisibility(visibility) {
+                $scope.material.visibility = visibility
+                console.log($scope.material)
+                serverCallService
+                    .makePost('rest/material/update', $scope.material)
+                    .then(({data: material}) => {
+                        storageService.setMaterial(material)
+                    })
+            }
+
 
             $scope.getLicenseIconList = () => {
                 if ($scope.material && $scope.material.licenseType) {
@@ -476,6 +498,14 @@ angular.module('koolikottApp')
                 return (
                     authenticatedUserService.isAdmin() ||
                     authenticatedUserService.isModerator()
+                )
+            }
+
+            $scope.isAdmindOrModeratorOrCreator = function () {
+                return (
+                    authenticatedUserService.isAdmin() ||
+                        authenticatedUserService.isModerator() ||
+                        $scope.isUsersMaterial()
                 )
             }
 

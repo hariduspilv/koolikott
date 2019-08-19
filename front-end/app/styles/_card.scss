@@ -36,7 +36,8 @@ md-card {
   .pick {
     position: absolute;
     padding: 10px;
-    left: 0;
+    bottom: 0;
+    right: 3px;
     transition: display 1s cubic-bezier(0.25, 0.8, 0.25, 1);
 
     .checked {
