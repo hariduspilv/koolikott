@@ -187,3 +187,5 @@ app:
 
 sitemap:
   path: front-end/app
+sitemaps:
+  directory: sitemaps/

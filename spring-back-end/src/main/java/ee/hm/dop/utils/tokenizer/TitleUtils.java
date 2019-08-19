@@ -1,7 +1,5 @@
 package ee.hm.dop.utils.tokenizer;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.text.Normalizer;
 
 import static java.text.Normalizer.normalize;

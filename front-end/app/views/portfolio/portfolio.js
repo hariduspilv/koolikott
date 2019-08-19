@@ -195,9 +195,9 @@ class controller extends Controller {
             this.$rootScope.tabTitle = portfolio.title;
             this.storageService.setPortfolio(portfolio)
 
-            let locationUrl = this.$rootScope.slug ? `${this.getUrl(portfolio)}#${this.$rootScope.slug}` : this.getUrl(portfolio)
-            this.$location.url(locationUrl)
-            this.$scope.learningObject = portfolio
+            let locationUrl = this.$rootScope.slug ? `${this.getUrl(portfolio)}#${this.$rootScope.slug}` : this.getUrl(portfolio);
+            this.$location.url(locationUrl);
+            this.$scope.learningObject = portfolio;
 
             this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
             this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
@@ -274,12 +274,12 @@ class controller extends Controller {
                 'itemListElement': [{
                     '@type': 'ListItem',
                     'position': 1,
-                    'name': 'Haridustase',
+                    'name': portfolio.taxonPositionDto[0].taxonLevelName,
                     'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[0].taxonLevelId}`
                 }, {
                     '@type': 'ListItem',
                     'position': 2,
-                    'name': 'Valdkond',
+                    'name': portfolio.taxonPositionDto[1].taxonLevelName,
                     'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[1].taxonLevelId}`
                 }]
             },

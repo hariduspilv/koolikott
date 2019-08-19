@@ -783,6 +783,7 @@ class Controller {
             ? ''
             : title || titlesForUrl && this.getUserDefinedLanguageString(titlesForUrl, this.translationService.getLanguage(), language)
     }
+
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
             return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
