@@ -786,7 +786,8 @@ class Controller {
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
             return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
-        }
+        } else if (learningObject.type === '.PortfolioLog')
+            return `kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`
         else
             return `kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`
     }
