@@ -27,13 +27,13 @@ public class GenerateSitemapXmlsExecutor {
             logger.info("SITEMAP: sitemapIndex generator started");
             long startOfSitemapGen = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
 
-//            int nrOfUrl = sitemapService.createSitemap();
+            int nrOfUrl = sitemapService.createSitemap();
 
             long endOfSitemapGen = TimeUnit.MILLISECONDS.toSeconds(System.currentTimeMillis());
             long durationOfSitemapGen = endOfSitemapGen - startOfSitemapGen;
 
             logger.info("SITEMAP: sitemapIndex generator ended");
-//            logger.info("SITEMAP: added " + nrOfUrl + " urls");
+            logger.info("SITEMAP: added " + nrOfUrl + " urls");
             if (durationOfSitemapGen < 1) {
                 durationOfSitemapGen /= 1000;
                 logger.info(String.format("SITEMAP: sitemapIndex generator took %d milliseconds", durationOfSitemapGen));

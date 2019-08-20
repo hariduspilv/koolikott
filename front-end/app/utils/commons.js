@@ -594,6 +594,19 @@ function translateEducationalContext(eduContext) {
     return translation;
 }
 
+function addLicense(license) {
+    return license.includes('CC') ? 'http://creativecommons.org/licenses/by/4.0/' : 'Kõik õigused kaitstud';
+}
+
+function audienceType(lo) {
+    return [...new Set(
+        lo.taxonPositionDto
+            .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
+            .map(x => x.taxonLevelName))]
+        .map(eduContext => translateEducationalContext(eduContext));
+
+}
+
 function getSource(material) {
     if (!material) return;
     if (material.source) {

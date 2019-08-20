@@ -17,7 +17,6 @@ import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Nullable;
 import javax.inject.Inject;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
@@ -28,7 +27,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static ee.hm.dop.utils.ConfigurationProperties.*;
+import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
+import static ee.hm.dop.utils.ConfigurationProperties.SITEMAPS_DIRECTORY;
 
 @Service
 @Transactional
@@ -52,10 +52,10 @@ public class SitemapService {
     private static final String USER_MANUALS_ADMIN = "toolaud/videojuhendid";
 
     private static final String MATERIAL = "/material/";
-    private static final String PORTFOLIO = "/portfolio/";
+    private static final String PORTFOLIO = "/kogumik/";
     private static final String USER = "/user/";
 
-    public static final String REST_SITEMAP = "sitemapFile/";
+    public static final String REST_SITEMAP = "/sitemapFile";
 
 
     private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS, PROFILE, IMPROPER, UNREVIEWED, CHANGES, SENTEMAILS, MODERATORS, RESTRICTED_USERS, DELETED, STATS_EXPERT, GDPR, USER_MANUALS_ADMIN);
@@ -73,7 +73,7 @@ public class SitemapService {
     @Inject
     private Environment environment;
 
-    public List<String> createSitemap(@Nullable String xmlView) throws MalformedURLException, ParseException, UnsupportedEncodingException {
+    public int createSitemap() throws MalformedURLException, ParseException, UnsupportedEncodingException {
 
         String property = environment.getProperty("server.servlet.contextPath");
         final String BASE_URL = configuration.getString(SERVER_ADDRESS);
@@ -93,7 +93,7 @@ public class SitemapService {
             nrOfUrl++;
         }
         String portfolioXml = String.join("", webSitemapGeneratorPortfolio.writeAsStrings());
-        uploadedFileService.uploadXmlFile(portfolioXml, "portfolios.xml", FileDirectory.SITEMAPS, property + REST_SITEMAP);
+        uploadedFileService.uploadXmlFile(portfolioXml, "portfolios.xml", FileDirectory.SITEMAPS);
         urls.add(String.join("", webSitemapGeneratorPortfolio.writeAsStrings()));
 
         WebSitemapGenerator webSitemapGeneratorMaterial = generatePrefixSpecific("materials", file);
@@ -109,7 +109,7 @@ public class SitemapService {
             nrOfUrl++;
         }
         String materialXml = String.join("", webSitemapGeneratorMaterial.writeAsStrings());
-        uploadedFileService.uploadXmlFile(materialXml, "materials.xml", FileDirectory.SITEMAPS, property + REST_SITEMAP);
+        uploadedFileService.uploadXmlFile(materialXml, "materials.xml", FileDirectory.SITEMAPS);
         urls.add(String.join("", webSitemapGeneratorMaterial.writeAsStrings()));
 
         WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("users", file);
@@ -125,7 +125,7 @@ public class SitemapService {
         }
 
         String usersXml = String.join("", webSitemapGeneratorUsers.writeAsStrings());
-        uploadedFileService.uploadXmlFile(usersXml, "users.xml", FileDirectory.SITEMAPS, property + REST_SITEMAP);
+        uploadedFileService.uploadXmlFile(usersXml, "users.xml", FileDirectory.SITEMAPS);
         urls.add(String.join("", webSitemapGeneratorUsers.writeAsStrings()));
 
         WebSitemapGenerator webSitemapGeneratorOther = generatePrefixSpecific("otherUrls", file);
@@ -139,11 +139,10 @@ public class SitemapService {
             nrOfUrl++;
         }
         String othersXml = String.join("", webSitemapGeneratorOther.writeAsStrings());
-        uploadedFileService.uploadXmlFile(othersXml, "otherUrls.xml", FileDirectory.SITEMAPS, property + REST_SITEMAP);
+        uploadedFileService.uploadXmlFile(othersXml, "otherUrls.xml", FileDirectory.SITEMAPS);
         urls.add(String.join("", webSitemapGeneratorOther.writeAsStrings()));
 
-
-        File outFile = new File(configuration.getString(SITEMAPS_DIRECTORY) + "sitemaps_index.xml");
+        File outFile = new File(configuration.getString(SITEMAPS_DIRECTORY) + "sitemapIndex.xml");
 
         SitemapIndexGenerator sitemapIndexGenerator = new SitemapIndexGenerator(BASE_URL + property + REST_SITEMAP, outFile);
         sitemapIndexGenerator.addUrl(BASE_URL + property + "/portfolios.xml");
@@ -152,10 +151,10 @@ public class SitemapService {
         sitemapIndexGenerator.addUrl(BASE_URL + property + "/users.xml");
 
         String indexXml = String.join("", sitemapIndexGenerator.writeAsString());
-        uploadedFileService.uploadXmlFile(indexXml, "/sitemaps_index.xml", FileDirectory.SITEMAPS, property + REST_SITEMAP);
+        uploadedFileService.uploadXmlFile(indexXml, "sitemapIndex.xml", FileDirectory.SITEMAPS);
         urls.add(String.join("", sitemapIndexGenerator.writeAsString()));
 
-        return urls;
+        return nrOfUrl;
     }
 
     private WebSitemapGenerator generatePrefixSpecific(String prefix, File file) throws MalformedURLException {
