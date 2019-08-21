@@ -249,7 +249,7 @@ class controller extends Controller {
                 },
                 'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
                 'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
-                'license': addLicense(portfolio.licenseType.name),
+                'license': addLicense(portfolio.licenseType),
                 'typicalAgeRange': portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                 'interactionCount': portfolio.views,
                 'headline': portfolio.title,

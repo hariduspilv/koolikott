@@ -596,7 +596,7 @@ function translateEducationalContext(eduContext) {
 
 function addLicense(license) {
     if (license)
-        return license.includes('CC') ? 'http://creativecommons.org/licenses/by/4.0/' : 'Kõik õigused kaitstud';
+        return license.name.includes('CC') ? 'http://creativecommons.org/licenses/by/4.0/' : 'Kõik õigused kaitstud';
     else
         return ''
 }
