@@ -174,8 +174,8 @@
       <ul class="sidenav__list">
         <li class="sidenav__item" layout="column">
           <a id="myPortfolios" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/' + user.username + '/kogumikud')}"
-             data-ng-click="checkUser($event, '/kogumikud'); updateCount('userPortfolios')">
+             data-ng-class="{'is-active': isLocationActive('/' + user.username + '/portfolios')}"
+             data-ng-click="checkUser($event, '/portfolios'); updateCount('userPortfolios')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">book</md-icon>
               <span data-translate="MY_PORTFOLIOS" class="sidenav__name"></span>
@@ -307,7 +307,7 @@
   </uib-accordion>
 
   <span class="flex"></span>
-  
+
   <div  class="sidenav__footer-logo-container" id="sidenav-logo">
     <div class="sidenav__footer-logo"></div>
   </div>
