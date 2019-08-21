@@ -590,6 +590,9 @@ function translateEducationalContext(eduContext) {
         case ('VOCATIONALEDUCATION'):
             translation = 'Kutsekooliõpilased';
             break;
+        case ('NONFORMALEDUCATION'):
+            translation = '';
+            break;
     }
     return translation;
 }
