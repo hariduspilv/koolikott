@@ -111,9 +111,8 @@ class controller extends Controller {
         const { username } = this.$scope.user
         const userLocations = [
             `/${username}/kogumikud`,
-            `/${username}/materials`,
             `/${username}/oppematerjalid`,
-            `/${username}/favorites`
+            `/${username}/lemmikud`
         ]
         return userLocations.includes(location)
     }
