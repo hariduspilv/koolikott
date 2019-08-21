@@ -22,8 +22,8 @@ let app = angular.module('koolikottApp', [
     'vcRecaptcha',
     'auto-tab',
     'ngCookies',
-    'updateMeta'
-    // 'angularTrix'
+    'updateMeta',
+    'angularTrix'
 ]);
 
 let provideProvider = null;
