@@ -595,7 +595,10 @@ function translateEducationalContext(eduContext) {
 }
 
 function addLicense(license) {
-    return license.includes('CC') ? 'http://creativecommons.org/licenses/by/4.0/' : 'Kõik õigused kaitstud';
+    if (license)
+        return license.includes('CC') ? 'http://creativecommons.org/licenses/by/4.0/' : 'Kõik õigused kaitstud';
+    else
+        return ''
 }
 
 function audienceType(lo) {
