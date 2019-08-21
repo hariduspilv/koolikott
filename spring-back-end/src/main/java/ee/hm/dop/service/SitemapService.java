@@ -5,11 +5,10 @@ import com.redfin.sitemapgenerator.SitemapIndexGenerator;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
 import ee.hm.dop.config.Configuration;
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.MaterialTitle;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.User;
 import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.service.files.enums.FileDirectory;
 import ee.hm.dop.utils.tokenizer.TitleUtils;
@@ -67,7 +66,7 @@ public class SitemapService {
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
-    private UserDao userDao;
+    private LearningObjectDao learningObjectDao;
     @Inject
     private UploadedFileService uploadedFileService;
     @Inject
@@ -113,8 +112,9 @@ public class SitemapService {
         urls.add(String.join("", webSitemapGeneratorMaterial.writeAsStrings()));
 
         WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("users", file);
-        for (User user : userDao.findAll()) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + USER + user.getUsername())
+
+        for (String user : learningObjectDao.findUsersLearningobjectCreators()) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + USER + user)
                     .lastMod(String.valueOf(LocalDateTime.now()))
                     .priority(0.8)
                     .changeFreq(ChangeFreq.DAILY)
