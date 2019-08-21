@@ -110,7 +110,4 @@ public interface ConfigurationProperties {
     String EXECUTOR_queueCapacity = "cron.executor.queueCapacity";
     String EXECUTOR_threadNamePrefix = "cron.executor.threadNamePrefix";
 
-//    Sitemap
-    String SITEMAP_PATH = "sitemap.path";
-
 }
