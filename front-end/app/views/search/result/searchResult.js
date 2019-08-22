@@ -67,6 +67,7 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$rootScope',
     '$location',
     '$route',
     'searchService'

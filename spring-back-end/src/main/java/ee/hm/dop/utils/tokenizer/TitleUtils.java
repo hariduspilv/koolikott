@@ -1,7 +1,5 @@
 package ee.hm.dop.utils.tokenizer;
 
-import org.apache.commons.lang3.StringUtils;
-
 import java.text.Normalizer;
 
 import static java.text.Normalizer.normalize;
@@ -21,7 +19,7 @@ public class TitleUtils {
     public static String replaceChars(String title) {
         return normalize(trim(title), Normalizer.Form.NFD)
                 .replaceAll(DIACRITICAL_MARKS, "")
-                .replaceAll(SPACES_PUNCTUATION_SYMBOLS, "_")
-                .replaceAll(CONSECUTIVE_UNDERSCORES, "_");
+                .replaceAll(SPACES_PUNCTUATION_SYMBOLS, "-")
+                .replaceAll(CONSECUTIVE_UNDERSCORES, "-");
     }
 }

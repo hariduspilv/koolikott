@@ -54,6 +54,26 @@ if (typeof String.prototype.contains === 'undefined') {
     };
 }
 
+function gTagCaptureEvent(event, category) {
+    gtag('event', event, {
+        'event_category': category
+    })
+}
+
+function gTagCaptureEvent(event, category, label) {
+    gtag('event', event, {
+        'event_category': category,
+        'event_label': label
+    })
+}
+
+function gTagCaptureEventWithValue(event, category, value) {
+    gtag('event', event, {
+        'event_category': category,
+        'event_value': value
+    })
+}
+
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
 if (!Array.prototype.includes) {
     Object.defineProperty(Array.prototype, 'includes', {
@@ -420,7 +440,7 @@ function classListNotContainsHidden(el) {
         document.getElementsByClassName("layout-gt-sm-row")[0].style.justifyContent = "center"
         let contentContainer = document.getElementsByClassName("content-container")[0];
         contentContainer.style.paddingTop = "1.5rem"
-        contentContainer.style.paddingLeft = window.location.href.includes('/portfolio?') ? "calc(295px + 1rem)": "0";
+        contentContainer.style.paddingLeft = window.location.href.includes('/kogumik') ? "calc(295px + 1rem)": "0";
         contentContainer.style.paddingRight = "0";
     }, 300)
 }
@@ -498,6 +518,130 @@ function isBasicOrSecondaryeducation(taxonService, currentValue) {
 
 function isObjectEmpty(obj) {
     return Object.keys(obj).length === 0 && JSON.stringify(obj) === JSON.stringify({});
+}
+
+function getTypicalAgeRange(grade) {
+    let ageRange;
+    switch (grade) {
+        case ('PRESCHOOL'):
+            ageRange = '0-7';
+            break;
+        case ('LEVEL1'):
+            ageRange = '7-10';
+            break;
+        case ('LEVEL2'):
+            ageRange = '10-13';
+            break;
+        case ('LEVEL3'):
+            ageRange = '13-16';
+            break;
+        case ('ZERO_FIVE'):
+            ageRange = '0-5';
+            break;
+        case 'SIX_SEVEN':
+            ageRange = '6-7';
+            break;
+        case 'GRADE1':
+            ageRange = '7-8';
+            break;
+        case 'GRADE2':
+            ageRange = '8-9';
+            break;
+        case 'GRADE3':
+            ageRange = '9-10';
+            break;
+        case 'GRADE4':
+            ageRange = '10-11';
+            break;
+        case 'GRADE5':
+            ageRange = '11-12';
+            break;
+        case 'GRADE6':
+            ageRange = '12-13';
+            break;
+        case 'GRADE7':
+            ageRange = '13-14';
+            break;
+        case 'GRADE8':
+            ageRange = '14-15';
+            break;
+        case 'GRADE9':
+            ageRange = '15-16';
+            break;
+        case ('GYMNASIUM' || 'LEVEL_GYMNASIUM'):
+            ageRange = '16-19';
+            break;
+    }
+    return ageRange;
+}
+
+function translateEducationalContext(eduContext) {
+    let translation;
+    switch (eduContext) {
+        case ('SECONDARYEDUCATION'):
+            translation = 'Keskkooliõpilased';
+            break;
+        case ('BASICEDUCATION'):
+            translation = 'Põhikooliõpilased';
+            break;
+        case ('PRESCHOOLEDUCATION'):
+            translation = 'Lasteaialapsed';
+            break;
+        case ('VOCATIONALEDUCATION'):
+            translation = 'Kutsekooliõpilased';
+            break;
+        case ('NONFORMALEDUCATION'):
+            translation = '';
+            break;
+    }
+    return translation;
+}
+
+function findLicenseType(license) {
+    let licenseLink;
+    switch (license) {
+        case ('CCBY'):
+            licenseLink = 'http://creativecommons.org/licenses/by/4.0/';
+            break;
+        case ('CCBYNC'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc/4.0/';
+            break;
+        case ('CCBYNCND'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc-nd/4.0/';
+            break;
+        case ('CCBYNCSA'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc-sa/4.0/';
+            break;
+        case ('CCBYND'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nd/4.0/';
+            break;
+        case ('CCBYSA'):
+            licenseLink = 'https://creativecommons.org/licenses/by-sa/4.0/';
+            break;
+        case ('Youtube'):
+            licenseLink = 'Youtube';
+            break;
+        case ('allRightsReserved'):
+            licenseLink = 'Kõik õigused kaitstud';
+            break;
+    }
+    return licenseLink;
+}
+
+function addLicense(license) {
+    if (license)
+        return findLicenseType(license.name);
+    else
+        return ''
+}
+
+function audienceType(lo) {
+    return [...new Set(
+        lo.taxonPositionDto
+            .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
+            .map(x => x.taxonLevelName))]
+        .map(eduContext => translateEducationalContext(eduContext));
+
 }
 
 function getSource(material) {
@@ -602,6 +746,15 @@ function countOccurrences(value, text) {
     return count;
 }
 
+function convertLanguage(lang) {
+    if (lang === 'est')
+        return 'ET'
+    else if (lang === 'rus')
+        return 'RU'
+    else if (lang === 'eng')
+        return 'EN'
+}
+
 /**
  *
  * Server requests are in iso-8859-1 therefore data is also in iso-8859-1, this can be decoded
@@ -680,24 +833,31 @@ class Controller {
             ? ''
             : title || titlesForUrl && this.getUserDefinedLanguageString(titlesForUrl, this.translationService.getLanguage(), language)
     }
+
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
-            return 'material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id
-        }
+            return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
+        } else if (learningObject.type === '.PortfolioLog')
+            return `kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`
         else
-            return 'portfolio?name=' + learningObject.titleForUrl + '&id=' + learningObject.id
+            return `kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`
     }
 
     getLearningObjectUrl(learningObject) {
         if (learningObject)
             return this.isPortfolio(learningObject)
-                ? `/portfolio?name=${learningObject.titleForUrl}&id=${learningObject.id}`
-                : '/material?name=' + this.getCorrectLanguageTitleForMaterialUrl(learningObject) + '&id=' + learningObject.id;
+                ? `/kogumik/${learningObject.id}-${learningObject.titleForUrl}`
+                : `/oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
     }
 
     replaceSpacesAndCharacters(title) {
         if (title)
-            return unorm.nfd(title.replace(/\s+/g, '_')).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "_")
+            return unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "-")
+    }
+
+    replaceSpaces(title) {
+        if (title)
+            return title.replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
     }
 
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {

@@ -104,12 +104,13 @@ class controller extends Controller {
                     }, () => this.$scope.showErrorOverlay = false
                 )
     }
+
     onNewFileChange(currentValue) {
         if (currentValue) {
             this.$scope.uploadingFile = true
             this.fileUpload = this.fileUploadService
                 .upload(currentValue)
-                .then(({ data }) => {
+                .then(({data}) => {
                     this.$scope.addMaterialForm.source.$setValidity('filenameTooLong', true)
                     this.$scope.material.source = null
                     this.$scope.fileUploaded = true
@@ -117,15 +118,15 @@ class controller extends Controller {
                     this.$scope.material.uploadedFile = data
                     this.$scope.material.uploadedFile.displayName = decodeUTF8(this.$scope.material.uploadedFile.name)
                     this.$scope.uploadingFile = false
-                }, ({ data }) => {
+                }, ({data}) => {
                     if (data.cause == 'filename too long') {
                         this.$scope.addMaterialForm.source.$setValidity('filenameTooLong', false)
                         this.$scope.addMaterialForm.source.$setTouched()
-                        this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL')
+                        this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000)
                     }
                     this.$scope.uploadingFile = false
+                    this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000)
                 })
-                .catch(this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL'))
         }
     }
 
@@ -362,6 +363,8 @@ class controller extends Controller {
         this.$scope.material.resourceTypes = []
         this.$scope.material.picture = {}
         this.$scope.issueDate = new Date()
+        this.$scope.timeAddMaterialOpen = new Date()
+        this.$scope.isNewMaterial = true;
         this.setTitlesAndDescriptions()
     }
     setTitlesAndDescriptions() {
@@ -736,7 +739,7 @@ class controller extends Controller {
                         this.storageService.setMaterial(material)
 
                         if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
-                            const url = '/material?id=' + material.id
+                            const url = '/oppematerjal/' + material.id
 
                             if (this.$location.url() === url)
                                 return done()
@@ -761,6 +764,12 @@ class controller extends Controller {
                 []
             )
         ).then(save)
+
+        if(this.$scope.isNewMaterial){
+            this.$scope.timeToSubmitMaterial = Math.round((new Date() - this.$scope.timeAddMaterialOpen) / 1000);
+
+            gTagCaptureEventWithValue('create', 'teaching material', this.$scope.timeToSubmitMaterial)
+        }
     }
 }
 controller.$inject = [

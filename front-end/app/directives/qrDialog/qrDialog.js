@@ -7,8 +7,8 @@
 
             this.checkResolution()
 
-            const location = this.locals.location.origin + this.locals.location.pathname + '?id=' + this.$location.search().id
-            this.$scope.location = (this.locals.slug) ? location  + '&chapterName=' + this.locals.title +  '#' + this.locals.slug : location
+            const location = this.locals.location.origin + this.locals.location.pathname
+            this.$scope.location = (this.locals.slug) ? location + this.locals.title +  '#' + this.locals.slug : location
 
             this.$scope.cancel = () => {
                 this.$mdDialog.hide();

@@ -145,10 +145,10 @@ angular.module('koolikottApp')
 
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
-                $location.url('/profile');
+                $location.url('/profiil');
                 $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
-                $location.url(localStorage.getItem(LOGIN_ORIGIN));
+                $location.url(authenticatedUser.user.username + localStorage.getItem(LOGIN_ORIGIN));
             }
             enableLogin();
 
@@ -172,6 +172,24 @@ angular.module('koolikottApp')
             $timeout(() =>
                 $rootScope.$broadcast('login:success')
             )
+
+            switch ($rootScope.authenticationOption) {
+                case 'idCard':
+                    gTagCaptureEvent('login', 'user', 'ID-Card')
+                    break;
+                case 'ekool':
+                    gTagCaptureEvent('login', 'user', 'ekool.eu')
+                    break;
+                case 'stuudium':
+                    gTagCaptureEvent('login', 'user', 'stuudium.com')
+                    break;
+                case 'harID':
+                    gTagCaptureEvent('login', 'user', 'HarID')
+                    break;
+                case 'mID':
+                    gTagCaptureEvent('login', 'user', 'Mobile-ID')
+                    break;
+            }
         }
 
         function disableLogin() {

@@ -100,6 +100,12 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         }
     }
 
+    public List<String> findUsersLearningobjectCreators() {
+        return getEntityManager()
+                .createNativeQuery("select distinct (U.userName) from LearningObject lo join User U on lo.creator = U.id")
+                .getResultList();
+    }
+
     @Override
     public LearningObject createOrUpdate(LearningObject learningObject) {
         learningObject.setLastInteraction(now());

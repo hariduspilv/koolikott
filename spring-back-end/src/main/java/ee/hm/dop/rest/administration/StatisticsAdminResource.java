@@ -1,6 +1,5 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.Media;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.files.UploadedFileService;
@@ -18,12 +17,7 @@ import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.io.File;
@@ -46,7 +40,7 @@ public class StatisticsAdminResource extends BaseResource {
     private UploadedFileService uploadedFileService;
 
     @PostMapping
-    @Secured({RoleString.ADMIN})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public NewStatisticsResult newsearch(@RequestBody StatisticsFilterDto searchFilter) {
         if (searchFilter == null || !searchFilter.isValidSearch()) {
             throw badRequest("Search parameters invalid");
@@ -61,7 +55,7 @@ public class StatisticsAdminResource extends BaseResource {
     }
 
     @PostMapping(value = "export", produces = MediaType.TEXT_PLAIN_VALUE)
-    @Secured({RoleString.ADMIN})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public String searchExport(@RequestBody StatisticsFilterDto filter) {
         if (filter == null || !filter.isValidExportRequest()) {
             throw badRequest("Search parameters invalid");

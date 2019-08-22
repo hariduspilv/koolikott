@@ -142,6 +142,10 @@ a {
   padding-right: $md-padding * 2;
 }
 
+.webkit-flex {
+  display: -webkit-flex;
+}
+
 .layout-padding,
 .layout-padding-gt-sm,
 .layout-padding-md {

@@ -22,10 +22,12 @@ let app = angular.module('koolikottApp', [
     'vcRecaptcha',
     'auto-tab',
     'ngCookies',
-    'angularTrix',
+    'updateMeta',
+    'angularTrix'
 ]);
 
 let provideProvider = null;
+
 
 app.config([
     '$locationProvider', '$controllerProvider', '$compileProvider', '$filterProvider', '$provide', '$translateProvider', '$sceProvider', '$mdThemingProvider', '$httpProvider', '$mdDateLocaleProvider', '$anchorScrollProvider', '$qProvider',
@@ -203,19 +205,19 @@ function isViewMyProfilePage($location, user) {
 }
 
 function isDashboardPage(path) {
-    return path.indexOf("/dashboard") !== -1;
+    return path.indexOf('/toolaud') !== -1;
 }
 
 function isViewMaterialPage(path) {
-    return path === '/material';
+    return path.contains('/oppematerjal/');
 }
 
 function isViewPortfolioPage(path) {
-    return path === '/portfolio';
+    return path.contains('/kogumik/');
 }
 
 function isEditPortfolioPage(path) {
-    return path === '/portfolio/edit';
+    return  path.contains('/kogumik/muuda');
 }
 
 function isHomePage(path) {
@@ -223,13 +225,13 @@ function isHomePage(path) {
 }
 
 function isProfileOrSendEmailPath(path) {
-    return path === '/profile' || path === '/dashboard/sentEmails';
+    return path === '/profiil' || path === '/toolaud/saadetud-teated';
 }
 
-app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies',
-    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies) {
+app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService', 'serverCallService', 'userLocatorService', 'userSessionService', '$cookies','$translate',
+    function ($rootScope, $location, authenticatedUserService, storageService, serverCallService, userLocatorService, userSessionService, $cookies, $translate) {
         $rootScope.$on('$routeChangeSuccess', function () {
-            var editModeAllowed = ["/portfolio/edit", "/search/result", "/material"];
+            var editModeAllowed = ["/search/result", "/oppematerjal", "/kogumik/muuda"];
 
             var path = $location.path();
             var user = authenticatedUserService.getUser();
@@ -247,7 +249,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             }
             $rootScope.isProfile = isProfileOrSendEmailPath(path)
             $rootScope.isAdmin = authenticatedUserService.isAdmin();
-            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path);
+            $rootScope.isViewPortfolioPage = isViewPortfolioPage(path, user);
             $rootScope.isEditPortfolioPage = isEditPortfolioPage(path);
             $rootScope.isViewMaterialPage = isViewMaterialPage(path);
             $rootScope.isViewAdminPanelPage = isDashboardPage(path);
@@ -257,6 +259,27 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isAdminTabOpen
             $rootScope.isTaxonomyOpen
             $rootScope.isCookie = !!$cookies.get('userAgent');
+            $rootScope.tabTitle = 'e-Koolikott';
+            $rootScope.applicationDescription ='';
+
+            if (window.location.hostname === 'e-koolikott.ee') {
+                if (user) {
+                    gtag('config', 'UA-72667340-1', {'user_id': `${user.id}`, 'page_path': path});
+                } else {
+                    gtag('config', 'UA-72667340-1', {'page_path': path});
+                }
+            } else {
+                if (user) {
+                    gtag('config', 'UA-145830836-1', {'user_id': `${user.id}`, 'page_path': path});
+                } else {
+                    gtag('config', 'UA-145830836-1', {'page_path': path});
+                }
+            }
+
+            $translate('HTML_META_DESCRIPTION').then((translation) => {
+                $rootScope.applicationDescription = translation
+            });
+
 
             if (!$rootScope.isCookie || $rootScope.isAdmin) {
                 $rootScope.showCookieBanner = true;
@@ -264,7 +287,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             }
 
             if (isViewMyProfile && $location.path() === '/' + user.username) {
-                $location.path('/' + user.username + '/portfolios');
+                $location.path('/' + user.username);
             }
 
             if ($rootScope.justLoggedIn && $rootScope.isAdmin) {
@@ -333,12 +356,13 @@ app.run(['$rootScope', '$location', function ($rootScope, $location) {
         var prevUrl = history.length > 1 ? history.splice(-2)[0] : '/';
         $location.url(prevUrl);
     };
+
 }]);
 
 app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDialog', '$cookies', function ($rootScope, authenticatedUserService, $route, $location, $mdDialog, $cookies) {
     $rootScope.$on('$locationChangeStart', function (event, next) {
         $mdDialog.cancel();
-        if (!location.href.includes('/portfolio/edit')) {
+        if (!location.href.includes('/kogumik/muuda')) {
             $cookies.remove('savedPortfolio');
             $cookies.remove('visitedAddMaterialPage');
         }

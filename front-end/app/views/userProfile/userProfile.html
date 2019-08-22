@@ -38,7 +38,7 @@
           </md-input-container>
         </div>
         <div class="taxonomy-padding" data-ng-if="user.userTaxons.length > 0 && $ctrl.isModerator()">
-          <h3 data-translate="USER_PROFILE_EXPERTISE"></h3>
+          <h2 data-translate="USER_PROFILE_EXPERTISE"></h2>
           <div id="taxons" layout="row" data-ng-repeat="taxon in user.userTaxons track by $index">
             <dop-taxon-selector data-taxon="user.userTaxons[$index]"
                                 flex
@@ -48,7 +48,7 @@
         </div>
         <div data-layout="row" data-layout-xs="column" data-layout-align="start start">
           <div class="md-padding" data-layout-align="center center" data-flex-xs="100" data-flex-sm="50" data-flex="50">
-            <h3 data-translate="USER_PROFILE_ROLE"></h3>
+            <h2 class="md-title" data-translate="USER_PROFILE_ROLE"></h2>
             <div data-ng-repeat="role in roles track by $index">
               <md-checkbox
                 data-ng-click="$ctrl.updateSelection($index, roles)"
@@ -58,7 +58,7 @@
               </md-checkbox>
             </div>
             <div  data-ng-show="roles[1].checked || roles[0].checked" data-layout-align="center center">
-              <h3 data-translate="USER_PROFILE_INSTITUTIONS"></h3>
+              <h2 data-translate="USER_PROFILE_INSTITUTIONS"></h2>
               <div layout="row" data-ng-repeat="school in userProfile.institutions track by $index" data-layout-align="center center">
               <dop-institution-selector
                 flex
@@ -93,7 +93,7 @@
             </div>
           </div>
           <div class="md-padding" data-layout-align="center center" data-flex-xs="100" data-flex-sm="50" data-flex="50">
-            <h3 data-translate="USER_PROFILE_INTERESTS"></h3>
+            <h2 data-translate="USER_PROFILE_INTERESTS"></h2>
             <div data-layout="row" data-layout-align="center center" data-ng-repeat="taxon in userProfile.taxons track by $index"
                  >
               <dop-taxon-selector

@@ -39,7 +39,7 @@
         data-ng-show="$ctrl.usersPortfolios || $ctrl.isPortfolioEdit && $ctrl.portfolio"
         data-md-selected-text="$ctrl.getPortfolioSelectLabel()"
         data-ng-model="$ctrl.portfolio"
-        data-ng-disabled="$ctrl.isPortfolioEdit"
+        data-ng-disabled="$ctrl.isPortfolioEdit || $ctrl.usersPortfolios.length === 0"
         data-ng-change="$ctrl.portfolioSelectChange()"
         aria-label="Vali kogumik"
         >
@@ -47,10 +47,6 @@
           data-ng-value="portfolio"
           data-ng-repeat="portfolio in $ctrl.usersPortfolios track by $index"
           data-ng-bind="portfolio.title"
-        ></md-option>
-        <md-option
-          data-ng-value="'-1'"
-          data-translate="ADD_TO_NEW_PORTFOLIO"
         ></md-option>
       </md-select>
       <p

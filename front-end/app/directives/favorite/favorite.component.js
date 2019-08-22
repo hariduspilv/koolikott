@@ -47,6 +47,12 @@ class controller extends Controller {
                     && this.materialService.getMaterialById(this.learningObject.id).then(makePost)
 
             this.hasFavorited = true
+
+            if(this.isPortfolio(this.learningObject)){
+                gTagCaptureEvent('bookmark', 'teaching portfolio')
+            } else if (this.isMaterial(this.learningObject)){
+                gTagCaptureEvent('bookmark', 'teaching material')
+            }
         }
     }
     removeFavorite($event) {
@@ -77,7 +83,8 @@ controller.$inject = [
     'authenticatedUserService',
     'toastService',
     'materialService',
-    'portfolioService'
+    'portfolioService',
+    '$location',
 ]
 component('dopFavorite', {
     bindings: {

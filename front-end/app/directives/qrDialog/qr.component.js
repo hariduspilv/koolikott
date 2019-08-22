@@ -7,6 +7,12 @@
 
             this.showQrCodeDialog = () => {
 
+                if(this.location.contains('kogumik')){
+                    gTagCaptureEvent('show', 'teaching portfolio', 'QR code')
+                } else {
+                    gTagCaptureEvent('show', 'teaching material', 'QR code')
+                }
+
                 this.$mdDialog.show({
                     templateUrl: 'directives/qrDialog/qrDialog.html',
                     controller: 'qrDialogController',

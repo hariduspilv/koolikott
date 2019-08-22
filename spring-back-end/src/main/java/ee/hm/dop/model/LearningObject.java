@@ -10,6 +10,7 @@ import ee.hm.dop.model.enums.SaveType;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
@@ -17,12 +18,28 @@ import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.OrderBy;
+import javax.persistence.Transient;
+import javax.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
@@ -168,7 +185,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
      */
     @JsonIgnore
     @Column
-
     private LocalDateTime lastInteraction;
 
     @Column(nullable = false)
@@ -180,6 +196,15 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     @Transient
     private Boolean favorite;
+
+    @Transient
+    private List<String> educationalContext;
+
+    @Transient
+    private List<String> domain;
+
+    @Transient
+    private List<TaxonPositionDTO> taxonPositionDto;
 
     @Transient
     @Enumerated(EnumType.STRING)
@@ -407,5 +432,29 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setSaveType(SaveType saveType) {
         this.saveType = saveType;
+    }
+
+    public List<String> getEducationalContext() {
+        return educationalContext;
+    }
+
+    public void setEducationalContext(List<String> educationalContext) {
+        this.educationalContext = educationalContext;
+    }
+
+    public List<String> getDomain() {
+        return domain;
+    }
+
+    public void setDomain(List<String> domain) {
+        this.domain = domain;
+    }
+
+    public List<TaxonPositionDTO> getTaxonPositionDto() {
+        return taxonPositionDto;
+    }
+
+    public void setTaxonPositionDto(List<TaxonPositionDTO> taxonPositionDto) {
+        this.taxonPositionDto = taxonPositionDto;
     }
 }

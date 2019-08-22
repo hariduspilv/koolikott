@@ -5,12 +5,15 @@ angular.module('koolikottApp')
         '$routeProvider',
         function ($routeProvider) {
 
-            $routeProvider.otherwise('/');
-
             $routeProvider
                 .when('/', {
                     templateUrl: 'views/home/home.html',
                     controller: 'homeController',
+                    controllerAs: '$ctrl'
+                })
+                .when('/404', {
+                    templateUrl: 'views/404/404.html',
+                    controller: '404Controller',
                     controllerAs: '$ctrl'
                 })
                 .when('/search/result', {
@@ -19,7 +22,19 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     reloadOnSearch: false,
                 })
-                .when('/material', {
+                .when('/oppematerjal/:id', {
+                    templateUrl: 'views/material/material.html',
+                    controller: 'materialController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/oppematerjal/:id-:name', {
+                    templateUrl: 'views/material/material.html',
+                    controller: 'materialController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/oppematerjal', {
                     templateUrl: 'views/material/material.html',
                     controller: 'materialController',
                     controllerAs: '$ctrl',
@@ -30,25 +45,37 @@ angular.module('koolikottApp')
                     controller: 'helpController',
                     controllerAs: '$ctrl'
                 })
-                .when('/portfolio', {
-                    templateUrl: 'views/portfolio/portfolio.html',
-                    controller: 'portfolioController',
-                    controllerAs: '$ctrl',
-                    reloadOnSearch: false
-                })
-                .when('/portfolio/edit', {
+                .when('/kogumik/muuda/:id', {
                     templateUrl: 'views/editPortfolio/editPortfolio.html',
                     controller: 'editPortfolioController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
                 })
-                .when('/dashboard', {
+                .when('/kogumik/:id', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/kogumik/:id-:name', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false
+                })
+                .when('/kogumik', {
+                    templateUrl: 'views/portfolio/portfolio.html',
+                    controller: 'portfolioController',
+                    controllerAs: '$ctrl',
+                    reloadOnSearch: false,
+                })
+                .when('/toolaud', {
                     templateUrl: 'views/dashboard/dashboard.html',
                     controller: 'dashboardController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/improper', {
+                .when('/toolaud/teatatud-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
@@ -60,76 +87,76 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/deleted', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
-                    controller: 'baseTableViewController',
-                    controllerAs: '$ctrl',
-                    permissions: ['ADMIN', 'MODERATOR']
-                })
-                .when('/dashboard/moderators', {
+                .when('/toolaud/kustutatud-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/dashboard/restrictedUsers', {
+                .when('/toolaud/aineeksperdid', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/dashboard/changes', {
+                .when('/toolaud/piiratud-kasutajad', {
+                    templateUrl: 'views/dashboard/baseTableView.html',
+                    controller: 'baseTableViewController',
+                    controllerAs: '$ctrl',
+                    permissions: ['ADMIN']
+                })
+                .when('/toolaud/muudetud-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/unReviewed', {
+                .when('/toolaud/uus-oppevara', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/sentEmails', {
+                .when('/toolaud/saadetud-teated', {
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/stat/expert', {
+                .when('/toolaud/ekspertide-statistika', {
                     templateUrl: 'views/statistics/expertStatistics.html',
                     controller: 'statisticsController',
                     controllerAs: '$ctrl',
-                    permissions: ['ADMIN']
+                    permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/dashboard/gdpr', {
+                .when('/toolaud/gdpr', {
                     templateUrl: 'views/gdpr/gdpr.html',
                     controller: 'gdprController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/dashboard/usermanualsAdmin', {
+                .when('/toolaud/videojuhendid', {
                     templateUrl: 'views/userManualsAdmin/userManualsAdmin.html',
                     controller: 'userManualsAdminController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/terms', {
+                .when('/kasutustingimused', {
                     templateUrl: 'views/terms/terms.html',
                     controller: 'termsController',
                     controllerAs: '$ctrl',
                 })
-                .when('/usermanuals', {
+                .when('/videojuhendid', {
                     templateUrl: 'views/userManual/userManual.html',
                     controller: 'userManualsController',
                     controllerAs: '$ctrl',
                 })
-                .when('/faq', {
+                .when('/kkk', {
                     templateUrl: 'views/faq/faq.html',
                     controller: 'faqController',
                     controllerAs: '$ctrl',
                 })
-                .when('/profile', {
+                .when('/profiil', {
                     templateUrl: 'views/userProfile/userProfile.html',
                     controller: 'userProfileController',
                     controllerAs: '$ctrl',
@@ -145,11 +172,28 @@ angular.module('koolikottApp')
                     controller: 'profileController',
                     controllerAs: '$ctrl',
                 })
+                .when('/:username/oppematerjalid', {
+                    templateUrl: 'views/profile/materials/materials.html',
+                    controller: 'userMaterialsController',
+                    controllerAs: '$ctrl',
+                    resolve: UserPathResolver,
+                })
+                .when('/:username/kogumikud', {
+                    templateUrl: 'views/profile/portfolios/portfolios.html',
+                    controller: 'userPortfoliosController',
+                    controllerAs: '$ctrl',
+                })
+                .when('/:username/lemmikud', {
+                    templateUrl: 'views/profile/favorites/favorites.html',
+                    controller: 'userFavoritesController',
+                    controllerAs: '$ctrl',
+                    resolve: UserPathResolver,
+                })
                 .when('/:username/materials', {
                     templateUrl: 'views/profile/materials/materials.html',
                     controller: 'userMaterialsController',
                     controllerAs: '$ctrl',
-                    resolve: UserPathResolver
+                    resolve: UserPathResolver,
                 })
                 .when('/:username/portfolios', {
                     templateUrl: 'views/profile/portfolios/portfolios.html',
@@ -160,13 +204,15 @@ angular.module('koolikottApp')
                     templateUrl: 'views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
                     controllerAs: '$ctrl',
-                    resolve: UserPathResolver
-
+                    resolve: UserPathResolver,
                 })
                 .when('/dev/login/:idCode', {
                     templateUrl: 'views/dev/login/login.html',
                     controller: 'devLoginController',
                     controllerAs: '$ctrl'
+                })
+                .otherwise({
+                    redirectTo: '/404'
                 });
         }
     ]);

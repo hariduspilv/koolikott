@@ -1,7 +1,7 @@
 <div class="embedded-material">
   <div data-ng-if="type === 'PICTURE'" class="embedded-material__picture">
-    <a data-ng-href="{{url}}" target="_blank">
-      <img data-ng-src="{{url}}" class="embedded-material__img"/>
+    <a data-ng-href="{{url}}" target="_blank" rel="nofollow" onclick="captureOutboundLink(this.href)">
+      <img title="{{materialTitle}}" alt="{{materialTitle}}" data-ng-src="{{url}}" class="embedded-material__img"/>
     </a>
   </div>
   <div data-ng-if="type === 'YOUTUBE'" class="embed-responsive embed-responsive-16by9">
@@ -70,8 +70,10 @@
     <a
       data-ng-href="{{url}}"
       data-ng-bind="displayUrl ? displayUrl : url"
+      onclick="captureOutboundLink(this.href)"
       target="_blank"
       class="embedded-material__link md-primary"
+      rel="nofollow"
     ></a>
   </div>
   <div data-ng-if="type === 'EMBEDSOURCE'">
