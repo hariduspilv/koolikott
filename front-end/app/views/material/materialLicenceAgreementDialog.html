@@ -1,0 +1,36 @@
+<md-dialog id="gdpr-dialog" aria-label="Materjali litsentsi muutmise modaalaken" class="login-dialog" flex="50">
+  <md-toolbar>
+    <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+      <div class="md-toolbar-tools" data-layout-align="space-between center">
+        <h2>Materjali avalikustamine</h2>
+      </div>
+    </div>
+  </md-toolbar>
+  <form name="materialLicenseAgreementDialogContent">
+    <md-dialog-content>
+      <md-content data-layout-padding>
+        <p>
+          <span>
+            Uuendasime litsentsindusega seotud tingimusi. Palun loe lähemalt SIIT. Lisaks annan nõusoleku, et kõigile minu olemasolevatele materjalidele rakendatakse CC BY-SA 3.0 litsentsi. Litsentsi kohta loe täpsemalt siit. Uute litsentsitingimustega mittenõustumisel saad küll E-koolikotti sisse logida, kuid kõik Sinu olemasolevad materjalid muudetakse automaatselt privaatseks.
+          </span>
+        </p>
+        <div id="migration-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
+          <md-button
+            id="license-agreement-cancel-button"
+            class="md-raised md-secondary"
+            aria-label="Ei nõustu"
+            data-ng-click="cancel()">
+            <span data-translate="BUTTON_CANCEL"></span>
+          </md-button>
+          <md-button
+            id="license-agreement-accept-button"
+            class="md-raised md-primary"
+            aria-label="Nõustun"
+            data-ng-click="agree()">
+            <span>LISAN MATERJALILE litsentsi</span>
+          </md-button>
+        </div>
+      </md-content>
+    </md-dialog-content>
+  </form>
+</md-dialog>

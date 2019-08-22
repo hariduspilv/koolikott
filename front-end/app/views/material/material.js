@@ -298,17 +298,31 @@ angular.module('koolikottApp')
             }
 
             $scope.makePublic = () => {
-                updateMaterialVisibility(VISIBILITY_PUBLIC)
+                if ($scope.material.licenseType.id !== 10){
+                    console.log($scope.material.licenseType.id)
+                    console.log('way')
+                    $mdDialog.show({
+                        templateUrl: 'views/material/materialLicenceAgreementDialog.html',
+                        controller: 'materialLicenseAgreementController',
+                    }).then((res) => {
+                        if (res.accept) {
+                            $scope.material.licenseType = {id: 10, name: 'UUSTYYP'}
+                            updateMaterialVisibility(VISIBILITY_PUBLIC)
+                        }
+                    })
+                } else if ($scope.material.licenseType.id === 10) {
+                    updateMaterialVisibility(VISIBILITY_PUBLIC)
+                }
             }
 
             function updateMaterialVisibility(visibility) {
                 $scope.material.visibility = visibility
-                console.log($scope.material)
                 serverCallService
                     .makePost('rest/material/update', $scope.material)
                     .then(({data: material}) => {
                         storageService.setMaterial(material)
                     })
+                toastService.show('MATERIAL_SAVED');
             }
 
 
@@ -458,7 +472,7 @@ angular.module('koolikottApp')
             }
 
             $scope.isUsersMaterial = () => {
-                if ($scope.material && authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted()) {
+                if ($scope.material && authenticatedUserService.isAuthenticated()) {
                     var userID = authenticatedUserService.getUser().id;
                     var creator = $scope.material.creator;
 
