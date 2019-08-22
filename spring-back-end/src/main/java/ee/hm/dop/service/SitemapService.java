@@ -52,10 +52,8 @@ public class SitemapService {
 
     private static final String MATERIAL = "/oppematerjal/";
     private static final String PORTFOLIO = "/kogumik/";
-    private static final String USER = "/user/";
 
     public static final String REST_SITEMAP = "/sitemapFile";
-
 
     private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS, PROFILE, IMPROPER, UNREVIEWED, CHANGES, SENTEMAILS, MODERATORS, RESTRICTED_USERS, DELETED, STATS_EXPERT, GDPR, USER_MANUALS_ADMIN);
 
@@ -114,7 +112,7 @@ public class SitemapService {
         WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("users", file);
 
         for (String user : learningObjectDao.findUsersLearningobjectCreators()) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + USER + user)
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + user)
                     .lastMod(String.valueOf(LocalDateTime.now()))
                     .priority(0.8)
                     .changeFreq(ChangeFreq.DAILY)
