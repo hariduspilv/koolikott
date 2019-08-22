@@ -563,7 +563,7 @@ function getTypicalAgeRange(grade) {
             ageRange = '13-14';
             break;
         case 'GRADE8':
-            ageRange = '15-16';
+            ageRange = '14-15';
             break;
         case 'GRADE9':
             ageRange = '15-16';
@@ -597,9 +597,40 @@ function translateEducationalContext(eduContext) {
     return translation;
 }
 
+function findLicenseType(license) {
+    let licenseLink;
+    switch (license) {
+        case ('CCBY'):
+            licenseLink = 'http://creativecommons.org/licenses/by/4.0/';
+            break;
+        case ('CCBYNC'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc/4.0/';
+            break;
+        case ('CCBYNCND'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc-nd/4.0/';
+            break;
+        case ('CCBYNCSA'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc-sa/4.0/';
+            break;
+        case ('CCBYND'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nd/4.0/';
+            break;
+        case ('CCBYSA'):
+            licenseLink = 'https://creativecommons.org/licenses/by-sa/4.0/';
+            break;
+        case ('Youtube'):
+            licenseLink = 'Youtube';
+            break;
+        case ('allRightsReserved'):
+            licenseLink = 'Kõik õigused kaitstud';
+            break;
+    }
+    return licenseLink;
+}
+
 function addLicense(license) {
     if (license)
-        return license.name.includes('CC') ? 'http://creativecommons.org/licenses/by/4.0/' : 'Kõik õigused kaitstud';
+        return findLicenseType(license.name);
     else
         return ''
 }
