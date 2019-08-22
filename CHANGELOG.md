@@ -21,14 +21,14 @@
 * SEO > Piltidele Img, Alt ja Title elemendid [EK-23](https://projektid.hitsa.ee/jira/browse/EK-23)
 * SEO > Kirjelduse (Description element) muudatused [EK-22](https://projektid.hitsa.ee/jira/browse/EK-22)
 
-## e-Koolikott [1.38.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11020)
+## e-Koolikott [1.38.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11020) (Toodangusse paigaldatud 01.08.2019)
 
 ### Muutunud
 * Esilehe videokasti suuruse muudatused [EK-629](https://projektid.hitsa.ee/jira/browse/EK-629)
 * Logo vahetus menüü responsive vaates [EK-632](https://projektid.hitsa.ee/jira/browse/EK-632)
 * Kogumike täisekraan-vaate parandus [EK-633](https://projektid.hitsa.ee/jira/browse/EK-633)
 
-## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008)
+## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008) (Toodangusse paigaldatud 01.08.2019)
 
 ### Muutunud
 * Kasutajaprofiili huvipakkuvate teemade ja koolide lisamise parandus [EK-478](https://projektid.hitsa.ee/jira/browse/EK-478)
