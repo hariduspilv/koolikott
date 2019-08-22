@@ -306,7 +306,7 @@ angular.module('koolikottApp')
                         controller: 'materialLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {
-                            $scope.material.licenseType = {id: 10, name: 'UUSTYYP'}
+                            $scope.material.licenseType = {id: 10, name: 'CCBY3.0'}
                             updateMaterialVisibility(VISIBILITY_PUBLIC)
                         }
                     })
