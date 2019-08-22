@@ -4,9 +4,9 @@
       <div class="md-toolbar-tools">
         <h2 data-ng-show="$root.sidenavLogin === '/kogumikud'" data-translate="SIGN_IN_TO_SEE_PORTFOLIOS" class="sidenav-login-title"></h2>
         <h2 data-ng-show="$root.sidenavLogin === '/oppematerjalid'" data-translate="SIGN_IN_TO_SEE_MATERIALS" class="sidenav-login-title"></h2>
-        <h2 data-ng-show="$root.sidenavLogin === '/favorites'" data-translate="SIGN_IN_TO_SEE_FAVORITES" class="sidenav-login-title"></h2>
+        <h2 data-ng-show="$root.sidenavLogin === '/lemmikud'" data-translate="SIGN_IN_TO_SEE_FAVORITES" class="sidenav-login-title"></h2>
         <h2
-          data-ng-show="!$root.sidenavLogin || (['/kogumikud','/oppematerjalid','/favorites'].indexOf($root.sidenavLogin) === -1)"
+          data-ng-show="!$root.sidenavLogin || (['/kogumikud','/oppematerjalid','/lemmikud'].indexOf($root.sidenavLogin) === -1)"
           data-ng-bind="title"
         ></h2>
         <span flex></span>

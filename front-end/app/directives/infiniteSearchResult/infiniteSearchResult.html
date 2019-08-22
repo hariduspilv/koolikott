@@ -3,9 +3,8 @@
       ng-if="$ctrl.isLandingPage()"
       data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
       data-ng-bind-html="title"></h1>
-  <h1 class="md-headline padding-left-16" data-translate="SEARCH_RESULTS" data-ng-if="!educationLevel && $ctrl.isSearchPage()"></h1>
   <h1 class="md-headline padding-left-16" ng-if="educationLevel" data-ng-bind="educationLevel"></h1>
-  <h2 id="exact-search-result-title" class="md-headline padding-left-16"
+  <h2 id="exact-search-result-title" class="md-headline"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
       data-ng-bind-html="exactTitle"></h2>
   <p data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"

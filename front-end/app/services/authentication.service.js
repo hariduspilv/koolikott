@@ -148,7 +148,7 @@ angular.module('koolikottApp')
                 $location.url('/profiil');
                 $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
-                $location.url(localStorage.getItem(LOGIN_ORIGIN));
+                $location.url(authenticatedUser.user.username + localStorage.getItem(LOGIN_ORIGIN));
             }
             enableLogin();
 
