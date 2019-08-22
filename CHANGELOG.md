@@ -1,4 +1,4 @@
-## e-Koolikott [1.30.9](https://projektid.hitsa.ee/jira/projects/EK/versions/11016)
+## e-Koolikott [1.39.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11016)
 
 ### Muutunud
 * E-kooli kaudu sisselogimise parandus [EK-656] (https://projektid.hitsa.ee/jira/browse/EK-656)
