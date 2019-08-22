@@ -50,7 +50,7 @@ public class SitemapService {
     private static final String GDPR = "toolaud/gdpr";
     private static final String USER_MANUALS_ADMIN = "toolaud/videojuhendid";
 
-    private static final String MATERIAL = "/material/";
+    private static final String MATERIAL = "/oppematerjal/";
     private static final String PORTFOLIO = "/kogumik/";
     private static final String USER = "/user/";
 
