@@ -5,14 +5,20 @@
   <script data-plumbr="plumbr"></script>
 
   <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-144167571-1"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-145830836-1"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-72667340-1"></script>
   <script>
-    // if(window.location.hostname === "e-koolikott.ee"){
+    if(window.location.hostname === "e-koolikott.ee"){
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
       gtag('js', new Date());
-      gtag('config', 'UA-144167571-1', { 'optimize_id': 'GTM-KZZPZTJ'});
-    // }
+      gtag('config', 'UA-72667340-1', { 'optimize_id': 'GTM-MGQW3L9'});
+    } else {
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-145830836-1');
+    }
   </script>
 
   <!-- Google Tag Manager -->
@@ -30,7 +36,7 @@
         j.src =
           'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
         f.parentNode.insertBefore(j, f);
-      })(window, document, 'script', 'dataLayer', 'GTM-KDHKWQT');
+      })(window, document, 'script', 'dataLayer', 'GTM-K3DVC56');
     }
   </script>
   <!-- End Google Tag Manager -->
@@ -60,7 +66,7 @@
   <meta property="og:title" content="e-Koolikott"/>
   <meta property="og:description"
         content="{{$root.applicationDescription}}"/>
-  <meta property="og:image:secure_url" content="https://e-koolikott.ee/koolikott.png"/>
+  <meta property="og:image:secure_url" content="https://e-koolikott.ee/ekoolikott.png"/>
   <script type="application/ld+json">[
     {
       "@context": "https://schema.org",
@@ -84,8 +90,7 @@
 <body>
 
 <!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KDHKWQT"
-                  height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3DVC56" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- End Google Tag Manager (noscript) -->
 
 <!--[if lt IE 11]>
@@ -109,14 +114,6 @@
       element.parentNode.removeChild(element);
     }, 3000)
   });</script>
-
-<!-- Google Tag Manager (noscript) -->
-<!--
-<noscript>
-  <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-K3DVC56" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-</noscript>
--->
-<!-- End Google Tag Manager (noscript) -->
 
 <!-- vendor -->
 <script src="libs/core.js/client/shim.min.js"></script>

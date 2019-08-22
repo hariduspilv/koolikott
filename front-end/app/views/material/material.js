@@ -4,10 +4,10 @@ angular.module('koolikottApp')
     .controller('materialController', [
         '$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
         'searchService', '$location', 'authenticatedUserService', 'dialogService',
-        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService', '$sce',
+        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService', '$sce', '$translate',
         function ($scope, serverCallService, $route, translationService, $rootScope,
                   searchService, $location, authenticatedUserService, dialogService,
-                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce) {
+                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce, $translate) {
 
             $scope.showMaterialContent = false;
             $rootScope.isFullScreen = false;
@@ -165,13 +165,11 @@ angular.module('koolikottApp')
                         },
                         'audience': {
                             '@type': 'Audience',
-                            'audienceType': material.taxonPositionDto
-                                .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
-                                .map(eduContext => translateEducationalContext(eduContext.taxonLevelName))
+                            'audienceType': audienceType(material)
                         },
                         'dateCreated': formatIssueDate(material.issueDate),
                         'datePublished': material.added,
-                        'license': material.licenseType.name,
+                        'license': addLicense(material.licenseType),
                         'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                         'interactionCount': material.views,
                         'headline': material.titles.map(title => title.text),
@@ -200,12 +198,12 @@ angular.module('koolikottApp')
                         'itemListElement': [{
                             '@type': 'ListItem',
                             'position': 1,
-                            'name': 'Haridustase',
+                            'name': $translate.instant(material.taxonPositionDto[0].taxonLevelName),
                             'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[0].taxonLevelId}`//TODO at the moment 1st taxonroute taken
                         }, {
                             '@type': 'ListItem',
                             'position': 2,
-                            'name': 'Valdkond',
+                            'name': $translate.instant((`DOMAIN_${material.taxonPositionDto[1].taxonLevelName}`).toUpperCase()),
                             'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[1].taxonLevelId}`
                         }]
                     }
@@ -236,11 +234,9 @@ angular.module('koolikottApp')
                     author['@type'] = 'Person';
                     author[`name`] = `${materialAuthor.name} ${materialAuthor.surname}`;
                     authorsNames.push(author);
-
                 });
                 $scope.materialMetaData[0].author = authorsNames;
             }
-
 
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');

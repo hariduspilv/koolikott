@@ -645,6 +645,10 @@
             return this.$scope.$ctrl.searchpage
         }
 
+        isUserViewPage() {
+            return this.$rootScope.userView
+        }
+
         maintenanceVisible() {
             return this.$scope.visible = !this.$scope.visible
         }

@@ -195,9 +195,9 @@ class controller extends Controller {
             this.$rootScope.tabTitle = portfolio.title;
             this.storageService.setPortfolio(portfolio)
 
-            let locationUrl = this.$rootScope.slug ? `${this.getUrl(portfolio)}#${this.$rootScope.slug}` : this.getUrl(portfolio)
-            this.$location.url(locationUrl)
-            this.$scope.learningObject = portfolio
+            let locationUrl = this.$rootScope.slug ? `${this.getUrl(portfolio)}#${this.$rootScope.slug}` : this.getUrl(portfolio);
+            this.$location.url(locationUrl);
+            this.$scope.learningObject = portfolio;
 
             this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
             this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
@@ -245,12 +245,11 @@ class controller extends Controller {
                 },
                 'audience': {
                     '@type': 'Audience',
-                    'audienceType': portfolio.taxonPositionDto.filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
-                        .map(eduContext => translateEducationalContext(eduContext.taxonLevelName))
+                    'audienceType': audienceType(portfolio)
                 },
                 'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
                 'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
-                'license': portfolio.licenseType.name,
+                'license': addLicense(portfolio.licenseType),
                 'typicalAgeRange': portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                 'interactionCount': portfolio.views,
                 'headline': portfolio.title,
@@ -274,12 +273,12 @@ class controller extends Controller {
                 'itemListElement': [{
                     '@type': 'ListItem',
                     'position': 1,
-                    'name': 'Haridustase',
+                    'name': this.$translate.instant(portfolio.taxonPositionDto[0].taxonLevelName),
                     'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[0].taxonLevelId}`
                 }, {
                     '@type': 'ListItem',
                     'position': 2,
-                    'name': 'Valdkond',
+                    'name': this.$translate.instant((`DOMAIN_${portfolio.taxonPositionDto[1].taxonLevelName}`).toUpperCase()),
                     'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[1].taxonLevelId}`
                 }]
             },
@@ -292,7 +291,8 @@ class controller extends Controller {
         ];
     }
 }
-controller.$inject = [
+
+    controller.$inject = [
     '$scope',
     '$rootScope',
     '$route',
@@ -304,7 +304,8 @@ controller.$inject = [
     'storageService',
     'toastService',
     'translationService',
-    'taxonGroupingService'
+    'taxonGroupingService',
+    '$translate'
 ]
 angular.module('koolikottApp').controller('portfolioController', controller)
 }

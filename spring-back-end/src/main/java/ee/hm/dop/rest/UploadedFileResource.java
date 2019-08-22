@@ -1,9 +1,9 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.files.UploadedFileService;
 import ee.hm.dop.service.files.enums.FileDirectory;
-import ee.hm.dop.config.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;

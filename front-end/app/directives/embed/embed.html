@@ -1,6 +1,6 @@
 <div class="embedded-material">
   <div data-ng-if="type === 'PICTURE'" class="embedded-material__picture">
-    <a data-ng-href="{{url}}" target="_blank">
+    <a data-ng-href="{{url}}" target="_blank" rel="nofollow" onclick="captureOutboundLink(this.href)">
       <img title="{{materialTitle}}" alt="{{materialTitle}}" data-ng-src="{{url}}" class="embedded-material__img"/>
     </a>
   </div>

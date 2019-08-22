@@ -3,7 +3,9 @@ package ee.hm.dop.service.files.enums;
 import ee.hm.dop.utils.ConfigurationProperties;
 
 public enum FileDirectory {
-    REVIEW(ConfigurationProperties.FILE_REVIEW_DIRECTORY), UPDATE(ConfigurationProperties.FILE_UPLOAD_DIRECTORY);
+    REVIEW(ConfigurationProperties.FILE_REVIEW_DIRECTORY),
+    UPDATE(ConfigurationProperties.FILE_UPLOAD_DIRECTORY),
+    SITEMAPS(ConfigurationProperties.SITEMAPS_DIRECTORY);
 
     private String directory;
 

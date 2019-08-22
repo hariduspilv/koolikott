@@ -3,8 +3,8 @@
 angular.module('koolikottApp')
 .controller('userPortfoliosController',
 [
-    '$scope', '$route', 'authenticatedUserService', '$translate', 'serverCallService', 'searchService',
-    function ($scope, $route, authenticatedUserService, $translate, serverCallService, searchService) {
+    '$scope', '$route', '$location', 'authenticatedUserService', '$translate', 'serverCallService', 'searchService',
+    function ($scope, $route, $location, authenticatedUserService, $translate, serverCallService, searchService) {
         function init() {
             searchService.setQuery(null)
             $scope.cache = false;
@@ -13,6 +13,7 @@ angular.module('koolikottApp')
                 'maxResults': 20,
                 'username': $route.current.params.username
             };
+            $location.url(`/${$scope.params.username}/kogumikud`)
 
             setTitle();
         }
