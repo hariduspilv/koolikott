@@ -70,7 +70,7 @@ function gTagCaptureEvent(event, category, label) {
 function gTagCaptureEventWithValue(event, category, value) {
     gtag('event', event, {
         'event_category': category,
-        'event_value': value
+        'value': value
     })
 }
 
