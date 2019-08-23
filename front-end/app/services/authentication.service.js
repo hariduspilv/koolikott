@@ -105,23 +105,6 @@ angular.module('koolikottApp')
                 } else {
                     showGdprModalAndAct(userStatus);
                 }
-                switch ($rootScope.authenticationOption) {
-                    case 'idCard':
-                        gTagCaptureEvent('login', 'user', 'ID-Card')
-                        break;
-                    case 'ekool':
-                        gTagCaptureEvent('login', 'user', 'ekool.eu')
-                        break;
-                    case 'stuudium':
-                        gTagCaptureEvent('login', 'user', 'stuudium.com')
-                        break;
-                    case 'harID':
-                        gTagCaptureEvent('login', 'user', 'HarID')
-                        break;
-                    case 'mID':
-                        gTagCaptureEvent('login', 'user', 'Mobile-ID')
-                        break;
-                }
             }
         }
 
@@ -247,6 +230,24 @@ angular.module('koolikottApp')
             loginSuccess: function (userStatus) {
                 isOAuthAuthentication = true;
                 loginSuccess(userStatus);
+
+                switch (userStatus.authenticatedUser.loginFrom) {
+                    case 'ID_CARD':
+                        gTagCaptureEvent('login', 'user', 'ID-Card')
+                        break;
+                    case 'EKOOL':
+                        gTagCaptureEvent('login', 'user', 'ekool.eu')
+                        break;
+                    case 'STUUDIUM':
+                        gTagCaptureEvent('login', 'user', 'stuudium.com')
+                        break;
+                    case 'HAR_ID':
+                        gTagCaptureEvent('login', 'user', 'HarID')
+                        break;
+                    case 'MOB_ID':
+                        gTagCaptureEvent('login', 'user', 'Mobile-ID')
+                        break;
+                }
             },
 
             loginFail: function () {
