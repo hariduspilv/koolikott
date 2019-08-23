@@ -634,10 +634,12 @@ function gTagCaptureEvent(event, category) {
 }
 
 function gTagCaptureEventWithLabel(event, category, label) {
+    console.log(label)
     gtag('event', event, {
         'event_category': category,
         'event_label': label
     })
+    console.log(label)
 }
 
 function gTagCaptureEventWithValue(event, category, value) {
