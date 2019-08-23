@@ -8,9 +8,9 @@
             this.showLoEmailCodeDialog = () => {
 
                 if(this.$location.absUrl().contains('kogumik')){
-                    gTagCaptureEvent('request', 'teaching portfolio', 'Feedback to author')
+                    gTagCaptureEventWithLabel('request', 'teaching portfolio', 'Feedback to author')
                 } else {
-                    gTagCaptureEvent('request', 'teaching material', 'Feedback to author')
+                    gTagCaptureEventWithLabel('request', 'teaching material', 'Feedback to author')
                 }
 
                 if (typeof this.learningObject.creator !== 'undefined' && this.learningObject.creator !== null) {

@@ -633,7 +633,7 @@ function gTagCaptureEvent(event, category) {
     })
 }
 
-function gTagCaptureEvent(event, category, label) {
+function gTagCaptureEventWithLabel(event, category, label) {
     gtag('event', event, {
         'event_category': category,
         'event_label': label
