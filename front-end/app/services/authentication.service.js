@@ -230,6 +230,7 @@ angular.module('koolikottApp')
             loginSuccess: function (userStatus) {
                 isOAuthAuthentication = true;
                 loginSuccess(userStatus);
+                console.log(userStatus.authenticatedUser.loginFrom)
 
                 switch (userStatus.authenticatedUser.loginFrom) {
                     case 'ID_CARD':
