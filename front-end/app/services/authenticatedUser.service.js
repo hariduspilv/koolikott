@@ -11,6 +11,7 @@ class controller {
     removeAuthenticatedUser() {
         localStorage.setItem('authenticatedUser', null);
         localStorage.removeItem('authenticatedUser');
+        localStorage.clear();
     }
     isAuthenticated() {
         return !!this.getAuthenticatedUser()
