@@ -7,7 +7,7 @@
 
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.isSaving = false
-            this.$scope.userStatusOk = this.$rootScope.userStatusOk
+            this.$scope.existingUser = this.$rootScope.userStatusOk
             this.$scope.userStatus = this.$rootScope.statusForDuplicateCheck
             console.log(this.$scope.userStatus)
 

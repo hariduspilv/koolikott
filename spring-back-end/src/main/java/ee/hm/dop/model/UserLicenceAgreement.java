@@ -85,4 +85,16 @@ public class UserLicenceAgreement implements AbstractEntity {
     public void setClickedAt(LocalDateTime clickedAt) {
         this.clickedAt = clickedAt;
     }
+
+    @Override
+    public String toString() {
+        return "UserLicenceAgreement{" +
+                "id=" + id +
+                ", user=" + user +
+                ", licenceAgreement=" + licenceAgreement +
+                ", agreed=" + agreed +
+                ", disagreed=" + disagreed +
+                ", clickedAt=" + clickedAt +
+                '}';
+    }
 }
