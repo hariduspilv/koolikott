@@ -21,8 +21,6 @@
 
             this.$scope.editMode = false;
             this.$rootScope.$on('logout:success', () => this.$scope.isEditMode = false);
-            console.log(this.$scope.exactTitle)
-            console.log(this.$scope.similarTitle)
         }
 
         headlineAndMaintananceLanguage() {
