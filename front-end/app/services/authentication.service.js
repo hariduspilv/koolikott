@@ -102,7 +102,6 @@ angular.module('koolikottApp')
             } else {
                 if (userStatus.statusOk){
                     authenticateUser(userStatus.authenticatedUser);
-                    console.log(userStatus.authenticatedUser.loginFrom)
                 } else {
                     showGdprModalAndAct(userStatus);
                 }
@@ -304,6 +303,8 @@ angular.module('koolikottApp')
                 isOAuthAuthentication = true;
                 if (!(agreement || existingUser)){
                     serverCallService.makeGet("rest/login/getAuthenticatedUser", {token}, authenticateUser, loginFail);
+                    console.log(loginFrom)
+                    console.log('esimene log')
                 } else {
                     const params = {
                         token,
@@ -311,6 +312,8 @@ angular.module('koolikottApp')
                         existingUser,
                         loginFrom
                     }
+                    console.log(params)
+                    console.log(loginFrom)
                     showGdprModalAndAct(params);
                 }
             },
