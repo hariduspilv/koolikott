@@ -105,24 +105,6 @@ angular.module('koolikottApp')
                 } else {
                     showGdprModalAndAct(userStatus);
                 }
-
-                switch (userStatus.authenticatedUser.loginFrom) {
-                    case 'ID_CARD':
-                        gTagCaptureEventWithLabel('login', 'user', 'ID-Card')
-                        break;
-                    case 'EKOOL':
-                        gTagCaptureEventWithLabel('login', 'user', 'ekool.eu')
-                        break;
-                    case 'STUUDIUM':
-                        gTagCaptureEventWithLabel('login', 'user', 'stuudium.com')
-                        break;
-                    case 'HAR_ID':
-                        gTagCaptureEventWithLabel('login', 'user', 'HarID')
-                        break;
-                    case 'MOB_ID':
-                        gTagCaptureEventWithLabel('login', 'user', 'Mobile-ID')
-                        break;
-                }
             }
         }
 
@@ -174,7 +156,7 @@ angular.module('koolikottApp')
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
             toastService.show('LOGIN_SUCCESS');
-            console.log(JSON.parse(localStorage.getItem('authenticatedUser')))
+            getLoginFrom(JSON.parse(localStorage.getItem('authenticatedUser').loginFrom))
 
             if (mobileIdLoginSuccessCallback) {
                 mobileIdLoginSuccessCallback();
