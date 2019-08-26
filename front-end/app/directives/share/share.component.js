@@ -102,9 +102,9 @@ class controller extends Controller {
                 })
 
                 if(this.pageUrl.contains('kogumik')){
-                    gTagCaptureEvent('share', 'teaching portfolio', 'Facebook')
+                    gTagCaptureEventWithLabel('share', 'teaching portfolio', 'Facebook')
                 } else {
-                    gTagCaptureEvent('share', 'teaching material', 'Facebook')
+                    gTagCaptureEventWithLabel('share', 'teaching material', 'Facebook')
                 }
 
                 break
@@ -118,9 +118,9 @@ class controller extends Controller {
                 })
 
                 if(this.pageUrl.contains('kogumik')){
-                    gTagCaptureEvent('share', 'teaching portfolio', 'Twitter')
+                    gTagCaptureEventWithLabel('share', 'teaching portfolio', 'Twitter')
                 } else if (this.pageUrl.contains('oppematerjal')){
-                    gTagCaptureEvent('share', 'teaching material', 'Twitter')
+                    gTagCaptureEventWithLabel('share', 'teaching material', 'Twitter')
                 }
 
                 break
@@ -134,9 +134,9 @@ class controller extends Controller {
                 })
 
                 if(this.pageUrl.contains('kogumik')){
-                    gTagCaptureEvent('share', 'teaching portfolio', 'E-mail')
+                    gTagCaptureEventWithLabel('share', 'teaching portfolio', 'E-mail')
                 } else if (this.pageUrl.contains('oppematerjal')){
-                    gTagCaptureEvent('share', 'teaching material', 'E-mail')
+                    gTagCaptureEventWithLabel('share', 'teaching material', 'E-mail')
                 }
 
                 break

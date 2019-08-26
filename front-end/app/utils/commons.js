@@ -54,25 +54,8 @@ if (typeof String.prototype.contains === 'undefined') {
     };
 }
 
-function gTagCaptureEvent(event, category) {
-    gtag('event', event, {
-        'event_category': category
-    })
-}
 
-function gTagCaptureEvent(event, category, label) {
-    gtag('event', event, {
-        'event_category': category,
-        'event_label': label
-    })
-}
 
-function gTagCaptureEventWithValue(event, category, value) {
-    gtag('event', event, {
-        'event_category': category,
-        'value': value
-    })
-}
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
 if (!Array.prototype.includes) {
@@ -642,6 +625,28 @@ function audienceType(lo) {
             .map(x => x.taxonLevelName))]
         .map(eduContext => translateEducationalContext(eduContext));
 
+}
+
+function gTagCaptureEvent(event, category) {
+    gtag('event', event, {
+        'event_category': category
+    })
+}
+
+function gTagCaptureEventWithLabel(event, category, label) {
+    console.log(label)
+    gtag('event', event, {
+        'event_category': category,
+        'event_label': label
+    })
+    console.log(label)
+}
+
+function gTagCaptureEventWithValue(event, category, value) {
+    gtag('event', event, {
+        'event_category': category,
+        'value': value
+    })
 }
 
 function getSource(material) {
