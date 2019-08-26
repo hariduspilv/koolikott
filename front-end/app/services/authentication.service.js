@@ -107,6 +107,24 @@ angular.module('koolikottApp')
                 } else {
                     showGdprModalAndAct(userStatus);
                 }
+
+                switch (userStatus.authenticatedUser.loginFrom) {
+                    case 'ID_CARD':
+                        gTagCaptureEventWithLabel('login', 'user', 'ID-Card')
+                        break;
+                    case 'EKOOL':
+                        gTagCaptureEventWithLabel('login', 'user', 'ekool.eu')
+                        break;
+                    case 'STUUDIUM':
+                        gTagCaptureEventWithLabel('login', 'user', 'stuudium.com')
+                        break;
+                    case 'HAR_ID':
+                        gTagCaptureEventWithLabel('login', 'user', 'HarID')
+                        break;
+                    case 'MOB_ID':
+                        gTagCaptureEventWithLabel('login', 'user', 'Mobile-ID')
+                        break;
+                }
             }
         }
 
@@ -174,24 +192,6 @@ angular.module('koolikottApp')
             $timeout(() =>
                 $rootScope.$broadcast('login:success')
             )
-
-            switch ($rootScope.authenticationOption) {
-                case 'idCard':
-                    gTagCaptureEvent('login', 'user', 'ID-Card')
-                    break;
-                case 'ekool':
-                    gTagCaptureEvent('login', 'user', 'ekool.eu')
-                    break;
-                case 'stuudium':
-                    gTagCaptureEvent('login', 'user', 'stuudium.com')
-                    break;
-                case 'harID':
-                    gTagCaptureEvent('login', 'user', 'HarID')
-                    break;
-                case 'mID':
-                    gTagCaptureEvent('login', 'user', 'Mobile-ID')
-                    break;
-            }
         }
 
         function disableLogin() {
