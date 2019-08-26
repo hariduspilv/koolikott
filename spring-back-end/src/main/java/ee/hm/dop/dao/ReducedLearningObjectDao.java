@@ -18,7 +18,7 @@ public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject>
         Query query = getEntityManager()
                 .createQuery("select rlo FROM ReducedMaterial rlo " +
                         "WHERE rlo.creator.id = :creatorId AND rlo.deleted = false " +
-                        "order by rlo.added desc", ReducedMaterial.class);
+                        "order by rlo.views desc, rlo.added desc", ReducedMaterial.class);
         return findByCreator(query, creator, start, maxResults);
     }
 
@@ -26,7 +26,7 @@ public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject>
         Query query = getEntityManager()
                 .createQuery("select rlo FROM ReducedPortfolio rlo " +
                         "WHERE rlo.creator.id = :creatorId AND rlo.deleted = false " +
-                        "order by rlo.added desc", ReducedPortfolio.class);
+                        "order by rlo.views desc, rlo.added desc", ReducedPortfolio.class);
         return findByCreator(query, creator, start, maxResults);
     }
 
@@ -34,7 +34,7 @@ public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject>
         Query query = getEntityManager()
                 .createQuery("select rlo FROM ReducedLearningObject rlo " +
                         "WHERE rlo.creator.id = :creatorId AND rlo.deleted = false " +
-                        "order by rlo.class asc, rlo.views desc ", ReducedLearningObject.class);
+                        "order by rlo.class asc, rlo.views desc, rlo.added desc ", ReducedLearningObject.class);
         return findByCreator(query, creator, start, maxResults);
     }
 
