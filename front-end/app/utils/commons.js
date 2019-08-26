@@ -624,9 +624,9 @@ function audienceType(lo) {
 
 }
 
-function getLoginFrom(loginFrom){
+function getLoginFrom(authBy){
     console.log('im in loginFrom')
-    switch (loginFrom) {
+    switch (authBy.loginFrom) {
         case 'ID_CARD':
             gTagCaptureEventWithLabel('login', 'user', 'ID-Card')
             break;
