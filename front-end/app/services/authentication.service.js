@@ -102,6 +102,7 @@ angular.module('koolikottApp')
             } else {
                 if (userStatus.statusOk){
                     authenticateUser(userStatus.authenticatedUser);
+                    console.log(userStatus.authenticatedUser.loginFrom)
                 } else {
                     showGdprModalAndAct(userStatus);
                 }
