@@ -303,8 +303,11 @@ angular.module('koolikottApp')
                 isOAuthAuthentication = true;
                 if (!(agreement || existingUser)){
                     serverCallService.makeGet("rest/login/getAuthenticatedUser", {token}, authenticateUser, loginFail);
-                    console.log(loginFrom)
+                    console.log(authenticateUser())
                     console.log('esimene log')
+                    console.log(authenticateUser)
+                    console.log(loginFrom)
+                    console.log('teine log')
                 } else {
                     const params = {
                         token,
