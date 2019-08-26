@@ -6,11 +6,11 @@
             super(...args)
 
             this.$scope.agree = () => {
-                this.$mdDialog.hide(true)
+                this.$mdDialog.hide({agreed: true})
             }
 
             this.$scope.cancel = () => {
-
+                this.$mdDialog.hide({disagreed: true})
             }
 
             this.$scope.logout = () => {

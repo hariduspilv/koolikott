@@ -136,6 +136,7 @@ angular.module('koolikottApp')
                     window.location.replace('/404');
                 } else {
                     $scope.material = material;
+                    console.log(material.licenseType.name)
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
 
