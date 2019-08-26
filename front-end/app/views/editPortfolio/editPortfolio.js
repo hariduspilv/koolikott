@@ -10,7 +10,7 @@ class controller extends Controller {
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
-                this.$rootScope.tabtitle = this.$scope.portfolio.title
+                this.$rootScope.tabTitle = this.$scope.portfolio.title
                 window.removeEventListener('popstate', listener, false)
                 history.back()
             }, () => history.pushState(null, document.title, location.href))
