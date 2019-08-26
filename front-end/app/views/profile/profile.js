@@ -7,7 +7,7 @@
             this.getUserNameAndLearningObjectsCount();
 
             this.$scope.cache = false;
-            this.$scope.url = 'rest/learningObject/getByCreatorAllLearningObjects';
+            this.$scope.url = 'rest/learningObject/getByCreatorAllReducedLearningObjects';
             this.$scope.params = {
                 'username': this.$route.current.params.username,
                 'maxResults': 20
