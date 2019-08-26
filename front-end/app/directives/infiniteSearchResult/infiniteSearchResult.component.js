@@ -150,7 +150,6 @@
         setPhraseTitles() {
             this.setPhraseTitleExact()
             this.setPhraseTitleSimilar()
-            this.setTabTitle()
         }
 
         resetSort() {
