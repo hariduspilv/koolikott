@@ -174,6 +174,7 @@ angular.module('koolikottApp')
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
             toastService.show('LOGIN_SUCCESS');
+            console.log('authenticateduser: ' + authenticatedUser)
 
             if (mobileIdLoginSuccessCallback) {
                 mobileIdLoginSuccessCallback();
@@ -285,6 +286,7 @@ angular.module('koolikottApp')
 
             authenticateUsingOAuth: function(inputParams) {
                 const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                console.log(inputParams)
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -303,6 +305,11 @@ angular.module('koolikottApp')
                 isOAuthAuthentication = true;
                 if (!(agreement || existingUser)){
                     serverCallService.makeGet("rest/login/getAuthenticatedUser", {token}, authenticateUser, loginFail);
+                    console.log(authenticateUser())
+                    console.log('esimene log')
+                    console.log(authenticateUser)
+                    console.log(loginFrom)
+                    console.log('teine log')
                 } else {
                     const params = {
                         token,
@@ -310,6 +317,8 @@ angular.module('koolikottApp')
                         existingUser,
                         loginFrom
                     }
+                    console.log(params)
+                    console.log(loginFrom)
                     showGdprModalAndAct(params);
                 }
             },
