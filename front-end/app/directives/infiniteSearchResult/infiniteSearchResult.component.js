@@ -118,7 +118,7 @@
                     } else if (this.$scope.headlineLanguage === 'RU') {
                         this.$rootScope.tabTitle = `Поиск: ${this.$scope.searchKeyWord}`;
                     }
-                } else {
+                } else if (this.$scope.educationLevel === '') {
                     this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
                 }
             })
@@ -211,6 +211,9 @@
                 this.$scope.educationLevel = fullTaxon.taxonLevel === 'EDUCATIONAL_CONTEXT' ?
                     this.$translate.instant(fullTaxon.name)
                     : this.$translate.instant((fullTaxon.taxonLevel + '_' + fullTaxon.name).toUpperCase());
+                if(this.$scope.searchKeyWord === ''){
+                    this.$rootScope.tabTitle = this.$scope.educationLevel
+                }
             }
         }
 

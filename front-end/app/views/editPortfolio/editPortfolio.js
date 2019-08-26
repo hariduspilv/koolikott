@@ -4,13 +4,13 @@
 class controller extends Controller {
     constructor(...args) {
         super(...args)
-
         const listener = () => {
             this.$mdDialog.show({
                 templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
+                this.$rootScope.tabtitle = this.$scope.portfolio.title
                 window.removeEventListener('popstate', listener, false)
                 history.back()
             }, () => history.pushState(null, document.title, location.href))
