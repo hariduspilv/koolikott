@@ -286,6 +286,7 @@ angular.module('koolikottApp')
 
             authenticateUsingOAuth: function(inputParams) {
                 const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                console.log(inputParams)
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
