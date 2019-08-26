@@ -4,6 +4,10 @@
       <div class="md-toolbar-tools" data-layout-align="space-between center">
         <h2 data-translate="AGREEMENT_DIALOG_HEADER"
         ></h2>
+        <md-button ng-if="!userStatusOk" id="gdpr-login-cancel-button" ng-click="cancel()" class="md-icon-button"
+                   aria-label="Sulge sisselogimise modaalaken">
+          <md-icon>close</md-icon>
+        </md-button>
       </div>
     </div>
   </md-toolbar>
@@ -40,7 +44,8 @@
           >
             <span data-translate="AGREEMENT_DIALOG_ACTION_NO"></span>
           </md-button>
-          <!--<md-button
+          <md-button
+            ng-if="!userStatusOk"
             id="gdpr-agreement-accept-button"
             class="md-raised md-primary"
             aria-label="Nõustun ja sisenen"
@@ -48,12 +53,13 @@
             data-ng-click="agree()"
           >
             <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
-          </md-button>-->
+          </md-button>
           <md-button
+            ng-if="userStatusOk"
             id="gdpr-agreement-accept-button"
             class="md-raised md-primary"
             aria-label="Nõustun"
-            data-ng-click="agree()"
+            data-ng-click="existingUserAgree()"
           >
             <span>Nõustun</span>         <!-- TODO: Add Traslation to span -->
           </md-button>

@@ -1,9 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.LicenceAgreement;
-import org.springframework.stereotype.Repository;
 
-@Repository
 public class LicenceAgreementDao extends AbstractDao<LicenceAgreement> {
 
     public LicenceAgreement findLatestAgreement() {

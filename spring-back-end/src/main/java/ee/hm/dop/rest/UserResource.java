@@ -1,8 +1,10 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserLicenceAgreement;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.user.UserLocation;
+import ee.hm.dop.service.UserLicenceAgreementService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
 import ee.hm.dop.service.useractions.UserService;
 import org.springframework.http.MediaType;
@@ -26,6 +28,8 @@ public class UserResource extends BaseResource {
     private UserService userService;
     @Inject
     private AuthenticatedUserService authenticatedUserService;
+    @Inject
+    UserLicenceAgreementService userLicenceAgreementService;
 
     @GetMapping
     public User get(@RequestParam("username") String username) {
@@ -39,6 +43,11 @@ public class UserResource extends BaseResource {
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.RESTRICTED, RoleString.MODERATOR})
     public String getSignedUserData() {
         return authenticatedUserService.signUserData(getAuthenticatedUser());
+    }
+
+    @GetMapping(value = "getUserLicenceAgreements")
+    public UserLicenceAgreement getUserLicenceAgreements(@RequestParam("id") Long userId) {
+        return null;
     }
 
     @GetMapping(value = "role", produces = MediaType.TEXT_PLAIN_VALUE)

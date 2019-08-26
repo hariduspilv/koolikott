@@ -67,10 +67,32 @@ angular.module('koolikottApp')
                     }
                 } else {
                     userStatus.userConfirmed = true;
+                    console.log(userStatus)
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
                             if ($rootScope.userHasEmailOnLogin) {
-                                authenticateUser(response.data);
+                                // Nüüd on status ok -> kuva migrationAgreementDialog
+                                console.log(response)
+                                // kasutaja id = response.data.user.id
+                                $mdDialog.show({
+                                    templateUrl: 'views/agreement/migrationAgreementDialog.html',
+                                    controller: 'migrationAgreementController',
+                                    controllerAs: '$ctrl',
+                                    escapeToClose: false
+                                }).then((migrationResponse) => {
+                                    if (migrationResponse.agree) {
+                                        let jsonObject = {}
+                                        jsonObject.user = response.data.user
+                                        jsonObject.agreed = true
+                                        jsonObject.disagree = false
+                                        console.log(jsonObject)
+                                        serverCallService.makePost('rest/licenceAgreement', jsonObject)
+                                            .then((resp) => {
+                                                console.log(resp)
+                                            })
+                                    }
+                                })
+                                // authenticateUser(response.data);
                             } else {
                                 userEmailService.saveEmail($rootScope.email, response.data.user)
                                 showEmailValidationModal(response)
@@ -103,6 +125,7 @@ angular.module('koolikottApp')
                 loginFail();
             } else {
                 if (userStatus.statusOk){
+                    // kontrolli license migration agreementi
                     authenticateUser(userStatus.authenticatedUser);
                 } else {
                     showGdprModalAndAct(userStatus);
@@ -163,7 +186,7 @@ angular.module('koolikottApp')
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
             if ($rootScope.afterAuthRedirectURL) {
 
-                $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
+                $location.url('/'/* + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL*/);
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/profiil');
                 $rootScope.userFirstLogin = true
