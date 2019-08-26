@@ -1,0 +1,4 @@
+call update_translations('MYPROFILE_PAGE_TITLE_MATERIALS', 'Minu materjalid', 'My materials', 'Мои материалы');
+call update_translations('MYPROFILE_PAGE_TITLE_FAVORITES', 'Minu lemmikud', 'My favorites', 'Избранные');
+call update_translations('USER_MANUALS_HEADING', 'Videojuhendi sisestamine', 'Add video guides', 'Videojuhendi sisestamine (RU)');
+update Translation set translation = 'To use E-Koolikott you are giving your personal data to digital learning object platform. Please read information page and give your response' where translationKey = 'AGREEMENT_DIALOG_TEXT' and translationGroup = 3;
