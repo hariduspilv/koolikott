@@ -221,6 +221,11 @@ angular.module('koolikottApp')
             serverCallService.makePost(url)
                 .then(() => {
                     authenticatedUserService.removeAuthenticatedUser();
+                    // $rootScope.$broadcast('logout:success');
+                    // enableLogin();
+                })
+                .then(() => {
+                    console.log(JSON.parse(localStorage.getItem('authenticatedUser')));
                     $rootScope.$broadcast('logout:success');
                     enableLogin();
                 });
