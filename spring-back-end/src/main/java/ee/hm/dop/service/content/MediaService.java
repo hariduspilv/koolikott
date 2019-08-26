@@ -5,13 +5,12 @@ import ee.hm.dop.model.Media;
 import ee.hm.dop.model.User;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
-
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @Transactional
@@ -52,5 +51,9 @@ public class MediaService {
 
     public Media get(long mediaId) {
         return mediaDao.findById(mediaId);
+    }
+
+    public List<Media> getAllByCreator(User creator) {
+        return mediaDao.findAllByCreator(creator);
     }
 }

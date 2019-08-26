@@ -1,7 +1,6 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.LearningObjectDao;
-import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
@@ -81,5 +80,9 @@ public class LearningObjectService {
             return userTaxons != null && collect.stream().anyMatch(userTaxons::contains);
         }
         return false;
+    }
+
+    public List<LearningObject> getAllByCreator(User creator) {
+        return learningObjectDao.findAllByCreator(creator);
     }
 }
