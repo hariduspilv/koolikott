@@ -156,6 +156,7 @@ angular.module('koolikottApp')
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
             toastService.show('LOGIN_SUCCESS');
+            console.log(JSON.parse(localStorage.getItem('authenticatedUser').loginFrom))
             getLoginFrom(JSON.parse(localStorage.getItem('authenticatedUser').loginFrom))
 
             if (mobileIdLoginSuccessCallback) {

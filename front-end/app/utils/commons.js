@@ -625,7 +625,7 @@ function audienceType(lo) {
 }
 
 function getLoginFrom(loginFrom){
-
+    console.log('im in loginFrom')
     switch (loginFrom) {
         case 'ID_CARD':
             gTagCaptureEventWithLabel('login', 'user', 'ID-Card')
@@ -652,6 +652,7 @@ function gTagCaptureEvent(event, category) {
 }
 
 function gTagCaptureEventWithLabel(event, category, label) {
+    console.log('im in gtag with label')
     gtag('event', event, {
         'event_category': category,
         'event_label': label
