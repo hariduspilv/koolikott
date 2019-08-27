@@ -124,7 +124,7 @@ class controller extends Controller {
         this.$scope.showLogButton = false;
         this.$rootScope.$broadcast('portfolioHistory:show');
 
-        gTagCaptureEvent('show', 'teaching portfolio', 'History')
+        gTagCaptureEventWithLabel('show', 'teaching portfolio', 'History')
     }
 
     hideButtons() {

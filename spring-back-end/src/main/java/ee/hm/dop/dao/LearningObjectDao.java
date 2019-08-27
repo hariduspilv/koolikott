@@ -54,6 +54,13 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
                 .getSingleResult();
     }
 
+    public List<LearningObject> findAllByCreator(User creator) {
+        return getEntityManager().createQuery("SELECT lo FROM LearningObject lo WHERE lo.deleted = false " +
+                "AND lo.creator = :creator", entity())
+                .setParameter("creator", creator)
+                .getResultList();
+    }
+
     public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects, int startPosition) {
         return getEntityManager()
                 .createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added DESC, id DESC", entity())
@@ -98,6 +105,12 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
                                     + "where lo.id = :id AND lo.deleted = false")
                     .setParameter("id", learningObject.getId()).executeUpdate();
         }
+    }
+
+    public List<String> findUsersLearningobjectCreators() {
+        return getEntityManager()
+                .createNativeQuery("select distinct (U.userName) from LearningObject lo join User U on lo.creator = U.id")
+                .getResultList();
     }
 
     @Override

@@ -91,7 +91,7 @@ angular.module('koolikottApp')
                     templateUrl: 'views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
-                    permissions: ['ADMIN', 'MODERATOR']
+                    permissions: ['ADMIN']
                 })
                 .when('/toolaud/aineeksperdid', {
                     templateUrl: 'views/dashboard/baseTableView.html',
@@ -184,6 +184,23 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                 })
                 .when('/:username/lemmikud', {
+                    templateUrl: 'views/profile/favorites/favorites.html',
+                    controller: 'userFavoritesController',
+                    controllerAs: '$ctrl',
+                    resolve: UserPathResolver,
+                })
+                .when('/:username/materials', {
+                    templateUrl: 'views/profile/materials/materials.html',
+                    controller: 'userMaterialsController',
+                    controllerAs: '$ctrl',
+                    resolve: UserPathResolver,
+                })
+                .when('/:username/portfolios', {
+                    templateUrl: 'views/profile/portfolios/portfolios.html',
+                    controller: 'userPortfoliosController',
+                    controllerAs: '$ctrl',
+                })
+                .when('/:username/favorites', {
                     templateUrl: 'views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
                     controllerAs: '$ctrl',

@@ -7,6 +7,9 @@
 
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.isSaving = false
+            this.$scope.existingUser = this.$rootScope.userStatusOk
+            this.$scope.userStatus = this.$rootScope.statusForDuplicateCheck
+            console.log(this.$scope.userStatus)
 
             this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
             this.$scope.$watch(
@@ -21,10 +24,11 @@
             })
 
             this.$scope.agree = () => {
-                if (this.$rootScope.userHasEmailOnLogin)
+                if (this.$rootScope.userHasEmailOnLogin) {
                     this.$mdDialog.hide(true)
-                else
+                } else {
                     this.handleLoginWithNoEmail();
+                }
             }
 
             this.$scope.cancel = () => {
@@ -67,7 +71,8 @@
         '$mdDialog',
         'authenticatedUserService',
         'userEmailService',
-        '$rootScope'
+        'authenticationService',
+        'serverCallService'
     ]
 
     angular.module('koolikottApp').controller('agreementDialogController', controller)

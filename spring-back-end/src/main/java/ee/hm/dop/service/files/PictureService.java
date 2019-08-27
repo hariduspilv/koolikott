@@ -2,6 +2,7 @@ package ee.hm.dop.service.files;
 
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.ThumbnailDao;
+import ee.hm.dop.model.LicenseType;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
@@ -32,5 +33,9 @@ public class PictureService {
         }
         Picture existingPicture = getByName(name);
         return existingPicture != null ? pictureSaver.createOneThumbnail(existingPicture, size) : null;
+    }
+
+    public LicenseType getLicenceTypeById(Long id) {
+        return originalPictureDao.findById(id).getLicenseType();
     }
 }

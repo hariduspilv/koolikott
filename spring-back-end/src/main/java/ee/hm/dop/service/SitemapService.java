@@ -5,26 +5,29 @@ import com.redfin.sitemapgenerator.SitemapIndexGenerator;
 import com.redfin.sitemapgenerator.WebSitemapGenerator;
 import com.redfin.sitemapgenerator.WebSitemapUrl;
 import ee.hm.dop.config.Configuration;
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.MaterialTitle;
 import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.User;
+import ee.hm.dop.service.files.UploadedFileService;
+import ee.hm.dop.service.files.enums.FileDirectory;
 import ee.hm.dop.utils.tokenizer.TitleUtils;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.text.ParseException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.redfin.sitemapgenerator.WebSitemapUrl.Options;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static ee.hm.dop.utils.ConfigurationProperties.SITEMAP_PATH;
+import static ee.hm.dop.utils.ConfigurationProperties.SITEMAPS_DIRECTORY;
 
 @Service
 @Transactional
@@ -47,9 +50,10 @@ public class SitemapService {
     private static final String GDPR = "toolaud/gdpr";
     private static final String USER_MANUALS_ADMIN = "toolaud/videojuhendid";
 
-    private static final String MATERIAL = "/material/";
-    private static final String PORTFOLIO = "/portfolio/";
-    private static final String USER = "/user/";
+    private static final String MATERIAL = "/oppematerjal/";
+    private static final String PORTFOLIO = "/kogumik/";
+
+    public static final String REST_SITEMAP = "/sitemapFile";
 
     private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS, PROFILE, IMPROPER, UNREVIEWED, CHANGES, SENTEMAILS, MODERATORS, RESTRICTED_USERS, DELETED, STATS_EXPERT, GDPR, USER_MANUALS_ADMIN);
 
@@ -60,17 +64,24 @@ public class SitemapService {
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
-    private UserDao userDao;
+    private LearningObjectDao learningObjectDao;
+    @Inject
+    private UploadedFileService uploadedFileService;
+    @Inject
+    private Environment environment;
 
-    public int createSitemap() throws MalformedURLException, ParseException {
+    public int createSitemap() throws MalformedURLException, ParseException, UnsupportedEncodingException {
+
+        String property = environment.getProperty("server.servlet.contextPath");
         final String BASE_URL = configuration.getString(SERVER_ADDRESS);
-        File file = new File(configuration.getString(SITEMAP_PATH));
+        File file = new File(configuration.getString(SITEMAPS_DIRECTORY));
         int nrOfUrl = 0;
+        List<String> urls = new ArrayList<>();
 
-        WebSitemapGenerator webSitemapGeneratorPortfolio = generatePrefixSpecific("/portfolios", file);
+        WebSitemapGenerator webSitemapGeneratorPortfolio = generatePrefixSpecific("portfolios", file);
 
         for (Portfolio portfolio : portfolioDao.findAll()) {
-            WebSitemapUrl wsmUrl = new Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + TitleUtils.replaceChars(portfolio.getTitle()))
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + TitleUtils.replaceChars(portfolio.getTitle()))
                     .lastMod(portfolio.getUpdated() == null ? String.valueOf(portfolio.getAdded()) : String.valueOf(portfolio.getUpdated()))
                     .priority(0.9)
                     .changeFreq(ChangeFreq.DAILY)
@@ -78,9 +89,11 @@ public class SitemapService {
             webSitemapGeneratorPortfolio.addUrl(wsmUrl);
             nrOfUrl++;
         }
-        webSitemapGeneratorPortfolio.write();
+        String portfolioXml = String.join("", webSitemapGeneratorPortfolio.writeAsStrings());
+        uploadedFileService.uploadXmlFile(portfolioXml, "portfolios.xml", FileDirectory.SITEMAPS);
+        urls.add(String.join("", webSitemapGeneratorPortfolio.writeAsStrings()));
 
-        WebSitemapGenerator webSitemapGeneratorMaterial = generatePrefixSpecific("/materials", file);
+        WebSitemapGenerator webSitemapGeneratorMaterial = generatePrefixSpecific("materials", file);
 
         List<MaterialTitle> materialTitles = sitemapServiceCache.findAllMaterialsTitles();
         for (MaterialTitle materialTitle : materialTitles) {
@@ -92,11 +105,14 @@ public class SitemapService {
             webSitemapGeneratorMaterial.addUrl(wsmUrl);
             nrOfUrl++;
         }
-        webSitemapGeneratorMaterial.write();
+        String materialXml = String.join("", webSitemapGeneratorMaterial.writeAsStrings());
+        uploadedFileService.uploadXmlFile(materialXml, "materials.xml", FileDirectory.SITEMAPS);
+        urls.add(String.join("", webSitemapGeneratorMaterial.writeAsStrings()));
 
-        WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("/users", file);
-        for (User user : userDao.findAll()) {
-            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + USER + user.getUsername())
+        WebSitemapGenerator webSitemapGeneratorUsers = generatePrefixSpecific("users", file);
+
+        for (String user : learningObjectDao.findUsersLearningobjectCreators()) {
+            WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + user)
                     .lastMod(String.valueOf(LocalDateTime.now()))
                     .priority(0.8)
                     .changeFreq(ChangeFreq.DAILY)
@@ -105,9 +121,12 @@ public class SitemapService {
             webSitemapGeneratorUsers.addUrl(wsmUrl);
             nrOfUrl++;
         }
-        webSitemapGeneratorUsers.write();
 
-        WebSitemapGenerator webSitemapGeneratorOther = generatePrefixSpecific("/otherUrls", file);
+        String usersXml = String.join("", webSitemapGeneratorUsers.writeAsStrings());
+        uploadedFileService.uploadXmlFile(usersXml, "users.xml", FileDirectory.SITEMAPS);
+        urls.add(String.join("", webSitemapGeneratorUsers.writeAsStrings()));
+
+        WebSitemapGenerator webSitemapGeneratorOther = generatePrefixSpecific("otherUrls", file);
         for (String url : URLS) {
             WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + "/" + url)
                     .lastMod(String.valueOf(LocalDateTime.now()))
@@ -117,15 +136,22 @@ public class SitemapService {
             webSitemapGeneratorOther.addUrl(wsmUrl);
             nrOfUrl++;
         }
-        webSitemapGeneratorOther.write();
+        String othersXml = String.join("", webSitemapGeneratorOther.writeAsStrings());
+        uploadedFileService.uploadXmlFile(othersXml, "otherUrls.xml", FileDirectory.SITEMAPS);
+        urls.add(String.join("", webSitemapGeneratorOther.writeAsStrings()));
 
-        File outFile = new File(configuration.getString(SITEMAP_PATH) + "/sitemaps_index.xml");
-        SitemapIndexGenerator sitemapIndexGenerator = new SitemapIndexGenerator(BASE_URL, outFile);
-        sitemapIndexGenerator.addUrl(BASE_URL + "/portfolios.xml");
-        sitemapIndexGenerator.addUrl(BASE_URL + "/materials.xml");
-        sitemapIndexGenerator.addUrl(BASE_URL + "/otherUrls.xml");
-        sitemapIndexGenerator.addUrl(BASE_URL + "/users.xml");
-        sitemapIndexGenerator.write();
+        File outFile = new File(configuration.getString(SITEMAPS_DIRECTORY) + "sitemapIndex.xml");
+
+        SitemapIndexGenerator sitemapIndexGenerator = new SitemapIndexGenerator(BASE_URL + property + REST_SITEMAP, outFile);
+        sitemapIndexGenerator.addUrl(BASE_URL + property + "/portfolios.xml");
+        sitemapIndexGenerator.addUrl(BASE_URL + property + "/materials.xml");
+        sitemapIndexGenerator.addUrl(BASE_URL + property + "/otherUrls.xml");
+        sitemapIndexGenerator.addUrl(BASE_URL + property + "/users.xml");
+
+        String indexXml = String.join("", sitemapIndexGenerator.writeAsString());
+        uploadedFileService.uploadXmlFile(indexXml, "sitemapIndex.xml", FileDirectory.SITEMAPS);
+        urls.add(String.join("", sitemapIndexGenerator.writeAsString()));
+
         return nrOfUrl;
     }
 

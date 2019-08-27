@@ -85,6 +85,7 @@ public interface ConfigurationProperties {
     String FILE_UPLOAD_DIRECTORY = "file.upload.directory";
     String DOCUMENT_MAX_FILE_SIZE = "file.document.upload.max.size";
     String FILE_REVIEW_DIRECTORY = "file.review.directory";
+    String SITEMAPS_DIRECTORY = "sitemaps.directory";
 
     String REQUEST_EXTRA_LOGGING = "request.extra.logging";
     String MAX_FEED_ITEMS = "feed.items.max";
@@ -108,8 +109,5 @@ public interface ConfigurationProperties {
     String EXECUTOR_maxPoolSize = "cron.executor.maxPoolSize";
     String EXECUTOR_queueCapacity = "cron.executor.queueCapacity";
     String EXECUTOR_threadNamePrefix = "cron.executor.threadNamePrefix";
-
-//    Sitemap
-    String SITEMAP_PATH = "sitemap.path";
 
 }

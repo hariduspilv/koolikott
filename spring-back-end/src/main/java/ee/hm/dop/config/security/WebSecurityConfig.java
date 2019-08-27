@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authenticationEntryPoint(restAuthenticationEntryPoint)
                 .and()
                 .addFilterBefore(preAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class);
-
+//        http.headers().contentTypeOptions().disable();
     }
 
     @Bean

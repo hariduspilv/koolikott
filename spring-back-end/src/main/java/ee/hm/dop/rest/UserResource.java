@@ -63,4 +63,13 @@ public class UserResource extends BaseResource {
         return userService.updateUserLocation(getLoggedInUser(), userLocation.getLocation());
     }
 
+    @GetMapping("areLicencesAcceptable")
+    public boolean areLicencesAcceptable(@RequestParam("username") String username) {
+        return  userService.areLicencesAcceptable(username);
+    }
+
+    @PostMapping("setLearningObjectsPrivate")
+    public void setUserLearningObjectsPrivate(@RequestBody User user) {
+        userService.setLearningObjectsPrivate(user);
+    }
 }

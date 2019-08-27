@@ -54,25 +54,8 @@ if (typeof String.prototype.contains === 'undefined') {
     };
 }
 
-function gTagCaptureEvent(event, category) {
-    gtag('event', event, {
-        'event_category': category
-    })
-}
 
-function gTagCaptureEvent(event, category, label) {
-    gtag('event', event, {
-        'event_category': category,
-        'event_label': label
-    })
-}
 
-function gTagCaptureEventWithValue(event, category, value) {
-    gtag('event', event, {
-        'event_category': category,
-        'event_value': value
-    })
-}
 
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
 if (!Array.prototype.includes) {
@@ -563,7 +546,7 @@ function getTypicalAgeRange(grade) {
             ageRange = '13-14';
             break;
         case 'GRADE8':
-            ageRange = '15-16';
+            ageRange = '14-15';
             break;
         case 'GRADE9':
             ageRange = '15-16';
@@ -590,8 +573,80 @@ function translateEducationalContext(eduContext) {
         case ('VOCATIONALEDUCATION'):
             translation = 'Kutsekooliõpilased';
             break;
+        case ('NONFORMALEDUCATION'):
+            translation = '';
+            break;
     }
     return translation;
+}
+
+function findLicenseType(license) {
+    let licenseLink;
+    switch (license) {
+        case ('CCBY'):
+            licenseLink = 'http://creativecommons.org/licenses/by/4.0/';
+            break;
+        case ('CCBYNC'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc/4.0/';
+            break;
+        case ('CCBYNCND'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc-nd/4.0/';
+            break;
+        case ('CCBYNCSA'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nc-sa/4.0/';
+            break;
+        case ('CCBYND'):
+            licenseLink = 'https://creativecommons.org/licenses/by-nd/4.0/';
+            break;
+        case ('CCBYSA'):
+            licenseLink = 'https://creativecommons.org/licenses/by-sa/4.0/';
+            break;
+        case ('Youtube'):
+            licenseLink = 'Youtube';
+            break;
+        case ('allRightsReserved'):
+            licenseLink = 'Kõik õigused kaitstud';
+            break;
+    }
+    return licenseLink;
+}
+
+function addLicense(license) {
+    if (license)
+        return findLicenseType(license.name);
+    else
+        return ''
+}
+
+function audienceType(lo) {
+    return [...new Set(
+        lo.taxonPositionDto
+            .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
+            .map(x => x.taxonLevelName))]
+        .map(eduContext => translateEducationalContext(eduContext));
+
+}
+
+function gTagCaptureEvent(event, category) {
+    gtag('event', event, {
+        'event_category': category
+    })
+}
+
+function gTagCaptureEventWithLabel(event, category, label) {
+    console.log(label)
+    gtag('event', event, {
+        'event_category': category,
+        'event_label': label
+    })
+    console.log(label)
+}
+
+function gTagCaptureEventWithValue(event, category, value) {
+    gtag('event', event, {
+        'event_category': category,
+        'value': value
+    })
 }
 
 function getSource(material) {
@@ -783,6 +838,7 @@ class Controller {
             ? ''
             : title || titlesForUrl && this.getUserDefinedLanguageString(titlesForUrl, this.translationService.getLanguage(), language)
     }
+
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
             return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`

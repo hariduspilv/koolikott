@@ -128,6 +128,12 @@ a {
   margin-right: 15px;
 }
 
+.margin-left-auto {
+  align-self: flex-end;
+  margin-left: auto;
+}
+
+
 .md-padding-double {
   padding: $md-padding * 2;
 }
@@ -140,6 +146,10 @@ a {
 .md-padding-double-horizontal {
   padding-left: $md-padding * 2;
   padding-right: $md-padding * 2;
+}
+
+.webkit-flex {
+  display: -webkit-flex;
 }
 
 .layout-padding,

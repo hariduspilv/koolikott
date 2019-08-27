@@ -101,6 +101,7 @@ class controller extends Controller {
     }
 }
 controller.$inject = [
+    '$rootScope',
     '$scope',
     '$location',
     '$timeout',

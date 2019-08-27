@@ -264,9 +264,15 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
 
             //if (window.location.hostname === 'e-koolikott.ee') {
                 if (user) {
-                    gtag('config', 'UA-144167571-1', {'user_id': `${user.id}`, 'page_path': path});
+                    gtag('config', 'UA-72667340-1', {'user_id': `${user.id}`, 'page_path': path});
                 } else {
-                    gtag('config', 'UA-144167571-1', {'page_path': path});
+                    gtag('config', 'UA-72667340-1', {'page_path': path});
+                }
+            } else {
+                if (user) {
+                    gtag('config', 'UA-145830836-1', {'user_id': `${user.id}`, 'page_path': path});
+                } else {
+                    gtag('config', 'UA-145830836-1', {'page_path': path});
                 }
             //}
 

@@ -7,11 +7,15 @@
             this.getUserNameAndLearningObjectsCount();
 
             this.$scope.cache = false;
-            this.$scope.url = 'rest/learningObject/getByCreatorAllLearningObjects';
+            this.$scope.url = 'rest/learningObject/getByCreatorAllReducedLearningObjects';
             this.$scope.params = {
                 'username': this.$route.current.params.username,
                 'maxResults': 20
             };
+            this.$rootScope.userView = true
+            this.$rootScope.$on('$locationChangeSuccess', () => {
+                this.$rootScope.userView = false;
+            })
         }
 
         getUserNameAndLearningObjectsCount() {
@@ -50,6 +54,7 @@
     }
 
     controller.$inject = [
+        '$rootScope',
         '$scope',
         '$route',
         'authenticatedUserService',
