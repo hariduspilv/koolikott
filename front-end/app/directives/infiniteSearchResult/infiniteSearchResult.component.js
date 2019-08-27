@@ -128,15 +128,17 @@
         }
 
         setPhraseTitleExact() {
-            this.$translate.onReady().then(() =>
-                this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
+                    this.setTabTitle()
+            })
         }
 
         setPhraseTitleSimilar() {
-            this.$translate.onReady().then(() =>
-                this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
+                    this.setTabTitle()
+            })
         }
 
         buildTitle(title, results, translations) {
