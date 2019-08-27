@@ -108,13 +108,7 @@
 
         setTabTitle(){
             if (this.$scope.searchKeyWord) {
-                if (this.$scope.headlineLanguage === 'ET') {
-                    this.$rootScope.tabTitle = `Otsing: ${this.$scope.searchKeyWord}`;
-                } else if (this.$scope.headlineLanguage === 'EN') {
-                    this.$rootScope.tabTitle = `Search: ${this.$scope.searchKeyWord}`;
-                } else if (this.$scope.headlineLanguage === 'RU') {
-                    this.$rootScope.tabTitle = `Поиск: ${this.$scope.searchKeyWord}`;
-                }
+                this.$rootScope.tabTitle = `${this.$translate.instant('SEARCH')}: ${this.$scope.searchKeyWord}`
             } else if (this.$scope.educationLevel === '') {
                 this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
             }
