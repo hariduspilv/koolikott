@@ -106,21 +106,24 @@
             this.expectedItemCount = this.maxResults
         }
 
+        setTabTitle(){
+            if (this.$scope.searchKeyWord) {
+                if (this.$scope.headlineLanguage === 'ET') {
+                    this.$rootScope.tabTitle = `Otsing: ${this.$scope.searchKeyWord}`;
+                } else if (this.$scope.headlineLanguage === 'EN') {
+                    this.$rootScope.tabTitle = `Search: ${this.$scope.searchKeyWord}`;
+                } else if (this.$scope.headlineLanguage === 'RU') {
+                    this.$rootScope.tabTitle = `Поиск: ${this.$scope.searchKeyWord}`;
+                }
+            } else if (this.$scope.educationLevel === '') {
+                this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
+            }
+        }
+
         setTitle() {
             this.$translate.onReady().then(() => {
-
                 this.$scope.title = (this.buildTitle(this.title, this.totalResults, this.titleTranslations))
-                if (this.$scope.searchKeyWord) {
-                    if (this.$scope.headlineLanguage === 'ET') {
-                        this.$rootScope.tabTitle = `Otsing: ${this.$scope.searchKeyWord}`;
-                    } else if (this.$scope.headlineLanguage === 'EN') {
-                        this.$rootScope.tabTitle = `Search: ${this.$scope.searchKeyWord}`;
-                    } else if (this.$scope.headlineLanguage === 'RU') {
-                        this.$rootScope.tabTitle = `Поиск: ${this.$scope.searchKeyWord}`;
-                    }
-                } else {
-                    this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
-                }
+                this.setTabTitle()
             })
         }
 
@@ -211,6 +214,9 @@
                 this.$scope.educationLevel = fullTaxon.taxonLevel === 'EDUCATIONAL_CONTEXT' ?
                     this.$translate.instant(fullTaxon.name)
                     : this.$translate.instant((fullTaxon.taxonLevel + '_' + fullTaxon.name).toUpperCase());
+                if(this.$scope.searchKeyWord === ''){
+                    this.$rootScope.tabTitle = this.$scope.educationLevel
+                }
             }
         }
 
