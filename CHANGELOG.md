@@ -1,3 +1,12 @@
+## e-Koolikott [1.39.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11023)
+
+### Muutunud
+* "Otsingu tulemuste layout katki/vale" [EK-697](https://projektid.hitsa.ee/jira/browse/EK-697)
+* "SEO > Browseri tabi pealkiri (Title element) muudatused" [EK-21](https://projektid.hitsa.ee/jira/browse/EK-21)
+* "Kogumike, materjalide ja lemmikute lehelt puudub pealkiri" [EK-701](https://projektid.hitsa.ee/jira/browse/EK-701)
+* "IE's ei kuvata detailvaates ja õppevara loomise modaalis pisipilte välja" [EK-658](https://projektid.hitsa.ee/jira/browse/EK-658)
+* "Aktiveeri kasutaja käitumise mõõtmiseks olulised sündmused Google Analytics'i jaoks" [EK-579](https://projektid.hitsa.ee/jira/browse/EK-579)
+
 ## e-Koolikott [1.39.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11016)
 
 ### Muutunud
