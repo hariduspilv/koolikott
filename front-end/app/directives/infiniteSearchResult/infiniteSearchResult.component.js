@@ -108,13 +108,7 @@
 
         setTabTitle(){
             if (this.$scope.searchKeyWord) {
-                if (this.$scope.headlineLanguage === 'ET') {
-                    this.$rootScope.tabTitle = `Otsing: ${this.$scope.searchKeyWord}`;
-                } else if (this.$scope.headlineLanguage === 'EN') {
-                    this.$rootScope.tabTitle = `Search: ${this.$scope.searchKeyWord}`;
-                } else if (this.$scope.headlineLanguage === 'RU') {
-                    this.$rootScope.tabTitle = `Поиск: ${this.$scope.searchKeyWord}`;
-                }
+                this.$rootScope.tabTitle = `${this.$translate.instant('SEARCH')}: ${this.$scope.searchKeyWord}`
             } else if (this.$scope.educationLevel === '') {
                 this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
             }
@@ -128,15 +122,17 @@
         }
 
         setPhraseTitleExact() {
-            this.$translate.onReady().then(() =>
-                this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
+                    this.setTabTitle()
+            })
         }
 
         setPhraseTitleSimilar() {
-            this.$translate.onReady().then(() =>
-                this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
+                    this.setTabTitle()
+            })
         }
 
         buildTitle(title, results, translations) {

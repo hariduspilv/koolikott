@@ -148,7 +148,12 @@ angular.module('koolikottApp')
                 $location.url('/profiil');
                 $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
-                $location.url(authenticatedUser.user.username + localStorage.getItem(LOGIN_ORIGIN));
+                let loginOrigin = localStorage.getItem(LOGIN_ORIGIN)
+                if (loginOrigin.contains('oppematerjalid') || loginOrigin.contains('kogumikud') || loginOrigin.contains('lemmikud')) {
+                    $location.url(authenticatedUser.user.username + loginOrigin);
+                } else {
+                    $location.url(loginOrigin)
+                }
             }
             enableLogin();
 
