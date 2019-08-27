@@ -10,9 +10,9 @@ class controller extends Controller {
             this.toastService.show('COPY_PERMALINK_SUCCESS')
 
             if(this.$scope.url.contains('kogumik')){
-                gTagCaptureEvent('copy', 'teaching portfolio', 'link')
+                gTagCaptureEventWithLabel('copy', 'teaching portfolio', 'link')
             } else if (this.$scope.url.contains('oppematerjal')){
-                gTagCaptureEvent('copy', 'teaching material', 'link')
+                gTagCaptureEventWithLabel('copy', 'teaching material', 'link')
             }
         }
     }

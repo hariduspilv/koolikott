@@ -27,7 +27,8 @@ class controller extends Controller {
                         }
                         break
                     case 404:
-                        window.location.replace('/404')
+                        this.$location.url('/404')
+                        break
                     case 401:
                         this.authenticatedUserService.removeAuthenticatedUser()
                     case 403:

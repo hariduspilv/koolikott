@@ -54,26 +54,6 @@ if (typeof String.prototype.contains === 'undefined') {
     };
 }
 
-function gTagCaptureEvent(event, category) {
-    gtag('event', event, {
-        'event_category': category
-    })
-}
-
-function gTagCaptureEvent(event, category, label) {
-    gtag('event', event, {
-        'event_category': category,
-        'event_label': label
-    })
-}
-
-function gTagCaptureEventWithValue(event, category, value) {
-    gtag('event', event, {
-        'event_category': category,
-        'event_value': value
-    })
-}
-
 // https://tc39.github.io/ecma262/#sec-array.prototype.includes
 if (!Array.prototype.includes) {
     Object.defineProperty(Array.prototype, 'includes', {
@@ -642,6 +622,47 @@ function audienceType(lo) {
             .map(x => x.taxonLevelName))]
         .map(eduContext => translateEducationalContext(eduContext));
 
+}
+
+function getLoginFrom(authBy){
+
+    switch (authBy.loginFrom) {
+        case 'ID_CARD':
+            gTagCaptureEventWithLabel('login', 'user', 'ID-Card')
+            break;
+        case 'EKOOL':
+            gTagCaptureEventWithLabel('login', 'user', 'ekool.eu')
+            break;
+        case 'STUUDIUM':
+            gTagCaptureEventWithLabel('login', 'user', 'stuudium.com')
+            break;
+        case 'HAR_ID':
+            gTagCaptureEventWithLabel('login', 'user', 'HarID')
+            break;
+        case 'MOB_ID':
+            gTagCaptureEventWithLabel('login', 'user', 'Mobile-ID')
+            break;
+    }
+}
+
+function gTagCaptureEvent(event, category) {
+    gtag('event', event, {
+        'event_category': category
+    })
+}
+
+function gTagCaptureEventWithLabel(event, category, label) {
+    gtag('event', event, {
+        'event_category': category,
+        'event_label': label
+    })
+}
+
+function gTagCaptureEventWithValue(event, category, value) {
+    gtag('event', event, {
+        'event_category': category,
+        'value': value
+    })
 }
 
 function getSource(material) {

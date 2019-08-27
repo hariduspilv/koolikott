@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.LearningObjectMiniDto;
 import ee.hm.dop.model.SearchResult;
@@ -39,7 +40,8 @@ import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 @RequestMapping("learningObject")
-public class LearningObjectResource extends BaseResource {
+public class
+LearningObjectResource extends BaseResource {
 
     @Inject
     private TagService tagService;
@@ -55,6 +57,8 @@ public class LearningObjectResource extends BaseResource {
     private MaterialGetter materialGetter;
     @Inject
     private UserService userService;
+    @Inject
+    private ReducedLearningObjectDao reducedLearningObjectDao;
 
     @PutMapping("{learningObject}/tags")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
@@ -136,19 +140,19 @@ public class LearningObjectResource extends BaseResource {
         return learningObjectService.showUnreviewed(id, getLoggedInUser());
     }
 
-    @GetMapping("getByCreatorAllLearningObjects")
-    public List<SearchResult> getByCreator(@RequestParam("username") String username,
-                                           @RequestParam(value = "start", defaultValue = "0") int start,
-                                           @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
+
+    @GetMapping("getByCreatorAllReducedLearningObjects")
+    public SearchResult getByCreatorAllReducedLearningObjects(@RequestParam("username") String username,
+                                                              @RequestParam(value = "start", defaultValue = "0") int start,
+                                                              @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
         User creator = getValidCreator(username);
         if (creator == null) throw notFound();
 
-        SearchResult portfolios = portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
-        SearchResult materials = materialGetter.getByCreatorResult(creator, start, maxResults);
-        List<SearchResult> los = new ArrayList<>();
-        los.add(portfolios);
-        los.add(materials);
-        return los;
+        int size = (int) (materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator));
+
+        List<Searchable> searchableList = new ArrayList<>(reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults));
+
+        return new SearchResult(searchableList, size, start);
     }
 
     @GetMapping("getByCreatorAllLearningObjectsCount")
@@ -158,6 +162,7 @@ public class LearningObjectResource extends BaseResource {
 
         return materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator);
     }
+
 
     private User getValidCreator(@RequestParam("username") String username) {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");

@@ -148,7 +148,12 @@ angular.module('koolikottApp')
                 $location.url('/profiil');
                 $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
-                $location.url(authenticatedUser.user.username + localStorage.getItem(LOGIN_ORIGIN));
+                let loginOrigin = localStorage.getItem(LOGIN_ORIGIN)
+                if (loginOrigin.contains('oppematerjalid') || loginOrigin.contains('kogumikud') || loginOrigin.contains('lemmikud')) {
+                    $location.url(authenticatedUser.user.username + loginOrigin);
+                } else {
+                    $location.url(loginOrigin)
+                }
             }
             enableLogin();
 
@@ -156,6 +161,7 @@ angular.module('koolikottApp')
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
             toastService.show('LOGIN_SUCCESS');
+            getLoginFrom(JSON.parse(localStorage.getItem('authenticatedUser')))
 
             if (mobileIdLoginSuccessCallback) {
                 mobileIdLoginSuccessCallback();
@@ -172,24 +178,6 @@ angular.module('koolikottApp')
             $timeout(() =>
                 $rootScope.$broadcast('login:success')
             )
-
-            switch ($rootScope.authenticationOption) {
-                case 'idCard':
-                    gTagCaptureEvent('login', 'user', 'ID-Card')
-                    break;
-                case 'ekool':
-                    gTagCaptureEvent('login', 'user', 'ekool.eu')
-                    break;
-                case 'stuudium':
-                    gTagCaptureEvent('login', 'user', 'stuudium.com')
-                    break;
-                case 'harID':
-                    gTagCaptureEvent('login', 'user', 'HarID')
-                    break;
-                case 'mID':
-                    gTagCaptureEvent('login', 'user', 'Mobile-ID')
-                    break;
-            }
         }
 
         function disableLogin() {
@@ -238,9 +226,10 @@ angular.module('koolikottApp')
             serverCallService.makePost(url)
                 .then(() => {
                     authenticatedUserService.removeAuthenticatedUser();
+                    $rootScope.afterAuthRedirectURL = null;
                     $rootScope.$broadcast('logout:success');
                     enableLogin();
-                });
+                })
         }
 
         return {

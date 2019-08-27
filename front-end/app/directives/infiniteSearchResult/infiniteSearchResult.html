@@ -1,12 +1,16 @@
+<h1 class="md-headline margin-top-36" ng-if="educationLevel" data-ng-bind="educationLevel"></h1>
 <div class="webkit-flex" data-layout="row" data-layout-align="space-between center" style="margin-top: 35px">
-  <h1 class="md-headline padding-left-16" ng-if="educationLevel" data-ng-bind="educationLevel"></h1>
-  <h1 id="search-result-title" class="md-headline padding-left-16"
+  <h1 id="search-result-title" class="md-headline"
       ng-if="!educationLevel && !$ctrl.isUserViewPage()"
       data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
       data-ng-bind-html="title"></h1>
-  <h1 id="exact-search-result-title" class="md-headline padding-left-16"
+  <h1 id="exact-search-result-title" class="md-headline"
       data-ng-if="showFilterGroups === 'phraseGrouping' && exactTitle"
       data-ng-bind-html="exactTitle"></h1>
+  <h2 id="search-result-title-h2" class="md-headline"
+      ng-if="educationLevel"
+      data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
+      data-ng-bind-html="title"></h2>
   <p data-ng-if="notice && !isEditMode && $ctrl.isLandingPage() && !filter"
      class="padding-left-16"
      data-ng-bind="notice"
@@ -99,10 +103,6 @@
     </md-select>
   </md-input-container>
 </div>
-<h2 id="search-result-title" class="md-headline padding-left-16"
-    ng-if="educationLevel"
-    data-ng-show="(showFilterGroups !== 'phraseGrouping' && title) && !$ctrl.isLandingPage()"
-    data-ng-bind-html="title"></h2>
 <div class="webkit-flex" data-layout="row" data-layout-align="space-between center">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
 </div>
@@ -136,8 +136,8 @@
       </div>
     </section>
   </div>
-  <h1 id="similar-search-result-title" class="md-headline"
-      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h1>
+  <h2 id="similar-search-result-title" class="md-headline"
+      data-ng-if="showFilterGroups === 'phraseGrouping' && similarTitle" data-ng-bind-html="similarTitle"></h2>
   <div class="webkit-flex" data-ng-if="$ctrl.showDefaultGroupButtons()" id="grouping-selection-buttons" data-layout="row">
     <section class="webkit-flex" data-layout="row" data-layout-xs="column" layout-wrap>
       <div class="margin-right-15" data-ng-repeat="(groupId, groupValue) in filterGroups">

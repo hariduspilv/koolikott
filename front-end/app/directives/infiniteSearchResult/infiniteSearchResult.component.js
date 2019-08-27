@@ -106,34 +106,33 @@
             this.expectedItemCount = this.maxResults
         }
 
+        setTabTitle(){
+            if (this.$scope.searchKeyWord) {
+                this.$rootScope.tabTitle = `${this.$translate.instant('SEARCH')}: ${this.$scope.searchKeyWord}`
+            } else if (this.$scope.educationLevel === '') {
+                this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
+            }
+        }
+
         setTitle() {
             this.$translate.onReady().then(() => {
-
                 this.$scope.title = (this.buildTitle(this.title, this.totalResults, this.titleTranslations))
-                if (this.$scope.searchKeyWord) {
-                    if (this.$scope.headlineLanguage === 'ET') {
-                        this.$rootScope.tabTitle = `Otsing: ${this.$scope.searchKeyWord}`;
-                    } else if (this.$scope.headlineLanguage === 'EN') {
-                        this.$rootScope.tabTitle = `Search: ${this.$scope.searchKeyWord}`;
-                    } else if (this.$scope.headlineLanguage === 'RU') {
-                        this.$rootScope.tabTitle = `Поиск: ${this.$scope.searchKeyWord}`;
-                    }
-                } else {
-                    this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
-                }
+                this.setTabTitle()
             })
         }
 
         setPhraseTitleExact() {
-            this.$translate.onReady().then(() =>
-                this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
+                    this.setTabTitle()
+            })
         }
 
         setPhraseTitleSimilar() {
-            this.$translate.onReady().then(() =>
-                this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
+                    this.setTabTitle()
+            })
         }
 
         buildTitle(title, results, translations) {
@@ -197,22 +196,6 @@
 
             this.serverCallService.makeGet(this.url, this.params)
                 .then(({data}) => {
-                    if (data.length > 1) {
-                        const result = data.reduce((result, item) => {
-                            const existing = result.find(x => x.distinctIdCount === item.distinctIdCount);
-                            if (existing) {
-                                existing.distinctIdCount += item.distinctIdCount;
-                                existing.items.push(...item.items);
-                                existing.start += item.start;
-                                existing.totalResults += item.totalResults;
-                            } else {
-                                result.push(item);
-                            }
-                            return result;
-                        }, []);
-                        data = result[0];
-                    }
-
                     this.params.isGrouped
                         ? this.groupedSearchSuccess(data)
                         : this.searchSuccess(data)
@@ -227,6 +210,9 @@
                 this.$scope.educationLevel = fullTaxon.taxonLevel === 'EDUCATIONAL_CONTEXT' ?
                     this.$translate.instant(fullTaxon.name)
                     : this.$translate.instant((fullTaxon.taxonLevel + '_' + fullTaxon.name).toUpperCase());
+                if(this.$scope.searchKeyWord === ''){
+                    this.$rootScope.tabTitle = this.$scope.educationLevel
+                }
             }
         }
 

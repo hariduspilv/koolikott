@@ -54,6 +54,7 @@ angular.module('koolikottApp')
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
             $scope.$watch(() => {
+                $rootScope.tabTitle = $scope.getCorrectLanguageString($scope.material.titles);
                 return $scope.material;
             }, () => {
                 if ($scope.material && $scope.material.id) {
@@ -278,9 +279,6 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
-
-                if ($scope.material)
-                    $rootScope.tabTitle = $scope.material.titles[0].text;
                 materialService.increaseViewCount($scope.material);
 
             }
