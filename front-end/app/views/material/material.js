@@ -137,7 +137,6 @@ angular.module('koolikottApp')
                     window.location.replace('/404');
                 } else {
                     $scope.material = material;
-                    console.log(material.licenseType.name)
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
 
@@ -280,8 +279,6 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
-
-                if ($scope.material)
                 materialService.increaseViewCount($scope.material);
 
             }
