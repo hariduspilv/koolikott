@@ -123,9 +123,10 @@ class controller extends Controller {
                         this.$scope.addMaterialForm.source.$setValidity('filenameTooLong', false)
                         this.$scope.addMaterialForm.source.$setTouched()
                         this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000)
+                    } else if (data.status < 200 || data.status > 300) {
+                        this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000)
                     }
                     this.$scope.uploadingFile = false
-                    this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000)
                 })
         }
     }
