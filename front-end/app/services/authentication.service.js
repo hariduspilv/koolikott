@@ -69,7 +69,7 @@ angular.module('koolikottApp')
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
                             if ($rootScope.userHasEmailOnLogin) {
-                                checkLicencesAndAct(userStatus)
+                                checkLicencesAndAct(response.data)
                             } else {
                                 userEmailService.saveEmail($rootScope.email, response.data.user)
                                 showEmailValidationModal(response)
@@ -119,7 +119,12 @@ angular.module('koolikottApp')
                     jsonObject.agreed = true
                     serverCallService.makePost('rest/userLicenceAgreement', jsonObject)
                         .then(() => {
-                            authenticateUser(authenticatedUser);
+                            /*
+                            serverCallService.makePost('rest/user/migrateLearningObjectLicences', authenticatedUser.user)
+                                .then(() => {
+                                    authenticateUser(authenticatedUser)
+                                })*/
+                            authenticateUser(authenticatedUser)
                         })
                 } else if (migrationResponse.disagreed) {
                     if (!$rootScope.previouslyDisagreed)
@@ -143,18 +148,16 @@ angular.module('koolikottApp')
                 if (userStatus.statusOk){
                     serverCallService.makeGet('rest/userLicenceAgreement?id=' + userStatus.authenticatedUser.user.id)
                         .then((response => {
-                            console.log('AAAAAAAAAA: ')
-                            console.log(response)
                             if (response.data.agreed) {
                                 authenticateUser(userStatus.authenticatedUser)
                             } else if (response.data.disagreed) {
                                 $rootScope.previouslyDisagreed = true
-                                checkLicencesAndAct(userStatus)
+                                checkLicencesAndAct(userStatus.authenticatedUser)
                                 /*} else {
                                     authenticateUser(userStatus.authenticatedUser)
                                 }*/
                             } else {
-                                checkLicencesAndAct(userStatus)
+                                checkLicencesAndAct(userStatus.authenticatedUser)
                             }
                         }))
                 } else {
@@ -164,13 +167,14 @@ angular.module('koolikottApp')
         }
 
         function checkLicencesAndAct(userStatus) {
-            serverCallService.makeGet('/rest/user/areLicencesAcceptable?username=' + userStatus.authenticatedUser.user.username)
+            serverCallService.makeGet('/rest/user/areLicencesAcceptable?username=' + userStatus.user.username)
                 .then((response) => {
                         if (response) {
                             if (response.data) {
-                                authenticateUser(userStatus.authenticatedUser)
+                                authenticateUser(userStatus)
                             } else {
-                                showLicenceMigrationAgreementModal(userStatus.authenticatedUser)
+                                console.log(userStatus)
+                                showLicenceMigrationAgreementModal(userStatus)
                             }
                         }
                     }
@@ -212,12 +216,17 @@ angular.module('koolikottApp')
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
             if ($rootScope.afterAuthRedirectURL) {
 
-                $location.url('/'/* + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL*/);
+                $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/profiil');
                 $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
-                $location.url(localStorage.getItem(LOGIN_ORIGIN));
+                let loginOrigin = localStorage.getItem(LOGIN_ORIGIN)
+                if (loginOrigin.contains('oppematerjalid') || loginOrigin.contains('kogumikud') || loginOrigin.contains('lemmikud')) {
+                    $location.url(authenticatedUser.user.username + loginOrigin);
+                } else {
+                    $location.url(loginOrigin)
+                }
             }
             enableLogin();
 
@@ -225,6 +234,7 @@ angular.module('koolikottApp')
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
             toastService.show('LOGIN_SUCCESS');
+            getLoginFrom(JSON.parse(localStorage.getItem('authenticatedUser')))
 
             if (mobileIdLoginSuccessCallback) {
                 mobileIdLoginSuccessCallback();
@@ -307,9 +317,10 @@ angular.module('koolikottApp')
             serverCallService.makePost(url)
                 .then(() => {
                     authenticatedUserService.removeAuthenticatedUser();
+                    $rootScope.afterAuthRedirectURL = null;
                     $rootScope.$broadcast('logout:success');
                     enableLogin();
-                });
+                })
         }
 
         return {

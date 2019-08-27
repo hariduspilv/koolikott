@@ -9,6 +9,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MediaService;
 import ee.hm.dop.service.files.PictureService;
+import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.text.WordUtils;
@@ -40,6 +41,8 @@ public class UserService {
     private LearningObjectService learningObjectService;
     @Inject
     private PictureService pictureService;
+    @Inject
+    private LicenseTypeService licenseTypeService;
 
     public User getUserByIdCode(String idCode) {
         return userDao.findUserByIdCode(idCode);
@@ -181,6 +184,24 @@ public class UserService {
                 .forEach(learningObject -> learningObject.setVisibility(Visibility.PRIVATE));
     }
 
+    public void migrateUserLearningObjectLicences(User user) {
+        learningObjectService.getAllByCreator(user)
+                .stream()
+                .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
+                        (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
+                .forEach(learningObject -> {
+                    learningObject.setLicenseType(licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
+                    Picture learningObjectPicture = learningObject.getPicture();
+                    if (learningObjectPicture != null && pictureHasUnAcceptableLicence(learningObjectPicture)) {
+                        pictureService.setLicenceType(learningObjectPicture.getId(), licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
+                    }
+                });
+        mediaService.getAllByCreator(user)
+                .stream()
+                .filter(this::mediaHasUnAcceptableLicence)
+                .forEach(media -> media.setLicenseType(licenseTypeService.findByNameIgnoreCase("CCBYSA30")));
+    }
+
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
         return !lo.getLicenseType().getName().equals("CCBY") &&
                 !lo.getLicenseType().getName().equals("CCBYSA");
@@ -193,6 +214,9 @@ public class UserService {
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {
         LicenseType pictureLicenceType = pictureService.getLicenceTypeById(picture.getId());
+        if (pictureLicenceType == null) {
+            return true;
+        }
         return !pictureLicenceType.getName().equals("CCBY") &&
                 !pictureLicenceType.getName().equals("CCBYSA");
     }

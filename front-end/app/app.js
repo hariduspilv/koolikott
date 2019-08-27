@@ -259,7 +259,6 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isAdminTabOpen
             $rootScope.isTaxonomyOpen
             $rootScope.isCookie = !!$cookies.get('userAgent');
-            $rootScope.tabTitle = 'e-Koolikott';
             $rootScope.applicationDescription ='';
 
             //if (window.location.hostname === 'e-koolikott.ee') {
