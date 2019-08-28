@@ -296,15 +296,12 @@ angular.module('koolikottApp')
 
             $scope.makePublic = () => {
                 if ($scope.material.licenseType.id !== 10){
-                    console.log($scope.material.licenseType.id)
-                    console.log('way')
                     $mdDialog.show({
                         templateUrl: 'views/material/materialLicenceAgreementDialog.html',
                         controller: 'materialLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {
-                            $scope.material.licenseType = {id: 10, name: 'CCBY3.0'}
-                            updateMaterialVisibility(VISIBILITY_PUBLIC)
+                            $scope.edit()
                         }
                     })
                 } else if ($scope.material.licenseType.id === 10) {
