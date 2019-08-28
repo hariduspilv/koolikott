@@ -48,6 +48,105 @@ angular.module('koolikottApp')
                 })
         }
 
+        function createLicenceAgreementResponse(userId, agreed, disagreed) {
+            let licenceAgreementResponse = {}
+            licenceAgreementResponse.userId = userId
+            licenceAgreementResponse.agreed = agreed
+            licenceAgreementResponse.disagreed = disagreed
+            return licenceAgreementResponse
+        }
+
+        function showEmailValidationModal(response) {
+            $mdDialog.show({
+                templateUrl: 'views/emailValidation/emailValidationDialog.html',
+                controller: 'emailValidationController',
+                clickOutsideToClose: false,
+                escapeToClose: false,
+            }).then((res) => {
+                if (!res)
+                    loginFail()
+                else {
+                    serverCallService.makePost('rest/userLicenceAgreement',
+                        createLicenceAgreementResponse(response.data.user.id, true, false))
+                        .then(() => {
+                            authenticateUser(response.data)
+                        })
+                }
+            })
+        }
+
+        function migrateLearningObjectsAndLogin(authenticatedUser) {
+            serverCallService.makePost('rest/user/migrateLearningObjectLicences', authenticatedUser.user)
+                .then(() => {
+                    authenticateUser(authenticatedUser)
+                })
+        }
+
+        function setAllLearningObjectsToPrivate(user) {
+            if (!$rootScope.previouslyDisagreed) {
+                serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
+            }
+        }
+
+        function saveResponseAndMigrateLicences(authenticatedUser) {
+            serverCallService.makePost('rest/userLicenceAgreement',
+                createLicenceAgreementResponse(authenticatedUser.user.id, true, false))
+                .then(() => {
+                    migrateLearningObjectsAndLogin(authenticatedUser)
+                    authenticateUser(authenticatedUser)
+                })
+        }
+
+        function saveResponseAndSetLearningObjectsToPrivate(authenticatedUser) {
+            setAllLearningObjectsToPrivate(authenticatedUser.user)
+            serverCallService.makePost('rest/userLicenceAgreement',
+                createLicenceAgreementResponse(authenticatedUser.user.id, false, true))
+                .then(() => {
+                    authenticateUser(authenticatedUser);
+                })
+        }
+
+        function saveResponseAndLogOut(authenticatedUser) {
+            serverCallService.makePost('rest/userLicenceAgreement',
+                createLicenceAgreementResponse(authenticatedUser.user.id, false, false))
+            loginFail()
+        }
+
+        function checkMigrationAgreementResponse(migrationResponse, authenticatedUser) {
+            if (migrationResponse.agreed) {
+                saveResponseAndMigrateLicences(authenticatedUser)
+            } else if (migrationResponse.disagreed) {
+                saveResponseAndSetLearningObjectsToPrivate(authenticatedUser)
+            } else {
+                saveResponseAndLogOut(authenticatedUser)
+            }
+        }
+
+        function showLicenceMigrationAgreementModal(authenticatedUser) {
+            $mdDialog.show({
+                templateUrl: 'views/agreement/migrationAgreementDialog.html',
+                controller: 'migrationAgreementController',
+                controllerAs: '$ctrl',
+                escapeToClose: false
+            }).then((migrationResponse) => {
+                checkMigrationAgreementResponse(migrationResponse, authenticatedUser)
+            })
+        }
+
+        function checkLicencesAndAct(authenticatedUser) {
+            serverCallService.makeGet('/rest/user/areLicencesAcceptable?username=' + authenticatedUser.user.username)
+                .then((response) => {
+                        if (response) {
+                            if (response.data) {
+                                authenticateUser(authenticatedUser)
+                            } else {
+                                showLicenceMigrationAgreementModal(authenticatedUser)
+                            }
+                        }
+                    }
+                )
+        }
+
         function showGdprModalAndAct(userStatus) {
             hasEmail(userStatus)
             $rootScope.statusForDuplicateCheck = userStatus
@@ -83,56 +182,19 @@ angular.module('koolikottApp')
             })
         }
 
-        function showEmailValidationModal(response) {
-            $mdDialog.show({
-                templateUrl: 'views/emailValidation/emailValidationDialog.html',
-                controller: 'emailValidationController',
-                clickOutsideToClose: false,
-                escapeToClose: false,
-            }).then((res) => {
-                if (!res)
-                    loginFail()
-                 else
-                    authenticateUser(response.data);
-            })
+        function userHasRespondToLatestLicenceAgreement(userLatestResponse, latestLicenceAgreementVersion) {
+            return userLatestResponse === latestLicenceAgreementVersion;
         }
 
-        function setAllLearningObjectsToPrivate(user) {
-            if (!$rootScope.previouslyDisagreed) {
-                serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
+        function analyzeUserLatestResponse(response, authenticatedUser) {
+            if (response.agreed) {
+                authenticateUser(authenticatedUser)
+            } else if (response.disagreed) {
+                $rootScope.previouslyDisagreed = true
+                checkLicencesAndAct(authenticatedUser)
+            }  else {
+                checkLicencesAndAct(authenticatedUser)
             }
-        }
-
-        function showLicenceMigrationAgreementModal(authenticatedUser) {
-            $mdDialog.show({
-                templateUrl: 'views/agreement/migrationAgreementDialog.html',
-                controller: 'migrationAgreementController',
-                controllerAs: '$ctrl',
-                escapeToClose: false
-            }).then((migrationResponse) => {
-                let licenceAgreementResponse = {}
-                licenceAgreementResponse.userId = authenticatedUser.user.id
-                licenceAgreementResponse.agreed = false
-                licenceAgreementResponse.disagreed = false
-                if (migrationResponse.agreed) {
-                    licenceAgreementResponse.agreed = true
-                    serverCallService.makePost('rest/userLicenceAgreement', licenceAgreementResponse)
-                        .then(() => {
-                            // migrateLearningObjectsAndLogin(authenticatedUser)
-                            authenticateUser(authenticatedUser)
-                        })
-                } else if (migrationResponse.disagreed) {
-                    setAllLearningObjectsToPrivate(authenticatedUser.user)
-                    licenceAgreementResponse.disagreed = true
-                    serverCallService.makePost('rest/userLicenceAgreement', licenceAgreementResponse)
-                        .then(() => {
-                            authenticateUser(authenticatedUser);
-                        })
-                } else {
-                    serverCallService.makePost('rest/userLicenceAgreement', licenceAgreementResponse)
-                    loginFail()
-                }
-            })
         }
 
         function loginSuccess(userStatus) {
@@ -148,14 +210,7 @@ angular.module('koolikottApp')
                             serverCallService.makeGet('rest/licenceAgreement/latest')
                                 .then((res) => {
                                     if (userHasRespondToLatestLicenceAgreement(response.data.licenceAgreement.version, res.data.version)) {
-                                        if (response.data.agreed) {
-                                            authenticateUser(userStatus.authenticatedUser)
-                                        } else if (response.data.disagreed) {
-                                            $rootScope.previouslyDisagreed = true
-                                            checkLicencesAndAct(userStatus.authenticatedUser)
-                                        } else {
-                                            checkLicencesAndAct(userStatus.authenticatedUser)
-                                        }
+                                        analyzeUserLatestResponse(response.data, userStatus.authenticatedUser)
                                     } else {
                                         showLicenceMigrationAgreementModal(userStatus.authenticatedUser)
                                     }
@@ -165,31 +220,6 @@ angular.module('koolikottApp')
                     showGdprModalAndAct(userStatus);
                 }
             }
-        }
-
-        function userHasRespondToLatestLicenceAgreement(userLatestResponse, latestLicenceAgreementVersion) {
-            return userLatestResponse === latestLicenceAgreementVersion;
-        }
-
-        function checkLicencesAndAct(authenticatedUser) {
-            serverCallService.makeGet('/rest/user/areLicencesAcceptable?username=' + authenticatedUser.user.username)
-                .then((response) => {
-                        if (response) {
-                            if (response.data) {
-                                authenticateUser(authenticatedUser)
-                            } else {
-                                showLicenceMigrationAgreementModal(authenticatedUser)
-                            }
-                        }
-                    }
-                )
-        }
-
-        function migrateLearningObjectsAndLogin(authenticatedUser) {
-            serverCallService.makePost('rest/user/migrateLearningObjectLicences', authenticatedUser.user)
-                .then(() => {
-                    authenticateUser(authenticatedUser)
-                })
         }
 
         function loginFail() {
