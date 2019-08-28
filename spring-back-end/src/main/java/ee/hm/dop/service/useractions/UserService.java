@@ -204,12 +204,14 @@ public class UserService {
 
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
         return !lo.getLicenseType().getName().equals("CCBY") &&
-                !lo.getLicenseType().getName().equals("CCBYSA");
+                !lo.getLicenseType().getName().equals("CCBYSA") &&
+                !lo.getLicenseType().getName().equals("CCBYSA30");
     }
 
     private boolean mediaHasUnAcceptableLicence(Media media) {
         return !media.getLicenseType().getName().equals("CCBY") &&
-                !media.getLicenseType().getName().equals("CCBYSA");
+                !media.getLicenseType().getName().equals("CCBYSA") &&
+                !media.getLicenseType().getName().equals("CCBYSA30");
     }
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {
@@ -218,6 +220,7 @@ public class UserService {
             return true;
         }
         return !pictureLicenceType.getName().equals("CCBY") &&
-                !pictureLicenceType.getName().equals("CCBYSA");
+                !pictureLicenceType.getName().equals("CCBYSA") &&
+                !pictureLicenceType.getName().equals("CCBYSA30");
     }
 }

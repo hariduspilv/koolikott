@@ -99,8 +99,8 @@ angular.module('koolikottApp')
 
         function setAllLearningObjectsToPrivate(user) {
             serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
-                .then((response) => {
-                    console.log(response)
+                .then(() => {
+
                 })
         }
 
@@ -118,8 +118,7 @@ angular.module('koolikottApp')
                 if (migrationResponse.agreed) {
                     jsonObject.agreed = true
                     serverCallService.makePost('rest/userLicenceAgreement', jsonObject)
-                        .then(() => {
-                            /*
+                        .then(() => {/*
                             serverCallService.makePost('rest/user/migrateLearningObjectLicences', authenticatedUser.user)
                                 .then(() => {
                                     authenticateUser(authenticatedUser)
@@ -173,7 +172,6 @@ angular.module('koolikottApp')
                             if (response.data) {
                                 authenticateUser(userStatus)
                             } else {
-                                console.log(userStatus)
                                 showLicenceMigrationAgreementModal(userStatus)
                             }
                         }
