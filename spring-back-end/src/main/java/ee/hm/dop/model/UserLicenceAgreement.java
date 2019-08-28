@@ -23,7 +23,7 @@ public class UserLicenceAgreement implements AbstractEntity {
 
     @ManyToOne
     @JoinColumn(name = "licenceAgreement")
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
+    @JsonProperty()
     private LicenceAgreement licenceAgreement;
 
     @Column(nullable = false)

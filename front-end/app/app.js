@@ -261,7 +261,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
             $rootScope.isCookie = !!$cookies.get('userAgent');
             $rootScope.applicationDescription ='';
 
-            //if (window.location.hostname === 'e-koolikott.ee') {
+            if (window.location.hostname === 'e-koolikott.ee') {
                 if (user) {
                     gtag('config', 'UA-72667340-1', {'user_id': `${user.id}`, 'page_path': path});
                 } else {
@@ -273,7 +273,7 @@ app.run(['$rootScope', '$location', 'authenticatedUserService', 'storageService'
                 } else {
                     gtag('config', 'UA-145830836-1', {'page_path': path});
                 }
-            //}
+            }
 
             $translate('HTML_META_DESCRIPTION').then((translation) => {
                 $rootScope.applicationDescription = translation
