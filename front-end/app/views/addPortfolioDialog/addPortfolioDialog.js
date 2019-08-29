@@ -39,9 +39,11 @@ angular.module('koolikottApp')
                     /**
                      * Set license type to “All rights reserved” if user chooses “Do not know” option.
                      */
-                    $scope.$watch('newPortfolio.licenseType', (selectedValue) => {
-                        if (selectedValue && selectedValue.id === 'doNotKnow')
-                            $scope.newPortfolio.licenseType = $scope.allRightsReserved
+                    $scope.$watch('licenseTypeAgreed', (selectedValue) => {
+                        if (selectedValue) {
+                            $scope.portfolio.licenseType = $scope.ccbysa30
+                            $scope.newPortfolio.licenseType = $scope.ccbysa30
+                        }
                     })
                     $scope.$watch('newPortfolio.taxons', (selectedValue) => {
                         $scope.isVocationalEducation = isVocational(taxonService, selectedValue);
@@ -195,7 +197,8 @@ angular.module('koolikottApp')
                 function setLicenseTypes(data) {
                     $scope.licenseTypes = data
                     $scope.doNotKnow = {id: 'doNotKnow'}
-                    $scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+                    // $scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+                    $scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
                 }
 
                 function onNewPictureChange(currentValue) {

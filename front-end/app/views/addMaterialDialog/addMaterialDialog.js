@@ -83,7 +83,6 @@ class controller extends Controller {
          */
         this.$scope.$watch('licenseTypeAgreed', (selectedValue) => {
             if (selectedValue) {
-                console.log(selectedValue)
                 this.$scope.material.licenseType = this.$scope.ccbysa30
             }
         })
