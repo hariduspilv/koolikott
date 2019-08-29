@@ -163,7 +163,8 @@ public class UserService {
         List<Media> allUserMedia = mediaService.getAllByCreator(getUserByUsername(username));
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(getUserByUsername(username));
         long unAcceptableMediaCount = allUserMedia.stream()
-                .filter(this::mediaHasUnAcceptableLicence).count();
+                .filter(this::mediaHasUnAcceptableLicence)
+                .count();
         long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
                 .filter(this::learningObjectHasUnAcceptableLicence)
                 .count();
@@ -203,12 +204,18 @@ public class UserService {
     }
 
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
+        if (lo.getLicenseType() == null) {
+            return true;
+        }
         return !lo.getLicenseType().getName().equals("CCBY") &&
                 !lo.getLicenseType().getName().equals("CCBYSA") &&
                 !lo.getLicenseType().getName().equals("CCBYSA30");
     }
 
     private boolean mediaHasUnAcceptableLicence(Media media) {
+        if (media.getLicenseType() == null) {
+            return true;
+        }
         return !media.getLicenseType().getName().equals("CCBY") &&
                 !media.getLicenseType().getName().equals("CCBYSA") &&
                 !media.getLicenseType().getName().equals("CCBYSA30");
