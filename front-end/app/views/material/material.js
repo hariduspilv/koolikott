@@ -168,13 +168,17 @@ angular.module('koolikottApp')
                             '@type': 'Audience',
                             'audienceType': audienceType(material)
                         },
-                        'dateCreated': formatIssueDate(material.issueDate),
-                        'datePublished': material.added,
+                        'thumbnailUrl': 'https://e-koolikott.ee/ekoolikott.png',
+                        'dateCreated': material.added,
+                        'datePublished': formatIssueDateTime(material.issueDate),
                         'license': addLicense(material.licenseType),
-                        'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+                        'typicalAgeRange': material.targetGroups.length > 1 && checkGeneralAgeRange(material.targetGroups)
+                            ? convertToClassGroup(material.targetGroups) :
+                            material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                         'interactionCount': material.views,
                         'headline': material.titles.map(title => title.text),
                         'keywords': material.tags,
+                        'inLanguage': convertLanguage(material.language),
                         'text': material.descriptions.map(description => description.text)
                     },
                     {
@@ -189,7 +193,7 @@ angular.module('koolikottApp')
                         'url': 'https://www.e-koolikott.ee/',
                         'potentialAction': {
                             '@type': 'SearchAction',
-                            'target': 'https://query.e-koolikott.ee/search?q={search_term_string}',
+                            'target': 'https://e-koolikott.ee/search/result?q={search_term_string}',
                             'query-input': 'required name=search_term_string'
                         }
                     },

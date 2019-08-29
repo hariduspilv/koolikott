@@ -260,17 +260,10 @@ function getLanguageString(values, language) {
     }
 }
 
-function formatIssueDate(issueDate) {
+function formatIssueDateTime(issueDate) {
     if (!issueDate) return;
     if (issueDate.day && issueDate.month && issueDate.year) {
-        // full date
-        return formatDay(issueDate.day) + "." + formatMonth(issueDate.month) + "." + formatYear(issueDate.year);
-    } else if (issueDate.month && issueDate.year) {
-        // month date
-        return formatMonth(issueDate.month) + "." + formatYear(issueDate.year);
-    } else if (issueDate.year) {
-        // year date
-        return formatYear(issueDate.year);
+        return new Date(formatYear(issueDate.year), formatMonth(issueDate.month), formatDay(issueDate.day))
     }
 }
 
@@ -503,18 +496,6 @@ function isObjectEmpty(obj) {
 function getTypicalAgeRange(grade) {
     let ageRange;
     switch (grade) {
-        case ('PRESCHOOL'):
-            ageRange = '0-7';
-            break;
-        case ('LEVEL1'):
-            ageRange = '7-10';
-            break;
-        case ('LEVEL2'):
-            ageRange = '10-13';
-            break;
-        case ('LEVEL3'):
-            ageRange = '13-16';
-            break;
         case ('ZERO_FIVE'):
             ageRange = '0-5';
             break;
@@ -553,6 +534,51 @@ function getTypicalAgeRange(grade) {
             break;
     }
     return ageRange;
+}
+
+function checkGeneralAgeRange(targetGroups) {
+    const PRESCHOOL = ['ZERO_FIVE', 'SIX_SEVEN'];
+    const LEVEL1 = ['GRADE1', 'GRADE2', 'GRADE3'];
+    const LEVEL2 = ['GRADE4', 'GRADE5', 'GRADE6'];
+    const LEVEL3 = ['GRADE7', 'GRADE8', 'GRADE9'];
+
+    // if (targetGroups.length === 3) {
+    //     if (_.isEqual(LEVEL1, targetGroups)) return true;
+    //     else if (_.isEqual(LEVEL2, targetGroups)) return true;
+    //     else if (_.isEqual(LEVEL3, targetGroups)) return true;
+    // } else if (targetGroups.length === 2) {
+    //     if (_.isEqual(PRESCHOOL, targetGroups)) return true;
+    // } else return false;
+    if (targetGroups.length === 3) {
+        if (targetGroups.includes(LEVEL1)) return true;
+        else if (targetGroups.includes(LEVEL2)) return true;
+        else if (targetGroups.includes(LEVEL3)) return true;
+    } else if (targetGroups.length === 2) {
+        if (targetGroups.includes(PRESCHOOL)) return true;
+    } else return false;
+}
+
+function convertToClassGroup(targetGroups) {
+    const PRESCHOOL = ['ZERO_FIVE', 'SIX_SEVEN'];
+    const LEVEL1 = ['GRADE1', 'GRADE2', 'GRADE3'];
+    const LEVEL2 = ['GRADE4', 'GRADE5', 'GRADE6'];
+    const LEVEL3 = ['GRADE7', 'GRADE8', 'GRADE9'];
+
+    // if (targetGroups.length === 3) {
+    //     if (_.isEqual(LEVEL1, targetGroups)) return '7-10';
+    //     else if (_.isEqual(LEVEL2, targetGroups)) return '10-13';
+    //     else if (_.isEqual(LEVEL3, targetGroups)) return '13-16';
+    // } else if (targetGroups.length === 2) {
+    //     if (_.isEqual(PRESCHOOL, targetGroups)) return '0-7';
+    // }
+
+    if (targetGroups.length === 3) {
+        if (targetGroups.includes(LEVEL1)) return '7-10';
+        else if (targetGroups.includes(LEVEL2)) return '10-13';
+        else if (targetGroups.includes(LEVEL3)) return '13-16';
+    } else if (targetGroups.length === 2) {
+        if (targetGroups.includes(PRESCHOOL)) return '0-7';
+    }
 }
 
 function translateEducationalContext(eduContext) {
@@ -769,11 +795,11 @@ function countOccurrences(value, text) {
 
 function convertLanguage(lang) {
     if (lang === 'est')
-        return 'ET'
+        return 'et'
     else if (lang === 'rus')
-        return 'RU'
+        return 'ru'
     else if (lang === 'eng')
-        return 'EN'
+        return 'en'
 }
 
 /**

@@ -247,15 +247,18 @@ class controller extends Controller {
                     '@type': 'Audience',
                     'audienceType': audienceType(portfolio)
                 },
-                'dateCreated': this.formatDateToDayMonthYear(portfolio.added),
-                'datePublished': this.formatDateToDayMonthYear(portfolio.publishedAt),
+                'thumbnailUrl': 'https://e-koolikott.ee/ekoolikott.png',
+                'dateCreated': portfolio.added,
+                'datePublished': portfolio.publishedAt,
                 'license': addLicense(portfolio.licenseType),
-                'typicalAgeRange': portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+                'typicalAgeRange': portfolio.targetGroups.length > 1 && checkGeneralAgeRange(portfolio.targetGroups)
+                    ? portfolio.targetGroups.map(targetGroup => convertToClassGroup(targetGroup)) :
+                    portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                 'interactionCount': portfolio.views,
                 'headline': portfolio.title,
                 'keywords': portfolio.tags,
                 'text': portfolio.summary,
-                'inLanguage': this.convertLanguage(this.translationService.getLanguage())
+                'inLanguage': this.translationService.getLanguageCode()
             },
             {
                 '@context': 'https://schema.org',
@@ -263,7 +266,7 @@ class controller extends Controller {
                 'url': 'https://www.e-koolikott.ee/',
                 'potentialAction': {
                     '@type': 'SearchAction',
-                    'target': 'https://query.e-koolikott.ee/search?q={search_term_string}',
+                    'target': 'https://e-koolikott.ee/search/result?q={search_term_string}',
                     'query-input': 'required name=search_term_string'
                 }
             },
