@@ -81,9 +81,11 @@ class controller extends Controller {
         /**
          * Set license type to “All rights reserved” if user chooses “Do not know” option.
          */
-        this.$scope.$watch('material.licenseType', (selectedValue) => {
-            if (selectedValue && selectedValue.id === 'doNotKnow')
-                this.$scope.material.licenseType = this.$scope.allRightsReserved
+        this.$scope.$watch('licenseTypeAgreed', (selectedValue) => {
+            if (selectedValue) {
+                console.log(selectedValue)
+                this.$scope.material.licenseType = this.$scope.ccbysa30
+            }
         })
 
         // fix for https://github.com/angular/material/issues/6905
@@ -627,7 +629,8 @@ class controller extends Controller {
     setLicenseTypes(data) {
         this.$scope.licenseTypes = data
         this.$scope.doNotKnow = { id: 'doNotKnow' }
-        this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+        // this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+        this.$scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
     }
     /**
      * If 'NOT_RELEVANT' is not last item in list

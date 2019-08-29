@@ -96,8 +96,18 @@
 
           <!-- material license -->
           <md-input-container flex="100" flex-gt-sm="60" flex-gt-md="25">
-            <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-            <md-select
+            <span class="white-space-no-wrap" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>
+            <br>
+            <md-checkbox
+              name="licenseType"
+              data-ng-model="licenseTypeAgreed"
+              data-ng-value="CCBYSA30"
+              aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
+              required
+            >
+              Olen nõus <a href=""><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
+            </md-checkbox>
+            <!--<md-select
               name="licenseType"
               class="no-margin"
               data-ng-model="material.licenseType"
@@ -113,7 +123,7 @@
                 data-ng-value="licenseType"
                 data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
               ></md-option>
-            </md-select>
+            </md-select>-->
             <div data-ng-messages="addMaterialForm.licenseType.$error">
               <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
             </div>
