@@ -194,14 +194,19 @@
           </md-input-container>
         </div>
 
-        <div class="md-padding">
-          <span data-translate="OR_WORD"></span>
-        </div>
-
         <div class="md-padding" flex="50" flex-gt-sm="20">
           <md-input-container flex="100" flex-gt-sm="100">
-            <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-            <md-select
+            <h5 class="white-space-no-wrap no-margin" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></h5>
+            <md-checkbox
+              name="pictureLicenseType"
+              data-ng-required="newPicture"
+              data-ng-model="pictureLicenseTypeAgreed"
+              data-ng-value="CCBYSA30"
+              aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
+            >
+              Olen nõus <a href=""><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
+            </md-checkbox>
+            <!--<md-select
               class="no-margin"
               data-ng-required="(newPicture || newPortfolio.picture.name) && !newPortfolio.picture.source"
               data-ng-model="newPortfolio.picture.licenseType"
@@ -220,7 +225,7 @@
               >
                 <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>
               </md-option>
-            </md-select>
+            </md-select>-->
           </md-input-container>
         </div>
       </div>

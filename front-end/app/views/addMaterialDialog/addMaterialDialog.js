@@ -87,6 +87,12 @@ class controller extends Controller {
             }
         })
 
+        this.$scope.$watch('pictureLicenseTypeAgreed', (selectedValue) => {
+            if (selectedValue) {
+                this.$scope.material.picture.licenseType = this.$scope.ccbysa30
+            }
+        })
+
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
             angular.element(document.querySelector('html')).css('overflow-y', '')
@@ -464,11 +470,11 @@ class controller extends Controller {
 
                         this.setThumbnail(snippet.thumbnails);
                         this.$scope.material.picture.author = snippet.channelTitle;
-                        this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
+                        /*this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
                             status.license.toLowerCase() === 'creativecommon'
                                 ? 'CCBY'
                                 : 'Youtube'
-                        );
+                        );*/
                     }
 
                     // Reset publishers before adding new from youtube

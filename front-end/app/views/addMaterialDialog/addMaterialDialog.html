@@ -610,8 +610,17 @@
 
                 <div class="md-padding" flex="50" flex-gt-sm="20">
                 <md-input-container flex="100" flex-gt-sm="100">
-                  <label for="taxonEducationalSelect" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-                  <md-select
+                  <h5 class="white-space-no-wrap no-margin" for="taxonEducationalSelect" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></h5>
+                  <md-checkbox
+                    name="pictureLicenseType"
+                    data-ng-required="newPicture"
+                    data-ng-model="pictureLicenseTypeAgreed"
+                    data-ng-value="CCBYSA30"
+                    aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
+                  >
+                    Olen nõus <a href=""><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
+                  </md-checkbox>
+                  <!--<md-select
                     class="no-margin"
                     data-ng-required="newPicture && !material.picture.source"
                     data-ng-model="material.picture.licenseType"
@@ -630,7 +639,7 @@
                       >
                       <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"/>
                     </md-option>
-                  </md-select>
+                  </md-select>-->
                 </md-input-container>
                 </div>
           </div>

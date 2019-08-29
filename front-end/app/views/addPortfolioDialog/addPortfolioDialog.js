@@ -51,9 +51,10 @@ angular.module('koolikottApp')
                             $scope.newPortfolio.targetGroups = []
                         }
                     }, true)
-                    $scope.$watch('newPortfolio.picture.licenseType', (selectedValue) => {
-                        if (selectedValue && selectedValue.id === 'doNotKnow')
-                            $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
+                    $scope.$watch('pictureLicenseTypeAgreed', (selectedValue) => {
+                        if (selectedValue) {
+                            $scope.newPortfolio.picture.licenseType = $scope.ccbysa30
+                        }
                     })
                     $scope.timeAddPortfolioOpened = new Date();
                 }
