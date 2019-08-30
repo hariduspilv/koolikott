@@ -32,6 +32,12 @@ class controller extends Controller {
 
         this.$rootScope.$broadcast('detailedSearch:close')
     }
+    isPublic(){
+        return this.learningObject.visibility === 'PUBLIC'
+    }
+    isPrivate(){
+        return this.learningObject.visibility === 'PRIVATE'
+    }
 }
 controller.$inject = [
     '$rootScope',
