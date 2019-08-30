@@ -132,6 +132,10 @@ angular.module('koolikottApp')
                 }
             }
 
+            $scope.getMaterialTitleForImage = () => {
+                return $scope.getCorrectLanguageString($scope.material.titles).replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
+            }
+
             function getMaterial(success, fail) {
                 materialService.getMaterialById($route.current.params.id.split('-')[0]).then(success, fail)
             }
@@ -279,7 +283,7 @@ angular.module('koolikottApp')
                 processMaterial();
                 showUnreviewedMessage();
 
-                let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, "-")
+                let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, '-')
 
                 $scope.materialUrl = `/oppematerjal/${$scope.material.id}-${correctLanguageTitle}`
                 if (!$scope.path.contains($scope.materialUrl)) {

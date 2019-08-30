@@ -29,6 +29,11 @@ class controller extends Controller {
             if (newValue !== oldValue) {
                 this.$rootScope.$broadcast('portfolioHistory:loadHistory');
                 this.eventService.notify('portfolio:reloadTaxonObject')
+                if (this.getCorrectLanguageTitle(this.portfolio)) {
+                    this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
+                } else {
+                    this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
+                }
             }
         })
         this.$scope.$watch('portfolio.taxon.id', (newValue, oldValue) => {
@@ -38,11 +43,6 @@ class controller extends Controller {
         this.$scope.$watch(() => this.storageService.getPortfolio(), (currentValue, previousValue) => {
             if (currentValue !== previousValue) {
                 this.$scope.portfolio = currentValue
-                if (this.getCorrectLanguageTitle(this.portfolio)) {
-                    this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
-                } else {
-                    this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
-                }
             }
         }, true)
 
@@ -53,6 +53,7 @@ class controller extends Controller {
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
         this.$scope.pageUrl = this.$location.absUrl()
+
 
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
