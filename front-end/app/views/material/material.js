@@ -13,6 +13,7 @@ angular.module('koolikottApp')
             $rootScope.isFullScreen = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
+            $scope.path = $location.url()
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
@@ -54,7 +55,8 @@ angular.module('koolikottApp')
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
             $scope.$watch(() => {
-                $rootScope.tabTitle = $scope.getCorrectLanguageString($scope.material.titles);
+                if ($scope.material)
+                    $rootScope.tabTitle = $scope.getCorrectLanguageString($scope.material.titles);
                 return $scope.material;
             }, () => {
                 if ($scope.material && $scope.material.id) {
@@ -272,6 +274,13 @@ angular.module('koolikottApp')
                 getContentType();
                 processMaterial();
                 showUnreviewedMessage();
+
+                let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, "-")
+
+                $scope.materialUrl = `/oppematerjal/${$scope.material.id}-${correctLanguageTitle}`
+                if (!$scope.path.contains($scope.materialUrl)) {
+                    $location.url($scope.materialUrl)
+                }
 
                 eventService.notify('material:reloadTaxonObject');
 
