@@ -115,10 +115,21 @@ class controller extends Controller {
         this.onParamsChange({});
     }
     clear() {
+        !this.isModerator() ? this.clearAllDataAndFilters() : this.clearDataForModerator();
+    }
+
+    clearDataForModerator() {
+        this.$scope.filter.from = ''
+        this.$scope.filter.to = ''
+        this.$scope.data = {}
+    }
+
+    clearAllDataAndFilters() {
         this.$scope.filter = {}
         this.$scope.educationalContext = undefined
         this.$scope.data = {}
     }
+
     onSelectTaxons(taxons) {
         this.$scope.filter.taxons = taxons
     }
