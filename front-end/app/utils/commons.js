@@ -536,83 +536,52 @@ function getTypicalAgeRange(grade) {
     return ageRange;
 }
 
-// function checkGeneralAgeRange(targetGroups) {
-//     if (targetGroups.includes('GRADE1', 'GRADE2', 'GRADE3')) return true;
-//     if (targetGroups.includes('GRADE4', 'GRADE5', 'GRADE6')) return true;
-//     if (targetGroups.includes('GRADE7', 'GRADE8', 'GRADE9')) return true;
-//     if (targetGroups.includes('ZERO_FIVE', 'SIX_SEVEN')) return true;
-// }
+function generalGradeLimits(level) {
+    let generalGrade;
+    switch (level) {
+        case ('PRESCHOOL'):
+            generalGrade = '0-7';
+            break;
+        case 'LEVEL1':
+            generalGrade = '7-10';
+            break;
+        case 'LEVEL2':
+            generalGrade = '10-13';
+            break;
+        case 'LEVEL3':
+            generalGrade = '13-16';
+            break;
+    }
+    return generalGrade;
+}
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
 
 function convertToClassGroup(targetGroups) {
+    const gradeGroup = {
+        PRESCHOOL: ['ZERO_FIVE', 'SIX_SEVEN'],
+        LEVEL1: ['GRADE1', 'GRADE2', 'GRADE3'],
+        LEVEL2: ['GRADE4', 'GRADE5', 'GRADE6'],
+        LEVEL3: ['GRADE7', 'GRADE8', 'GRADE9']
+    };
+    let finalArray = [];
+    Object.values(gradeGroup)
+        .forEach(function (ageGroup) {
+                let completeGradeGroupMatch = ageGroup.every(grade => targetGroups.includes(grade));
+                if (completeGradeGroupMatch) {
+                    const generalLimits = generalGradeLimits(getKeyByValue(gradeGroup, ageGroup));
+                    finalArray.push(generalLimits);
+                    ageGroup.forEach(group => targetGroups.splice(targetGroups.indexOf(group), 1));
+                }});
 
-    const PRESCHOOL = ['ZERO_FIVE', 'SIX_SEVEN'];
-    const LEVEL1 = ['GRADE1', 'GRADE2', 'GRADE3'];
-    const LEVEL2 = ['GRADE4', 'GRADE5', 'GRADE6'];
-    const LEVEL3 = ['GRADE7', 'GRADE8', 'GRADE9'];
-
-    const generalAgeArray = [PRESCHOOL, LEVEL1, LEVEL2, LEVEL3];
-
-    const faa = generalAgeArray.forEach(age => age.every(function (val) {
-        return targetGroups.indexOf(val) >= 0;
-    }));
-
-    // const faa = PRESCHOOL.every(function (val) {
-    //     return targetGroups.indexOf(val) >= 0;
-    // });
-
-    console.log(faa);
-
-    // const filteredArray = targetGroups.filter(x => LEVEL1.indexOf(x) > 0);
-    // const filteredArray = targetGroups.filter(item => !LEVEL3.indexOf(item) < 0);
-
-
-    // const xxx = targetGroups.every(val => {
-    //     return generalAgeArray.forEach(ar => ar.indexOf(val) >= 0)
-    // });
-    //193.40.55.130
-    // console.log(xxx);
-
-    // if (targetGroups.length === 3) {
-    //     if (_.isEqual(LEVEL1, targetGroups)) return true;
-    //     else if (_.isEqual(LEVEL2, targetGroups)) return true;
-    //     else if (_.isEqual(LEVEL3, targetGroups)) return true;
-    // } else if (targetGroups.length === 2) {
-    //     if (_.isEqual(PRESCHOOL, targetGroups)) return true;
-    // } else return false;
-
-    generalAgeArray.forEach(arr => targetGroups.every(val => arr.indexOf(val) >= 0));
-
-    let newArr = [];
-
-    if (targetGroups.every((val) => PRESCHOOL.indexOf(val) >= 0)){
-        newArr.push('0-7');
-        targetGroups.splice(targetGroups.indexOf(val))
+    if (targetGroups.length) {
+        const singleGrades = targetGroups.map(singleGrade => getTypicalAgeRange(singleGrade))
+        finalArray.push(...singleGrades);
     }
-
-    // console.log("targetGroups:" + targetGroups);
-    // console.log("newArray " + newArr);
-
-
-    // targetGroups.every((val) => LEVEL1.indexOf(val) >= 0);
-    // targetGroups.every((val) => LEVEL2.indexOf(val) >= 0);
-
-    // targetGroups.every((val) => LEVEL3.indexOf(val) >= 0);
-
-    // const arrayConsistAllOtherArrayElements = targetGroups.every(val => {
-    //     return generalAgeArray.forEach(ar => ar.indexOf(val) >= 0)
-    // });
-
-    // console.log(arrayConsistAllOtherArrayElements);
-
-
-
-    // let classGroups = [];
-    //
-    // if (targetGroups.includes('GRADE1', 'GRADE2', 'GRADE3')) classGroups.push('7-10');
-    // if (targetGroups.includes('GRADE4', 'GRADE5', 'GRADE6')) classGroups.push('10-13');
-    // if (targetGroups.includes('GRADE7', 'GRADE8', 'GRADE9')) classGroups.push('13-16');
-    // if (targetGroups.includes('ZERO_FIVE', 'SIX_SEVEN')) classGroups.push('0-7');
-    // return classGroups;
+    console.log(finalArray);
+    return finalArray;
 }
 
 function translateEducationalContext(eduContext) {
