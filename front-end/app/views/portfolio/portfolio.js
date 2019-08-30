@@ -251,9 +251,10 @@ class controller extends Controller {
                 'dateCreated': portfolio.added,
                 'datePublished': portfolio.publishedAt,
                 'license': addLicense(portfolio.licenseType),
-                'typicalAgeRange': portfolio.targetGroups.length > 1 && checkGeneralAgeRange(portfolio.targetGroups)
-                    ? portfolio.targetGroups.map(targetGroup => convertToClassGroup(targetGroup)) :
-                    portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+                'typicalAgeRange': convertToClassGroup(portfolio.targetGroups),
+                // 'typicalAgeRange': convertToClassGroup(portfolio.targetGroups),
+                    // ? convertToClassGroup(portfolio.targetGroups) :
+                    // portfolio.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
                 'interactionCount': portfolio.views,
                 'headline': portfolio.title,
                 'keywords': portfolio.tags,
