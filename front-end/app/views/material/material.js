@@ -40,7 +40,8 @@ angular.module('koolikottApp')
                 'CCBYND': ['by', 'nd'],
                 'CCBYNC': ['by', 'nc'],
                 'CCBYNCSA': ['by', 'nc', 'sa'],
-                'CCBYNCND': ['by', 'nc', 'nd']
+                'CCBYNCND': ['by', 'nc', 'nd'],
+                'CCBYSA30': ['by', 'sa']
             };
 
             const storedMaterial = storageService.getMaterial()
