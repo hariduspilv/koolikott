@@ -13,7 +13,8 @@ class controller extends Controller {
             'CCBYND': ['by', 'nd'],
             'CCBYNC': ['by', 'nc'],
             'CCBYNCSA': ['by', 'nc', 'sa'],
-            'CCBYNCND': ['by', 'nc', 'nd']
+            'CCBYNCND': ['by', 'nc', 'nd'],
+            'CCBYSA30': ['by', 'sa']
         };
 
         this.$scope.showEditModeButton = true
