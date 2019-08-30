@@ -37,11 +37,6 @@ class controller extends Controller {
         this.$scope.$watch(() => this.storageService.getPortfolio(), (currentValue, previousValue) => {
             if (currentValue !== previousValue) {
                 this.$scope.portfolio = currentValue
-                if (this.getCorrectLanguageTitle(this.portfolio)) {
-                    this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
-                } else {
-                    this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
-                }
             }
         }, true)
 
@@ -52,6 +47,12 @@ class controller extends Controller {
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
         this.$scope.pageUrl = this.$location.absUrl()
+
+        if (this.getCorrectLanguageTitle(this.portfolio)) {
+            this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
+        } else {
+            this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
+        }
 
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
