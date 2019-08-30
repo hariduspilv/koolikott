@@ -13,6 +13,7 @@ angular.module('koolikottApp')
             $rootScope.isFullScreen = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
+            $scope.path = $location.url()
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
@@ -57,6 +58,8 @@ angular.module('koolikottApp')
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
             $scope.$watch(() => {
+                if ($scope.material)
+                    $rootScope.tabTitle = $scope.getCorrectLanguageString($scope.material.titles);
                 return $scope.material;
             }, () => {
                 if ($scope.material && $scope.material.id) {
@@ -139,7 +142,6 @@ angular.module('koolikottApp')
                     window.location.replace('/404');
                 } else {
                     $scope.material = material;
-                    console.log(material.licenseType.name)
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
 
@@ -276,6 +278,13 @@ angular.module('koolikottApp')
                 processMaterial();
                 showUnreviewedMessage();
 
+                let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, "-")
+
+                $scope.materialUrl = `/oppematerjal/${$scope.material.id}-${correctLanguageTitle}`
+                if (!$scope.path.contains($scope.materialUrl)) {
+                    $location.url($scope.materialUrl)
+                }
+
                 eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectPrivate = ["PRIVATE"].includes($scope.material.visibility);
@@ -283,9 +292,6 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
-
-                if ($scope.material)
-                    $rootScope.tabTitle = $scope.material.titles[0].text;
                 materialService.increaseViewCount($scope.material);
 
             }

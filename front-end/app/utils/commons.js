@@ -857,7 +857,7 @@ class Controller {
 
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
-            return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
+            return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject).replace(/(-)\1+/g, "-")}`
         } else if (learningObject.type === '.PortfolioLog')
             return `kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`
         else
@@ -873,12 +873,12 @@ class Controller {
 
     replaceSpacesAndCharacters(title) {
         if (title)
-            return unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "-")
+            return unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 255).replace(/[\W_]/g, "-").replace(/(-)\1+/g, "-")
     }
 
     replaceSpaces(title) {
         if (title)
-            return title.replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
+            return title.replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '').replace(/(-)\1+/g, "-")
     }
 
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
