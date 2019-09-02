@@ -17,6 +17,7 @@ class controller extends Controller {
         this.$scope.isSaving = false
         this.$scope.isUserAuthor = false
         this.$scope.licenseTypes = []
+        this.$scope.licenseTermsLink = 'https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode'
 
         const { name, surname } = this.authenticatedUserService.getUser()
         this.userFullName = `${name} ${surname}`
@@ -24,8 +25,6 @@ class controller extends Controller {
         this.metadataService.loadLicenseTypes(data => {
             this.$scope.licenseTypes = data
             this.$scope.doNotKnow = { id: 'doNotKnow' }
-            // this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
-            console.log(data)
             this.$scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
         })
 

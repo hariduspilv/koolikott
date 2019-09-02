@@ -24,6 +24,11 @@ angular.module('koolikottApp')
                     $scope.newPortfolio.chapters = portfolio.chapters;
                     $scope.newPortfolio.taxons = [{}];
                     $scope.isVocationalEducation = true
+                    $scope.licenseTermsLink = 'https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode'
+                    
+                    if ($scope.portfolio && $scope.portfolio.picture) {
+                        $scope.existingPicture = true
+                    }
 
                     $scope.mode = locals.mode;
                     if ($scope.mode === 'EDIT' || $scope.mode === 'COPY') {
@@ -198,7 +203,6 @@ angular.module('koolikottApp')
                 function setLicenseTypes(data) {
                     $scope.licenseTypes = data
                     $scope.doNotKnow = {id: 'doNotKnow'}
-                    // $scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
                     $scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
                 }
 
@@ -263,6 +267,13 @@ angular.module('koolikottApp')
                         }
                     });
                     return hasCorrectTaxon;
+                }
+
+                $scope.goToLinkWithoutCheckingBox = function($event, link) {
+                    console.log(link)
+                    $event.stopPropagation()
+                    window.captureOutboundLink(link);
+                    window.open(link, '_blank');
                 }
 
                 init();

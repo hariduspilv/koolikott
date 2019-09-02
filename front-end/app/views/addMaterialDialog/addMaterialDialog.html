@@ -94,16 +94,17 @@
           </div>
 
           <!-- material license -->
-          <h5 class="no-margin" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></h5>
           <md-input-container flex="100" flex-gt-sm="60" flex-gt-md="25">
+            <h5 class="no-margin" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></h5>
             <md-checkbox
               name="licenseType"
+              style="margin-top: 9px;"
               data-ng-model="licenseTypeAgreed"
               data-ng-value="CCBYSA30"
               aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
               required
             >
-              Olen nõus <a href="https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode" target="_blank" rel="nofollow"><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
+              Olen nõus <a href="https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode" onclick="captureOutboundLink(this.href)" target="_blank" rel="nofollow"><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
             </md-checkbox>
             <!--<md-select
               name="licenseType"
@@ -610,15 +611,15 @@
                   <md-input-container flex="100" flex-gt-sm="100">
                   <md-checkbox
                     name="pictureLicenseType"
-                    data-ng-required="newPicture"
+                    data-ng-required="newPicture || existingPicture"
                     data-ng-model="pictureLicenseTypeAgreed"
                     data-ng-value="CCBYSA30"
                     aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
                   >
-                    Olen nõus <a href="https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode" target="_blank" rel="nofollow"><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
+                    Olen nõus <a href="https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode" onclick="captureOutboundLink(this.href)" target="_blank" rel="nofollow"><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
                   </md-checkbox>
-                  <div data-ng-messages="addMaterialForm.pictureLicenseType.$error" data-ng-show="newPicture">
-                    <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
+                  <div data-ng-messages="addMaterialForm.pictureLicenseType.$error" data-ng-show="!pictureLicenseTypeAgreed && (newPicture || existingPicture)">
+                    <div data-translate="LICENSE_TYPE_IS_REQUIRED" class="md-input-message-animation"></div>
                   </div>
                   <!--<md-select
                     class="no-margin"
