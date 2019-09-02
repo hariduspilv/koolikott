@@ -560,6 +560,7 @@ function getKeyByValue(object, value) {
 }
 
 function convertToClassGroup(targetGroups) {
+    let copyOfTargetGroups = [...targetGroups];
     const gradeGroup = {
         PRESCHOOL: ['ZERO_FIVE', 'SIX_SEVEN'],
         LEVEL1: ['GRADE1', 'GRADE2', 'GRADE3'],
@@ -568,19 +569,19 @@ function convertToClassGroup(targetGroups) {
     };
     let finalArray = [];
     Object.values(gradeGroup)
-        .forEach(function (ageGroup) {
-                let completeGradeGroupMatch = ageGroup.every(grade => targetGroups.includes(grade));
-                if (completeGradeGroupMatch) {
-                    const generalLimits = generalGradeLimits(getKeyByValue(gradeGroup, ageGroup));
-                    finalArray.push(generalLimits);
-                    ageGroup.forEach(group => targetGroups.splice(targetGroups.indexOf(group), 1));
-                }});
+        .forEach(ageGroup => {
+            const completeGradeGroupMatch = ageGroup.every(grade => copyOfTargetGroups.includes(grade));
+            if (completeGradeGroupMatch) {
+                const generalLimits = generalGradeLimits(getKeyByValue(gradeGroup, ageGroup));
+                finalArray.push(generalLimits);
+                ageGroup.forEach(group => copyOfTargetGroups.splice(copyOfTargetGroups.indexOf(group), 1));
+            }
+        });
 
-    if (targetGroups.length) {
-        const singleGrades = targetGroups.map(singleGrade => getTypicalAgeRange(singleGrade))
+    if (copyOfTargetGroups.length) {
+        const singleGrades = copyOfTargetGroups.map(singleGrade => getTypicalAgeRange(singleGrade));
         finalArray.push(...singleGrades);
     }
-    console.log(finalArray);
     return finalArray;
 }
 
