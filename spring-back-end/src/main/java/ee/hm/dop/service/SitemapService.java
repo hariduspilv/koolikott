@@ -80,7 +80,7 @@ public class SitemapService {
 
         WebSitemapGenerator webSitemapGeneratorPortfolio = generatePrefixSpecific("portfolios", file);
 
-        for (Portfolio portfolio : portfolioDao.findAll()) {
+        for (Portfolio portfolio : portfolioDao.getAllPortfoliosDeletedExcluded()) {
             WebSitemapUrl wsmUrl = new WebSitemapUrl.Options(BASE_URL + PORTFOLIO + portfolio.getId() + "-" + TitleUtils.replaceChars(portfolio.getTitle()))
                     .lastMod(portfolio.getUpdated() == null ? String.valueOf(portfolio.getAdded()) : String.valueOf(portfolio.getUpdated()))
                     .priority(0.9)

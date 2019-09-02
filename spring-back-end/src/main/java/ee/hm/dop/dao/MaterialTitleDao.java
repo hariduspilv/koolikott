@@ -35,7 +35,7 @@ public class MaterialTitleDao extends AbstractDao<LanguageString> {
                         " join Material M on LO.id = M.id\n" +
                         " join Material_Title MT on M.id = MT.material\n" +
                         " join LanguageString LS on MT.title = LS.id\n" +
-                        " where M.lang in (1,2,3)\n" +
+                        " where M.lang in (1,2,3) AND LO.deleted = 0\n" +
                         " order by lang desc;")
                 .getResultList();
 
