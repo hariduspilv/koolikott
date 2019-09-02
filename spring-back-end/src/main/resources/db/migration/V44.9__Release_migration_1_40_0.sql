@@ -1,4 +1,4 @@
-/*SET foreign_key_checks = 0;
+SET foreign_key_checks = 0;
 
 INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (1, 'LICENSETYPE_CCBYSA30', 'CC BY-SA 3.0'),
@@ -17,4 +17,4 @@ INSERT INTO Translation(translationGroup, translationKey, translation) VALUES
 (2, 'CCBYSA30_CHECKBOX_TEXT', 'Olen nõus <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.'),
 (3, 'CCBYSA30_CHECKBOX_TEXT', 'I agree to the terms of <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong>CC BY-SA 3.0</strong></a> license.');
 
-SET foreign_key_checks = 1;*/
+SET foreign_key_checks = 1;
