@@ -20,7 +20,7 @@ class controller extends Controller {
                 : this.setMaterialFooterData(data.currentValue)
         }
     }
-    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType, deleted }) {
+    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType, deleted, visibility }) {
         this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
         this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
         this.$scope.link = '/oppematerjal/' + id + '-' + this.replaceSpacesAndCharacters(this.$scope.title)
@@ -28,6 +28,7 @@ class controller extends Controller {
         this.setMaterialSourceLink()
 
         this.$scope.deleted = deleted
+        this.$scope.private = visibility === 'PRIVATE'
 
         const { name: licenseTypeName } = licenseType || {}
         this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
