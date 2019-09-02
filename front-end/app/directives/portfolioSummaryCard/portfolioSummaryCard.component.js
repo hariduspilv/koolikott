@@ -25,14 +25,14 @@ class controller extends Controller {
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
+            if (this.getCorrectLanguageTitle(this.portfolio)) {
+                this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
+            } else {
+                this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
+            }
             if (newValue !== oldValue) {
                 this.$rootScope.$broadcast('portfolioHistory:loadHistory');
                 this.eventService.notify('portfolio:reloadTaxonObject')
-                if (this.getCorrectLanguageTitle(this.portfolio)) {
-                    this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
-                } else {
-                    this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
-                }
             }
         })
         this.$scope.$watch('portfolio.taxon.id', (newValue, oldValue) => {
