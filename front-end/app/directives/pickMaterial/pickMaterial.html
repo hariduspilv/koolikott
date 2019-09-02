@@ -2,7 +2,7 @@
   <md-tooltip md-direction="bottom">
     <span data-ng-if="$ctrl.isPublic()" data-ng-show="!$ctrl.learningObject.selected" data-translate="PICK_MATERIAL"></span>
     <span data-ng-if="$ctrl.isPublic()" data-ng-show="$ctrl.learningObject.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
-    <span data-ng-if="$ctrl.isPrivate()" data-ng-show="!$ctrl.learningObject.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
+    <span data-ng-if="$ctrl.isPrivate()" data-ng-show="!$ctrl.learningObject.selected" data-translate="PRIVATE_MATERIAL_WARNING"></span>
   </md-tooltip>
 
   <md-icon data-ng-if="$ctrl.isPublic()" class="unchecked">check</md-icon>
