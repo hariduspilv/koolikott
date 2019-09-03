@@ -129,9 +129,9 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                 <md-button id="change-visibility" aria-label="Jaga"
                            class="md-icon-button no-margin no-padding card-cover-menu-button"
                            ng-click="$mdMenu.open($event)"
-                           data-ng-disabled="!isAdmindOrModeratorOrCreator()">
+                           data-ng-disabled="!isAdminOrModeratorOrCreator()">
                   <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
-                  <md-icon data-ng-if="isAdmindOrModeratorOrCreator() && material.visibility === 'PUBLIC'">visibility</md-icon>
+                  <md-icon data-ng-if="isAdminOrModeratorOrCreator() && material.visibility === 'PUBLIC'">visibility</md-icon>
                   <md-icon data-ng-if="material.visibility === 'PRIVATE'">visibility_off</md-icon>
                 </md-button>
                 <md-menu-content>

@@ -512,7 +512,7 @@ angular.module('koolikottApp')
                 )
             }
 
-            $scope.isAdmindOrModeratorOrCreator = function () {
+            $scope.isAdminOrModeratorOrCreator = function () {
                 return (
                     authenticatedUserService.isAdmin() ||
                         authenticatedUserService.isModerator() ||
