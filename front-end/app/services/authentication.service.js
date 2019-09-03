@@ -228,6 +228,10 @@ angular.module('koolikottApp')
                     authenticatedUserService.removeAuthenticatedUser();
                     $rootScope.afterAuthRedirectURL = null;
                     $rootScope.$broadcast('logout:success');
+                    console.log('loginFrom is: ' + JSON.parse(localStorage.getItem('authenticatedUser')).loginFrom);
+                    if (JSON.parse(localStorage.getItem('authenticatedUser')).loginFrom === 'EKOOL') {
+                        serverCallService.makeGet('rest/login/logout');
+                    }
                     enableLogin();
                 })
         }
@@ -243,15 +247,19 @@ angular.module('koolikottApp')
                 loginFail();
             },
 
-            logout: function() {
+            logout: function () {
                 endSession('rest/user/logout')
             },
 
-            terminate: function() {
+            logoutFromEkool: function () {
+                endSession('/rest/login/logout')
+            },
+
+            terminate: function () {
                 endSession('rest/user/terminateSession')
             },
 
-            loginWithIdCard: function() {
+            loginWithIdCard: function () {
                 if (isAuthenticationInProgress) {
                     return;
                 }
