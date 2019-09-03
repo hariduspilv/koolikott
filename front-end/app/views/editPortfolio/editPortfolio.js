@@ -89,7 +89,7 @@ class controller extends Controller {
             window.location.replace('/404')
         }
         this.serverCallService
-            .makeGet('rest/portfolio?id=' + this.$route.current.params.id)
+            .makeGet('rest/portfolio?id=' + this.$route.current.params.id.split('-')[0])
             .then(({ data: portfolio }) =>
                 portfolio
                     ? this.setPortfolio(portfolio)

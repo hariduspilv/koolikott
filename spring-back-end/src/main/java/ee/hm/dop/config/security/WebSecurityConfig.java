@@ -38,7 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .contentTypeOptions()
                 .disable();
-
     }
 
     @Bean

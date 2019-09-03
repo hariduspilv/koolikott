@@ -39,6 +39,7 @@ class controller extends Controller {
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
         this.$scope.closeOtherTabs = this.closeOtherTabs.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
+        this.$scope.isUserModerator = this.isUserModerator.bind(this)
         this.$scope.isAdminUser = this.isAdminUser.bind(this)
         this.$scope.confirm = this.confirm.bind(this)
 
@@ -138,6 +139,10 @@ class controller extends Controller {
     }
     isAdminUser() {
         return this.authenticatedUserService.isAdmin()
+    }
+
+    isUserModerator() {
+        return this.authenticatedUserService.isModerator()
     }
     /**
      * @param {string} type - One of:
