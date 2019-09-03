@@ -760,40 +760,39 @@ class controller extends Controller {
             this.serverCallService
                 .makePost(this.locals.isEditMode ? 'rest/material/update' : 'rest/material/create', this.$scope.material)
                 .then(({ data: material }) => {
-                        const done = () => {
-                            this.$scope.isUpdateMode
-                                ? this.$rootScope.learningObjectChanged = this.isChanged(material)
-                                : this.$rootScope.learningObjectUnreviewed = true
-                            this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                        }
-                        if (material) {
-                            material.source = this.getMaterialSource(material)
-                            this.$mdDialog.hide(material)
-                            this.storageService.setMaterial(material)
+                    const done = () => {
+                        this.$scope.isUpdateMode
+                            ? this.$rootScope.learningObjectChanged = this.isChanged(material)
+                            : this.$rootScope.learningObjectUnreviewed = true
+                        this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
+                    }
+                    if (material) {
+                        material.source = this.getMaterialSource(material)
+                        this.$mdDialog.hide(material)
+                        this.storageService.setMaterial(material)
 
-                            if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
-                                const url = '/oppematerjal/' + material.id
+                        if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
+                            const url = '/oppematerjal/' + material.id
 
-                                if(this.storageService.getMaterial().visibility === 'PRIVATE'){
-                                    this.showMakePublicDialog()
-                                }
-
-                                this.toastService.show('MATERIAL_SAVED')
-
-                                if (this.$location.url() === url)
-                                    return done()
-
-                                const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
-                                    unsubscribe()
-                                    this.$timeout(done)
-                                })
-                                //this.$location.url(url)
+                            if(this.storageService.getMaterial().visibility === 'PRIVATE'){
+                                this.showMakePublicDialog()
                             }
+
+                            this.toastService.show('MATERIAL_SAVED')
+
+                            if (this.$location.url() === url)
+                                return done()
+
+                            const unsubscribe = this.$rootScope.$on('$locationChangeSuccess', () => {
+                                unsubscribe()
+                                this.$timeout(done)
+                            })
                         }
-                        this.$scope.isSaving = false
-                    }, () =>
-                        this.$scope.isSaving = false
-                )
+                    }
+                    this.$scope.isSaving = false
+                }, () =>
+                    this.$scope.isSaving = false
+            )
         }
         Promise.all(
             ['fileUpload', 'pictureUpload'].reduce(
