@@ -29,7 +29,6 @@ public class LoginResource extends BaseResource {
     private final Logger logger = LoggerFactory.getLogger(LoginResource.class);
 
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
-    private static final String EKOOL_LOGOUT_URL = "https://auth.ekool.eu/auth/logout";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+personal_code&response_type=code";
@@ -55,14 +54,6 @@ public class LoginResource extends BaseResource {
     private MobileIDLoginService mobileIDLoginService;
     @Inject
     private HaridService haridService;
-
-
-    @GetMapping("/logout")
-    public RedirectView logoutFromEkool() throws URISyntaxException {
-        AuthenticatedUser authenticatedUser = getAuthenticatedUser();
-        logger.info(format("User %s is logged out", authenticatedUser.getUser().getUsername()) + " from Ekool");
-        return new RedirectView(getEkoolLogoutUri().toString());
-    }
 
     @PostMapping("/finalizeLogin")
     public AuthenticatedUser permissionConfirm(@RequestBody UserStatus userStatus) {
@@ -161,10 +152,6 @@ public class LoginResource extends BaseResource {
 
     private URI getHaridAuthenticationURI() throws URISyntaxException {
         return new URI(format(HARID_AUTHENTICATION_URL, haridService.getAuthorizationUrl(), haridService.getClientId(), getHaridCallbackUrl()));
-    }
-
-    private URI getEkoolLogoutUri() throws URISyntaxException {
-        return new URI(format(EKOOL_LOGOUT_URL));
     }
 
     private RedirectView authenticateWithHaridToken(String token) throws URISyntaxException {

@@ -18,6 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import static ee.hm.dop.service.login.SessionUtil.minRemaining;
 import static ee.hm.dop.utils.ConfigurationProperties.SESSION_ALERT_MINS;
 import static java.lang.String.format;

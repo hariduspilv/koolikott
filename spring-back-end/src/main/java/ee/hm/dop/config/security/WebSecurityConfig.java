@@ -39,6 +39,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .contentTypeOptions()
                 .disable();
 
+        http
+                .logout()
+                .logoutUrl("https://auth.ekool.eu/auth/logout")
+                .logoutSuccessUrl("/");
+
     }
 
     @Bean
