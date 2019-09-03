@@ -57,7 +57,6 @@ public class UploadedFileService {
         }
         String outputPath = zipService.packArchive(sourcePath, sourcePath);
         File file = FileUtils.getFile(outputPath);
-//        String mediaType = DOPFileUtils.probeForMediaType(file.getName());
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
         String mediaType = fileTypeMap.getContentType(file.getName());
 
@@ -69,7 +68,6 @@ public class UploadedFileService {
         if (uploadedFile == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-//        String mediaType = DOPFileUtils.probeForMediaType(requestFilename);
         MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
         String mediaType = fileTypeMap.getContentType(requestFilename);
 
