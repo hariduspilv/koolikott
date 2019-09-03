@@ -33,7 +33,7 @@ public class SessionResource extends BaseResource {
 
     private static Logger logger = LoggerFactory.getLogger(SessionResource.class);
 
-    private static final String EKOOL_LOGOUT_URL = "https://auth.ekool.eu/auth/logout";
+    private static final String EKOOL_LOGOUT_URL = "https://auth-chucknorris.ekool.eu/auth/logout"; //TODO
 
     @Inject
     private SessionService sessionService;
