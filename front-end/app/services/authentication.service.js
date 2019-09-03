@@ -225,13 +225,14 @@ angular.module('koolikottApp')
             userSessionService.stopTimer();
             serverCallService.makePost(url)
                 .then(() => {
-                    authenticatedUserService.removeAuthenticatedUser();
-                    $rootScope.afterAuthRedirectURL = null;
-                    $rootScope.$broadcast('logout:success');
+                    debugger
                     console.log('loginFrom is: ' + JSON.parse(localStorage.getItem('authenticatedUser')).loginFrom);
                     if (JSON.parse(localStorage.getItem('authenticatedUser')).loginFrom === 'EKOOL') {
                         serverCallService.makeGet('rest/login/logout');
                     }
+                    authenticatedUserService.removeAuthenticatedUser();
+                    $rootScope.afterAuthRedirectURL = null;
+                    $rootScope.$broadcast('logout:success');
                     enableLogin();
                 })
         }
@@ -251,9 +252,9 @@ angular.module('koolikottApp')
                 endSession('rest/user/logout')
             },
 
-            logoutFromEkool: function () {
-                endSession('/rest/login/logout')
-            },
+            // logoutFromEkool: function () {
+            //     endSession('/rest/login/logout')
+            // },
 
             terminate: function () {
                 endSession('rest/user/terminateSession')
