@@ -77,13 +77,14 @@ public class SessionResource extends BaseResource {
         logger.info(format("User %s is logged out", authenticatedUser.getUser().getUsername()));
     }
 
-    @PostMapping
+    @GetMapping
     @RequestMapping("logoutFromEkool")
     public RedirectView logoutFromEkool() throws URISyntaxException {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
-        sessionService.logout(authenticatedUser);
+//        sessionService.logout(authenticatedUser);
         sessionService.terminateSession(getAuthenticatedUser());
         logger.info(format("User %s is logged out", authenticatedUser.getUser().getUsername()));
+        logger.info("Logout url is: " + getEkoolLogoutUri().toString());//TODO
         return new RedirectView(getEkoolLogoutUri().toString());
     }
 

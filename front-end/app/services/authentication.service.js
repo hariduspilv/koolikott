@@ -244,11 +244,12 @@ angular.module('koolikottApp')
             },
 
             logout: function () {
-                endSession('rest/user/logout')
+                endSession('rest/user/logoutFromEkool')//TODO
+                // endSession('rest/user/logout')
             },
 
             terminate: function () {
-                endSession('rest/user/terminateSession')
+                endSession('rest/user/logoutFromEkool')//TODO
             },
 
             loginWithIdCard: function () {
