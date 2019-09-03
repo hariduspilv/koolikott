@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import javax.inject.Inject;
 
@@ -31,6 +32,8 @@ import static java.lang.String.format;
 public class SessionResource extends BaseResource {
 
     private static Logger logger = LoggerFactory.getLogger(SessionResource.class);
+
+    private static final String EKOOL_LOGOUT_URL = "https://auth.ekool.eu/auth/logout";
 
     @Inject
     private SessionService sessionService;
@@ -72,5 +75,19 @@ public class SessionResource extends BaseResource {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
         sessionService.logout(authenticatedUser);
         logger.info(format("User %s is logged out", authenticatedUser.getUser().getUsername()));
+    }
+
+    @PostMapping
+    @RequestMapping("logoutFromEkool")
+    public RedirectView logoutFromEkool() throws URISyntaxException {
+        AuthenticatedUser authenticatedUser = getAuthenticatedUser();
+        sessionService.logout(authenticatedUser);
+        sessionService.terminateSession(getAuthenticatedUser());
+        logger.info(format("User %s is logged out", authenticatedUser.getUser().getUsername()));
+        return new RedirectView(getEkoolLogoutUri().toString());
+    }
+
+    private URI getEkoolLogoutUri() throws URISyntaxException {
+        return new URI(format(EKOOL_LOGOUT_URL));
     }
 }

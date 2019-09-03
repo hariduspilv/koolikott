@@ -248,7 +248,7 @@ angular.module('koolikottApp')
             },
 
             terminate: function () {
-                endSession('rest/user/terminateSession')
+                endSession('rest/user/logoutFromEkool')//TODO
             },
 
             loginWithIdCard: function () {
