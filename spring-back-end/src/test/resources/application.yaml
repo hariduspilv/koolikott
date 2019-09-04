@@ -26,6 +26,9 @@ spring:
 app:
   devLogin: true
 
+logging:
+  level:
+    root: ERROR
 
 #application-common.yaml
 version: ${project.version}
