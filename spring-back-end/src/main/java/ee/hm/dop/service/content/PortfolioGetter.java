@@ -10,6 +10,7 @@ import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.SearchResult;
 import ee.hm.dop.model.Searchable;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.TaxonLevel;
 import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.model.taxon.TaxonPositionDTO;
@@ -95,17 +96,20 @@ public class PortfolioGetter {
 
         List<TaxonPositionDTO> taxonPositionDTOList = new ArrayList<>();
         taxonPosition.forEach(tp -> {
-            TaxonPositionDTO tpdEduContext = new TaxonPositionDTO();
-            tpdEduContext.setTaxonLevelId(tp.getEducationalContext().getId());
-            tpdEduContext.setTaxonLevelName(tp.getEducationalContext().getName());
-            tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
-            if (tp.getDomain() != null) {
-                TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
-                tpdDomain.setTaxonLevelId(tp.getDomain().getId());
-                tpdDomain.setTaxonLevelName(tp.getDomain().getName());
-                tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
-                taxonPositionDTOList.add(tpdEduContext);
-                taxonPositionDTOList.add(tpdDomain);
+            Taxon educationalContext = tp.getEducationalContext();
+            if (educationalContext != null) {
+                TaxonPositionDTO tpdEduContext = new TaxonPositionDTO();
+                tpdEduContext.setTaxonLevelId(educationalContext.getId());
+                tpdEduContext.setTaxonLevelName(educationalContext.getName());
+                tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
+                if (tp.getDomain() != null) {
+                    TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
+                    tpdDomain.setTaxonLevelId(tp.getDomain().getId());
+                    tpdDomain.setTaxonLevelName(tp.getDomain().getName());
+                    tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
+                    taxonPositionDTOList.add(tpdEduContext);
+                    taxonPositionDTOList.add(tpdDomain);
+                }
             }
         });
 

@@ -19,7 +19,7 @@ import static org.junit.Assert.assertTrue;
 public class Material1Validation {
 
     public static void assertMaterial1(Material material, TestLayer layer) {
-        assertTrue(material.getTitlesForUrl().get(0).getText().length() == MAX_TITLE_LENGTH);
+        assertTrue(material.getTitlesForUrl().get(0).getText().length() <= MAX_TITLE_LENGTH);
         assertEquals(2, material.getTitlesForUrl().size());
         assertEquals(2, material.getTitles().size());
         assertEquals("Matemaatika õpik üheksandale klassile", material.getTitles().get(0).getText());
