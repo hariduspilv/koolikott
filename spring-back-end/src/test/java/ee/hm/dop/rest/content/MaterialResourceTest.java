@@ -13,6 +13,8 @@ import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import java.time.LocalDateTime;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 

@@ -21,6 +21,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
 
@@ -91,6 +92,7 @@ public class MaterialGetter {
         List<TaxonPosition> taxonPosition = material.getTaxons()
                 .stream()
                 .map(taxonPositionDao::findByTaxon)
+                .filter(Objects::nonNull)
                 .collect(toList());
 
         List<TaxonPositionDTO> taxonPositionDTOList = new ArrayList<>();

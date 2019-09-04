@@ -42,7 +42,7 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void moderator_can_not_search_statistics() throws Exception {
         login(USER_MODERATOR);
-        assertEquals(Response.Status.FORBIDDEN.getStatusCode(), doPost(SEARCH_STATISTICS).getStatus());
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), doPost(SEARCH_STATISTICS).getStatus());
     }
 
     @Test

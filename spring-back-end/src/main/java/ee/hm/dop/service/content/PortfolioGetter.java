@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
@@ -92,6 +93,7 @@ public class PortfolioGetter {
         List<TaxonPosition> taxonPosition = portfolio.getTaxons()
                 .stream()
                 .map(taxonPositionDao::findByTaxon)
+                .filter(Objects::nonNull)
                 .collect(toList());
 
         List<TaxonPositionDTO> taxonPositionDTOList = new ArrayList<>();

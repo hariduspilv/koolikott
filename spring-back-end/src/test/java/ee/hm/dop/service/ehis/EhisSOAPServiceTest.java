@@ -18,6 +18,7 @@ import static ee.hm.dop.model.ehis.Role.InstitutionalRole.PRINCIPAL;
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.STUDENT;
 import static ee.hm.dop.model.ehis.Role.InstitutionalRole.TEACHER;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 public class EhisSOAPServiceTest extends DatabaseTestBase {
@@ -30,6 +31,7 @@ public class EhisSOAPServiceTest extends DatabaseTestBase {
         Person person = ehisSOAPService.getPersonInformation("46212154899");
 
         List<Institution> institutions = person.getInstitutions();
+        assertNotNull(institutions);
         assertEquals(2, institutions.size());
 
         Institution institution1 = institutions.get(0);
@@ -52,6 +54,7 @@ public class EhisSOAPServiceTest extends DatabaseTestBase {
         Person person = ehisSOAPService.getPersonInformation("60104294277");
 
         List<Institution> institutions = person.getInstitutions();
+        assertNotNull(institutions);
         assertEquals(1, institutions.size());
 
         Institution institution = institutions.get(0);
@@ -67,6 +70,7 @@ public class EhisSOAPServiceTest extends DatabaseTestBase {
         Person person = ehisSOAPService.getPersonInformation("45805217556");
 
         List<Institution> institutions = person.getInstitutions();
+        assertNotNull(institutions);
         assertEquals(1, institutions.size());
 
         Institution institution = institutions.get(0);
@@ -88,6 +92,7 @@ public class EhisSOAPServiceTest extends DatabaseTestBase {
         Person person = ehisSOAPService.getPersonInformation("4444");
 
         List<Institution> institutions = person.getInstitutions();
+        assertNotNull(institutions);
         assertEquals(1, institutions.size());
 
         Institution institution = institutions.get(0);
