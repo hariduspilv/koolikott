@@ -21,7 +21,7 @@ public class TitleUtilsTest {
     }
 
     @Test
-    public void two_word_title_has_break_replaced_with_underscrore() {
+    public void two_word_title_has_break_replaced_with_hyphen() {
         assertEquals("Best-Title", TitleUtils.makeEncodingFriendly("Best Title"));
     }
 
@@ -68,12 +68,12 @@ public class TitleUtilsTest {
     }
 
     @Test
-    public void title_symbols_replaced_with_underscores_more_than_one_consecutive_underscore_replaced_with_single() {
+    public void title_symbols_replaced_with_hyphens_more_than_one_consecutive_hyphen_replaced_with_single() {
         assertEquals("Title-", TitleUtils.makeEncodingFriendly("Title @£¤$%&/{[]}()=)"));
     }
 
     @Test
-    public void title_with_long_space_between_words_multiple_underscore_replaced_with_single() {
+    public void title_with_long_space_between_words_multiple_hyphen_replaced_with_single() {
         assertEquals("Best-Title", TitleUtils.makeEncodingFriendly("Best       Title"));
     }
 }
