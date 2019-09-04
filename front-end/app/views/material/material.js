@@ -301,8 +301,21 @@ angular.module('koolikottApp')
 
             }
 
+            $scope.updateMaterialVisibility = () =>{
+                serverCallService
+                    .makePost('rest/material/update', $scope.material)
+                    .then(({ data: material }) => {
+                        if (material) {
+                            storageService.setMaterial(null)
+                            $location.url('/oppematerjal/' + $scope.material.id)
+                            $route.reload()
+                        }
+                    })
+            }
+
             $scope.makePrivate = () => {
-                updateMaterialVisibility(VISIBILITY_PRIVATE)
+                $scope.material.visibility = VISIBILITY_PRIVATE
+                $scope.updateMaterialVisibility()
             }
 
             $scope.makePublic = () => {
@@ -316,18 +329,9 @@ angular.module('koolikottApp')
                         }
                     })
                 } else if ($scope.material.licenseType.id === 10) {
-                    updateMaterialVisibility(VISIBILITY_PUBLIC)
+                    $scope.material.visibility = VISIBILITY_PUBLIC
+                    $scope.updateMaterialVisibility()
                 }
-            }
-
-            function updateMaterialVisibility(visibility) {
-                $scope.material.visibility = visibility
-                serverCallService
-                    .makePost('rest/material/update', $scope.material)
-                    .then(({data: material}) => {
-                        storageService.setMaterial(material)
-                    })
-                toastService.show('MATERIAL_SAVED');
             }
 
 
@@ -520,7 +524,7 @@ angular.module('koolikottApp')
                 )
             }
 
-            $scope.isAdmindOrModeratorOrCreator = function () {
+            $scope.isAdminOrModeratorOrCreator = function () {
                 return (
                     authenticatedUserService.isAdmin() ||
                         authenticatedUserService.isModerator() ||
