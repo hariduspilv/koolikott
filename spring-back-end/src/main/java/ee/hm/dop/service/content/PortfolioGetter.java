@@ -27,6 +27,7 @@ import java.util.Objects;
 import java.util.function.Function;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 @Service
 @Transactional
@@ -90,6 +91,9 @@ public class PortfolioGetter {
     }
 
     private void setTaxonPosition(Portfolio portfolio) {
+        if (isEmpty(portfolio.getTaxons())){
+            return;
+        }
         List<TaxonPosition> taxonPosition = portfolio.getTaxons()
                 .stream()
                 .map(taxonPositionDao::findByTaxon)

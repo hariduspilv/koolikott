@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 @Service
 @Transactional
@@ -89,6 +90,9 @@ public class MaterialGetter {
     }
 
     private void setTaxonPosition(Material material) {
+        if (isEmpty(material.getTaxons())){
+            return;
+        }
         List<TaxonPosition> taxonPosition = material.getTaxons()
                 .stream()
                 .map(taxonPositionDao::findByTaxon)
