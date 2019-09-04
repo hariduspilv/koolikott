@@ -34,15 +34,16 @@ public class PortfolioGetter {
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            learningObjectService.setTaxonPosition(portfolioDao.findById(portfolioId));
-
-            return portfolioDao.findById(portfolioId);
+            Portfolio portfolio = portfolioDao.findById(portfolioId);
+            if (portfolio == null) return null;
+            learningObjectService.setTaxonPosition(portfolio);
+            return portfolio;
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
-        learningObjectService.setTaxonPosition(portfolio);
         if (!portfolioPermission.canView(loggedInUser, portfolio)) {
             throw ValidatorUtil.permissionError();
         }
+        learningObjectService.setTaxonPosition(portfolio);
         return portfolio;
     }
 
