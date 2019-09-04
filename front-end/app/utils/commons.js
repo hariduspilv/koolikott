@@ -897,14 +897,17 @@ class Controller {
             ? ''
             : title || titlesForUrl && this.getUserDefinedLanguageString(titlesForUrl, this.translationService.getLanguage(), language)
     }
+    removeHyphenFromTheEndOfString(str) {
+        return str.charAt(str.length - 1) === '-' ? str.slice(0, -1) : str
+    }
 
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
-            return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject).replace(/(-)\1+/g, "-")}`
+            return this.removeHyphenFromTheEndOfString(`oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject).replace(/(-)\1+/g, "-")}`)
         } else if (learningObject.type === '.PortfolioLog')
-            return `kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`
+            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`)
         else
-            return `kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`
+            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`)
     }
 
     getLearningObjectUrl(learningObject) {
@@ -916,7 +919,7 @@ class Controller {
 
     replaceSpacesAndCharacters(title) {
         if (title)
-            return unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 255).replace(/[\W_]/g, "-").replace(/(-)\1+/g, "-")
+            return this.removeHyphenFromTheEndOfString(unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 255).replace(/[\W_]/g, "-").replace(/(-)\1+/g, "-"))
     }
 
     replaceSpaces(title) {
