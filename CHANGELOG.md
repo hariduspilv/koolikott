@@ -1,3 +1,11 @@
+## e-Koolikott [1.39.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11058)
+
+### Muutunud
+* "Aineekspertide statistika kuvamise loogika muudatused (õppevara põhiselt tegevuspõhisele)" [EK-295](https://projektid.hitsa.ee/jira/browse/EK-295)
+* "Sorteerimise rippmenüü on valesse kohta sattunud" [EK-654](https://projektid.hitsa.ee/jira/browse/EK-654)
+* "Kasutuspiirangu seadmise nupp peaks olema kuvatud vaid administraatoritele" [EK-706](https://projektid.hitsa.ee/jira/browse/EK-706)
+* "Ekspertide statistika" [EK-177](https://projektid.hitsa.ee/jira/browse/EK-177)
+
 ## e-Koolikott [1.39.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11023)
 
 ### Muutunud
