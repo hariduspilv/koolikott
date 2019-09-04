@@ -266,6 +266,19 @@ function formatIssueDateTime(issueDate) {
         return new Date(formatYear(issueDate.year), formatMonth(issueDate.month), formatDay(issueDate.day))
     }
 }
+function formatIssueDate(issueDate) {
+    if (!issueDate) return;
+    if (issueDate.day && issueDate.month && issueDate.year) {
+        // full date
+        return formatDay(issueDate.day) + "." + formatMonth(issueDate.month) + "." + formatYear(issueDate.year);
+    } else if (issueDate.month && issueDate.year) {
+        // month date
+        return formatMonth(issueDate.month) + "." + formatYear(issueDate.year);
+    } else if (issueDate.year) {
+        // year date
+        return formatYear(issueDate.year);
+    }
+}
 
 function formatDay(day) {
     return day > 9 ? "" + day : "0" + day;
