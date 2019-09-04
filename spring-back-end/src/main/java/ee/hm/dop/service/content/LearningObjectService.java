@@ -17,11 +17,13 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.UserUtil.isAdmin;
 import static ee.hm.dop.utils.UserUtil.isModerator;
 import static java.util.stream.Collectors.toList;
+import static org.apache.commons.collections.CollectionUtils.isEmpty;
 
 @Service
 @Transactional
@@ -91,24 +93,31 @@ public class LearningObjectService {
     }
 
     public void setTaxonPosition(LearningObject learningobject) {
+        if (isEmpty(learningobject.getTaxons())) {
+            return;
+        }
         List<TaxonPosition> taxonPosition = learningobject.getTaxons()
                 .stream()
                 .map(taxonPositionDao::findByTaxon)
+                .filter(Objects::nonNull)
                 .collect(toList());
 
         List<TaxonPositionDTO> taxonPositionDTOList = new ArrayList<>();
         taxonPosition.forEach(tp -> {
-            TaxonPositionDTO tpdEduContext = new TaxonPositionDTO();
-            tpdEduContext.setTaxonLevelId(tp.getEducationalContext().getId());
-            tpdEduContext.setTaxonLevelName(tp.getEducationalContext().getName());
-            tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
-            if (tp.getDomain() != null) {
-                TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
-                tpdDomain.setTaxonLevelId(tp.getDomain().getId());
-                tpdDomain.setTaxonLevelName(tp.getDomain().getName());
-                tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
-                taxonPositionDTOList.add(tpdEduContext);
-                taxonPositionDTOList.add(tpdDomain);
+            Taxon educationalContext = tp.getEducationalContext();
+            if (educationalContext != null) {
+                TaxonPositionDTO tpdEduContext = new TaxonPositionDTO();
+                tpdEduContext.setTaxonLevelId(educationalContext.getId());
+                tpdEduContext.setTaxonLevelName(educationalContext.getName());
+                tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
+                if (tp.getDomain() != null) {
+                    TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
+                    tpdDomain.setTaxonLevelId(tp.getDomain().getId());
+                    tpdDomain.setTaxonLevelName(tp.getDomain().getName());
+                    tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
+                    taxonPositionDTOList.add(tpdEduContext);
+                    taxonPositionDTOList.add(tpdDomain);
+                }
             }
         });
 
