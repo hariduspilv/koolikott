@@ -17,5 +17,5 @@
 
     controller.$inject = ['$scope', '$mdDialog']
 
-    angular.module('koolikottApp').controller('materialLicenseAgreementController', controller)
+    angular.module('koolikottApp').controller('learningObjectLicenseAgreementController', controller)
 }

@@ -310,8 +310,8 @@ angular.module('koolikottApp')
             $scope.makePublic = () => {
                 if ($scope.material.licenseType.id !== 10){
                     $mdDialog.show({
-                        templateUrl: 'views/material/materialLicenceAgreementDialog.html',
-                        controller: 'materialLicenseAgreementController',
+                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenceAgreementDialog.html',
+                        controller: 'learningObjectLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {
                             $scope.edit()
@@ -322,7 +322,6 @@ angular.module('koolikottApp')
                     $scope.updateMaterialVisibility()
                 }
             }
-
 
             $scope.getLicenseIconList = () => {
                 if ($scope.material && $scope.material.licenseType) {

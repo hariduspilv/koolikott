@@ -86,9 +86,23 @@ class controller extends Controller {
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.makePublic = () => {
+
             this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
-            this.updatePortfolio()
-            this.toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC')
+            this.$scope.portfolioLicenseType = this.storageService.getPortfolio().licenseType.id
+            if(this.$scope.portfolioLicenseType !== 10){
+                this.$mdDialog.show({
+                    templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenceAgreementDialog.html',
+                    controller: 'learningObjectLicenseAgreementController',
+                }).then((res) => {
+                    if (res.accept) {
+                        this.$rootScope.licenseTypeChanged = true
+                        this.showEditMetadataDialog()
+                    }
+                })
+            } else if (this.$scope.portfolioLicenseType === 10) {
+                this.updatePortfolio()
+                this.toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC')
+            }
         }
 
         this.$scope.makeNotListed = () => {
