@@ -46,16 +46,15 @@ public class PortfolioGetter {
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            setTaxonPosition(portfolioDao.findById(portfolioId));
-
-            return portfolioDao.findById(portfolioId);
+            Portfolio portfolio = portfolioDao.findById(portfolioId);
+            if (portfolio == null) return null;
+            return addTaxonPosition(portfolio);
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
         if (!portfolioPermission.canView(loggedInUser, portfolio)) {
             throw ValidatorUtil.permissionError();
         }
-        setTaxonPosition(portfolio);
-        return portfolio;
+        return addTaxonPosition(portfolio);
     }
 
     public SearchResult getByCreatorResult(User creator, User loggedInUser, int start, int maxResults) {
@@ -90,9 +89,9 @@ public class PortfolioGetter {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
     }
 
-    private void setTaxonPosition(Portfolio portfolio) {
+    private Portfolio addTaxonPosition(Portfolio portfolio) {
         if (isEmpty(portfolio.getTaxons())){
-            return;
+            return portfolio;
         }
         List<TaxonPosition> taxonPosition = portfolio.getTaxons()
                 .stream()
@@ -120,5 +119,6 @@ public class PortfolioGetter {
         });
 
         portfolio.setTaxonPositionDto(taxonPositionDTOList);
+        return portfolio;
     }
 }

@@ -41,17 +41,15 @@ public class MaterialGetter {
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            setTaxonPosition(materialDao.findById(materialId));
-            return materialDao.findById(materialId);
+            Material material = materialDao.findById(materialId);
+            if (material == null) return null;
+            return addTaxonPosition(material);
         }
-
         Material material = materialDao.findByIdNotDeleted(materialId);
-
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
         }
-        setTaxonPosition(material);
-        return material;
+        return addTaxonPosition(material);
     }
 
     public Material getWithoutValidation(Long materialId) {
@@ -89,9 +87,9 @@ public class MaterialGetter {
         return materialDao.findByCreatorSize(creator);
     }
 
-    private void setTaxonPosition(Material material) {
-        if (isEmpty(material.getTaxons())){
-            return;
+    private Material addTaxonPosition(Material material) {
+        if (isEmpty(material.getTaxons())) {
+            return material;
         }
         List<TaxonPosition> taxonPosition = material.getTaxons()
                 .stream()
@@ -119,5 +117,6 @@ public class MaterialGetter {
         });
 
         material.setTaxonPositionDto(taxonPositionDTOList);
+        return material;
     }
 }
