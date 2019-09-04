@@ -22,7 +22,7 @@ public class TitleUtilsTest {
 
     @Test
     public void two_word_title_has_break_replaced_with_underscrore() {
-        assertEquals("Best_Title", TitleUtils.makeEncodingFriendly("Best Title"));
+        assertEquals("Best-Title", TitleUtils.makeEncodingFriendly("Best Title"));
     }
 
     @Test
@@ -37,7 +37,14 @@ public class TitleUtilsTest {
 
     @Test
     public void length_is_predefined() {
-        assertEquals(MAX_TITLE_LENGTH, TitleUtils.makeEncodingFriendly("material title string length is predefined").length());
+        assertEquals(MAX_TITLE_LENGTH,
+                TitleUtils.makeEncodingFriendly("material title string length is predefined." +
+                " material title string length is predefined." +
+                " material title string length is predefined." +
+                " material title string length is predefined." +
+                " material title string length is predefined." +
+                " material title string length is predefined." +
+                " material title string length is predefined").length());
     }
 
     @Test
@@ -47,7 +54,7 @@ public class TitleUtilsTest {
 
     @Test
     public void title_with_russian_characters_russian_characters_will_not_be_replaced() {
-        assertEquals("это_русскии_заголовок", TitleUtils.makeEncodingFriendly("это русский заголовок"));
+        assertEquals("это-русскии-заголовок", TitleUtils.makeEncodingFriendly("это русский заголовок"));
     }
 
     @Test
@@ -57,16 +64,16 @@ public class TitleUtilsTest {
 
     @Test
     public void title_with_arabic_characters() {
-        assertEquals("العنوان_العربي", TitleUtils.makeEncodingFriendly("العنوان العربي"));
+        assertEquals("العنوان-العربي", TitleUtils.makeEncodingFriendly("العنوان العربي"));
     }
 
     @Test
     public void title_symbols_replaced_with_underscores_more_than_one_consecutive_underscore_replaced_with_single() {
-        assertEquals("Title_", TitleUtils.makeEncodingFriendly("Title @£¤$%&/{[]}()=)"));
+        assertEquals("Title-", TitleUtils.makeEncodingFriendly("Title @£¤$%&/{[]}()=)"));
     }
 
     @Test
     public void title_with_long_space_between_words_multiple_underscore_replaced_with_single() {
-        assertEquals("Best_Title", TitleUtils.makeEncodingFriendly("Best       Title"));
+        assertEquals("Best-Title", TitleUtils.makeEncodingFriendly("Best       Title"));
     }
 }

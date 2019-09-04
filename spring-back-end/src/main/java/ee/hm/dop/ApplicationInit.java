@@ -22,7 +22,7 @@ public class ApplicationInit {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
-        synchronizeMaterialsExecutor.runAsync();
+//        synchronizeMaterialsExecutor.runAsync();
         automaticallyAcceptReviewableChange.runAsync();
         authenticationStateCleaner.runAsync();
         authenticatedUserCleaner.runAsync();

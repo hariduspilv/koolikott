@@ -9,7 +9,7 @@ public class TitleUtils {
 
     public static final int MAX_TITLE_LENGTH = 255;
     public static final String SPACES_PUNCTUATION_SYMBOLS = "[\\s+\\p{P}\\p{S}]";
-    public static final String CONSECUTIVE_UNDERSCORES = "\\_+";
+    public static final String CONSECUTIVE_HYPHENS = "\\-+";
     public static final String DIACRITICAL_MARKS = "\\p{InCombiningDiacriticalMarks}+";
 
     public static String makeEncodingFriendly(String title) {
@@ -20,6 +20,6 @@ public class TitleUtils {
         return normalize(trim(title), Normalizer.Form.NFD)
                 .replaceAll(DIACRITICAL_MARKS, "")
                 .replaceAll(SPACES_PUNCTUATION_SYMBOLS, "-")
-                .replaceAll(CONSECUTIVE_UNDERSCORES, "-");
+                .replaceAll(CONSECUTIVE_HYPHENS, "-");
     }
 }
