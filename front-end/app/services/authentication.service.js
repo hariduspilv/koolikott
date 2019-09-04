@@ -145,10 +145,15 @@ angular.module('koolikottApp')
 
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
-                $location.url('/profile');
+                $location.url('/profiil');
                 $rootScope.userFirstLogin = true
             } else if (isOAuthAuthentication) {
-                $location.url(localStorage.getItem(LOGIN_ORIGIN));
+                let loginOrigin = localStorage.getItem(LOGIN_ORIGIN)
+                if (loginOrigin.contains('oppematerjalid') || loginOrigin.contains('kogumikud') || loginOrigin.contains('lemmikud')) {
+                    $location.url(authenticatedUser.user.username + loginOrigin);
+                } else {
+                    $location.url(loginOrigin)
+                }
             }
             enableLogin();
 
@@ -156,6 +161,7 @@ angular.module('koolikottApp')
             isOAuthAuthentication = false;
             $rootScope.afterAuthRedirectURL = null;
             toastService.show('LOGIN_SUCCESS');
+            getLoginFrom(JSON.parse(localStorage.getItem('authenticatedUser')))
 
             if (mobileIdLoginSuccessCallback) {
                 mobileIdLoginSuccessCallback();
@@ -220,9 +226,10 @@ angular.module('koolikottApp')
             serverCallService.makePost(url)
                 .then(() => {
                     authenticatedUserService.removeAuthenticatedUser();
+                    $rootScope.afterAuthRedirectURL = null;
                     $rootScope.$broadcast('logout:success');
                     enableLogin();
-                });
+                })
         }
 
         return {
@@ -236,15 +243,15 @@ angular.module('koolikottApp')
                 loginFail();
             },
 
-            logout: function() {
+            logout: function () {
                 endSession('rest/user/logout')
             },
 
-            terminate: function() {
+            terminate: function () {
                 endSession('rest/user/terminateSession')
             },
 
-            loginWithIdCard: function() {
+            loginWithIdCard: function () {
                 if (isAuthenticationInProgress) {
                     return;
                 }

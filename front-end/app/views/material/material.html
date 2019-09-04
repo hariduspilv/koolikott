@@ -1,3 +1,5 @@
+<update-meta property="og:url" content="{{pageUrl}}"></update-meta>
+<update-script content="materialMetaData" type="application/ld+json"></update-script>
 <div data-layout="column" data-layout-gt-sm="row" data-ng-cloak id="material-parent"
 data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
   <div flex-gt-sm="75">
@@ -12,7 +14,8 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
           <div class="card-lg__container card-lg__container--padding-l-r-t" layout="row">
             <h1 class="learning-object-title card-header--flex-basis" flex="65">
               <a data-ng-if="sourceType === 'LINK' && !material.embeddable"
-                 data-ng-href="{{material.source}}" target="_blank">
+                 data-ng-href="{{material.source}}" target="_blank" rel="nofollow"
+                 data-ng-click="captureOutboundLink(material.source)">
                 <span data-ng-bind="getCorrectLanguageString(material.titles)"></span>
                 <md-tooltip md-direction="left">
                   <span data-translate="MATERIAL_VIEW_LINK_TO_MATERIAL">Open material</span>
@@ -88,7 +91,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                   <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
                   <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
                                 data-learning-object="material"></md-menu-item>
-                  <md-menu-item data-ng-if="material.creator && (isAdmin() || isModerator())" dop-restrict
+                  <md-menu-item data-ng-if="material.creator && isAdmin() && !isOwner()" dop-restrict
                                 data-learning-object="material">
                   </md-menu-item>
                 </md-menu-content>
@@ -128,6 +131,8 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               <!-- Image -->
               <img data-ng-src="rest/picture/thumbnail/lg/{{material.picture.name}}"
                    sizes="(max-width: 600px) 600px, 300px" data-ng-if="material.picture"
+                   title="{{getMaterialTitleForImage()}}"
+                   alt="{{getMaterialTitleForImage()}}"
                    data-ng-srcset="rest/picture/thumbnail/lg_xs/{{material.picture.name}} 600w,
                     rest/picture/thumbnail/lg/{{material.picture.name}} 300w"/>
               <!-- Pattern -->
@@ -271,7 +276,8 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                 </span>
                 <span data-ng-if="!getLicenseIconList().length" data-ng-switch data-on="material.licenseType.name">
                   <a data-ng-switch-when="Youtube" href="//www.youtube.com/static?template=terms"
-                     data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}" target="_blank"></a>
+                     data-ng-click="captureOutboundLink('//www.youtube.com/static?template=terms')"
+                     data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}" target="_blank" rel="nofollow"></a>
                   <span data-ng-switch-default data-translate="LICENSETYPE_{{material.licenseType.name.toUpperCase()}}"></span>
                 </span>
                 <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>

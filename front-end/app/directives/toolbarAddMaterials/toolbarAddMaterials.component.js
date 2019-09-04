@@ -42,11 +42,8 @@ class controller extends Controller {
             )
     }
     getPortfolioSelectLabel() {
-        return !this.portfolio
-            ? this.$translate.instant('CHOOSE_PORTFOLIO')
-            : this.portfolio == -1
-                ? this.$translate.instant('ADD_TO_NEW_PORTFOLIO')
-                : this.portfolio.title || ''
+        return this.$translate.instant('CHOOSE_PORTFOLIO')
+
     }
     getChapterSelectLabel() {
         return !this.chapter
@@ -103,7 +100,7 @@ class controller extends Controller {
             insertAfterLocationChange(parseInt(this.chapter, 10))
             this.isSaving = false
             this.$rootScope.$broadcast('detailedSearch:empty')
-            this.$location.url('/portfolio/edit?id=' + portfolio.id)
+            this.$location.url('/kogumik/muuda/' + portfolio.id)
         }
     }
     portfolioSelectChange() {

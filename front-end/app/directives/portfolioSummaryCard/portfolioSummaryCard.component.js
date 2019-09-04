@@ -25,6 +25,11 @@ class controller extends Controller {
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
+            if (this.getCorrectLanguageTitle(this.portfolio)) {
+                this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
+            } else {
+                this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
+            }
             if (newValue !== oldValue) {
                 this.$rootScope.$broadcast('portfolioHistory:loadHistory');
                 this.eventService.notify('portfolio:reloadTaxonObject')
@@ -35,8 +40,9 @@ class controller extends Controller {
                 $scope.portfolioSubject = this.taxonService.getSubject(this.portfolio.taxon)
         }, true)
         this.$scope.$watch(() => this.storageService.getPortfolio(), (currentValue, previousValue) => {
-            if (currentValue !== previousValue)
+            if (currentValue !== previousValue) {
                 this.$scope.portfolio = currentValue
+            }
         }, true)
 
         this.$rootScope.$on('portfolioHistory:hide', this.showButtons.bind(this));
@@ -46,6 +52,7 @@ class controller extends Controller {
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
         this.$scope.pageUrl = this.$location.absUrl()
+
 
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
@@ -117,6 +124,8 @@ class controller extends Controller {
         this.$scope.showEditModeButton = false;
         this.$scope.showLogButton = false;
         this.$rootScope.$broadcast('portfolioHistory:show');
+
+        gTagCaptureEventWithLabel('show', 'teaching portfolio', 'History')
     }
 
     hideButtons() {
@@ -154,7 +163,10 @@ class controller extends Controller {
         return this.authenticatedUserService.isRestricted()
     }
     editPortfolio() {
-        this.$location.url('/portfolio/edit?id=' + this.$route.current.params.id)
+        this.$location.url('/kogumik/muuda/' + this.$route.current.params.id)
+
+        gTagCaptureEvent('modify', 'teaching portfolio')
+
     }
     updatePortfolio() {
         this.updateChaptersStateFromEditors()
@@ -206,7 +218,7 @@ class controller extends Controller {
                 this.toastService.show('PORTFOLIO_DELETED')
                 this.portfolio.deleted = true
                 this.$rootScope.learningObjectDeleted = true
-                this.$location.url('/portfolio?id=' + this.$route.current.params.id)
+                this.$location.url('/kogumik/' + this.$route.current.params.id)
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
                 this.$rootScope.$broadcast('portfolioHistory:closeLogBanner')
                 this.$scope.showEditModeButton = false;
@@ -220,6 +232,7 @@ class controller extends Controller {
             'PORTFOLIO_CONFIRM_DELETE_DIALOG_CONTENT',
             this.deletePortfolio
         )
+        gTagCaptureEvent('delete', 'teaching portfolio')
     }
     restorePortfolio() {
         this.serverCallService
@@ -268,8 +281,11 @@ class controller extends Controller {
     toggleFullScreen() {
         this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen;
         toggleFullScreen();
-        if (this.$rootScope.isFullScreen)
+        if (this.$rootScope.isFullScreen){
             this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
+
+            gTagCaptureEvent('full-screen', 'teaching portfolio')
+        }
         else {
             this.toastService.hide()
         }
@@ -291,6 +307,7 @@ controller.$inject = [
     'taxonGroupingService',
     'eventService',
     'portfolioService',
+    'translationService',
     '$timeout'
 ]
 component('dopPortfolioSummaryCard', {

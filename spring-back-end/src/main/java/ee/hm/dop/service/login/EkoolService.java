@@ -1,12 +1,10 @@
 package ee.hm.dop.service.login;
 
-import static org.apache.commons.lang3.StringUtils.isBlank;
-
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.ekool.EkoolToken;
 import ee.hm.dop.model.ekool.Person;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.login.dto.UserStatus;
-import ee.hm.dop.config.Configuration;
 import org.glassfish.jersey.internal.util.collection.MultivaluedStringMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,13 +16,13 @@ import javax.ws.rs.client.Client;
 import javax.ws.rs.client.Entity;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
-
 import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 
 import static ee.hm.dop.utils.ConfigurationProperties.*;
 import static java.lang.String.format;
 import static javax.ws.rs.core.MediaType.APPLICATION_FORM_URLENCODED_TYPE;
-import static org.apache.xml.security.utils.Base64.encode;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @Service
 @Transactional
@@ -93,7 +91,7 @@ public class EkoolService {
 
     private String generateAuthHeaderHash() {
         String authHeader = format("%s:%s", getClientId(), getClientSecret());
-        return encode(authHeader.getBytes(StandardCharsets.UTF_8));
+        return Base64.getEncoder().encodeToString(authHeader.getBytes(StandardCharsets.UTF_8));
     }
 
     private void logAsString(String reason, Response response) {

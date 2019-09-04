@@ -14,6 +14,7 @@
             this.$scope.currentLanguage = this.translationService.getLanguage();
             this.$scope.filteredTitle = {}
             this.$scope.highligthTitle = {}
+            this.$scope.searchKeyWord = ""
             this.getFrontPageTitleTranslations()
             this.getAllFrontPageTitleTranslations()
             this.headlineAndMaintananceLanguage()
@@ -36,7 +37,7 @@
         }
 
 
-        $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home}) {
+        $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home, searchpage}) {
             if (title && title.currentValue !== title.previousValue) this.setTitle()
             if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitleExact()
             if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitleSimilar()
@@ -45,6 +46,7 @@
             if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
             if (notice && notice.currentValue !== notice.previousValue) this.$scope.notice = notice.currentValue
             if (home && home.currentValue !== home.previousValue) this.$scope.home = home.currentValue
+            if (searchpage && searchpage.currentValue !== searchpage.previousValue) this.$scope.searchpage = searchpage.currentValue
 
             if (params && !params.isFirstChange() && this.params) {
                 const c = params.currentValue;
@@ -104,28 +106,40 @@
             this.expectedItemCount = this.maxResults
         }
 
+        setTabTitle(){
+            if (this.$scope.searchKeyWord) {
+                this.$rootScope.tabTitle = `${this.$translate.instant('SEARCH')}: ${this.$scope.searchKeyWord}`
+            } else if (this.$scope.educationLevel === '') {
+                this.$rootScope.tabTitle = this.$scope.title.replace(/<strong>/gi, '').replace(/<\/strong>/gi, '')
+            }
+        }
+
         setTitle() {
-            this.$translate.onReady().then(() =>
-                this.$scope.title = this.buildTitle(this.title, this.totalResults, this.titleTranslations)
-            )
+            this.$translate.onReady().then(() => {
+                this.$scope.title = (this.buildTitle(this.title, this.totalResults, this.titleTranslations))
+                this.setTabTitle()
+            })
         }
 
         setPhraseTitleExact() {
-            this.$translate.onReady().then(() =>
-                this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.exactTitle = this.buildTitle(this.exactTitle, this.distinctCount.exact, this.phaseTitlesExact)
+                    this.setTabTitle()
+            })
         }
 
         setPhraseTitleSimilar() {
-            this.$translate.onReady().then(() =>
-                this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
-            )
+            this.$translate.onReady().then(() => {
+                    this.$scope.similarTitle = this.buildTitle(this.similarTitle, this.distinctCount.similar, this.phaseTitlesSimilar)
+                    this.setTabTitle()
+            })
         }
 
         buildTitle(title, results, translations) {
+            this.$scope.searchKeyWord = this.searchService.getQuery()
             let t = (key) => this.$translate.instant(key);
             return title ? t(title) :
-                this.$scope.searching ? t('SEARCH_RESULTS') :
+                this.$scope.searching ? '' :
                     this.replaceTitleContent(results, t, this.searchService.getQuery(), translations)
         }
 
@@ -160,7 +174,10 @@
         }
 
         search(isNewSearch) {
-            if (isNewSearch) this.setParams()
+            if (isNewSearch) {
+                this.setParams()
+                this.$scope.educationLevel = ''
+            }
             if (this.$scope.searching || !isNewSearch && this.allResultsLoaded()) return
 
             this.$scope.searching = true
@@ -170,11 +187,33 @@
             this.params.maxResults = this.maxResults
             this.params.start = this.$scope.start
 
-            this.serverCallService.makeGet(this.url, this.params).then(({data}) => {
-                this.params.isGrouped ? this.groupedSearchSuccess(data) : this.searchSuccess(data)
-            }, () => {
-                this.searchFail()
-            })
+            let taxonId
+            if (this.params.taxon) {
+                taxonId = this.params.taxon[0]
+            }
+
+            this.getSearchTaxonHeader(taxonId);
+
+            this.serverCallService.makeGet(this.url, this.params)
+                .then(({data}) => {
+                    this.params.isGrouped
+                        ? this.groupedSearchSuccess(data)
+                        : this.searchSuccess(data)
+                }, () => {
+                    this.searchFail()
+                })
+        }
+
+        getSearchTaxonHeader(taxonId) {
+            const fullTaxon = this.taxonService.getFullTaxon(taxonId)
+            if (fullTaxon) {
+                this.$scope.educationLevel = fullTaxon.taxonLevel === 'EDUCATIONAL_CONTEXT' ?
+                    this.$translate.instant(fullTaxon.name)
+                    : this.$translate.instant((fullTaxon.taxonLevel + '_' + fullTaxon.name).toUpperCase());
+                if(this.$scope.searchKeyWord === ''){
+                    this.$rootScope.tabTitle = this.$scope.educationLevel
+                }
+            }
         }
 
         searchSuccess(data) {
@@ -588,6 +627,14 @@
             return this.$scope.$ctrl.home
         }
 
+        isSearchPage() {
+            return this.$scope.$ctrl.searchpage
+        }
+
+        isUserViewPage() {
+            return this.$rootScope.userView
+        }
+
         maintenanceVisible() {
             return this.$scope.visible = !this.$scope.visible
         }
@@ -677,6 +724,7 @@
         'authenticatedUserService',
         'toastService',
         'translationService',
+        'taxonService'
     ]
     component('dopInfiniteSearchResult', {
         bindings: {
@@ -690,6 +738,7 @@
             exactTitle: '<',
             similarTitle: '<',
             home: '<',
+            searchpage: '<'
         },
         templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
         controller

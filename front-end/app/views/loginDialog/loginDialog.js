@@ -23,14 +23,25 @@ class controller extends Controller {
             this.$mdDialog.hide()
         }
         this.$scope.idCardAuth = () => {
+            this.$rootScope.authenticationOption = 'idCard'
             this.$scope.loginButtonFlag = true
             this.authenticationService.loginWithIdCard()
         }
         // this.$scope.taatAuth = () => this.authenticationService.loginWithTaat()
-        this.$scope.ekoolAuth = () => this.authenticationService.loginWithEkool()
-        this.$scope.stuudiumAuth = () => this.authenticationService.loginWithStuudium()
-        this.$scope.haridAuth= () => this.authenticationService.loginWithHarid()
+        this.$scope.ekoolAuth = () => {
+            this.$rootScope.authenticationOption = 'ekool'
+            this.authenticationService.loginWithEkool()
+        }
+        this.$scope.stuudiumAuth = () => {
+            this.$rootScope.authenticationOption = 'stuudium'
+            this.authenticationService.loginWithStuudium()
+        }
+        this.$scope.haridAuth= () => {
+            this.$rootScope.authenticationOption = 'harID'
+            this.authenticationService.loginWithHarid()
+        }
         this.$scope.mobileIdAuth = () => {
+            this.$rootScope.authenticationOption = 'mID'
             if (!this.validatorsBound) {
                 this.bindValidators()
                 this.$scope.forms.mobileIdForm.$$controls.forEach(c => c.$validate())

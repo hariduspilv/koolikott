@@ -44,7 +44,7 @@ public class PortfolioResource extends BaseResource {
                                      @RequestParam(value = "start", defaultValue = "0") int start,
                                      @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
         User creator = getValidCreator(username);
-        if (creator == null) throw badRequest("User does not exist with this username parameter");
+        if (creator == null) throw notFound();
 
         return portfolioGetter.getByCreatorResult(creator, getLoggedInUser(), start, maxResults);
     }
@@ -52,7 +52,7 @@ public class PortfolioResource extends BaseResource {
     @GetMapping("getByCreator/count")
     public Long getByCreatorCount(@RequestParam("username") String username) {
         User creator = getValidCreator(username);
-        if (creator == null) throw badRequest("User does not exist with this username parameter");
+        if (creator == null) throw notFound();
 
         return portfolioGetter.getCountByCreator(creator);
     }
@@ -89,7 +89,7 @@ public class PortfolioResource extends BaseResource {
     @GetMapping("getPortfolioHistory")
     public PortfolioLog getPortfolioHistory(@RequestParam("portfolioHistoryId") Long portfolioHistoryId) {
         PortfolioLog portfolioLog = portfolioGetter.getPortfolioHistory(portfolioHistoryId);
-        if (portfolioLog == null) throw badRequest("No such portfoliolog with id: " + portfolioHistoryId);
+        if (portfolioLog == null) throw notFound();
         return portfolioLog;
     }
 

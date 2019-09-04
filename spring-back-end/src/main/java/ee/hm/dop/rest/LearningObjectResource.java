@@ -1,24 +1,47 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.dao.ReducedLearningObjectDao;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.Tag;
+import ee.hm.dop.model.User;
+import ee.hm.dop.model.UserFavorite;
+import ee.hm.dop.model.UserLike;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.content.MaterialGetter;
+import ee.hm.dop.service.content.PortfolioGetter;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.UserFavoriteService;
 import ee.hm.dop.service.useractions.UserLikeService;
+import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 import static com.google.common.primitives.Ints.min;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 @RestController
 @RequestMapping("learningObject")
-public class LearningObjectResource extends BaseResource {
+public class
+LearningObjectResource extends BaseResource {
 
     @Inject
     private TagService tagService;
@@ -28,6 +51,14 @@ public class LearningObjectResource extends BaseResource {
     private UserLikeService userLikeService;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private PortfolioGetter portfolioGetter;
+    @Inject
+    private MaterialGetter materialGetter;
+    @Inject
+    private UserService userService;
+    @Inject
+    private ReducedLearningObjectDao reducedLearningObjectDao;
 
     @PutMapping("{learningObject}/tags")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
@@ -107,5 +138,34 @@ public class LearningObjectResource extends BaseResource {
     @GetMapping("showUnreviewed")
     public boolean showUnreviewedMessage(@RequestParam("id") Long id) {
         return learningObjectService.showUnreviewed(id, getLoggedInUser());
+    }
+
+
+    @GetMapping("getByCreatorAllReducedLearningObjects")
+    public SearchResult getByCreatorAllReducedLearningObjects(@RequestParam("username") String username,
+                                                              @RequestParam(value = "start", defaultValue = "0") int start,
+                                                              @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
+        User creator = getValidCreator(username);
+        if (creator == null) throw notFound();
+
+        int size = (int) (materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator));
+
+        List<Searchable> searchableList = new ArrayList<>(reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults));
+
+        return new SearchResult(searchableList, size, start);
+    }
+
+    @GetMapping("getByCreatorAllLearningObjectsCount")
+    public Long getByCreator(@RequestParam("username") String username) {
+        User creator = getValidCreator(username);
+        if (creator == null) throw notFound();
+
+        return materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator);
+    }
+
+
+    private User getValidCreator(@RequestParam("username") String username) {
+        if (isBlank(username)) throw badRequest("Username parameter is mandatory");
+        return userService.getUserByUsername(username);
     }
 }

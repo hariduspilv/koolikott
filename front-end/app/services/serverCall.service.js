@@ -18,7 +18,6 @@ class controller extends Controller {
         else config.params = params;
 
         if (transformRequest) config.transformRequest = transformRequest;
-
         if (!successCallback)
             return this.$http(config).catch(response => {
                 switch (response.status) {
@@ -26,6 +25,9 @@ class controller extends Controller {
                         if (window.location.hostname === 'spring.oxygen.netgroupdigital.com'){
                             this.authenticatedUserService.removeAuthenticatedUser()
                         }
+                        break
+                    case 404:
+                        this.$location.url('/404')
                         break
                     case 401:
                         this.authenticatedUserService.removeAuthenticatedUser()

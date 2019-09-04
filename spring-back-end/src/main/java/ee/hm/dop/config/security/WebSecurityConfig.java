@@ -34,6 +34,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .addFilterBefore(preAuthenticationFilter, AbstractPreAuthenticatedProcessingFilter.class);
 
+        http
+                .headers()
+                .contentTypeOptions()
+                .disable();
     }
 
     @Bean

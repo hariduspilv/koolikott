@@ -7,7 +7,7 @@
             this.getFaqs()
             this.initNewFaq()
             this.$scope.editMode = false
-
+            this.$translate('KKK_TAB').then((translation) => this.$rootScope.tabTitle = translation);
         }
 
         initNewFaq() {
@@ -61,6 +61,8 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
+        '$translate',
         'serverCallService',
         'authenticatedUserService',
         'faqService',

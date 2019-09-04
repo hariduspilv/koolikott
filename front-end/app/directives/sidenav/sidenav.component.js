@@ -23,14 +23,14 @@ class controller extends Controller {
         ]
         // List of sidenav adminLocations
         this.adminLocations = [
-            '/dashboard/improper',
-            '/dashboard/unReviewed',
-            '/dashboard/changes',
-            '/dashboard/moderators',
-            '/dashboard/restrictedUsers',
-            '/dashboard/deleted',
-            '/dashboard/stat/expert',
-            '/dashboard/sentEmails',
+            '/toolaud/teatatud-oppevara',
+            '/toolaud/uus-oppevara',
+            '/toolaud/muudetud-oppevara',
+            '/toolaud/aineeksperdid',
+            '/toolaud/piiratud-kasutajad',
+            '/toolaud/kustutatud-oppevara',
+            '/toolaud/ekspertide-statistika',
+            '/toolaud/saadetud-teated',
         ];
 
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
@@ -39,6 +39,7 @@ class controller extends Controller {
         this.$scope.updateUserCounts = this.updateUserCounts.bind(this)
         this.$scope.closeOtherTabs = this.closeOtherTabs.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
+        this.$scope.isUserModerator = this.isUserModerator.bind(this)
         this.$scope.isAdminUser = this.isAdminUser.bind(this)
         this.$scope.confirm = this.confirm.bind(this)
 
@@ -53,6 +54,7 @@ class controller extends Controller {
         this.$scope.$watch(() => this.$location.url(), () => {
             this.$rootScope.isViewPortfolioAndEdit = (
                 this.$location.url().indexOf('/portfolio') !== -1 ||
+                this.$location.url().indexOf('/kogumik/') !== -1 ||
                 this.$location.url().indexOf('/search') !== -1
             )
         }, true)
@@ -95,23 +97,23 @@ class controller extends Controller {
             : this.$rootScope.learningObjectPrivate
                 ? false
                 : this.$rootScope.learningObjectDeleted
-                    ? menuLocation === '/dashboard/deleted'
+                    ? menuLocation === '/toolaud/kustutatud-oppevara'
                     : this.$rootScope.learningObjectImproper
-                        ? menuLocation === '/dashboard/improper'
+                        ? menuLocation === '/toolaud/teatatud-oppevara'
                         : this.$rootScope.learningObjectUnreviewed
-                            ? menuLocation === '/dashboard/unReviewed'
+                            ? menuLocation === '/toolaud/uus-oppevara'
                             : this.$rootScope.sentEmails
-                                ? menuLocation === '/dashboard/sentEmails'
+                                ? menuLocation === '/toolaud/saadetud-teated'
                                 : this.$rootScope.learningObjectChanged
-                                    ? menuLocation === '/dashboard/changes'
+                                    ? menuLocation === '/toolaud/muudetud-oppevara'
                                     : false
     }
     isUserLocation(location) {
         const { username } = this.$scope.user
         const userLocations = [
-            `/${username}/portfolios`,
-            `/${username}/materials`,
-            `/${username}/favorites`
+            `/${username}/kogumikud`,
+            `/${username}/oppematerjalid`,
+            `/${username}/lemmikud`
         ]
         return userLocations.includes(location)
     }
@@ -137,6 +139,10 @@ class controller extends Controller {
     }
     isAdminUser() {
         return this.authenticatedUserService.isAdmin()
+    }
+
+    isUserModerator() {
+        return this.authenticatedUserService.isModerator()
     }
     /**
      * @param {string} type - One of:
@@ -224,11 +230,11 @@ class controller extends Controller {
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
-                window.location.href = href
+                 this.$location.url(href)
             })
         }
         else
-            window.location.href = href
+            this.$location.url(href)
     }
 }
 controller.$inject = [
@@ -241,6 +247,7 @@ controller.$inject = [
     'userDataService',
     'taxonService',
     'userManualsAdminService',
+    '$location'
 ]
 component('dopSidenav', {
     bindings: {

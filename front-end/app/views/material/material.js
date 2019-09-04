@@ -4,15 +4,16 @@ angular.module('koolikottApp')
     .controller('materialController', [
         '$scope', 'serverCallService', '$route', 'translationService', '$rootScope',
         'searchService', '$location', 'authenticatedUserService', 'dialogService',
-        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService', '$sce',
+        'toastService', 'iconService', '$mdDialog', 'storageService', 'targetGroupService', 'taxonService', 'taxonGroupingService', 'eventService', 'materialService', '$sce', '$translate',
         function ($scope, serverCallService, $route, translationService, $rootScope,
                   searchService, $location, authenticatedUserService, dialogService,
-                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce) {
+                  toastService, iconService, $mdDialog, storageService, targetGroupService, taxonService, taxonGroupingService, eventService, materialService, $sce, $translate) {
 
             $scope.showMaterialContent = false;
             $rootScope.isFullScreen = false;
             $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
+            $scope.path = $location.url()
             $scope.getMaterialSuccess = getMaterialSuccess;
             $scope.taxonObject = {};
             $scope.location = $location.absUrl()
@@ -53,8 +54,9 @@ angular.module('koolikottApp')
             } else {
                 getMaterial(getMaterialSuccess, getMaterialFail);
             }
-
             $scope.$watch(() => {
+                if ($scope.material)
+                    $rootScope.tabTitle = $scope.getCorrectLanguageString($scope.material.titles);
                 return $scope.material;
             }, () => {
                 if ($scope.material && $scope.material.id) {
@@ -96,6 +98,18 @@ angular.module('koolikottApp')
                 console.log("Content probing failed!");
             }
 
+            $scope.getMaterialEducationalContexts = () => {
+                let educationalContexts = [];
+                if (!$scope.material || !$scope.material.taxons) return;
+
+                $scope.material.taxons.forEach((taxon) => {
+                    let edCtx = taxonService.getEducationalContext(taxon);
+                    if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
+                });
+
+                return educationalContexts;
+            };
+
             $rootScope.$on('fullscreenchange', () => {
                 $scope.$apply(() => {
                     $scope.showMaterialContent = !$scope.showMaterialContent;
@@ -111,32 +125,132 @@ angular.module('koolikottApp')
                     $scope.material = newMaterial;
                     $scope.material.source = decodeUTF8($scope.material.source);
                     processMaterial();
-                    // getMaterialRelatedPortfolios($scope.material.id)
                 }
             }
 
+            $scope.getMaterialTitleForImage = () => {
+                return $scope.getCorrectLanguageString($scope.material.titles).replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
+            }
+
             function getMaterial(success, fail) {
-                materialService.getMaterialById($route.current.params.id).then(success, fail)
+                materialService.getMaterialById($route.current.params.id.split('-')[0]).then(success, fail)
             }
 
             function getMaterialSuccess(material) {
                 if (isEmpty(material)) {
                     console.log('No data returned by getting material. Redirecting to landing page');
                     toastService.show('ERROR_MATERIAL_NOT_FOUND');
-                    $location.url("/");
+                    window.location.replace('/404');
                 } else {
                     $scope.material = material;
                     if ($rootScope.isEditPortfolioMode || authenticatedUserService.isAuthenticated()) {
                         $rootScope.selectedSingleMaterial = $scope.material;
+
                     }
                     init();
+
+                    //metaandmete lisamine
+
+                    $scope.materialMetaData = createMetaData(material);
+
+                    addAuthors(material);
+
+                    if (material.peerReviews.length > 0) return addPeerReview(material);
+
                 }
+            }
+
+            function createMetaData(material) {
+                return [
+                    {
+                        '@context': 'http://schema.org/',
+                        '@type': 'CreativeWork',
+                        'url': $scope.pageUrl,
+                        'publisher': {
+                            '@type': 'Organization',
+                            'name': 'e-koolikott.ee'
+                        },
+                        'audience': {
+                            '@type': 'Audience',
+                            'audienceType': audienceType(material)
+                        },
+                        'thumbnailUrl': 'https://e-koolikott.ee/ekoolikott.png',
+                        'dateCreated': material.added,
+                        'datePublished': formatIssueDateTime(material.issueDate),
+                        'license': addLicense(material.licenseType),
+                        'typicalAgeRange': convertToClassGroup(material.targetGroups),
+                        'interactionCount': material.views,
+                        'headline': material.titles.map(title => title.text),
+                        'keywords': material.tags,
+                        'inLanguage': convertLanguage(material.language),
+                        'text': material.descriptions.map(description => description.text)
+                    },
+                    {
+                        '@context': 'https://schema.org',
+                        '@type': 'Organization',
+                        'url': 'https://e-koolikott.ee',
+                        'logo': 'https://e-koolikott.ee/ekoolikott.png'
+                    },
+                    {
+                        '@context': 'https://schema.org',
+                        '@type': 'WebSite',
+                        'url': 'https://www.e-koolikott.ee/',
+                        'potentialAction': {
+                            '@type': 'SearchAction',
+                            'target': 'https://e-koolikott.ee/search/result?q={search_term_string}',
+                            'query-input': 'required name=search_term_string'
+                        }
+                    },
+                    {
+                        '@context': 'https://schema.org',
+                        '@type': 'BreadcrumbList',
+                        'itemListElement': [{
+                            '@type': 'ListItem',
+                            'position': 1,
+                            'name': $translate.instant(material.taxonPositionDto[0].taxonLevelName),
+                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[0].taxonLevelId}`//TODO at the moment 1st taxonroute taken
+                        }, {
+                            '@type': 'ListItem',
+                            'position': 2,
+                            'name': $translate.instant((`DOMAIN_${material.taxonPositionDto[1].taxonLevelName}`).toUpperCase()),
+                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[1].taxonLevelId}`
+                        }]
+                    }
+                ]
+            }
+
+            function addPeerReview() {
+                $scope.materialMetaData[0].review = {
+                    '@type': 'Review',
+                    'reviewRating': {
+                        '@type': 'Rating',
+                        'ratingValue': '5',
+                        'bestRating': '5'
+                    },
+                    'reviewBody': 'Vastab nõuetele',
+                    'publisher': {
+                        '@type': 'Organization',
+                        'name': 'e-koolikott.ee'
+                    }
+                }
+            }
+
+            function addAuthors(material) {
+                let authorsNames = [];
+
+                material.authors.map(materialAuthor => {
+                    const author = {};
+                    author['@type'] = 'Person';
+                    author[`name`] = `${materialAuthor.name} ${materialAuthor.surname}`;
+                    authorsNames.push(author);
+                });
+                $scope.materialMetaData[0].author = authorsNames;
             }
 
             function getMaterialFail() {
                 console.log('Getting materials failed. Redirecting to landing page');
                 toastService.show('ERROR_MATERIAL_NOT_FOUND');
-                $location.url("/");
+                window.location.replace('/404');
             }
 
             function processMaterial() {
@@ -167,7 +281,12 @@ angular.module('koolikottApp')
                 processMaterial();
                 showUnreviewedMessage();
 
-                // getMaterialRelatedPortfolios($scope.material.id);
+                let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, '-')
+
+                $scope.materialUrl = `/oppematerjal/${$scope.material.id}-${correctLanguageTitle}`
+                if (!$scope.path.contains($scope.materialUrl)) {
+                    $location.url($scope.materialUrl)
+                }
 
                 eventService.notify('material:reloadTaxonObject');
 
@@ -175,9 +294,7 @@ angular.module('koolikottApp')
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
-
-                if ($scope.material)
-                    materialService.increaseViewCount($scope.material);
+                materialService.increaseViewCount($scope.material);
 
             }
 
@@ -185,18 +302,6 @@ angular.module('koolikottApp')
                 if ($scope.material && $scope.material.licenseType) {
                     return licenceTypeMap[$scope.material.licenseType.name];
                 }
-            };
-
-            $scope.getMaterialEducationalContexts = () => {
-                let educationalContexts = [];
-                if (!$scope.material || !$scope.material.taxons) return;
-
-                $scope.material.taxons.forEach((taxon) => {
-                    let edCtx = taxonService.getEducationalContext(taxon);
-                    if (edCtx && !educationalContexts.includes(edCtx)) educationalContexts.push(edCtx);
-                });
-
-                return educationalContexts;
             };
 
             $scope.getCorrectLanguageString = (languageStringList) => {
@@ -216,21 +321,20 @@ angular.module('koolikottApp')
             $scope.getPublisherSearchURL = (name) => {
                 return `/search/result?q=publisher:"${name}"&type=all`;
             };
-
             $scope.isLoggedIn = () => authenticatedUserService.isAuthenticated();
             $scope.isAdmin = () => authenticatedUserService.isAdmin();
             $scope.isModerator = () => authenticatedUserService.isModerator();
             $scope.isRestricted = () => authenticatedUserService.isRestricted();
+            $scope.isOwner= () => authenticatedUserService.isOwner($scope.material);
+
             $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
 
             function showUnreviewedMessage() {
                 if ($scope.material && $scope.material.id) {
                     serverCallService.makeGet('rest/learningObject/showUnreviewed?id=' + $scope.material.id)
-                    .then(response => {
-                        $scope.showUnreviewedLO = response.data;
-                    })
-
-
+                        .then(response => {
+                            $scope.showUnreviewedLO = response.data;
+                        })
                 }
             }
 
@@ -268,8 +372,10 @@ angular.module('koolikottApp')
             $scope.toggleFullScreen = () => {
                 $rootScope.isFullScreen = !$rootScope.isFullScreen;
                 toggleFullScreen();
-                if ($rootScope.isFullScreen)
+                if ($rootScope.isFullScreen){
                     toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
+                    gTagCaptureEvent('full-screen', 'teaching material')
+                }
                 else {
                     toastService.hide()
                 }
@@ -278,6 +384,8 @@ angular.module('koolikottApp')
             $scope.edit = () => {
                 var editMaterialScope = $scope.$new(true);
                 editMaterialScope.material = angular.copy($scope.material);
+
+                gTagCaptureEvent('modify', 'teaching material')
 
                 $mdDialog.show({
                     templateUrl: 'addMaterialDialog.html',
@@ -311,6 +419,9 @@ angular.module('koolikottApp')
             };
 
             $scope.confirmMaterialDeletion = () => {
+
+                gTagCaptureEvent('delete', 'teaching material')
+
                 dialogService.showConfirmationDialog(
                     'MATERIAL_CONFIRM_DELETE_DIALOG_TITLE',
                     'MATERIAL_CONFIRM_DELETE_DIALOG_CONTENT',
@@ -384,5 +495,9 @@ angular.module('koolikottApp')
             $scope.$on('$destroy', () =>
                 storageService.setMaterial(null)
             )
+
+            $scope.captureOutboundLink = function(url) {
+                window.captureOutboundLink(url);
+            };
         }
     ]);

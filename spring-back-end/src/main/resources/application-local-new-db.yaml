@@ -2,6 +2,7 @@ server:
   servlet:
     contextPath: /rest
   port: 8100
+  addressurl: https://localhost:3001
 
 spring:
   profiles:
@@ -22,7 +23,7 @@ spring:
     outOfOrder: true
     baselineOnMigrate: true
     placeholderReplacement: false
-    locations: classpath:db/migration, classpath:db/initdb, classpath:db/initdata, classpath:db/users
+    locations: classpath:db/migration
   jackson:
     deserialization:
       fail-on-unknown-properties: false

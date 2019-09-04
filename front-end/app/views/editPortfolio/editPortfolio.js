@@ -4,13 +4,13 @@
 class controller extends Controller {
     constructor(...args) {
         super(...args)
-
         const listener = () => {
             this.$mdDialog.show({
                 templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
+                this.$rootScope.tabTitle = this.$scope.portfolio.title
                 window.removeEventListener('popstate', listener, false)
                 history.back()
             }, () => history.pushState(null, document.title, location.href))
@@ -86,10 +86,10 @@ class controller extends Controller {
     fetchPortfolio() {
         const fail = () => {
             this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
-            this.$location.url('/')
+            window.location.replace('/404')
         }
         this.serverCallService
-            .makeGet('rest/portfolio?id=' + this.$route.current.params.id)
+            .makeGet('rest/portfolio?id=' + this.$route.current.params.id.split('-')[0])
             .then(({ data: portfolio }) =>
                 portfolio
                     ? this.setPortfolio(portfolio)

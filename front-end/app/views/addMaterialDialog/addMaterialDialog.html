@@ -68,7 +68,7 @@
                 <span data-translate="IS_FILE"></span>
                 <span data-translate="FOR_MATERIAL"></span>
               </span>
-              <span ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
+              <span name="fileToBeUploaded" ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
                 <a href="javascript:void(0);" class="md-raised md-primary" data-ng-if="!uploadingFile">
                   <span data-ng-if="!material.uploadedFile" data-translate="FILE_WORD"></span>
                   <span data-ng-if="material.uploadedFile">(<span data-translate="CHANGE"></span>).</span>

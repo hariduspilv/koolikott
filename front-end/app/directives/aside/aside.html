@@ -1,6 +1,6 @@
 <div layout="column" layout-sm="row">
   <div flex-sm="50" data-ng-if="similar.length > 0">
-    <h4 class="md-subhead" data-translate="SIMILAR"></h4>
+    <h2 class="md-subhead" data-translate="SIMILAR"></h2>
 
     <div data-ng-repeat="item in similar" role="list" aria-label="Ava sarnane materjal">
       <dop-card-xs data-learning-object="item"></dop-card-xs>
@@ -8,7 +8,7 @@
   </div>
 
   <div flex-sm="50" data-ng-if="recommendations.length > 0">
-    <h4 class="md-subhead" data-translate="RECOMMENDATIONS"></h4>
+    <h2 class="md-subhead" data-translate="RECOMMENDATIONS"></h2>
 
     <div data-ng-repeat="item in recommendations" role="list" aria-label="Ava soovitatud materjal">
       <dop-card-xs data-learning-object="item"></dop-card-xs>

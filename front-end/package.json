@@ -1,7 +1,9 @@
 {
   "name": "e-Koolikott",
-  "version": "1.38.0",
-  "dependencies": {},
+  "version": "1.39.2",
+  "dependencies": {
+    "bower": "^1.6.3"
+  },
   "repository": {},
   "scripts": {
     "bower": "node_modules/.bin/bower",

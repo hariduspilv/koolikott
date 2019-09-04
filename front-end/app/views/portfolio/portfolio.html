@@ -1,3 +1,6 @@
+<update-meta name="author" content="{{portfolio.creator.name + ' ' +  portfolio.creator.surname}}"></update-meta>
+<update-meta property="og:url" content="{{pageUrl}}"></update-meta>
+<update-script content="portfolioMetaData" type="application/ld+json"></update-script>
 <div data-layout="column" data-layout-gt-sm="row" data-ng-cloak id="portfolio-parent" data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
   <div flex-gt-sm="75">
     <dop-error-message ng-show="(showUnreviewedPortfolio || showDeletedBanner) && !showlogselect" data="portfolio" id="dop-error"></dop-error-message>

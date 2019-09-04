@@ -49,7 +49,7 @@
         }
 
         openNewTab() {
-            this.$window.open(window.location.origin + '/usermanuals', '_blank')
+            this.$window.open(window.location.origin + '/videojuhendid', '_blank')
             this.$scope.showUserManualsHelped = true
             this.$scope.allowDialogClose = false
         }
@@ -155,6 +155,10 @@
                     }, () =>
                         this.$scope.isSaving = false
                 )
+
+            this.timeToSubmitQuestion = Math.round((new Date() - this.timeChatOpened) / 1000);
+
+            gTagCaptureEventWithValue('submit', 'chat', this.timeToSubmitQuestion)
         }
 
         getLoggedInUserData() {
@@ -175,6 +179,9 @@
         toggleCustomerSupportDialog() {
             this.getLoggedInUserData()
             this.$scope.showCustomerSupportDialog = true
+            this.timeChatOpened = new Date();
+
+            gTagCaptureEvent('open', 'chat')
         }
 
         isSendDisabled() {

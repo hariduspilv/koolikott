@@ -53,6 +53,7 @@ angular.module('koolikottApp')
                         if (selectedValue && selectedValue.id === 'doNotKnow')
                             $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
                     })
+                    $scope.timeAddPortfolioOpened = new Date();
                 }
 
                 $scope.cancel = function () {
@@ -72,6 +73,9 @@ angular.module('koolikottApp')
                             createPortfolioFailed,
                             savePortfolioFinally);
                     }
+                    $scope.timeToSubmitPortfolio = Math.round((new Date() - $scope.timeAddPortfolioOpened) / 1000);
+
+                    gTagCaptureEventWithValue('create', 'teaching portfolio', $scope.timeToSubmitPortfolio)
                 };
 
                 $scope.deleteTaxon = function (index) {
@@ -99,7 +103,7 @@ angular.module('koolikottApp')
                             })
                         }
 
-                        $location.url('/portfolio/edit?id=' + portfolio.id)
+                        $location.url('/kogumik/muuda/' + portfolio.id)
                     }
                 }
 

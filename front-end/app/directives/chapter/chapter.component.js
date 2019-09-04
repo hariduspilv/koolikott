@@ -43,7 +43,7 @@ class controller extends Controller {
     $onInit() {
         this.$scope.location = this.$location.absUrl()
         this.$scope.$watch('chapter.title', (title) =>
-            this.$scope.slug = this.getSlug(`chapter-${this.index + 1}`)
+            this.$scope.slug = this.getSlug(`peatukk-${this.index + 1}`)
         )
         this.currentLanguage = this.translationService.getLanguage()
 
@@ -183,7 +183,6 @@ class controller extends Controller {
                 },
                 targetBlank: true
             })
-
             editor.subscribe('focus', this.onFocusBlock.bind(this, idx))
             editor.subscribe('blur', this.onBlurBlock.bind(this, idx))
 
@@ -389,7 +388,7 @@ class controller extends Controller {
     registerSubchapters() {
         // add id attributes to all subchapters derived from subchapter titles
         for (let [subIdx, subEl] of this.$element[0].querySelectorAll('.subchapter').entries())
-            subEl.id = this.getSlug(`subchapter-${this.index + 1}-${subIdx + 1}`)
+            subEl.id = this.getSlug(`alapeatukk-${this.index + 1}-${subIdx + 1}`)
     }
     loadEmbeddedContents(editorEl) {
         for (let embed of editorEl.querySelectorAll('.chapter-embed-card'))

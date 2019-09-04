@@ -36,7 +36,7 @@ public class NewStatisticsService {
     private TaxonDao taxonDao;
 
     public NewStatisticsResult statistics(StatisticsFilterDto filter, User loggedInUser) {
-        UserUtil.mustBeAdmin(loggedInUser);
+        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
 
         if (filter.isUserSearch()) {
             return userSearchPath(filter);

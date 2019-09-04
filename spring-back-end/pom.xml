@@ -4,7 +4,7 @@
     <groupId>ee.hm</groupId>
     <artifactId>spring-kott</artifactId>
     <packaging>jar</packaging>
-    <version>1.38.0</version>
+    <version>1.39.2</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -241,6 +241,12 @@
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.github.dfabulich/sitemapgen4j -->
+        <dependency>
+            <groupId>com.github.dfabulich</groupId>
+            <artifactId>sitemapgen4j</artifactId>
+            <version>1.1.2</version>
         </dependency>
 
         <!-- Testing -->

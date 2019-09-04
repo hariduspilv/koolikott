@@ -3,10 +3,10 @@
   <!-- BEGIN Search learning objects -->
   <md-toolbar
     class="md-table-toolbar md-default"
-    data-ng-if="$ctrl.viewPath != 'moderators' && $ctrl.viewPath != 'restrictedUsers'"
+    data-ng-if="$ctrl.viewPath != 'aineeksperdid' && $ctrl.viewPath != 'piiratud-kasutajad'"
   >
     <div class="md-toolbar-tools custom-table-padding" data-layout-xs="column" data-layout-align-xs="start start">
-      <h2 class="md-headline" data-translate="{{titleTranslationKey}}"></h2>
+      <h1 class="md-headline" data-translate="{{titleTranslationKey}}"></h1>
       <form data-flex name="filter.form">
         <md-input-container>
           <label></label>
@@ -15,10 +15,10 @@
                  type="text"
                  data-ng-model="query.filter"
                  data-ng-model-options="filter.options"
-                 placeholder = "{{$ctrl.viewPath === 'sentEmails' ? ('SENT_EMAILS_SEARCH' | translate) : ('SEARCH' | translate)}}"
+                 placeholder = "{{$ctrl.viewPath === 'saadetud-teated' ? ('SENT_EMAILS_SEARCH' | translate) : ('SEARCH' | translate)}}"
                  class="search-learning-objects"
           >
-          <md-button data-ng-if="$ctrl.viewPath != 'unReviewed'"
+          <md-button data-ng-if="$ctrl.viewPath != 'uus-oppevara'"
                      id="clear-filter"
                      class="md-icon-button md-ink-ripple"
                      data-ng-click="$ctrl.clearFilter()"
@@ -34,10 +34,10 @@
   <!-- BEGIN Search users -->
   <md-toolbar
     class="md-table-toolbar md-default"
-    data-ng-if="$ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'"
+    data-ng-if="$ctrl.viewPath == 'aineeksperdid' || $ctrl.viewPath == 'piiratud-kasutajad'"
   >
     <div layout-margin>
-      <h2 class="md-title" data-translate="SEARCH_USERS"></h2>
+      <h1 class="md-title" data-translate="SEARCH_USERS"></h1>
     </div>
     <div class="md-toolbar-tools">
       <md-autocomplete
@@ -63,7 +63,7 @@
     </div>
   </md-toolbar>
   <!-- END Search users -->
-  <div data-layout-xs="column" layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
+  <div data-layout-xs="column" layout="row" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'uus-oppevara'">
     <md-input-container class="statistics-filter__experts-container"
                         data-flex data-layout="column"
     >
@@ -102,7 +102,7 @@
       </md-select>
     </md-input-container>
   </div>
-  <div layout="row" data-flex data-layout-align="space-between center" data-layout-xs="column" data-layout-align-xs="start start" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'unReviewed'">
+  <div layout="row" data-flex data-layout-align="space-between center" data-layout-xs="column" data-layout-align-xs="start start" style="padding: 0px 6px; margin: 6px 8px" data-ng-if="$ctrl.viewPath == 'uus-oppevara'">
     <dop-taxon-selector
       flex
       class="statistics-filter__taxon-container"
@@ -112,7 +112,7 @@
       data-ng-show="isTaxonSelectVisible"
       data-clear-selection="clearFields"
     ></dop-taxon-selector>
-    <div data-ng-if="$ctrl.viewPath == 'unReviewed'">
+    <div data-ng-if="$ctrl.viewPath == 'uus-oppevara'">
       <md-button id="clear-button"
                  class="statistics-filter__clear"
                  data-translate="CLEAR_FORM"
@@ -137,13 +137,13 @@
 
   <md-table-container class="table-container">
     <div data-ng-show="itemsCount" class="md-data-table">
-      <dop-unreviewed data-ng-if="$ctrl.viewPath == 'unReviewed'"></dop-unreviewed>
-      <dop-improper data-ng-if="$ctrl.viewPath == 'improper'"></dop-improper>
-      <dop-changed data-ng-if="$ctrl.viewPath == 'changes'"></dop-changed>
-      <dop-deleted data-ng-if="$ctrl.viewPath == 'deleted'"></dop-deleted>
-      <dop-users data-ng-if="$ctrl.viewPath == 'moderators'"></dop-users>
-      <dop-users data-ng-if="$ctrl.viewPath == 'restrictedUsers'"></dop-users>
-      <dop-sentemails data-ng-if="$ctrl.viewPath == 'sentEmails'"></dop-sentemails>
+      <dop-unreviewed data-ng-if="$ctrl.viewPath == 'uus-oppevara'"></dop-unreviewed>
+      <dop-improper data-ng-if="$ctrl.viewPath == 'teatatud-oppevara'"></dop-improper>
+      <dop-changed data-ng-if="$ctrl.viewPath == 'muudetud-oppevara'"></dop-changed>
+      <dop-deleted data-ng-if="$ctrl.viewPath == 'kustutatud-oppevara'"></dop-deleted>
+      <dop-users data-ng-if="$ctrl.viewPath == 'aineeksperdid'"></dop-users>
+      <dop-users data-ng-if="$ctrl.viewPath == 'piiratud-kasutajad'"></dop-users>
+      <dop-sentemails data-ng-if="$ctrl.viewPath == 'saadetud-teated'"></dop-sentemails>
     </div>
     <!-- BEGIN Not found message after data is loaded but contains 0 items -->
     <div
@@ -152,10 +152,10 @@
       data-layout-align="center center"
       data-layout-padding
     >
-      <h4 data-translate="{{
-        $ctrl.viewPath == 'moderators' || $ctrl.viewPath == 'restrictedUsers'
-          ? 'ERROR_USERS_NOT_FOUND' : $ctrl.viewPath == 'sentEmails' ? 'EMAIL_SENT_EMAIL_NOT_FOUND'  : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
-      ></h4>
+      <h2 class="md-body-2" data-translate="{{
+        $ctrl.viewPath == 'aineeksperdid' || $ctrl.viewPath == 'piiratud-kasutajad'
+          ? 'ERROR_USERS_NOT_FOUND' : $ctrl.viewPath == 'saadetud-teated' ? 'EMAIL_SENT_EMAIL_NOT_FOUND'  : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
+      ></h2>
     </div>
     <!-- END Not found message -->
   </md-table-container>

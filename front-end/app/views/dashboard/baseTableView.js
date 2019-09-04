@@ -2,49 +2,49 @@
 
 {
     const DASHBOARD_VIEW_STATE_MAP = {
-        unReviewed: [
+        'uus-oppevara': [
             'UNREVIEWED', // title translation key
             'firstReview/unReviewed', // rest URI (after 'rest/admin/')
             '-byCreatedAt', // default sort by (use leading minus for DESC)
             true, // backendPagination?
             false // userpage
         ],
-        sentEmails: [
+        'saadetud-teated': [
             'EMAIL_SENT_EMAILS',
             'sentEmails',
             '-byEmailSentAt',
             true,
             false
         ],
-        improper: [
+        'teatatud-oppevara': [
             'IMPROPER',
             'improper',
             '-byReportCount',
             false,
             false
         ],
-        changes: [
+        'muudetud-oppevara': [
             'CHANGED_LEARNING_OBJECTS',
             'changed',
             'byLastChangedAt',
             false,
             false
         ],
-        deleted: [
+        'kustutatud-oppevara': [
             'DELETED_LEARNING_OBJECTS',
             'deleted',
             'byUpdatedAt',
             false,
             false
         ],
-        moderators: [
+        'aineeksperdid': [
             'MODERATORS_TAB',
             'moderator',
             'byUsername',
             false,
             true
         ],
-        restrictedUsers: [
+        'piiratud-kasutajad': [
             'RESTRICTED_USERS_TAB',
             'restrictedUser',
             'byUsername',
@@ -60,10 +60,11 @@
             this.collection = null;
             this.filteredCollection = null;
 
-            this.viewPath = this.$location.path().replace(/^\/dashboard\//, '');
+            this.viewPath = this.$location.path().replace(/^\/toolaud\//, '');
             const [titleTranslationKey, url, sort, backendPagination, userPage] = DASHBOARD_VIEW_STATE_MAP[this.viewPath] || [];
 
             this.$scope.titleTranslationKey = titleTranslationKey;
+            this.$translate(titleTranslationKey).then((translation) => this.$rootScope.tabTitle = translation);
             this.sortedBy = sort;
             this.restUri = url;
             this.isBackendPagination = backendPagination;
@@ -104,7 +105,7 @@
         }
 
         getModeratorsAndAllUsers() {
-            if (this.viewPath === 'unReviewed') {
+            if (this.viewPath === 'uus-oppevara') {
                 this.getModerators();
             }
             if (this.userPage) {
@@ -410,7 +411,7 @@
                                 isFilterMatch(data.username, query)
                             );
 
-                        const text = this.getCorrectLanguageTitle(data.learningObject);
+                        const text = this.getCorrectLanguageTitle(data);
 
                         if (text)
                             return isFilterMatch(text, query)
@@ -501,6 +502,7 @@
 
     controller.$inject = [
         '$scope',
+        '$rootScope',
         '$location',
         '$filter',
         '$mdDialog',

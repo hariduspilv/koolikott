@@ -9,6 +9,13 @@ class controller extends Controller {
         this.$scope.showlogselect = false;
         this.$scope.showDeletedBanner = this.showDeletedBanner.bind(this);
 
+        if (this.$location.url().contains('#')) {
+            let splittedUrl = this.$location.url().split('#');
+            this.$rootScope.slug = splittedUrl[splittedUrl.length - 1]
+                    .replace('subchapter', 'alapeatukk')
+                    .replace('chapter', 'peatukk')
+        }
+
         window.addEventListener('scroll', (e) => {
             this.handleScroll(e);
         });
@@ -53,8 +60,9 @@ class controller extends Controller {
         }, true)
 
         this.$scope.$on('$routeChangeStart', () => {
-            if (!this.$location.url().startsWith('/portfolio/edit?id='))
+            if (!this.$location.url().startsWith('/kogumik/')) {
                 this.setPortfolio(null)
+            }
         })
         this.$scope.$on('$destroy', () =>
             this.$timeout.cancel(this.increaseViewCountPromise)
@@ -119,9 +127,9 @@ class controller extends Controller {
                 }
                 let title = $(el).find('h2').text()
                 title = this.replaceSpacesAndCharacters(title)
-                let url = this.$location.url().split("&chapterName=")[0] + "&chapterName=" + title + '#' + el.id;
+                let url = `${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${el.id}`
 
-                if (!window.location.href.includes(title) && this.$location.path() === '/portfolio') {
+                if (!window.location.href.includes(title) && this.$location.path().startsWith('/kogumik')) {
                     this.$location.url(url)
                     history.pushState({}, '', url)
                 }
@@ -137,10 +145,10 @@ class controller extends Controller {
     }
 
     getPortfolio() {
-        const { id } = this.$route.current.params
+        const id = this.$route.current.params.id.split('-')[0]
         const fail = () => {
             this.toastService.show('ERROR_PORTFOLIO_NOT_FOUND')
-            this.$location.url('/')
+            window.location.replace('/404')
         }
         if (id) {
             this.serverCallService
@@ -152,7 +160,6 @@ class controller extends Controller {
                     fail
                 )
         }
-
     }
     increaseViewCount() {
         /**
@@ -182,37 +189,111 @@ class controller extends Controller {
     }
 
     setPortfolio(portfolio, isLocallyStored = true) {
-        this.$scope.portfolio = portfolio
-        this.storageService.setPortfolio(portfolio)
+        if (portfolio) {
+            this.$scope.portfolio = portfolio
+            this.$rootScope.portfolio = portfolio
+            this.$rootScope.tabTitle = portfolio.title;
+            this.storageService.setPortfolio(portfolio)
 
-        this.$scope.learningObject = portfolio
+            let locationUrl = this.$rootScope.slug ? `${this.getUrl(portfolio)}#${this.$rootScope.slug}` : this.getUrl(portfolio);
+            this.$location.url(locationUrl);
+            this.$scope.learningObject = portfolio;
 
-        this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
-        this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
-        this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
-        this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
-        this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
-        if (!isLocallyStored){
-            this.showUnreviewedMessage(portfolio.id);
+            this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
+            this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
+            this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
+            this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
+            this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed
+            if (!isLocallyStored){
+                this.showUnreviewedMessage(portfolio.id);
+            }
+
+            if (!isLocallyStored && portfolio && portfolio.chapters) {
+                portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
+
+                // add id attributes to all subchapters derived from subchapter titles
+                this.$timeout(() =>
+                    this.$timeout(() => {
+                        const entries = (selector, el = document) => el.querySelectorAll(selector).entries()
+                        for (let [idx, el] of entries('.portfolio-chapter'))
+                            for (let [subIdx, subEl] of entries('.subchapter', el)) {
+                                subEl.id = this.getSlug(`alapeatukk-${idx + 1}-${subIdx + 1}`)
+                            }
+                    }, 1000)
+                )
+            }
+
+            this.$scope.portfolioMetaData = this.createMetaData(portfolio);
+
+            this.$rootScope.$broadcast('portfolioChanged')
         }
+    }
 
-        if (!isLocallyStored && portfolio && portfolio.chapters) {
-            portfolio.chapters = (new Controller()).transformChapters(portfolio.chapters)
-
-            // add id attributes to all subchapters derived from subchapter titles
-            this.$timeout(() =>
-                this.$timeout(() => {
-                    const entries = (selector, el = document) => el.querySelectorAll(selector).entries()
-                    for (let [idx, el] of entries('.portfolio-chapter'))
-                        for (let [subIdx, subEl] of entries('.subchapter', el))
-                            subEl.id = this.getSlug(`subchapter-${idx + 1}-${subIdx + 1}`)
-                })
-            )
-        }
-        this.$rootScope.$broadcast('portfolioChanged')
+    createMetaData(portfolio) {
+        return [
+            {
+                '@context': 'http://schema.org/',
+                '@type': 'CreativeWork',
+                'author': {
+                    '@type': 'Person',
+                    'name': `${portfolio.creator.name} ${portfolio.creator.surname}`
+                },
+                'url': window.location.href,
+                'publisher': {
+                    '@type': 'Organization',
+                    'name': 'e-koolikott.ee'
+                },
+                'audience': {
+                    '@type': 'Audience',
+                    'audienceType': audienceType(portfolio)
+                },
+                'thumbnailUrl': 'https://e-koolikott.ee/ekoolikott.png',
+                'dateCreated': portfolio.added,
+                'datePublished': portfolio.publishedAt,
+                'license': addLicense(portfolio.licenseType),
+                'typicalAgeRange': convertToClassGroup(portfolio.targetGroups),
+                'interactionCount': portfolio.views,
+                'headline': portfolio.title,
+                'keywords': portfolio.tags,
+                'text': portfolio.summary,
+                'inLanguage': this.translationService.getLanguageCode()
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'WebSite',
+                'url': 'https://www.e-koolikott.ee/',
+                'potentialAction': {
+                    '@type': 'SearchAction',
+                    'target': 'https://e-koolikott.ee/search/result?q={search_term_string}',
+                    'query-input': 'required name=search_term_string'
+                }
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'BreadcrumbList',
+                'itemListElement': [{
+                    '@type': 'ListItem',
+                    'position': 1,
+                    'name': this.$translate.instant(portfolio.taxonPositionDto[0].taxonLevelName),
+                    'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[0].taxonLevelId}`
+                }, {
+                    '@type': 'ListItem',
+                    'position': 2,
+                    'name': this.$translate.instant((`DOMAIN_${portfolio.taxonPositionDto[1].taxonLevelName}`).toUpperCase()),
+                    'item': `https://e-koolikott.ee/search/result/?taxon=${portfolio.taxonPositionDto[1].taxonLevelId}`
+                }]
+            },
+            {
+                '@context': 'https://schema.org',
+                '@type': 'Organization',
+                'url': 'https://e-koolikott.ee',
+                'logo': 'https://e-koolikott.ee/ekoolikott.png'
+            }
+        ];
     }
 }
-controller.$inject = [
+
+    controller.$inject = [
     '$scope',
     '$rootScope',
     '$route',
@@ -223,6 +304,9 @@ controller.$inject = [
     'serverCallService',
     'storageService',
     'toastService',
+    'translationService',
+    'taxonGroupingService',
+    '$translate'
 ]
 angular.module('koolikottApp').controller('portfolioController', controller)
 }

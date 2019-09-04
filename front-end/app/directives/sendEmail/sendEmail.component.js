@@ -6,6 +6,13 @@
             super(...args)
 
             this.showLoEmailCodeDialog = () => {
+
+                if(this.$location.absUrl().contains('kogumik')){
+                    gTagCaptureEventWithLabel('request', 'teaching portfolio', 'Feedback to author')
+                } else {
+                    gTagCaptureEventWithLabel('request', 'teaching material', 'Feedback to author')
+                }
+
                 if (typeof this.learningObject.creator !== 'undefined' && this.learningObject.creator !== null) {
                     this.userEmailService.userHasEmail(this.learningObject.creator.id)
                         .then(response => {

@@ -23,7 +23,7 @@ class controller extends Controller {
     setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType, deleted }) {
         this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
         this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
-        this.$scope.link = '/material?name=' + this.replaceSpacesAndCharacters(this.$scope.title)+ '&id=' + id
+        this.$scope.link = '/oppematerjal/' + id + '-' + this.replaceSpacesAndCharacters(this.$scope.title)
         this.$scope.publishersAndAuthors = publishers.filter(p => p.name).map(p => p.name).concat(authors.filter(a => a.name || a.surname).map(a => a.name ? a.name+(a.surname ? ' '+a.surname : '') : a.surname)).join(', ')
         this.setMaterialSourceLink()
 

@@ -25,7 +25,7 @@
         }
 
         validatePin(user, pin, email, location) {
-            if (location === '/profile') {
+            if (location === '/profiil') {
                 return this.serverCallService
                     .makePost('rest/userEmail/validateFromProfile', {user: user, pin: pin, email: email})
             } else {

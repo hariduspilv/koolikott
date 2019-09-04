@@ -10,7 +10,7 @@ class controller extends Controller {
         this.$scope.isSubmitButtonEnabled = false
         this.$scope.isDownloadButtonEnabled = false;
         this.$scope.isExpertsSelectVisible = true
-        this.$scope.isTaxonSelectVisible = true
+
         this.$scope.params = {}
         this.$scope.filter = {
             from: moment().subtract(1, 'month').startOf('month').toDate(),
@@ -25,6 +25,7 @@ class controller extends Controller {
         this.$scope.perPage = 100
         this.$scope.page = 1
         this.$scope.numPages = 1
+        this.$translate('EXPERT_STATISTICS').then((translation) => this.$rootScope.tabTitle = translation);
 
         this.$scope.$watch('filter', this.onFilterChange.bind(this), true)
         this.$scope.$watch('params', this.onParamsChange.bind(this), true)
@@ -36,10 +37,15 @@ class controller extends Controller {
         this.$scope.$on('$destroy', () => window.removeEventListener('resize', this.setInfoTextHeight))
         setTimeout(this.setInfoTextHeight)
     }
+    isModerator() {
+        return this.authenticatedUserService.isModerator()
+    }
     getModerators() {
         this.serverCallService
             .makeGet('rest/admin/moderator')
-            .then(res => this.$scope.moderators = res.data)
+            .then(res => {
+                this.$scope.moderators = res.data
+            })
     }
     getStatistics() {
         this.$scope.fetching = true
@@ -68,10 +74,22 @@ class controller extends Controller {
 
                 if (200 <= status && status < 300) {
                     const downloadLink = document.createElement('a')
+                    let event = this.returnEvent();
                     downloadLink.href = `/rest/admin/statistics/export/download/${filename}`
-                    downloadLink.dispatchEvent(new MouseEvent('click'))
+                    downloadLink.dispatchEvent(event)
                 }
             })
+    }
+
+    returnEvent() {
+        let event;
+        if (typeof(MouseEvent) === 'function') {
+            event = new MouseEvent('click');
+        } else {
+            event = document.createEvent('MouseEvent');
+            event.initEvent('click', true, true);
+        }
+        return event;
     }
     // Copy filter values to POST params with one exception: params.users = [filter.user].
     onFilterChange(filter) {
@@ -97,10 +115,21 @@ class controller extends Controller {
         this.onParamsChange({});
     }
     clear() {
+        !this.isModerator() ? this.clearAllDataAndFilters() : this.clearDataForModerator();
+    }
+
+    clearDataForModerator() {
+        this.$scope.filter.from = ''
+        this.$scope.filter.to = ''
+        this.$scope.data = {}
+    }
+
+    clearAllDataAndFilters() {
         this.$scope.filter = {}
         this.$scope.educationalContext = undefined
         this.$scope.data = {}
     }
+
     onSelectTaxons(taxons) {
         this.$scope.filter.taxons = taxons
     }
@@ -165,9 +194,11 @@ class controller extends Controller {
 }
 controller.$inject = [
     '$scope',
+    '$rootScope',
     '$translate',
     'serverCallService',
     'sortService',
+    'authenticatedUserService'
 ]
 angular.module('koolikottApp').controller('statisticsController', controller)
 }

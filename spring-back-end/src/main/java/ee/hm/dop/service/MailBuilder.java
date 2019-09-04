@@ -35,9 +35,9 @@ public class MailBuilder {
 
     public Email composeEmailToUser(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .from("E-koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(customerSupport.getName(), customerSupport.getEmail())
-                .withSubject("e-Koolikott, küsimuse kinnitus")
+                .withSubject("E-koolikott, küsimuse kinnitus")
                 .withHTMLText("<b>Teema:</b> " + customerSupport.getSubject() + BREAK +
                         "<b>Küsimus:</b> " + customerSupport.getMessage())
                 .buildEmail();
@@ -45,9 +45,9 @@ public class MailBuilder {
 
     public Email composeEmailToSupport(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", customerSupport.getEmail())
+                .from("E-koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
-                .withSubject("e-Koolikott: " + customerSupport.getSubject())
+                .withSubject("E-koolikott: " + customerSupport.getSubject())
                 .withHTMLText("<b>Küsimus:</b> " + customerSupport.getMessage() + BREAK +
                         "<b>Küsija kontakt:</b> " + customerSupport.getName() + ", " + customerSupport.getEmail())
                 .withAttachments(getAttachmentResources(customerSupport))
@@ -78,7 +78,7 @@ public class MailBuilder {
 
     public Email composeEmailToSupportWhenSendFailed(CustomerSupport customerSupport) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", customerSupport.getEmail())
+                .from("E-koolikott", customerSupport.getEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("Kasutaja ebaõnnestunud pöördumine")
                 .withHTMLText("Kasutaja: " + customerSupport.getName() +", " + customerSupport.getEmail() + BREAK
@@ -90,11 +90,11 @@ public class MailBuilder {
 
     public Email sendPinToUser(UserEmail userEmail, UserEmail email) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .from("E-koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(userEmail.getUser().getFullName(), email.getEmail())
-                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withSubject("E-koolikotis e-posti kinnitamine")
                 .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
-                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Aitäh, et oled E-koolikoti kasutaja!" + BREAK +
                         "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
                         BREAK +
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
@@ -105,11 +105,11 @@ public class MailBuilder {
 
     public Email sendPinToUser(UserEmail userEmail, String email) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .from("E-koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(userEmail.getUser().getFullName(), email)
-                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withSubject("E-koolikotis e-posti kinnitamine")
                 .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
-                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Aitäh, et oled E-koolikoti kasutaja!" + BREAK +
                         "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
                         BREAK +
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
@@ -120,11 +120,11 @@ public class MailBuilder {
 
     public Email sendPinToUser(UserEmail userEmail) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .from("E-koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(userEmail.getUser().getFullName(), userEmail.getEmail())
-                .withSubject("e-Koolikotis e-posti kinnitamine")
+                .withSubject("E-koolikotis e-posti kinnitamine")
                 .withHTMLText("Tere, " + userEmail.getUser().getFullName()+ BREAK +
-                        "Aitäh, et oled e-Koolikoti kasutaja!" + BREAK +
+                        "Aitäh, et oled E-koolikoti kasutaja!" + BREAK +
                         "Palun trüki allolev kood e-posti aadressi kinnitamise aknasse." + BREAK +
                         BREAK +
                         "<span style=\"font-size: 18px\"><b>" + userEmail.getPin() + "</b></span>" + BREAK + BREAK +
@@ -135,9 +135,9 @@ public class MailBuilder {
 
     public Email sendEmailToCreator(EmailToCreator emailToCreator) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
+                .from("E-koolikott", configuration.getString(EMAIL_NO_REPLY_ADDRESS))
                 .to(emailToCreator.getUser().getFullName(), emailToCreator.getCreatorEmail())
-                .withSubject("e-Koolikott: Aineeksperdi küsimus")
+                .withSubject("E-koolikott: Aineeksperdi küsimus")
                 .withHTMLText("Aineekspert " +  emailToCreator.getSenderName() + " on esitanud küsimuse Teie õppevara kohta: " + emailToCreator.getLearningObjectTitle() + BREAK
                         + BREAK + emailToCreator.getMessage() + BREAK + BREAK +
                         "Aineeksperdile vastamiseks kirjutage e-posti aadressile:" + "<a href=\"mailto:" + emailToCreator.getSenderName() +
@@ -147,7 +147,7 @@ public class MailBuilder {
 
     public Email sendEmailToSupportWhenSendEmailToCreatorFailed(EmailToCreator emailToCreator) {
         return EmailBuilder.startingBlank()
-                .from("e-Koolikott", emailToCreator.getSenderEmail())
+                .from("E-koolikott", emailToCreator.getSenderEmail())
                 .to("HITSA Support", configuration.getString(EMAIL_ADDRESS))
                 .withSubject("Aineeksperdi küsimus ebaõnnestunud ekirja saatmine")
                 .withHTMLText("Kasutaja: " + emailToCreator.getSenderName() + ", " + emailToCreator.getSenderEmail() + BREAK

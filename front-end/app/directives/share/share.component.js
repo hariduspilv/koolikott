@@ -100,6 +100,13 @@ class controller extends Controller {
                         socialshareVia: this.FB_APP_ID
                     }
                 })
+
+                if(this.pageUrl.contains('kogumik')){
+                    gTagCaptureEventWithLabel('share', 'teaching portfolio', 'Facebook')
+                } else {
+                    gTagCaptureEventWithLabel('share', 'teaching material', 'Facebook')
+                }
+
                 break
             case 'twitter':
                 this.Socialshare.share({
@@ -109,6 +116,13 @@ class controller extends Controller {
                         socialshareText: this.$translate.instant('READING_RECOMMENDATION') + ': ' + this.title
                     }
                 })
+
+                if(this.pageUrl.contains('kogumik')){
+                    gTagCaptureEventWithLabel('share', 'teaching portfolio', 'Twitter')
+                } else if (this.pageUrl.contains('oppematerjal')){
+                    gTagCaptureEventWithLabel('share', 'teaching material', 'Twitter')
+                }
+
                 break
             case 'email':
                 this.Socialshare.share({
@@ -118,6 +132,13 @@ class controller extends Controller {
                         socialshareBody: this.$translate.instant('WELCOME_READ_HERE') + ': ' + this.pageUrl
                     }
                 })
+
+                if(this.pageUrl.contains('kogumik')){
+                    gTagCaptureEventWithLabel('share', 'teaching portfolio', 'E-mail')
+                } else if (this.pageUrl.contains('oppematerjal')){
+                    gTagCaptureEventWithLabel('share', 'teaching material', 'E-mail')
+                }
+
                 break
         }
     }

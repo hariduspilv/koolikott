@@ -70,8 +70,6 @@ class controller extends Controller {
             this.init()
     }
     $onInit() {
-        this.isAdmin = this.authenticatedUserService.isAdmin()
-        this.isModerator = this.authenticatedUserService.isModerator()
         this.oldLinkColor = this.$mdColors.getThemeColor('grey-500')
 
         this.$scope.getChangeType = (item) =>
@@ -128,6 +126,8 @@ class controller extends Controller {
             this.init()
     }
     init() {
+        this.isAdmin = this.authenticatedUserService.isAdmin()
+        this.isModerator = this.authenticatedUserService.isModerator()
         this.setState('', '', [], false); // reset
 
         if (!this.$rootScope.learningObjectPrivate) {

@@ -9,14 +9,22 @@ class controller {
         return JSON.parse(localStorage.getItem('authenticatedUser'))
     }
     removeAuthenticatedUser() {
-        localStorage.removeItem('authenticatedUser')
+        localStorage.removeItem('authenticatedUser');
     }
+
     isAuthenticated() {
         return !!this.getAuthenticatedUser()
     }
     isAdmin() {
         return this.hasRole('ADMIN');
     }
+
+    isOwner(learningObject) {
+        return !this.isAuthenticated()
+            ? false : learningObject && learningObject.creator
+                ? learningObject.creator.id === this.getUser().id : false
+    }
+
     isPublisher() {
         const user = this.getUser()
         return user && isDefined(user.publisher)

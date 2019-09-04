@@ -3,14 +3,14 @@
   <md-card class="card-xs" layout="row">
 
     <md-card-content flex="50">
-      <h6 data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)"
+      <h3 data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)"
           class="ellipsis ellipsis--2 ellipsis--small no-margin"
           data-ng-bind="$ctrl.learningObject.title">
-      </h6>
-      <h6 data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
+      </h3>
+      <h3 data-ng-if="$ctrl.isMaterial($ctrl.learningObject)"
           class="ellipsis ellipsis--2 ellipsis--small no-margin"
           data-ng-bind="$ctrl.getCorrectLanguageTitle($ctrl.learningObject)">
-      </h6>
+      </h3>
       <p class="md-caption ellipsis">
       <span data-ng-if="$ctrl.isPortfolio($ctrl.learningObject)" class="authors">
         <span data-ng-bind="$ctrl.formatNameToInitials($ctrl.learningObject.creator.name)"></span>
