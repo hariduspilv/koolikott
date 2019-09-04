@@ -2,11 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.taxon.TaxonLevel;
-import ee.hm.dop.model.taxon.TaxonPosition;
-import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.permission.MaterialPermission;
 import ee.hm.dop.utils.UrlUtil;
@@ -21,8 +17,6 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
-
 @Service
 @Transactional
 public class MaterialGetter {
@@ -34,16 +28,16 @@ public class MaterialGetter {
     @Inject
     private MaterialPermission materialPermission;
     @Inject
-    private TaxonPositionDao taxonPositionDao;
+    private LearningObjectService learningObjectService;
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            setTaxonPosition(materialDao.findById(materialId));
+            learningObjectService.setTaxonPosition(materialDao.findById(materialId));
             return materialDao.findById(materialId);
         }
 
         Material material = materialDao.findByIdNotDeleted(materialId);
-        setTaxonPosition(material);
+        learningObjectService.setTaxonPosition(material);
 
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
@@ -86,28 +80,4 @@ public class MaterialGetter {
         return materialDao.findByCreatorSize(creator);
     }
 
-    private void setTaxonPosition(Material material) {
-        List<TaxonPosition> taxonPosition = material.getTaxons()
-                .stream()
-                .map(taxonPositionDao::findByTaxon)
-                .collect(toList());
-
-        List<TaxonPositionDTO> taxonPositionDTOList = new ArrayList<>();
-        taxonPosition.forEach(tp -> {
-            TaxonPositionDTO tpdEduContext = new TaxonPositionDTO();
-            tpdEduContext.setTaxonLevelId(tp.getEducationalContext().getId());
-            tpdEduContext.setTaxonLevelName(tp.getEducationalContext().getName());
-            tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
-            if (tp.getDomain() != null) {
-                TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
-                tpdDomain.setTaxonLevelId(tp.getDomain().getId());
-                tpdDomain.setTaxonLevelName(tp.getDomain().getName());
-                tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
-                taxonPositionDTOList.add(tpdEduContext);
-                taxonPositionDTOList.add(tpdDomain);
-            }
-        });
-
-        material.setTaxonPositionDto(taxonPositionDTOList);
-    }
 }

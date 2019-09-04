@@ -1,10 +1,13 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.LearningObjectDao;
-import ee.hm.dop.dao.TaxonDao;
+import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.TaxonLevel;
+import ee.hm.dop.model.taxon.TaxonPosition;
+import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.service.permission.PermissionFactory;
 import ee.hm.dop.service.permission.PermissionItem;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -12,11 +15,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.UserUtil.isAdmin;
 import static ee.hm.dop.utils.UserUtil.isModerator;
+import static java.util.stream.Collectors.toList;
 
 @Service
 @Transactional
@@ -28,6 +33,8 @@ public class LearningObjectService {
     private PermissionFactory permissionFactory;
     @Inject
     private LearningObjectServiceCache learningObjectServiceCache;
+    @Inject
+    private TaxonPositionDao taxonPositionDao;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
@@ -81,5 +88,30 @@ public class LearningObjectService {
             return userTaxons != null && collect.stream().anyMatch(userTaxons::contains);
         }
         return false;
+    }
+
+    public void setTaxonPosition(LearningObject learningobject) {
+        List<TaxonPosition> taxonPosition = learningobject.getTaxons()
+                .stream()
+                .map(taxonPositionDao::findByTaxon)
+                .collect(toList());
+
+        List<TaxonPositionDTO> taxonPositionDTOList = new ArrayList<>();
+        taxonPosition.forEach(tp -> {
+            TaxonPositionDTO tpdEduContext = new TaxonPositionDTO();
+            tpdEduContext.setTaxonLevelId(tp.getEducationalContext().getId());
+            tpdEduContext.setTaxonLevelName(tp.getEducationalContext().getName());
+            tpdEduContext.setTaxonLevel(TaxonLevel.EDUCATIONAL_CONTEXT);
+            if (tp.getDomain() != null) {
+                TaxonPositionDTO tpdDomain = new TaxonPositionDTO();
+                tpdDomain.setTaxonLevelId(tp.getDomain().getId());
+                tpdDomain.setTaxonLevelName(tp.getDomain().getName());
+                tpdDomain.setTaxonLevel(TaxonLevel.DOMAIN);
+                taxonPositionDTOList.add(tpdEduContext);
+                taxonPositionDTOList.add(tpdDomain);
+            }
+        });
+
+        learningobject.setTaxonPositionDto(taxonPositionDTOList);
     }
 }
