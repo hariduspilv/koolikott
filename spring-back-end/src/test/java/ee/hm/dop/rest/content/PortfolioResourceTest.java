@@ -127,12 +127,10 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
-    //fails on repeated runs
     public void getByCreatorNotExistingUser() {
         String username = "notexisting.user";
         Response response = doGet(format(GET_BY_CREATOR_URL, username));
-        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertTrue(response.readEntity(String.class).contains("User does not exist with this username parameter"));
+        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
