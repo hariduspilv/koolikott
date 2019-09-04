@@ -282,9 +282,10 @@ angular.module('koolikottApp')
                 showUnreviewedMessage();
 
                 let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, '-')
+                correctLanguageTitle = correctLanguageTitle.charAt(correctLanguageTitle.length - 1) === '-' ? correctLanguageTitle.slice(0, -1) : correctLanguageTitle
 
                 $scope.materialUrl = `/oppematerjal/${$scope.material.id}-${correctLanguageTitle}`
-                if (!$scope.path.contains($scope.materialUrl)) {
+                if ($scope.path !== $scope.materialUrl) {
                     $location.url($scope.materialUrl)
                 }
 

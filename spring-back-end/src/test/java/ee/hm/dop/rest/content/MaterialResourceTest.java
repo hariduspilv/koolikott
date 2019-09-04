@@ -13,6 +13,8 @@ import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
 import java.time.LocalDateTime;
+
+import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -160,6 +162,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void create() {
         login(USER_SECOND);
 
@@ -192,6 +195,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void createWithKeyCompetencesWhenNotAllowed() {
         login(USER_SECOND);
 

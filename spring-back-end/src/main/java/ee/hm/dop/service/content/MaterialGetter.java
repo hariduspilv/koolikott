@@ -32,16 +32,17 @@ public class MaterialGetter {
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
-            learningObjectService.setTaxonPosition(materialDao.findById(materialId));
-            return materialDao.findById(materialId);
+            Material material = materialDao.findById(materialId);
+            if (material == null) return null;
+            learningObjectService.setTaxonPosition(material);
+            return material;
         }
 
         Material material = materialDao.findByIdNotDeleted(materialId);
-        learningObjectService.setTaxonPosition(material);
-
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
         }
+        learningObjectService.setTaxonPosition(material);
         return material;
     }
 

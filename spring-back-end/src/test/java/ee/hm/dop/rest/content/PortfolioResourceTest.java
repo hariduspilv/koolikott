@@ -3,12 +3,7 @@ package ee.hm.dop.rest.content;
 import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestLayer;
-import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ContentRow;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -48,6 +43,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void getNotExistingPortfolio() {
         Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
@@ -134,8 +130,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void getByCreatorNotExistingUser() {
         String username = "notexisting.user";
         Response response = doGet(format(GET_BY_CREATOR_URL, username));
-        assertEquals(Status.BAD_REQUEST.getStatusCode(), response.getStatus());
-        assertTrue(response.readEntity(String.class).contains("User does not exist with this username parameter"));
+        assertEquals(Status.NOT_FOUND.getStatusCode(), response.getStatus());
     }
 
     @Test
@@ -158,6 +153,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void updateChanginMetadataNoChapters() {
         login(USER_MATI);
 
@@ -188,7 +184,12 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     public void updateCreatingChapter() {
         login(USER_MATI);
 
-        List<Chapter> chapters = chapters(NEW_CHAPTER_1);
+        List<Chapter> chapters = new ArrayList<>();
+        Chapter newChapter = chapter(NEW_CHAPTER_1);
+        List<ChapterBlock> chapterBlocks = new ArrayList<>();
+        chapterBlocks.add(new ChapterBlock());
+        newChapter.setBlocks(chapterBlocks);
+        chapters.add(newChapter);
 
         Portfolio portfolio = getPortfolio(PORTFOLIO_5);
         portfolio.setChapters(chapters);
@@ -205,6 +206,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
         Chapter newChapter = chapter(NEW_CHAPTER_1);
         newChapter.setSubchapters(chapters(NEW_SUBCHAPTER));
 
+        List<ChapterBlock> chapterBlocks = new ArrayList<>();
+        chapterBlocks.add(new ChapterBlock());
+        newChapter.setBlocks(chapterBlocks);
         chapters.add(newChapter);
 
         Portfolio portfolio = getPortfolio(PORTFOLIO_5);
@@ -222,6 +226,10 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Chapter newChapter = chapter(NEW_CHAPTER_1);
         newChapter.setSubchapters(chapters(NEW_COOL_SUBCHAPTER));
+
+        List<ChapterBlock> chapterBlocks = new ArrayList<>();
+        chapterBlocks.add(new ChapterBlock());
+        newChapter.setBlocks(chapterBlocks);
 
         Portfolio portfolio = getPortfolio(PORTFOLIO_5);
         portfolio.getChapters().add(newChapter);
@@ -283,6 +291,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void deletePortfolioAsCreator() {
         login(USER_SECOND);
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_12));
@@ -303,6 +312,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void createWithContent() {
         login(USER_MATI);
 
@@ -313,6 +323,9 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
 
         Chapter firstChapter = chapter("First chapter");
         firstChapter.setContentRows(Lists.newArrayList(new ContentRow(Lists.newArrayList(createdMaterial))));
+        List<ChapterBlock> chapterBlocks = new ArrayList<>();
+        chapterBlocks.add(new ChapterBlock());
+        firstChapter.setBlocks(chapterBlocks);
         portfolio.setChapters(Lists.newArrayList(firstChapter));
 
         Portfolio createdPortfolio = doPost(CREATE_PORTFOLIO_URL, portfolio, Portfolio.class);
@@ -359,6 +372,13 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     private Portfolio portfolioWithTitle(String title) {
         Portfolio portfolio = new Portfolio();
         portfolio.setTitle(title);
+        List<Chapter> chapters = new ArrayList<>();
+        Chapter chapter = chapter("example chapter");
+        List<ChapterBlock> chapterBlocks = new ArrayList<>();
+        chapterBlocks.add(new ChapterBlock());
+        chapter.setBlocks(chapterBlocks);
+        chapters.add(chapter);
+        portfolio.setChapters(chapters);
         return portfolio;
     }
 

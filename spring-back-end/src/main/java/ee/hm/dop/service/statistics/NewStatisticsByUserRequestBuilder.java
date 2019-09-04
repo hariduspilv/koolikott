@@ -33,8 +33,11 @@ public class NewStatisticsByUserRequestBuilder {
             if (taxon instanceof Domain) {
                 domainsWithChildren.add(commonRequestBuilder.convertRealDomainForUser((Domain) taxon));
             } else if (taxon instanceof Topic) {
-                domainsWithChildren.add(commonRequestBuilder.convertSubjectDomain((Subject) taxonPositionDao.findByTaxon(taxon).getSubject(), (Domain) taxonPositionDao.findByTaxon(taxon).getDomain()));
-            } else if (!(taxon instanceof Subject) && !(taxon instanceof Topic)){
+                TaxonPosition taxonPosition = taxonPositionDao.findByTaxon(taxon);
+                if (taxonPosition != null) {
+                    domainsWithChildren.add(commonRequestBuilder.convertSubjectDomain((Subject) taxonPosition.getSubject(), (Domain) taxonPosition.getDomain()));
+                }
+            } else if (!(taxon instanceof Subject) && !(taxon instanceof Topic)) {
                 //todo log something, user has wierd taxons
             }
         }

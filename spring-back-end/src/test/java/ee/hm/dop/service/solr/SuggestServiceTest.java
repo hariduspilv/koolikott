@@ -11,6 +11,7 @@ import org.junit.runner.RunWith;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 
+import static org.assertj.core.api.Java6Assertions.fail;
 import static org.easymock.EasyMock.expect;
 import static org.easymock.EasyMock.replay;
 import static org.junit.Assert.assertEquals;
@@ -27,7 +28,12 @@ public class SuggestServiceTest extends ResourceIntegrationTestBase {
     public void suggestEmpty() throws IOException, SolrServerException {
         expect(solrService.suggest("")).andReturn(null);
         replay(solrService);
-        Response r = (Response) suggestService.suggest("");
-        assertEquals(r.getStatus(), 400);
+        try {
+            Response r = (Response) suggestService.suggest("");
+            fail("Exception expected");
+        } catch (Exception e) {
+            String msg = e.getMessage();
+            assertEquals("400 BAD_REQUEST", msg);
+        }
     }
 }

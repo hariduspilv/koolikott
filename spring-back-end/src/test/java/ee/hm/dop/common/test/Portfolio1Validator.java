@@ -23,7 +23,7 @@ public class Portfolio1Validator {
     public static void assertPortfolio1(Portfolio portfolio, TestLayer layer) {
         assertNotNull(portfolio);
         assertEquals(PORTFOLIO_1, portfolio.getId());
-        assertEquals("The_new_stock_market", portfolio.getTitleForUrl());
+        assertEquals("The-new-stock-market", portfolio.getTitleForUrl());
         assertEquals("The new stock market", portfolio.getTitle());
         //todo time
 //        assertEquals(LocalDateTime.parse("2000-12-29T08:00:01.000+02:00"), portfolio.getAdded());
