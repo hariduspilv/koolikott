@@ -69,26 +69,6 @@ public class TranslationServiceTest {
         verifyAll(language);
     }
 
-    @Test
-    public void getTranslationsForSupportedLanguageWithTranslation() {
-        String languageCode = "supportedLanguageCode";
-        Language language = createMock(Language.class);
-        TranslationGroup translationGroup = createMock(TranslationGroup.class);
-        @SuppressWarnings("unchecked")
-        Map<String, String> translations = createMock(Map.class);
-
-        expect(languageDao.findByCode(languageCode)).andReturn(language);
-        expect(translationGroupDao.findTranslationGroupFor(language)).andReturn(translationGroup);
-        expect(translationGroup.getTranslations()).andReturn(translations);
-        expect(language.getCode()).andReturn("").times(2);
-
-        replayAll(language, translationGroup, translations);
-
-        assertSame(translations, translationService.getTranslationsFor(languageCode));
-
-        verifyAll(language, translationGroup, translations);
-    }
-
     private void replayAll(Object... mocks) {
         replay(languageDao, translationGroupDao);
 

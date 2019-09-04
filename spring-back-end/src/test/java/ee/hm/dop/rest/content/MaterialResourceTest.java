@@ -162,6 +162,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void create() {
         login(USER_SECOND);
 
@@ -194,6 +195,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void createWithKeyCompetencesWhenNotAllowed() {
         login(USER_SECOND);
 

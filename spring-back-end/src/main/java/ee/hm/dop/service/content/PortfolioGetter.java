@@ -50,10 +50,10 @@ public class PortfolioGetter {
             return portfolioDao.findById(portfolioId);
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);
-        setTaxonPosition(portfolio);
         if (!portfolioPermission.canView(loggedInUser, portfolio)) {
             throw ValidatorUtil.permissionError();
         }
+        setTaxonPosition(portfolio);
         return portfolio;
     }
 

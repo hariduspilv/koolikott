@@ -43,6 +43,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void getNotExistingPortfolio() {
         Response response = doGet(format(GET_PORTFOLIO_URL, 2000));
         assertEquals(Status.FORBIDDEN.getStatusCode(), response.getStatus());
@@ -126,6 +127,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void getByCreatorNotExistingUser() {
         String username = "notexisting.user";
         Response response = doGet(format(GET_BY_CREATOR_URL, username));
@@ -153,6 +155,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void updateChanginMetadataNoChapters() {
         login(USER_MATI);
 
@@ -290,6 +293,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void deletePortfolioAsCreator() {
         login(USER_SECOND);
         Response response = doPost(DELETE_PORTFOLIO_URL, portfolioWithId(PORTFOLIO_12));
@@ -310,6 +314,7 @@ public class PortfolioResourceTest extends ResourceIntegrationTestBase {
     }
 
     @Test
+    //fails on repeated runs
     public void createWithContent() {
         login(USER_MATI);
 

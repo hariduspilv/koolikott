@@ -45,11 +45,11 @@ public class MaterialGetter {
         }
 
         Material material = materialDao.findByIdNotDeleted(materialId);
-        setTaxonPosition(material);
 
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
         }
+        setTaxonPosition(material);
         return material;
     }
 
