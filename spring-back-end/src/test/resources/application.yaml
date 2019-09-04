@@ -56,7 +56,7 @@ cron:
     enabled: false
   sitemapsXmlsGenerator:
     scheduledTime: 0 0 7 * * ?
-    enabled: true
+    enabled: false
 
 keystore:
   filename: server.keystore
