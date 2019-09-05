@@ -281,8 +281,15 @@ angular.module('koolikottApp')
                 processMaterial();
                 showUnreviewedMessage();
 
+                $scope.getCorrectLanguageString = (languageStringList) => {
+                    if (languageStringList) {
+                        return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
+                    }
+                };
+
                 let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, '-')
                 correctLanguageTitle = correctLanguageTitle.charAt(correctLanguageTitle.length - 1) === '-' ? correctLanguageTitle.slice(0, -1) : correctLanguageTitle
+                correctLanguageTitle = correctLanguageTitle.charAt(0) === '-' ? correctLanguageTitle.slice(1) : correctLanguageTitle
 
                 $scope.materialUrl = `/oppematerjal/${$scope.material.id}-${correctLanguageTitle}`
                 if ($scope.path !== $scope.materialUrl) {
@@ -302,12 +309,6 @@ angular.module('koolikottApp')
             $scope.getLicenseIconList = () => {
                 if ($scope.material && $scope.material.licenseType) {
                     return licenceTypeMap[$scope.material.licenseType.name];
-                }
-            };
-
-            $scope.getCorrectLanguageString = (languageStringList) => {
-                if (languageStringList) {
-                    return getUserDefinedLanguageString(languageStringList, translationService.getLanguage(), $scope.material.language);
                 }
             };
 
