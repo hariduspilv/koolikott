@@ -1,11 +1,51 @@
-## e-Koolikott [1.38.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11020)
+## e-Koolikott [1.39.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11058)
+
+### Muutunud
+* "Aineekspertide statistika kuvamise loogika muudatused (õppevara põhiselt tegevuspõhisele)" [EK-295](https://projektid.hitsa.ee/jira/browse/EK-295)
+* "Sorteerimise rippmenüü on valesse kohta sattunud" [EK-654](https://projektid.hitsa.ee/jira/browse/EK-654)
+* "Kasutuspiirangu seadmise nupp peaks olema kuvatud vaid administraatoritele" [EK-706](https://projektid.hitsa.ee/jira/browse/EK-706)
+* "Ekspertide statistika" [EK-177](https://projektid.hitsa.ee/jira/browse/EK-177)
+
+## e-Koolikott [1.39.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11023)
+
+### Muutunud
+* "Otsingu tulemuste layout katki/vale" [EK-697](https://projektid.hitsa.ee/jira/browse/EK-697)
+* "SEO > Browseri tabi pealkiri (Title element) muudatused" [EK-21](https://projektid.hitsa.ee/jira/browse/EK-21)
+* "Kogumike, materjalide ja lemmikute lehelt puudub pealkiri" [EK-701](https://projektid.hitsa.ee/jira/browse/EK-701)
+* "IE's ei kuvata detailvaates ja õppevara loomise modaalis pisipilte välja" [EK-658](https://projektid.hitsa.ee/jira/browse/EK-658)
+* "Aktiveeri kasutaja käitumise mõõtmiseks olulised sündmused Google Analytics'i jaoks" [EK-579](https://projektid.hitsa.ee/jira/browse/EK-579)
+
+## e-Koolikott [1.39.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11016)
+
+### Muutunud
+* E-kooli kaudu sisselogimise parandus [EK-656](https://projektid.hitsa.ee/jira/browse/EK-656)
+* "e-Koolikott" õigekiri ümber muuta "E-koolikott" [EK-653](https://projektid.hitsa.ee/jira/browse/EK-653)
+* Esilehe HTMLst vana logo viide uue logoga asendada [EK-646](https://projektid.hitsa.ee/jira/browse/EK-646)
+* SEO > Realiseerida URLide suunamine SEF URLidele [EK-614](https://projektid.hitsa.ee/jira/browse/EK-614)
+* SEO > Paigaldada Google Search Console HTML file e-Koolikoti [EK-580](https://projektid.hitsa.ee/jira/browse/EK-580)
+* SEO > Lisa logo metainfo [EK-578](https://projektid.hitsa.ee/jira/browse/EK-578)
+* SEO > Lisa site search metainfo [EK-575](https://projektid.hitsa.ee/jira/browse/EK-575)
+* SEO > Lisa õpivarade meta-andmed veebilehtedele [EK-574](https://projektid.hitsa.ee/jira/browse/EK-574)
+* SEO > Lisa väljaminevatele linkidele "nofollow" [EK-573](https://projektid.hitsa.ee/jira/browse/EK-573)
+* SEO > Lisa SEF URLid	[EK-571](https://projektid.hitsa.ee/jira/browse/EK-571)
+* SEO > Lisa rakendusele Hotjar saidi kasutajatelt tagasiside korjamiseks [EK-569](https://projektid.hitsa.ee/jira/browse/EK-569)
+* SEO > Lisa Google Optimize skriptid saidi lehtedele [EK-568](https://projektid.hitsa.ee/jira/browse/EK-568)
+* SEO > Eemaldada test.e-koolikott.ee sisu indekseerimine otsimootorite poolt [EK-567](https://projektid.hitsa.ee/jira/browse/EK-567)
+* SEO > Seadista Google Analyticsi User-ID jälgimine e-Koolikoti identiteedi alusel	[EK-563](https://projektid.hitsa.ee/jira/browse/EK-563)
+* SEO > Lisa sündmused välistele linkidele klikkamisel [EK-562](https://projektid.hitsa.ee/jira/browse/EK-562)
+* SEO > Breadscrumbi loomine [EK-552](https://projektid.hitsa.ee/jira/browse/EK-552)
+* SEO > XML Sitemap	[EK-24](https://projektid.hitsa.ee/jira/browse/EK-24)
+* SEO > Piltidele Img, Alt ja Title elemendid [EK-23](https://projektid.hitsa.ee/jira/browse/EK-23)
+* SEO > Kirjelduse (Description element) muudatused [EK-22](https://projektid.hitsa.ee/jira/browse/EK-22)
+
+## e-Koolikott [1.38.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11020) (Toodangusse paigaldatud 01.08.2019)
 
 ### Muutunud
 * Esilehe videokasti suuruse muudatused [EK-629](https://projektid.hitsa.ee/jira/browse/EK-629)
 * Logo vahetus menüü responsive vaates [EK-632](https://projektid.hitsa.ee/jira/browse/EK-632)
 * Kogumike täisekraan-vaate parandus [EK-633](https://projektid.hitsa.ee/jira/browse/EK-633)
 
-## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008)
+## e-Koolikott [1.38.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11008) (Toodangusse paigaldatud 01.08.2019)
 
 ### Muutunud
 * Kasutajaprofiili huvipakkuvate teemade ja koolide lisamise parandus [EK-478](https://projektid.hitsa.ee/jira/browse/EK-478)

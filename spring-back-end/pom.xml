@@ -4,7 +4,7 @@
     <groupId>ee.hm</groupId>
     <artifactId>spring-kott</artifactId>
     <packaging>jar</packaging>
-    <version>1.39.0</version>
+    <version>1.39.2</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -391,6 +391,7 @@
                         <artifactId>cobertura-maven-plugin</artifactId>
                         <version>2.7</version>
                         <configuration>
+                            <skip>true</skip>
                             <formats>
                                 <format>xml</format>
                             </formats>

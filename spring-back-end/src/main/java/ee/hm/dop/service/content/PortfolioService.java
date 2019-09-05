@@ -2,10 +2,9 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.PortfolioLog;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
@@ -21,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
+import java.util.List;
 
 import static ee.hm.dop.model.enums.SaveType.MANUAL;
 import static java.time.LocalDateTime.now;
@@ -49,6 +49,10 @@ public class PortfolioService {
     private PortfolioMaterialService portfolioMaterialService;
     @Inject
     private PortfolioLogDao portfolioLogDao;
+    @Inject
+    private MediaService mediaService;
+    @Inject
+    private PictureService pictureService;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -95,6 +99,43 @@ public class PortfolioService {
         copy.setChapters(portfolioCopier.copyChapters(originalPortfolio.getChapters()));
 
         return save(copy, loggedInUser, originalPortfolio.getCreator());
+    }
+
+    public Portfolio findById(Long id) {
+        return portfolioDao.findById(id);
+    }
+
+    public boolean portfolioHasAcceptableLicenses(Long id) {
+        Portfolio portfolio = findById(id);
+        if (portfolio == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        List<Media> portfolioMedia = getPortfolioMedia(portfolio);
+        return !portfolioHasUnAcceptableLicense(portfolio) &&
+                portfolio.getPicture() != null && !portfolioThumbnailHasUnAcceptableLicense(portfolio.getPicture()) &&
+                !portfolioMediaHasUnAcceptableLicenses(portfolioMedia);
+    }
+
+    private boolean portfolioMediaHasUnAcceptableLicenses(List<Media> portfolioMedia) {
+        return mediaService.anyMediaHasUnacceptableLicenseType(portfolioMedia);
+    }
+
+    private List<Media> getPortfolioMedia(Portfolio portfolio) {
+        return mediaService.getAllMediaIfLearningObjectIsPortfolio(portfolio);
+    }
+
+    private boolean portfolioThumbnailHasUnAcceptableLicense(Picture picture) {
+        return pictureService.pictureHasUnAcceptableLicence(picture);
+    }
+
+    private boolean portfolioHasUnAcceptableLicense(Portfolio portfolio) {
+        LicenseType licenseType = portfolio.getLicenseType();
+        if (licenseType == null) {
+            return true;
+        }
+        return !licenseType.getName().equals("CCBY") &&
+                !licenseType.getName().equals("CCBYSA") &&
+                !licenseType.getName().equals("CCBYSA30");
     }
 
     private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {

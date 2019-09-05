@@ -41,7 +41,7 @@
                 deltaQuery="select id from LearningObject
                     where
                     (
-                        DATE_ADD(lastInteraction, INTERVAL 5 MINUTE) > '${dih.last_index_time}'
+                        DATE_ADD(added, INTERVAL 5 MINUTE) > '${dih.last_index_time}'
                         OR
                         DATE_ADD(lastInteraction, INTERVAL 5 MINUTE) > '${dih.last_index_time}'
                     )
@@ -49,7 +49,7 @@
                 deletedPkQuery="select id from LearningObject
                     where
                     (
-                        DATE_ADD(lastInteraction, INTERVAL 5 MINUTE) > '${dih.last_index_time}'
+                        DATE_ADD(added, INTERVAL 5 MINUTE) > '${dih.last_index_time}'
                         OR
                         DATE_ADD(lastInteraction, INTERVAL 5 MINUTE) > '${dih.last_index_time}'
                     )

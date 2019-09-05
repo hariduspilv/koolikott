@@ -76,7 +76,7 @@
         data-ng-show="!$ctrl.isModerator() && isTaxonSelectVisible"
       ></dop-taxon-selector>
     </div>
-    <div class="statistics-filter__buttons" data-layout="row" data-layout-align="end center">
+    <div class="statistics-filter__buttons" data-layout="column" data-layout-gt-xs="row" data-layout-align="end center">
       <md-button
         class="statistics-filter__clear"
         data-translate="CLEAR_FORM"
@@ -178,7 +178,7 @@
           <td md-cell data-ng-if="isExpertsSelectVisible" class="statistics-table__educational-context-cell">
             <span data-translate="{{domainOrSubjectRow.educationalContext.name.toUpperCase()}}"></span>
           </td>
-          <td md-cell class="statistics-table__domain-or-subject-cell">
+          <td md-cell class="statistics-table__domain-or-subject-cell" style="word-break: break-word">
             <strong data-translate="{{'DOMAIN_' + domainOrSubjectRow.domain.name.toUpperCase()}}"></strong>
             <span data-ng-if="domainOrSubjectRow.subject"> › </span>
             <span data-ng-if="domainOrSubjectRow.subject" data-translate="{{'SUBJECT_' + domainOrSubjectRow.subject.name.toUpperCase()}}"></span>

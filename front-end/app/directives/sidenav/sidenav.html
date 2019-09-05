@@ -255,7 +255,7 @@
             <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="sentEmailsCount"></span>
           </a>
         </li>
-<!--        <li class="sidenav__item" layout="column" ng-if="isAdminOrModerator()">
+        <li class="sidenav__item" layout="column" ng-if="isUserModerator()">
           <a id="expertStatisticsForModerator" class="sidenav__header" md-ink-ripple layout="row"
              layout-align="space-between center"
              data-ng-class="{'is-active': isLocationActive('/toolaud/ekspertide-statistika')}"
@@ -265,7 +265,7 @@
               <span data-translate="STATISTICS" class="sidenav__name"></span>
             </div>
           </a>
-        </li>-->
+        </li>
       </ul>
     </div>
     <!-- END My Pofile -->

@@ -93,7 +93,7 @@ angular.module('koolikottApp')
                 createLicenceAgreementResponse(authenticatedUser.user.id, true, false))
                 .then(() => {
                     migrateLearningObjectsAndLogin(authenticatedUser)
-                    authenticateUser(authenticatedUser)
+                    // authenticateUser(authenticatedUser)
                 })
         }
 
@@ -375,15 +375,15 @@ angular.module('koolikottApp')
                 loginFail();
             },
 
-            logout: function() {
+            logout: function () {
                 endSession('rest/user/logout')
             },
 
-            terminate: function() {
+            terminate: function () {
                 endSession('rest/user/terminateSession')
             },
 
-            loginWithIdCard: function() {
+            loginWithIdCard: function () {
                 if (isAuthenticationInProgress) {
                     return;
                 }

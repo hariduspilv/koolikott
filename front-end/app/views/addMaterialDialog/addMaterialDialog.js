@@ -30,6 +30,13 @@ class controller extends Controller {
         this.$scope.selectedLanguage = this.translationService.getLanguage()
         this.$scope.isVocationalEducation = true
         this.$scope.isBasicOrSecondaryEducation = false
+        this.$scope.additionalInfo = {}
+        this.$scope.licenseTermsLink = 'https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode'
+
+        if (this.$scope.material && this.$scope.material.picture) {
+            this.$scope.additionalInfo.isVisible = true
+            this.$scope.existingPicture = true
+        }
 
         this.fetchMaxPictureSize()
         this.fetchMaxFileSize()
@@ -81,9 +88,16 @@ class controller extends Controller {
         /**
          * Set license type to “All rights reserved” if user chooses “Do not know” option.
          */
-        this.$scope.$watch('material.licenseType', (selectedValue) => {
-            if (selectedValue && selectedValue.id === 'doNotKnow')
-                this.$scope.material.licenseType = this.$scope.allRightsReserved
+        this.$scope.$watch('licenseTypeAgreed', (selectedValue) => {
+            if (selectedValue) {
+                this.$scope.material.licenseType = this.$scope.ccbysa30
+            }
+        })
+
+        this.$scope.$watch('pictureLicenseTypeAgreed', (selectedValue) => {
+            if (selectedValue) {
+                this.$scope.material.picture.licenseType = this.$scope.ccbysa30
+            }
         })
 
         // fix for https://github.com/angular/material/issues/6905
@@ -131,6 +145,8 @@ class controller extends Controller {
                     }
                     this.$scope.uploadingFile = false
                 })
+        } else {
+            if (this.$scope.addMaterialForm.fileToBeUploaded.$error.maxSize) this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000);
         }
     }
 
@@ -463,11 +479,11 @@ class controller extends Controller {
 
                         this.setThumbnail(snippet.thumbnails);
                         this.$scope.material.picture.author = snippet.channelTitle;
-                        this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
+                        /*this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
                             status.license.toLowerCase() === 'creativecommon'
                                 ? 'CCBY'
                                 : 'Youtube'
-                        );
+                        );*/
                     }
 
                     // Reset publishers before adding new from youtube
@@ -627,7 +643,7 @@ class controller extends Controller {
     setLicenseTypes(data) {
         this.$scope.licenseTypes = data
         this.$scope.doNotKnow = { id: 'doNotKnow' }
-        this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+        this.$scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
     }
     /**
      * If 'NOT_RELEVANT' is not last item in list

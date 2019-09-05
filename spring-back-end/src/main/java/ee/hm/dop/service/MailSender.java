@@ -22,6 +22,7 @@ public class MailSender {
     private Configuration configuration;
 
     public boolean sendEmail(Email email) {
+        //todo tests could not send out emails
         try {
             MailerBuilder
                     .withSMTPServer(configuration.getString(EMAIL_HOST), configuration.getInt(EMAIL_PORT), configuration.getString(EMAIL_USERNAME), configuration.getString(EMAIL_PASSWORD))

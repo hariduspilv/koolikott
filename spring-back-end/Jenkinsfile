@@ -1,0 +1,56 @@
+properties([
+        [
+                $class  : 'BuildDiscarderProperty',
+                strategy: [
+                        $class               : 'LogRotator',
+                        artifactDaysToKeepStr: '20', artifactNumToKeepStr: '2',
+                        daysToKeepStr        : '20', numToKeepStr: '8'
+                ]
+        ]
+])
+
+
+node {
+    git branch: env.BRANCH_NAME,
+            url: 'https://github.com/hariduspilv/koolikott.git'
+    def solrOxygenUrl = 'solr@oxygen.netgroupdigital.com'
+    def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
+    def adminOxygenUrl = 'netgroup@oxygen.netgroupdigital.com'
+
+    docker.image('mariadb:10.3.13')
+            .withRun("-e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=dop") { c ->
+                docker.image('openjdk:8-jdk-slim')
+                        .inside("--link ${c.id}:db") {
+                            stage('Verify') {
+                                sh 'cd spring-back-end && ./mvnw clean test -Dspring.datasource.url=jdbc:mysql://db/dop?serverTimezone=UTC'
+                                archiveArtifacts artifacts: 'spring-back-end/target/surefire-reports/**/*'
+                            }
+                            stage('Package') {
+                                sh 'cd spring-back-end && ./mvnw clean package -DskipTests=true'
+                                archiveArtifacts artifacts: 'spring-back-end/target/spring-kott.jar'
+                            }
+                        }
+            }
+
+    stage('Copy solr config') {
+        if (env.BRANCH_NAME == 'develop') {
+            sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
+            sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
+        } else {
+            sh 'echo solr copy disabled'
+        }
+    }
+
+    stage('Deploy jar file') {
+        if (env.BRANCH_NAME == 'develop') {
+            sh "scp -r spring-back-end/target/spring-kott.jar ${dopOxygenUrl}:app/"
+            sh "ssh -t ${adminOxygenUrl} sh /home/netgroup/dop.sh"
+        } else {
+            sh 'echo jar deploy disabled'
+        }
+    }
+
+    stage('Cleanup') {
+        sh 'docker volume rm \$(docker volume ls -q | awk \'{print $2}\') || true'
+    }
+}

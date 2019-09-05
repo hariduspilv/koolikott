@@ -8,10 +8,8 @@ import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioGetter;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -93,6 +91,15 @@ public class PortfolioResource extends BaseResource {
         return portfolioLog;
     }
 
+    @PostMapping("setPortfolioMediaLicenses")
+    public void setPortfolioMediaLicenses(@RequestBody Portfolio portfolio) {
+        portfolioService.setPortfolioMediaLicenseType(portfolio, portfolio.getLicenseType());
+    }
+
+    @GetMapping("portfolioHasAnyUnAcceptableLicense")
+    public boolean portfolioHasAnyUnAcceptableLicense(@RequestParam("id") Long portfolioId){
+        return !portfolioService.portfolioHasAcceptableLicenses(portfolioId);
+    }
 
 /*    @PostMapping
     @RequestMapping("copy")

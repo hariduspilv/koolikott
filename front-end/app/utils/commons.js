@@ -260,6 +260,12 @@ function getLanguageString(values, language) {
     }
 }
 
+function formatIssueDateTime(issueDate) {
+    if (!issueDate) return;
+    if (issueDate.day && issueDate.month && issueDate.year) {
+        return new Date(formatYear(issueDate.year), formatMonth(issueDate.month), formatDay(issueDate.day))
+    }
+}
 function formatIssueDate(issueDate) {
     if (!issueDate) return;
     if (issueDate.day && issueDate.month && issueDate.year) {
@@ -503,18 +509,6 @@ function isObjectEmpty(obj) {
 function getTypicalAgeRange(grade) {
     let ageRange;
     switch (grade) {
-        case ('PRESCHOOL'):
-            ageRange = '0-7';
-            break;
-        case ('LEVEL1'):
-            ageRange = '7-10';
-            break;
-        case ('LEVEL2'):
-            ageRange = '10-13';
-            break;
-        case ('LEVEL3'):
-            ageRange = '13-16';
-            break;
         case ('ZERO_FIVE'):
             ageRange = '0-5';
             break;
@@ -553,6 +547,55 @@ function getTypicalAgeRange(grade) {
             break;
     }
     return ageRange;
+}
+
+function generalGradeLimits(level) {
+    let generalGrade;
+    switch (level) {
+        case ('PRESCHOOL'):
+            generalGrade = '0-7';
+            break;
+        case 'LEVEL1':
+            generalGrade = '7-10';
+            break;
+        case 'LEVEL2':
+            generalGrade = '10-13';
+            break;
+        case 'LEVEL3':
+            generalGrade = '13-16';
+            break;
+    }
+    return generalGrade;
+}
+
+function getKeyByValue(object, value) {
+    return Object.keys(object).find(key => object[key] === value);
+}
+
+function convertToClassGroup(targetGroups) {
+    let copyOfTargetGroups = [...targetGroups];
+    const gradeGroup = {
+        PRESCHOOL: ['ZERO_FIVE', 'SIX_SEVEN'],
+        LEVEL1: ['GRADE1', 'GRADE2', 'GRADE3'],
+        LEVEL2: ['GRADE4', 'GRADE5', 'GRADE6'],
+        LEVEL3: ['GRADE7', 'GRADE8', 'GRADE9']
+    };
+    let finalArray = [];
+    Object.values(gradeGroup)
+        .forEach(ageGroup => {
+            const completeGradeGroupMatch = ageGroup.every(grade => copyOfTargetGroups.includes(grade));
+            if (completeGradeGroupMatch) {
+                const generalLimits = generalGradeLimits(getKeyByValue(gradeGroup, ageGroup));
+                finalArray.push(generalLimits);
+                ageGroup.forEach(group => copyOfTargetGroups.splice(copyOfTargetGroups.indexOf(group), 1));
+            }
+        });
+
+    if (copyOfTargetGroups.length) {
+        const singleGrades = copyOfTargetGroups.map(singleGrade => getTypicalAgeRange(singleGrade));
+        finalArray.push(...singleGrades);
+    }
+    return finalArray;
 }
 
 function translateEducationalContext(eduContext) {
@@ -769,11 +812,11 @@ function countOccurrences(value, text) {
 
 function convertLanguage(lang) {
     if (lang === 'est')
-        return 'ET'
+        return 'et'
     else if (lang === 'rus')
-        return 'RU'
+        return 'ru'
     else if (lang === 'eng')
-        return 'EN'
+        return 'en'
 }
 
 /**
@@ -854,14 +897,17 @@ class Controller {
             ? ''
             : title || titlesForUrl && this.getUserDefinedLanguageString(titlesForUrl, this.translationService.getLanguage(), language)
     }
+    removeHyphenFromTheEndOfString(str) {
+        return str.charAt(str.length - 1) === '-' ? str.slice(0, -1) : str
+    }
 
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
-            return `oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`
+            return this.removeHyphenFromTheEndOfString(`oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject).replace(/(-)\1+/g, "-")}`)
         } else if (learningObject.type === '.PortfolioLog')
-            return `kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`
+            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`)
         else
-            return `kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`
+            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`)
     }
 
     getLearningObjectUrl(learningObject) {
@@ -873,12 +919,12 @@ class Controller {
 
     replaceSpacesAndCharacters(title) {
         if (title)
-            return unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 30).replace(/[\W_]/g, "-")
+            return this.removeHyphenFromTheEndOfString(unorm.nfd(title).replace(/[\u0300-\u036f]/g, "").substring(0, 255).replace(/[\W_]/g, "-").replace(/(-)\1+/g, "-"))
     }
 
     replaceSpaces(title) {
         if (title)
-            return title.replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '')
+            return title.replace(/\s/g, '-').replace(/^-+|-+(?=-|$)/g, '').replace(/(-)\1+/g, "-")
     }
 
     getUserDefinedLanguageString(values, userLanguage, materialLanguage) {
