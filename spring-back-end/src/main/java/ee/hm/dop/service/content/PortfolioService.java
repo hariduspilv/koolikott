@@ -105,13 +105,6 @@ public class PortfolioService {
         return portfolioDao.findById(id);
     }
 
-    public void setPortfolioMediaLicenseType(Portfolio portfolio, LicenseType licenseType) {
-        List<Media> portfolioMedia = getPortfolioMedia(portfolio);
-        if (!portfolioMedia.isEmpty()) {
-            portfolioMedia.forEach(media -> media.setLicenseType(licenseType));
-        }
-    }
-
     public boolean portfolioHasAcceptableLicenses(Long id) {
         Portfolio portfolio = findById(id);
         if (portfolio == null) {
