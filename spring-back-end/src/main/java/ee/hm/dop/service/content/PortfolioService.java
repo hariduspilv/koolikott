@@ -97,6 +97,10 @@ public class PortfolioService {
         return save(copy, loggedInUser, originalPortfolio.getCreator());
     }
 
+    public Portfolio findById(Long id) {
+        return portfolioDao.findById(id);
+    }
+
     private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {
         return portfolioLogDao.createOrUpdate(portfolio);
     }

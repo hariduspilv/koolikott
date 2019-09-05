@@ -181,8 +181,16 @@ public class UserService {
         learningObjectService.getAllByCreator(user)
                 .stream()
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
+                        learningObjectMediaHasUnacceptableLicence(mediaService.getAllMediaIfLearningObjectIsPortfolio(lo)) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> learningObject.setVisibility(Visibility.PRIVATE));
+    }
+
+    private boolean learningObjectMediaHasUnacceptableLicence(List<Media> allLearningObjectMedia) {
+        if (!allLearningObjectMedia.isEmpty()) {
+            return allLearningObjectMedia.stream().anyMatch(this::mediaHasUnAcceptableLicence);
+        }
+        return false;
     }
 
     public void migrateUserLearningObjectLicences(User user) {
@@ -192,15 +200,23 @@ public class UserService {
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
                     learningObject.setLicenseType(licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
-                    Picture learningObjectPicture = learningObject.getPicture();
-                    if (learningObjectPicture != null && pictureHasUnAcceptableLicence(learningObjectPicture)) {
-                        pictureService.setLicenceType(learningObjectPicture.getId(), licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
-                    }
+                    setPictureLicenseType(learningObject, licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
                 });
+        setUserMediaLicenseType(user, licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
+    }
+
+    private void setPictureLicenseType(LearningObject lo, LicenseType licenseType) {
+        Picture learningObjectPicture = lo.getPicture();
+        if (learningObjectPicture != null && pictureHasUnAcceptableLicence(learningObjectPicture)) {
+            pictureService.setLicenceType(learningObjectPicture.getId(), licenseType);
+        }
+    }
+
+    private void setUserMediaLicenseType(User user, LicenseType licenseType) {
         mediaService.getAllByCreator(user)
                 .stream()
                 .filter(this::mediaHasUnAcceptableLicence)
-                .forEach(media -> media.setLicenseType(licenseTypeService.findByNameIgnoreCase("CCBYSA30")));
+                .forEach(media -> media.setLicenseType(licenseType));
     }
 
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
