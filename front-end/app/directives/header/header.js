@@ -187,27 +187,31 @@ class controller extends Controller {
         this.$scope.saveAndExitPortfolio = () => {
             this.$cookies.put('savedPortfolio', true);
             this.storageService.getPortfolio().saveType = 'MANUAL';
-            if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
+
+            if(this.storageService.getPortfolio().licenseType.name !== 'CCBYSA3.0' ||
+                (this.storageService.getPortfolio().picture &&
+                    this.storageService.getPortfolio().picture.licenseType.name !== 'CCBYSA3.0')){
+                return this.saveAndExit();
+            } else if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
                 this.storageService.getPortfolio().publicationConfirmed = true;
                 return this.saveAndExit();
-            }
+            } else if (this.storageService.getPortfolio().visibility === VISIBILITY_PRIVATE){
 
-            if (this.storageService.getPortfolio().publicationConfirmed) {
+                this.storageService.getPortfolio().publicationConfirmed = true;
+                this.dialogService.showConfirmationDialog(
+                    "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
+                    "{{'PORTFOLIO_WARNING' | translate}}",
+                    "{{'PORTFOLIO_YES' | translate}}",
+                    "{{'PORTFOLIO_NO' | translate}}",
+                    () => {
+                        this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
+                        this.saveAndExit()
+                    },
+                    this.saveAndExit.bind(this)
+                )
+            } else if (this.storageService.getPortfolio().publicationConfirmed) {
                 return this.saveAndExit();
             }
-
-            this.storageService.getPortfolio().publicationConfirmed = true;
-            this.dialogService.showConfirmationDialog(
-                "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
-                "{{'PORTFOLIO_WARNING' | translate}}",
-                "{{'PORTFOLIO_YES' | translate}}",
-                "{{'PORTFOLIO_NO' | translate}}",
-                () => {
-                    this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
-                    this.saveAndExit()
-                },
-                this.saveAndExit.bind(this)
-            )
         }
 
         this.$scope.$watch(() => this.$location.path(), (params) => {

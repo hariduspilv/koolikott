@@ -743,6 +743,10 @@ class controller extends Controller {
             if (this.$scope.material.source)
                 this.$scope.material.uploadedFile = null
 
+            if(this.$rootScope.materialLicenseChanged){
+                this.$scope.material.visibility = 'PUBLIC'
+            }
+
             if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
                 this.$scope.material.publishers[0] = null
 
@@ -774,11 +778,13 @@ class controller extends Controller {
                         if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
                             const url = '/oppematerjal/' + material.id
 
-                            if(this.storageService.getMaterial().visibility === 'PRIVATE'){
+                            this.toastService.show('MATERIAL_SAVED')
+
+                            if(!this.$rootScope.materialLicenseChanged && this.$scope.material.visibility === 'PRIVATE') {
                                 this.showMakePublicDialog()
                             }
 
-                            this.toastService.show('MATERIAL_SAVED')
+                            this.$rootScope.materialLicenseChanged = false
 
                             if (this.$location.url() === url)
                                 return done()

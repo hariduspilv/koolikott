@@ -308,16 +308,19 @@ angular.module('koolikottApp')
             }
 
             $scope.makePublic = () => {
-                if ($scope.material.licenseType.id !== 10){
+                $rootScope.learningObjectTypeOfChangedLicense = 'material'
+
+                if ($scope.material.licenseType.name !== 'CCBYSA3.0' || ($scope.material.picture.licenseType && $scope.material.picture.licenseType.name !== 'CCBYSA3.0')){
                     $mdDialog.show({
-                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenceAgreementDialog.html',
+                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
                         controller: 'learningObjectLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {
+                            $rootScope.materialLicenseChanged = true
                             $scope.edit()
                         }
                     })
-                } else if ($scope.material.licenseType.id === 10) {
+                } else {
                     $scope.material.visibility = VISIBILITY_PUBLIC
                     $scope.updateMaterialVisibility()
                 }

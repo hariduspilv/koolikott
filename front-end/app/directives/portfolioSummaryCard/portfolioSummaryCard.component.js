@@ -86,22 +86,22 @@ class controller extends Controller {
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.makePublic = () => {
+            this.$rootScope.learningObjectTypeOfChangedLicense = 'portfolio'
 
-            this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
-            this.$scope.portfolioLicenseType = this.storageService.getPortfolio().licenseType.id
-            if(this.$scope.portfolioLicenseType !== 10){
+            if(this.$scope.portfolio.licenseType.name !== 'CCBYSA3.0' ||
+                (this.$scope.portfolio.picture && this.$scope.portfolio.picture.licenseType.name !== 'CCBYSA3.0')){
                 this.$mdDialog.show({
-                    templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenceAgreementDialog.html',
+                    templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
                     controller: 'learningObjectLicenseAgreementController',
                 }).then((res) => {
                     if (res.accept) {
-                        this.$rootScope.licenseTypeChanged = true
+                        this.$rootScope.portfolioLicenseTypeChanged = true
                         this.showEditMetadataDialog()
                     }
                 })
-            } else if (this.$scope.portfolioLicenseType === 10) {
+            } else {
+                this.$scope.portfolio.visibility = VISIBILITY_PUBLIC
                 this.updatePortfolio()
-                this.toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC')
             }
         }
 
@@ -150,11 +150,10 @@ class controller extends Controller {
     }
 
     canEdit() {
-        return !this.authenticatedUserService.isRestricted() && (
-            this.isOwner() ||
+        return this.isOwner() ||
             this.authenticatedUserService.isAdmin() ||
             this.authenticatedUserService.isModerator()
-        )
+
     }
     isOwner() {
         return !this.authenticatedUserService.isAuthenticated()
