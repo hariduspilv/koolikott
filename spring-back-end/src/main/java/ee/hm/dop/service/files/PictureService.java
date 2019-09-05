@@ -46,4 +46,14 @@ public class PictureService {
             originalPicture.setLicenseType(licenseType);
         }
     }
+
+    public boolean pictureHasUnAcceptableLicence(Picture picture) {
+        LicenseType pictureLicenceType = getLicenceTypeById(picture.getId());
+        if (pictureLicenceType == null) {
+            return true;
+        }
+        return !pictureLicenceType.getName().equals("CCBY") &&
+                !pictureLicenceType.getName().equals("CCBYSA") &&
+                !pictureLicenceType.getName().equals("CCBYSA30");
+    }
 }

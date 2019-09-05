@@ -229,21 +229,10 @@ public class UserService {
     }
 
     private boolean mediaHasUnAcceptableLicence(Media media) {
-        if (media.getLicenseType() == null) {
-            return true;
-        }
-        return !media.getLicenseType().getName().equals("CCBY") &&
-                !media.getLicenseType().getName().equals("CCBYSA") &&
-                !media.getLicenseType().getName().equals("CCBYSA30");
+        return mediaService.mediaHasUnAcceptableLicence(media);
     }
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {
-        LicenseType pictureLicenceType = pictureService.getLicenceTypeById(picture.getId());
-        if (pictureLicenceType == null) {
-            return true;
-        }
-        return !pictureLicenceType.getName().equals("CCBY") &&
-                !pictureLicenceType.getName().equals("CCBYSA") &&
-                !pictureLicenceType.getName().equals("CCBYSA30");
+        return pictureService.pictureHasUnAcceptableLicence(picture);
     }
 }

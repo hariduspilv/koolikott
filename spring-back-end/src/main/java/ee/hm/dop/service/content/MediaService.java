@@ -60,6 +60,23 @@ public class MediaService {
         return mediaDao.findAllByCreator(creator);
     }
 
+    public boolean mediaHasUnAcceptableLicence(Media media) {
+        LicenseType licenseType = media.getLicenseType();
+        if (licenseType == null) {
+            return true;
+        }
+        return !licenseType.getName().equals("CCBY") &&
+                !licenseType.getName().equals("CCBYSA") &&
+                !licenseType.getName().equals("CCBYSA30");
+    }
+
+    public boolean anyMediaHasUnacceptableLicenseType(List<Media> allMedia) {
+        if (allMedia.isEmpty()) {
+            return false;
+        }
+        return allMedia.stream().anyMatch(this::mediaHasUnAcceptableLicence);
+    }
+
     public List<Media> getAllMediaIfLearningObjectIsPortfolio(LearningObject lo) {
         List<Media> portfolioMedia = new ArrayList<>();
         Portfolio portfolio = portfolioService.findById(lo.getId());
