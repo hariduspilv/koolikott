@@ -129,7 +129,7 @@ class controller extends Controller {
                     this.$scope.uploadingFile = false
                 })
         } else {
-            if (this.$scope.addMaterialForm.fileToBeUploaded.$error.maxSize) this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000);
+            if (Object.getOwnPropertyNames(this.$scope.addMaterialForm.fileToBeUploaded.$error).length !== 0) this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000);
         }
     }
 
