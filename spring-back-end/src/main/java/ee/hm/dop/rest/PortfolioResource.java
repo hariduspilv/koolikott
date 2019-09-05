@@ -91,11 +91,6 @@ public class PortfolioResource extends BaseResource {
         return portfolioLog;
     }
 
-    @PostMapping("setPortfolioMediaLicenses")
-    public void setPortfolioMediaLicenses(@RequestBody Portfolio portfolio) {
-        portfolioService.setPortfolioMediaLicenseType(portfolio, portfolio.getLicenseType());
-    }
-
     @GetMapping("portfolioHasAnyUnAcceptableLicense")
     public boolean portfolioHasAnyUnAcceptableLicense(@RequestParam("id") Long portfolioId){
         return !portfolioService.portfolioHasAcceptableLicenses(portfolioId);
