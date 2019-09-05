@@ -270,7 +270,6 @@ angular.module('koolikottApp')
                 }
 
                 $scope.goToLinkWithoutCheckingBox = function($event, link) {
-                    console.log(link)
                     $event.stopPropagation()
                     window.captureOutboundLink(link);
                     window.open(link, '_blank');
