@@ -29,7 +29,7 @@ public class ImproperContentResourceTest extends ResourceIntegrationTestBase {
     public void setImproperNoData() {
         login(USER_SECOND);
         Response response = doPut(IMPROPERS, new ImproperContent());
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
+        assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
     @Test

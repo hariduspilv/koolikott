@@ -1,20 +1,16 @@
 package ee.hm.dop.rest.login;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.user.UserSession;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.useractions.SessionService;
-import ee.hm.dop.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 

@@ -12,23 +12,15 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.InputStreamResource;
-import org.springframework.http.CacheControl;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.activation.MimetypesFileTypeMap;
 import javax.inject.Inject;
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -65,7 +57,8 @@ public class UploadedFileService {
         }
         String outputPath = zipService.packArchive(sourcePath, sourcePath);
         File file = FileUtils.getFile(outputPath);
-        String mediaType = DOPFileUtils.probeForMediaType(file.getName());
+        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+        String mediaType = fileTypeMap.getContentType(file.getName());
 
         return returnFileStream(mediaType, file.getName(), file);
     }
@@ -75,7 +68,9 @@ public class UploadedFileService {
         if (uploadedFile == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        String mediaType = DOPFileUtils.probeForMediaType(requestFilename);
+        MimetypesFileTypeMap fileTypeMap = new MimetypesFileTypeMap();
+        String mediaType = fileTypeMap.getContentType(requestFilename);
+
         String fileName = DOPFileUtils.getRealFilename(requestFilename, uploadedFile);
         String path = configuration.getString(fileDirectory.getDirectory()) + uploadedFile.getId() + File.separator + fileName;
 

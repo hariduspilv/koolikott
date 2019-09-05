@@ -35,7 +35,6 @@ public class EhisV6ResponseAnalyzerTest extends DatabaseTestBase {
             ehisV6ResponseAnalyzer.parseSOAPResponse(msg);
             fail();
         } catch (Exception e) {
-            assertTrue(e instanceof RuntimeException);
             assertEquals("Error retrieving information from EHIS: veakood: NOTFOUND", e.getMessage());
         }
     }

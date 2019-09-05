@@ -182,8 +182,5 @@ email:
 captcha:
   key: 6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI
 
-app:
-  devLogin: true
-
 sitemaps:
   directory: sitemaps/

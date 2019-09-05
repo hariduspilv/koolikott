@@ -178,13 +178,15 @@ angular.module('koolikottApp')
                             '@type': 'Audience',
                             'audienceType': audienceType(material)
                         },
-                        'dateCreated': formatIssueDate(material.issueDate),
-                        'datePublished': material.added,
+                        'thumbnailUrl': 'https://e-koolikott.ee/ekoolikott.png',
+                        'dateCreated': material.added,
+                        'datePublished': formatIssueDateTime(material.issueDate),
                         'license': addLicense(material.licenseType),
-                        'typicalAgeRange': material.targetGroups.map(targetGroup => getTypicalAgeRange(targetGroup)),
+                        'typicalAgeRange': convertToClassGroup(material.targetGroups),
                         'interactionCount': material.views,
                         'headline': material.titles.map(title => title.text),
                         'keywords': material.tags,
+                        'inLanguage': convertLanguage(material.language),
                         'text': material.descriptions.map(description => description.text)
                     },
                     {
@@ -199,7 +201,7 @@ angular.module('koolikottApp')
                         'url': 'https://www.e-koolikott.ee/',
                         'potentialAction': {
                             '@type': 'SearchAction',
-                            'target': 'https://query.e-koolikott.ee/search?q={search_term_string}',
+                            'target': 'https://e-koolikott.ee/search/result?q={search_term_string}',
                             'query-input': 'required name=search_term_string'
                         }
                     },
@@ -284,9 +286,10 @@ angular.module('koolikottApp')
                 showUnreviewedMessage();
 
                 let correctLanguageTitle = $scope.getCorrectLanguageString($scope.material.titlesForUrl).replace(/(-)\1+/g, '-')
+                correctLanguageTitle = correctLanguageTitle.charAt(correctLanguageTitle.length - 1) === '-' ? correctLanguageTitle.slice(0, -1) : correctLanguageTitle
 
                 $scope.materialUrl = `/oppematerjal/${$scope.material.id}-${correctLanguageTitle}`
-                if (!$scope.path.contains($scope.materialUrl)) {
+                if ($scope.path !== $scope.materialUrl) {
                     $location.url($scope.materialUrl)
                 }
 

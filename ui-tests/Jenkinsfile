@@ -1,0 +1,30 @@
+properties([
+        [
+                $class  : 'BuildDiscarderProperty',
+                strategy: [
+                        $class               : 'LogRotator',
+                        artifactDaysToKeepStr: '20', artifactNumToKeepStr: '2',
+                        daysToKeepStr        : '20', numToKeepStr: '8'
+                ]
+        ]
+])
+
+
+pipeline {
+    agent any
+
+    stages {
+        stage('Download code') {
+            steps {
+                git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
+            }
+        }
+        stage('Run tests') {
+            steps {
+                wrap([$class: 'Xvfb']) {
+                    sh 'cd ui-tests && ./mvnw clean verify'
+                }
+            }
+        }
+    }
+}

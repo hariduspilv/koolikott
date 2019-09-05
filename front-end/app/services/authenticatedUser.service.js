@@ -9,7 +9,6 @@ class controller {
         return JSON.parse(localStorage.getItem('authenticatedUser'))
     }
     removeAuthenticatedUser() {
-        delete localStorage.authenticatedUser;
         localStorage.removeItem('authenticatedUser');
     }
 

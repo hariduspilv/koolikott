@@ -22,6 +22,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     public static final String MATEMAATIKA = "matemaatika";
     public static final String NOT_EXISTING_TAG = "keemia";
     public static final String REPORT = "tagUpVotes/report?learningObject=";
+    public static final String NO_PORTFOLIO_LOG = "&portfolioLog=false";
 
     @Test
     public void upVote() {
@@ -45,7 +46,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void reportNotLoggedIn() {
-        List<TagUpVoteForm> tagUpVoteForms = doGet(REPORT + MATERIAL_1, list());
+        List<TagUpVoteForm> tagUpVoteForms = doGet(REPORT + MATERIAL_1 + NO_PORTFOLIO_LOG, list());
 
         assertEquals(5, tagUpVoteForms.size());
 
@@ -65,7 +66,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
     public void report() {
         login(USER_MATI);
 
-        Response response = doGet(REPORT + MATERIAL_1);
+        Response response = doGet(REPORT + MATERIAL_1 + NO_PORTFOLIO_LOG);
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(5, tagUpVoteForms.size());
@@ -86,7 +87,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void reportNoLearningObject() {
-        Response response = doGet(REPORT + NOT_EXISTS_ID);
+        Response response = doGet(REPORT + NOT_EXISTS_ID + NO_PORTFOLIO_LOG);
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(0, tagUpVoteForms.size());
@@ -94,7 +95,7 @@ public class TagUpVoteResourceTest extends ResourceIntegrationTestBase {
 
     @Test
     public void getTagUpVotesNoTags() {
-        Response response = doGet(REPORT + MATERIAL_3);
+        Response response = doGet(REPORT + MATERIAL_3 + NO_PORTFOLIO_LOG);
         List<TagUpVoteForm> tagUpVoteForms = response.readEntity(list());
 
         assertEquals(0, tagUpVoteForms.size());

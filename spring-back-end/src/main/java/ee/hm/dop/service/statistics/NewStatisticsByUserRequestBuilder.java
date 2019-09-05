@@ -1,10 +1,9 @@
 package ee.hm.dop.service.statistics;
 
 import ee.hm.dop.dao.TaxonDao;
+import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.User;
-import ee.hm.dop.model.taxon.Domain;
-import ee.hm.dop.model.taxon.Subject;
-import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.taxon.*;
 import ee.hm.dop.service.reviewmanagement.newdto.DomainWithChildren;
 import ee.hm.dop.service.reviewmanagement.newdto.SubjectWithChildren;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,8 @@ public class NewStatisticsByUserRequestBuilder {
     private TaxonDao taxonDao;
     @Inject
     private NewStatisticsCommonRequestBuilder commonRequestBuilder;
+    @Inject
+    private TaxonPositionDao taxonPositionDao;
 
     public List<DomainWithChildren> userPath(User user) {
         //there is only 1 user currently
@@ -31,7 +32,12 @@ public class NewStatisticsByUserRequestBuilder {
         for (Taxon taxon : taxons) {
             if (taxon instanceof Domain) {
                 domainsWithChildren.add(commonRequestBuilder.convertRealDomainForUser((Domain) taxon));
-            } else if (!(taxon instanceof Subject)) {
+            } else if (taxon instanceof Topic) {
+                TaxonPosition taxonPosition = taxonPositionDao.findByTaxon(taxon);
+                if (taxonPosition != null) {
+                    domainsWithChildren.add(commonRequestBuilder.convertSubjectDomain((Subject) taxonPosition.getSubject(), (Domain) taxonPosition.getDomain()));
+                }
+            } else if (!(taxon instanceof Subject) && !(taxon instanceof Topic)) {
                 //todo log something, user has wierd taxons
             }
         }
