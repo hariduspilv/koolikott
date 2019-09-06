@@ -45,7 +45,11 @@ node {
         if (env.BRANCH_NAME == 'develop') {
             sh "scp -r spring-back-end/target/spring-kott.jar ${dopOxygenUrl}:app/"
             sh "ssh -t ${adminOxygenUrl} sh /home/netgroup/dop.sh"
-        } else {
+        } else if (env.BRANCH_NAME == 'sprint_1_40') {
+            sh "scp -r spring-back-end/target/spring-kott.jar ${dopOxygenUrl}:app/"
+            sh "ssh -t ${adminOxygenUrl} sh /home/netgroup/dop.sh"
+        }
+        else {
             sh 'echo jar deploy disabled'
         }
     }
