@@ -759,7 +759,7 @@ class controller extends Controller {
             if (this.$scope.material.source)
                 this.$scope.material.uploadedFile = null
 
-            if(this.$rootScope.materialLicenseChanged){
+            if(this.$rootScope.materialLicenseTypeChanged){
                 this.$scope.material.visibility = 'PUBLIC'
             }
 
@@ -796,11 +796,11 @@ class controller extends Controller {
 
                             this.toastService.show('MATERIAL_SAVED')
 
-                            if(!this.$rootScope.materialLicenseChanged && this.$scope.material.visibility === 'PRIVATE') {
+                            if(!this.$rootScope.materialLicenseTypeChanged && this.$scope.material.visibility === 'PRIVATE') {
                                 this.showMakePublicDialog()
                             }
 
-                            this.$rootScope.materialLicenseChanged = false
+                            this.$rootScope.materialLicenseTypeChanged = false
 
                             if (this.$location.url() === url)
                                 return done()
