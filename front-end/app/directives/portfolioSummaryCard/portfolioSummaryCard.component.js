@@ -87,23 +87,7 @@ class controller extends Controller {
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.makePublic = () => {
-            this.$rootScope.learningObjectTypeOfChangedLicense = 'portfolio'
-
-            if(this.$scope.portfolio.licenseType.name !== 'CCBYSA3.0' ||
-                (this.$scope.portfolio.picture && this.$scope.portfolio.picture.licenseType.name !== 'CCBYSA3.0')){
-                this.$mdDialog.show({
-                    templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
-                    controller: 'learningObjectLicenseAgreementController',
-                }).then((res) => {
-                    if (res.accept) {
-                        this.$rootScope.portfolioLicenseTypeChanged = true
-                        this.showEditMetadataDialog()
-                    }
-                })
-            } else {
-                this.$scope.portfolio.visibility = VISIBILITY_PUBLIC
-                this.updatePortfolio()
-            }
+            this.checkUnacceptableLicensesAndUpdate()
         }
 
         this.$scope.makeNotListed = () => {
@@ -225,6 +209,32 @@ class controller extends Controller {
             },
         })
     }
+
+    checkUnacceptableLicensesAndUpdate(){
+
+        this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
+            {
+                id: this.$scope.portfolio.id,
+            })
+            .then(({ data }) => {
+                if(data){
+                    this.$mdDialog.show({
+                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
+                        controller: 'learningObjectLicenseAgreementController',
+                    }).then((res) => {
+                        if (res.accept) {
+                            this.$rootScope.portfolioLicenseTypeChanged = true
+                            this.showEditMetadataDialog()
+                        }
+                    })
+                } else {
+                    this.$scope.portfolio.visibility = VISIBILITY_PUBLIC
+                    this.updatePortfolio()
+                }
+
+            })
+    }
+
     deletePortfolio() {
         this.serverCallService
             .makePost('rest/portfolio/delete', this.portfolio)
