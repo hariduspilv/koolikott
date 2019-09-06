@@ -915,11 +915,11 @@ class Controller {
 
     getUrl(learningObject) {
         if (this.isMaterial(learningObject)) {
-            return this.removeHyphenFromTheEndOfString(`oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject).replace(/(-)\1+/g, "-")}`)
+            return this.removeHyphenFromTheEndOfString(`oppematerjal/${learningObject.id}-${this.getCorrectLanguageTitleForMaterialUrl(learningObject)}`).replace(/(-)\1+/g, "-")
         } else if (learningObject.type === '.PortfolioLog')
-            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`)
+            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.learningObject}-${this.replaceSpacesAndCharacters(learningObject.title)}`).replace(/(-)\1+/g, '-')
         else
-            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`)
+            return this.removeHyphenFromTheEndOfString(`kogumik/${learningObject.id}-${this.replaceSpacesAndCharacters(learningObject.title)}`).replace(/(-)\1+/g, '-')
     }
 
     getLearningObjectUrl(learningObject) {

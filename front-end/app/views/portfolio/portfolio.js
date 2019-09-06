@@ -127,7 +127,7 @@ class controller extends Controller {
                 }
                 let title = $(el).find('h2').text()
                 title = this.replaceSpacesAndCharacters(title)
-                let url = `${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${el.id}`
+                let url = `${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${el.id}`.replace(/(-)\1+/g, '-')
 
                 if (!window.location.href.includes(title) && this.$location.path().startsWith('/kogumik')) {
                     this.$location.url(url)
@@ -196,7 +196,7 @@ class controller extends Controller {
             this.storageService.setPortfolio(portfolio)
 
             let locationUrl = this.$rootScope.slug ? `${this.getUrl(portfolio)}#${this.$rootScope.slug}` : this.getUrl(portfolio);
-            this.$location.url(locationUrl);
+            this.$location.url(locationUrl.replace(/(-)\1+/g, '-'));
             this.$scope.learningObject = portfolio;
 
             this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
