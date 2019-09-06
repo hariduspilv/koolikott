@@ -838,7 +838,7 @@ function convertLanguage(lang) {
  * which results in another decodeURIComponent();
  */
 function decodeUTF8(string) {
-    return decodeURIComponent(escape(decodeURIComponent(string)));
+    return decodeURIComponent(string);
 }
 
 if (typeof localStorage === 'object') {
