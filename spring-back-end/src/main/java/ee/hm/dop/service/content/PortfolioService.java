@@ -112,7 +112,7 @@ public class PortfolioService {
         }
         List<Media> portfolioMedia = getPortfolioMedia(portfolio);
         return !portfolioHasUnAcceptableLicense(portfolio) &&
-                portfolio.getPicture() != null && !portfolioThumbnailHasUnAcceptableLicense(portfolio.getPicture()) &&
+                !portfolioThumbnailHasUnAcceptableLicense(portfolio) &&
                 !portfolioMediaHasUnAcceptableLicenses(portfolioMedia);
     }
 
@@ -124,8 +124,11 @@ public class PortfolioService {
         return mediaService.getAllMediaIfLearningObjectIsPortfolio(portfolio);
     }
 
-    private boolean portfolioThumbnailHasUnAcceptableLicense(Picture picture) {
-        return pictureService.pictureHasUnAcceptableLicence(picture);
+    private boolean portfolioThumbnailHasUnAcceptableLicense(Portfolio portfolio) {
+        if (portfolio.getPicture() == null) {
+            return false;
+        }
+        return pictureService.pictureHasUnAcceptableLicence(portfolio.getPicture());
     }
 
     private boolean portfolioHasUnAcceptableLicense(Portfolio portfolio) {
