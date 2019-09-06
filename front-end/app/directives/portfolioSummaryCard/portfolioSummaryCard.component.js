@@ -1,21 +1,21 @@
 'use strict'
 
 {
+    const VISIBILITY_PUBLIC = 'PUBLIC'
+    const VISIBILITY_PRIVATE = 'PRIVATE'
+    const VISIBILITY_NOT_LISTED = 'NOT_LISTED'
+    const licenceTypeMap = {
+        'CCBY': ['by'],
+        'CCBYSA': ['by', 'sa'],
+        'CCBYND': ['by', 'nd'],
+        'CCBYNC': ['by', 'nc'],
+        'CCBYNCSA': ['by', 'nc', 'sa'],
+        'CCBYNCND': ['by', 'nc', 'nd'],
+        'CCBYSA30': ['by', 'sa']
+    };
+
 class controller extends Controller {
     $onInit() {
-
-        const VISIBILITY_PUBLIC = 'PUBLIC'
-        const VISIBILITY_PRIVATE = 'PRIVATE'
-        const VISIBILITY_NOT_LISTED = 'NOT_LISTED'
-        const licenceTypeMap = {
-            'CCBY': ['by'],
-            'CCBYSA': ['by', 'sa'],
-            'CCBYND': ['by', 'nd'],
-            'CCBYNC': ['by', 'nc'],
-            'CCBYNCSA': ['by', 'nc', 'sa'],
-            'CCBYNCND': ['by', 'nc', 'nd'],
-            'CCBYSA30': ['by', 'sa']
-        };
 
         this.$scope.showEditModeButton = true
         this.deletePortfolio = this.deletePortfolio.bind(this)
@@ -211,7 +211,6 @@ class controller extends Controller {
     }
 
     checkUnacceptableLicensesAndUpdate(){
-
         this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
             {
                 id: this.$scope.portfolio.id,
@@ -231,7 +230,6 @@ class controller extends Controller {
                     this.$scope.portfolio.visibility = VISIBILITY_PUBLIC
                     this.updatePortfolio()
                 }
-
             })
     }
 
