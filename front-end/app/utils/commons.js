@@ -777,6 +777,10 @@ function isZipLink(url) {
     return url && ["zip", "tar", "apk", "7z"].includes(url.split('.').pop().toLowerCase());
 }
 
+function isDigiDocLink(url) {
+    return url && ["bdoc", "ddoc", "asice"].includes(url.split('.').pop().toLowerCase());
+}
+
 function matchType(type) {
     if (isYoutubeVideo(type)) {
         return 'YOUTUBE';
@@ -796,6 +800,8 @@ function matchType(type) {
         return 'DOC';
     } else if (isZipLink(type)) {
         return 'ZIP';
+    } else if (isDigiDocLink(type)) {
+        return 'DDOC';
     } else {
         return 'LINK';
     }
