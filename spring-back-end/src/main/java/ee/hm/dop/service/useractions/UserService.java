@@ -30,6 +30,7 @@ import static java.lang.String.format;
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final String CC_BY_SA_30 = "CCBYSA30";
 
     @Inject
     private UserDao userDao;
@@ -199,10 +200,10 @@ public class UserService {
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
-                    learningObject.setLicenseType(licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
-                    setPictureLicenseType(learningObject, licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
+                    learningObject.setLicenseType(licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+                    setPictureLicenseType(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
                 });
-        setUserMediaLicenseType(user, licenseTypeService.findByNameIgnoreCase("CCBYSA30"));
+        setUserMediaLicenseType(user, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
     }
 
     private void setPictureLicenseType(LearningObject lo, LicenseType licenseType) {
@@ -220,12 +221,7 @@ public class UserService {
     }
 
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
-        if (lo.getLicenseType() == null) {
-            return true;
-        }
-        return !lo.getLicenseType().getName().equals("CCBY") &&
-                !lo.getLicenseType().getName().equals("CCBYSA") &&
-                !lo.getLicenseType().getName().equals("CCBYSA30");
+        return learningObjectService.learningObjectHasUnAcceptableLicence(lo);
     }
 
     private boolean mediaHasUnAcceptableLicence(Media media) {

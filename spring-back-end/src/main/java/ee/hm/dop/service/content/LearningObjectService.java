@@ -127,4 +127,13 @@ public class LearningObjectService {
 
         learningobject.setTaxonPositionDto(taxonPositionDTOList);
     }
+
+    public boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
+        if (lo.getLicenseType() == null) {
+            return true;
+        }
+        return !lo.getLicenseType().getName().equals("CCBY") &&
+                !lo.getLicenseType().getName().equals("CCBYSA") &&
+                !lo.getLicenseType().getName().equals("CCBYSA30");
+    }
 }
