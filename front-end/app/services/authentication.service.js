@@ -223,10 +223,13 @@ angular.module('koolikottApp')
             userLocatorService.stopTimer();
             $rootScope.showLocationDialog = true;
             userSessionService.stopTimer();
+            serverCallService.makePost('https://auth-chucknorris.ekool.eu/auth/logout')
+                .then(() => console.log('Directed to logout url!!'));
             serverCallService.makePost(url)
                 .then(() => {
                     authenticatedUserService.removeAuthenticatedUser();
                     $rootScope.afterAuthRedirectURL = '/';
+                    console.log('after removed auth.user')
                     $rootScope.$broadcast('logout:success');
                     enableLogin();
                 })
