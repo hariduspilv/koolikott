@@ -195,8 +195,8 @@ public class LoginResource extends BaseResource {
                 logger.info("token:" + status.getAuthenticatedUser().getToken() + status.getAuthenticatedUser().getUser().getUsername());
                 return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), null));
             }
-
-            return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
+            logger.info("token: " + status.getAuthenticatedUser().getToken() + " user: " + status.getAuthenticatedUser().getUser().getUsername());
+            return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), null));
         }
         if (status.iseKoolUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL, getServerAddress(), true));
