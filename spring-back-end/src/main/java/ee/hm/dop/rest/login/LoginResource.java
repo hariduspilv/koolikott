@@ -30,7 +30,6 @@ public class LoginResource extends BaseResource {
 
     private static final String EKOOL_CALLBACK_PATH = "/rest/login/ekool/success";
     private static final String EKOOL_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=read&response_type=code";
-    private static final String EKOOL_LOGOUT_URL = "https://auth-chucknorris.ekool.eu/auth/logout";
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+personal_code&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
@@ -86,14 +85,6 @@ public class LoginResource extends BaseResource {
     @RequestMapping("ekool/success")
     public RedirectView ekoolAuthenticateSuccess(@RequestParam("code") String code) throws URISyntaxException {
         return new RedirectView(getEkoolLocation(code).toString());
-    }
-
-    @CrossOrigin
-    @PostMapping
-    @RequestMapping("ekool/logout")
-    public RedirectView ekoolLogout() throws URISyntaxException {
-        logger.info("before redircting to logout url");
-        return new RedirectView(new URI(EKOOL_LOGOUT_URL).toString());
     }
 
     @GetMapping
@@ -199,12 +190,6 @@ public class LoginResource extends BaseResource {
     }
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
-
-        logger.info("redirectSuccess. FROM: " + status.getLoginFrom() + "is logged Out : " + status.getAuthenticatedUser().isLoggedOut());
-        if (status.getLoginFrom() == LoginFrom.EKOOL && status.getAuthenticatedUser().isLoggedOut()){
-            return new URI(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), null);
-        }
-
         if (status.isStatusOk()) {
             return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
         }

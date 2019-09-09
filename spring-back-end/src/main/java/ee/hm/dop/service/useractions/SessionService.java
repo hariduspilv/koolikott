@@ -1,5 +1,6 @@
 package ee.hm.dop.service.useractions;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.AuthenticatedUserDao;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.User;
@@ -8,18 +9,10 @@ import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.model.user.UserSession;
 import ee.hm.dop.service.login.TokenGenerator;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
-import ee.hm.dop.config.Configuration;
-
-import java.time.LocalDateTime;
-
-import org.apache.commons.lang3.RandomStringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-
 import java.time.LocalDateTime;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SESSION_DURATION_MINS;
@@ -29,15 +22,12 @@ import static java.time.LocalDateTime.now;
 @Transactional
 public class SessionService {
 
-    private static Logger logger = LoggerFactory.getLogger(SessionService.class);
-
     @Inject
     private AuthenticatedUserDao authenticatedUserDao;
     @Inject
     private TokenGenerator tokenGenerator;
     @Inject
     private Configuration configuration;
-
 
     public AuthenticatedUser startSession(User user, Person person, LoginFrom loginFrom) {
         LocalDateTime now = now();
@@ -60,11 +50,8 @@ public class SessionService {
 
     public void logout(AuthenticatedUser authenticatedUser) {
         if (authenticatedUser != null) {
-            logger.info("Hash before db modifs : " + authenticatedUser.getToken());
             authenticatedUser.setSessionTime(LocalDateTime.now());
             authenticatedUser.setLoggedOut(true);
-            authenticatedUser.setToken(generatePseudoHash());
-            logger.info("now hash should be wrong: " + authenticatedUser.getToken());
             authenticatedUserDao.delete(authenticatedUser);
         }
     }
@@ -92,10 +79,5 @@ public class SessionService {
             authenticatedUser.setToken(tokenGenerator.secureToken());
             return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         }
-    }
-
-    private String generatePseudoHash() {
-        int length = 26;
-        return RandomStringUtils.random(length, true, false);
     }
 }

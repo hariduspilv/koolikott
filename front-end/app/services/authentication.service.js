@@ -225,9 +225,6 @@ angular.module('koolikottApp')
             userSessionService.stopTimer();
             serverCallService.makePost(url)
                 .then(() => {
-                    console.log('token before deletion: ' + authenticatedUserService.getToken());
-                    authenticatedUserService.removeToken();
-                    console.log('token after deletion: ' + authenticatedUserService.getToken())
                     authenticatedUserService.removeAuthenticatedUser();
                     $rootScope.afterAuthRedirectURL = '/';
                     $rootScope.$broadcast('logout:success');

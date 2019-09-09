@@ -81,12 +81,12 @@ public abstract class ResourceIntegrationTestBase implements BaseClassForTests {
     public void logout() {
         if (authenticationFilter != null) {
             Response response = doPost(LOGOUT);
-//            if (Status.UNAUTHORIZED.getStatusCode() == response.getStatus()) {
+            if (Status.UNAUTHORIZED.getStatusCode() == response.getStatus()) {
                 //ignored as test user has already logged out
                 //tests have same user logging in and out multiple times
-//            } else {
-//                assertEquals("Logout failed", Status.OK.getStatusCode(), response.getStatus());
-//            }
+            } else {
+                assertEquals("Logout failed", Status.OK.getStatusCode(), response.getStatus());
+            }
             authenticationFilter = null;
         }
     }

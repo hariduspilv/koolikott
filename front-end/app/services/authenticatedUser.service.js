@@ -69,14 +69,6 @@ class controller {
             : null
     }
 
-    removeToken() {
-        if (this.getToken()) {
-            const authenticatedUser = this.getAuthenticatedUser();
-            authenticatedUser.token = null;
-            return authenticatedUser;
-        }
-    }
-
     hasRole(role) {
         const user = this.getUser()
         return user && user.role === role

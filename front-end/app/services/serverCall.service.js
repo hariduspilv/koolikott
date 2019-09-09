@@ -7,8 +7,6 @@ class controller extends Controller {
 
         if (includeAuthentication) this.setAuthorization(headers);
 
-        console.log('Headers username:' + headers.Username + ' Headers Authentication :' + headers.Authentication)//TODO
-
         let config = {
             method: method,
             url: url,

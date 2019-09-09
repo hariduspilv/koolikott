@@ -38,14 +38,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers()
                 .contentTypeOptions()
                 .disable();
-        http
-                .httpBasic()
-                .and()
-                .logout()
-                .clearAuthentication(true)
-                .logoutSuccessUrl("https://auth-chucknorris.ekool.eu/auth/logout")
-                .deleteCookies("EKOOLSESSION","SESSION","DWRSESSIONID")
-                .invalidateHttpSession(true);
     }
 
     @Bean

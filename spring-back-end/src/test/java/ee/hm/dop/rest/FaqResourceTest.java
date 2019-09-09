@@ -73,7 +73,6 @@ public class FaqResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Response.Status.FORBIDDEN.getStatusCode(), response2.getStatus());
     }
 
-    @Ignore
     @Test
     public void when_any_question_or_answer_is_blank_or_null_bad_request_is_thrown() {
         login(USER_ADMIN);
