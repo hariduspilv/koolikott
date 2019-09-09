@@ -12,6 +12,7 @@ import ee.hm.dop.config.Configuration;
 
 import java.time.LocalDateTime;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -56,7 +57,7 @@ public class SessionService {
         if (authenticatedUser != null) {
             authenticatedUser.setSessionTime(LocalDateTime.now());
             authenticatedUser.setLoggedOut(true);
-            authenticatedUser.setToken("");
+            authenticatedUser.setToken(generatePseudoHash());
             authenticatedUserDao.delete(authenticatedUser);
         }
     }
@@ -84,5 +85,10 @@ public class SessionService {
             authenticatedUser.setToken(tokenGenerator.secureToken());
             return authenticatedUserDao.createAuthenticatedUser(authenticatedUser);
         }
+    }
+
+    private String generatePseudoHash() {
+        int length = 26;
+        return RandomStringUtils.random(length, true, false);
     }
 }
