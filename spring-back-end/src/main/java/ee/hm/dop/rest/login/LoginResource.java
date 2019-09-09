@@ -88,9 +88,11 @@ public class LoginResource extends BaseResource {
         return new RedirectView(getEkoolLocation(code).toString());
     }
 
+    @CrossOrigin
     @PostMapping
     @RequestMapping("ekool/logout")
     public RedirectView ekoolLogout() throws URISyntaxException {
+        logger.info("before redircting to logout url");
         return new RedirectView(new URI(EKOOL_LOGOUT_URL).toString());
     }
 
