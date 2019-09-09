@@ -44,7 +44,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .clearAuthentication(true)
                 .logoutSuccessUrl("https://auth-chucknorris.ekool.eu/auth/logout")
-                .deleteCookies("JSESSIONID","EKOOLSESSION","SESSION","DWRSESSIONID")
+                .deleteCookies("EKOOLSESSION","SESSION","DWRSESSIONID")
                 .invalidateHttpSession(true);
     }
 
