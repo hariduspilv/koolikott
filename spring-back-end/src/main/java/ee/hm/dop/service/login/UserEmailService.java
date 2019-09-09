@@ -212,7 +212,7 @@ public class UserEmailService {
     }
 
     private ResponseStatusException notFound(String s) {
-        return new ResponseStatusException(HttpStatus.NOT_FOUND, s);
+        return new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, s);
     }
 
     public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
