@@ -191,6 +191,11 @@ public class LoginResource extends BaseResource {
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
         if (status.isStatusOk()) {
+            if (status.getLoginFrom() == LoginFrom.EKOOL) {
+                logger.info("token:" + status.getAuthenticatedUser().getToken() + status.getAuthenticatedUser().getUser().getUsername());
+                return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), null));
+            }
+
             return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
         }
         if (status.iseKoolUserMissingIdCode()) {
