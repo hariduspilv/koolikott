@@ -64,6 +64,7 @@ public class SessionResource extends BaseResource {
     public void logout() {
         AuthenticatedUser authenticatedUser = getAuthenticatedUser();
         sessionService.logout(authenticatedUser);
+        logger.info("token : " + authenticatedUser.getToken());
         logger.info(format("User %s is logged out", authenticatedUser.getUser().getUsername()));
     }
 }

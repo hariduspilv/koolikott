@@ -27,11 +27,11 @@
             this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
 
             this.$rootScope.$on('logout:success', this.moveNavbarHeaderUpForNotAdmin.bind(this));
-            this.$rootScope.$on('cookie:showCookieNotice', this.$timeout(() => {
+            this.$rootScope.$on('cookie:showCookieNotice', (() => {
                 this.moveNavbarHeaderUp()
                 this.moveDetailedSearchUp()
                 this.moveAddMaterialsToolbarUp()
-            }, 1000));
+            }));
 
             this.$scope.$watch(() => this.$scope.cookieNotice.text, (selectedValue, previousValue) => {
                 if (selectedValue && (selectedValue !== previousValue)) {

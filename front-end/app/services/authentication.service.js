@@ -226,7 +226,7 @@ angular.module('koolikottApp')
             serverCallService.makePost(url)
                 .then(() => {
                     authenticatedUserService.removeAuthenticatedUser();
-                    $rootScope.afterAuthRedirectURL = null;
+                    $rootScope.afterAuthRedirectURL = '/';
                     $rootScope.$broadcast('logout:success');
                     enableLogin();
                 })
