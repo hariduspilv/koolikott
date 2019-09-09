@@ -56,6 +56,7 @@ public class SessionService {
         if (authenticatedUser != null) {
             authenticatedUser.setSessionTime(LocalDateTime.now());
             authenticatedUser.setLoggedOut(true);
+            authenticatedUser.setToken("");
             authenticatedUserDao.delete(authenticatedUser);
         }
     }
