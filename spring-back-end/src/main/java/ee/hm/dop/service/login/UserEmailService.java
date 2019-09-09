@@ -45,11 +45,11 @@ public class UserEmailService {
 
         User user = userDao.findUserById(id);
         if (user == null) {
-            throw notFound("User not found");
+            throw badRequest("User not found");
         }
         UserEmail userEmail = userEmailDao.findByUser(user);
         if (userEmail == null) {
-            throw notFound("User email not found");
+            throw badRequest("User email not found");
         }
         else
             return userEmail;
@@ -130,7 +130,7 @@ public class UserEmailService {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         User_Agreement dbUserAgreement = userAgreementDao.getLatestAgreementForUser(userEmail.getUser().getId());
         if (dbUserEmail == null)
-            throw notFound("User not found");
+            throw badRequest("User not found");
         if (!dbUserEmail.getPin().equals(userEmail.getPin()))
             throw badRequest("Pins not equal");
 
@@ -147,7 +147,7 @@ public class UserEmailService {
     public UserEmail validatePinFromProfile(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         if (dbUserEmail == null)
-            throw notFound("User not found");
+            throw badRequest("User not found");
         if (!dbUserEmail.getPin().equals(userEmail.getPin()))
             throw badRequest("Pins not equal");
 
@@ -209,10 +209,6 @@ public class UserEmailService {
 
     private ResponseStatusException badRequest(String s) {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
-    }
-
-    private ResponseStatusException notFound(String s) {
-        return new ResponseStatusException(HttpStatus.I_AM_A_TEAPOT, s);
     }
 
     public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {
