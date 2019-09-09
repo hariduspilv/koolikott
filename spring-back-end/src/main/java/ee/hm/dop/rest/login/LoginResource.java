@@ -200,12 +200,13 @@ public class LoginResource extends BaseResource {
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
         if (status.isStatusOk()) {
+            logger.info("userstatus check: " + status.getLoginFrom());//TODO
             if (status.getLoginFrom() == LoginFrom.EKOOL) {
-                logger.info("Redirect check :" + status.getAuthenticatedUser().getToken() + status.getAuthenticatedUser().getUser().getUsername());
+                logger.info("Redirect check :" + status.getAuthenticatedUser().getToken() + status.getAuthenticatedUser().getUser().getUsername());//TODO
                 return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), null));
             }
 
-            return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
+//            return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));//TODO
         }
         if (status.iseKoolUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL, getServerAddress(), true));
