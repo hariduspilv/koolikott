@@ -199,6 +199,12 @@ public class LoginResource extends BaseResource {
     }
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
+
+        logger.info("redirectSuccess. FROM: " + status.getLoginFrom() + "is logged Out : " + status.getAuthenticatedUser().isLoggedOut());
+        if (status.getLoginFrom() == LoginFrom.EKOOL && status.getAuthenticatedUser().isLoggedOut()){
+            return new URI(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), null);
+        }
+
         if (status.isStatusOk()) {
             return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
         }
@@ -211,11 +217,6 @@ public class LoginResource extends BaseResource {
         if (status.isHarIdUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
-        logger.info("redirectSuccess. FROM: " + status.getLoginFrom() + "is logged Out : " + status.getAuthenticatedUser().isLoggedOut());
-        if (status.getLoginFrom() == LoginFrom.EKOOL && status.getAuthenticatedUser().isLoggedOut()){
-            return new URI(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), null);
-        }
-
         return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getAgreementId().toString(), status.isExistingUser(), status.getLoginFrom().name()));
     }
 
