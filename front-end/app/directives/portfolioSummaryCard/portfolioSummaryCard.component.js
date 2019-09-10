@@ -54,7 +54,6 @@ class controller extends Controller {
         this.$scope.showlogselect = this.showlogselect
         this.$scope.pageUrl = this.$location.absUrl()
 
-
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
         this.$scope.showDeleteButton = true;
