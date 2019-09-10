@@ -796,8 +796,9 @@ class controller extends Controller {
 
                             this.toastService.show('MATERIAL_SAVED')
 
-                            if(typeof this.$rootScope.materialLicenseTypeChanged === 'undefined' ||
-                                this.$rootScope.materialLicenseTypeChanged === false) {
+                            if((typeof this.$rootScope.materialLicenseTypeChanged === 'undefined' ||
+                                this.$rootScope.materialLicenseTypeChanged === false) &&
+                                this.material.visibility === VISIBILITY_PRIVATE) {
                                 this.showMakePublicDialog()
                             }
 
