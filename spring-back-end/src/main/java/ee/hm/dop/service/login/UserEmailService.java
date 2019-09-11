@@ -42,17 +42,13 @@ public class UserEmailService {
     private LearningObjectDao learningObjectDao;
 
     public UserEmail getUserEmail(long id) {
-
         User user = userDao.findUserById(id);
-        if (user == null) {
-            throw badRequest("User not found");
-        }
         UserEmail userEmail = userEmailDao.findByUser(user);
-        if (userEmail == null) {
-            throw badRequest("User email not found");
-        }
-        else
+
+        if (user != null && userEmail != null && userEmail.isActivated())
             return userEmail;
+         else
+            throw badRequest("User or user email not found or e-mail not activated");
     }
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
