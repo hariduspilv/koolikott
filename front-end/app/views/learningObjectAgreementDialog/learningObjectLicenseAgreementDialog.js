@@ -5,8 +5,6 @@
         constructor(...args) {
             super(...args)
 
-            const path = this.$location.path()
-
             this.$scope.agree = () => {
                 this.$mdDialog.hide({accept: true})
             }
@@ -16,7 +14,7 @@
             }
 
             this.$scope.isMaterial = () => {
-                if(path.startsWith('/oppematerjal/')){
+                if (this.$location.path().startsWith('/oppematerjal/')){
                     return true
                 }
             }
