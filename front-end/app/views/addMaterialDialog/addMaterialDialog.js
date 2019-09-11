@@ -128,8 +128,6 @@ class controller extends Controller {
                     }
                     this.$scope.uploadingFile = false
                 })
-        } else {
-            if (this.$scope.addMaterialForm.fileToBeUploaded.$error.maxSize) this.toastService.show('MATERIAL_FILE_UPLOAD_FAIL', 15000);
         }
     }
 
