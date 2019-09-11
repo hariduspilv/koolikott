@@ -26,6 +26,15 @@ class controller extends Controller {
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
+            if (this.portfolio) {
+                if (this.portfolio.type === '.Portfolio') {
+                    this.serverCallService
+                    .makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense', {id: this.portfolio.id})
+                    .then((response) => {
+                        this.$scope.acceptableLicenses = !response.data
+                    })
+                }
+            }
             if (this.getCorrectLanguageTitle(this.portfolio)) {
                 this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
             } else {
@@ -67,6 +76,7 @@ class controller extends Controller {
         this.$scope.isOwner= this.isOwner.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
         this.$scope.isLoggedIn = this.isLoggedIn.bind(this)
+        this.$scope.isPublic = this.isPublic.bind(this)
         this.$scope.isRestricted = this.isRestricted.bind(this)
         this.$scope.editPortfolio = this.editPortfolio.bind(this)
         this.$scope.getPortfolioEducationalContexts = this.getPortfolioEducationalContexts.bind(this)
@@ -271,6 +281,19 @@ class controller extends Controller {
                 this.$scope.showLogButton = true;
             })
     }
+    copyPortfolio() {
+        const portfolio = this.storageService.getPortfolio();
+        if (!portfolio) console.log('copying failed')
+        this.storageService.setEmptyPortfolio(portfolio)
+        this.$mdDialog.show({
+            templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+            controller: 'addPortfolioDialogController',
+            fullscreen: false,
+            locals: {
+                mode: 'COPY'
+            }
+        })
+    }
     markReviewed() {
         if (this.portfolio && (
                 this.authenticatedUserService.isAdmin() ||
@@ -300,6 +323,10 @@ class controller extends Controller {
     setRecommendation(recommendation) {
         if (this.portfolio)
             this.portfolio.recommendation = recommendation
+    }
+
+    isPublic() {
+        return this.portfolio.visibility === 'PUBLIC';
     }
 
     toggleFullScreen() {

@@ -72,6 +72,12 @@
                 </md-button>
               </md-menu-item>
               <md-menu-item data-ng-if="$root.isViewPortfolioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
+              <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && isPublic() && acceptableLicenses">
+                <md-button data-ng-click="$ctrl.copyPortfolio()">
+                  <md-icon md-menu-align-target>file_copy</md-icon>
+                  <span data-translate="COPY_PORTFOLIO"></span>
+                </md-button>
+              </md-menu-item>
               <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
               <md-menu-item
                 dop-recommend

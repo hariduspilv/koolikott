@@ -124,7 +124,7 @@ angular.module('koolikottApp')
                 };
 
                 $scope.copy = function () {
-                    updateOrCopy(`rest/portfolio/update`, $scope.copy);
+                    updateOrCopy(`rest/portfolio/copy`, $scope.copy);
                 };
 
                 function updateOrCopy(url, func) {

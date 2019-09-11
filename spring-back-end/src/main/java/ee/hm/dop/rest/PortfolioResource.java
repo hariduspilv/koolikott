@@ -12,6 +12,8 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
@@ -96,14 +98,15 @@ public class PortfolioResource extends BaseResource {
         return !portfolioService.portfolioHasAcceptableLicenses(portfolioId);
     }
 
-/*    @PostMapping
+    @PostMapping
     @RequestMapping("copy")
     @Consumes(MediaType.APPLICATION_JSON)
 
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(@RequestBody Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
-    }*/
+    }
+
     @PostMapping("delete")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject delete(@RequestBody Portfolio portfolio) {
