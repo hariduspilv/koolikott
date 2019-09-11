@@ -329,21 +329,23 @@ angular.module('koolikottApp')
             }
 
             $scope.makePublic = () => {
-                if ($scope.material.licenseType.id !== 10){
+                if ($scope.material.licenseType.name !== 'CCBYSA30' ||
+                    ($scope.material.picture &&
+                    $scope.material.picture.licenseType.name !== 'CCBYSA30')){
                     $mdDialog.show({
-                        templateUrl: 'views/material/materialLicenceAgreementDialog.html',
-                        controller: 'materialLicenseAgreementController',
+                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
+                        controller: 'learningObjectLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {
+                            $rootScope.materialLicenseTypeChanged = true
                             $scope.edit()
                         }
                     })
-                } else if ($scope.material.licenseType.id === 10) {
+                } else {
                     $scope.material.visibility = VISIBILITY_PUBLIC
                     $scope.updateMaterialVisibility()
                 }
             }
-
 
             $scope.getLicenseIconList = () => {
                 if ($scope.material && $scope.material.licenseType) {

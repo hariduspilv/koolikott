@@ -141,7 +141,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                       <md-icon>visibility</md-icon>
                       <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
                     </md-button>
-                    <md-button data-ng-if="material.visibility != 'PUBLIC'"
+                    <md-button data-ng-if="material.visibility !== 'PUBLIC'"
                                aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
                       <md-icon>visibility</md-icon>
                       <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
@@ -154,7 +154,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                       <md-icon>visibility_off</md-icon>
                       <span data-translate="PORTFOLIO_VISIBILITY_PRIVATE"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
                     </md-button>
-                    <md-button data-ng-if="material.visibility != 'PRIVATE'"
+                    <md-button data-ng-if="material.visibility !== 'PRIVATE'"
                                aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PRIVATE | translate}}" data-ng-click="makePrivate()">
                       <md-icon>visibility_off</md-icon>
                       <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PRIVATE"></span>

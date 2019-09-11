@@ -87,9 +87,7 @@ class controller extends Controller {
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.makePublic = () => {
-            this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
-            this.updatePortfolio()
-            this.toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC')
+            this.checkUnacceptableLicensesAndUpdate()
         }
 
         this.$scope.makeNotListed = () => {
@@ -137,11 +135,10 @@ class controller extends Controller {
     }
 
     canEdit() {
-        return !this.authenticatedUserService.isRestricted() && (
-            this.isOwner() ||
+        return this.isOwner() ||
             this.authenticatedUserService.isAdmin() ||
             this.authenticatedUserService.isModerator()
-        )
+
     }
     isOwner() {
         return !this.authenticatedUserService.isAuthenticated()
@@ -212,6 +209,32 @@ class controller extends Controller {
             },
         })
     }
+
+    checkUnacceptableLicensesAndUpdate(){
+
+        this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
+            {
+                id: this.$scope.portfolio.id,
+            })
+            .then(({ data }) => {
+                if(data){
+                    this.$mdDialog.show({
+                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
+                        controller: 'learningObjectLicenseAgreementController',
+                    }).then((res) => {
+                        if (res.accept) {
+                            this.$rootScope.portfolioLicenseTypeChanged = true
+                            this.showEditMetadataDialog()
+                        }
+                    })
+                } else {
+                    this.$scope.portfolio.visibility = VISIBILITY_PUBLIC
+                    this.updatePortfolio()
+                }
+
+            })
+    }
+
     deletePortfolio() {
         this.serverCallService
             .makePost('rest/portfolio/delete', this.portfolio)

@@ -62,7 +62,7 @@ public class PortfolioResource extends BaseResource {
     }
 
     @PostMapping("update")
-    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public Portfolio update(@RequestBody Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }

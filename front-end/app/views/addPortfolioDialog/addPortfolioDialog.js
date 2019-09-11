@@ -116,6 +116,10 @@ angular.module('koolikottApp')
                 }
 
                 $scope.update = function () {
+                    if($rootScope.portfolioLicenseTypeChanged){
+                        $scope.portfolio.visibility = 'PUBLIC'
+                        $rootScope.portfolioLicenseTypeChanged = false
+                    }
                     updateOrCopy(`rest/portfolio/update`, $scope.update);
                 };
 
