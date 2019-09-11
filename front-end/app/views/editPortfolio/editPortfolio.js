@@ -77,6 +77,7 @@ class controller extends Controller {
     }
     move(idx, up = false) {
         this.updateChaptersStateFromEditors();
+        this.updateChapterEditorsFromState();
         this.$scope.portfolio.chapters.splice(
             up  ? idx - 1
                 : idx + 1,
