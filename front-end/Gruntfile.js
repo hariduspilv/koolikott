@@ -337,6 +337,7 @@ module.exports = function (grunt) {
                         '*.js',
                         'views/**/**/*.html',
                         'views/dev/login/login.js',
+                        'views/addMaterialDialog/addMaterialDialog.js',
                         'images/{,*/}*.{webp}',
                         'fonts/{,*/}*.*',
                         'directives/**/**/*.html',
