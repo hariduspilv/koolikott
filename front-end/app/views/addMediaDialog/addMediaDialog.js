@@ -17,7 +17,7 @@ class controller extends Controller {
         this.$scope.isSaving = false
         this.$scope.isUserAuthor = false
         this.$scope.licenseTypes = []
-        this.$scope.licenseTermsLink = 'https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode'
+        this.$scope.licenseTermsLink = this.$translate.instant('LICENSE_TERMS_LINK')
 
         const { name, surname } = this.authenticatedUserService.getUser()
         this.userFullName = `${name} ${surname}`

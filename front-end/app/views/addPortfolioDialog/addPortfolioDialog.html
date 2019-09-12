@@ -43,25 +43,10 @@
             aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
             required
             >
-            Olen nõus <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
+              <span data-translate="I_AGREE_TO"></span>
+              <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong data-translate="LICENSETYPE_CCBYSA30"></strong></a>
+              <span data-translate="TERMS_OF_LICENSE"></span>
           </md-checkbox>
-          <!--<md-select
-            name="licenseType"
-            class="no-margin"
-            data-ng-model="newPortfolio.licenseType"
-            data-ng-model-options="{trackBy: '$value.id'}"
-            required
-          >
-            <md-option
-              data-ng-value="doNotKnow"
-              data-translate="LICENSETYPE_CANT_CHOOSE"
-            ></md-option>
-            <md-option
-              data-ng-repeat="licenseType in licenseTypes track by $index"
-              data-ng-value="licenseType"
-              data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
-            ></md-option>
-          </md-select>-->
           <div data-ng-messages="addPortfolioForm.licenseType.$error">
             <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
           </div>
@@ -204,31 +189,13 @@
               data-ng-value="CCBYSA30"
               aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
             >
-              Olen nõus <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong>CC BY-SA 3.0</strong></a> litsentsi tingimustega.
+              <span data-translate="I_AGREE_TO"></span>
+              <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong data-translate="LICENSETYPE_CCBYSA30"></strong></a>
+              <span data-translate="TERMS_OF_LICENSE"></span>
             </md-checkbox>
             <div data-ng-messages="addPortfolioForm.pictureLicenseType.$error" data-ng-show="!pictureLicenseTypeAgreed && (newPicture || existingPicture)">
               <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
             </div>
-            <!--<md-select
-              class="no-margin"
-              data-ng-required="(newPicture || newPortfolio.picture.name) && !newPortfolio.picture.source"
-              data-ng-model="newPortfolio.picture.licenseType"
-              id="pictureLicenseTypeSelect"
-              name="pictureLicenseType"
-              ng-model-options="{trackBy: '$value.id'}"
-            >
-              <md-option
-                data-ng-value="doNotKnow"
-                data-translate="LICENSETYPE_CANT_CHOOSE"
-              ></md-option>
-              <md-option
-                data-ng-value="licenseType"
-                data-ng-repeat="licenseType in licenseTypes track by $index"
-                data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
-              >
-                <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>
-              </md-option>
-            </md-select>-->
           </md-input-container>
         </div>
       </div>

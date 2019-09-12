@@ -31,7 +31,7 @@ class controller extends Controller {
         this.$scope.isVocationalEducation = true
         this.$scope.isBasicOrSecondaryEducation = false
         this.$scope.additionalInfo = {}
-        this.$scope.licenseTermsLink = 'https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode'
+        this.$scope.licenseTermsLink = this.$translate.instant('LICENSE_TERMS_LINK')
 
         if (this.$scope.material && this.$scope.material.picture) {
             this.$scope.additionalInfo.isVisible = true

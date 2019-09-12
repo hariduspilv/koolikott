@@ -24,7 +24,7 @@ angular.module('koolikottApp')
                     $scope.newPortfolio.chapters = portfolio.chapters;
                     $scope.newPortfolio.taxons = [{}];
                     $scope.isVocationalEducation = true
-                    $scope.licenseTermsLink = 'https://creativecommons.org/licenses/by-sa/3.0/ee/legalcode'
+                    $scope.licenseTermsLink = $translate.instant('LICENSE_TERMS_LINK')
                     
                     if ($scope.portfolio && $scope.portfolio.picture) {
                         $scope.existingPicture = true
