@@ -97,6 +97,7 @@ public class PortfolioService {
 
         Portfolio copy = portfolioConverter.setFieldsToNewPortfolio(portfolio);
         copy.setChapters(portfolioCopier.copyChapters(originalPortfolio.getChapters()));
+        copy.setCopy(true);
 
         return save(copy, loggedInUser, originalPortfolio.getCreator());
     }
@@ -156,7 +157,9 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
-        portfolioMaterialService.save(portfolio);
+        if (!portfolio.isCopy()) {
+            portfolioMaterialService.save(portfolio);
+        }
         return createdPortfolio;
     }
 

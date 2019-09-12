@@ -8,10 +8,9 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -41,6 +40,8 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime publishedAt;
+
+    public boolean isCopy;
 
     public String getTitle() {
         return title;
@@ -87,5 +88,13 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
 
     public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public boolean isCopy() {
+        return isCopy;
+    }
+
+    public void setCopy(boolean copy) {
+        isCopy = copy;
     }
 }

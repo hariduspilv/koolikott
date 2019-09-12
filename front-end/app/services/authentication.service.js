@@ -80,9 +80,10 @@ angular.module('koolikottApp')
         }
 
         function setAllLearningObjectsToPrivate(user) {
-            if (!$rootScope.previouslyDisagreed) {
+            /*if (!$rootScope.previouslyDisagreed) {
                 serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
-            }
+            }*/
+            serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
         }
 
         function saveResponseAndMigrateLicences(authenticatedUser) {
