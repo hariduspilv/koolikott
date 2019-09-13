@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
@@ -31,12 +32,19 @@ public class PortfolioGetter {
     private PortfolioLogDao portfolioLogDao;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
             Portfolio portfolio = portfolioDao.findById(portfolioId);
             if (portfolio == null) return null;
             learningObjectService.setTaxonPosition(portfolio);
+            if (portfolio.isCopy()) {
+                LearningObject lo = learningObjectDao.findById(portfolio.getCopiedFromDirect());
+                portfolio.setCopiedFromDirectName(lo.getCreator().getFullName());
+                portfolio.setDeletedOrNotPublic(lo.isDeletedOrNotPublic());
+            }
             return portfolio;
         }
         Portfolio portfolio = portfolioDao.findByIdNotDeleted(portfolioId);

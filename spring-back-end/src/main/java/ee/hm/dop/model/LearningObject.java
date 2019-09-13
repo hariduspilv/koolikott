@@ -21,24 +21,7 @@ import org.hibernate.annotations.Formula;
 import org.owasp.html.HtmlPolicyBuilder;
 import org.owasp.html.PolicyFactory;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.OrderBy;
-import javax.persistence.Transient;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -209,6 +192,9 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @Transient
     @Enumerated(EnumType.STRING)
     private SaveType saveType;
+
+    @Transient
+    private boolean deletedOrNotPublic;
 
     public Long getId() {
         return id;
@@ -456,5 +442,13 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setTaxonPositionDto(List<TaxonPositionDTO> taxonPositionDto) {
         this.taxonPositionDto = taxonPositionDto;
+    }
+
+    public boolean isDeletedOrNotPublic() {
+        return this.isDeleted() || this.getVisibility() != Visibility.PUBLIC;
+    }
+
+    public void setDeletedOrNotPublic(boolean deletedOrNotPublic) {
+        this.deletedOrNotPublic = deletedOrNotPublic;
     }
 }

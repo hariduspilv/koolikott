@@ -41,7 +41,14 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime publishedAt;
 
-    public boolean isCopy;
+    private boolean isCopy;
+
+    private Long copiedFromDirect;
+
+    private Long copiedFromOriginal;
+
+    @Transient
+    private String copiedFromDirectName;
 
     public String getTitle() {
         return title;
@@ -96,5 +103,29 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
 
     public void setCopy(boolean copy) {
         isCopy = copy;
+    }
+
+    public Long getCopiedFromDirect() {
+        return copiedFromDirect;
+    }
+
+    public void setCopiedFromDirect(Long copiedFromDirect) {
+        this.copiedFromDirect = copiedFromDirect;
+    }
+
+    public Long getCopiedFromOriginal() {
+        return copiedFromOriginal;
+    }
+
+    public void setCopiedFromOriginal(Long copiedFromOriginal) {
+        this.copiedFromOriginal = copiedFromOriginal;
+    }
+
+    public String getCopiedFromDirectName() {
+        return copiedFromDirectName;
+    }
+
+    public void setCopiedFromDirectName(String copiedFromDirectName) {
+        this.copiedFromDirectName = copiedFromDirectName;
     }
 }

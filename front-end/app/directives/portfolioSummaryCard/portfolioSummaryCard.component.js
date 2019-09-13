@@ -326,10 +326,14 @@ class controller extends Controller {
         return this.portfolio.visibility === 'PUBLIC';
     }
 
+    isDeletedOrPrivate() {
+        return this.portfolio.deletedOrNotPublic;
+    }
+
     toggleFullScreen() {
         this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen;
         toggleFullScreen();
-        if (this.$rootScope.isFullScreen){
+        if (this.$rootScope.isFullScreen) {
             this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
 
             gTagCaptureEvent('full-screen', 'teaching portfolio')
