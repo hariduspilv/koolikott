@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.annotation.NoClass;
+import ee.hm.dop.model.enums.CopiedLOStatus;
 import ee.hm.dop.model.enums.SaveType;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.interfaces.ILearningObject;
@@ -194,7 +195,11 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     private SaveType saveType;
 
     @Transient
-    private boolean deletedOrNotPublic;
+    @Enumerated(EnumType.STRING)
+    private CopiedLOStatus copiedLOStatus;
+
+    @Transient
+    private Boolean deletedOrNotPublic;
 
     public Long getId() {
         return id;
@@ -444,11 +449,19 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.taxonPositionDto = taxonPositionDto;
     }
 
-    public boolean isDeletedOrNotPublic() {
-        return this.isDeleted() || this.getVisibility() != Visibility.PUBLIC;
+    public Boolean getDeletedOrNotPublic() {
+        return deletedOrNotPublic;
     }
 
-    public void setDeletedOrNotPublic(boolean deletedOrNotPublic) {
+    public void setDeletedOrNotPublic(Boolean deletedOrNotPublic) {
         this.deletedOrNotPublic = deletedOrNotPublic;
+    }
+
+    public CopiedLOStatus getCopiedLOStatus() {
+        return copiedLOStatus;
+    }
+
+    public void setCopiedLOStatus(CopiedLOStatus copiedLOStatus) {
+        this.copiedLOStatus = copiedLOStatus;
     }
 }

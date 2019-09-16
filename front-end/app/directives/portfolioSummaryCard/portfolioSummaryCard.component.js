@@ -326,10 +326,6 @@ class controller extends Controller {
         return this.portfolio.visibility === 'PUBLIC';
     }
 
-    isDeletedOrPrivate() {
-        return this.portfolio.deletedOrNotPublic;
-    }
-
     toggleFullScreen() {
         this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen;
         toggleFullScreen();

@@ -15,14 +15,9 @@
   .link-is-grey {
     color: grey !important;
   }
-  .disabled-link {
-    a.disabled {
-      cursor: not-allowed;
-      opacity: .65;
-    }
+}
 
-    a.disabled:hover { text-decoration: none; }
-    a.disabled:focus { text-decoration: none; }
-    a.disabled:active { text-decoration: none; }
-  }
+.disabled-link {
+  cursor: default;
+  pointer-events: none;
 }

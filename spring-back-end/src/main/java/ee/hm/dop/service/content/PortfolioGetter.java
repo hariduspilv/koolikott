@@ -5,6 +5,8 @@ import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.CopiedLOStatus;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -41,9 +43,7 @@ public class PortfolioGetter {
             if (portfolio == null) return null;
             learningObjectService.setTaxonPosition(portfolio);
             if (portfolio.isCopy()) {
-                LearningObject lo = learningObjectDao.findById(portfolio.getCopiedFromDirect());
-                portfolio.setCopiedFromDirectName(lo.getCreator().getFullName());
-                portfolio.setDeletedOrNotPublic(lo.isDeletedOrNotPublic());
+                return findCopiedRelated(portfolio);
             }
             return portfolio;
         }
@@ -52,6 +52,9 @@ public class PortfolioGetter {
             throw ValidatorUtil.permissionError();
         }
         learningObjectService.setTaxonPosition(portfolio);
+        if (portfolio.isCopy()) {
+            return findCopiedRelated(portfolio);
+        }
         return portfolio;
     }
 
@@ -85,5 +88,23 @@ public class PortfolioGetter {
 
     public Portfolio findValid(Portfolio portfolio) {
         return ValidatorUtil.findValid(portfolio, (Function<Long, Portfolio>) portfolioDao::findByIdNotDeleted);
+    }
+
+    private Boolean isDeletedOrNotPublic(LearningObject learningObject) {
+        return learningObject.isDeleted() || learningObject.getVisibility() != Visibility.PUBLIC;
+    }
+
+    private CopiedLOStatus getDeletedOrNotPublic(LearningObject learningObject) {
+        if (learningObject.isDeleted()) return CopiedLOStatus.DELETED;
+        else if (learningObject.getVisibility() != Visibility.PUBLIC) return CopiedLOStatus.PRIVATE;
+        return null;
+    }
+
+    private Portfolio findCopiedRelated(Portfolio portfolio) {
+        LearningObject loCopiedFromDirectly = learningObjectDao.findById(portfolio.getCopiedFromDirect());
+        portfolio.setCopiedFromDirectName(loCopiedFromDirectly.getCreator().getFullName());
+        portfolio.setDeletedOrNotPublic(isDeletedOrNotPublic(loCopiedFromDirectly));
+        portfolio.setCopiedLOStatus(getDeletedOrNotPublic(loCopiedFromDirectly));
+        return portfolio;
     }
 }

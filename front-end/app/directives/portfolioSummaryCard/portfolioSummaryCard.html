@@ -222,23 +222,26 @@
         <p class="md-body-2"
            data-ng-if="portfolio.copy">
           <span class="md-caption caption-light">
-            <span data-translate="ORIGINAL_TULETATUD"></span>:
+            <span data-translate="PORTFOLIO_COPIED"></span>:
           </span>
-          <a data-ng-class="{'disabled-link': portfolio.deletedOrNotPublic}" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}">
+          <a data-ng-class="{'disabled-link': portfolio.deletedOrNotPublic}" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
             <span data-ng-bind="portfolio.copiedFromDirectName"></span>
+            <span data-ng-if="portfolio.copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
+            <span data-ng-if="portfolio.copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>
+            <span data-ng-if="portfolio.copiedLOStatus !== 'PRIVATE' && portfolio.copiedLOStatus !== 'DELETED'" data-translate="PORTFOLIO_COPIED_FROM"></span>
           </a>
         </p>
         <p class="md-body-2"
            data-ng-if="portfolio.copy">
           <span class="md-caption caption-light">
-            <span data-translate="ORIGINAL_LISAJA"></span>:
+            <span data-translate="PORTFOLIO_COPY_MAKER"></span>:
           </span>
             <span data-ng-bind="portfolio.creator.username"></span>
         </p>
         <p class="md-body-2"
            data-ng-if="portfolio.copy">
           <span class="md-caption caption-light">
-            <span data-translate="ORIGINAL_KUUPÄEV"></span>:
+            <span data-translate="ADDED"></span>:
           </span>
             {{portfolio.added | date:'dd.MM.yyyy'}}
         </p>
