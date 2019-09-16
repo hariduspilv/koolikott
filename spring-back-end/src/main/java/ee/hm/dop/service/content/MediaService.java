@@ -107,6 +107,10 @@ public class MediaService {
     }
 
     private long parseMediaId(String partOfChapterBlock) {
+        return parseIdFromChapterBlock(partOfChapterBlock);
+    }
+
+    static long parseIdFromChapterBlock(String partOfChapterBlock) {
         StringBuilder idString = new StringBuilder();
         String unparsedId = partOfChapterBlock.split("data-id")[1];
 

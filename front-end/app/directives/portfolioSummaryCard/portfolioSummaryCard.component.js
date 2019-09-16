@@ -33,6 +33,10 @@ class controller extends Controller {
                     .then((response) => {
                         this.$scope.acceptableLicenses = !response.data
                     })
+                    this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyMaterialWithUnacceptableLicense', {id: this.$scope.portfolio.id})
+                        .then((response) => {
+                            this.$scope.portfolioHasMaterialWithUnacceptableLicense = response.data
+                        })
                 }
             }
             if (this.getCorrectLanguageTitle(this.portfolio)) {
@@ -69,6 +73,7 @@ class controller extends Controller {
         this.$scope.showSendEmailButton = true;
         this.$scope.showRecommendButton = true;
         this.$scope.showReportImproperButton = true;
+        this.$scope.portfolioHasMaterialWithUnacceptableLicense = false;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
@@ -323,7 +328,8 @@ class controller extends Controller {
     }
 
     isPublic() {
-        return this.portfolio.visibility === 'PUBLIC';
+        if (this.portfolio)
+            return this.portfolio.visibility === 'PUBLIC';
     }
 
     toggleFullScreen() {

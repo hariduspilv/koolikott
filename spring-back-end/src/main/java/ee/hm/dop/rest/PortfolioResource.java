@@ -113,6 +113,12 @@ public class PortfolioResource extends BaseResource {
         return learningObjectAdministrationService.delete(portfolio, getLoggedInUser());
     }
 
+    @GetMapping("portfolioHasAnyMaterialWithUnacceptableLicense")
+    public boolean portfolioHasAnyMaterialWithUnacceptableLicense(@RequestParam("id") Long portfolioId) {
+        Portfolio portfolio = get(portfolioId);
+        return portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
+    }
+
     private User getValidCreator(@RequestParam("username") String username) {
         if (isBlank(username)) throw badRequest("Username parameter is mandatory");
         return userService.getUserByUsername(username);

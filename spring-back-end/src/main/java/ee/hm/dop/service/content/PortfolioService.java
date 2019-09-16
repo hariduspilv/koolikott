@@ -53,6 +53,8 @@ public class PortfolioService {
     private MediaService mediaService;
     @Inject
     private PictureService pictureService;
+    @Inject
+    private MaterialService materialService;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -185,5 +187,14 @@ public class PortfolioService {
         if (isEmpty(portfolio.getTitle())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Required field title must be filled.");
         }
+    }
+
+    public boolean portfolioHasAnyMaterialWithUnacceptableLicense(Portfolio portfolio) {
+        if (portfolio == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Portfolio is required.");
+        }
+        List<Material> portfolioMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(portfolio);
+        return portfolioMaterials.stream()
+                .anyMatch(material -> materialService.materialHasUnacceptableLicense(material, false));
     }
 }

@@ -38,6 +38,11 @@ class controller extends Controller {
     isPrivate(){
         return this.learningObject.visibility === 'PRIVATE'
     }
+    hasUnAcceptableLicenses() {
+        return this.learningObject.licenseType.id === 1 ||
+            this.learningObject.licenseType.id === 4 ||
+            this.learningObject.licenseType.id === 7
+    }
 }
 controller.$inject = [
     '$rootScope',

@@ -91,7 +91,6 @@ angular.module('koolikottApp')
                 createLicenceAgreementResponse(authenticatedUser.user.id, true, false))
                 .then(() => {
                     migrateLearningObjectsAndLogin(authenticatedUser)
-                    // authenticateUser(authenticatedUser)
                 })
         }
 

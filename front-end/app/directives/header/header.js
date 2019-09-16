@@ -190,7 +190,11 @@ class controller extends Controller {
                         id: this.$scope.portfolio.id,
                     })
                     .then(({ data }) => {
-                        this.$scope.unAcceptableLicenses = data
+                        this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyMaterialWithUnacceptableLicense',
+                            {id: this.$scope.portfolio.id})
+                            .then((response) => {
+                                this.$scope.unAcceptableLicenses = data || response.data
+                            })
                     })
         }
 
@@ -253,7 +257,14 @@ class controller extends Controller {
         this.$rootScope.$watch('learningObjectImproper', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectUnreviewed', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectChanged', onLearningObjectAdminStatusChange)
-        this.$rootScope.$on('$locationChangeSuccess', this.setHeaderColor)
+        this.$rootScope.$on('$locationChangeSuccess', () => {
+            this.setHeaderColor()
+            this.$scope.path = this.$location.path()
+            if(this.$scope.path.startsWith('/kogumik/muuda')){
+                this.$scope.portfolio = this.storageService.getPortfolio()
+                this.$scope.hasUnacceptableLicenses()
+            }
+        })
     }
     setHeaderColor() {
         const setDefault = () => {
@@ -261,10 +272,10 @@ class controller extends Controller {
             this.$scope.isHeaderGray = false
             this.$scope.isHeaderRed = false
         }
+        const path = this.$location.path()
 
         if (!this.authenticatedUserService.isModeratorOrAdmin()) return setDefault()
 
-        const path = this.$location.path()
         const isDashboard = path.startsWith('/toolaud')
         const isMaterial = path.startsWith('/oppematerjal')
         const isPortfolio = path.startsWith('/kogumik')
@@ -299,11 +310,6 @@ class controller extends Controller {
         this.$rootScope.$broadcast(
             this.$scope.isHeaderRed ? 'header:red' : 'header:default'
         )
-
-        if(path.startsWith('/kogumik/muuda')){
-            this.$scope.portfolio = this.storageService.getPortfolio()
-            this.$scope.hasUnacceptableLicenses()
-        }
     }
     setLanguage(language) {
         const shouldReload = this.$scope.selectedLanguage !== language

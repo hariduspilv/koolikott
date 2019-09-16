@@ -80,5 +80,5 @@
     <div data-ng-bind-html="embedSource"></div>
   </div>
 
-  <div class="embedded-material__overlay" data-ng-class="{'is-top': !isAdminOrModerator}" data-ng-if="(deleted || private)  && ($root.isViewPortfolioPage || $root.isEditPortfolioPage)"></div>
+  <div class="embedded-material__overlay" data-ng-class="{'is-top': !isAdminOrModerator}" data-ng-if="(deleted || private  || hasInvalidLicense)  && ($root.isViewPortfolioPage || $root.isEditPortfolioPage)"></div>
 </div>

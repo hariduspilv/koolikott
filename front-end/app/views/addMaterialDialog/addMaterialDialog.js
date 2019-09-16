@@ -798,7 +798,7 @@ class controller extends Controller {
 
                             if((typeof this.$rootScope.materialLicenseTypeChanged === 'undefined' ||
                                 this.$rootScope.materialLicenseTypeChanged === false) &&
-                                this.material.visibility === VISIBILITY_PRIVATE) {
+                                material.visibility === VISIBILITY_PRIVATE) {
                                 this.showMakePublicDialog()
                             }
 

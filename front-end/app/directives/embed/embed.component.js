@@ -16,6 +16,7 @@ class controller extends Controller {
         this.$scope.deleted = this.data.deleted
         this.$scope.private = this.data.visibility === 'PRIVATE'
         this.$scope.materialTitle = this.getCurrentMaterialTitle()
+        this.$scope.hasInvalidLicense = this.isLicenseTypeInvalid()
 
         this.$scope.isAdminOrModerator = this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()
 
@@ -131,6 +132,11 @@ class controller extends Controller {
 
     getCurrentMaterialTitle() {
         return this.replaceSpaces(this.getCorrectLanguageTitle(this.data))
+    }
+
+    isLicenseTypeInvalid() {
+        const licenseType = this.data.licenseType.id
+        return licenseType === 1 || licenseType === 7 || licenseType === 4
     }
 }
 controller.$inject = [

@@ -7,10 +7,12 @@ import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.MediaService;
 import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
@@ -21,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.text.Normalizer;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -44,6 +47,10 @@ public class UserService {
     private PictureService pictureService;
     @Inject
     private LicenseTypeService licenseTypeService;
+    @Inject
+    private MaterialService materialService;
+    @Inject
+    private SolrEngineService solrEngineService;
 
     public User getUserByIdCode(String idCode) {
         return userDao.findUserByIdCode(idCode);
@@ -161,20 +168,14 @@ public class UserService {
     }
 
     public boolean areLicencesAcceptable(String username) {
-        List<Media> allUserMedia = mediaService.getAllByCreator(getUserByUsername(username));
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(getUserByUsername(username));
-        long unAcceptableMediaCount = allUserMedia.stream()
-                .filter(this::mediaHasUnAcceptableLicence)
-                .count();
         long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
-                .filter(this::learningObjectHasUnAcceptableLicence)
-                .count();
+                .filter(this::learningObjectHasUnAcceptableLicence).count();
         long unAcceptablePictureCount = allUserLearningObjects.stream()
                 .filter(lo -> lo.getPicture() != null)
                 .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))
                 .count();
         return (unAcceptableLearningObjectsCount == 0) &&
-                (unAcceptableMediaCount == 0) &&
                 (unAcceptablePictureCount == 0);
     }
 
@@ -182,16 +183,19 @@ public class UserService {
         learningObjectService.getAllByCreator(user)
                 .stream()
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
-                        learningObjectMediaHasUnacceptableLicence(mediaService.getAllMediaIfLearningObjectIsPortfolio(lo)) ||
+                        learningObjectHasMaterialWithUnacceptableLicense(materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> learningObject.setVisibility(Visibility.PRIVATE));
+
+        solrEngineService.updateIndex();
     }
 
-    private boolean learningObjectMediaHasUnacceptableLicence(List<Media> allLearningObjectMedia) {
-        if (!allLearningObjectMedia.isEmpty()) {
-            return allLearningObjectMedia.stream().anyMatch(this::mediaHasUnAcceptableLicence);
+    public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
+        learningObjectMaterials = learningObjectMaterials.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        if (learningObjectMaterials.isEmpty()) {
+            return false;
         }
-        return false;
+        return learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
     }
 
     public void migrateUserLearningObjectLicences(User user) {
@@ -221,11 +225,19 @@ public class UserService {
     }
 
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
-        return learningObjectService.learningObjectHasUnAcceptableLicence(lo);
+        List<Material> loMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return learningObjectService.learningObjectHasUnAcceptableLicence(lo) || learningObjectHasMaterialWithUnacceptableLicense(loMaterials);
     }
 
     private boolean mediaHasUnAcceptableLicence(Media media) {
         return mediaService.mediaHasUnAcceptableLicence(media);
+    }
+
+    private boolean materialHasUnacceptableLicense(Material material) {
+        return materialService.materialHasUnacceptableLicense(material, true);
     }
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {

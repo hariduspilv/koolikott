@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.PortfolioDao;
@@ -11,31 +12,32 @@ import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
-import ee.hm.dop.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.service.content.MediaService.parseIdFromChapterBlock;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static java.time.LocalDateTime.now;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 @Service
 @Transactional
@@ -69,6 +71,10 @@ public class MaterialService {
     private OriginalPictureDao originalPictureDao;
     @Inject
     private PortfolioDao portfolioDao;
+    @Inject
+    private PortfolioService portfolioService;
+    @Inject
+    private PictureService pictureService;
 
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
@@ -337,5 +343,59 @@ public class MaterialService {
 
     public List<Portfolio> getRelatedPortfolios(Long id) {
         return portfolioDao.getRelatedPortfolios(id);
+    }
+
+    public List<Material> getAllMaterialIfLearningObjectIsPortfolio(LearningObject lo) {
+        List<Material> portfolioMaterials = new ArrayList<>();
+        Portfolio portfolio = portfolioService.findById(lo.getId());
+
+        if (portfolio != null) {
+            List<ChapterBlock> chapterBlocks = new ArrayList<>();
+            portfolio.getChapters().forEach(chapter -> chapterBlocks.addAll(chapter.getBlocks()));
+            chapterBlocks.forEach(chapterBlock -> portfolioMaterials.addAll(getMaterialFromChapterBlock(chapterBlock.getHtmlContent())));
+        }
+
+        return portfolioMaterials;
+    }
+
+    private List<Material> getMaterialFromChapterBlock(String htmlContent) {
+        List<Material> materials = new ArrayList<>();
+        List<String> partsOfChapterBlock = Arrays.asList(htmlContent.split("<div"));
+
+        partsOfChapterBlock.forEach(partOfChapterBlock -> {
+            if (partOfChapterBlock.contains("material") && partOfChapterBlock.contains("data-id")) {
+                Long id = parseMaterialId(partOfChapterBlock);
+                if (id > 0) {
+                    materials.add(materialDao.findById(id));
+                }
+            }
+        });
+
+        return materials;
+    }
+
+    private long parseMaterialId(String partOfChapterBlock) {
+        return parseIdFromChapterBlock(partOfChapterBlock);
+    }
+
+    public boolean materialHasUnacceptableLicense(Material material, boolean userIsLoggingIn) {
+        LicenseType licenseType = material.getLicenseType();
+        if (licenseType == null) {
+            return true;
+        }
+
+        boolean materialPictureHasUnacceptableLicense = material.getPicture() != null && pictureService.pictureHasUnAcceptableLicence(material.getPicture());
+
+        if (userIsLoggingIn) {
+            return !licenseType.getName().equals("CCBY") &&
+                    !licenseType.getName().equals("CCBYSA") &&
+                    !licenseType.getName().equals("CCBYSA30") ||
+                    materialPictureHasUnacceptableLicense;
+        } else {
+            return licenseType.getId() == 1 ||
+                    licenseType.getId() == 4 ||
+                    licenseType.getId() == 7 ||
+                    materialPictureHasUnacceptableLicense;
+        }
     }
 }

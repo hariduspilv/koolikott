@@ -29,6 +29,7 @@ class controller extends Controller {
 
         this.$scope.deleted = deleted
         this.$scope.private = visibility === 'PRIVATE'
+        this.$scope.invalidLicense = licenseType.id === 1 || licenseType.id === 4 || licenseType.id === 7
 
         const { name: licenseTypeName } = licenseType || {}
         this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()

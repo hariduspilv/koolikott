@@ -13,10 +13,9 @@ import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 import org.hibernate.annotations.Formula;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.CascadeType.MERGE;
@@ -92,6 +91,18 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
 
     @Transient
     private Integer orderNr;
+
+    @ManyToOne
+    @JoinColumn(name = "licenseType")
+    private LicenseType licenseType;
+
+    public LicenseType getLicenseType() {
+        return licenseType;
+    }
+
+    public void setLicenseType(LicenseType licenseType) {
+        this.licenseType = licenseType;
+    }
 
     public OriginalPicture getPicture() {
         return picture;
