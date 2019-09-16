@@ -1,0 +1,41 @@
+<md-dialog id="gdpr-dialog" aria-label="Litsentside migreerimise modaalaken" class="login-dialog" flex="50">
+  <md-toolbar>
+    <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+      <div class="md-toolbar-tools" data-layout-align="space-between center">
+        <h2 data-translate="LICENSE_AGREEMENT_DIALOG_HEADER"></h2>
+      </div>
+    </div>
+  </md-toolbar>
+  <form name="migrationAgreementDialogContent">
+    <md-dialog-content>
+      <md-content data-layout-padding>
+        <p>
+          <span data-translate="LICENSE_AGREEMENT_DIALOG_TEXT"></span>
+        </p>
+        <div id="migration-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
+          <md-button
+            id="migration-agreement-logout-button"
+            class="md-raised md-secondary"
+            aria-label="Väljun"
+            data-ng-click="logout()">
+            <span data-translate="LICENSE_AGREEMENT_DIALOG_ACTION_EXIT"></span>
+          </md-button>
+          <md-button
+            id="migration-agreement-cancel-button"
+            class="md-raised md-secondary"
+            aria-label="Ei nõustu"
+            data-ng-click="cancel()">
+            <span data-translate="LICENSE_AGREEMENT_DIALOG_ACTION_NO"></span>
+          </md-button>
+          <md-button
+            id="migration-agreement-accept-button"
+            class="md-raised md-primary"
+            aria-label="Nõustun"
+            data-ng-click="agree()">
+            <span data-translate="LICENSE_AGREEMENT_DIALOG_ACTION_YES"></span>
+          </md-button>
+        </div>
+      </md-content>
+    </md-dialog-content>
+  </form>
+</md-dialog>

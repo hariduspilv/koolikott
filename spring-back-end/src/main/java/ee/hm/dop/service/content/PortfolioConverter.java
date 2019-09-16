@@ -96,6 +96,16 @@ public class PortfolioConverter {
                 to.getPicture().setName(originalPicture.getName());
             }
         }
+        if (to.getId() != null && to.getId().equals(from.getId())) {
+            return to;
+        }
+        if (from.isCopy()) {
+            to.setCopiedFromOriginal(from.getCopiedFromOriginal());
+            to.setCopiedFromDirect(from.getId());
+        } else {
+            to.setCopiedFromDirect(from.getId());
+            to.setCopiedFromOriginal(from.getId());
+        }
         return to;
     }
 

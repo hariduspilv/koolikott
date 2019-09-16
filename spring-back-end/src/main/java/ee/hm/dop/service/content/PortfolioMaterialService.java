@@ -2,12 +2,7 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.PortfolioMaterialDao;
-import ee.hm.dop.model.Chapter;
-import ee.hm.dop.model.ChapterBlock;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.PortfolioMaterial;
+import ee.hm.dop.model.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

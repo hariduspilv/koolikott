@@ -85,6 +85,7 @@ public class MaterialService {
         material.setSource(UrlUtil.processURL(material.getSource()));
         cleanPeerReviewUrls(material);
         material.setCreator(creator);
+        material.setVisibility(Visibility.PRIVATE);
         if (UserUtil.isPublisher(creator)) {
             material.setEmbeddable(true);
         }
@@ -119,6 +120,7 @@ public class MaterialService {
         String sourceBefore = originalMaterial.getSource();
         material.setSource(UrlUtil.processURL(material.getSource()));
         mustHaveUniqueSource(material);
+        material.setVisibility(material.getVisibility());
 
         cleanPeerReviewUrls(material);
         if (!UserUtil.isAdmin(changer)) {
@@ -209,7 +211,6 @@ public class MaterialService {
             material.setKeyCompetences(null);
             material.setCrossCurricularThemes(null);
         }
-        material.setVisibility(Visibility.PUBLIC);
 
         if (material.getPicture() != null) {
             if (material.getPicture().getId() == null) {

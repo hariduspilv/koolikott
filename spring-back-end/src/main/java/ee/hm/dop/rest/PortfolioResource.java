@@ -8,12 +8,12 @@ import ee.hm.dop.service.content.PortfolioCopier;
 import ee.hm.dop.service.content.PortfolioGetter;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.useractions.UserService;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
+import javax.ws.rs.Consumes;
+import javax.ws.rs.core.MediaType;
 import java.util.List;
 
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
@@ -64,7 +64,7 @@ public class PortfolioResource extends BaseResource {
     }
 
     @PostMapping("update")
-    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public Portfolio update(@RequestBody Portfolio portfolio) {
         return portfolioService.update(portfolio, getLoggedInUser());
     }
@@ -93,15 +93,19 @@ public class PortfolioResource extends BaseResource {
         return portfolioLog;
     }
 
+    @GetMapping("portfolioHasAnyUnAcceptableLicense")
+    public boolean portfolioHasAnyUnAcceptableLicense(@RequestParam("id") Long portfolioId){
+        return !portfolioService.portfolioHasAcceptableLicenses(portfolioId);
+    }
 
-/*    @PostMapping
+    @PostMapping
     @RequestMapping("copy")
     @Consumes(MediaType.APPLICATION_JSON)
-
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(@RequestBody Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());
-    }*/
+    }
+
     @PostMapping("delete")
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public LearningObject delete(@RequestBody Portfolio portfolio) {

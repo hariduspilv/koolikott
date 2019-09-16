@@ -72,6 +72,12 @@
                 </md-button>
               </md-menu-item>
               <md-menu-item data-ng-if="$root.isViewPortfolioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
+              <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && isPublic() && acceptableLicenses">
+                <md-button data-ng-click="$ctrl.copyPortfolio()">
+                  <md-icon md-menu-align-target>file_copy</md-icon>
+                  <span data-translate="COPY_PORTFOLIO"></span>
+                </md-button>
+              </md-menu-item>
               <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
               <md-menu-item
                 dop-recommend
@@ -192,7 +198,7 @@
       </div>
       <md-content class="card-lg__container">
         <!-- Creator -->
-        <p class="md-body-2">
+        <p class="md-body-2" data-ng-if="!portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="CREATOR"></span>:
           </span>
@@ -203,7 +209,7 @@
         </p>
         <!-- Original creator -->
         <p class="md-body-2"
-           data-ng-if="portfolio.creator && portfolio.originalCreator && portfolio.creator.id != portfolio.originalCreator.id">
+           data-ng-if="portfolio.creator && portfolio.originalCreator && portfolio.creator.id != portfolio.originalCreator.id && !portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="ORIGINAL_CREATOR"></span>:
           </span>
@@ -212,15 +218,42 @@
             <span data-ng-bind="portfolio.originalCreator.surname"></span>
           </a>
         </p>
+        <!-- Copied portfolio related -->
+        <p class="md-body-2"
+           data-ng-if="portfolio.copy">
+          <span class="md-caption caption-light">
+            <span data-translate="PORTFOLIO_COPIED"></span>:
+          </span>
+          <a data-ng-class="{'disabled-link': portfolio.deletedOrNotPublic}" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
+            <span data-ng-bind="portfolio.copiedFromDirectName"></span>
+            <span data-ng-if="portfolio.copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
+            <span data-ng-if="portfolio.copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>
+            <span data-ng-if="portfolio.copiedLOStatus !== 'PRIVATE' && portfolio.copiedLOStatus !== 'DELETED'" data-translate="PORTFOLIO_COPIED_FROM"></span>
+          </a>
+        </p>
+        <p class="md-body-2"
+           data-ng-if="portfolio.copy">
+          <span class="md-caption caption-light">
+            <span data-translate="PORTFOLIO_COPY_MAKER"></span>:
+          </span>
+            <span data-ng-bind="portfolio.creator.username"></span>
+        </p>
+        <p class="md-body-2"
+           data-ng-if="portfolio.copy">
+          <span class="md-caption caption-light">
+            <span data-translate="ADDED"></span>:
+          </span>
+            {{portfolio.added | date:'dd.MM.yyyy'}}
+        </p>
         <!-- Created -->
-        <p class="md-body-2" data-ng-if="portfolio.added">
+        <p class="md-body-2" data-ng-if="portfolio.added && !portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="CREATED"></span>:
           </span>
           {{portfolio.added | date:'dd.MM.yyyy'}}
         </p>
         <!-- Published/Added -->
-        <p class="md-body-2" data-ng-if="portfolio.publishedAt">
+        <p class="md-body-2" data-ng-if="portfolio.publishedAt && !portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="ADDED"></span>:
           </span>

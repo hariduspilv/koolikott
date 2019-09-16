@@ -1,13 +1,9 @@
-<md-dialog id="gdpr-dialog" aria-label="Sisselogimise modaalaken" class="login-dialog" flex="50" esc-key="cancel()">
+<md-dialog id="gdpr-dialog" aria-label="Sisselogimise modaalaken" class="login-dialog" flex="50">
   <md-toolbar>
     <div id="gdpr-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
       <div class="md-toolbar-tools" data-layout-align="space-between center">
         <h2 data-translate="AGREEMENT_DIALOG_HEADER"
         ></h2>
-        <md-button id="gdpr-login-cancel-button" ng-click="cancel()" class="md-icon-button"
-                   aria-label="Sulge sisselogimise modaalaken">
-          <md-icon>close</md-icon>
-        </md-button>
       </div>
     </div>
   </md-toolbar>
@@ -16,7 +12,7 @@
       <md-content data-layout-padding>
         <p><span id="gdpr-agreement-text" data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
         <p>
-          <a id="gdpr-agreement-link" target="_blank" data-translate="AGREEMENT_DIALOG_LINK_TEXT" href="/kasutustingimused>
+          <a id="gdpr-agreement-link" target="_blank" data-translate="AGREEMENT_DIALOG_LINK_TEXT" href="/kasutustingimused">
             <span id="gdpr-agreement-link-text" data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
           </a>
         </p>
@@ -52,6 +48,7 @@
             data-ng-click="agree()"
           >
             <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
+          </md-button>
           </md-button>
           <md-progress-circular
             class="ng-hide"

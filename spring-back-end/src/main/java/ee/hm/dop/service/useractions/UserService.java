@@ -2,9 +2,14 @@ package ee.hm.dop.service.useractions;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.content.MediaService;
+import ee.hm.dop.service.files.PictureService;
+import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.utils.UserUtil;
 import org.apache.commons.text.WordUtils;
@@ -25,11 +30,20 @@ import static java.lang.String.format;
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final String CC_BY_SA_30 = "CCBYSA30";
 
     @Inject
     private UserDao userDao;
     @Inject
     private TaxonService taxonService;
+    @Inject
+    private MediaService mediaService;
+    @Inject
+    private LearningObjectService learningObjectService;
+    @Inject
+    private PictureService pictureService;
+    @Inject
+    private LicenseTypeService licenseTypeService;
 
     public User getUserByIdCode(String idCode) {
         return userDao.findUserByIdCode(idCode);
@@ -144,5 +158,77 @@ public class UserService {
     private User setRole(User user, Role from, Role to) {
         user = getUserByUsername(user.getUsername());
         return user.getRole().equals(from) ? setUserRole(user, to) : null;
+    }
+
+    public boolean areLicencesAcceptable(String username) {
+        List<Media> allUserMedia = mediaService.getAllByCreator(getUserByUsername(username));
+        List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(getUserByUsername(username));
+        long unAcceptableMediaCount = allUserMedia.stream()
+                .filter(this::mediaHasUnAcceptableLicence)
+                .count();
+        long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
+                .filter(this::learningObjectHasUnAcceptableLicence)
+                .count();
+        long unAcceptablePictureCount = allUserLearningObjects.stream()
+                .filter(lo -> lo.getPicture() != null)
+                .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))
+                .count();
+        return (unAcceptableLearningObjectsCount == 0) &&
+                (unAcceptableMediaCount == 0) &&
+                (unAcceptablePictureCount == 0);
+    }
+
+    public void setLearningObjectsPrivate(User user) {
+        learningObjectService.getAllByCreator(user)
+                .stream()
+                .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
+                        learningObjectMediaHasUnacceptableLicence(mediaService.getAllMediaIfLearningObjectIsPortfolio(lo)) ||
+                        (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
+                .forEach(learningObject -> learningObject.setVisibility(Visibility.PRIVATE));
+    }
+
+    private boolean learningObjectMediaHasUnacceptableLicence(List<Media> allLearningObjectMedia) {
+        if (!allLearningObjectMedia.isEmpty()) {
+            return allLearningObjectMedia.stream().anyMatch(this::mediaHasUnAcceptableLicence);
+        }
+        return false;
+    }
+
+    public void migrateUserLearningObjectLicences(User user) {
+        learningObjectService.getAllByCreator(user)
+                .stream()
+                .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
+                        (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
+                .forEach(learningObject -> {
+                    learningObject.setLicenseType(licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+                    setPictureLicenseType(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+                });
+        setUserMediaLicenseType(user, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+    }
+
+    private void setPictureLicenseType(LearningObject lo, LicenseType licenseType) {
+        Picture learningObjectPicture = lo.getPicture();
+        if (learningObjectPicture != null && pictureHasUnAcceptableLicence(learningObjectPicture)) {
+            pictureService.setLicenceType(learningObjectPicture.getId(), licenseType);
+        }
+    }
+
+    private void setUserMediaLicenseType(User user, LicenseType licenseType) {
+        mediaService.getAllByCreator(user)
+                .stream()
+                .filter(this::mediaHasUnAcceptableLicence)
+                .forEach(media -> media.setLicenseType(licenseType));
+    }
+
+    private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
+        return learningObjectService.learningObjectHasUnAcceptableLicence(lo);
+    }
+
+    private boolean mediaHasUnAcceptableLicence(Media media) {
+        return mediaService.mediaHasUnAcceptableLicence(media);
+    }
+
+    private boolean pictureHasUnAcceptableLicence(Picture picture) {
+        return pictureService.pictureHasUnAcceptableLicence(picture);
     }
 }

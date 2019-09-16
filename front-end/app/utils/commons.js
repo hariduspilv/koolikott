@@ -1410,6 +1410,12 @@ class Controller {
         else if (lang === 'eng')
             return 'EN'
     }
+
+    goToLinkWithoutCheckingBox($event, link) {
+        $event.stopPropagation()
+        window.captureOutboundLink(link);
+        window.open(link, '_blank');
+    }
 }
 
 

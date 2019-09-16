@@ -184,30 +184,42 @@ class controller extends Controller {
             this.$rootScope.$broadcast('taxonSelector:clear', null)
         }
 
+        this.$scope.hasUnacceptableLicenses = () => {
+                this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
+                    {
+                        id: this.$scope.portfolio.id,
+                    })
+                    .then(({ data }) => {
+                        this.$scope.unAcceptableLicenses = data
+                    })
+        }
+
         this.$scope.saveAndExitPortfolio = () => {
             this.$cookies.put('savedPortfolio', true);
             this.storageService.getPortfolio().saveType = 'MANUAL';
-            if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
+
+            if(this.$scope.unAcceptableLicenses){
+                return this.saveAndExit();
+            } else if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
                 this.storageService.getPortfolio().publicationConfirmed = true;
                 return this.saveAndExit();
-            }
+            } else if (this.storageService.getPortfolio().visibility === VISIBILITY_PRIVATE){
 
-            if (this.storageService.getPortfolio().publicationConfirmed) {
+                this.storageService.getPortfolio().publicationConfirmed = true;
+                this.dialogService.showConfirmationDialog(
+                    "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
+                    "{{'PORTFOLIO_WARNING' | translate}}",
+                    "{{'PORTFOLIO_YES' | translate}}",
+                    "{{'PORTFOLIO_NO' | translate}}",
+                    () => {
+                        this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
+                        this.saveAndExit()
+                    },
+                    this.saveAndExit.bind(this)
+                )
+            } else if (this.storageService.getPortfolio().publicationConfirmed) {
                 return this.saveAndExit();
             }
-
-            this.storageService.getPortfolio().publicationConfirmed = true;
-            this.dialogService.showConfirmationDialog(
-                "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
-                "{{'PORTFOLIO_WARNING' | translate}}",
-                "{{'PORTFOLIO_YES' | translate}}",
-                "{{'PORTFOLIO_NO' | translate}}",
-                () => {
-                    this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
-                    this.saveAndExit()
-                },
-                this.saveAndExit.bind(this)
-            )
         }
 
         this.$scope.$watch(() => this.$location.path(), (params) => {
@@ -287,6 +299,11 @@ class controller extends Controller {
         this.$rootScope.$broadcast(
             this.$scope.isHeaderRed ? 'header:red' : 'header:default'
         )
+
+        if(path.startsWith('/kogumik/muuda')){
+            this.$scope.portfolio = this.storageService.getPortfolio()
+            this.$scope.hasUnacceptableLicenses()
+        }
     }
     setLanguage(language) {
         const shouldReload = this.$scope.selectedLanguage !== language

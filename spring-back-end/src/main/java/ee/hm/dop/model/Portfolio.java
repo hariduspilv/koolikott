@@ -8,10 +8,9 @@ import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static javax.persistence.CascadeType.ALL;
@@ -41,6 +40,15 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime publishedAt;
+
+    private boolean isCopy;
+
+    private Long copiedFromDirect;
+
+    private Long copiedFromOriginal;
+
+    @Transient
+    private String copiedFromDirectName;
 
     public String getTitle() {
         return title;
@@ -87,5 +95,37 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
 
     public void setPublishedAt(LocalDateTime publishedAt) {
         this.publishedAt = publishedAt;
+    }
+
+    public boolean isCopy() {
+        return isCopy;
+    }
+
+    public void setCopy(boolean copy) {
+        isCopy = copy;
+    }
+
+    public Long getCopiedFromDirect() {
+        return copiedFromDirect;
+    }
+
+    public void setCopiedFromDirect(Long copiedFromDirect) {
+        this.copiedFromDirect = copiedFromDirect;
+    }
+
+    public Long getCopiedFromOriginal() {
+        return copiedFromOriginal;
+    }
+
+    public void setCopiedFromOriginal(Long copiedFromOriginal) {
+        this.copiedFromOriginal = copiedFromOriginal;
+    }
+
+    public String getCopiedFromDirectName() {
+        return copiedFromDirectName;
+    }
+
+    public void setCopiedFromDirectName(String copiedFromDirectName) {
+        this.copiedFromDirectName = copiedFromDirectName;
     }
 }

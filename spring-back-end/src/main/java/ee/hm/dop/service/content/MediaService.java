@@ -1,17 +1,17 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.MediaDao;
-import ee.hm.dop.model.Media;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.utils.UrlUtil;
 import ee.hm.dop.utils.UserUtil;
-
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Service
 @Transactional
@@ -19,6 +19,8 @@ public class MediaService {
 
     @Inject
     private MediaDao mediaDao;
+    @Inject
+    private PortfolioService portfolioService;
 
     public Media save(Media media, User loggedInUser) {
         if (media.getId() != null) {
@@ -52,5 +54,69 @@ public class MediaService {
 
     public Media get(long mediaId) {
         return mediaDao.findById(mediaId);
+    }
+
+    public List<Media> getAllByCreator(User creator) {
+        return mediaDao.findAllByCreator(creator);
+    }
+
+    public boolean mediaHasUnAcceptableLicence(Media media) {
+        if (media == null) return true;
+        LicenseType licenseType = media.getLicenseType();
+        if (licenseType == null) {
+            return true;
+        }
+        return !licenseType.getName().equals("CCBY") &&
+                !licenseType.getName().equals("CCBYSA") &&
+                !licenseType.getName().equals("CCBYSA30");
+    }
+
+    public boolean anyMediaHasUnacceptableLicenseType(List<Media> allMedia) {
+        if (allMedia.isEmpty()) {
+            return false;
+        }
+        return allMedia.stream().anyMatch(this::mediaHasUnAcceptableLicence);
+    }
+
+    public List<Media> getAllMediaIfLearningObjectIsPortfolio(LearningObject lo) {
+        List<Media> portfolioMedia = new ArrayList<>();
+        Portfolio portfolio = portfolioService.findById(lo.getId());
+
+        if (portfolio != null) {
+            List<ChapterBlock> chapterBlocks = new ArrayList<>();
+            portfolio.getChapters().forEach(chapter -> chapterBlocks.addAll(chapter.getBlocks()));
+            chapterBlocks.forEach(chapterBlock -> portfolioMedia.addAll(getMediaFromChapterBlock(chapterBlock.getHtmlContent())));
+        }
+
+        return portfolioMedia;
+    }
+
+    private List<Media> getMediaFromChapterBlock(String htmlContent) {
+        List<Media> media = new ArrayList<>();
+        List<String> partsOfChapterBlock = Arrays.asList(htmlContent.split("<div"));
+
+        partsOfChapterBlock.forEach(partOfChapterBlock -> {
+            if (partOfChapterBlock.contains("media") && partOfChapterBlock.contains("data-id")) {
+                Long id = parseMediaId(partOfChapterBlock);
+                if (id > 0) {
+                    media.add(mediaDao.findById(id));
+                }
+            }
+        });
+
+        return media;
+    }
+
+    private long parseMediaId(String partOfChapterBlock) {
+        StringBuilder idString = new StringBuilder();
+        String unparsedId = partOfChapterBlock.split("data-id")[1];
+
+        unparsedId.chars().forEach(c -> {
+            if (Character.isDigit((char) c)) {
+                idString.append((char) c);
+            }
+        });
+
+        return Long.parseLong(idString.toString());
     }
 }

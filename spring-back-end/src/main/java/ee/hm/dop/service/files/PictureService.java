@@ -2,6 +2,8 @@ package ee.hm.dop.service.files;
 
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.ThumbnailDao;
+import ee.hm.dop.model.LicenseType;
+import ee.hm.dop.model.OriginalPicture;
 import ee.hm.dop.model.Picture;
 import ee.hm.dop.model.Thumbnail;
 import ee.hm.dop.model.enums.Size;
@@ -32,5 +34,26 @@ public class PictureService {
         }
         Picture existingPicture = getByName(name);
         return existingPicture != null ? pictureSaver.createOneThumbnail(existingPicture, size) : null;
+    }
+
+    public LicenseType getLicenceTypeById(Long id) {
+        return originalPictureDao.findById(id).getLicenseType();
+    }
+
+    public void setLicenceType(Long id, LicenseType licenseType) {
+        OriginalPicture originalPicture = originalPictureDao.findById(id);
+        if (originalPicture != null) {
+            originalPicture.setLicenseType(licenseType);
+        }
+    }
+
+    public boolean pictureHasUnAcceptableLicence(Picture picture) {
+        LicenseType pictureLicenceType = getLicenceTypeById(picture.getId());
+        if (pictureLicenceType == null) {
+            return true;
+        }
+        return !pictureLicenceType.getName().equals("CCBY") &&
+                !pictureLicenceType.getName().equals("CCBYSA") &&
+                !pictureLicenceType.getName().equals("CCBYSA30");
     }
 }

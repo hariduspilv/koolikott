@@ -24,6 +24,11 @@ angular.module('koolikottApp')
                     $scope.newPortfolio.chapters = portfolio.chapters;
                     $scope.newPortfolio.taxons = [{}];
                     $scope.isVocationalEducation = true
+                    $scope.licenseTermsLink = $translate.instant('LICENSE_TERMS_LINK')
+                    
+                    if ($scope.portfolio && $scope.portfolio.picture) {
+                        $scope.existingPicture = true
+                    }
 
                     $scope.mode = locals.mode;
                     if ($scope.mode === 'EDIT' || $scope.mode === 'COPY') {
@@ -39,9 +44,11 @@ angular.module('koolikottApp')
                     /**
                      * Set license type to “All rights reserved” if user chooses “Do not know” option.
                      */
-                    $scope.$watch('newPortfolio.licenseType', (selectedValue) => {
-                        if (selectedValue && selectedValue.id === 'doNotKnow')
-                            $scope.newPortfolio.licenseType = $scope.allRightsReserved
+                    $scope.$watch('licenseTypeAgreed', (selectedValue) => {
+                        if (selectedValue) {
+                            $scope.portfolio.licenseType = $scope.ccbysa30
+                            $scope.newPortfolio.licenseType = $scope.ccbysa30
+                        }
                     })
                     $scope.$watch('newPortfolio.taxons', (selectedValue) => {
                         $scope.isVocationalEducation = isVocational(taxonService, selectedValue);
@@ -49,9 +56,10 @@ angular.module('koolikottApp')
                             $scope.newPortfolio.targetGroups = []
                         }
                     }, true)
-                    $scope.$watch('newPortfolio.picture.licenseType', (selectedValue) => {
-                        if (selectedValue && selectedValue.id === 'doNotKnow')
-                            $scope.newPortfolio.picture.licenseType = $scope.allRightsReserved
+                    $scope.$watch('pictureLicenseTypeAgreed', (selectedValue) => {
+                        if (selectedValue) {
+                            $scope.newPortfolio.picture.licenseType = $scope.ccbysa30
+                        }
                     })
                     $scope.timeAddPortfolioOpened = new Date();
                 }
@@ -108,11 +116,17 @@ angular.module('koolikottApp')
                 }
 
                 $scope.update = function () {
+                    if(typeof $rootScope.portfolioLicenseTypeChanged === 'undefined') {
+                        updateOrCopy(`rest/portfolio/update`, $scope.update)
+                    }else if($rootScope.portfolioLicenseTypeChanged === true){
+                        $scope.portfolio.visibility = 'PUBLIC'
+                        $rootScope.portfolioLicenseTypeChanged = false
+                    }
                     updateOrCopy(`rest/portfolio/update`, $scope.update);
                 };
 
                 $scope.copy = function () {
-                    updateOrCopy(`rest/portfolio/update`, $scope.copy);
+                    updateOrCopy(`rest/portfolio/copy`, $scope.copy);
                 };
 
                 function updateOrCopy(url, func) {
@@ -195,7 +209,7 @@ angular.module('koolikottApp')
                 function setLicenseTypes(data) {
                     $scope.licenseTypes = data
                     $scope.doNotKnow = {id: 'doNotKnow'}
-                    $scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+                    $scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
                 }
 
                 function onNewPictureChange(currentValue) {
@@ -259,6 +273,12 @@ angular.module('koolikottApp')
                         }
                     });
                     return hasCorrectTaxon;
+                }
+
+                $scope.goToLinkWithoutCheckingBox = function($event, link) {
+                    $event.stopPropagation()
+                    window.captureOutboundLink(link);
+                    window.open(link, '_blank');
                 }
 
                 init();

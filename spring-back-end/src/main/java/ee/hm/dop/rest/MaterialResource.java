@@ -82,7 +82,7 @@ public class MaterialResource extends BaseResource {
     }
 
     @PostMapping("update")
-    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public Material updateMaterial(@RequestBody Material material) {
         if (material.getId() == null) {
             throw new UnsupportedOperationException("this is update method");

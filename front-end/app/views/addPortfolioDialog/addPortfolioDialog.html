@@ -33,25 +33,20 @@
         </md-input-container>
 
         <!-- License type -->
-        <md-input-container flex="100" flex-gt-sm="60" flex-gt-md="25">
-          <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-          <md-select
+        <md-input-container flex="100" flex-gt-sm="60" flex-gt-md="30">
+          <h5 class="no-margin" data-translate="LICENSETYPE_REQUIRED"></h5>
+          <md-checkbox
             name="licenseType"
-            class="no-margin"
-            data-ng-model="newPortfolio.licenseType"
-            data-ng-model-options="{trackBy: '$value.id'}"
+            class="margin-top-18 margin-bottom-18"
+            data-ng-model="licenseTypeAgreed"
+            data-ng-value="CCBYSA30"
+            aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
             required
-          >
-            <md-option
-              data-ng-value="doNotKnow"
-              data-translate="LICENSETYPE_CANT_CHOOSE"
-            ></md-option>
-            <md-option
-              data-ng-repeat="licenseType in licenseTypes track by $index"
-              data-ng-value="licenseType"
-              data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
-            ></md-option>
-          </md-select>
+            >
+              <span data-translate="I_AGREE_TO"></span>
+              <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong data-translate="LICENSETYPE_CCBYSA30"></strong></a>
+              <span data-translate="TERMS_OF_LICENSE"></span>
+          </md-checkbox>
           <div data-ng-messages="addPortfolioForm.licenseType.$error">
             <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
           </div>
@@ -145,7 +140,7 @@
           </div>
         </div>
 
-        <div class="md-padding" flex="50" flex-gt-sm="20">
+        <div class="md-padding" flex="20" flex-gt-sm="20">
           <h5 class="no-margin" data-translate="SUBTOPIC_ILLUSTRATSIOON"></h5>
           <md-input-container>
             <label data-translate="AUTHOR_WORD"></label>
@@ -163,18 +158,17 @@
           </md-input-container>
         </div>
 
-        <div class="md-padding" flex="50" flex-gt-sm="20">
+        <div class="md-padding" flex="20" flex-gt-sm="20">
           <md-checkbox class="md-primary checkbox--material-author" data-ng-click="setAuthorToUser()"
                        data-ng-checked="isUserAuthor" aria-label="{{ 'I_AM_AUTHOR' | translate }}">
             <span data-translate="I_AM_AUTHOR"></span>
           </md-checkbox>
         </div>
 
-        <div class="md-padding" flex="50" flex-gt-sm="20">
+        <div class="md-padding" flex="20" flex-gt-sm="20">
           <md-input-container>
             <label data-translate="SOURCE_BIG"></label>
             <input
-              data-ng-required="(newPicture || newPortfolio.picture.name) && !newPortfolio.picture.licenseType"
               data-ng-model="newPortfolio.picture.source"
               name="pictureSource"
               md-maxlength="50"
@@ -185,33 +179,23 @@
           </md-input-container>
         </div>
 
-        <div class="md-padding">
-          <span data-translate="OR_WORD"></span>
-        </div>
-
-        <div class="md-padding" flex="50" flex-gt-sm="20">
+        <div class="md-padding" flex="30" flex-gt-sm="30">
+          <h5 class="no-margin" for="taxonEducationalSelect" data-translate="MATERIAL_VIEW_LICENSE_TYPE"></h5>
           <md-input-container flex="100" flex-gt-sm="100">
-            <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-            <md-select
-              class="no-margin"
-              data-ng-required="(newPicture || newPortfolio.picture.name) && !newPortfolio.picture.source"
-              data-ng-model="newPortfolio.picture.licenseType"
-              id="pictureLicenseTypeSelect"
+            <md-checkbox
               name="pictureLicenseType"
-              ng-model-options="{trackBy: '$value.id'}"
+              data-ng-required="newPicture || existingPicture"
+              data-ng-model="pictureLicenseTypeAgreed"
+              data-ng-value="CCBYSA30"
+              aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
             >
-              <md-option
-                data-ng-value="doNotKnow"
-                data-translate="LICENSETYPE_CANT_CHOOSE"
-              ></md-option>
-              <md-option
-                data-ng-value="licenseType"
-                data-ng-repeat="licenseType in licenseTypes track by $index"
-                data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
-              >
-                <span data-translate="MATERIAL_VIEW_LICENSE_TYPE"></span>
-              </md-option>
-            </md-select>
+              <span data-translate="I_AGREE_TO"></span>
+              <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong data-translate="LICENSETYPE_CCBYSA30"></strong></a>
+              <span data-translate="TERMS_OF_LICENSE"></span>
+            </md-checkbox>
+            <div data-ng-messages="addPortfolioForm.pictureLicenseType.$error" data-ng-show="!pictureLicenseTypeAgreed && (newPicture || existingPicture)">
+              <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
+            </div>
           </md-input-container>
         </div>
       </div>

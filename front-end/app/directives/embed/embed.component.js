@@ -14,6 +14,7 @@ class controller extends Controller {
 
         this.$scope.url = url
         this.$scope.deleted = this.data.deleted
+        this.$scope.private = this.data.visibility === 'PRIVATE'
         this.$scope.materialTitle = this.getCurrentMaterialTitle()
 
         this.$scope.isAdminOrModerator = this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()
