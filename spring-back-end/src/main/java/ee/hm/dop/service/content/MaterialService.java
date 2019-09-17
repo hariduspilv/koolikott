@@ -1,5 +1,6 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.PortfolioDao;
@@ -14,28 +15,25 @@ import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
-import ee.hm.dop.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static java.time.LocalDateTime.now;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 @Service
 @Transactional
@@ -120,7 +118,6 @@ public class MaterialService {
         String sourceBefore = originalMaterial.getSource();
         material.setSource(UrlUtil.processURL(material.getSource()));
         mustHaveUniqueSource(material);
-        material.setVisibility(material.getVisibility());
 
         cleanPeerReviewUrls(material);
         if (!UserUtil.isAdmin(changer)) {
