@@ -210,7 +210,7 @@ public class UserService {
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
 
-                    if (learningObjectIsPortfolio(learningObject)) {
+                    if (learningObject instanceof Portfolio) {
                         Portfolio portfolio = portfolioService.findById(learningObject.getId());
                         if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
                             portfolio.setVisibility(Visibility.PRIVATE);
@@ -258,10 +258,6 @@ public class UserService {
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {
         return pictureService.pictureHasUnAcceptableLicence(picture);
-    }
-
-    private boolean learningObjectIsPortfolio(LearningObject learningObject) {
-        return learningObject.getType().equals("portfolio");
     }
 
     private boolean portfolioHasInvalidMaterialCreatedByAnotherAuthor(Portfolio portfolio, User user) {
