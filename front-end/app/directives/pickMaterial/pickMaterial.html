@@ -3,7 +3,7 @@
     <span data-ng-if="$ctrl.isPublic()" data-ng-show="!$ctrl.learningObject.selected && !$ctrl.hasUnAcceptableLicenses()" data-translate="PICK_MATERIAL"></span>
     <span data-ng-if="$ctrl.isPublic()" data-ng-show="$ctrl.learningObject.selected" data-translate="REMOVE_PICKED_MATERIAL"></span>
     <span data-ng-if="$ctrl.isPrivate()" data-ng-show="!$ctrl.learningObject.selected" data-translate="PRIVATE_MATERIAL_WARNING"></span>
-    <span data-ng-if="$ctrl.isPublic()" data-ng-show="$ctrl.hasUnAcceptableLicenses()">Antud litsentsiga materjali ei saa kogumikku lisada</span>
+    <span data-ng-if="$ctrl.isPublic()" data-ng-show="$ctrl.hasUnAcceptableLicenses()" data-translate="UNABLE_TO_ADD_MATERIAL"></span>
   </md-tooltip>
 
   <md-icon data-ng-if="$ctrl.isPublic() && !$ctrl.hasUnAcceptableLicenses()" class="unchecked">check</md-icon>

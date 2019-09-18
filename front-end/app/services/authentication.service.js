@@ -9,6 +9,7 @@ angular.module('koolikottApp')
         var isOAuthAuthentication = false;
         $rootScope.showLocationDialog = true;
         $rootScope.userFirstLogin = false;
+        $rootScope.rejectedPortfolios = [];
 
         var mobileIdLoginSuccessCallback;
         var mobileIdLoginFailCallback;
@@ -74,16 +75,16 @@ angular.module('koolikottApp')
 
         function migrateLearningObjectsAndLogin(authenticatedUser) {
             serverCallService.makePost('rest/user/migrateLearningObjectLicences', authenticatedUser.user)
-                .then(() => {
+                .then((response) => {
+                    $rootScope.rejectedPortfolios = response.data
                     authenticateUser(authenticatedUser)
                 })
         }
 
         function setAllLearningObjectsToPrivate(user) {
-            /*if (!$rootScope.previouslyDisagreed) {
+            if (!$rootScope.previouslyDisagreed) {
                 serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
-            }*/
-            serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
+            }
         }
 
         function saveResponseAndMigrateLicences(authenticatedUser) {
@@ -202,7 +203,7 @@ angular.module('koolikottApp')
                     serverCallService.makeGet('rest/userLicenceAgreement?id=' + userStatus.authenticatedUser.user.id)
                         .then((response => {
                             if (!response.data) {
-                                showLicenceMigrationAgreementModal(userStatus.authenticatedUser)
+                                checkLicencesAndAct(userStatus.authenticatedUser)
                             }
                             serverCallService.makeGet('rest/licenceAgreement/latest')
                                 .then((res) => {
@@ -278,12 +279,31 @@ angular.module('koolikottApp')
                 mobileIdLoginSuccessCallback();
             }
 
-            userLocatorService.getUserLocation().then((response) => {
-                if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
-                    showLocationDialog()
-                    $rootScope.locationDialogIsOpen = true
-                }
-            });
+            if ($rootScope.rejectedPortfolios.length > 0) {
+                $timeout(() => { $mdDialog.show({
+                    templateUrl: 'views/notMigratedPortfoliosDialog/notMigratedPortfoliosDialog.html',
+                    controller: 'notMigratedPortfoliosController',
+                    controllerAs: '$ctrl',
+                    clickOutsideToClose: false,
+                    escapeToClose: false,
+                    locals: { portfolios: $rootScope.rejectedPortfolios }
+                    }).then(() => {
+                        userLocatorService.getUserLocation().then((response) => {
+                            if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
+                                showLocationDialog()
+                                $rootScope.locationDialogIsOpen = true
+                            }
+                        });
+                    })
+                })
+            } else {
+                userLocatorService.getUserLocation().then((response) => {
+                    if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
+                        showLocationDialog()
+                        $rootScope.locationDialogIsOpen = true
+                    }
+                });
+            }
 
             $rootScope.justLoggedIn = true;
             $timeout(() =>

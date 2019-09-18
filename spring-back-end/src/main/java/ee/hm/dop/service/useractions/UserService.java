@@ -9,6 +9,7 @@ import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.MediaService;
+import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
@@ -22,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -49,6 +51,8 @@ public class UserService {
     private LicenseTypeService licenseTypeService;
     @Inject
     private MaterialService materialService;
+    @Inject
+    private PortfolioService portfolioService;
     @Inject
     private SolrEngineService solrEngineService;
 
@@ -198,16 +202,28 @@ public class UserService {
         return learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
     }
 
-    public void migrateUserLearningObjectLicences(User user) {
-        learningObjectService.getAllByCreator(user)
-                .stream()
+    public List<Portfolio> migrateUserLearningObjectLicences(User user) {
+        List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
+        List<Portfolio> portfoliosSetToPrivate = new ArrayList<>();
+        allUserLearningObjects.stream()
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
-                    learningObject.setLicenseType(licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
-                    setPictureLicenseType(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+
+                    if (learningObjectIsPortfolio(learningObject)) {
+                        Portfolio portfolio = portfolioService.findById(learningObject.getId());
+                        if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
+                            portfolio.setVisibility(Visibility.PRIVATE);
+                            portfoliosSetToPrivate.add(portfolio);
+                        } else {
+                            migrateLearningObjectLicense(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+                        }
+                    } else {
+                        migrateLearningObjectLicense(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+                    }
                 });
         setUserMediaLicenseType(user, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+        return portfoliosSetToPrivate;
     }
 
     private void setPictureLicenseType(LearningObject lo, LicenseType licenseType) {
@@ -242,5 +258,18 @@ public class UserService {
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {
         return pictureService.pictureHasUnAcceptableLicence(picture);
+    }
+
+    private boolean learningObjectIsPortfolio(LearningObject learningObject) {
+        return learningObject.getType().equals("portfolio");
+    }
+
+    private boolean portfolioHasInvalidMaterialCreatedByAnotherAuthor(Portfolio portfolio, User user) {
+        return portfolio.getCreator() != user && portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
+    }
+
+    private void migrateLearningObjectLicense(LearningObject learningObject, LicenseType licenseType) {
+        learningObject.setLicenseType(licenseType);
+        setPictureLicenseType(learningObject, licenseType);
     }
 }

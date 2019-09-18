@@ -1,5 +1,6 @@
 package ee.hm.dop.rest;
 
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.model.user.UserLocation;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.inject.Inject;
+
+import java.util.List;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -74,7 +77,7 @@ public class UserResource extends BaseResource {
     }
 
     @PostMapping("migrateLearningObjectLicences")
-    public void migrateUserLearningObjectLicences(@RequestBody User user) {
-        userService.migrateUserLearningObjectLicences(user);
+    public List<Portfolio> migrateUserLearningObjectLicences(@RequestBody User user) {
+        return userService.migrateUserLearningObjectLicences(user);
     }
 }
