@@ -1,3 +1,11 @@
+## e-Koolikott [1.39.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11061)
+
+### Muutunud
+* "Ekspertide statistika pädevusalade kuvamise täiendused statistika tabelis)" [EK-719](https://projektid.hitsa.ee/jira/browse/EK-719)
+* "Lisa SEF URLid" [EK-571](https://projektid.hitsa.ee/jira/browse/EK-571)
+* "Kogumikus murtakse sisu sõna suvalisest kohast" [EK-718](https://projektid.hitsa.ee/jira/browse/EK-718)
+* "Materjali loomise kuupäev katki" [EK-717](https://projektid.hitsa.ee/jira/browse/EK-717)
+
 ## e-Koolikott [1.39.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11058)
 
 ### Muutunud

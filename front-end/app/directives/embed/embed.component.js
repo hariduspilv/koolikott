@@ -37,15 +37,15 @@ class controller extends Controller {
 
                 this.$scope.type = type
                 break
-            case 'EBOOK':
-                if (this.isIE()) {
-                    this.$scope.type = 'LINK'
-                    this.$scope.url += '?archive=true'
-                    return
-                }
-                this.$scope.type = 'EBOOK'
-                this.$scope.url = `/utils/bibi/bib/i/?book=${uploadedFile.id}/${uploadedFile.name}`
-                break
+            // case 'EBOOK'://TODO to fix embbeded epub issue.probably smth with url
+            //     if (this.isIE()) {
+            //         this.$scope.type = 'LINK'
+            //         this.$scope.url += '?archive=true'
+            //         return
+            //     }
+            //     this.$scope.type = 'EBOOK'
+            //     this.$scope.url = `/utils/bibi/bib/i/?book=${uploadedFile.id}/${uploadedFile.name}`
+            //     break
             case 'PDF':
                 if (!isMaterial)
                     return console.error('E-books and PDFs are not embeddable as media files', url)

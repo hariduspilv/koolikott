@@ -68,6 +68,7 @@ class controller {
             ? authenticatedUser.token
             : null
     }
+
     hasRole(role) {
         const user = this.getUser()
         return user && user.role === role

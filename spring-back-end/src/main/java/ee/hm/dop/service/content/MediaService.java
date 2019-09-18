@@ -61,6 +61,7 @@ public class MediaService {
     }
 
     public boolean mediaHasUnAcceptableLicence(Media media) {
+        if (media == null) return true;
         LicenseType licenseType = media.getLicenseType();
         if (licenseType == null) {
             return true;

@@ -101,7 +101,6 @@ public class PortfolioResource extends BaseResource {
     @PostMapping
     @RequestMapping("copy")
     @Consumes(MediaType.APPLICATION_JSON)
-
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
     public Portfolio copy(@RequestBody Portfolio portfolio) {
         return portfolioService.copy(portfolio, getLoggedInUser());

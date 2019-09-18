@@ -42,17 +42,13 @@ public class UserEmailService {
     private LearningObjectDao learningObjectDao;
 
     public UserEmail getUserEmail(long id) {
-
         User user = userDao.findUserById(id);
-        if (user == null) {
-            throw notFound("User not found");
-        }
         UserEmail userEmail = userEmailDao.findByUser(user);
-        if (userEmail == null) {
-            throw notFound("User email not found");
-        }
-        else
+
+        if (user != null && userEmail != null && userEmail.isActivated())
             return userEmail;
+         else
+            throw badRequest("User or user email not found or e-mail not activated");
     }
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
@@ -130,7 +126,7 @@ public class UserEmailService {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         User_Agreement dbUserAgreement = userAgreementDao.getLatestAgreementForUser(userEmail.getUser().getId());
         if (dbUserEmail == null)
-            throw notFound("User not found");
+            throw badRequest("User not found");
         if (!dbUserEmail.getPin().equals(userEmail.getPin()))
             throw badRequest("Pins not equal");
 
@@ -147,7 +143,7 @@ public class UserEmailService {
     public UserEmail validatePinFromProfile(UserEmail userEmail) {
         UserEmail dbUserEmail = userEmailDao.findByUser(userEmail.getUser());
         if (dbUserEmail == null)
-            throw notFound("User not found");
+            throw badRequest("User not found");
         if (!dbUserEmail.getPin().equals(userEmail.getPin()))
             throw badRequest("Pins not equal");
 
@@ -209,10 +205,6 @@ public class UserEmailService {
 
     private ResponseStatusException badRequest(String s) {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
-    }
-
-    private ResponseStatusException notFound(String s) {
-        return new ResponseStatusException(HttpStatus.NOT_FOUND, s);
     }
 
     public DopPage getUserEmail(User loggedInUser, PageableQuerySentEmails pageableQuery) {

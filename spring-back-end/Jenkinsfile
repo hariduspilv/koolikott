@@ -36,7 +36,12 @@ node {
         if (env.BRANCH_NAME == 'develop') {
             sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
             sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
-        } else {
+        }
+        else if (env.BRANCH_NAME == 'sprint_1_40') {
+            sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
+            sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
+        }
+        else {
             sh 'echo solr copy disabled'
         }
     }
@@ -45,7 +50,11 @@ node {
         if (env.BRANCH_NAME == 'develop') {
             sh "scp -r spring-back-end/target/spring-kott.jar ${dopOxygenUrl}:app/"
             sh "ssh -t ${adminOxygenUrl} sh /home/netgroup/dop.sh"
-        } else {
+        } else if (env.BRANCH_NAME == 'sprint_1_40') {
+            sh "scp -r spring-back-end/target/spring-kott.jar ${dopOxygenUrl}:app/"
+            sh "ssh -t ${adminOxygenUrl} sh /home/netgroup/dop.sh"
+        }
+        else {
             sh 'echo jar deploy disabled'
         }
     }
