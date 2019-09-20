@@ -15,6 +15,7 @@ import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,7 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
+@Slf4j
 @Service
 @Transactional
 public class UserService {
@@ -172,13 +174,18 @@ public class UserService {
     }
 
     public boolean areLicencesAcceptable(String username) {
+        log.info("Starting license check for user " + username);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(getUserByUsername(username));
+        log.info("Found all users LO's " + allUserLearningObjects.size());
         long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
                 .filter(this::learningObjectHasUnAcceptableLicence).count();
+        log.info("UnAcceptableLicenses " + unAcceptableLearningObjectsCount);
+        log.info("Found %s LO's with unAcceptableLicense", unAcceptableLearningObjectsCount);
         long unAcceptablePictureCount = allUserLearningObjects.stream()
                 .filter(lo -> lo.getPicture() != null)
                 .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))
                 .count();
+        log.info("UnAcceptablePictures " + unAcceptablePictureCount);
         return (unAcceptableLearningObjectsCount == 0) &&
                 (unAcceptablePictureCount == 0);
     }
