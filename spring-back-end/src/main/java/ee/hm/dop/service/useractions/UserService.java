@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 
-@Slf4j
 @Service
 @Transactional
 public class UserService {
@@ -174,18 +173,18 @@ public class UserService {
     }
 
     public boolean areLicencesAcceptable(String username) {
-        log.info("Starting license check for user " + username);
+        logger.info("Starting license check for user " + username);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(getUserByUsername(username));
-        log.info("Found all users LO's " + allUserLearningObjects.size());
+        logger.info("Found all users LO's " + allUserLearningObjects.size());
         long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
                 .filter(this::learningObjectHasUnAcceptableLicence).count();
-        log.info("UnAcceptableLicenses " + unAcceptableLearningObjectsCount);
-        log.info("Found %s LO's with unAcceptableLicense", unAcceptableLearningObjectsCount);
+        logger.info("UnAcceptableLicenses " + unAcceptableLearningObjectsCount);
+        logger.info(String.format("Found %s LO's with unAcceptableLicense", unAcceptableLearningObjectsCount));
         long unAcceptablePictureCount = allUserLearningObjects.stream()
                 .filter(lo -> lo.getPicture() != null)
                 .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))
                 .count();
-        log.info("UnAcceptablePictures " + unAcceptablePictureCount);
+        logger.info("UnAcceptablePictures " + unAcceptablePictureCount);
         return (unAcceptableLearningObjectsCount == 0) &&
                 (unAcceptablePictureCount == 0);
     }
