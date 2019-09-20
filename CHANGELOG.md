@@ -1,4 +1,4 @@
-## e-Koolikott [1.39.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11061)
+## e-Koolikott [1.39.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11061) (Toodangusse paigaldatud 12.09.2019)
 
 ### Muutunud
 * "Ekspertide statistika pädevusalade kuvamise täiendused statistika tabelis)" [EK-719](https://projektid.hitsa.ee/jira/browse/EK-719)
@@ -6,7 +6,7 @@
 * "Kogumikus murtakse sisu sõna suvalisest kohast" [EK-718](https://projektid.hitsa.ee/jira/browse/EK-718)
 * "Materjali loomise kuupäev katki" [EK-717](https://projektid.hitsa.ee/jira/browse/EK-717)
 
-## e-Koolikott [1.39.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11058)
+## e-Koolikott [1.39.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11058) (Toodangusse paigaldatud 05.09.2019)
 
 ### Muutunud
 * "Aineekspertide statistika kuvamise loogika muudatused (õppevara põhiselt tegevuspõhisele)" [EK-295](https://projektid.hitsa.ee/jira/browse/EK-295)
@@ -14,7 +14,7 @@
 * "Kasutuspiirangu seadmise nupp peaks olema kuvatud vaid administraatoritele" [EK-706](https://projektid.hitsa.ee/jira/browse/EK-706)
 * "Ekspertide statistika" [EK-177](https://projektid.hitsa.ee/jira/browse/EK-177)
 
-## e-Koolikott [1.39.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11023)
+## e-Koolikott [1.39.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11023) (Toodangusse paigaldatud 29.08.2019)
 
 ### Muutunud
 * "Otsingu tulemuste layout katki/vale" [EK-697](https://projektid.hitsa.ee/jira/browse/EK-697)
