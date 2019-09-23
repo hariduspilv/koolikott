@@ -59,11 +59,11 @@ angular.module('koolikottApp')
                         }
                     })
                     $scope.timeAddPortfolioOpened = new Date();
-                    if ($scope.portfolio && $scope.portfolio.licenseType && $scope.portfolio.licenseType.id === 10) {
+                    if ($scope.portfolio && $scope.portfolio.licenseType && $scope.portfolio.licenseType.name === 'CCBYSA30') {
                         $scope.hasValidLicense = true;
                     }
                     if ($scope.portfolio && $scope.portfolio.picture) {
-                        $scope.pictureHasValidLicense = $scope.portfolio.picture.licenseType.id === 10
+                        $scope.pictureHasValidLicense = $scope.portfolio.picture.licenseType.name === 'CCBYSA30'
                     }
                 }
 

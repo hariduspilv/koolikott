@@ -135,8 +135,10 @@ class controller extends Controller {
     }
 
     isLicenseTypeInvalid() {
-        const licenseType = this.data.licenseType.id
-        return licenseType === 1 || licenseType === 7 || licenseType === 4
+        const licenseType = this.data.licenseType.name
+        const pictureLicenseType = this.data.picture.licenseType.name
+        return licenseType === 'allRightsReserved' || licenseType === 'CCBYNCND' || licenseType === 'CCBYND' ||
+            pictureLicenseType === 'allRightsReserved' || pictureLicenseType === 'CCBYNCND' || pictureLicenseType === 'CCBYND'
     }
 }
 controller.$inject = [

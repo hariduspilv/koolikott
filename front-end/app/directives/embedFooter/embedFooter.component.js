@@ -11,6 +11,8 @@ class controller extends Controller {
                 null
             )
         )
+
+        this.$scope.invalidLicense = this.isLicenseTypeInvalid()
     }
     $onChanges({ data }) {
         if (data.currentValue !== data.previousValue) {
@@ -29,7 +31,6 @@ class controller extends Controller {
 
         this.$scope.deleted = deleted
         this.$scope.private = visibility === 'PRIVATE'
-        this.$scope.invalidLicense = licenseType.id === 1 || licenseType.id === 4 || licenseType.id === 7
 
         const { name: licenseTypeName } = licenseType || {}
         this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
@@ -85,6 +86,13 @@ class controller extends Controller {
         return (this.$scope.licenseTypeName || this.$scope.defaultLicenseTypeName) === 'YOUTUBE'
             ? 'https://www.youtube.com/static?template=terms'
             : 'http://hitsa.ee/teenused/autorioigused/litsentside-selgitused'
+    }
+
+    isLicenseTypeInvalid() {
+        const licenseType = this.data.licenseType.name
+        const pictureLicenseType = this.data.picture.licenseType.name
+        return licenseType === 'allRightsReserved' || licenseType === 'CCBYNCND' || licenseType === 'CCBYND' ||
+            pictureLicenseType === 'allRightsReserved' || pictureLicenseType === 'CCBYNCND' || pictureLicenseType === 'CCBYND'
     }
 }
 controller.$inject = [

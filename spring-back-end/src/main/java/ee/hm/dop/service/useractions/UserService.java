@@ -15,7 +15,6 @@ import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -216,18 +215,17 @@ public class UserService {
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
 
+                    migrateLearningObjectLicense(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+
                     if (learningObject instanceof Portfolio) {
                         Portfolio portfolio = portfolioService.findById(learningObject.getId());
                         if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
                             portfolio.setVisibility(Visibility.PRIVATE);
                             portfoliosSetToPrivate.add(portfolio);
-                        } else {
-                            migrateLearningObjectLicense(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
                         }
-                    } else {
-                        migrateLearningObjectLicense(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
                     }
                 });
+
         setUserMediaLicenseType(user, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
         return portfoliosSetToPrivate;
     }

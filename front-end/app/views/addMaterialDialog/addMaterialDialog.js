@@ -34,13 +34,13 @@ class controller extends Controller {
         this.$scope.licenseTermsLink = this.$translate.instant('LICENSE_TERMS_LINK')
 
         if (this.$scope.material) {
-            this.$scope.hasValidLicense = this.$scope.material.licenseType.id === 10
+            this.$scope.hasValidLicense = this.$scope.material.licenseType.name === 'CCBYSA30'
         }
 
         if (this.$scope.material && this.$scope.material.picture) {
             this.$scope.additionalInfo.isVisible = true
             this.$scope.existingPicture = true
-            this.$scope.pictureHasValidLicense = this.$scope.material.picture.licenseType.id === 10
+            this.$scope.pictureHasValidLicense = this.$scope.material.picture.licenseType.name === 'CCBYSA30'
         }
 
         this.fetchMaxPictureSize()
