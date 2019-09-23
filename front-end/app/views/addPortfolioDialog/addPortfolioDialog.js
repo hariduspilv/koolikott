@@ -25,7 +25,7 @@ angular.module('koolikottApp')
                     $scope.newPortfolio.taxons = [{}];
                     $scope.isVocationalEducation = true
                     $scope.licenseTermsLink = $translate.instant('LICENSE_TERMS_LINK')
-                    
+
                     if ($scope.portfolio && $scope.portfolio.picture) {
                         $scope.existingPicture = true
                     }
@@ -41,9 +41,6 @@ angular.module('koolikottApp')
                     if (($scope.mode === 'EDIT' || $scope.mode === 'COPY') && !$scope.newPortfolio.licenseType) {
                         $timeout(() => $scope.addPortfolioForm.licenseType.$setTouched())
                     }
-                    /**
-                     * Set license type to “All rights reserved” if user chooses “Do not know” option.
-                     */
                     $scope.$watch('licenseTypeAgreed', (selectedValue) => {
                         if (selectedValue) {
                             $scope.portfolio.licenseType = $scope.ccbysa30
@@ -62,6 +59,12 @@ angular.module('koolikottApp')
                         }
                     })
                     $scope.timeAddPortfolioOpened = new Date();
+                    if ($scope.portfolio && $scope.portfolio.licenseType && $scope.portfolio.licenseType.id === 10) {
+                        $scope.hasValidLicense = true;
+                    }
+                    if ($scope.portfolio && $scope.portfolio.picture) {
+                        $scope.pictureHasValidLicense = $scope.portfolio.picture.licenseType.id === 10
+                    }
                 }
 
                 $scope.cancel = function () {

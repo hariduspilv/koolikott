@@ -40,6 +40,7 @@
             class="margin-top-18 margin-bottom-18"
             data-ng-model="licenseTypeAgreed"
             data-ng-value="CCBYSA30"
+            data-ng-checked="hasValidLicense"
             aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
             required
             >
@@ -187,6 +188,7 @@
               data-ng-required="newPicture || existingPicture"
               data-ng-model="pictureLicenseTypeAgreed"
               data-ng-value="CCBYSA30"
+              data-ng-checked="pictureHasValidLicense"
               aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
             >
               <span data-translate="I_AGREE_TO"></span>
