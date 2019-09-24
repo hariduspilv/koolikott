@@ -895,6 +895,10 @@ class Controller {
                 this[name] = arguments[idx]
             )
     }
+    isLicenseInvalid(license, pictureLicense) {
+        return license === 'allRightsReserved' || license === 'CCBYNCND' || license === 'CCBYND' ||
+            pictureLicense === 'allRightsReserved' || pictureLicense === 'CCBYNCND' || pictureLicense === 'CCBYND'
+    }
     isMaterial({ type }) {
         return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'
     }
