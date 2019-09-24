@@ -352,8 +352,10 @@ public class MaterialService {
         if (portfolio != null) {
             List<ChapterBlock> chapterBlocks = new ArrayList<>();
             if (portfolio.getChapters() != null) {
-                portfolio.getChapters().forEach(chapter -> chapterBlocks.addAll(chapter.getBlocks()));
-                chapterBlocks.forEach(chapterBlock -> portfolioMaterials.addAll(getMaterialFromChapterBlock(chapterBlock.getHtmlContent())));
+                portfolio.getChapters().stream().filter(chapter -> !chapter.getBlocks().isEmpty() || chapter.getBlocks() != null)
+                        .map(Chapter::getBlocks).forEach(chapterBlocks::addAll);
+                if (!chapterBlocks.isEmpty())
+                    chapterBlocks.forEach(chapterBlock -> portfolioMaterials.addAll(getMaterialFromChapterBlock(chapterBlock.getHtmlContent())));
             }
         }
 
