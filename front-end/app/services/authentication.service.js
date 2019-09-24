@@ -132,7 +132,7 @@ angular.module('koolikottApp')
         }
 
         function checkLicencesAndAct(authenticatedUser) {
-            serverCallService.makeGet('/rest/user/areLicencesAcceptable?username=' + authenticatedUser.user.username)
+            serverCallService.makeGet('/rest/user/areLicencesAcceptable?id=' + authenticatedUser.user.id)
                 .then((response) => {
                         if (response) {
                             if (response.data) {

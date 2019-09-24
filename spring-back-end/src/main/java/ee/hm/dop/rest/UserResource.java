@@ -67,8 +67,8 @@ public class UserResource extends BaseResource {
     }
 
     @GetMapping("areLicencesAcceptable")
-    public boolean areLicencesAcceptable(@RequestParam("username") String username) {
-        return  userService.areLicencesAcceptable(username);
+    public boolean areLicencesAcceptable(@RequestParam("id") Long id) {
+        return  userService.areLicencesAcceptable(id);
     }
 
     @PostMapping("setLearningObjectsPrivate")

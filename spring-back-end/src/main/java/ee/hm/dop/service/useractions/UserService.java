@@ -171,9 +171,10 @@ public class UserService {
         return user.getRole().equals(from) ? setUserRole(user, to) : null;
     }
 
-    public boolean areLicencesAcceptable(String username) {
-        logger.info("Starting license check for user " + username);
-        List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(getUserByUsername(username));
+    public boolean areLicencesAcceptable(Long userId) {
+        logger.info("Starting license check for user " + userId);
+        User user = userDao.findUserById(userId);
+        List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
         logger.info("Found all users LO's " + allUserLearningObjects.size());
         long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
                 .filter(this::learningObjectHasUnAcceptableLicence).count();
@@ -270,6 +271,7 @@ public class UserService {
 
     private void migrateLearningObjectLicense(LearningObject learningObject, LicenseType licenseType) {
         learningObject.setLicenseType(licenseType);
-        setPictureLicenseType(learningObject, licenseType);
+        if (learningObject.getPicture() != null)
+            setPictureLicenseType(learningObject, licenseType);
     }
 }
