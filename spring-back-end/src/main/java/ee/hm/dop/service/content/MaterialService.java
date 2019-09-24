@@ -351,8 +351,10 @@ public class MaterialService {
 
         if (portfolio != null) {
             List<ChapterBlock> chapterBlocks = new ArrayList<>();
-            portfolio.getChapters().forEach(chapter -> chapterBlocks.addAll(chapter.getBlocks()));
-            chapterBlocks.forEach(chapterBlock -> portfolioMaterials.addAll(getMaterialFromChapterBlock(chapterBlock.getHtmlContent())));
+            if (portfolio.getChapters() != null) {
+                portfolio.getChapters().forEach(chapter -> chapterBlocks.addAll(chapter.getBlocks()));
+                chapterBlocks.forEach(chapterBlock -> portfolioMaterials.addAll(getMaterialFromChapterBlock(chapterBlock.getHtmlContent())));
+            }
         }
 
         return portfolioMaterials;
