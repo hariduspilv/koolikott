@@ -182,7 +182,7 @@ angular.module('koolikottApp')
                 };
 
                 $scope.isValid = function () {
-                    return $scope.addPortfolioForm.$valid && hasCorrectTaxon();
+                    return $scope.addPortfolioForm.$valid && hasCorrectTaxon() && $scope.licenseTypeAgreed && hasPictureAndLicenseChecked();
                 };
 
                 $scope.addNewTaxon = function () {
@@ -190,6 +190,10 @@ angular.module('koolikottApp')
 
                     $scope.newPortfolio.taxons.push(educationalContext);
                 };
+
+                function hasPictureAndLicenseChecked() {
+                    return $scope.newPicture || $scope.existingPicture ? $scope.pictureLicenseTypeAgreed : true;
+                }
 
                 function savePortfolioFinally() {
                     $scope.isSaving = false;
