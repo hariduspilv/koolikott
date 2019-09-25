@@ -350,10 +350,10 @@ public class MaterialService {
 
         if (portfolio != null) {
             List<ChapterBlock> chapterBlocks = new ArrayList<>();
+            logger.info(String.format("Starting to handle portfolio with id --- %s", portfolio.getId()));
+            logger.info(String.format("Trying to get chapters: %s", portfolio.getChapters()));
             if (portfolio.getChapters().size() > 0) {
                 portfolio.getChapters().forEach(chapter -> {
-                    logger.info(String.format("Starting to handle portfolio with id --- %s", portfolio.getId()));
-                    logger.info(String.format("Chapter::: %s --- Chapter blocks::: %s", chapter, chapter.getBlocks()));
                     if (chapter.getBlocks().size() > 0)
                         chapterBlocks.addAll(chapter.getBlocks());
                 });
