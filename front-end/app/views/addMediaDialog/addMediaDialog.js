@@ -52,14 +52,6 @@ class controller extends Controller {
             this.$scope.isUserAuthor = currentValue === this.userFullName
         })
 
-        /**
-         * Set license type to “All rights reserved” if user chooses “Do not know” option.
-         */
-        this.$scope.$watch('licenseTypeAgreed', (selectedValue) => {
-            if (selectedValue)
-                this.$scope.media.licenseType = this.$scope.ccbysa30
-        })
-
         // fix for https://github.com/angular/material/issues/6905
         this.$timeout(() =>
             angular.element(document.querySelector('html')).css('overflow-y', '')

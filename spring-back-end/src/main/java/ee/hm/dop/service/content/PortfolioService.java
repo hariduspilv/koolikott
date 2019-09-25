@@ -50,8 +50,6 @@ public class PortfolioService {
     @Inject
     private PortfolioLogDao portfolioLogDao;
     @Inject
-    private MediaService mediaService;
-    @Inject
     private PictureService pictureService;
     @Inject
     private MaterialService materialService;
@@ -113,18 +111,8 @@ public class PortfolioService {
         if (portfolio == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        List<Media> portfolioMedia = getPortfolioMedia(portfolio);
         return !portfolioHasUnAcceptableLicense(portfolio) &&
-                !portfolioThumbnailHasUnAcceptableLicense(portfolio) &&
-                !portfolioMediaHasUnAcceptableLicenses(portfolioMedia);
-    }
-
-    private boolean portfolioMediaHasUnAcceptableLicenses(List<Media> portfolioMedia) {
-        return mediaService.anyMediaHasUnacceptableLicenseType(portfolioMedia);
-    }
-
-    private List<Media> getPortfolioMedia(Portfolio portfolio) {
-        return mediaService.getAllMediaIfLearningObjectIsPortfolio(portfolio);
+                !portfolioThumbnailHasUnAcceptableLicense(portfolio);
     }
 
     private boolean portfolioThumbnailHasUnAcceptableLicense(Portfolio portfolio) {
