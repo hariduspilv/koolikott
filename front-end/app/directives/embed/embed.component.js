@@ -135,7 +135,18 @@ class controller extends Controller {
     }
 
     isLicenseTypeInvalid() {
-        this.isLicenseInvalid(this.data.licenseType.name, this.data.picture.licenseType.name)
+        const licenseType = this.data.licenseType
+        const picture = this.data.picture
+
+        if (licenseType === undefined) {
+            return true
+        } else if (picture === undefined) {
+            return this.isLicenseInvalid(licenseType.name)
+        } else if (picture.licenseType === undefined) {
+            return true
+        } else {
+            return this.isLicenseInvalid(licenseType.name) || this.isPictureLicenseInvalid(picture.licenseType.name)
+        }
     }
 }
 controller.$inject = [

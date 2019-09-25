@@ -63,7 +63,8 @@ angular.module('koolikottApp')
                         $scope.hasValidLicense = true;
                     }
                     if ($scope.portfolio && $scope.portfolio.picture) {
-                        $scope.pictureHasValidLicense = $scope.portfolio.picture.licenseType.name === 'CCBYSA30'
+                        $scope.pictureHasValidLicense = !$scope.portfolio.picture.licenseType
+                            ? false : $scope.portfolio.picture.licenseType.name === 'CCBYSA30';
                     }
                 }
 

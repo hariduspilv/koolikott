@@ -895,9 +895,11 @@ class Controller {
                 this[name] = arguments[idx]
             )
     }
-    isLicenseInvalid(license, pictureLicense) {
-        return license === 'allRightsReserved' || license === 'CCBYNCND' || license === 'CCBYND' ||
-            pictureLicense === 'allRightsReserved' || pictureLicense === 'CCBYNCND' || pictureLicense === 'CCBYND'
+    isLicenseInvalid(license) {
+        return license === 'allRightsReserved' || license === 'CCBYNCND' || license === 'CCBYND'
+    }
+    isPictureLicenseInvalid(pictureLicense) {
+        return pictureLicense === 'allRightsReserved' || pictureLicense === 'CCBYNCND' || pictureLicense === 'CCBYND'
     }
     isMaterial({ type }) {
         return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'

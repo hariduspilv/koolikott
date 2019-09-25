@@ -799,18 +799,20 @@ class controller extends Controller {
                 isAddToPortfolio: true
             }
         }).then(material => {
-            this.dialogService.showConfirmationDialog(
-                "{{'MATERIAL_MAKE_PUBLIC' | translate}}",
-                "{{'MATERIAL_WARNING_IN_PORTFOLIO' | translate}}",
-                "{{'MATERIAL_YES' | translate}}",
-                "{{'MATERIAL_NO' | translate}}",
-                () => {
-                    this.updateMaterialVisibilityToPublic(material)
-                },
-                () => {
-                    this.toastService.show('MATERIAL_SAVED_IN_PORTFOLIO')
-                }
-            )
+            if (material !== undefined){
+                this.dialogService.showConfirmationDialog(
+                    "{{'MATERIAL_MAKE_PUBLIC' | translate}}",
+                    "{{'MATERIAL_WARNING_IN_PORTFOLIO' | translate}}",
+                    "{{'MATERIAL_YES' | translate}}",
+                    "{{'MATERIAL_NO' | translate}}",
+                    () => {
+                        this.updateMaterialVisibilityToPublic(material)
+                    },
+                    () => {
+                        this.toastService.show('MATERIAL_SAVED_IN_PORTFOLIO')
+                    }
+                )
+            }
         })
     }
     getMaterialsMarkup(materials) {

@@ -40,7 +40,8 @@ class controller extends Controller {
         if (this.$scope.material && this.$scope.material.picture) {
             this.$scope.additionalInfo.isVisible = true
             this.$scope.existingPicture = true
-            this.$scope.pictureHasValidLicense = this.$scope.material.picture.licenseType.name === 'CCBYSA30'
+            this.$scope.pictureHasValidLicense = !this.$scope.material.picture.licenseType
+                ? false : this.$scope.material.picture.licenseType.name === 'CCBYSA30';
         }
 
         this.fetchMaxPictureSize()
