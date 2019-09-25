@@ -94,24 +94,6 @@
               <div data-ng-message="required" data-translate="SOURCE_REQUIRED"></div>
             </div>
           </md-input-container>
-          <!-- License type -->
-          <md-input-container data-flex class="no-margin">
-            <h5 class="margin-bottom-18 margin-top-18" data-translate="LICENSETYPE_REQUIRED"></h5>
-            <md-checkbox
-              name="licenseType"
-              data-ng-model="licenseTypeAgreed"
-              data-ng-value="CCBYSA30"
-              aria-label="Olen nõus CC BY-SA 3.0 litsentsi tingimustega"
-              required
-            >
-              <span data-translate="I_AGREE_TO"></span>
-              <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong data-translate="LICENSETYPE_CCBYSA30"></strong></a>
-              <span data-translate="TERMS_OF_LICENSE"></span>
-            </md-checkbox>
-            <div data-ng-messages="addMediaForm.licenseType.$error">
-              <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
-            </div>
-          </md-input-container>
         </div>
       </div>
       <!-- Actions -->

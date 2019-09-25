@@ -34,7 +34,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.service.content.MediaService.parseIdFromChapterBlock;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -404,5 +403,18 @@ public class MaterialService {
                     licenseType.getId() == 7 ||
                     materialPictureHasUnacceptableLicense;
         }
+    }
+
+    private long parseIdFromChapterBlock(String partOfChapterBlock) {
+        StringBuilder idString = new StringBuilder();
+        String unparsedId = partOfChapterBlock.split("data-id")[1];
+
+        unparsedId.chars().forEach(c -> {
+            if (Character.isDigit((char) c)) {
+                idString.append((char) c);
+            }
+        });
+
+        return Long.parseLong(idString.toString());
     }
 }

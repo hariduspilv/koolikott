@@ -8,7 +8,6 @@ import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
-import ee.hm.dop.service.content.MediaService;
 import ee.hm.dop.service.content.PortfolioService;
 import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.metadata.LicenseTypeService;
@@ -41,8 +40,6 @@ public class UserService {
     private UserDao userDao;
     @Inject
     private TaxonService taxonService;
-    @Inject
-    private MediaService mediaService;
     @Inject
     private LearningObjectService learningObjectService;
     @Inject
@@ -227,7 +224,6 @@ public class UserService {
                     }
                 });
 
-        setUserMediaLicenseType(user, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
         return portfoliosSetToPrivate;
     }
 
@@ -238,23 +234,12 @@ public class UserService {
         }
     }
 
-    private void setUserMediaLicenseType(User user, LicenseType licenseType) {
-        mediaService.getAllByCreator(user)
-                .stream()
-                .filter(this::mediaHasUnAcceptableLicence)
-                .forEach(media -> media.setLicenseType(licenseType));
-    }
-
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
         List<Material> loMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)
                 .stream()
                 .filter(Objects::nonNull)
                 .collect(Collectors.toList());
         return learningObjectService.learningObjectHasUnAcceptableLicence(lo) || learningObjectHasMaterialWithUnacceptableLicense(loMaterials);
-    }
-
-    private boolean mediaHasUnAcceptableLicence(Media media) {
-        return mediaService.mediaHasUnAcceptableLicence(media);
     }
 
     private boolean materialHasUnacceptableLicense(Material material) {
