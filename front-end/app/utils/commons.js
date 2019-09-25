@@ -901,8 +901,8 @@ class Controller {
     isPictureLicenseInvalid(pictureLicense) {
         return pictureLicense === 'allRightsReserved' || pictureLicense === 'CCBYNCND' || pictureLicense === 'CCBYND'
     }
-    isMaterialLicenseTypeInvalid(license, picture){
-        return !license ? true : !picture ?
+    isMaterialLicenseTypeInvalid(license, picture, type){
+        return !this.isMaterial({ type }) ? false : !license ? true : !picture ?
             this.isLicenseInvalid(license.name) : !picture.licenseType ?
                 true : this.isLicenseInvalid(license.name) || this.isPictureLicenseInvalid(picture.licenseType.name);
     }

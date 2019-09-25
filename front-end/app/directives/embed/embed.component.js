@@ -16,7 +16,7 @@ class controller extends Controller {
         this.$scope.deleted = this.data.deleted
         this.$scope.private = this.data.visibility === 'PRIVATE'
         this.$scope.materialTitle = this.getCurrentMaterialTitle()
-        this.$scope.hasInvalidLicense = this.isMaterialLicenseTypeInvalid(this.data.licenseType, this.data.picture)
+        this.$scope.hasInvalidLicense = this.isMaterialLicenseTypeInvalid(this.data.licenseType, this.data.picture, this.data.type)
 
         this.$scope.isAdminOrModerator = this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()
 

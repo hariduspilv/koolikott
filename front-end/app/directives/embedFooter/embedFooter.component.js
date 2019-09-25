@@ -12,7 +12,7 @@ class controller extends Controller {
             )
         )
 
-        this.$scope.invalidLicense = this.isMaterialLicenseTypeInvalid(this.data.licenseType, this.data.picture)
+        this.$scope.invalidLicense = this.isMaterialLicenseTypeInvalid(this.data.licenseType, this.data.picture, this.data.type)
     }
     $onChanges({ data }) {
         if (data.currentValue !== data.previousValue) {
