@@ -393,9 +393,7 @@ public class MaterialService {
         boolean materialPictureHasUnacceptableLicense = material.getPicture() != null && pictureService.pictureHasUnAcceptableLicence(material.getPicture());
 
         if (userIsLoggingIn) {
-            return !licenseType.getName().equals("CCBY") &&
-                    !licenseType.getName().equals("CCBYSA") &&
-                    !licenseType.getName().equals("CCBYSA30") ||
+            return !licenseType.getName().equals("CCBYSA30") ||
                     materialPictureHasUnacceptableLicense;
         } else {
             return licenseType.getId() == 1 ||

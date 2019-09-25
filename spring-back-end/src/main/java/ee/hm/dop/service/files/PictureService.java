@@ -52,8 +52,6 @@ public class PictureService {
         if (pictureLicenceType == null) {
             return true;
         }
-        return !pictureLicenceType.getName().equals("CCBY") &&
-                !pictureLicenceType.getName().equals("CCBYSA") &&
-                !pictureLicenceType.getName().equals("CCBYSA30");
+        return !pictureLicenceType.getName().equals("CCBYSA30");
     }
 }

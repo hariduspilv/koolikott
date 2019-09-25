@@ -127,9 +127,7 @@ public class PortfolioService {
         if (licenseType == null) {
             return true;
         }
-        return !licenseType.getName().equals("CCBY") &&
-                !licenseType.getName().equals("CCBYSA") &&
-                !licenseType.getName().equals("CCBYSA30");
+        return !licenseType.getName().equals("CCBYSA30");
     }
 
     private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {

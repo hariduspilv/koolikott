@@ -129,8 +129,6 @@ public class LearningObjectService {
     }
 
     public boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
-        return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals("CCBY") &&
-                !lo.getLicenseType().getName().equals("CCBYSA") &&
-                !lo.getLicenseType().getName().equals("CCBYSA30");
+        return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals("CCBYSA30");
     }
 }
