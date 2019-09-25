@@ -41,7 +41,7 @@ class controller extends Controller {
     hasUnAcceptableLicenses() {
         return this.learningObject.licenseType ? this.learningObject.licenseType.name === 'allRightsReserved' ||
             this.learningObject.licenseType.name === 'CCBYND' ||
-            this.learningObject.licenseType.id === 'CCBYNCND' : !this.learningObject.licenseType;
+            this.learningObject.licenseType.name === 'CCBYNCND' : !this.learningObject.licenseType;
     }
 }
 controller.$inject = [

@@ -4,6 +4,7 @@ import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.PortfolioMaterialDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -76,6 +77,8 @@ public class MaterialService {
     private PortfolioService portfolioService;
     @Inject
     private PictureService pictureService;
+    @Inject
+    private PortfolioMaterialDao portfolioMaterialDao;
 
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
@@ -347,41 +350,15 @@ public class MaterialService {
     }
 
     public List<Material> getAllMaterialIfLearningObjectIsPortfolio(LearningObject lo) {
-        List<Material> portfolioMaterials = new ArrayList<>();
+        List<Material> materials = new ArrayList<>();
         Portfolio portfolio = portfolioService.findById(lo.getId());
 
         if (portfolio != null) {
-            List<ChapterBlock> chapterBlocks = new ArrayList<>();
-            logger.info(String.format("Starting to handle portfolio with id --- %s", portfolio.getId()));
-            logger.info(String.format("Trying to get chapters: %s", portfolio.getChapters()));
-            if (portfolio.getChapters().size() > 0) {
-                portfolio.getChapters().stream().filter(Objects::nonNull).map(Chapter::getBlocks).forEach(chapterBlocks::addAll);
-                if (chapterBlocks.size() > 0)
-                    chapterBlocks.forEach(chapterBlock -> portfolioMaterials.addAll(getMaterialFromChapterBlock(chapterBlock.getHtmlContent())));
-            }
+            List<PortfolioMaterial> portfolioMaterials = portfolioMaterialDao.findAllPortfolioMaterialsByPortfolio(portfolio.getId());
+            if (!portfolioMaterials.isEmpty())
+                materials = portfolioMaterials.stream().map(PortfolioMaterial::getMaterial).collect(Collectors.toList());
         }
-
-        return portfolioMaterials;
-    }
-
-    private List<Material> getMaterialFromChapterBlock(String htmlContent) {
-        List<Material> materials = new ArrayList<>();
-        List<String> partsOfChapterBlock = Arrays.asList(htmlContent.split("<div"));
-
-        partsOfChapterBlock.forEach(partOfChapterBlock -> {
-            if (partOfChapterBlock.contains("material") && partOfChapterBlock.contains("data-id")) {
-                Long id = parseMaterialId(partOfChapterBlock);
-                if (id > 0) {
-                    materials.add(materialDao.findById(id));
-                }
-            }
-        });
-
         return materials;
-    }
-
-    private long parseMaterialId(String partOfChapterBlock) {
-        return parseIdFromChapterBlock(partOfChapterBlock);
     }
 
     public boolean materialHasUnacceptableLicense(Material material, boolean userIsLoggingIn) {
@@ -401,14 +378,5 @@ public class MaterialService {
                     licenseType.getName().equals("CCBYNCND") ||
                     materialPictureHasUnacceptableLicense;
         }
-    }
-
-    private Long parseIdFromChapterBlock(String partOfChapterBlock) {
-        Pattern pattern = Pattern.compile("data-id=(.*?)></div>", Pattern.DOTALL);
-        Matcher matcher = pattern.matcher(partOfChapterBlock);
-        if (matcher.find())
-            return Long.parseLong(matcher.group(1).replace("\"", ""));
-        else
-            return null;
     }
 }
