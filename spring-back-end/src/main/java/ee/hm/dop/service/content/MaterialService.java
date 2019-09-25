@@ -32,6 +32,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
@@ -403,16 +405,12 @@ public class MaterialService {
         }
     }
 
-    private long parseIdFromChapterBlock(String partOfChapterBlock) {
-        StringBuilder idString = new StringBuilder();
-        String unparsedId = partOfChapterBlock.split("data-id")[1];
-
-        unparsedId.chars().forEach(c -> {
-            if (Character.isDigit((char) c)) {
-                idString.append((char) c);
-            }
-        });
-
-        return Long.parseLong(idString.toString());
+    private Long parseIdFromChapterBlock(String partOfChapterBlock) {
+        Pattern pattern = Pattern.compile("data-id=(.*?)></div>", Pattern.DOTALL);
+        Matcher matcher = pattern.matcher(partOfChapterBlock);
+        if (matcher.find())
+            return Long.parseLong(matcher.group(1));
+        else
+            return null;
     }
 }
