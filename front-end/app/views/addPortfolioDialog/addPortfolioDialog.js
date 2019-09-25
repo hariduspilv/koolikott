@@ -31,6 +31,8 @@ angular.module('koolikottApp')
                     }
 
                     $scope.mode = locals.mode;
+                    if ($scope.mode === 'COPY')
+                        $scope.isCopy = true
                     if ($scope.mode === 'EDIT' || $scope.mode === 'COPY') {
                         setExistingFields()
                     }
