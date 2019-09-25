@@ -39,9 +39,9 @@ class controller extends Controller {
         return this.learningObject.visibility === 'PRIVATE'
     }
     hasUnAcceptableLicenses() {
-        return this.learningObject.licenseType ? this.learningObject.licenseType.id === 1 ||
-            this.learningObject.licenseType.id === 4 ||
-            this.learningObject.licenseType.id === 7 : !this.learningObject.licenseType;
+        return this.learningObject.licenseType ? this.learningObject.licenseType.name === 'allRightsReserved' ||
+            this.learningObject.licenseType.name === 'CCBYND' ||
+            this.learningObject.licenseType.id === 'CCBYNCND' : !this.learningObject.licenseType;
     }
 }
 controller.$inject = [
