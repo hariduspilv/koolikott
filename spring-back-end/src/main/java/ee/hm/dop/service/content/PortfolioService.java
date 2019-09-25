@@ -4,6 +4,7 @@ import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.service.CheckLicenseStrategy;
 import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
@@ -22,6 +23,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.inject.Inject;
 import java.util.List;
 
+import static ee.hm.dop.model.enums.LicenseType.CC_BY_SA_30;
 import static ee.hm.dop.model.enums.SaveType.MANUAL;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -127,7 +129,7 @@ public class PortfolioService {
         if (licenseType == null) {
             return true;
         }
-        return !licenseType.getName().equals("CCBYSA30");
+        return !licenseType.getName().equals(CC_BY_SA_30);
     }
 
     private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {
@@ -181,6 +183,6 @@ public class PortfolioService {
         }
         List<Material> portfolioMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(portfolio);
         return portfolioMaterials.stream()
-                .anyMatch(material -> materialService.materialHasUnacceptableLicense(material, false));
+                .anyMatch(material -> materialService.materialHasUnacceptableLicense(material, CheckLicenseStrategy.USER_HAS_LOGGED_IN));
     }
 }

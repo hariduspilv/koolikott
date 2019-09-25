@@ -6,6 +6,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.CheckLicenseStrategy;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
@@ -199,10 +200,7 @@ public class UserService {
 
     public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
         learningObjectMaterials = learningObjectMaterials.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        if (learningObjectMaterials.isEmpty()) {
-            return false;
-        }
-        return learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
+        return !learningObjectMaterials.isEmpty() && learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
     }
 
     public List<Portfolio> migrateUserLearningObjectLicences(User user) {
@@ -243,7 +241,7 @@ public class UserService {
     }
 
     private boolean materialHasUnacceptableLicense(Material material) {
-        return materialService.materialHasUnacceptableLicense(material, true);
+        return materialService.materialHasUnacceptableLicense(material, CheckLicenseStrategy.FIRST_LOGIN);
     }
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {

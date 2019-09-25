@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.model.enums.LicenseType.CC_BY_SA_30;
 import static ee.hm.dop.utils.UserUtil.isAdmin;
 import static ee.hm.dop.utils.UserUtil.isModerator;
 import static java.util.stream.Collectors.toList;
@@ -129,6 +130,6 @@ public class LearningObjectService {
     }
 
     public boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
-        return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals("CCBYSA30");
+        return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals(CC_BY_SA_30);
     }
 }

@@ -9,6 +9,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.service.CheckLicenseStrategy;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
@@ -30,13 +31,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.model.enums.LicenseType.*;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -361,22 +360,24 @@ public class MaterialService {
         return materials;
     }
 
-    public boolean materialHasUnacceptableLicense(Material material, boolean userIsLoggingIn) {
+    public boolean materialHasUnacceptableLicense(Material material, CheckLicenseStrategy checkLicenseStrategy) {
         LicenseType licenseType = material.getLicenseType();
         if (licenseType == null) {
             return true;
         }
 
-        boolean materialPictureHasUnacceptableLicense = material.getPicture() != null && pictureService.pictureHasUnAcceptableLicence(material.getPicture());
-
-        if (userIsLoggingIn) {
-            return !licenseType.getName().equals("CCBYSA30") ||
-                    materialPictureHasUnacceptableLicense;
+        if (checkLicenseStrategy.isFirstLogin()) {
+            return !licenseType.getName().equals(CC_BY_SA_30) ||
+                    materialPictureHasInvalidLicense(material);
         } else {
-            return licenseType.getName().equals("allRightsReserved") ||
-                    licenseType.getName().equals("CCBYND") ||
-                    licenseType.getName().equals("CCBYNCND") ||
-                    materialPictureHasUnacceptableLicense;
+            return licenseType.getName().equals(ALL_RIGHTS_RESERVED) ||
+                    licenseType.getName().equals(CC_BY_ND) ||
+                    licenseType.getName().equals(CC_BY_NC_ND) ||
+                    materialPictureHasInvalidLicense(material);
         }
+    }
+
+    private boolean materialPictureHasInvalidLicense(Material material) {
+        return material.getPicture() != null && pictureService.pictureHasUnAcceptableLicence(material.getPicture());
     }
 }
