@@ -62,8 +62,7 @@ class controller extends Controller {
             text: media.source
         }
 
-        const { name: licenseTypeName } = media.licenseType || {}
-        this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
+        this.$scope.licenseTypeName = null
     }
     onClick() {
         if (this.isMedia && this.isEditMode) {
