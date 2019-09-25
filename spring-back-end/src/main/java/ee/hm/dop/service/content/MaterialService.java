@@ -353,10 +353,7 @@ public class MaterialService {
             logger.info(String.format("Starting to handle portfolio with id --- %s", portfolio.getId()));
             logger.info(String.format("Trying to get chapters: %s", portfolio.getChapters()));
             if (portfolio.getChapters().size() > 0) {
-                portfolio.getChapters().forEach(chapter -> {
-                    if (chapter.getBlocks().size() > 0)
-                        chapterBlocks.addAll(chapter.getBlocks());
-                });
+                portfolio.getChapters().stream().filter(Objects::nonNull).map(Chapter::getBlocks).forEach(chapterBlocks::addAll);
                 if (chapterBlocks.size() > 0)
                     chapterBlocks.forEach(chapterBlock -> portfolioMaterials.addAll(getMaterialFromChapterBlock(chapterBlock.getHtmlContent())));
             }
