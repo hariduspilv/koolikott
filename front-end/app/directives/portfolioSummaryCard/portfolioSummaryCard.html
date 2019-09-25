@@ -243,7 +243,7 @@
             <span data-translate="PORTFOLIO_COPIED"></span>:
           </span>
           <a data-ng-class="{'disabled-link': (portfolio.deletedOrNotPublic && !isAdmin())}" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
-            <span data-ng-bind="portfolio.copiedFromDirectName"></span>
+            <span data-ng-bind="copiedFromDirectName"></span>
             <span data-ng-if="portfolio.copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
             <span data-ng-if="portfolio.copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>
             <span data-ng-if="portfolio.copiedLOStatus !== 'PRIVATE' && portfolio.copiedLOStatus !== 'DELETED'" data-translate="PORTFOLIO_COPIED_FROM"></span>
@@ -254,7 +254,7 @@
           <span class="md-caption caption-light">
             <span data-translate="PORTFOLIO_COPY_MAKER"></span>:
           </span>
-            <span data-ng-bind="portfolio.creator.username"></span>
+            <span>{{portfolio.creator.name}} {{portfolio.creator.surname}}</span>
         </p>
         <p class="md-body-2"
            data-ng-if="portfolio.copy">
