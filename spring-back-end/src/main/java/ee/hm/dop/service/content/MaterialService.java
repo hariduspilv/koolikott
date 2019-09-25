@@ -353,6 +353,7 @@ public class MaterialService {
             List<ChapterBlock> chapterBlocks = new ArrayList<>();
             if (portfolio.getChapters().size() > 0) {
                 portfolio.getChapters().forEach(chapter -> {
+                    logger.info(String.format("Starting to handle portfolio with id --- %s", portfolio.getId()));
                     logger.info(String.format("Chapter::: %s --- Chapter blocks::: %s", chapter, chapter.getBlocks()));
                     if (chapter.getBlocks().size() > 0)
                         chapterBlocks.addAll(chapter.getBlocks());
