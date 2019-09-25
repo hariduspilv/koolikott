@@ -396,9 +396,9 @@ public class MaterialService {
             return !licenseType.getName().equals("CCBYSA30") ||
                     materialPictureHasUnacceptableLicense;
         } else {
-            return licenseType.getId() == 1 ||
-                    licenseType.getId() == 4 ||
-                    licenseType.getId() == 7 ||
+            return licenseType.getName().equals("allRightsReserved") ||
+                    licenseType.getName().equals("CCBYND") ||
+                    licenseType.getName().equals("CCBYNCND") ||
                     materialPictureHasUnacceptableLicense;
         }
     }
