@@ -407,7 +407,7 @@ public class MaterialService {
         Pattern pattern = Pattern.compile("data-id=(.*?)></div>", Pattern.DOTALL);
         Matcher matcher = pattern.matcher(partOfChapterBlock);
         if (matcher.find())
-            return Long.parseLong(matcher.group(1));
+            return Long.parseLong(matcher.group(1).replace("\"", ""));
         else
             return null;
     }

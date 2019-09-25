@@ -12,7 +12,7 @@ class controller extends Controller {
             )
         )
 
-        this.$scope.invalidLicense = this.isLicenseTypeInvalid()
+        this.$scope.invalidLicense = this.isMaterialLicenseTypeInvalid(this.data.licenseType, this.data.picture, this.data.type)
     }
     $onChanges({ data }) {
         if (data.currentValue !== data.previousValue) {
@@ -85,21 +85,6 @@ class controller extends Controller {
         return (this.$scope.licenseTypeName || this.$scope.defaultLicenseTypeName) === 'YOUTUBE'
             ? 'https://www.youtube.com/static?template=terms'
             : 'http://hitsa.ee/teenused/autorioigused/litsentside-selgitused'
-    }
-
-    isLicenseTypeInvalid() {
-        const licenseType = this.data.licenseType
-        const picture = this.data.picture
-
-        if (licenseType === undefined) {
-            return true
-        } else if (picture === undefined) {
-            return this.isLicenseInvalid(licenseType.name)
-        } else if (picture.licenseType === undefined) {
-            return true
-        } else {
-            return this.isLicenseInvalid(licenseType.name) || this.isPictureLicenseInvalid(picture.licenseType.name)
-        }
     }
 }
 controller.$inject = [
