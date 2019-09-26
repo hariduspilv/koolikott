@@ -55,6 +55,8 @@ public class PortfolioService {
     private PictureService pictureService;
     @Inject
     private MaterialService materialService;
+    @Inject
+    private PortfolioGetter portfolioGetter;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -86,6 +88,7 @@ public class PortfolioService {
 
         boolean loChanged = reviewableChangeService.processChanges(updatedPortfolio, user, ChangeProcessStrategy.processStrategy(updatedPortfolio));
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
+        portfolioGetter.findCopiedRelated(updatedPortfolio);
 
         solrEngineService.updateIndex();
 

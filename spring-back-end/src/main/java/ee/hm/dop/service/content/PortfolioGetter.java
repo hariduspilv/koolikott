@@ -100,7 +100,7 @@ public class PortfolioGetter {
         return null;
     }
 
-    private Portfolio findCopiedRelated(Portfolio portfolio) {
+    public Portfolio findCopiedRelated(Portfolio portfolio) {
         LearningObject loCopiedFromDirectly = learningObjectDao.findById(portfolio.getCopiedFromDirect());
         portfolio.setCopiedFromDirectName(loCopiedFromDirectly.getCreator().getFullName());
         portfolio.setDeletedOrNotPublic(isDeletedOrNotPublic(loCopiedFromDirectly));
