@@ -175,7 +175,7 @@ public class UserService {
         User user = userDao.findUserById(userId);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
         long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
-                .filter(this::learningObjectHasUnAcceptableLicence).count();
+                .filter(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)).count();
         long unAcceptablePictureCount = allUserLearningObjects.stream()
                 .filter(lo -> lo.getPicture() != null)
                 .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))

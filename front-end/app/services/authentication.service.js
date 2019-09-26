@@ -46,33 +46,6 @@ angular.module('koolikottApp')
                 })
         }
 
-        function createLicenceAgreementResponse(userId, agreed, disagreed) {
-            let licenceAgreementResponse = {}
-            licenceAgreementResponse.userId = userId
-            licenceAgreementResponse.agreed = agreed
-            licenceAgreementResponse.disagreed = disagreed
-            return licenceAgreementResponse
-        }
-
-        function showEmailValidationModal(response) {
-            $mdDialog.show({
-                templateUrl: 'views/emailValidation/emailValidationDialog.html',
-                controller: 'emailValidationController',
-                clickOutsideToClose: false,
-                escapeToClose: false,
-            }).then((res) => {
-                if (!res)
-                    loginFail()
-                else {
-                    serverCallService.makePost('rest/userLicenceAgreement',
-                        createLicenceAgreementResponse(response.data.user.id, true, false))
-                        .then(() => {
-                            authenticateUser(response.data)
-                        })
-                }
-            })
-        }
-
         function migrateLearningObjectsAndLogin(authenticatedUser) {
             serverCallService.makePost('rest/user/migrateLearningObjectLicences', authenticatedUser.user)
                 .then((response) => {
@@ -85,6 +58,14 @@ angular.module('koolikottApp')
             if (!$rootScope.previouslyDisagreed) {
                 serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
             }
+        }
+
+        function createLicenceAgreementResponse(userId, agreed, disagreed) {
+            let licenceAgreementResponse = {}
+            licenceAgreementResponse.userId = userId
+            licenceAgreementResponse.agreed = agreed
+            licenceAgreementResponse.disagreed = disagreed
+            return licenceAgreementResponse
         }
 
         function saveResponseAndMigrateLicences(authenticatedUser) {
@@ -131,6 +112,21 @@ angular.module('koolikottApp')
             })
         }
 
+        function showEmailValidationModal(response) {
+            $mdDialog.show({
+                templateUrl: 'views/emailValidation/emailValidationDialog.html',
+                controller: 'emailValidationController',
+                clickOutsideToClose: false,
+                escapeToClose: false,
+            }).then((res) => {
+                if (!res)
+                    loginFail()
+                else {
+                    showLicenceMigrationAgreementModal(response.data)
+                }
+            })
+        }
+
         function checkLicencesAndAct(authenticatedUser) {
             serverCallService.makeGet('/rest/user/areLicencesAcceptable?id=' + authenticatedUser.user.id)
                 .then((response) => {
@@ -166,7 +162,7 @@ angular.module('koolikottApp')
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
                             if ($rootScope.userHasEmailOnLogin) {
-                                checkLicencesAndAct(response.data)
+                                showLicenceMigrationAgreementModal(response.data)
                             } else {
                                 userEmailService.saveEmail($rootScope.email, response.data.user)
                                 showEmailValidationModal(response)
@@ -191,7 +187,7 @@ angular.module('koolikottApp')
                 $rootScope.previouslyDisagreed = true
                 checkLicencesAndAct(authenticatedUser)
             }  else {
-                checkLicencesAndAct(authenticatedUser)
+                showLicenceMigrationAgreementModal(authenticatedUser)
             }
         }
 
@@ -203,7 +199,7 @@ angular.module('koolikottApp')
                     serverCallService.makeGet('rest/userLicenceAgreement?id=' + userStatus.authenticatedUser.user.id)
                         .then((response => {
                             if (!response.data) {
-                                checkLicencesAndAct(userStatus.authenticatedUser)
+                                showLicenceMigrationAgreementModal(userStatus.authenticatedUser)
                             }
                             serverCallService.makeGet('rest/licenceAgreement/latest')
                                 .then((res) => {
@@ -218,6 +214,10 @@ angular.module('koolikottApp')
                     showGdprModalAndAct(userStatus);
                 }
             }
+        }
+
+        function enableLogin() {
+            isAuthenticationInProgress = false;
         }
 
         function loginFail() {
@@ -295,7 +295,7 @@ angular.module('koolikottApp')
                             }
                         });
                     })
-                })
+                }, 100)
             } else {
                 userLocatorService.getUserLocation().then((response) => {
                     if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
@@ -331,10 +331,6 @@ angular.module('koolikottApp')
 
         function disableLogin() {
             isAuthenticationInProgress = true;
-        }
-
-        function enableLogin() {
-            isAuthenticationInProgress = false;
         }
 
         function loginWithMobileIdSuccess(mobileIDSecurityCodes) {
