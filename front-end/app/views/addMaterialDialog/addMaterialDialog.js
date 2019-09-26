@@ -721,7 +721,8 @@ class controller extends Controller {
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.keyCompetences.length === 0)
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
             || this.$scope.isSaving
-            || this.$scope.uploadingFile;
+            || this.$scope.uploadingFile
+            || !this.$scope.addMaterialForm.licenseType.$viewValue
     }
     updateMaterial(){
         this.serverCallService

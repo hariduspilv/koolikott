@@ -174,16 +174,12 @@ public class UserService {
         logger.info("Starting license check for user " + userId);
         User user = userDao.findUserById(userId);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
-        logger.info("Found all users LO's " + allUserLearningObjects.size());
         long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
                 .filter(this::learningObjectHasUnAcceptableLicence).count();
-        logger.info("UnAcceptableLicenses " + unAcceptableLearningObjectsCount);
-        logger.info(String.format("Found %s LO's with unAcceptableLicense", unAcceptableLearningObjectsCount));
         long unAcceptablePictureCount = allUserLearningObjects.stream()
                 .filter(lo -> lo.getPicture() != null)
                 .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))
                 .count();
-        logger.info("UnAcceptablePictures " + unAcceptablePictureCount);
         return (unAcceptableLearningObjectsCount == 0) &&
                 (unAcceptablePictureCount == 0);
     }
