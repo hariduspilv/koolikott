@@ -104,7 +104,7 @@ class controller extends Controller {
 
         this.$scope.removeLink = setTimeout(() => {
             this.removeLink()
-        }, 1)
+        }, 10)
 
         this.$scope.getLicenseIconList = () => {
             if (this.portfolio && this.portfolio.licenseType) {
