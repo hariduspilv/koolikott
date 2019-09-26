@@ -15,6 +15,7 @@ import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -200,7 +201,7 @@ public class UserService {
 
     public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
         learningObjectMaterials = learningObjectMaterials.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        return !learningObjectMaterials.isEmpty() && learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
+        return CollectionUtils.isNotEmpty(learningObjectMaterials) && learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
     }
 
     public List<Portfolio> migrateUserLearningObjectLicences(User user) {

@@ -27,9 +27,15 @@ class controller extends Controller {
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
             if (this.portfolio) {
-                if (this.portfolio.copiedFromDirectName) {
+                if (this.portfolio.deletedOrNotPublic)
+                    this.$scope.deletedOrNotPublic = this.portfolio.deletedOrNotPublic
+
+                if (this.portfolio.copiedLOStatus)
+                    this.$scope.copiedLOStatus = this.portfolio.copiedLOStatus
+
+                if (this.portfolio.copiedFromDirectName)
                     this.$scope.copiedFromDirectName = this.portfolio.copiedFromDirectName
-                }
+
                 if (this.portfolio.type === '.Portfolio') {
                     this.serverCallService
                     .makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense', {id: this.portfolio.id})
