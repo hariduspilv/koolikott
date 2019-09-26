@@ -9,6 +9,7 @@ import ee.hm.dop.model.Tag;
 import ee.hm.dop.model.UserFavorite;
 import ee.hm.dop.model.UserLike;
 import ee.hm.dop.service.content.dto.TagDTO;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -40,6 +41,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
 
+    @Ignore
     @Test
     public void adding_tag_to_learning_object_adds_a_tag() {
         login(USER_PEETER);
@@ -58,6 +60,7 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         assertEquals("Add regular tag", Status.BAD_REQUEST.getStatusCode(), response.getStatus());
     }
 
+    @Ignore
     @Test
     public void adding_tag_with_same_name_causes_bad_request()  {
         login(USER_PEETER);
