@@ -101,10 +101,14 @@ public class PortfolioGetter {
     }
 
     public Portfolio findCopiedRelated(Portfolio portfolio) {
-        LearningObject loCopiedFromDirectly = learningObjectDao.findById(portfolio.getCopiedFromDirect());
-        portfolio.setCopiedFromDirectName(loCopiedFromDirectly.getCreator().getFullName());
-        portfolio.setDeletedOrNotPublic(isDeletedOrNotPublic(loCopiedFromDirectly));
-        portfolio.setCopiedLOStatus(getDeletedOrNotPublic(loCopiedFromDirectly));
+        if (portfolio.getCopiedFromDirect() != null) {
+            LearningObject loCopiedFromDirectly = learningObjectDao.findById(portfolio.getCopiedFromDirect());
+            if (loCopiedFromDirectly != null) {
+                portfolio.setCopiedFromDirectName(loCopiedFromDirectly.getCreator().getFullName());
+                portfolio.setDeletedOrNotPublic(isDeletedOrNotPublic(loCopiedFromDirectly));
+                portfolio.setCopiedLOStatus(getDeletedOrNotPublic(loCopiedFromDirectly));
+            }
+        }
         return portfolio;
     }
 }
