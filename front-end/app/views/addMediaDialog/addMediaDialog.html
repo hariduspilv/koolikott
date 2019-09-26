@@ -94,31 +94,6 @@
               <div data-ng-message="required" data-translate="SOURCE_REQUIRED"></div>
             </div>
           </md-input-container>
-          <!-- License type -->
-          <md-input-container data-flex>
-            <label data-translate="MATERIAL_VIEW_LICENSE_TYPE"></label>
-            <md-select
-              name="licenseType"
-              class="no-margin"
-              data-ng-model="media.licenseType"
-              data-ng-model-options="{trackBy: '$value.id'}"
-              required
-              >
-              <md-option
-                data-ng-value="doNotKnow"
-                data-translate="LICENSETYPE_CANT_CHOOSE"
-              ></md-option>
-              <md-option
-                data-ng-repeat="licenseType in licenseTypes"
-                data-ng-value="licenseType"
-                data-translate="LICENSETYPE_LONG_NAME_{{licenseType.name.toUpperCase()}}"
-                >
-              </md-option>
-            </md-select>
-            <div data-ng-messages="addMediaForm.licenseType.$error">
-              <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
-            </div>
-          </md-input-container>
         </div>
       </div>
       <!-- Actions -->

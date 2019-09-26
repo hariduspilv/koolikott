@@ -46,6 +46,11 @@ pipeline {
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
                         sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
+                    }
+                    else if (env.BRANCH_NAME == 'sprint_1_40') {
+                        sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
+                        sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
+                        sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
                     } else {
                         sh 'echo copy build files disabled'
                     }

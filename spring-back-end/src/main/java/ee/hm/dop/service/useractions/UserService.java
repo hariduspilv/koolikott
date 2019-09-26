@@ -2,11 +2,20 @@ package ee.hm.dop.service.useractions;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.UserDao;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.service.CheckLicenseStrategy;
+import ee.hm.dop.service.content.LearningObjectService;
+import ee.hm.dop.service.content.MaterialService;
+import ee.hm.dop.service.content.PortfolioService;
+import ee.hm.dop.service.files.PictureService;
+import ee.hm.dop.service.metadata.LicenseTypeService;
 import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.utils.UserUtil;
+import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.text.WordUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 import java.text.Normalizer;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.lang.String.format;
@@ -25,11 +36,24 @@ import static java.lang.String.format;
 public class UserService {
 
     private static final Logger logger = LoggerFactory.getLogger(UserService.class);
+    private static final String CC_BY_SA_30 = "CCBYSA30";
 
     @Inject
     private UserDao userDao;
     @Inject
     private TaxonService taxonService;
+    @Inject
+    private LearningObjectService learningObjectService;
+    @Inject
+    private PictureService pictureService;
+    @Inject
+    private LicenseTypeService licenseTypeService;
+    @Inject
+    private MaterialService materialService;
+    @Inject
+    private PortfolioService portfolioService;
+    @Inject
+    private SolrEngineService solrEngineService;
 
     public User getUserByIdCode(String idCode) {
         return userDao.findUserByIdCode(idCode);
@@ -144,5 +168,101 @@ public class UserService {
     private User setRole(User user, Role from, Role to) {
         user = getUserByUsername(user.getUsername());
         return user.getRole().equals(from) ? setUserRole(user, to) : null;
+    }
+
+    public boolean areLicencesAcceptable(Long userId) {
+        logger.info("Starting license check for user " + userId);
+        User user = userDao.findUserById(userId);
+        List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
+        long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
+                .filter(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)).count();
+        long unAcceptablePictureCount = allUserLearningObjects.stream()
+                .filter(lo -> lo.getPicture() != null)
+                .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))
+                .count();
+        return (unAcceptableLearningObjectsCount == 0) &&
+                (unAcceptablePictureCount == 0);
+    }
+
+    public List<Portfolio> setLearningObjectsPrivate(User user) {
+        List<Portfolio> portfoliosToReturn = new ArrayList<>();
+        learningObjectService.getAllByCreator(user)
+                .stream()
+                .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
+                        learningObjectHasMaterialWithUnacceptableLicense(materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)) ||
+                        (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
+                .forEach(learningObject -> {
+                    learningObject.setVisibility(Visibility.PRIVATE);
+
+                    if (learningObject instanceof Portfolio) {
+                        Portfolio portfolio = portfolioService.findById(learningObject.getId());
+                        if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
+                            portfoliosToReturn.add(portfolio);
+                        }
+                    }
+                });
+
+        solrEngineService.updateIndex();
+        return portfoliosToReturn;
+    }
+
+    public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
+        learningObjectMaterials = learningObjectMaterials.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        return CollectionUtils.isNotEmpty(learningObjectMaterials) && learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
+    }
+
+    public List<Portfolio> migrateUserLearningObjectLicences(User user) {
+        List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
+        List<Portfolio> portfoliosSetToPrivate = new ArrayList<>();
+        allUserLearningObjects.stream()
+                .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
+                        (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
+                .forEach(learningObject -> {
+
+                    migrateLearningObjectLicense(learningObject, licenseTypeService.findByNameIgnoreCase(CC_BY_SA_30));
+
+                    if (learningObject instanceof Portfolio) {
+                        Portfolio portfolio = portfolioService.findById(learningObject.getId());
+                        if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
+                            portfolio.setVisibility(Visibility.PRIVATE);
+                            portfoliosSetToPrivate.add(portfolio);
+                        }
+                    }
+                });
+
+        return portfoliosSetToPrivate;
+    }
+
+    private void setPictureLicenseType(LearningObject lo, LicenseType licenseType) {
+        Picture learningObjectPicture = lo.getPicture();
+        if (learningObjectPicture != null && pictureHasUnAcceptableLicence(learningObjectPicture)) {
+            pictureService.setLicenceType(learningObjectPicture.getId(), licenseType);
+        }
+    }
+
+    private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
+        List<Material> loMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)
+                .stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return learningObjectService.learningObjectHasUnAcceptableLicence(lo) || learningObjectHasMaterialWithUnacceptableLicense(loMaterials);
+    }
+
+    private boolean materialHasUnacceptableLicense(Material material) {
+        return materialService.materialHasUnacceptableLicense(material, CheckLicenseStrategy.FIRST_LOGIN);
+    }
+
+    private boolean pictureHasUnAcceptableLicence(Picture picture) {
+        return pictureService.pictureHasUnAcceptableLicence(picture);
+    }
+
+    private boolean portfolioHasInvalidMaterialCreatedByAnotherAuthor(Portfolio portfolio, User user) {
+        return portfolio.getCreator() != user && portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
+    }
+
+    private void migrateLearningObjectLicense(LearningObject learningObject, LicenseType licenseType) {
+        learningObject.setLicenseType(licenseType);
+        if (learningObject.getPicture() != null)
+            setPictureLicenseType(learningObject, licenseType);
     }
 }

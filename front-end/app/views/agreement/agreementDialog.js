@@ -21,10 +21,11 @@
             })
 
             this.$scope.agree = () => {
-                if (this.$rootScope.userHasEmailOnLogin)
+                if (this.$rootScope.userHasEmailOnLogin) {
                     this.$mdDialog.hide(true)
-                else
+                } else {
                     this.handleLoginWithNoEmail();
+                }
             }
 
             this.$scope.cancel = () => {
@@ -67,7 +68,8 @@
         '$mdDialog',
         'authenticatedUserService',
         'userEmailService',
-        '$rootScope'
+        'authenticationService',
+        'serverCallService'
     ]
 
     angular.module('koolikottApp').controller('agreementDialogController', controller)

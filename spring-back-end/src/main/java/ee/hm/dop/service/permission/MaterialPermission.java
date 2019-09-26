@@ -14,12 +14,12 @@ public class MaterialPermission implements PermissionItem {
     @Override
     public boolean canView(User user, ILearningObject learningObject) {
         if (!(learningObject instanceof IMaterial)) return false;
-        return isNotPrivate(learningObject) || UserUtil.isAdmin(user);
+        return isNotPrivate(learningObject) || UserUtil.isAdmin(user) || UserUtil.isCreator(learningObject, user);
     }
 
     @Override
     public boolean canInteract(User user, ILearningObject learningObject) {
         if (!(learningObject instanceof IMaterial)) return false;
-        return isPublic(learningObject) || UserUtil.isAdmin(user);
+        return isPublic(learningObject) || UserUtil.isAdmin(user) || UserUtil.isCreator(learningObject, user);
     }
 }

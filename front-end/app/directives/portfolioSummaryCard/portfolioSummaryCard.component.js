@@ -1,20 +1,21 @@
 'use strict'
 
 {
+    const VISIBILITY_PUBLIC = 'PUBLIC'
+    const VISIBILITY_PRIVATE = 'PRIVATE'
+    const VISIBILITY_NOT_LISTED = 'NOT_LISTED'
+    const licenceTypeMap = {
+        'CCBY': ['by'],
+        'CCBYSA': ['by', 'sa'],
+        'CCBYND': ['by', 'nd'],
+        'CCBYNC': ['by', 'nc'],
+        'CCBYNCSA': ['by', 'nc', 'sa'],
+        'CCBYNCND': ['by', 'nc', 'nd'],
+        'CCBYSA30': ['by', 'sa']
+    };
+
 class controller extends Controller {
     $onInit() {
-
-        const VISIBILITY_PUBLIC = 'PUBLIC'
-        const VISIBILITY_PRIVATE = 'PRIVATE'
-        const VISIBILITY_NOT_LISTED = 'NOT_LISTED'
-        const licenceTypeMap = {
-            'CCBY': ['by'],
-            'CCBYSA': ['by', 'sa'],
-            'CCBYND': ['by', 'nd'],
-            'CCBYNC': ['by', 'nc'],
-            'CCBYNCSA': ['by', 'nc', 'sa'],
-            'CCBYNCND': ['by', 'nc', 'nd']
-        };
 
         this.$scope.showEditModeButton = true
         this.deletePortfolio = this.deletePortfolio.bind(this)
@@ -25,6 +26,28 @@ class controller extends Controller {
         // Main purpose of this watch is to handle situations
         // where portfolio is undefined at the moment of init()
         this.$scope.$watch('portfolio', (newValue, oldValue) => {
+            if (this.portfolio) {
+                if (this.portfolio.deletedOrNotPublic)
+                    this.$scope.deletedOrNotPublic = this.portfolio.deletedOrNotPublic
+
+                if (this.portfolio.copiedLOStatus)
+                    this.$scope.copiedLOStatus = this.portfolio.copiedLOStatus
+
+                if (this.portfolio.copiedFromDirectName)
+                    this.$scope.copiedFromDirectName = this.portfolio.copiedFromDirectName
+
+                if (this.portfolio.type === '.Portfolio') {
+                    this.serverCallService
+                    .makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense', {id: this.portfolio.id})
+                    .then((response) => {
+                        this.$scope.acceptableLicenses = !response.data
+                    })
+                    this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyMaterialWithUnacceptableLicense', {id: this.$scope.portfolio.id})
+                        .then((response) => {
+                            this.$scope.portfolioHasMaterialWithUnacceptableLicense = response.data
+                        })
+                }
+            }
             if (this.getCorrectLanguageTitle(this.portfolio)) {
                 this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
             } else {
@@ -53,19 +76,20 @@ class controller extends Controller {
         this.$scope.showlogselect = this.showlogselect
         this.$scope.pageUrl = this.$location.absUrl()
 
-
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
         this.$scope.showDeleteButton = true;
         this.$scope.showSendEmailButton = true;
         this.$scope.showRecommendButton = true;
         this.$scope.showReportImproperButton = true;
+        this.$scope.portfolioHasMaterialWithUnacceptableLicense = false;
 
         this.$scope.canEdit = this.canEdit.bind(this)
         this.$scope.isAdmin = this.isAdmin.bind(this)
         this.$scope.isOwner= this.isOwner.bind(this)
         this.$scope.isAdminOrModerator = this.isAdminOrModerator.bind(this)
         this.$scope.isLoggedIn = this.isLoggedIn.bind(this)
+        this.$scope.isPublic = this.isPublic.bind(this)
         this.$scope.isRestricted = this.isRestricted.bind(this)
         this.$scope.editPortfolio = this.editPortfolio.bind(this)
         this.$scope.getPortfolioEducationalContexts = this.getPortfolioEducationalContexts.bind(this)
@@ -77,7 +101,6 @@ class controller extends Controller {
         this.$scope.dotsAreShowing = this.dotsAreShowing.bind(this)
         this.$scope.restorePortfolio = this.restorePortfolio
         this.$scope.toggleFullScreen = this.toggleFullScreen.bind(this)
-
         this.$scope.getLicenseIconList = () => {
             if (this.portfolio && this.portfolio.licenseType) {
                 return licenceTypeMap[this.portfolio.licenseType.name];
@@ -86,9 +109,7 @@ class controller extends Controller {
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.makePublic = () => {
-            this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
-            this.updatePortfolio()
-            this.toastService.show('PORTFOLIO_HAS_BEEN_MADE_PUBLIC')
+            this.checkUnacceptableLicensesAndUpdate()
         }
 
         this.$scope.makeNotListed = () => {
@@ -136,11 +157,10 @@ class controller extends Controller {
     }
 
     canEdit() {
-        return !this.authenticatedUserService.isRestricted() && (
-            this.isOwner() ||
+        return this.isOwner() ||
             this.authenticatedUserService.isAdmin() ||
             this.authenticatedUserService.isModerator()
-        )
+
     }
     isOwner() {
         return !this.authenticatedUserService.isAuthenticated()
@@ -211,6 +231,30 @@ class controller extends Controller {
             },
         })
     }
+
+    checkUnacceptableLicensesAndUpdate(){
+        this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
+            {
+                id: this.$scope.portfolio.id,
+            })
+            .then(({ data }) => {
+                if(data){
+                    this.$mdDialog.show({
+                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
+                        controller: 'learningObjectLicenseAgreementController',
+                    }).then((res) => {
+                        if (res.accept) {
+                            this.$rootScope.portfolioLicenseTypeChanged = true
+                            this.showEditMetadataDialog()
+                        }
+                    })
+                } else {
+                    this.$scope.portfolio.visibility = VISIBILITY_PUBLIC
+                    this.updatePortfolio()
+                }
+            })
+    }
+
     deletePortfolio() {
         this.serverCallService
             .makePost('rest/portfolio/delete', this.portfolio)
@@ -247,6 +291,19 @@ class controller extends Controller {
                 this.$scope.showLogButton = true;
             })
     }
+    copyPortfolio() {
+        const portfolio = this.storageService.getPortfolio();
+        if (!portfolio) console.log('copying failed')
+        this.storageService.setEmptyPortfolio(portfolio)
+        this.$mdDialog.show({
+            templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+            controller: 'addPortfolioDialogController',
+            fullscreen: false,
+            locals: {
+                mode: 'COPY'
+            }
+        })
+    }
     markReviewed() {
         if (this.portfolio && (
                 this.authenticatedUserService.isAdmin() ||
@@ -278,10 +335,15 @@ class controller extends Controller {
             this.portfolio.recommendation = recommendation
     }
 
+    isPublic() {
+        if (this.portfolio)
+            return this.portfolio.visibility === 'PUBLIC';
+    }
+
     toggleFullScreen() {
         this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen;
         toggleFullScreen();
-        if (this.$rootScope.isFullScreen){
+        if (this.$rootScope.isFullScreen) {
             this.toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
 
             gTagCaptureEvent('full-screen', 'teaching portfolio')

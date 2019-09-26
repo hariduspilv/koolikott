@@ -2,10 +2,10 @@ package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.PortfolioLog;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
+import ee.hm.dop.service.CheckLicenseStrategy;
+import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
@@ -21,7 +21,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
+import java.util.List;
 
+import static ee.hm.dop.model.enums.LicenseType.CC_BY_SA_30;
 import static ee.hm.dop.model.enums.SaveType.MANUAL;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
@@ -49,6 +51,12 @@ public class PortfolioService {
     private PortfolioMaterialService portfolioMaterialService;
     @Inject
     private PortfolioLogDao portfolioLogDao;
+    @Inject
+    private PictureService pictureService;
+    @Inject
+    private MaterialService materialService;
+    @Inject
+    private PortfolioGetter portfolioGetter;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -80,6 +88,7 @@ public class PortfolioService {
 
         boolean loChanged = reviewableChangeService.processChanges(updatedPortfolio, user, ChangeProcessStrategy.processStrategy(updatedPortfolio));
         if (loChanged) return portfolioDao.createOrUpdate(updatedPortfolio);
+        portfolioGetter.findCopiedRelated(updatedPortfolio);
 
         solrEngineService.updateIndex();
 
@@ -93,8 +102,37 @@ public class PortfolioService {
 
         Portfolio copy = portfolioConverter.setFieldsToNewPortfolio(portfolio);
         copy.setChapters(portfolioCopier.copyChapters(originalPortfolio.getChapters()));
+        copy.setCopy(true);
 
         return save(copy, loggedInUser, originalPortfolio.getCreator());
+    }
+
+    public Portfolio findById(Long id) {
+        return portfolioDao.findById(id);
+    }
+
+    public boolean portfolioHasAcceptableLicenses(Long id) {
+        Portfolio portfolio = findById(id);
+        if (portfolio == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return !portfolioHasUnAcceptableLicense(portfolio) &&
+                !portfolioThumbnailHasUnAcceptableLicense(portfolio);
+    }
+
+    private boolean portfolioThumbnailHasUnAcceptableLicense(Portfolio portfolio) {
+        if (portfolio.getPicture() == null) {
+            return false;
+        }
+        return pictureService.pictureHasUnAcceptableLicence(portfolio.getPicture());
+    }
+
+    private boolean portfolioHasUnAcceptableLicense(Portfolio portfolio) {
+        LicenseType licenseType = portfolio.getLicenseType();
+        if (licenseType == null) {
+            return true;
+        }
+        return !licenseType.getName().equals(CC_BY_SA_30);
     }
 
     private PortfolioLog savePortfolioLog(PortfolioLog portfolio) {
@@ -112,7 +150,9 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
-        portfolioMaterialService.save(portfolio);
+        if (!portfolio.isCopy()) {
+            portfolioMaterialService.save(portfolio);
+        }
         return createdPortfolio;
     }
 
@@ -138,5 +178,14 @@ public class PortfolioService {
         if (isEmpty(portfolio.getTitle())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Required field title must be filled.");
         }
+    }
+
+    public boolean portfolioHasAnyMaterialWithUnacceptableLicense(Portfolio portfolio) {
+        if (portfolio == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Portfolio is required.");
+        }
+        List<Material> portfolioMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(portfolio);
+        return portfolioMaterials.stream()
+                .anyMatch(material -> materialService.materialHasUnacceptableLicense(material, CheckLicenseStrategy.USER_HAS_LOGGED_IN));
     }
 }

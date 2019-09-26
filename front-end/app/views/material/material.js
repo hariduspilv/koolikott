@@ -31,13 +31,17 @@ angular.module('koolikottApp')
                 }
             });
 
+            const VISIBILITY_PUBLIC = 'PUBLIC'
+            const VISIBILITY_PRIVATE = 'PRIVATE'
+
             const licenceTypeMap = {
                 'CCBY': ['by'],
                 'CCBYSA': ['by', 'sa'],
                 'CCBYND': ['by', 'nd'],
                 'CCBYNC': ['by', 'nc'],
                 'CCBYNCSA': ['by', 'nc', 'sa'],
-                'CCBYNCND': ['by', 'nc', 'nd']
+                'CCBYNCND': ['by', 'nc', 'nd'],
+                'CCBYSA30': ['by', 'sa']
             };
 
             const storedMaterial = storageService.getMaterial()
@@ -299,11 +303,48 @@ angular.module('koolikottApp')
                 eventService.notify('material:reloadTaxonObject');
 
                 $rootScope.learningObjectPrivate = ["PRIVATE"].includes($scope.material.visibility);
+
                 $rootScope.learningObjectImproper = ($scope.material.improper > 0);
                 $rootScope.learningObjectDeleted = ($scope.material.deleted === true);
                 $rootScope.learningObjectUnreviewed = !!$scope.material.unReviewed;
                 materialService.increaseViewCount($scope.material);
 
+            }
+
+            $scope.updateMaterialVisibility = () =>{
+                serverCallService
+                    .makePost('rest/material/update', $scope.material)
+                    .then(({ data: material }) => {
+                        if (material) {
+                            storageService.setMaterial(null)
+                            $location.url('/oppematerjal/' + $scope.material.id)
+                            $route.reload()
+                        }
+                    })
+            }
+
+            $scope.makePrivate = () => {
+                $scope.material.visibility = VISIBILITY_PRIVATE
+                $scope.updateMaterialVisibility()
+            }
+
+            $scope.makePublic = () => {
+                if ($scope.material.licenseType.name !== 'CCBYSA30' ||
+                    ($scope.material.picture &&
+                    $scope.material.picture.licenseType.name !== 'CCBYSA30')){
+                    $mdDialog.show({
+                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
+                        controller: 'learningObjectLicenseAgreementController',
+                    }).then((res) => {
+                        if (res.accept) {
+                            $rootScope.materialLicenseTypeChanged = true
+                            $scope.edit()
+                        }
+                    })
+                } else {
+                    $scope.material.visibility = VISIBILITY_PUBLIC
+                    $scope.updateMaterialVisibility()
+                }
             }
 
             $scope.getLicenseIconList = () => {
@@ -446,7 +487,7 @@ angular.module('koolikottApp')
             }
 
             $scope.isUsersMaterial = () => {
-                if ($scope.material && authenticatedUserService.isAuthenticated() && !authenticatedUserService.isRestricted()) {
+                if ($scope.material && authenticatedUserService.isAuthenticated()) {
                     var userID = authenticatedUserService.getUser().id;
                     var creator = $scope.material.creator;
 
@@ -486,6 +527,14 @@ angular.module('koolikottApp')
                 return (
                     authenticatedUserService.isAdmin() ||
                     authenticatedUserService.isModerator()
+                )
+            }
+
+            $scope.isAdminOrModeratorOrCreator = function () {
+                return (
+                    authenticatedUserService.isAdmin() ||
+                        authenticatedUserService.isModerator() ||
+                        $scope.isUsersMaterial()
                 )
             }
 

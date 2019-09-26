@@ -194,6 +194,10 @@ h2 {
   white-space: nowrap;
 }
 
+.text-transform-inherit {
+  text-transform: inherit;
+}
+
 /**
  * This is necessary so that the WYSIWYG (Medium Editor) would work properly in Firefox.
  * Medium Editor simply calls document.execCommand('bold') on a <div contenteditable="true">.

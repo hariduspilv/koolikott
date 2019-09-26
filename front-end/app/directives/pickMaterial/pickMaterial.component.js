@@ -32,6 +32,17 @@ class controller extends Controller {
 
         this.$rootScope.$broadcast('detailedSearch:close')
     }
+    isPublic(){
+        return this.learningObject.visibility === 'PUBLIC'
+    }
+    isPrivate(){
+        return this.learningObject.visibility === 'PRIVATE'
+    }
+    hasUnAcceptableLicenses() {
+        return this.learningObject.licenseType ? this.learningObject.licenseType.name === 'allRightsReserved' ||
+            this.learningObject.licenseType.name === 'CCBYND' ||
+            this.learningObject.licenseType.name === 'CCBYNCND' : !this.learningObject.licenseType;
+    }
 }
 controller.$inject = [
     '$rootScope',

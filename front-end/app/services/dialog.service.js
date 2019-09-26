@@ -13,7 +13,9 @@ angular.module('koolikottApp')
                 this.showConfirmationDialog(title, content, 'BUTTON_TERMS_YES', 'BUTTON_TERMS_NO', onConfirm, onCancel)
             },
             showConfirmationDialog: function(title, content, ok, cancel, onConfirm, onCancel) {
-                let confirm = $mdDialog.confirm()
+                let confirm = $mdDialog.confirm({
+                    escapeToClose: false
+                })
                 .title($filter('translate')(title))
                 .content($filter('translate')(content))
                 .ok($filter('translate')(ok))

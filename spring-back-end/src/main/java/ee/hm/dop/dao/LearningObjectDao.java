@@ -2,6 +2,7 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.Visibility;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.TypedQuery;
@@ -54,6 +55,13 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
                 .getSingleResult();
     }
 
+    public List<LearningObject> findAllByCreator(User creator) {
+        return getEntityManager().createQuery("SELECT lo FROM LearningObject lo WHERE lo.deleted = false " +
+                "AND lo.creator = :creator", entity())
+                .setParameter("creator", creator)
+                .getResultList();
+    }
+
     public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects, int startPosition) {
         return getEntityManager()
                 .createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added DESC, id DESC", entity())
@@ -76,6 +84,7 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
         }
         learningObject.setDeleted(deleted);
         learningObject.setUpdated(now());
+        learningObject.setVisibility(Visibility.PRIVATE);
         createOrUpdate(learningObject);
     }
 

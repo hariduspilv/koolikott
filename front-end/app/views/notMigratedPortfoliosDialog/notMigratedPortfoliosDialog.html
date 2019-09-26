@@ -1,0 +1,30 @@
+<md-dialog id="not-migrated-portfolios-dialog" aria-label="Migreerimata jäänud kogumike modaalaken" class="login-dialog" flex="50">
+  <md-toolbar>
+    <div id="not-migrated-portfolios-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+      <div class="md-toolbar-tools" data-layout-align="space-between center">
+        <h2 data-translate="ATTENTION"></h2>
+      </div>
+    </div>
+  </md-toolbar>
+  <form name="notMigratedPortfoliosDialogContent">
+    <md-dialog-content>
+      <md-content data-layout-padding>
+        <p>
+          <span data-translate="PORTFOLIOS_SET_TO_PRIVATE_TEXT"></span>
+        </p>
+        <div data-ng-repeat="portfolio in portfolios">
+          <span><strong>{{ portfolio.title }}</strong></span>
+        </div>
+        <div id="not-migrated-portfolios-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="center end">
+          <md-button
+            id="not-migrated-portfolios-continue-button"
+            class="md-raised md-primary"
+            aria-label="Jätka"
+            data-ng-click="agree()">
+            <span data-translate="CONTINUE"></span>
+          </md-button>
+        </div>
+      </md-content>
+    </md-dialog-content>
+  </form>
+</md-dialog>

@@ -1,41 +1,44 @@
 package ee.hm.dop.service.content;
 
+import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.PortfolioDao;
+import ee.hm.dop.dao.PortfolioMaterialDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
+import ee.hm.dop.service.CheckLicenseStrategy;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.metadata.CrossCurricularThemeService;
 import ee.hm.dop.service.metadata.KeyCompetenceService;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
-import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.reviewmanagement.FirstReviewAdminService;
+import ee.hm.dop.service.reviewmanagement.ReviewableChangeService;
 import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.useractions.PeerReviewService;
 import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
-import ee.hm.dop.config.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.model.enums.LicenseType.*;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
-import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 import static java.time.LocalDateTime.now;
+import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
 
 @Service
 @Transactional
@@ -69,6 +72,12 @@ public class MaterialService {
     private OriginalPictureDao originalPictureDao;
     @Inject
     private PortfolioDao portfolioDao;
+    @Inject
+    private PortfolioService portfolioService;
+    @Inject
+    private PictureService pictureService;
+    @Inject
+    private PortfolioMaterialDao portfolioMaterialDao;
 
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
@@ -85,6 +94,7 @@ public class MaterialService {
         material.setSource(UrlUtil.processURL(material.getSource()));
         cleanPeerReviewUrls(material);
         material.setCreator(creator);
+        material.setVisibility(Visibility.PRIVATE);
         if (UserUtil.isPublisher(creator)) {
             material.setEmbeddable(true);
         }
@@ -119,6 +129,7 @@ public class MaterialService {
         String sourceBefore = originalMaterial.getSource();
         material.setSource(UrlUtil.processURL(material.getSource()));
         mustHaveUniqueSource(material);
+        material.setVisibility(material.getVisibility());
 
         cleanPeerReviewUrls(material);
         if (!UserUtil.isAdmin(changer)) {
@@ -209,7 +220,6 @@ public class MaterialService {
             material.setKeyCompetences(null);
             material.setCrossCurricularThemes(null);
         }
-        material.setVisibility(Visibility.PUBLIC);
 
         if (material.getPicture() != null) {
             if (material.getPicture().getId() == null) {
@@ -336,5 +346,38 @@ public class MaterialService {
 
     public List<Portfolio> getRelatedPortfolios(Long id) {
         return portfolioDao.getRelatedPortfolios(id);
+    }
+
+    public List<Material> getAllMaterialIfLearningObjectIsPortfolio(LearningObject lo) {
+        List<Material> materials = new ArrayList<>();
+        Portfolio portfolio = portfolioService.findById(lo.getId());
+
+        if (portfolio != null) {
+            List<PortfolioMaterial> portfolioMaterials = portfolioMaterialDao.findAllPortfolioMaterialsByPortfolio(portfolio.getId());
+            if (!portfolioMaterials.isEmpty())
+                materials = portfolioMaterials.stream().map(PortfolioMaterial::getMaterial).collect(Collectors.toList());
+        }
+        return materials;
+    }
+
+    public boolean materialHasUnacceptableLicense(Material material, CheckLicenseStrategy checkLicenseStrategy) {
+        LicenseType licenseType = material.getLicenseType();
+        if (licenseType == null) {
+            return true;
+        }
+
+        if (checkLicenseStrategy.isFirstLogin()) {
+            return !licenseType.getName().equals(CC_BY_SA_30) ||
+                    materialPictureHasInvalidLicense(material);
+        } else {
+            return licenseType.getName().equals(ALL_RIGHTS_RESERVED) ||
+                    licenseType.getName().equals(CC_BY_ND) ||
+                    licenseType.getName().equals(CC_BY_NC_ND) ||
+                    materialPictureHasInvalidLicense(material);
+        }
+    }
+
+    private boolean materialPictureHasInvalidLicense(Material material) {
+        return material.getPicture() != null && pictureService.pictureHasUnAcceptableLicence(material.getPicture());
     }
 }

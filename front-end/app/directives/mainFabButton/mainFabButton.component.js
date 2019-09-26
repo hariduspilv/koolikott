@@ -59,20 +59,6 @@ class controller extends Controller {
                 locals: { isEditMode: false }
             })
 
-        /*this.$scope.copyPortfolio = () => {
-            const portfolio = this.storageService.getPortfolio();
-            if (!portfolio) console.log("copying failed")
-            this.storageService.setEmptyPortfolio(portfolio)
-            this.$mdDialog.show({
-                templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
-                controller: 'addPortfolioDialogController',
-                fullscreen: false,
-                locals: {
-                    mode: 'COPY'
-                }
-            })
-        }*/
-
         this.$scope.hasPermission = () =>
             this.authenticatedUserService.getUser() && !this.authenticatedUserService.isRestricted()
 

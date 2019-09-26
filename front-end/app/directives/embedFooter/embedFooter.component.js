@@ -11,6 +11,8 @@ class controller extends Controller {
                 null
             )
         )
+
+        this.$scope.invalidLicense = this.isMaterialLicenseTypeInvalid(this.data.licenseType, this.data.picture, this.data.type)
     }
     $onChanges({ data }) {
         if (data.currentValue !== data.previousValue) {
@@ -20,7 +22,7 @@ class controller extends Controller {
                 : this.setMaterialFooterData(data.currentValue)
         }
     }
-    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType, deleted }) {
+    setMaterialFooterData({ id, publishers, authors, titles, source, uploadedFile, language, resourceTypes, licenseType, deleted, visibility }) {
         this.$scope.icon = this.iconService.getMaterialIcon(resourceTypes)
         this.$scope.title = this.getUserDefinedLanguageString(titles, this.currentLanguage, language)
         this.$scope.link = '/oppematerjal/' + id + '-' + this.replaceSpacesAndCharacters(this.$scope.title)
@@ -28,6 +30,7 @@ class controller extends Controller {
         this.setMaterialSourceLink()
 
         this.$scope.deleted = deleted
+        this.$scope.private = visibility === 'PRIVATE'
 
         const { name: licenseTypeName } = licenseType || {}
         this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
@@ -59,8 +62,7 @@ class controller extends Controller {
             text: media.source
         }
 
-        const { name: licenseTypeName } = media.licenseType || {}
-        this.$scope.licenseTypeName = licenseTypeName && licenseTypeName.toUpperCase()
+        this.$scope.licenseTypeName = null
     }
     onClick() {
         if (this.isMedia && this.isEditMode) {

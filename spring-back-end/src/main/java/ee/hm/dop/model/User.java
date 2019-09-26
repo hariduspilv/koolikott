@@ -84,6 +84,10 @@ public class User implements AbstractEntity {
     @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<User_Agreement> userAgreements;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user", fetch = LAZY)
+    private List<UserLicenceAgreement> userLicenceAgreements;
+
     @Transient
     @JsonIgnore
     private boolean newUser;
@@ -174,6 +178,14 @@ public class User implements AbstractEntity {
 
     public void setUserAgreements(List<User_Agreement> userAgreements) {
         this.userAgreements = userAgreements;
+    }
+
+    public List<UserLicenceAgreement> getUserLicenceAgreements() {
+        return userLicenceAgreements;
+    }
+
+    public void setUserLicenceAgreements(List<UserLicenceAgreement> userLicenceAgreements) {
+        this.userLicenceAgreements = userLicenceAgreements;
     }
 
     public String getLocation() {

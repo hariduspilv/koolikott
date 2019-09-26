@@ -96,6 +96,16 @@ public class PortfolioConverter {
                 to.getPicture().setName(originalPicture.getName());
             }
         }
+        if (to.getId() != null && to.getId().equals(from.getId())) {
+            return to;
+        }
+        if (from.isCopy()) {
+            to.setCopiedFromOriginal(from.getCopiedFromOriginal());
+            to.setCopiedFromDirect(from.getId());
+        } else {
+            to.setCopiedFromDirect(from.getId());
+            to.setCopiedFromOriginal(from.getId());
+        }
         return to;
     }
 
@@ -104,14 +114,17 @@ public class PortfolioConverter {
             ChapterLog chapterLog = new ChapterLog();
             chapterLog.setTitle(chapter.getTitle());
 
-            List<ChapterBlockLog> chapterBlockLogs = chapter
-                    .getBlocks()
-                    .stream()
-                    .map(this::convertChapterBlock)
-                    .collect(Collectors.toList());
+            if (chapter.getBlocks() != null) {
+                List<ChapterBlockLog> chapterBlockLogs = chapter
+                        .getBlocks()
+                        .stream()
+                        .map(this::convertChapterBlock)
+                        .collect(Collectors.toList());
 
-            chapterLog.setBlocks(chapterBlockLogs);
-            return chapterLog;
+                chapterLog.setBlocks(chapterBlockLogs);
+                return chapterLog;
+            } else
+                return chapterLog;
         }
         return null;
     }

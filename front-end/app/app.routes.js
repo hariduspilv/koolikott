@@ -218,9 +218,9 @@ angular.module('koolikottApp')
     ]);
 
 let UserPathResolver = {
-    isLoggedIn: ['authenticatedUserService', '$location', function (authenticatedUserService, $location) {
-        if (!authenticatedUserService.isAuthenticated()) {
-            $location.path("/");
+    isLoggedIn: ['authenticatedUserService', '$location', '$route', function (authenticatedUserService, $location, $route) {
+        if (!authenticatedUserService.isAuthenticated() || ($route.current.params.username !== authenticatedUserService.getUser().username)) {
+            $location.path('/');
         }
     }]
 };

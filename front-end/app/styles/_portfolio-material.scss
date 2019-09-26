@@ -16,3 +16,8 @@
     color: grey !important;
   }
 }
+
+.disabled-link {
+  cursor: default;
+  pointer-events: none;
+}

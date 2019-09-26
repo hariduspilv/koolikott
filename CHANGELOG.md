@@ -1,3 +1,25 @@
+## e-Koolikott [1.50.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11022)
+
+### Muutunud
+* "Kogumiku kopeerimise funktsionaalsus" [EK-683](https://projektid.hitsa.ee/jira/browse/EK-683)
+* "Kogumiku detailvaate muudatused seoses kopeerimisega" [EK-684](https://projektid.hitsa.ee/jira/browse/EK-684)
+* "Litsentsitingimustega nõustumise küsimine olemasolevalt kasutajalt" [EK-728](https://projektid.hitsa.ee/jira/browse/EK-728)
+* "Litsentsitingimustega nõustumise küsimine uuelt kasutajalt" [EK-681](https://projektid.hitsa.ee/jira/browse/EK-681)
+* "Materjali sisestamise modaali litsentsimuudatused" [EK-686](https://projektid.hitsa.ee/jira/browse/EK-686)
+* "Kogumiku sisestamise modaali litsentsimuudatused" [EK-687](https://projektid.hitsa.ee/jira/browse/EK-687)
+* "Meedia lisamise modaali litsentsimuudatused" [EK-688](https://projektid.hitsa.ee/jira/browse/EK-688)
+
+## e-Koolikott [1.40.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11021)
+
+### Muutunud
+* "Materjalile saab lisada täpitähtedega faile" [EK-721](https://projektid.hitsa.ee/jira/browse/EK-721)
+* "Ebasobiva materjali musta bänneri parandus" [EK-667](https://projektid.hitsa.ee/jira/browse/EK-667)
+* "Retsensioonilinkide parandused" [EK-610](https://projektid.hitsa.ee/jira/browse/EK-610)
+* "Adminina rakenduses olles ei saa ennast piiratud kasutajaks taandada" [EK-649](https://projektid.hitsa.ee/jira/browse/EK-649)
+* "Autori puuduva e-posti veateate kuvamise loogika parandus" [EK-723](https://projektid.hitsa.ee/jira/browse/EK-723)
+
+
+## e-Koolikott [1.39.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11061)
 ## e-Koolikott [1.39.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11061) (Toodangusse paigaldatud 12.09.2019)
 
 ### Muutunud

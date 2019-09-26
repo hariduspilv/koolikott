@@ -3,6 +3,7 @@ package ee.hm.dop.rest.login;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.service.login.dto.UserStatus;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.client.ClientRequestContext;
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertNotNull;
 
 public class SessionResourceTest extends ResourceIntegrationTestBase {
 
+    @Ignore
     @Test
     public void testLogout() {
         AuthenticatedUser authenticatedUser = doGet(DEV_LOGIN + USER_MATI.idCode, new GenericType<UserStatus>() {

@@ -17,6 +17,7 @@ class controller extends Controller {
         this.$scope.isSaving = false
         this.$scope.isUserAuthor = false
         this.$scope.licenseTypes = []
+        this.$scope.licenseTermsLink = this.$translate.instant('LICENSE_TERMS_LINK')
 
         const { name, surname } = this.authenticatedUserService.getUser()
         this.userFullName = `${name} ${surname}`
@@ -24,7 +25,7 @@ class controller extends Controller {
         this.metadataService.loadLicenseTypes(data => {
             this.$scope.licenseTypes = data
             this.$scope.doNotKnow = { id: 'doNotKnow' }
-            this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+            this.$scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
         })
 
         this.$scope.$watch('media.url', this.processURL.bind(this))
@@ -49,14 +50,6 @@ class controller extends Controller {
 
         this.$scope.$watch('media.author', (currentValue, previousValue) => {
             this.$scope.isUserAuthor = currentValue === this.userFullName
-        })
-
-        /**
-         * Set license type to “All rights reserved” if user chooses “Do not know” option.
-         */
-        this.$scope.$watch('media.licenseType', (selectedValue) => {
-            if (selectedValue && selectedValue.id === 'doNotKnow')
-                this.$scope.media.licenseType = this.$scope.allRightsReserved
         })
 
         // fix for https://github.com/angular/material/issues/6905

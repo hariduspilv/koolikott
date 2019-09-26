@@ -776,6 +776,19 @@ class controller extends Controller {
                 )
             )
     }
+
+    updateMaterialVisibilityToPublic(material) {
+        material.visibility = 'PUBLIC'
+        this.serverCallService
+            .makePost('rest/material/update', material)
+            .then(({data: materialData}) => {
+                this.storageService.setMaterial(materialData)
+                this.embedCache[material.id] = material
+                this.insertEmbeds(this.getMaterialsMarkup([material], material.id))
+            })
+        this.toastService.show('MATERIAL_SAVED');
+    }
+
     onClickAddNewMaterial() {
         this.$mdDialog.show({
             templateUrl: 'addMaterialDialog.html',
@@ -786,8 +799,20 @@ class controller extends Controller {
                 isAddToPortfolio: true
             }
         }).then(material => {
-            this.embedCache[material.id] = material
-            this.insertEmbeds(this.getMaterialsMarkup([material], material.id))
+            if (material !== undefined){
+                this.dialogService.showConfirmationDialog(
+                    "{{'MATERIAL_MAKE_PUBLIC' | translate}}",
+                    "{{'MATERIAL_WARNING_IN_PORTFOLIO' | translate}}",
+                    "{{'MATERIAL_YES' | translate}}",
+                    "{{'MATERIAL_NO' | translate}}",
+                    () => {
+                        this.updateMaterialVisibilityToPublic(material)
+                    },
+                    () => {
+                        this.toastService.show('MATERIAL_SAVED_IN_PORTFOLIO')
+                    }
+                )
+            }
         })
     }
     getMaterialsMarkup(materials) {
@@ -949,7 +974,9 @@ controller.$inject = [
     'serverCallService',
     'translationService',
     'searchService',
-    '$location'
+    '$location',
+    'storageService',
+    'toastService'
 ]
 component('dopChapter', {
     bindings: {

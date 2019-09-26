@@ -1,6 +1,9 @@
 'use strict';
 
 {
+const VISIBILITY_PUBLIC = 'PUBLIC'
+const VISIBILITY_PRIVATE = 'PRIVATE'
+
 class controller extends Controller {
     constructor(...args) {
         super(...args)
@@ -27,6 +30,19 @@ class controller extends Controller {
         this.$scope.selectedLanguage = this.translationService.getLanguage()
         this.$scope.isVocationalEducation = true
         this.$scope.isBasicOrSecondaryEducation = false
+        this.$scope.additionalInfo = {}
+        this.$scope.licenseTermsLink = this.$translate.instant('LICENSE_TERMS_LINK')
+
+        if (this.$scope.material) {
+            this.$scope.hasValidLicense = this.$scope.material.licenseType.name === 'CCBYSA30'
+        }
+
+        if (this.$scope.material && this.$scope.material.picture) {
+            this.$scope.additionalInfo.isVisible = true
+            this.$scope.existingPicture = true
+            this.$scope.pictureHasValidLicense = !this.$scope.material.picture.licenseType
+                ? false : this.$scope.material.picture.licenseType.name === 'CCBYSA30';
+        }
 
         this.fetchMaxPictureSize()
         this.fetchMaxFileSize()
@@ -78,9 +94,16 @@ class controller extends Controller {
         /**
          * Set license type to “All rights reserved” if user chooses “Do not know” option.
          */
-        this.$scope.$watch('material.licenseType', (selectedValue) => {
-            if (selectedValue && selectedValue.id === 'doNotKnow')
-                this.$scope.material.licenseType = this.$scope.allRightsReserved
+        this.$scope.$watch('licenseTypeAgreed', (selectedValue) => {
+            if (selectedValue) {
+                this.$scope.material.licenseType = this.$scope.ccbysa30
+            }
+        })
+
+        this.$scope.$watch('pictureLicenseTypeAgreed', (selectedValue) => {
+            if (selectedValue) {
+                this.$scope.material.picture.licenseType = this.$scope.ccbysa30
+            }
         })
 
         // fix for https://github.com/angular/material/issues/6905
@@ -462,11 +485,11 @@ class controller extends Controller {
 
                         this.setThumbnail(snippet.thumbnails);
                         this.$scope.material.picture.author = snippet.channelTitle;
-                        this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
+                        /*this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
                             status.license.toLowerCase() === 'creativecommon'
                                 ? 'CCBY'
                                 : 'Youtube'
-                        );
+                        );*/
                     }
 
                     // Reset publishers before adding new from youtube
@@ -626,7 +649,7 @@ class controller extends Controller {
     setLicenseTypes(data) {
         this.$scope.licenseTypes = data
         this.$scope.doNotKnow = { id: 'doNotKnow' }
-        this.$scope.allRightsReserved = data.find(t => t.name === 'allRightsReserved')
+        this.$scope.ccbysa30 = data.find(t => t.name === 'CCBYSA30')
     }
     /**
      * If 'NOT_RELEVANT' is not last item in list
@@ -698,8 +721,44 @@ class controller extends Controller {
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.keyCompetences.length === 0)
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
             || this.$scope.isSaving
-            || this.$scope.uploadingFile;
+            || this.$scope.uploadingFile
+            || !this.$scope.addMaterialForm.licenseType.$viewValue
+            || !this.hasPictureAndLicenseChecked()
     }
+
+    hasPictureAndLicenseChecked() {
+        if (!!(this.$scope.newPicture || this.$scope.existingPicture))
+            return !!this.$scope.addMaterialForm.pictureLicenseType.$viewValue
+    }
+    updateMaterial(){
+        this.serverCallService
+            .makePost('rest/material/update', this.storageService.getMaterial())
+            .then(({ data: material }) => {
+                if (material) {
+                    this.storageService.setMaterial(null)
+                    this.$location.url('/oppematerjal/' + material.id)
+                    this.searchService.setIsFavorites(false)
+                    this.searchService.setIsRecommended(false)
+                    this.dontSearch = true // otherwise reload will trigger search if search has values
+                    this.$route.reload()
+                }
+            })
+    }
+
+    showMakePublicDialog() {
+        this.dialogService.showConfirmationDialog(
+            "{{'MATERIAL_MAKE_PUBLIC' | translate}}",
+            "{{'MATERIAL_WARNING' | translate}}",
+            "{{'MATERIAL_YES' | translate}}",
+            "{{'MATERIAL_NO' | translate}}",
+            () => {
+                this.storageService.getMaterial().visibility = VISIBILITY_PUBLIC
+                this.updateMaterial()
+            },
+            this.updateMaterial.bind(this)
+        )
+    }
+
     save() {
         const save = () => {
             this.$scope.isSaving = true
@@ -712,6 +771,10 @@ class controller extends Controller {
 
             if (this.$scope.material.source)
                 this.$scope.material.uploadedFile = null
+
+            if(this.$rootScope.materialLicenseTypeChanged){
+                this.$scope.material.visibility = 'PUBLIC'
+            }
 
             if (this.$scope.material.publishers[0] && !this.$scope.material.publishers[0].name)
                 this.$scope.material.publishers[0] = null
@@ -744,6 +807,16 @@ class controller extends Controller {
                         if (!this.$scope.isChapterMaterial && !this.locals.isAddToPortfolio) {
                             const url = '/oppematerjal/' + material.id
 
+                            this.toastService.show('MATERIAL_SAVED')
+
+                            if((typeof this.$rootScope.materialLicenseTypeChanged === 'undefined' ||
+                                this.$rootScope.materialLicenseTypeChanged === false) &&
+                                material.visibility === VISIBILITY_PRIVATE) {
+                                this.showMakePublicDialog()
+                            }
+
+                            this.$rootScope.materialLicenseTypeChanged = false
+
                             if (this.$location.url() === url)
                                 return done()
 
@@ -751,13 +824,12 @@ class controller extends Controller {
                                 unsubscribe()
                                 this.$timeout(done)
                             })
-                            this.$location.url(url)
                         }
                     }
                     this.$scope.isSaving = false
                 }, () =>
                     this.$scope.isSaving = false
-                )
+            )
         }
         Promise.all(
             ['fileUpload', 'pictureUpload'].reduce(
@@ -796,6 +868,7 @@ controller.$inject = [
   'toastService',
   'translationService',
   'youtubeService',
+    'dialogService'
 ]
 angular.module('koolikottApp').controller('addMaterialDialogController', controller)
 }

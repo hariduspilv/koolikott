@@ -184,30 +184,46 @@ class controller extends Controller {
             this.$rootScope.$broadcast('taxonSelector:clear', null)
         }
 
+        this.$scope.hasUnacceptableLicenses = () => {
+                this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
+                    {
+                        id: this.$scope.portfolio.id,
+                    })
+                    .then(({ data }) => {
+                        this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyMaterialWithUnacceptableLicense',
+                            {id: this.$scope.portfolio.id})
+                            .then((response) => {
+                                this.$scope.unAcceptableLicenses = data || response.data
+                            })
+                    })
+        }
+
         this.$scope.saveAndExitPortfolio = () => {
             this.$cookies.put('savedPortfolio', true);
             this.storageService.getPortfolio().saveType = 'MANUAL';
-            if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
+
+            if(this.$scope.unAcceptableLicenses){
+                return this.saveAndExit();
+            } else if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
                 this.storageService.getPortfolio().publicationConfirmed = true;
                 return this.saveAndExit();
-            }
+            } else if (this.storageService.getPortfolio().visibility === VISIBILITY_PRIVATE){
 
-            if (this.storageService.getPortfolio().publicationConfirmed) {
+                this.storageService.getPortfolio().publicationConfirmed = true;
+                this.dialogService.showConfirmationDialog(
+                    "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
+                    "{{'PORTFOLIO_WARNING' | translate}}",
+                    "{{'PORTFOLIO_YES' | translate}}",
+                    "{{'PORTFOLIO_NO' | translate}}",
+                    () => {
+                        this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
+                        this.saveAndExit()
+                    },
+                    this.saveAndExit.bind(this)
+                )
+            } else if (this.storageService.getPortfolio().publicationConfirmed) {
                 return this.saveAndExit();
             }
-
-            this.storageService.getPortfolio().publicationConfirmed = true;
-            this.dialogService.showConfirmationDialog(
-                "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
-                "{{'PORTFOLIO_WARNING' | translate}}",
-                "{{'PORTFOLIO_YES' | translate}}",
-                "{{'PORTFOLIO_NO' | translate}}",
-                () => {
-                    this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
-                    this.saveAndExit()
-                },
-                this.saveAndExit.bind(this)
-            )
         }
 
         this.$scope.$watch(() => this.$location.path(), (params) => {
@@ -241,7 +257,14 @@ class controller extends Controller {
         this.$rootScope.$watch('learningObjectImproper', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectUnreviewed', onLearningObjectAdminStatusChange)
         this.$rootScope.$watch('learningObjectChanged', onLearningObjectAdminStatusChange)
-        this.$rootScope.$on('$locationChangeSuccess', this.setHeaderColor)
+        this.$rootScope.$on('$locationChangeSuccess', () => {
+            this.setHeaderColor()
+            this.$scope.path = this.$location.path()
+            if(this.$scope.path.startsWith('/kogumik/muuda')){
+                this.$scope.portfolio = this.storageService.getPortfolio()
+                this.$scope.hasUnacceptableLicenses()
+            }
+        })
     }
     setHeaderColor() {
         const setDefault = () => {
@@ -249,10 +272,10 @@ class controller extends Controller {
             this.$scope.isHeaderGray = false
             this.$scope.isHeaderRed = false
         }
+        const path = this.$location.path()
 
         if (!this.authenticatedUserService.isModeratorOrAdmin()) return setDefault()
 
-        const path = this.$location.path()
         const isDashboard = path.startsWith('/toolaud')
         const isMaterial = path.startsWith('/oppematerjal')
         const isPortfolio = path.startsWith('/kogumik')

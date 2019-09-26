@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+import static ee.hm.dop.model.enums.LicenseType.CC_BY_SA_30;
 import static ee.hm.dop.utils.UserUtil.isAdmin;
 import static ee.hm.dop.utils.UserUtil.isModerator;
 import static java.util.stream.Collectors.toList;
@@ -92,6 +93,10 @@ public class LearningObjectService {
         return false;
     }
 
+    public List<LearningObject> getAllByCreator(User creator) {
+        return learningObjectDao.findAllByCreator(creator);
+    }
+
     public void setTaxonPosition(LearningObject learningobject) {
         if (isEmpty(learningobject.getTaxons())) {
             return;
@@ -122,5 +127,9 @@ public class LearningObjectService {
         });
 
         learningobject.setTaxonPositionDto(taxonPositionDTOList);
+    }
+
+    public boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
+        return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals(CC_BY_SA_30);
     }
 }

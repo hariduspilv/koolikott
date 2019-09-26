@@ -769,6 +769,18 @@ function isPDFLink(url) {
     return url && url.split('.').pop().toLowerCase() === "pdf";
 }
 
+function isDocLink(url) {
+    return url && ["doc", "docx", "odt", "odp", "ppt", "pptx"].includes(url.split('.').pop().toLowerCase());
+}
+
+function isZipLink(url) {
+    return url && ["zip", "tar", "apk", "7z"].includes(url.split('.').pop().toLowerCase());
+}
+
+function isDigiDocLink(url) {
+    return url && ["bdoc", "ddoc", "asice"].includes(url.split('.').pop().toLowerCase());
+}
+
 function matchType(type) {
     if (isYoutubeVideo(type)) {
         return 'YOUTUBE';
@@ -784,6 +796,12 @@ function matchType(type) {
         return 'EBOOK';
     } else if (isPDFLink(type)) {
         return 'PDF';
+    } else if (isDocLink(type)) {
+        return 'DOC';
+    } else if (isZipLink(type)) {
+        return 'ZIP';
+    } else if (isDigiDocLink(type)) {
+        return 'DDOC';
     } else {
         return 'LINK';
     }
@@ -826,7 +844,7 @@ function convertLanguage(lang) {
  * which results in another decodeURIComponent();
  */
 function decodeUTF8(string) {
-    return decodeURIComponent(escape(decodeURIComponent(string)));
+    return decodeURIComponent(string);
 }
 
 if (typeof localStorage === 'object') {
@@ -876,6 +894,17 @@ class Controller {
             this.constructor.$inject.forEach((name, idx) =>
                 this[name] = arguments[idx]
             )
+    }
+    isLicenseInvalid(license) {
+        return license === 'allRightsReserved' || license === 'CCBYNCND' || license === 'CCBYND'
+    }
+    isPictureLicenseInvalid(pictureLicense) {
+        return pictureLicense === 'allRightsReserved' || pictureLicense === 'CCBYNCND' || pictureLicense === 'CCBYND'
+    }
+    isMaterialLicenseTypeInvalid(license, picture, type){
+        return !this.isMaterial({ type }) ? false : !license ? true : !picture ?
+            this.isLicenseInvalid(license.name) : !picture.licenseType ?
+                true : this.isLicenseInvalid(license.name) || this.isPictureLicenseInvalid(picture.licenseType.name);
     }
     isMaterial({ type }) {
         return type === '.Material' || type === '.ReducedMaterial' || type === '.AdminMaterial'
@@ -1391,6 +1420,12 @@ class Controller {
             return 'RU'
         else if (lang === 'eng')
             return 'EN'
+    }
+
+    goToLinkWithoutCheckingBox($event, link) {
+        $event.stopPropagation()
+        window.captureOutboundLink(link);
+        window.open(link, '_blank');
     }
 }
 

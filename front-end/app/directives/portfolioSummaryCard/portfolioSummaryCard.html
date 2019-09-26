@@ -72,6 +72,12 @@
                 </md-button>
               </md-menu-item>
               <md-menu-item data-ng-if="$root.isViewPortfolioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
+              <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && isPublic() && acceptableLicenses">
+                <md-button data-ng-click="$ctrl.copyPortfolio()">
+                  <md-icon md-menu-align-target>file_copy</md-icon>
+                  <span data-translate="COPY_PORTFOLIO"></span>
+                </md-button>
+              </md-menu-item>
               <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
               <md-menu-item
                 dop-recommend
@@ -125,30 +131,48 @@
               <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
               <md-menu-divider></md-menu-divider>
               <md-menu-item>
-                <md-button data-ng-if="getPortfolioVisibility() === 'PUBLIC'"
-                           aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
-                  <md-icon>visibility</md-icon>
-                  <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
-                </md-button>
-                <md-button data-ng-if="getPortfolioVisibility() != 'PUBLIC'"
-                           aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
-                  <md-icon>visibility</md-icon>
-                  <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
-                </md-button>
+                <div class="no-padding">
+                  <md-button class="text-transform-inherit"
+                             data-ng-if="getPortfolioVisibility() === 'PUBLIC'"
+                             aria-label="{{PORTFOLIO_VISIBILITY_PUBLIC | translate}}">
+                    <md-icon class="margin-right-16">visibility</md-icon>
+                    <span data-translate="PORTFOLIO_VISIBILITY_PUBLIC"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+                  </md-button>
+                  <md-button class="text-transform-inherit"
+                             data-ng-if="getPortfolioVisibility() != 'PUBLIC'"
+                             data-ng-disabled="portfolioHasMaterialWithUnacceptableLicense"
+                             aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
+                    <md-icon data-ng-if="!portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">visibility</md-icon>
+                    <md-icon data-ng-if="portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
+                    <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
+                  </md-button>
+                  <md-tooltip data-ng-show="portfolioHasMaterialWithUnacceptableLicense">
+                    <span data-translate="UNABLE_TO_SET_PRIVACY_LEVEL"></span>
+                  </md-tooltip>
+                </div>
               </md-menu-item>
               <md-menu-divider></md-menu-divider>
               <md-menu-item>
-                <md-button data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'"
-                           aria-label="{{PORTFOLIO_VISIBILITY_NOT_LISTED | translate}}">
-                  <md-icon>link</md-icon>
-                  <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
-                </md-button>
-                <md-button data-ng-if="getPortfolioVisibility() != 'NOT_LISTED'"
-                           aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}"
-                           data-ng-click="makeNotListed()">
-                  <md-icon>link</md-icon>
-                  <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
-                </md-button>
+                <div class="no-padding">
+                  <md-button class="text-transform-inherit"
+                             data-ng-if="getPortfolioVisibility() === 'NOT_LISTED'"
+                             aria-label="{{PORTFOLIO_VISIBILITY_NOT_LISTED | translate}}">
+                    <md-icon class="margin-right-16">link</md-icon>
+                    <span data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"></span> <span class="md-alt-text"><md-icon>check</md-icon></span>
+                  </md-button>
+                    <md-button class="text-transform-inherit"
+                               data-ng-if="getPortfolioVisibility() != 'NOT_LISTED'"
+                               data-ng-disabled="portfolioHasMaterialWithUnacceptableLicense"
+                               aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}"
+                               data-ng-click="makeNotListed()">
+                      <md-icon data-ng-if="!portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">link</md-icon>
+                      <md-icon data-ng-if="portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
+                      <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
+                  </md-button>
+                  <md-tooltip data-ng-show="portfolioHasMaterialWithUnacceptableLicense">
+                    <span data-translate="UNABLE_TO_SET_PRIVACY_LEVEL"></span>
+                  </md-tooltip>
+                </div>
               </md-menu-item>
               <md-menu-divider></md-menu-divider>
               <md-menu-item>
@@ -192,7 +216,7 @@
       </div>
       <md-content class="card-lg__container">
         <!-- Creator -->
-        <p class="md-body-2">
+        <p class="md-body-2" data-ng-if="!portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="CREATOR"></span>:
           </span>
@@ -203,7 +227,7 @@
         </p>
         <!-- Original creator -->
         <p class="md-body-2"
-           data-ng-if="portfolio.creator && portfolio.originalCreator && portfolio.creator.id != portfolio.originalCreator.id">
+           data-ng-if="portfolio.creator && portfolio.originalCreator && portfolio.creator.id != portfolio.originalCreator.id && !portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="ORIGINAL_CREATOR"></span>:
           </span>
@@ -212,15 +236,48 @@
             <span data-ng-bind="portfolio.originalCreator.surname"></span>
           </a>
         </p>
+        <!-- Copied portfolio related -->
+        <p class="md-body-2"
+           data-ng-if="portfolio.copy">
+          <span class="md-caption caption-light">
+            <span data-translate="PORTFOLIO_COPIED"></span>:
+          </span>
+          <a data-ng-if="isAdminOrModerator() || !portfolio.deletedOrNotPublic" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
+            <span data-ng-bind="copiedFromDirectName"></span>
+            <span data-ng-if="copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
+            <span data-ng-if="copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>
+            <span data-ng-if="copiedLOStatus !== 'PRIVATE' && copiedLOStatus !== 'DELETED'" data-translate="PORTFOLIO_COPIED_FROM"></span>
+          </a>
+          <a data-ng-if="!isAdminOrModerator() && portfolio.deletedOrNotPublic" data-ng-class="{'disabled-link': (deletedOrNotPublic)}">
+            <span data-ng-bind="copiedFromDirectName"></span>
+            <span data-ng-if="copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
+            <span data-ng-if="copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>
+            <span data-ng-if="copiedLOStatus !== 'PRIVATE' && copiedLOStatus !== 'DELETED'" data-translate="PORTFOLIO_COPIED_FROM"></span>
+          </a>
+        </p>
+        <p class="md-body-2"
+           data-ng-if="portfolio.copy">
+          <span class="md-caption caption-light">
+            <span data-translate="PORTFOLIO_COPY_MAKER"></span>:
+          </span>
+            <span>{{portfolio.creator.name}} {{portfolio.creator.surname}}</span>
+        </p>
+        <p class="md-body-2"
+           data-ng-if="portfolio.copy">
+          <span class="md-caption caption-light">
+            <span data-translate="ADDED"></span>:
+          </span>
+            {{portfolio.added | date:'dd.MM.yyyy'}}
+        </p>
         <!-- Created -->
-        <p class="md-body-2" data-ng-if="portfolio.added">
+        <p class="md-body-2" data-ng-if="portfolio.added && !portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="CREATED"></span>:
           </span>
           {{portfolio.added | date:'dd.MM.yyyy'}}
         </p>
         <!-- Published/Added -->
-        <p class="md-body-2" data-ng-if="portfolio.publishedAt">
+        <p class="md-body-2" data-ng-if="portfolio.publishedAt && !portfolio.copy">
           <span class="md-caption caption-light">
             <span data-translate="ADDED"></span>:
           </span>
