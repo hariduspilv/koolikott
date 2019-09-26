@@ -47,6 +47,10 @@ class controller extends Controller {
                             this.$scope.portfolioHasMaterialWithUnacceptableLicense = response.data
                         })
                 }
+                this.$scope.removeLink = setTimeout(() => {
+                    this.removeLink()
+                }, 100)
+
             }
             if (this.getCorrectLanguageTitle(this.portfolio)) {
                 this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
@@ -101,11 +105,6 @@ class controller extends Controller {
         this.$scope.dotsAreShowing = this.dotsAreShowing.bind(this)
         this.$scope.restorePortfolio = this.restorePortfolio
         this.$scope.toggleFullScreen = this.toggleFullScreen.bind(this)
-
-        this.$scope.removeLink = setTimeout(() => {
-            this.removeLink()
-        }, 100)
-
         this.$scope.getLicenseIconList = () => {
             if (this.portfolio && this.portfolio.licenseType) {
                 return licenceTypeMap[this.portfolio.licenseType.name];
