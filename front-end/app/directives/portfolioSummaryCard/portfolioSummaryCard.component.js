@@ -47,10 +47,6 @@ class controller extends Controller {
                             this.$scope.portfolioHasMaterialWithUnacceptableLicense = response.data
                         })
                 }
-                this.$scope.removeLink = setTimeout(() => {
-                    this.removeLink()
-                }, 100)
-
             }
             if (this.getCorrectLanguageTitle(this.portfolio)) {
                 this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
@@ -342,13 +338,6 @@ class controller extends Controller {
     isPublic() {
         if (this.portfolio)
             return this.portfolio.visibility === 'PUBLIC';
-    }
-
-    removeLink() {
-            if (!this.isAdminOrModerator() && this.portfolio.deletedOrNotPublic){
-                document.getElementById('linkToRemove').removeAttribute('href');
-                document.getElementById('linkToRemove').setAttribute('class', 'disabled-link');
-            }
     }
 
     toggleFullScreen() {
