@@ -723,6 +723,12 @@ class controller extends Controller {
             || this.$scope.isSaving
             || this.$scope.uploadingFile
             || !this.$scope.addMaterialForm.licenseType.$viewValue
+            || !this.hasPictureAndLicenseChecked()
+    }
+
+    hasPictureAndLicenseChecked() {
+        if (!!(this.$scope.newPicture || this.$scope.existingPicture))
+            return !!this.$scope.addMaterialForm.pictureLicenseType.$viewValue
     }
     updateMaterial(){
         this.serverCallService
