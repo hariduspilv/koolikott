@@ -114,14 +114,17 @@ public class PortfolioConverter {
             ChapterLog chapterLog = new ChapterLog();
             chapterLog.setTitle(chapter.getTitle());
 
-            List<ChapterBlockLog> chapterBlockLogs = chapter
-                    .getBlocks()
-                    .stream()
-                    .map(this::convertChapterBlock)
-                    .collect(Collectors.toList());
+            if (chapter.getBlocks() != null) {
+                List<ChapterBlockLog> chapterBlockLogs = chapter
+                        .getBlocks()
+                        .stream()
+                        .map(this::convertChapterBlock)
+                        .collect(Collectors.toList());
 
-            chapterLog.setBlocks(chapterBlockLogs);
-            return chapterLog;
+                chapterLog.setBlocks(chapterBlockLogs);
+                return chapterLog;
+            } else
+                return chapterLog;
         }
         return null;
     }
