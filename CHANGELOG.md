@@ -19,7 +19,6 @@
 * "Autori puuduva e-posti veateate kuvamise loogika parandus" [EK-723](https://projektid.hitsa.ee/jira/browse/EK-723)
 
 
-## e-Koolikott [1.39.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11061)
 ## e-Koolikott [1.39.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11061) (Toodangusse paigaldatud 12.09.2019)
 
 ### Muutunud
