@@ -242,7 +242,7 @@
           <span class="md-caption caption-light">
             <span data-translate="PORTFOLIO_COPIED"></span>:
           </span>
-          <a data-ng-class="{'disabled-link': (deletedOrNotPublic && !isAdmin())}" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
+          <a id="linkToRemove" href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
             <span data-ng-bind="copiedFromDirectName"></span>
             <span data-ng-if="copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
             <span data-ng-if="copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>

@@ -102,6 +102,10 @@ class controller extends Controller {
         this.$scope.restorePortfolio = this.restorePortfolio
         this.$scope.toggleFullScreen = this.toggleFullScreen.bind(this)
 
+        this.$scope.removeLink = setTimeout(() => {
+            this.removeLink()
+        }, 1)
+
         this.$scope.getLicenseIconList = () => {
             if (this.portfolio && this.portfolio.licenseType) {
                 return licenceTypeMap[this.portfolio.licenseType.name];
@@ -339,6 +343,13 @@ class controller extends Controller {
     isPublic() {
         if (this.portfolio)
             return this.portfolio.visibility === 'PUBLIC';
+    }
+
+    removeLink() {
+            if (!this.isAdminOrModerator() && this.portfolio.deletedOrNotPublic){
+                document.getElementById('linkToRemove').removeAttribute('href');
+                document.getElementById('linkToRemove').setAttribute('class', 'disabled-link');
+            }
     }
 
     toggleFullScreen() {
