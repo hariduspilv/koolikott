@@ -54,9 +54,15 @@ angular.module('koolikottApp')
                 })
         }
 
-        function setAllLearningObjectsToPrivate(user) {
+        function setAllLearningObjectsToPrivate(authenticatedUser) {
             if (!$rootScope.previouslyDisagreed) {
-                serverCallService.makePost('rest/user/setLearningObjectsPrivate', user)
+                serverCallService.makePost('rest/user/setLearningObjectsPrivate', authenticatedUser.user)
+                    .then((response) => {
+                        $rootScope.rejectedPortfolios = response.data
+                        authenticateUser(authenticatedUser)
+                    })
+            } else {
+                authenticateUser(authenticatedUser)
             }
         }
 
@@ -77,12 +83,9 @@ angular.module('koolikottApp')
         }
 
         function saveResponseAndSetLearningObjectsToPrivate(authenticatedUser) {
-            setAllLearningObjectsToPrivate(authenticatedUser.user)
+            setAllLearningObjectsToPrivate(authenticatedUser)
             serverCallService.makePost('rest/userLicenceAgreement',
                 createLicenceAgreementResponse(authenticatedUser.user.id, false, true))
-                .then(() => {
-                    authenticateUser(authenticatedUser);
-                })
         }
 
         function saveResponseAndLogOut(authenticatedUser) {

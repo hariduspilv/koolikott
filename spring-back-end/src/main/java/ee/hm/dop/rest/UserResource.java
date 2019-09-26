@@ -72,8 +72,8 @@ public class UserResource extends BaseResource {
     }
 
     @PostMapping("setLearningObjectsPrivate")
-    public void setUserLearningObjectsPrivate(@RequestBody User user) {
-        userService.setLearningObjectsPrivate(user);
+    public List<Portfolio> setUserLearningObjectsPrivate(@RequestBody User user) {
+        return userService.setLearningObjectsPrivate(user);
     }
 
     @PostMapping("migrateLearningObjectLicences")

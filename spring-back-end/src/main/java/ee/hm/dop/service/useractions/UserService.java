@@ -184,15 +184,26 @@ public class UserService {
                 (unAcceptablePictureCount == 0);
     }
 
-    public void setLearningObjectsPrivate(User user) {
+    public List<Portfolio> setLearningObjectsPrivate(User user) {
+        List<Portfolio> portfoliosToReturn = new ArrayList<>();
         learningObjectService.getAllByCreator(user)
                 .stream()
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
                         learningObjectHasMaterialWithUnacceptableLicense(materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
-                .forEach(learningObject -> learningObject.setVisibility(Visibility.PRIVATE));
+                .forEach(learningObject -> {
+                    learningObject.setVisibility(Visibility.PRIVATE);
+
+                    if (learningObject instanceof Portfolio) {
+                        Portfolio portfolio = portfolioService.findById(learningObject.getId());
+                        if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
+                            portfoliosToReturn.add(portfolio);
+                        }
+                    }
+                });
 
         solrEngineService.updateIndex();
+        return portfoliosToReturn;
     }
 
     public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
