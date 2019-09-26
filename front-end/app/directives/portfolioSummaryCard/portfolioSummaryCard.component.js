@@ -49,7 +49,7 @@ class controller extends Controller {
                 }
                 this.$scope.removeLink = setTimeout(() => {
                     this.removeLink()
-                }, 500)
+                }, 200)
 
             }
             if (this.getCorrectLanguageTitle(this.portfolio)) {
