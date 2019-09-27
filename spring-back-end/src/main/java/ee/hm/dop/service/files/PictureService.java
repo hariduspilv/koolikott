@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
 
-import static ee.hm.dop.model.enums.LicenseType.CC_BY_SA_30;
+import static ee.hm.dop.model.enums.LicenseType.CCBYSA30;
 
 @Service
 @Transactional
@@ -54,6 +54,6 @@ public class PictureService {
         if (pictureLicenceType == null) {
             return true;
         }
-        return !pictureLicenceType.getName().equals(CC_BY_SA_30);
+        return !pictureLicenceType.getName().equals(CCBYSA30.name());
     }
 }
