@@ -349,14 +349,14 @@ public class MaterialService {
     }
 
     public List<Material> getAllMaterialIfLearningObjectIsPortfolio(LearningObject lo) {
-        List<Material> materials = new ArrayList<>();
-
         if (lo instanceof Portfolio) {
-            List<PortfolioMaterial> portfolioMaterials = portfolioMaterialDao.findAllPortfolioMaterialsByPortfolio(lo.getId());
-            if (!portfolioMaterials.isEmpty())
-                materials = portfolioMaterials.stream().map(PortfolioMaterial::getMaterial).collect(Collectors.toList());
+            return materialDao.findAllMaterialsByPortfolio(lo.getId());
         }
-        return materials;
+        return new ArrayList<>();
+    }
+
+    public List<Material> getAllMaterialsByPortfolio(Long id) {
+        return materialDao.findAllMaterialsByPortfolio(id);
     }
 
     public boolean materialHasUnacceptableLicense(Material material, CheckLicenseStrategy checkLicenseStrategy) {

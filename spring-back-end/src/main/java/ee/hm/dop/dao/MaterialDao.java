@@ -148,6 +148,18 @@ public class MaterialDao extends AbstractDao<Material> {
                 .getResultList();
     }
 
+    public List<Material> findAllMaterialsByPortfolio(Long portfolioId) {
+        return getEntityManager()
+                .createNativeQuery(
+                "SELECT M.id, M.lang, M.issueDate, M.source, M.repositoryIdentifier, M.repository, M.paid, M.isSpecialEducation, M.embeddable, M.curriculumLiterature, M.uploadedFile, M.embedSource " +
+                        "FROM PortfolioMaterial pm " +
+                        "JOIN Material M on pm.material = M.id " +
+                        "WHERE pm.portfolio = :portfolioId")
+                .setParameter("portfolioId", portfolioId)
+                .getResultList();
+    }
+
+
     public List<BigInteger> getRelatedPortfolios(Long materialId) {
         return getEntityManager().
                 createNativeQuery("SELECT pm.portfolio " +

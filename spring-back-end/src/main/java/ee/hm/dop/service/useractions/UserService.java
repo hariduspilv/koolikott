@@ -184,7 +184,6 @@ public class UserService {
         learningObjectService.getAllByCreator(user)
                 .stream()
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
-                        learningObjectHasMaterialWithUnacceptableLicense(materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
                     learningObject.setVisibility(Visibility.PRIVATE);
