@@ -350,10 +350,9 @@ public class MaterialService {
 
     public List<Material> getAllMaterialIfLearningObjectIsPortfolio(LearningObject lo) {
         List<Material> materials = new ArrayList<>();
-        Portfolio portfolio = portfolioService.findById(lo.getId());
 
-        if (portfolio != null) {
-            List<PortfolioMaterial> portfolioMaterials = portfolioMaterialDao.findAllPortfolioMaterialsByPortfolio(portfolio.getId());
+        if (lo instanceof Portfolio) {
+            List<PortfolioMaterial> portfolioMaterials = portfolioMaterialDao.findAllPortfolioMaterialsByPortfolio(lo.getId());
             if (!portfolioMaterials.isEmpty())
                 materials = portfolioMaterials.stream().map(PortfolioMaterial::getMaterial).collect(Collectors.toList());
         }
@@ -365,14 +364,13 @@ public class MaterialService {
         if (licenseType == null) {
             return true;
         }
-
         if (checkLicenseStrategy.isFirstLogin()) {
-            return !licenseType.getName().equals(CC_BY_SA_30) ||
+            return !licenseType.getName().equals(CCBYSA30.name()) ||
                     materialPictureHasInvalidLicense(material);
         } else {
-            return licenseType.getName().equals(ALL_RIGHTS_RESERVED) ||
-                    licenseType.getName().equals(CC_BY_ND) ||
-                    licenseType.getName().equals(CC_BY_NC_ND) ||
+            return licenseType.getName().equalsIgnoreCase(ALLRIGHTSRESERVED.name()) ||
+                    licenseType.getName().equals(CCBYND.name()) ||
+                    licenseType.getName().equals(CCBYNCND.name()) ||
                     materialPictureHasInvalidLicense(material);
         }
     }

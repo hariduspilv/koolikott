@@ -174,14 +174,9 @@ public class UserService {
         logger.info("Starting license check for user " + userId);
         User user = userDao.findUserById(userId);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
-        long unAcceptableLearningObjectsCount = allUserLearningObjects.stream()
-                .filter(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)).count();
-        long unAcceptablePictureCount = allUserLearningObjects.stream()
-                .filter(lo -> lo.getPicture() != null)
-                .filter(lo -> pictureHasUnAcceptableLicence(lo.getPicture()))
-                .count();
-        return (unAcceptableLearningObjectsCount == 0) &&
-                (unAcceptablePictureCount == 0);
+
+        return allUserLearningObjects.stream().noneMatch(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)) &&
+                allUserLearningObjects.stream().noneMatch(lo -> lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture()));
     }
 
     public List<Portfolio> setLearningObjectsPrivate(User user) {
@@ -241,11 +236,14 @@ public class UserService {
     }
 
     private boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
-        List<Material> loMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)
-                .stream()
-                .filter(Objects::nonNull)
-                .collect(Collectors.toList());
-        return learningObjectService.learningObjectHasUnAcceptableLicence(lo) || learningObjectHasMaterialWithUnacceptableLicense(loMaterials);
+        return learningObjectService.learningObjectHasUnAcceptableLicence(lo) || learningObjectHasMaterialWithUnacceptableLicense(getMaterials(lo));
+    }
+
+    private List<Material> getMaterials(LearningObject lo) {
+        return materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)
+                    .stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
     }
 
     private boolean materialHasUnacceptableLicense(Material material) {
