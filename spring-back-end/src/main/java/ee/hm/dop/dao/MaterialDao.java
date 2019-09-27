@@ -150,11 +150,11 @@ public class MaterialDao extends AbstractDao<Material> {
 
     public List<Material> findAllMaterialsByPortfolio(Long portfolioId) {
         return getEntityManager()
-                .createNativeQuery(
-                "SELECT M.id, M.lang, M.issueDate, M.source, M.repositoryIdentifier, M.repository, M.paid, M.isSpecialEducation, M.embeddable, M.curriculumLiterature, M.uploadedFile, M.embedSource " +
+                .createQuery(
+                "SELECT m " +
                         "FROM PortfolioMaterial pm " +
-                        "JOIN Material M on pm.material = M.id " +
-                        "WHERE pm.portfolio = :portfolioId")
+                        "JOIN Material m on pm.material = m.id " +
+                        "WHERE pm.portfolio.id = :portfolioId", entity())
                 .setParameter("portfolioId", portfolioId)
                 .getResultList();
     }
