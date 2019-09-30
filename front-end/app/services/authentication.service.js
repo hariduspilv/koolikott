@@ -9,7 +9,7 @@ angular.module('koolikottApp')
         var isOAuthAuthentication = false;
         $rootScope.showLocationDialog = true;
         $rootScope.userFirstLogin = false;
-        $rootScope.migrationDone = false
+        $rootScope.canCloseWaitingDialog = false
         $rootScope.rejectedPortfolios = [];
 
         var mobileIdLoginSuccessCallback;
@@ -52,8 +52,8 @@ angular.module('koolikottApp')
                 templateUrl: 'views/pleaseWaitDialog/pleaseWaitDialog.html',
                 controller: 'pleaseWaitDialogController',
                 controllerAs: '$ctrl',
-                clickOutsideToClose: $rootScope.migrationDone,
-                escapeToClose: $rootScope.migrationDone})
+                clickOutsideToClose: $rootScope.canCloseWaitingDialog,
+                escapeToClose: $rootScope.canCloseWaitingDialog})
         }
 
         function migrateLearningObjectsAndLogin(authenticatedUser) {
@@ -63,7 +63,7 @@ angular.module('koolikottApp')
             serverCallService.makePost('rest/user/migrateLearningObjectLicences', authenticatedUser.user)
                 .then((response) => {
                     $rootScope.rejectedPortfolios = response.data
-                    $rootScope.migrationDone = true
+                    $rootScope.canCloseWaitingDialog = true
                     authenticateUser(authenticatedUser)
                 })
         }
@@ -76,7 +76,7 @@ angular.module('koolikottApp')
                 serverCallService.makePost('rest/user/setLearningObjectsPrivate', authenticatedUser.user)
                     .then((response) => {
                         $rootScope.rejectedPortfolios = response.data
-                        $rootScope.migrationDone = true
+                        $rootScope.canCloseWaitingDialog = true
                         authenticateUser(authenticatedUser)
                     })
             } else {
@@ -206,6 +206,7 @@ angular.module('koolikottApp')
                 authenticateUser(authenticatedUser)
             } else if (response.disagreed) {
                 $rootScope.previouslyDisagreed = true
+                $rootScope.canCloseWaitingDialog = true
                 checkLicencesAndAct(authenticatedUser)
             }  else {
                 showLicenceMigrationAgreementModal(authenticatedUser)
