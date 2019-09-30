@@ -174,8 +174,10 @@ public class UserService {
         User user = userDao.findUserById(userId);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
 
-        return allUserLearningObjects.stream().noneMatch(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)) &&
-                allUserLearningObjects.stream().noneMatch(lo -> lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture()));
+        return allUserLearningObjects.stream()
+                        .noneMatch(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)) &&
+                allUserLearningObjects.stream()
+                        .noneMatch(lo -> lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture()));
     }
 
     public List<Portfolio> setLearningObjectsPrivate(User user) {
@@ -233,8 +235,12 @@ public class UserService {
     }
 
     public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
-        learningObjectMaterials = learningObjectMaterials.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        return CollectionUtils.isNotEmpty(learningObjectMaterials) && learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
+        learningObjectMaterials = learningObjectMaterials.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return CollectionUtils.isNotEmpty(learningObjectMaterials) &&
+                learningObjectMaterials.stream()
+                        .anyMatch(this::materialHasUnacceptableLicense);
     }
 
     private List<Material> getMaterials(LearningObject lo) {
