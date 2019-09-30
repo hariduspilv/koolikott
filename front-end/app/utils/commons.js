@@ -896,10 +896,10 @@ class Controller {
             )
     }
     isLicenseInvalid(license) {
-        return license === 'allRightsReserved' || license === 'CCBYNCND' || license === 'CCBYND'
+        return license !== 'CCBYSA30'
     }
     isPictureLicenseInvalid(pictureLicense) {
-        return pictureLicense === 'allRightsReserved' || pictureLicense === 'CCBYNCND' || pictureLicense === 'CCBYND'
+        return pictureLicense !== 'CCBYSA30'
     }
     isMaterialLicenseTypeInvalid(license, picture, type){
         return !this.isMaterial({ type }) ? false : !license ? true : !picture ?
