@@ -4,7 +4,6 @@ import ee.hm.dop.dao.PortfolioDao;
 import ee.hm.dop.dao.PortfolioLogDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.service.CheckLicenseStrategy;
 import ee.hm.dop.service.files.PictureService;
 import ee.hm.dop.service.permission.PortfolioPermission;
 import ee.hm.dop.service.reviewmanagement.ChangeProcessStrategy;
@@ -186,6 +185,6 @@ public class PortfolioService {
         }
         List<Material> portfolioMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(portfolio);
         return portfolioMaterials.stream()
-                .anyMatch(material -> materialService.materialHasUnacceptableLicense(material, CheckLicenseStrategy.USER_HAS_LOGGED_IN));
+                .anyMatch(material -> materialService.materialHasUnacceptableLicense(material));
     }
 }
