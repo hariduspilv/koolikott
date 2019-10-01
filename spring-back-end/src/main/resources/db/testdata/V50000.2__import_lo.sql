@@ -348,39 +348,39 @@ insert into LearningObject_TargetGroup(learningObject, targetGroup) values (1, 2
 
 -- Portfolio
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (101, '2000-12-29 06:00:01', '2004-12-29 06:00:01', 95455215, 3, 6, false, 3, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (101, 'The new stock market', 5, 'The changes after 2008.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (101, 'The new stock market', 5, 'The changes after 2008.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (102, '2012-12-29 06:00:01', null, 14, null, 4, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (102, 'New ways how to do it', 4, null);
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (102, 'New ways how to do it', 4, null);
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (103, '2002-12-29 06:00:01', '2006-12-29 06:00:01', 14, 4, 6, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (103, 'The newer stock market', 6, 'A marvellous summary.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (103, 'The newer stock market', 6, 'A marvellous summary.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (104, '2003-10-10 07:00:11', null, 100, null, 1, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (104, 'The even newer stock market', 1, 'Cool summary.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (104, 'The even newer stock market', 1, 'Cool summary.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (105, '2003-10-10 07:00:11', null, 100, null, 1, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (105, 'Adding comment to a portfolio', 1, 'Cool summary.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (105, 'Adding comment to a portfolio', 1, 'Cool summary.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (106, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', 2, 'Summary.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (106, 'This portfolio will be changed to not listed in the tests. ', 2, 'Summary.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (107, '2003-10-10 07:00:11', null, 100, 5, 2, false, null, 'PRIVATE');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (107, 'This portfolio is private. ', 2, 'Summary. Sum sum sum.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (107, 'This portfolio is private. ', 2, 'Summary. Sum sum sum.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (108, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (108, 'This portfolio is public. ', 2, 'Summary. Wow.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (108, 'This portfolio is public. ', 2, 'Summary. Wow.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (109, '2011-10-10 07:00:11', null, 100, null, 7, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (109, 'This portfolio2 is public. ', 7, 'Alpha.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (109, 'This portfolio2 is public. ', 7, 'Alpha.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (110, '2003-10-10 07:00:11', null, 95455216, null, 7, false, 5, 'PRIVATE');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (110, 'This portfolio2 is private. ', 7, 'Alpha.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (110, 'This portfolio2 is private. ', 7, 'Alpha.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (111, '2003-10-10 07:00:11', null, 100, null, 7, false, 6, 'NOT_LISTED');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (111, 'This portfolio2 is not listed. ', 7, 'Alpha.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (111, 'This portfolio2 is not listed. ', 7, 'Alpha.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (112, '2003-10-10 07:00:11', null, 100, null, 9, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (112, 'This portfolio will be DELETED in tests.', 9, 'Alpha.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (112, 'This portfolio will be DELETED in tests.', 9, 'Alpha.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (113, '2003-12-10 06:21:10', null, 100, null, 9, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (113, 'This portfolio will be DELETED in tests by admin.', 9, 'Beta.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (113, 'This portfolio will be DELETED in tests by admin.', 9, 'Beta.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (114, '2003-10-10 07:00:09', null, 100, null, 6, false, 4, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (114, 'Uploading picture to it', 6, 'Beta.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (114, 'Uploading picture to it', 6, 'Beta.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (115, '2003-10-10 07:00:09', null, 0, null, null, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (115, 'Broken portfolio', 6, 'Beta.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (115, 'Broken portfolio', 6, 'Beta.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (116, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (116, 'This portfolio is public. ', 2, 'Summary. Wow.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (116, 'This portfolio is public. ', 2, 'Summary. Wow.');
 insert into LearningObject(id, added, updated, views, picture, creator, deleted, recommendation, visibility) VALUES (117, '2003-10-10 07:00:11', null, 100, null, 2, false, null, 'PUBLIC');
-insert into Portfolio(id, title, originalCreator, summary) VALUES (117, 'This portfolio is public. ', 2, 'Summary. Wow.');
+insert into Portfolio(id, title, originalOrCopiedFromDirectCreator, summary) VALUES (117, 'This portfolio is public. ', 2, 'Summary. Wow.');
 
 -- Chapter
 
