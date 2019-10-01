@@ -1,3 +1,12 @@
+## e-Koolikott [1.50.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11107)
+
+### Muutunud
+* "Ebasobiva litsentsiga materjali omavat kogumikku on võimalik avalikustada" [EK-753](https://projektid.hitsa.ee/jira/browse/EK-753)
+* "Kuvada kasutajale teade pärast litsentsimodaalil valiku tegemist" [EK-752](https://projektid.hitsa.ee/jira/browse/EK-752)
+* "Litsentsi väli peaks olema kohustuslik väli" [EK-741](https://projektid.hitsa.ee/jira/browse/EK-741)
+* "Tahvelarvuti resolutsioonidel peaks litsentsi modaali nuppude tekst olema korrektselt kuvatud" [EK-754](https://projektid.hitsa.ee/jira/browse/EK-754)
+* "Litsents> Olemasolev kasutaja, kelle kogumikes on vana litsentsiga materjale, logib e-Koolikotti pärast muudatuste jõustumist" [EK-728](https://projektid.hitsa.ee/jira/browse/EK-728)
+
 ## e-Koolikott [1.50.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11022)
 
 ### Muutunud
