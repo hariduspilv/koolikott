@@ -100,4 +100,9 @@ public class MaterialResource extends BaseResource {
     public List<Portfolio> getRelatedPortfolios(@RequestParam("id") Long id) {
         return materialService.getRelatedPortfolios(id);
     }
+
+    @GetMapping("getAllMaterialsByPortfolio")
+    public List<Material> getAllMaterialsByPortfolio(@RequestParam("id") Long id) {
+        return materialService.getAllMaterialsByPortfolio(id);
+    }
 }

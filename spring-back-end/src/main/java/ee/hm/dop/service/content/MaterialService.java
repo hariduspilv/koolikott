@@ -9,7 +9,6 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.EducationalContext;
-import ee.hm.dop.service.CheckLicenseStrategy;
 import ee.hm.dop.service.author.AuthorService;
 import ee.hm.dop.service.author.PublisherService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
@@ -35,7 +34,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.model.enums.LicenseType.*;
+import static ee.hm.dop.model.enums.LicenseType.CCBYSA30;
 import static ee.hm.dop.utils.ConfigurationProperties.SERVER_ADDRESS;
 import static java.time.LocalDateTime.now;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -359,20 +358,14 @@ public class MaterialService {
         return materialDao.findAllMaterialsByPortfolio(id);
     }
 
-    public boolean materialHasUnacceptableLicense(Material material, CheckLicenseStrategy checkLicenseStrategy) {
+    public boolean materialHasUnacceptableLicense(Material material) {
         LicenseType licenseType = material.getLicenseType();
         if (licenseType == null) {
             return true;
         }
-        if (checkLicenseStrategy.isFirstLogin()) {
-            return !licenseType.getName().equals(CCBYSA30.name()) ||
-                    materialPictureHasInvalidLicense(material);
-        } else {
-            return licenseType.getName().equalsIgnoreCase(ALLRIGHTSRESERVED.name()) ||
-                    licenseType.getName().equals(CCBYND.name()) ||
-                    licenseType.getName().equals(CCBYNCND.name()) ||
-                    materialPictureHasInvalidLicense(material);
-        }
+        return !licenseType.getName().equals(CCBYSA30.name()) ||
+                materialPictureHasInvalidLicense(material);
+
     }
 
     private boolean materialPictureHasInvalidLicense(Material material) {

@@ -1,0 +1,24 @@
+<md-dialog id="please-wait-dialog" aria-label="" class="login-dialog" flex="50">
+  <md-toolbar>
+    <div id="please-wait-dialog-toolbar" data-layout-align="center start" data-layout-gt-sm="row" data-layout="column">
+      <div class="md-toolbar-tools" data-layout-align="space-between center">
+        <h2 data-translate="PLEASE_WAIT"></h2>
+        <md-button
+          data-ng-if="$root.migrationDone"
+          ng-click="$ctrl.close()"
+          class="md-icon-button"
+          aria-label="Sulge modaal"
+        >
+          <md-icon>close</md-icon>
+        </md-button>
+      </div>
+    </div>
+  </md-toolbar>
+  <md-dialog-content>
+    <md-content data-layout-padding>
+      <p>
+        <span data-translate="PLEASE_WAIT_TEXT"></span>
+      </p>
+    </md-content>
+  </md-dialog-content>
+</md-dialog>

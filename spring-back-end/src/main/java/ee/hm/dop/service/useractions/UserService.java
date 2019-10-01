@@ -6,7 +6,6 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
-import ee.hm.dop.service.CheckLicenseStrategy;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
@@ -175,8 +174,10 @@ public class UserService {
         User user = userDao.findUserById(userId);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
 
-        return allUserLearningObjects.stream().noneMatch(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)) &&
-                allUserLearningObjects.stream().noneMatch(lo -> lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture()));
+        return allUserLearningObjects.stream()
+                        .noneMatch(lo -> learningObjectService.learningObjectHasUnAcceptableLicence(lo)) &&
+                allUserLearningObjects.stream()
+                        .noneMatch(lo -> lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture()));
     }
 
     public List<Portfolio> setLearningObjectsPrivate(User user) {
@@ -198,11 +199,6 @@ public class UserService {
 
         solrEngineService.updateIndex();
         return portfoliosToReturn;
-    }
-
-    public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
-        learningObjectMaterials = learningObjectMaterials.stream().filter(Objects::nonNull).collect(Collectors.toList());
-        return CollectionUtils.isNotEmpty(learningObjectMaterials) && learningObjectMaterials.stream().anyMatch(this::materialHasUnacceptableLicense);
     }
 
     public List<Portfolio> migrateUserLearningObjectLicences(User user) {
@@ -238,6 +234,15 @@ public class UserService {
         return learningObjectService.learningObjectHasUnAcceptableLicence(lo) || learningObjectHasMaterialWithUnacceptableLicense(getMaterials(lo));
     }
 
+    public boolean learningObjectHasMaterialWithUnacceptableLicense(List<Material> learningObjectMaterials) {
+        learningObjectMaterials = learningObjectMaterials.stream()
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+        return CollectionUtils.isNotEmpty(learningObjectMaterials) &&
+                learningObjectMaterials.stream()
+                        .anyMatch(this::materialHasUnacceptableLicense);
+    }
+
     private List<Material> getMaterials(LearningObject lo) {
         return materialService.getAllMaterialIfLearningObjectIsPortfolio(lo)
                     .stream()
@@ -246,7 +251,7 @@ public class UserService {
     }
 
     private boolean materialHasUnacceptableLicense(Material material) {
-        return materialService.materialHasUnacceptableLicense(material, CheckLicenseStrategy.FIRST_LOGIN);
+        return materialService.materialHasUnacceptableLicense(material);
     }
 
     private boolean pictureHasUnAcceptableLicence(Picture picture) {
@@ -254,7 +259,9 @@ public class UserService {
     }
 
     private boolean portfolioHasInvalidMaterialCreatedByAnotherAuthor(Portfolio portfolio, User user) {
-        return portfolio.getCreator() != user && portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
+        return materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
+                .anyMatch(material -> material.getCreator() != null && !material.getCreator().getId().equals(user.getId())) &&
+                portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
     }
 
     private void migrateLearningObjectLicense(LearningObject learningObject, LicenseType licenseType) {
