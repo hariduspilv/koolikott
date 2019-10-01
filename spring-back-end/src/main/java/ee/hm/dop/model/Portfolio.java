@@ -33,7 +33,7 @@ public class Portfolio extends LearningObject implements Searchable, IPortfolio 
     private List<Chapter> chapters;
 
     @ManyToOne
-    @JoinColumn(name = "originalCreator", nullable = false)
+    @JoinColumn(name = "originalOrCopiedFromDirectCreator", nullable = false)
     private User originalCreator;
 
     @Column
