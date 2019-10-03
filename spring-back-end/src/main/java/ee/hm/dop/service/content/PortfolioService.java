@@ -116,7 +116,8 @@ public class PortfolioService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return !portfolioHasUnAcceptableLicense(portfolio) &&
-                !portfolioThumbnailHasUnAcceptableLicense(portfolio);
+                !portfolioThumbnailHasUnAcceptableLicense(portfolio) &&
+                !portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
     }
 
     private boolean portfolioThumbnailHasUnAcceptableLicense(Portfolio portfolio) {
