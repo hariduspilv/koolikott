@@ -5,6 +5,11 @@
         constructor(...args) {
             super(...args)
 
+            this.$scope.$watch(() => {
+                if (this.$rootScope.canCloseWaitingDialog) {
+                    this.$mdDialog.hide()
+                }
+            });
         }
 
         close() {
@@ -12,7 +17,7 @@
         }
     }
 
-    controller.$inject = ['$scope', '$mdDialog']
+    controller.$inject = ['$scope', '$rootScope', '$mdDialog']
 
     angular.module('koolikottApp').controller('pleaseWaitDialogController', controller)
 }
