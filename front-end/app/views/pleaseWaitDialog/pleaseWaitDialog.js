@@ -7,6 +7,7 @@
 
             this.$scope.$watch(() => {
                 if (this.$rootScope.canCloseWaitingDialog) {
+                    this.$rootScope.canCloseWaitingDialog = false
                     this.$mdDialog.hide()
                 }
             });
