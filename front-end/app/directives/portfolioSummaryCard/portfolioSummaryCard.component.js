@@ -170,6 +170,9 @@ class controller extends Controller {
     isAdmin() {
         return this.authenticatedUserService.isAdmin()
     }
+    isModerator() {
+        return this.authenticatedUserService.isModerator()
+    }
     isAdminOrModerator() {
         return (
             this.authenticatedUserService.isAdmin() ||
@@ -338,6 +341,16 @@ class controller extends Controller {
     isPublic() {
         if (this.portfolio)
             return this.portfolio.visibility === 'PUBLIC';
+    }
+
+    originalIsPrivate() {
+        if (this.portfolio)
+            return this.portfolio.copiedLOStatus === 'PRIVATE';
+    }
+
+    originalIsDeleted() {
+        if (this.portfolio)
+            return this.portfolio.copiedLOStatus === 'DELETED';
     }
 
     toggleFullScreen() {

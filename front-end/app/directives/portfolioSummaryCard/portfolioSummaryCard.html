@@ -242,18 +242,31 @@
           <span class="md-caption caption-light">
             <span data-translate="PORTFOLIO_COPIED"></span>:
           </span>
-          <a data-ng-if="isAdminOrModerator() || !portfolio.deletedOrNotPublic" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
+
+          <a data-ng-if="$ctrl.isAdmin() || !portfolio.deletedOrNotPublic" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
             <span data-ng-bind="copiedFromDirectName"></span>
             <span data-ng-if="copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
             <span data-ng-if="copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>
             <span data-ng-if="copiedLOStatus !== 'PRIVATE' && copiedLOStatus !== 'DELETED'" data-translate="PORTFOLIO_COPIED_FROM"></span>
           </a>
+
+          <a data-ng-if="$ctrl.isModerator() && $ctrl.originalIsPrivate()" data-ng-href="/kogumik/{{portfolio.copiedFromDirect}}" target="_blank">
+            <span data-ng-bind="copiedFromDirectName"></span>
+            <span data-ng-if="copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
+          </a>
+
+          <a data-ng-if="$ctrl.isModerator() && $ctrl.originalIsDeleted()" data-ng-class="{'disabled-link': (deletedOrNotPublic)}">
+            <span data-ng-bind="copiedFromDirectName"></span>
+            <span data-translate="PORTFOLIO_DELETED_FROM"></span>
+          </a>
+
           <a data-ng-if="!isAdminOrModerator() && portfolio.deletedOrNotPublic" data-ng-class="{'disabled-link': (deletedOrNotPublic)}">
             <span data-ng-bind="copiedFromDirectName"></span>
             <span data-ng-if="copiedLOStatus === 'PRIVATE'" data-translate="PORTFOLIO_PRIVATE_FROM"></span>
             <span data-ng-if="copiedLOStatus === 'DELETED'" data-translate="PORTFOLIO_DELETED_FROM"></span>
             <span data-ng-if="copiedLOStatus !== 'PRIVATE' && copiedLOStatus !== 'DELETED'" data-translate="PORTFOLIO_COPIED_FROM"></span>
           </a>
+
         </p>
         <p class="md-body-2"
            data-ng-if="portfolio.copy">
