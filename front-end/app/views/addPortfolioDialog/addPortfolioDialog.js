@@ -60,6 +60,9 @@ angular.module('koolikottApp')
                             $scope.newPortfolio.picture.licenseType = $scope.ccbysa30
                         }
                     })
+                    $scope.$watch(() => {
+                        $scope.existingPicture = $scope.newPortfolio.picture
+                    })
                     $scope.timeAddPortfolioOpened = new Date();
                     if ($scope.portfolio && $scope.portfolio.licenseType && $scope.portfolio.licenseType.name === 'CCBYSA30') {
                         $scope.hasValidLicense = true;
@@ -195,7 +198,7 @@ angular.module('koolikottApp')
                 };
 
                 function hasPictureAndLicenseChecked() {
-                    return $scope.newPicture || $scope.existingPicture ? $scope.pictureLicenseTypeAgreed : true;
+                    return $scope.newPicture || $scope.existingPicture.name ? $scope.pictureLicenseTypeAgreed : true;
                 }
 
                 function savePortfolioFinally() {

@@ -185,7 +185,7 @@
           <md-input-container flex="100" flex-gt-sm="100">
             <md-checkbox
               name="pictureLicenseType"
-              data-ng-required="newPicture || existingPicture"
+              data-ng-required="newPicture || existingPicture.name"
               data-ng-model="pictureLicenseTypeAgreed"
               data-ng-value="CCBYSA30"
               data-ng-checked="pictureHasValidLicense"
@@ -195,8 +195,8 @@
               <a href="" data-ng-click="goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong data-translate="LICENSETYPE_CCBYSA30"></strong></a>
               <span data-translate="TERMS_OF_LICENSE"></span>
             </md-checkbox>
-            <div data-ng-messages="addPortfolioForm.pictureLicenseType.$error" data-ng-show="!pictureLicenseTypeAgreed && (newPicture || existingPicture)">
-              <div data-ng-message="required" data-translate="LICENSE_TYPE_IS_REQUIRED"></div>
+            <div data-ng-messages="addPortfolioForm.pictureLicenseType.$error" data-ng-show="!pictureLicenseTypeAgreed && (newPicture || existingPicture.name)">
+              <div data-translate="LICENSE_TYPE_IS_REQUIRED" class="md-input-message-animation"></div>
             </div>
           </md-input-container>
         </div>

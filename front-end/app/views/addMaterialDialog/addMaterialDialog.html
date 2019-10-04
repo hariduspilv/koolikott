@@ -556,14 +556,14 @@
               <md-input-container>
                 <label data-translate="AUTHOR_WORD"></label>
                 <input
-                  data-ng-required="newPicture"
+                  data-ng-required="newPicture || existingPicture.name"
                   data-ng-model="material.picture.author"
                   id="material-picture-author-{{$index}}"
                   name="authorName"
                   md-maxlength="50"
                   data-ng-disabled="isUserAuthor"
                 >
-                <div ng-messages="addMaterialForm.authorName.$error" data-ng-show="!material.picture.author">
+                <div ng-messages="addMaterialForm.authorName.$error" data-ng-show="!material.picture.author && existingPicture.name">
                   <div ng-message="required" data-translate="AUTHOR_NAME_REQUIRED"></div>
                 </div>
               </md-input-container>
@@ -604,7 +604,7 @@
                     <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, licenseTermsLink)"><strong data-translate="LICENSETYPE_CCBYSA30"></strong></a>
                     <span data-translate="TERMS_OF_LICENSE"></span>
                   </md-checkbox>
-                  <div data-ng-messages="addMaterialForm.pictureLicenseType.$error" data-ng-show="!pictureLicenseTypeAgreed && (newPicture || existingPicture)">
+                  <div data-ng-messages="addMaterialForm.pictureLicenseType.$error" data-ng-show="!pictureLicenseTypeAgreed && (newPicture || existingPicture.name)">
                     <div data-translate="LICENSE_TYPE_IS_REQUIRED" class="md-input-message-animation"></div>
                   </div>
                 </md-input-container>

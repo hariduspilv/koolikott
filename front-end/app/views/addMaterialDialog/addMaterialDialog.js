@@ -81,6 +81,9 @@ class controller extends Controller {
             this.onDatePickerChange.bind(this),
             true
         )
+        this.$scope.$watch(() => {
+            this.$scope.existingPicture = this.$scope.material.picture
+        })
 
         /**
          * Immediately show license type field error in edit-mode if it is not filled to tell the user
@@ -485,11 +488,6 @@ class controller extends Controller {
 
                         this.setThumbnail(snippet.thumbnails);
                         this.$scope.material.picture.author = snippet.channelTitle;
-                        /*this.$scope.material.picture.licenseType = this.getLicenseTypeByName(
-                            status.license.toLowerCase() === 'creativecommon'
-                                ? 'CCBY'
-                                : 'Youtube'
-                        );*/
                     }
 
                     // Reset publishers before adding new from youtube
@@ -727,7 +725,7 @@ class controller extends Controller {
     }
 
     hasPictureAndLicenseChecked() {
-        return !!(this.$scope.newPicture || this.$scope.existingPicture) ? !this.$scope.addMaterialForm.pictureLicenseType.$viewValue : false;
+        return !!(this.$scope.newPicture || this.$scope.existingPicture.name) ? !this.$scope.addMaterialForm.pictureLicenseType.$viewValue : false;
     }
     updateMaterial(){
         this.serverCallService
