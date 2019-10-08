@@ -1,3 +1,11 @@
+## e-Koolikott [1.50.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11113)
+
+### Muutunud
+* "Kasutajad ei tohi saada kopeerida kogumikke, milles on vale litsentsiga materjale" [EK-757](https://projektid.hitsa.ee/jira/browse/EK-757)
+* "Aineekspert ei peaks saama liikuda kustutatud õppevaradele" [EK-758](https://projektid.hitsa.ee/jira/browse/EK-758)
+* "Materjali ei tohi saada lisada ilma kohustuslikke välju täitmata - illustratsiooni litsents" [EK-760](https://projektid.hitsa.ee/jira/browse/EK-760)
+* "Litsentside migreerimise 'Oota' modaal peaks olema kuvatud vaid reaalselt vajaliku aja" [EK-761](https://projektid.hitsa.ee/jira/browse/EK-761)
+
 ## e-Koolikott [1.50.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11107)
 
 ### Muutunud
