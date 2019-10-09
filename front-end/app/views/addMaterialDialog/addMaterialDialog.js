@@ -34,7 +34,7 @@ class controller extends Controller {
         this.$scope.licenseTermsLink = this.$translate.instant('LICENSE_TERMS_LINK')
 
         if (this.$scope.material) {
-            this.$scope.hasValidLicense = this.$scope.material.licenseType.name === 'CCBYSA30'
+            this.$scope.hasValidLicense = this.$scope.material.licenseType && this.$scope.material.licenseType.name === 'CCBYSA30'
         }
 
         if (this.$scope.material && this.$scope.material.picture) {

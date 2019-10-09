@@ -329,7 +329,7 @@ angular.module('koolikottApp')
             }
 
             $scope.makePublic = () => {
-                if ($scope.material.licenseType.name !== 'CCBYSA30' ||
+                if (!$scope.material.licenseType || $scope.material.licenseType.name !== 'CCBYSA30' ||
                     ($scope.material.picture &&
                     $scope.material.picture.licenseType.name !== 'CCBYSA30')){
                     $mdDialog.show({
