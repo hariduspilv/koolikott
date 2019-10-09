@@ -220,6 +220,8 @@ public class UserService {
                     }
                 });
 
+        solrEngineService.updateIndex();
+
         return portfoliosSetToPrivate;
     }
 
