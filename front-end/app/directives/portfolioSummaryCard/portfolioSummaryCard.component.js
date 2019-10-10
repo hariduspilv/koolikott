@@ -365,6 +365,10 @@ class controller extends Controller {
             this.toastService.hide()
         }
     }
+
+    onDivAction() {
+        this.$scope.showTooltip = this.$scope.portfolioHasMaterialWithUnacceptableLicense;
+    }
 }
 controller.$inject = [
     '$rootScope',
