@@ -17,6 +17,10 @@
 class controller extends Controller {
     $onInit() {
 
+        this.$scope.$on("$mdMenuClose", () => {
+            this.$scope.showTooltip1 = false;
+            this.$scope.showTooltip2 = false;
+        });
         this.$scope.showEditModeButton = true
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
@@ -366,8 +370,20 @@ class controller extends Controller {
         }
     }
 
-    onDivAction() {
-        this.$scope.showTooltip = this.$scope.portfolioHasMaterialWithUnacceptableLicense;
+    onDivAction1() {
+        this.$scope.showTooltip1 = this.$scope.portfolioHasMaterialWithUnacceptableLicense;
+    }
+
+    onDivAction2() {
+        this.$scope.showTooltip2 = this.$scope.portfolioHasMaterialWithUnacceptableLicense;
+    }
+
+    onDivLeave1() {
+        this.$scope.showTooltip1 = false;
+    }
+
+    onDivLeave2() {
+        this.$scope.showTooltip2 = false;
     }
 }
 controller.$inject = [
