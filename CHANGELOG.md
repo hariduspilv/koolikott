@@ -1,3 +1,10 @@
+## e-Koolikott [1.50.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11114)
+
+### Muutunud
+* "Kogumiku avalikustamise menüü tooltip ei tohiks lehele kinni jääda" [EK-762](https://projektid.hitsa.ee/jira/browse/EK-762)
+* "Paluda solrit kenasti end peale migratsioon uuendama" [EK-763](https://projektid.hitsa.ee/jira/browse/EK-763)
+* "Litsentsinduse teksti muudatused" [EK-768](https://projektid.hitsa.ee/jira/browse/EK-768)
+
 ## e-Koolikott [1.50.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11113)
 
 ### Muutunud
