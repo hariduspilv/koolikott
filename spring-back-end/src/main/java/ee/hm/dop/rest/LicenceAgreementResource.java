@@ -2,9 +2,7 @@ package ee.hm.dop.rest;
 
 import ee.hm.dop.model.LicenceAgreement;
 import ee.hm.dop.service.LicenceAgreementService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 
@@ -18,6 +16,12 @@ public class LicenceAgreementResource extends BaseResource {
     @GetMapping("latest")
     public LicenceAgreement getLatest() {
         return licenceAgreementService.getLatestLicenceAgreement();
+    }
+
+    @PostMapping
+    public LicenceAgreement save(@RequestBody LicenceAgreement licenceAgreement) {
+        licenceAgreement.setCreatedBy(getLoggedInUser());
+        return licenceAgreementService.save(licenceAgreement);
     }
 
 }
