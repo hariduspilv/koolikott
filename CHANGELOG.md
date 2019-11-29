@@ -1,11 +1,11 @@
-## e-Koolikott [1.50.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11114)
+## e-Koolikott [1.50.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11114) (Prelive'i paigaldatud 15.10.2019)
 
 ### Muutunud
 * "Kogumiku avalikustamise menüü tooltip ei tohiks lehele kinni jääda" [EK-762](https://projektid.hitsa.ee/jira/browse/EK-762)
 * "Paluda solrit kenasti end peale migratsioon uuendama" [EK-763](https://projektid.hitsa.ee/jira/browse/EK-763)
 * "Litsentsinduse teksti muudatused" [EK-768](https://projektid.hitsa.ee/jira/browse/EK-768)
 
-## e-Koolikott [1.50.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11113)
+## e-Koolikott [1.50.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11113) (Prelive'i paigaldatud 08.10.2019)
 
 ### Muutunud
 * "Kasutajad ei tohi saada kopeerida kogumikke, milles on vale litsentsiga materjale" [EK-757](https://projektid.hitsa.ee/jira/browse/EK-757)
@@ -13,7 +13,7 @@
 * "Materjali ei tohi saada lisada ilma kohustuslikke välju täitmata - illustratsiooni litsents" [EK-760](https://projektid.hitsa.ee/jira/browse/EK-760)
 * "Litsentside migreerimise 'Oota' modaal peaks olema kuvatud vaid reaalselt vajaliku aja" [EK-761](https://projektid.hitsa.ee/jira/browse/EK-761)
 
-## e-Koolikott [1.50.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11107)
+## e-Koolikott [1.50.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11107) (Prelive'i paigaldatud 01.10.2019)
 
 ### Muutunud
 * "Ebasobiva litsentsiga materjali omavat kogumikku on võimalik avalikustada" [EK-753](https://projektid.hitsa.ee/jira/browse/EK-753)
@@ -22,7 +22,7 @@
 * "Tahvelarvuti resolutsioonidel peaks litsentsi modaali nuppude tekst olema korrektselt kuvatud" [EK-754](https://projektid.hitsa.ee/jira/browse/EK-754)
 * "Litsents> Olemasolev kasutaja, kelle kogumikes on vana litsentsiga materjale, logib e-Koolikotti pärast muudatuste jõustumist" [EK-728](https://projektid.hitsa.ee/jira/browse/EK-728)
 
-## e-Koolikott [1.50.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11022)
+## e-Koolikott [1.50.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11022) (Prelive'i paigaldatud 26.09.2019)
 
 ### Muutunud
 * "Kogumiku kopeerimise funktsionaalsus" [EK-683](https://projektid.hitsa.ee/jira/browse/EK-683)
@@ -32,10 +32,6 @@
 * "Materjali sisestamise modaali litsentsimuudatused" [EK-686](https://projektid.hitsa.ee/jira/browse/EK-686)
 * "Kogumiku sisestamise modaali litsentsimuudatused" [EK-687](https://projektid.hitsa.ee/jira/browse/EK-687)
 * "Meedia lisamise modaali litsentsimuudatused" [EK-688](https://projektid.hitsa.ee/jira/browse/EK-688)
-
-## e-Koolikott [1.40.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11021)
-
-### Muutunud
 * "Materjalile saab lisada täpitähtedega faile" [EK-721](https://projektid.hitsa.ee/jira/browse/EK-721)
 * "Ebasobiva materjali musta bänneri parandus" [EK-667](https://projektid.hitsa.ee/jira/browse/EK-667)
 * "Retsensioonilinkide parandused" [EK-610](https://projektid.hitsa.ee/jira/browse/EK-610)
