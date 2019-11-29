@@ -11,7 +11,7 @@
 </md-card>
 
 <!-- Edit mode -->
-<form name="termsForm">
+<form name="licensesForm">
   <md-card data-ng-if="$ctrl.isLicensesEditMode()" class="portfolio-chapter card-lg faq-font"
            data-ng-repeat="licence in $ctrl.licenses track by $index">
     <div>
@@ -49,7 +49,7 @@
                   ng-model="licence.titleEst"
                   maxlength="100"
                   required>
-                <div data-ng-messages="termsForm.title.$error">
+                <div data-ng-messages="licensesForm.title.$error">
                   <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
                 </div>
               </md-input-container>
@@ -66,7 +66,7 @@
                   ng-model="licence.titleEng"
                   maxlength="100"
                   required>
-                <div data-ng-messages="termsForm.title.$error">
+                <div data-ng-messages="licensesForm.title.$error">
                   <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
                 </div>
               </md-input-container>
@@ -83,7 +83,7 @@
                   ng-model="licence.titleRus"
                   maxlength="100"
                   required>
-                <div data-ng-messages="termsForm.title.$error">
+                <div data-ng-messages="licensesForm.title.$error">
                   <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
                 </div>
               </md-input-container>
@@ -114,8 +114,8 @@
         </div>
         <div class="md-padding" flex="50" data-ng-if="$index === 0">
           <md-checkbox class="md-primary checkbox--material-author" ng-click="$ctrl.notifyOfGDPRUpdate()"
-                       data-ng-checked="notifyOfGDPRUpdate" aria-label="{{ 'TERM_NOTIFY_GDPR' | translate }}">
-            <span data-translate="TERM_NOTIFY_GDPR"></span>
+                       data-ng-checked="notifyOfGDPRUpdate" aria-label="{{ 'LICENSE_NOTIFY' | translate }}">
+            <span data-translate="LICENSE_NOTIFY"></span>
           </md-checkbox>
         </div>
         <div data-layout="row" data-layout-align="space-between center">

@@ -12,4 +12,9 @@ CREATE TABLE Licenses (
     PRIMARY KEY (id)
 );
 
+call insert_translation('LICENSES_TAB', 'Litsentsitingimused', 'License terms');
+call insert_translation('LICENSES_HEADER', 'Litsentsitingimused', 'License terms');
+call insert_translation('ADD_LICENSES', 'Lisa litsentsitingimus', 'Add License terms');
+call insert_translation('LICENSE_NOTIFY', 'Teavita kasutajaid uuest litsentitingimuste versioonist', 'Notify users of the license terms');
+
 SET foreign_key_checks = 1;
