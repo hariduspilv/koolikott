@@ -148,6 +148,10 @@ angular.module('koolikottApp')
             })
         }
 
+        function userHasRespondToLatestLicenceAgreement(userLatestResponse, latestLicenceAgreementVersion) {
+            return userLatestResponse === latestLicenceAgreementVersion;
+        }
+
         function checkLicencesAndAct(authenticatedUser) {
             serverCallService.makeGet('/rest/user/areLicencesAcceptable?id=' + authenticatedUser.user.id)
                 .then((response) => {
@@ -160,6 +164,35 @@ angular.module('koolikottApp')
                         }
                     }
                 )
+        }
+
+        function analyzeUserLatestResponse(response, authenticatedUser) {
+            if (response.agreed) {
+                authenticateUser(authenticatedUser)
+            } else if (response.disagreed) {
+                $rootScope.previouslyDisagreed = true
+                $rootScope.canCloseWaitingDialog = true
+                checkLicencesAndAct(authenticatedUser)
+            }  else {
+                showLicenceMigrationAgreementModal(authenticatedUser)
+            }
+        }
+
+        function checkUserPreviousResponse(authenticatedUser) {
+            serverCallService.makeGet('rest/userLicenceAgreement?id=' + authenticatedUser.user.id)
+                .then((response => {
+                    if (!response.data) {
+                        showLicenceMigrationAgreementModal(authenticatedUser)
+                    }
+                    serverCallService.makeGet('rest/licenceAgreement/latest')
+                        .then((res) => {
+                            if (userHasRespondToLatestLicenceAgreement(response.data.licenceAgreement.version, res.data.version)) {
+                                analyzeUserLatestResponse(response.data, authenticatedUser)
+                            } else {
+                                showLicenceMigrationAgreementModal(authenticatedUser)
+                            }
+                        })
+                }))
         }
 
         function showGdprModalAndAct(userStatus) {
@@ -183,7 +216,7 @@ angular.module('koolikottApp')
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
                             if ($rootScope.userHasEmailOnLogin) {
-                                showLicenceMigrationAgreementModal(response.data)
+                                checkUserPreviousResponse(response.data)
                             } else {
                                 userEmailService.saveEmail($rootScope.email, response.data.user)
                                 showEmailValidationModal(response)
@@ -197,41 +230,12 @@ angular.module('koolikottApp')
             })
         }
 
-        function userHasRespondToLatestLicenceAgreement(userLatestResponse, latestLicenceAgreementVersion) {
-            return userLatestResponse === latestLicenceAgreementVersion;
-        }
-
-        function analyzeUserLatestResponse(response, authenticatedUser) {
-            if (response.agreed) {
-                authenticateUser(authenticatedUser)
-            } else if (response.disagreed) {
-                $rootScope.previouslyDisagreed = true
-                $rootScope.canCloseWaitingDialog = true
-                checkLicencesAndAct(authenticatedUser)
-            }  else {
-                showLicenceMigrationAgreementModal(authenticatedUser)
-            }
-        }
-
         function loginSuccess(userStatus) {
             if (isEmpty(userStatus)) {
                 loginFail();
             } else {
                 if (userStatus.statusOk){
-                    serverCallService.makeGet('rest/userLicenceAgreement?id=' + userStatus.authenticatedUser.user.id)
-                        .then((response => {
-                            if (!response.data) {
-                                showLicenceMigrationAgreementModal(userStatus.authenticatedUser)
-                            }
-                            serverCallService.makeGet('rest/licenceAgreement/latest')
-                                .then((res) => {
-                                    if (userHasRespondToLatestLicenceAgreement(response.data.licenceAgreement.version, res.data.version)) {
-                                        analyzeUserLatestResponse(response.data, userStatus.authenticatedUser)
-                                    } else {
-                                        showLicenceMigrationAgreementModal(userStatus.authenticatedUser)
-                                    }
-                                })
-                        }))
+                    checkUserPreviousResponse(userStatus.authenticatedUser)
                 } else {
                     showGdprModalAndAct(userStatus);
                 }

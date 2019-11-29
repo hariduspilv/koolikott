@@ -113,23 +113,18 @@
         }
 
         createAgreement() {
-            let version = 1;
-            this.serverCallService.makeGet('rest/licenceAgreement/latest')
-                .then((res) => {
-                    version = Number(res.data.version) + 1;
-                    this.serverCallService
-                        .makePost('rest/licenceAgreement', {url: '/litsentsitingimused', version: version})
-                        .then((response) => {
-                            if (response.status === 200) {
-                                console.log('agreement added')
-                            }
-                            else {
-                                this.toastService.show('GDPR_NOTIFY_FAILED')
-                            }
-                        }), () => {
+            this.serverCallService
+                .makePost('rest/admin/agreement', {url: '/terms', version: 1, validFrom: new Date})
+                .then((response) => {
+                    if (response.status === 200) {
+                        console.log('agreement added')
+                    }
+                    else {
                         this.toastService.show('GDPR_NOTIFY_FAILED')
                     }
-                })
+                }), (() => {
+                this.toastService.show('GDPR_NOTIFY_FAILED')
+            });
         }
     }
 
