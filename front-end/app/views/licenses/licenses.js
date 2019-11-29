@@ -66,8 +66,7 @@
         '$translate',
         'authenticatedUserService',
         'licensesService',
-        '$timeout',
-        '$route'
+        '$timeout'
     ]
     angular.module('koolikottApp').controller('licensesController', controller)
 }

@@ -18,21 +18,6 @@
             term.activeTermLanguage = lang
         }
 
-        isLangFilled(lang, term) {
-            let isFilled = false;
-
-            if ((lang === 'ET') && !!(term.titleEst && term.contentEst))
-                isFilled = true
-
-            if ((lang === 'EN') && !!(term.titleEng && term.contentEng))
-                isFilled = true
-
-            if ((lang === 'RU') && !!(term.titleRus && term.contentRus))
-                isFilled = true
-
-            return isFilled;
-        }
-
         save(term) {
             this.$scope.isSaving = true
 

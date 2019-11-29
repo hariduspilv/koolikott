@@ -18,21 +18,6 @@
             licence.activeLicenceLanguage = lang
         }
 
-        isLangFilled(lang, licence) {
-            let isFilled = false;
-
-            if ((lang === 'ET') && !!(licence.titleEst && licence.contentEst))
-                isFilled = true
-
-            if ((lang === 'EN') && !!(licence.titleEng && licence.contentEng))
-                isFilled = true
-
-            if ((lang === 'RU') && !!(licence.titleRus && licence.contentRus))
-                isFilled = true
-
-            return isFilled;
-        }
-
         save(licence) {
             this.$scope.isSaving = true
 
@@ -133,7 +118,6 @@
         'dialogService',
         'serverCallService',
         'translationService',
-        'searchService',
         'licensesService',
         'toastService',
     ]

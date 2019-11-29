@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
-import java.time.LocalDateTime;
 
 @Service
 @Transactional
@@ -17,11 +16,6 @@ public class LicenceAgreementService {
 
     public LicenceAgreement getLatestLicenceAgreement() {
         return licenceAgreementDao.findLatestAgreement();
-    }
-
-    public LicenceAgreement save(LicenceAgreement licenceAgreement) {
-        licenceAgreement.setValidFrom(LocalDateTime.now());
-        return licenceAgreementDao.createOrUpdate(licenceAgreement);
     }
 
 }

@@ -20,7 +20,6 @@
 
     controller.$inject = [
         'serverCallService',
-        'authenticatedUserService',
     ]
     factory('licensesService', controller)
 }
