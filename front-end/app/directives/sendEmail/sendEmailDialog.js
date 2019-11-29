@@ -27,7 +27,7 @@
                 })
             } else {
                 this.$translate('SEND_EMAIL_CONTENT_COUNTER').then(value => {
-                    this.$scope.placeholder = (value.replace('${counter}', 500 - this.$scope.emailToCreator.emailContent.length))
+                    this.$scope.placeholder = (value.replace('${counter}', 1000 - this.$scope.emailToCreator.emailContent.length))
                 })
             }
         }
