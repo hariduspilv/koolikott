@@ -14,7 +14,6 @@
 
             this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () =>
             {
-                console.log('siin')
                 this.$mdDialog.hide()
             })
             this.$scope.$watch(

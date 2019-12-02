@@ -1,6 +1,7 @@
 package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.ImproperContentDao;
+import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReportingReasonDao;
 import ee.hm.dop.model.ImproperContent;
 import ee.hm.dop.model.LearningObject;
@@ -30,9 +31,12 @@ public class ImproperContentService {
     private LearningObjectService learningObjectService;
     @Inject
     private ReportingReasonDao reportingReasonDao;
+    @Inject
+    private LearningObjectDao learningObjectDao;
 
     public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser) {
-        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
+        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
+        UserUtil.mustBeAdminOrModeratorOrCreator(learningObject ,loggedInUser);
         return improperContentDao.findByLearningObjectId(learningObjectId);
     }
 

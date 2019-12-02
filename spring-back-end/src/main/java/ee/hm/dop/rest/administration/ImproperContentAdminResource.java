@@ -12,12 +12,7 @@ import ee.hm.dop.service.reviewmanagement.ImproperContentAdminService;
 import ee.hm.dop.service.reviewmanagement.ImproperContentService;
 import ee.hm.dop.service.reviewmanagement.ReviewManager;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -55,7 +50,7 @@ public class ImproperContentAdminResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("{learningObjectId}")
-    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR, RoleString.USER})
     public List<ImproperContent> getImproperById(@PathVariable("learningObjectId") Long learningObjectId) {
         return improperContentService.getImproperContent(learningObjectId, getLoggedInUser());
     }

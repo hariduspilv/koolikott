@@ -204,6 +204,7 @@ class controller extends Controller {
                 if (portfolio) {
                     this.storageService.setPortfolio(portfolio);
                     this.toastService.show('PORTFOLIO_SAVED');
+                    this.$route.reload();
                 }
             })
             .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))

@@ -191,6 +191,7 @@ class controller extends Controller {
     setPortfolio(portfolio, isLocallyStored = true) {
         if (portfolio) {
             this.$scope.portfolio = portfolio
+            this.$scope.isOwner = portfolio.creator.id === this.authenticatedUserService.getUser().id;
             this.$rootScope.portfolio = portfolio
             this.$rootScope.tabTitle = portfolio.title;
             this.storageService.setPortfolio(portfolio)

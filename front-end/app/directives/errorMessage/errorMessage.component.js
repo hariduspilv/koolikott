@@ -148,8 +148,24 @@ class controller extends Controller {
                 this.setState(...VIEW_STATE_MAP['showDeleted'])
         }
     }
+
+    show(cb) {
+        if (!this.isOwner(this.data) && !this.isAdmin && !this.isModerator) {
+            return false;
+        }
+        if ((!this.$rootScope.learningObjectImproper && this.isOwner(this.data)) &&
+            (!this.isAdmin || !this.isModerator)) {
+            return false;
+        }
+        if (typeof cb === 'boolean') {
+            return cb;
+        } else {
+            return true;
+        }
+    }
+
     setState(icon, messageKey, buttons, cb) {
-        this.$scope.show = typeof cb === 'boolean' ? cb : true
+        this.$scope.show = this.show(cb);
         this.$scope.icon = icon
         if (this.bannerType != 'showChanged')
             this.$scope.messageKey = typeof messageKey === 'function' ? messageKey(this) : messageKey
@@ -173,15 +189,21 @@ class controller extends Controller {
             false
         )
     }
+
+    isOwner(data) {
+        return !this.authenticatedUserService.isAuthenticated()
+            ? false : data && data.creator
+                ? data.creator.id === this.authenticatedUserService.getUser().id : false
+    }
+
     getReasons(setMessage = true) {
         const { id } = this.data || {}
-
         if (id) {
             // cache this while reports are fetched
             const { messageKey } = this.$scope
             this.$scope.messageKey = ''
 
-            if (this.isAdmin || this.isModerator) {
+            if (this.isAdmin || this.isModerator || this.isOwner(this.data)) {
                 this.serverCallService
                     .makeGet('rest/admin/improper/' + this.data.id)
                     .then(({data: reports}) => {
