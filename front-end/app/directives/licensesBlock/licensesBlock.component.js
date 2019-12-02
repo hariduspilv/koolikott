@@ -4,8 +4,8 @@
     class controller extends Controller {
         constructor(...args) {
             super(...args)
-            this.termLanguages = ['ET', 'EN', 'RU']
-            this.$scope.activeTermLanguages = this.termLanguages[0]
+            this.licenceLanguages = ['ET', 'EN', 'RU']
+            this.$scope.activeLicenceLanguages = this.licenceLanguages[0]
             this.getCurrentLanguage()
             this.$scope.notifyOfGDPRUpdate = false
         }
@@ -14,11 +14,11 @@
             this.$scope.notifyOfGDPRUpdate = !this.$scope.notifyOfGDPRUpdate
         }
 
-        toggleTermsLanguageInputs(term, lang) {
-            term.activeTermLanguage = lang
+        toggleLicensesLanguageInputs(licence, lang) {
+            licence.activeLicenceLanguage = lang
         }
 
-        save(term) {
+        save(licence) {
             this.$scope.isSaving = true
 
             if (this.$scope.notifyOfGDPRUpdate) {
@@ -26,13 +26,13 @@
                 this.$scope.notifyOfGDPRUpdate = false
             }
 
-            this.termsService.saveTerm(term)
+            this.licensesService.saveLicence(licence)
                 .then(response => {
                     if (response.status === 200) {
                         this.createDialogOpen = false
                         this.$scope.isSaving = false
-                        term.edit = !term.edit
-                        this.getTerms()
+                        licence.edit = !licence.edit
+                        this.getLicenses()
                         this.toastService.show('TERMS_SAVED')
                     } else {
                         this.$scope.isSaving = false
@@ -46,7 +46,7 @@
             return this.translationService.getLanguage()
         }
 
-        isTermsEditMode() {
+        isLicensesEditMode() {
             return this.editMode
         }
 
@@ -54,46 +54,46 @@
             return this.createDialogOpen
         }
 
-        editTerm(term) {
+        editLicence(licence) {
             this.createDialogOpen = !this.createDialogOpen
-            term.edit = !term.edit;
+            licence.edit = !licence.edit;
         }
 
-        cancelEdit(term) {
+        cancelEdit(licence) {
             this.dialogService.showCancelConfirmationDialog(
                 'ARE_YOU_SURE_CANCEL',
                 '',
-                () => this.cancelConfirmed(term))
+                () => this.cancelConfirmed(licence))
         }
 
-        cancelConfirmed(term) {
-            if (term.new) {
-                this.removeTerm()
+        cancelConfirmed(licence) {
+            if (licence.new) {
+                this.removeLicence()
             } else {
-                term.edit = !term.edit;
+                licence.edit = !licence.edit;
             }
             this.createDialogOpen = false
             this.$scope.notifyOfGDPRUpdate = false
-            this.getTerms()
+            this.getLicenses()
         }
 
-        delete(term) {
+        delete(licence) {
             this.dialogService.showDeleteConfirmationDialog(
                 'ARE_YOU_SURE_DELETE',
                 '',
-                () => this.termsService.deleteTerm(term)
+                () => this.licensesService.deleteLicence(licence)
                     .then(() => {
-                        this.getTerms()
+                        this.getLicenses()
                         this.toastService.show('TERM_DELETED')
                         this.createDialogOpen = false
                     })
             )
         }
 
-        isSubmitDisabled(term) {
-            return !(term.titleEst && term.titleEng &&
-                term.titleRus && (term.contentEst && term.contentEst !== '<br>') &&
-                (term.contentEng && term.contentEng !== '<br>') && (term.contentRus && term.contentRus !== '<br>'))
+        isSubmitDisabled(licence) {
+            return !(licence.titleEst && licence.titleEng &&
+                licence.titleRus && (licence.contentEst && licence.contentEst !== '<br>') &&
+                (licence.contentEng && licence.contentEng !== '<br>') && (licence.contentRus && licence.contentRus !== '<br>'))
 
         }
 
@@ -107,9 +107,9 @@
                     else {
                         this.toastService.show('GDPR_NOTIFY_FAILED')
                     }
-                }), () => {
+                }), (() => {
                 this.toastService.show('GDPR_NOTIFY_FAILED')
-            }
+            });
         }
     }
 
@@ -118,20 +118,19 @@
         'dialogService',
         'serverCallService',
         'translationService',
-        'searchService',
-        'termsService',
+        'licensesService',
         'toastService',
     ]
-    component('dopTermsBlock', {
+    component('dopLicensesBlock', {
         bindings: {
-            terms: '<',
+            licenses: '<',
             editMode: '<',
-            removeTerm: '&',
-            getTerms: '&',
+            removeLicence: '&',
+            getLicenses: '&',
             createDialogOpen: '='
 
         },
-        templateUrl: 'directives/termsBlock/termsBlock.html',
+        templateUrl: 'directives/licensesBlock/licensesBlock.html',
         controller
     })
 }

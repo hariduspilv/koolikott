@@ -14,21 +14,6 @@
             faq.activeFaqLanguage = lang
         }
 
-        isLangFilled(lang, faq) {
-            let isFilled = false;
-
-            if ((lang === 'ET') && !!(faq.answerEst && faq.questionEst))
-                isFilled = true
-
-            if ((lang === 'EN') && !!(faq.answerEng && faq.questionEng))
-                isFilled = true
-
-            if ((lang === 'RU') && !!(faq.answerRus && faq.questionRus))
-                isFilled = true
-
-            return isFilled;
-        }
-
         save(faq) {
 
             this.$scope.isSaving = true

@@ -146,6 +146,11 @@ angular.module('koolikottApp')
                     controller: 'termsController',
                     controllerAs: '$ctrl',
                 })
+                .when('/litsentsitingimused', {
+                    templateUrl: 'views/licenses/licenses.html',
+                    controller: 'licensesController',
+                    controllerAs: '$ctrl',
+                })
                 .when('/videojuhendid', {
                     templateUrl: 'views/userManual/userManual.html',
                     controller: 'userManualsController',
