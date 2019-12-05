@@ -369,6 +369,7 @@ angular.module('koolikottApp')
             $scope.isModerator = () => authenticatedUserService.isModerator();
             $scope.isRestricted = () => authenticatedUserService.isRestricted();
             $scope.isOwner= () => authenticatedUserService.isOwner($scope.material);
+            $scope.showImproper = () => $rootScope.learningObjectImproper;
 
             $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
 

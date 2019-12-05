@@ -10,7 +10,7 @@ const VIEW_STATE_MAP = {
             icon: () => 'restore_page', // button icon
             label: 'BUTTON_RESTORE', // button tooltip translation key
             onClick: ($ctrl) => $ctrl.setNotDeleted(),
-            show: ($ctrl) => $ctrl.isAdmin // to show or not to show this button
+            show: ($ctrl) => $ctrl.$scope.isAdmin // to show or not to show this button
         }]
     ],
     showChanged: [
@@ -20,7 +20,7 @@ const VIEW_STATE_MAP = {
             icon: () => 'undo',
             label: 'UNDO_CHANGES',
             onClick: ($ctrl) => $ctrl.setAllChanges('revert'),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
+            show: ($ctrl) => $ctrl.$scope.isAdmin || $ctrl.$scope.isModerator
         }, {
             icon: ($ctrl) => {
                 const numNewTaxons = $ctrl.newTaxons ? $ctrl.newTaxons.length : 0
@@ -30,7 +30,7 @@ const VIEW_STATE_MAP = {
             },
             label: 'ACCEPT_CHANGES',
             onClick: ($ctrl) => $ctrl.setAllChanges('accept'),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
+            show: ($ctrl) => $ctrl.$scope.isAdmin || $ctrl.$scope.isModerator
         }],
         ($ctrl) => $ctrl.getChanges()
     ],
@@ -41,12 +41,12 @@ const VIEW_STATE_MAP = {
             icon: () => 'delete',
             label: 'BUTTON_REMOVE',
             onClick: ($ctrl) => $ctrl.setDeleted(),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator,
+            show: ($ctrl) => $ctrl.$scope.isAdmin || $ctrl.$scope.isModerator,
         }, {
             icon: () => 'done',
             label: 'REPORT_NOT_IMPROPER',
             onClick: ($ctrl) => $ctrl.setNotImproper(),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
+            show: ($ctrl) => $ctrl.$scope.isAdmin || $ctrl.$scope.isModerator
         }],
         ($ctrl) => $ctrl.getReasons()
     ],
@@ -60,7 +60,7 @@ const VIEW_STATE_MAP = {
             icon: () => 'done',
             label: 'BUTTON_REVIEW',
             onClick: ($ctrl) => $ctrl.setReviewed(),
-            show: ($ctrl) => $ctrl.isAdmin || $ctrl.isModerator
+            show: ($ctrl) => $ctrl.$scope.isAdmin || $ctrl.$scope.isModerator
         }]
     ]
 }
@@ -126,8 +126,8 @@ class controller extends Controller {
             this.init()
     }
     init() {
-        this.isAdmin = this.authenticatedUserService.isAdmin()
-        this.isModerator = this.authenticatedUserService.isModerator()
+        this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
+        this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.setState('', '', [], false); // reset
 
         if (!this.$rootScope.learningObjectPrivate) {
@@ -150,11 +150,7 @@ class controller extends Controller {
     }
 
     show(cb) {
-        if (!this.isOwner(this.data) && !this.isAdmin && !this.isModerator) {
-            return false;
-        }
-        if ((!this.$rootScope.learningObjectImproper && this.isOwner(this.data)) &&
-            (!this.isAdmin || !this.isModerator)) {
+        if (!this.$rootScope.learningObjectImproper && (!this.isAdmin || !this.isModerator)) {
             return false;
         }
         if (typeof cb === 'boolean') {
@@ -190,52 +186,81 @@ class controller extends Controller {
         )
     }
 
-    isOwner(data) {
-        return !this.authenticatedUserService.isAuthenticated()
+    setOwner(data) {
+        this.$scope.isOwner = !this.authenticatedUserService.isAuthenticated()
             ? false : data && data.creator
                 ? data.creator.id === this.authenticatedUserService.getUser().id : false
     }
 
     getReasons(setMessage = true) {
         const { id } = this.data || {}
+        this.setOwner(this.data)
         if (id) {
             // cache this while reports are fetched
             const { messageKey } = this.$scope
             this.$scope.messageKey = ''
 
-            if (this.isAdmin || this.isModerator || this.isOwner(this.data)) {
+            if (this.$scope.isAdmin || this.$scope.isModerator) {
                 this.serverCallService
                     .makeGet('rest/admin/improper/' + this.data.id)
                     .then(({data: reports}) => {
-                            if (Array.isArray(reports) && reports.length) {
-                                const done = (reasons = '') => {
-                                    !setMessage
-                                        ? this.$scope.messageKey = messageKey
-                                        : this.$scope.message = reports[0].reportingText
-                                        ? reasons.join(', ') + ': ' + reports[0].reportingText
-                                        : reasons.join(', ')
-
-                                    if (!this.listeningResize) {
-                                        this.listeningResize = true
-                                        window.addEventListener('resize', this.onWindowResizeReports)
-                                    }
-                                    this.onWindowResizeReports()
-                                }
-
-                                !reports[0].reportingReasons
-                                    ? done()
-                                    : Promise
-                                        .all(reports[0].reportingReasons.map(r => this.$translate(r.reason)))
-                                        .then(done)
-
-                                this.$scope.reports = reports
-                            }
+                            this.setReasonsMessage(reports, setMessage, messageKey)
+                        }, () =>
+                            this.$scope.messageKey = messageKey
+                    )
+            } else {
+                this.serverCallService
+                    .makeGet('rest/impropers/' + this.data.id)
+                    .then(({data: reports}) => {
+                            this.setReasonsMessage(reports, setMessage = false, messageKey)
                         }, () =>
                             this.$scope.messageKey = messageKey
                     )
             }
         }
     }
+
+    setReasonsMessage(reports, setMessage, messageKey) {
+        if (Array.isArray(reports) && reports.length) {
+            const done = (reasons = '') => {
+                !setMessage
+                    ? this.$scope.messageKey = messageKey
+                    : this.$scope.message = reports[0].reportingText
+                    ? reasons.join(', ') + ': ' + reports[0].reportingText
+                    : reasons.join(', ')
+
+                if (!this.listeningResize) {
+                    this.listeningResize = true
+                    window.addEventListener('resize', this.onWindowResizeReports)
+                }
+                this.onWindowResizeReports()
+            }
+
+            !reports[0].reportingReasons
+                ? done()
+                : Promise
+                    .all(reports[0].reportingReasons.map(r => this.$translate(r.reason)))
+                    .then(done)
+
+            this.setFullReason(reports)
+        }
+    }
+
+    getTranslation(key) {
+        return this.$translate.instant(key)
+    }
+
+    setFullReason(reports) {
+        for (let i = 0; i < reports.length; i++) {
+            let reason = this.getTranslation(reports[i].reportingReasons[0].reason)
+            for (let j = 0; j < reports[i].reportingReasons.length; j++) {
+                reason += ', ' + this.getTranslation(reports[i].reportingReasons[j].reason).toLowerCase()
+            }
+            reports[i].fullReason = reason;
+            this.$scope.reports = reports;
+        }
+    }
+
     getChanges() {
         const { id } = this.data || {}
 
@@ -324,7 +349,7 @@ class controller extends Controller {
     setNotImproper() {
         const { id, type } = this.data
 
-        if (id && (this.isAdmin || this.isModerator))
+        if (id && (this.$scope.isAdmin || this.$scope.isModerator))
             this.serverCallService
                 .makePost('rest/admin/improper/setProper', {id, type})
                 .then(({ status, data }) => {
@@ -337,7 +362,7 @@ class controller extends Controller {
     setDeleted() {
         const { id, type } = this.data
         // TODO ips creator can delete their portfolio
-        if (id && (this.isAdmin || this.isModerator)) {
+        if (id && (this.$scope.isAdmin || this.$scope.isModerator)) {
             const isPortfolio = this.isPortfolio(this.data);
 
             (isPortfolio
@@ -354,7 +379,7 @@ class controller extends Controller {
     setNotDeleted() {
         const { id, type } = this.data
 
-        if (id && this.isAdmin) {
+        if (id && this.$scope.isAdmin) {
             const isPortfolio = this.isPortfolio(this.data)
             const url = 'rest/admin/deleted/restore';
 
@@ -377,7 +402,7 @@ class controller extends Controller {
     setReviewed() {
         const { id, type } = this.data
 
-        if (id && (this.isAdmin || this.isModerator))
+        if (id && (this.$scope.isAdmin || this.$scope.isModerator))
             this.serverCallService
                 .makePost('rest/admin/firstReview/setReviewed', { id, type })
                 .then(({ status, data }) => {

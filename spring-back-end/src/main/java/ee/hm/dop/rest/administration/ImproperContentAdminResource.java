@@ -1,9 +1,6 @@
 package ee.hm.dop.rest.administration;
 
-import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.LearningObjectMiniDto;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.model.enums.ReviewType;
 import ee.hm.dop.model.enums.RoleString;
@@ -50,7 +47,7 @@ public class ImproperContentAdminResource extends BaseResource {
 
     @GetMapping
     @RequestMapping("{learningObjectId}")
-    @Secured({RoleString.ADMIN, RoleString.MODERATOR, RoleString.USER})
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public List<ImproperContent> getImproperById(@PathVariable("learningObjectId") Long learningObjectId) {
         return improperContentService.getImproperContent(learningObjectId, getLoggedInUser());
     }

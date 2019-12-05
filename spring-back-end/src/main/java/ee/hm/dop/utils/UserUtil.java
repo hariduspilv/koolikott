@@ -12,7 +12,6 @@ public class UserUtil {
     public static final String MUST_BE_ADMIN = "Logged in user must be admin.";
     public static final String MUST_BE_MODERATOR = "Logged in user must be moderator.";
     public static final String MUST_BE_ADMIN_OR_MODERATOR = "Logged in user must be admin or moderator.";
-    public static final String MUST_BE_ADMIN_OR_MODERATOR_OR_CREATOR = "Logged in user must be admin or moderator or creator";
 
     public static boolean isCreator(ILearningObject learningObject, User loggedInUser) {
         return loggedInUser != null && learningObject.getCreator().getId().equals(loggedInUser.getId());
@@ -28,10 +27,6 @@ public class UserUtil {
 
     public static boolean isModerator(User loggedInUser) {
         return loggedInUser != null && loggedInUser.getRole() == Role.MODERATOR;
-    }
-
-    public static boolean isAdminOrModeratorOrCreator(ILearningObject learningObject, User loggedInUser) {
-        return isAdminOrModerator(loggedInUser) || isCreator(learningObject, loggedInUser);
     }
 
     public static boolean isPublisher(User loggedInUser) {
@@ -57,12 +52,6 @@ public class UserUtil {
     public static void mustBeModerator(User loggedInUser) {
         if (!isModerator(loggedInUser)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, MUST_BE_MODERATOR);
-        }
-    }
-
-    public static void mustBeAdminOrModeratorOrCreator(ILearningObject learningObject, User loggedInUser) {
-        if (!isAdminOrModeratorOrCreator(learningObject, loggedInUser)) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, MUST_BE_ADMIN_OR_MODERATOR_OR_CREATOR);
         }
     }
 }

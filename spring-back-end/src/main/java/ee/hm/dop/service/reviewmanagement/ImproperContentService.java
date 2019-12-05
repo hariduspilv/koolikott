@@ -1,12 +1,8 @@
 package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.ImproperContentDao;
-import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReportingReasonDao;
-import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.ReportingReason;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
@@ -31,13 +27,14 @@ public class ImproperContentService {
     private LearningObjectService learningObjectService;
     @Inject
     private ReportingReasonDao reportingReasonDao;
-    @Inject
-    private LearningObjectDao learningObjectDao;
 
     public List<ImproperContent> getImproperContent(long learningObjectId, User loggedInUser) {
-        LearningObject learningObject = learningObjectDao.findById(learningObjectId);
-        UserUtil.mustBeAdminOrModeratorOrCreator(learningObject ,loggedInUser);
+        UserUtil.mustBeModeratorOrAdmin(loggedInUser);
         return improperContentDao.findByLearningObjectId(learningObjectId);
+    }
+
+    public List<ImproperContentDto> getImproperContentForUser(long learningObjectId) {
+        return improperContentDao.findImproperForUser(learningObjectId);
     }
 
     public ImproperContent save(ImproperContent improperContent, User creator, LearningObject learningObject1) {

@@ -16,15 +16,16 @@
         class="md-block"
         data-ng-class="{ 'md-input-invalid': errors }"
         >
-        <div data-layout="column" data-layout-gt-sm="row">
-          <md-checkbox
-            data-ng-repeat="reason in reasons"
-            name="{{ reason.key }}"
-            aria-label="{{ reason.key | translate }}"
-            data-ng-model="reason.checked"
+        <div data-layout="row" data-layout-xs="column" data-layout-wrap >
+          <div data-ng-repeat="reason in reasons" data-flex="50">
+            <md-checkbox
+              name="{{ reason.key }}"
+              aria-label="{{ reason.key | translate }}"
+              data-ng-model="reason.checked"
             >
-            <div data-translate="{{ reason.key }}" class="ellipsis"></div>
-          </md-checkbox>
+              <div data-translate="{{ reason.key }}" class="ellipsis"></div>
+            </md-checkbox>
+          </div>
         </div>
         <div data-ng-messages="errors" data-md-auto-hide="false">
           <div

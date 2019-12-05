@@ -2,12 +2,13 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.ImproperContentDto;
 import ee.hm.dop.model.User;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -93,5 +94,20 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                         "and ic.reviewed = false")
                 .setParameter("loId", learningObjectId)
                 .getResultList();
+    }
+
+    public List<ImproperContentDto> findImproperForUser(Long learningObjectId) {
+        List<ImproperContent> improperReports = findByLearningObjectId(learningObjectId);
+        List<ImproperContentDto> improperContentUser = new ArrayList<>();
+
+        for (ImproperContent improperContent : improperReports) {
+            ImproperContentDto improperContentDto = new ImproperContentDto();
+            improperContentDto.setId(improperContent.getId());
+            improperContentDto.setReportingReasons(improperContent.getReportingReasons());
+            improperContentDto.setReportingText(improperContent.getReportingText());
+            improperContentDto.setReviewed(improperContent.isReviewed());
+            improperContentUser.add(improperContentDto);
+        }
+        return improperContentUser;
     }
 }

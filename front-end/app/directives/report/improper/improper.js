@@ -72,27 +72,24 @@ class controller extends Controller {
                         $scope.sendReport = () => {
                             if (data.reportingReasons.length)
                                 return $mdDialog.hide()
-                            
+
                             $scope.errors = { reasonRequired: true }
                             $scope.submitEnabled = false
                         }
                         $scope.$watch('reasons', (newValue) => {
                             if (Array.isArray(newValue)) {
-                                let anyChecked = false
+                                $scope.anyChecked = false
 
                                 $scope.data.reportingReasons = newValue.reduce((reportingReasons, r) =>
                                     r.checked
-                                        ? (anyChecked = true) && reportingReasons.concat({ reason: r.key })
+                                        ? ($scope.anyChecked = true) && reportingReasons.concat({ reason: r.key })
                                         : reportingReasons,
                                     []
                                 )
 
-                                if (anyChecked)
+                                if ($scope.anyChecked)
                                     $scope.errors = null
-                                
-                                $scope.submitEnabled = anyChecked
-                            } else
-                                $scope.submitEnabled = false
+                            }
                         }, true)
 
                         $scope.characters = { used: 0, remaining: 255 }
@@ -100,6 +97,13 @@ class controller extends Controller {
                             const used = newValue ? newValue.length : 0
                             $scope.characters = { used, remaining: 255 - used }
                         })
+                        $scope.$watch('[anyChecked, characters.used]', (newValues) => {
+                            if (newValues[0] && newValues[1] > 4) {
+                                $scope.submitEnabled = true
+                            } else {
+                                $scope.submitEnabled = false
+                            }
+                        });
                     }],
                     templateUrl: 'directives/report/improper/improper.dialog.html',
                     clickOutsideToClose: true,
@@ -182,8 +186,6 @@ class controller extends Controller {
                     this.toastService.show('TOAST_NOTIFICATION_SENT_TO_ADMIN')
                 }
             })
-        if (!this.isAdminOrModerator())
-            window.location.href = '/'
     }
     isAdminOrModerator() {
         return this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()

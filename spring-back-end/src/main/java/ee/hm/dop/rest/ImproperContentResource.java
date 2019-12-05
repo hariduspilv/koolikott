@@ -1,16 +1,15 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.ImproperContentDto;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.service.reviewmanagement.ImproperContentService;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
+import java.util.List;
 
 @RestController
 @RequestMapping("impropers")
@@ -30,6 +29,12 @@ public class ImproperContentResource extends BaseResource {
     @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR, RoleString.RESTRICTED})
     public ImproperContent setImproper2(@RequestBody ImproperContentForm form) {
         return improperContentService.save(form.getImproperContent(), getLoggedInUser(), form.getLearningObject());
+    }
+
+    @GetMapping
+    @RequestMapping("{learningObjectId}")
+    public List<ImproperContentDto> getImproperContentUser(@PathVariable("learningObjectId") Long learningObjectId) {
+        return improperContentService.getImproperContentForUser(learningObjectId);
     }
 
     public static class ImproperContentForm {

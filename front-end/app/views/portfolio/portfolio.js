@@ -191,7 +191,6 @@ class controller extends Controller {
     setPortfolio(portfolio, isLocallyStored = true) {
         if (portfolio) {
             this.$scope.portfolio = portfolio
-            this.$scope.isOwner = portfolio.creator.id === this.authenticatedUserService.getUser().id;
             this.$rootScope.portfolio = portfolio
             this.$rootScope.tabTitle = portfolio.title;
             this.storageService.setPortfolio(portfolio)
@@ -202,6 +201,7 @@ class controller extends Controller {
 
             this.$rootScope.learningObjectPrivate = portfolio && ['PRIVATE'].includes(portfolio.visibility)
             this.$rootScope.learningObjectImproper = portfolio && portfolio.improper > 0
+            this.$scope.showImproper = this.$rootScope.learningObjectImproper
             this.$rootScope.learningObjectDeleted = portfolio && portfolio.deleted === true
             this.$rootScope.learningObjectChanged = portfolio && portfolio.changed > 0
             this.$rootScope.learningObjectUnreviewed = portfolio && !!portfolio.unReviewed

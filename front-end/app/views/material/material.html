@@ -3,7 +3,7 @@
 <div data-layout="column" data-layout-gt-sm="row" data-ng-cloak id="material-parent"
 data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
   <div flex-gt-sm="75">
-    <dop-error-message ng-if="showUnreviewedLO || isOwner" data="material" id="dop-error"></dop-error-message>
+    <dop-error-message ng-if="showUnreviewedLO || showImproper" data="material" id="dop-error"></dop-error-message>
     <!-- same as portfolioSummaryCard in directives -->
     <md-card class="card-lg summary-card" id="material-card">
       <!-- SECTION 1 -->
@@ -88,8 +88,8 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                     data-on-change="setRecommendation(recommendation)"
                     data-ng-if="isAdmin()"
                   ></md-menu-item>
-                  <md-menu-divider data-ng-if="!isAdmin()"></md-menu-divider>
-                  <md-menu-item dop-report-improper data-ng-if="!isAdmin()"
+                  <md-menu-divider data-ng-if="!isAdmin() && !isOwner()"></md-menu-divider>
+                  <md-menu-item dop-report-improper data-ng-if="!isAdmin() && !isOwner()"
                                 data-learning-object="material"></md-menu-item>
                   <md-menu-item data-ng-if="material.creator && isAdmin() && !isOwner()" dop-restrict
                                 data-learning-object="material">

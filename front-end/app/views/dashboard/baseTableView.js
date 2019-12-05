@@ -449,9 +449,7 @@
                     ? ''
                     : reportingReasons.length === 1
                         ? reportingReasons[0].reason
-                        : reportingReasons.length > 1
-                            ? 'MULTIPLE_REASONS'
-                            : ''
+                        : this.getFullReason(reportingReasons)
             }
 
             let reasonKey = ''
@@ -460,16 +458,27 @@
                 let {reportingReasons} = item.__reports[i]
 
                 if (Array.isArray(reportingReasons)) {
-                    if (reportingReasons.length > 1)
-                        return 'MULTIPLE_REASONS'
+                    if (reportingReasons.length > 1) {
+                        reasonKey = this.getFullReason(reportingReasons)
+                    }
 
                     if (reportingReasons.length === 1) {
                         if (!reasonKey)
                             reasonKey = reportingReasons[0].reason
-                        else if (reasonKey != reportingReasons[0].reason)
-                            return 'MULTIPLE_REASONS'
+                        else if (reasonKey != reportingReasons[0].reason) {
+                            reasonKey = this.getFullReason(reportingReasons)
+                        }
                     }
                 }
+            }
+            return reasonKey
+        }
+
+        getFullReason(reportingReasons) {
+            let reasonKey = this.getTranslation(reportingReasons[0].reason);
+            for (let i = 1; i < reportingReasons.length; i++) {
+                let reason = ', ' + this.getTranslation(reportingReasons[i].reason)
+                reasonKey += reason.toLowerCase()
             }
             return reasonKey
         }

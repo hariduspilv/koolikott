@@ -51,7 +51,7 @@
     <md-list-item class="md-3-line md-long-text" data-ng-repeat="report in reports track by $index">
       <md-icon
         class="md-avatar-icon"
-        data-ng-if="!report.creator"
+        data-ng-if="!report.createdBy"
         >
         person
         <md-tooltip data-ng-if="reports" data-md-direction="bottom">
@@ -60,22 +60,22 @@
       </md-icon>
       <div
         class="md-avatar"
-        data-ng-if="report.creator"
+        data-ng-if="report.createdBy"
         data-md-colors="{
           color: 'grey-50',
           'background-color':
-            report.creator && (report.creator.role == 'ADMIN' || report.creator.role == 'MODERATOR')
+            report.createdBy && (report.createdBy.role == 'ADMIN' || report.createdBy.role == 'MODERATOR')
               ? 'pink-800'
               : 'light-blue-500'
         }">
-        <span data-ng-bind="(report.creator.name[0]+report.creator.surname[0]).toUpperCase()"></span>
+        <span data-ng-bind="(report.createdBy.name[0]+report.createdBy.surname[0]).toUpperCase()"></span>
         <md-tooltip data-ng-if="reports" md-direction="bottom">
-          <span data-ng-bind="report.creator.name+' '+report.creator.surname"></span>
+          <span data-ng-bind="report.createdBy.name+' '+report.createdBy.surname"></span>
         </md-tooltip>
       </div>
       <div class="md-list-item-text">
-        <h3><span data-ng-repeat="reason in report.reportingReasons"><span ng-if="$index > 0">, </span><span data-translate="{{reason.reason}}"></span></span></h3>
-        <p data-ng-if="report.reportingText" data-ng-bind="report.reportingText"></p>
+        <h3><span data-ng-bind="report.fullReason"><span ng-if="$index > 0">, </span></span></h3>
+        <p data-ng-if="report.reportingText && (isAdmin || isModerator || isOwner)" data-ng-bind="report.reportingText"></p>
       </div>
       <md-divider inset></md-divider>
     </md-list-item>
