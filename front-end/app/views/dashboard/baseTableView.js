@@ -449,38 +449,31 @@
                     ? ''
                     : reportingReasons.length === 1
                         ? reportingReasons[0].reason
-                        : this.getFullReason(reportingReasons)
+                        : this.getAllReasons(item)
             }
+            return this.getAllReasons(item)
+        }
 
-            let reasonKey = ''
-
+        getAllReasons(item) {
+            let reasonArray = []
             for (let i = 0; i < item.__reports.length; i++) {
                 let {reportingReasons} = item.__reports[i]
-
-                if (Array.isArray(reportingReasons)) {
-                    if (reportingReasons.length > 1) {
-                        reasonKey = this.getFullReason(reportingReasons)
-                    }
-
-                    if (reportingReasons.length === 1) {
-                        if (!reasonKey)
-                            reasonKey = reportingReasons[0].reason
-                        else if (reasonKey != reportingReasons[0].reason) {
-                            reasonKey = this.getFullReason(reportingReasons)
-                        }
+                for (let j = 0; j < reportingReasons.length; j++) {
+                    if (!reasonArray.includes(reportingReasons[j].reason)) {
+                        reasonArray.push(reportingReasons[j].reason)
                     }
                 }
             }
-            return reasonKey
+            return this.capitalizeAndTranslateReason(reasonArray);
         }
 
-        getFullReason(reportingReasons) {
-            let reasonKey = this.getTranslation(reportingReasons[0].reason);
-            for (let i = 1; i < reportingReasons.length; i++) {
-                let reason = ', ' + this.getTranslation(reportingReasons[i].reason)
-                reasonKey += reason.toLowerCase()
+        capitalizeAndTranslateReason(reasonKey) {
+            let reason = this.getTranslation(reasonKey[0]);
+            for (let i = 1; i < reasonKey.length; i++) {
+                let reason1 = ', ' + this.getTranslation(reasonKey[i])
+                reason += reason1.toLowerCase()
             }
-            return reasonKey
+            return reason
         }
 
         showDialog() {

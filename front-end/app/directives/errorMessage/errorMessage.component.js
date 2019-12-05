@@ -253,7 +253,7 @@ class controller extends Controller {
     setFullReason(reports) {
         for (let i = 0; i < reports.length; i++) {
             let reason = this.getTranslation(reports[i].reportingReasons[0].reason)
-            for (let j = 0; j < reports[i].reportingReasons.length; j++) {
+            for (let j = 1; j < reports[i].reportingReasons.length; j++) {
                 reason += ', ' + this.getTranslation(reports[i].reportingReasons[j].reason).toLowerCase()
             }
             reports[i].fullReason = reason;
