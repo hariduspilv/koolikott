@@ -251,12 +251,12 @@ class controller extends Controller {
     }
 
     setFullReason(reports) {
-        for (const i of reports) {
-            let reason = this.getTranslation(i.reportingReasons[0].reason)
-            for (let j of i.reportingReasons.slice(1, -1)) {
-                reason += ', ' + this.getTranslation(j.reason).toLowerCase()
+        for (const report of reports) {
+            let fullReason = this.getTranslation(report.reportingReasons[0].reason)
+            for (let singleReason of report.reportingReasons.slice(1, -1)) {
+                fullReason += ', ' + this.getTranslation(singleReason.reason).toLowerCase()
             }
-            i.fullReason = reason;
+            report.fullReason = fullReason;
             this.$scope.reports = reports;
         }
     }

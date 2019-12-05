@@ -456,11 +456,11 @@
 
         getAllReasons(item) {
             let reasonArray = []
-            for (const i of item.__reports) {
-                let {reportingReasons} = i
-                for (let j of reportingReasons) {
-                    if (!reasonArray.includes(j.reason)) {
-                        reasonArray.push(j.reason)
+            for (const report of item.__reports) {
+                let {reportingReasons} = report
+                for (let singleReason of reportingReasons) {
+                    if (!reasonArray.includes(singleReason.reason)) {
+                        reasonArray.push(singleReason.reason)
                     }
                 }
             }
@@ -468,12 +468,12 @@
         }
 
         capitalizeAndTranslateReason(reasonKey) {
-            let reason = this.getTranslation(reasonKey[0]);
-            for (const i of reasonKey.slice(1, -1)) {
-                let appendReason = ', ' + this.getTranslation(i)
-                reason += appendReason.toLowerCase()
+            let fullReason = this.getTranslation(reasonKey[0]);
+            for (const singleReason of reasonKey.slice(1, -1)) {
+                let appendReason = ', ' + this.getTranslation(singleReason)
+                fullReason += appendReason.toLowerCase()
             }
-            return reason
+            return fullReason
         }
 
         showDialog() {
