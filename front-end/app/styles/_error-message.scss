@@ -30,7 +30,8 @@ dop-error-message {
 }
 
 .error-message-collapse-icon {
-  margin-left: $layout-gutter-width / 2;
+  margin-left: 24px;
+  font-size: 40px;
   transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
 
   .expanded & {
