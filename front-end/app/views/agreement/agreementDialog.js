@@ -7,6 +7,8 @@
 
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.isSaving = false
+            this.$scope.termsLink = '/kasutustingimused'
+            this.$scope.licensesLink = '/litsentsitingimused'
 
             this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
             this.$scope.$watch(
@@ -54,11 +56,16 @@
                 this.unsubscribeRouteChangeSuccess()
         }
 
+        notAgreedToTerms() {
+            return !this.$scope.licensesAgreed || !this.$scope.termsAgreed
+        }
+
         isSubmitDisabled() {
             if (!this.$rootScope.userHasEmailOnLogin) {
                 const {email, pattern} = this.$scope.gdprDialogContent.email.$error
-                return !this.$scope.gdprDialogContent.email.$viewValue || email || pattern || this.$scope.isSaving
+                return !this.$scope.gdprDialogContent.email.$viewValue || email || pattern || this.$scope.isSaving || this.notAgreedToTerms()
             }
+            return this.notAgreedToTerms()
         }
     }
 

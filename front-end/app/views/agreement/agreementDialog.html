@@ -11,11 +11,19 @@
     <md-dialog-content>
       <md-content data-layout-padding>
         <p><span id="gdpr-agreement-text" data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
-        <p>
-          <a id="gdpr-agreement-link" target="_blank" data-translate="AGREEMENT_DIALOG_LINK_TEXT" href="/kasutustingimused">
-            <span id="gdpr-agreement-link-text" data-translate="AGREEMENT_DIALOG_LINK_TEXT"></span>
-          </a>
-        </p>
+        <div>
+          <md-checkbox ng-model="termsAgreed" value="false">
+            <span data-translate="AGREE_TO"></span>
+              <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, termsLink)"><strong data-translate="WITH_TERMS"></strong></a>
+            <span data-translate="AGREEMENT_REQUIRED"></span>
+          </md-checkbox>
+          <br>
+          <md-checkbox ng-model="licensesAgreed" value="false">
+            <span data-translate="AGREE_TO"></span>
+              <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, licensesLink)"><strong data-translate="WITH_LICENSES"></strong></a>
+            <span data-translate="AGREEMENT_REQUIRED"></span>
+          </md-checkbox>
+        </div>
         <div id="gdpr-agreement-buttons" data-layout-gt-sm="row" data-layout="column" data-layout-align="end end">
           <md-input-container class="md-block animate-if remaining-charaters-wrapper margin-10" data-ng-show="!$root.userHasEmailOnLogin">
             <label data-translate="GDPR_EMAIL" style="display: block"></label>
@@ -48,7 +56,6 @@
             data-ng-click="agree()"
           >
             <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
-          </md-button>
           </md-button>
           <md-progress-circular
             class="ng-hide"
