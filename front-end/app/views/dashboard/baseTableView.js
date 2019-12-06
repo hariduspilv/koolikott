@@ -469,7 +469,7 @@
 
         capitalizeAndTranslateReason(reasonKey) {
             let fullReason = this.getTranslation(reasonKey[0]);
-            for (const singleReason of reasonKey.slice(1, -1)) {
+            for (const singleReason of reasonKey.slice(1)) {
                 let appendReason = ', ' + this.getTranslation(singleReason)
                 fullReason += appendReason.toLowerCase()
             }

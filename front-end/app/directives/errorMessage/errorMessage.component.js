@@ -192,57 +192,37 @@ class controller extends Controller {
                 ? data.creator.id === this.authenticatedUserService.getUser().id : false
     }
 
-    getReasons(setMessage = true) {
+    getReasons() {
         const { id } = this.data || {}
         this.setOwner(this.data)
         if (id) {
-            // cache this while reports are fetched
-            const { messageKey } = this.$scope
-            this.$scope.messageKey = ''
-
             if (this.$scope.isAdmin || this.$scope.isModerator) {
                 this.serverCallService
                     .makeGet('rest/admin/improper/' + this.data.id)
                     .then(({data: reports}) => {
-                            this.setReasonsMessage(reports, setMessage, messageKey)
-                        }, () =>
-                            this.$scope.messageKey = messageKey
+                        this.resizeWindow(reports)
+                        this.setFullReason(reports)
+                        }
                     )
             } else {
                 this.serverCallService
                     .makeGet('rest/impropers/' + this.data.id)
                     .then(({data: reports}) => {
-                            this.setReasonsMessage(reports, setMessage = false, messageKey)
-                        }, () =>
-                            this.$scope.messageKey = messageKey
+                        this.resizeWindow(reports)
+                        this.setFullReason(reports)
+                        }
                     )
             }
         }
     }
 
-    setReasonsMessage(reports, setMessage, messageKey) {
+    resizeWindow(reports) {
         if (Array.isArray(reports) && reports.length) {
-            const done = (reasons = '') => {
-                !setMessage
-                    ? this.$scope.messageKey = messageKey
-                    : this.$scope.message = reports[0].reportingText
-                    ? reasons.join(', ') + ': ' + reports[0].reportingText
-                    : reasons.join(', ')
-
                 if (!this.listeningResize) {
                     this.listeningResize = true
                     window.addEventListener('resize', this.onWindowResizeReports)
                 }
                 this.onWindowResizeReports()
-            }
-
-            !reports[0].reportingReasons
-                ? done()
-                : Promise
-                    .all(reports[0].reportingReasons.map(r => this.$translate(r.reason)))
-                    .then(done)
-
-            this.setFullReason(reports)
         }
     }
 
@@ -253,7 +233,7 @@ class controller extends Controller {
     setFullReason(reports) {
         for (const report of reports) {
             let fullReason = this.getTranslation(report.reportingReasons[0].reason)
-            for (let singleReason of report.reportingReasons.slice(1, -1)) {
+            for (let singleReason of report.reportingReasons.slice(1)) {
                 fullReason += ', ' + this.getTranslation(singleReason.reason).toLowerCase()
             }
             report.fullReason = fullReason;
@@ -319,7 +299,7 @@ class controller extends Controller {
         )
     }
     toggleExpandableReports() {
-        if (this.$scope.reports.length > 1 || this.forceCollapsible)
+        if (this.$scope.reports.length > 0 || this.forceCollapsible)
             return this.$scope.showExpandableReports = true
 
         const { offsetWidth, scrollWidth } = document.getElementById('error-message-heading')
