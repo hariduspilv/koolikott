@@ -48,15 +48,20 @@
           >
             <span data-translate="AGREEMENT_DIALOG_ACTION_NO"></span>
           </md-button>
-          <md-button
-            id="gdpr-agreement-accept-button"
-            class="md-raised md-primary"
-            aria-label="Nõustun ja sisenen"
-            data-ng-disabled="$ctrl.isSubmitDisabled()"
-            data-ng-click="agree()"
-          >
-            <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
-          </md-button>
+            <md-button
+              id="gdpr-agreement-accept-button"
+              class="md-raised md-primary"
+              aria-label="Nõustun ja sisenen"
+              data-ng-disabled="$ctrl.isSubmitDisabled()"
+              data-ng-click="agree()"
+            >
+              <div ng-mousemove="$ctrl.onDivAction()" ng-mouseenter="$ctrl.onDivAction()" ng-mouseleave="$ctrl.onDivLeave();">
+                <span data-translate="AGREEMENT_DIALOG_ACTION_YES"></span>
+                <md-tooltip data-ng-show="$ctrl.isSubmitDisabled() && showTooltip" md-delay="0" md-autohide="true">
+                  <span data-translate="FILL_REQUIRED_FIELDS_TO_ENTER"></span>
+                </md-tooltip>
+              </div>
+            </md-button>
           <md-progress-circular
             class="ng-hide"
             md-mode="indeterminate"

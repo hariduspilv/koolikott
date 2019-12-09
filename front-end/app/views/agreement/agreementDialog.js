@@ -22,6 +22,12 @@
                     this.$scope.gdprDialogContent.email.$setValidity('validationError', true)
             })
 
+            this.$scope.$watch(() => {
+                if (this.isSubmitDisabled()) {
+                    this.$scope.showTooltip = true;
+                }
+            })
+
             this.$scope.agree = () => {
                 if (this.$rootScope.userHasEmailOnLogin) {
                     this.$mdDialog.hide(true)
@@ -31,6 +37,7 @@
             }
 
             this.$scope.cancel = () => {
+                this.$scope.showTooltip = false
                 this.$mdDialog.hide()
             }
         }
@@ -66,6 +73,14 @@
                 return !this.$scope.gdprDialogContent.email.$viewValue || email || pattern || this.$scope.isSaving || this.notAgreedToTerms()
             }
             return this.notAgreedToTerms()
+        }
+
+        onDivAction() {
+            this.$scope.showTooltip = true
+        }
+
+        onDivLeave() {
+            this.$scope.showTooltip = false
         }
     }
 
