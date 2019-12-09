@@ -41,7 +41,7 @@
           <div layout-xs="column" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
                flex-order-gt-sm="2" flex="100" data-ng-if="true">
             <div ng-if="lang === 'ET'" data-layout-align="start stretch" layout="column" data-flex="100">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+              <md-input-container class="md-block animate-if remaining-charaters-wrapper">
                 <label data-translate="TERM_TITLE"></label>
                 <input
                   name="title"
@@ -58,7 +58,7 @@
               </div>
             </div>
             <div ng-if="lang === 'EN'" data-layout-align="start stretch" layout="column" data-flex="100">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+              <md-input-container class="md-block animate-if remaining-charaters-wrapper">
                 <label data-translate="TERM_TITLE"></label>
                 <input
                   name="title"
@@ -75,7 +75,7 @@
               </div>
             </div>
             <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" data-flex="100">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
+              <md-input-container class="md-block animate-if remaining-charaters-wrapper">
                 <label data-translate="TERM_TITLE"></label>
                 <input
                   name="title"
@@ -118,7 +118,7 @@
             <span data-translate="TERM_NOTIFY_GDPR"></span>
           </md-checkbox>
         </div>
-        <div data-layout="row" data-layout-align="space-between center">
+        <div data-layout="row" data-layout-xs="column" data-layout-align="space-between center">
 
           <md-button
             aria-label="Delete term"
@@ -129,7 +129,7 @@
           >
             <span data-translate="BUTTON_REMOVE"></span>
           </md-button>
-          <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
+          <div layout="row" data-layout-xs="column" layout-align="end center" class="md-padding md-padding-horizontal-double"
                data-ng-if="true">
             <md-button
               aria-label="Cancel term edit"
