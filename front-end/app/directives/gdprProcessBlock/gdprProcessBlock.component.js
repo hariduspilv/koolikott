@@ -4,8 +4,8 @@
     class controller extends Controller {
         constructor(...args) {
             super(...args)
-            this.gdprProcessLanguages = ['ET', 'EN', 'RU']
-            this.$scope.activeGdprProcessLanguages = this.gdprProcessLanguages[0]
+            this.termLanguages = ['ET', 'EN', 'RU']
+            this.$scope.activeTermLanguages = this.termLanguages[0]
             this.getCurrentLanguage()
             this.$scope.notifyOfGDPRUpdate = false
         }
@@ -15,7 +15,7 @@
         }
 
         toggleGdprProcessLanguageInputs(term, lang) {
-            term.activeGdprProcessLanguage = lang
+            term.activeTermLanguage = lang
         }
 
         save(term) {

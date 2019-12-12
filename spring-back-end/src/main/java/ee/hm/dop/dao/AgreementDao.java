@@ -10,7 +10,7 @@ import java.util.List;
 public class AgreementDao extends AbstractDao<Agreement> {
 
     private static final String TERMS_AGREEMENT_URL = "/terms";
-    private static final String PERSONAL_DATA_AGREEMENT_URL = "/gdpr-process";
+    private static final String GDRP_TERM_AGREEMENT_URL = "/gdpr-process";
 
     public List<Agreement> getValidAgreements() {
         return getList(entityManager
@@ -23,8 +23,8 @@ public class AgreementDao extends AbstractDao<Agreement> {
         return findLatestAgreement(TERMS_AGREEMENT_URL);
     }
 
-    public Agreement findLatestPersonalDataAgreement() {
-        return findLatestAgreement(PERSONAL_DATA_AGREEMENT_URL);
+    public Agreement findLatestGdprTermsAgreement() {
+        return findLatestAgreement(GDRP_TERM_AGREEMENT_URL);
     }
 
     public List<Agreement> findMatchingAgreements(Agreement agreement) {

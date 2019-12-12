@@ -20,7 +20,7 @@
             this.$scope.$watch(
                 () => {
                     this.$scope.notAgreedToTermsAgreement = this.$rootScope.statusForDuplicateCheck.termsAgreement;
-                    this.$scope.notAgreedToPersonalDataAgreement = this.$rootScope.statusForDuplicateCheck.personalDataAgreement;
+                    this.$scope.notAgreedToGdprTermsAgreement = this.$rootScope.statusForDuplicateCheck.gdprTermsAgreement;
                 }
             )
 
@@ -71,9 +71,9 @@
         }
 
         notAgreedToTerms() {
-            return (this.$scope.notAgreedToTermsAgreement && this.$scope.notAgreedToPersonalDataAgreement) ? (!this.$scope.termsAgreed || !this.$scope.licensesAgreed) :
+            return (this.$scope.notAgreedToTermsAgreement && this.$scope.notAgreedToGdprTermsAgreement) ? (!this.$scope.termsAgreed || !this.$scope.licensesAgreed) :
                 this.$scope.notAgreedToTermsAgreement ? !this.$scope.termsAgreed :
-                    this.$scope.notAgreedToPersonalDataAgreement ? !this.$scope.licensesAgreed : false
+                    this.$scope.notAgreedToGdprTermsAgreement ? !this.$scope.licensesAgreed : false
         }
 
         isSubmitDisabled() {

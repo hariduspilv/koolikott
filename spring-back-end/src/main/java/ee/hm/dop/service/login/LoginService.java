@@ -51,19 +51,19 @@ public class LoginService {
 
     public UserStatus login(String idCode, String name, String surname, LoginFrom loginFrom) {
         Agreement latestTermsAgreement = agreementDao.findLatestTermsAgreement();
-        Agreement latestPersonalDataAgreement = agreementDao.findLatestPersonalDataAgreement();
-        if (latestTermsAgreement == null && latestPersonalDataAgreement == null) {
+        Agreement latestGdprTermsAgreement = agreementDao.findLatestGdprTermsAgreement();
+        if (latestTermsAgreement == null && latestGdprTermsAgreement == null) {
             return loggedIn(finalizeLogin(idCode, name, surname, loginFrom));
         }
         User user = userService.getUserByIdCode(idCode);
         if (user == null) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
-            return missingPermissionsNewUser(state.getToken(), latestTermsAgreement, latestPersonalDataAgreement, loginFrom);
+            return missingPermissionsNewUser(state.getToken(), latestTermsAgreement, latestGdprTermsAgreement, loginFrom);
         }
-        if (userAgreementDoesntExist(user, latestTermsAgreement) && userAgreementDoesntExist(user, latestPersonalDataAgreement)) {
+        if (userAgreementDoesntExist(user, latestTermsAgreement) && userAgreementDoesntExist(user, latestGdprTermsAgreement)) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
             logger.info(format("User with id %s doesn't have agreement", user.getId()));
-            return missingPermissionsExistingUser(state.getToken(), latestTermsAgreement, latestPersonalDataAgreement, loginFrom);
+            return missingPermissionsExistingUser(state.getToken(), latestTermsAgreement, latestGdprTermsAgreement, loginFrom);
         }
 
         if (userAgreementDoesntExist(user, latestTermsAgreement)) {
@@ -72,10 +72,10 @@ public class LoginService {
             return missingTermsAgreement(state.getToken(), latestTermsAgreement, loginFrom);
         }
 
-        if (userAgreementDoesntExist(user, latestPersonalDataAgreement)) {
+        if (userAgreementDoesntExist(user, latestGdprTermsAgreement)) {
             AuthenticationState state = authenticationStateService.save(idCode, name, surname);
             logger.info(format("User with id %s doesn't have personal data agreement", user.getId()));
-            return missingPersonalDataAgreement(state.getToken(), latestPersonalDataAgreement, loginFrom);
+            return missingGdprTermsAgreement(state.getToken(), latestGdprTermsAgreement, loginFrom);
         }
 
         logger.info(format("User with id %s logged in", user.getId()));
@@ -95,7 +95,7 @@ public class LoginService {
             authenticationStateDao.delete(state);
             return null;
         }
-        if (userStatus.getTermsAgreement() == null && userStatus.getPersonalDataAgreement() == null) {
+        if (userStatus.getTermsAgreement() == null && userStatus.getGdprTermsAgreement() == null) {
             throw new RuntimeException("No agreements for token: " + userStatus.getToken());
         }
 
@@ -104,8 +104,8 @@ public class LoginService {
         if (userStatus.getTermsAgreement() != null) {
             createUserAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getTermsAgreement().getId()));
         }
-        if (userStatus.getPersonalDataAgreement() != null) {
-            createUserAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getPersonalDataAgreement().getId()));
+        if (userStatus.getGdprTermsAgreement() != null) {
+            createUserAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getGdprTermsAgreement().getId()));
         }
 
         AuthenticatedUser authenticate = authenticate(user, userStatus.getLoginFrom());
@@ -125,7 +125,7 @@ public class LoginService {
             authenticationStateDao.delete(state);
             return;
         }
-        if (userStatus.getTermsAgreement() == null && userStatus.getPersonalDataAgreement() == null) {
+        if (userStatus.getTermsAgreement() == null && userStatus.getGdprTermsAgreement() == null) {
             throw new RuntimeException("No agreements for token: " + userStatus.getToken());
         }
         User user = userService.getUserByIdCode(state.getIdCode());
@@ -133,7 +133,7 @@ public class LoginService {
             return;
         }
         rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getTermsAgreement().getId()));
-        rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getPersonalDataAgreement().getId()));
+        rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getGdprTermsAgreement().getId()));
     }
 
     private void rejectAgreementIfDoesntExists(User user, Agreement agreement) {

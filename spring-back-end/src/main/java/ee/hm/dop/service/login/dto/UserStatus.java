@@ -14,26 +14,26 @@ public class UserStatus {
     private boolean userConfirmed;
     private String token;
     private Agreement termsAgreement;
-    private Agreement personalDataAgreement;
+    private Agreement gdprTermsAgreement;
     private AuthenticatedUser authenticatedUser;
     private LoginFrom loginFrom;
 
-    public static UserStatus missingPermissionsNewUser(String token, Agreement termsAgreement, Agreement personalDataAgreement, LoginFrom loginFrom) {
+    public static UserStatus missingPermissionsNewUser(String token, Agreement termsAgreement, Agreement gdprTermsAgreement, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
         status.setTermsAgreement(termsAgreement);
-        status.setPersonalDataAgreement(personalDataAgreement);
+        status.setGdprTermsAgreement(gdprTermsAgreement);
         status.setLoginFrom(loginFrom);
         return status;
     }
 
-    public static UserStatus missingPermissionsExistingUser(String token, Agreement termsAgreement, Agreement personalDataAgreement, LoginFrom loginFrom) {
+    public static UserStatus missingPermissionsExistingUser(String token, Agreement termsAgreement, Agreement gdprTermsAgreement, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
         status.setTermsAgreement(termsAgreement);
-        status.setPersonalDataAgreement(personalDataAgreement);
+        status.setGdprTermsAgreement(gdprTermsAgreement);
         status.setExistingUser(true);
         status.setLoginFrom(loginFrom);
         return status;
@@ -49,11 +49,11 @@ public class UserStatus {
         return status;
     }
 
-    public static UserStatus missingPersonalDataAgreement(String token, Agreement personalDataAgreement, LoginFrom loginFrom) {
+    public static UserStatus missingGdprTermsAgreement(String token, Agreement gdprTermsAgreement, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
-        status.setPersonalDataAgreement(personalDataAgreement);
+        status.setGdprTermsAgreement(gdprTermsAgreement);
         status.setExistingUser(true);
         status.setLoginFrom(loginFrom);
         return status;
@@ -164,11 +164,11 @@ public class UserStatus {
         this.harIdUserMissingIdCode = harIdUserMissingIdCode;
     }
 
-    public Agreement getPersonalDataAgreement() {
-        return personalDataAgreement;
+    public Agreement getGdprTermsAgreement() {
+        return gdprTermsAgreement;
     }
 
-    public void setPersonalDataAgreement(Agreement personalDataAgreement) {
-        this.personalDataAgreement = personalDataAgreement;
+    public void setGdprTermsAgreement(Agreement gdprTermsAgreement) {
+        this.gdprTermsAgreement = gdprTermsAgreement;
     }
 }

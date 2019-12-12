@@ -28,7 +28,7 @@ public class UserAgreementDao extends AbstractDao<User_Agreement> {
         return getUserAgreementForUser(userId, TERMS_AGREEMENT_URL);
     }
 
-    public User_Agreement getLatestPersonalDataAgreementForUser(Long userId) {
+    public User_Agreement getLatestGdprTermsAgreementForUser(Long userId) {
         return getUserAgreementForUser(userId, PERSONAL_DATA_AGREEMENT_URL);
     }
 

@@ -124,7 +124,7 @@ public class UserEmailService {
 
     public UserEmail validatePin(UserEmail userEmail) {
         UserEmail dbUserEmail = validateAndActivateEmail(userEmail);
-        agreeToAgreement(userAgreementDao.getLatestPersonalDataAgreementForUser(userEmail.getUser().getId()));
+        agreeToAgreement(userAgreementDao.getLatestGdprTermsAgreementForUser(userEmail.getUser().getId()));
         agreeToAgreement(userAgreementDao.getLatestTermsAgreementForUser(userEmail.getUser().getId()));
 
         return userEmailDao.createOrUpdate(dbUserEmail);
