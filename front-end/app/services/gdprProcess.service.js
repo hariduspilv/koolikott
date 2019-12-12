@@ -6,15 +6,15 @@
         }
 
         saveTerm(term) {
-            return this.serverCallService.makePost('rest/licenses', term)
+            return this.serverCallService.makePost('rest/gdprProcessing', term)
         }
 
         getTerms() {
-            return this.serverCallService.makeGet('rest/licenses')
+            return this.serverCallService.makeGet('rest/gdprProcessing')
         }
 
         deleteTerm(term) {
-            return this.serverCallService.makePost('rest/licenses/delete', term)
+            return this.serverCallService.makePost('rest/gdprProcessing/delete', term)
         }
     }
 
