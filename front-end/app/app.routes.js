@@ -147,8 +147,8 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                 })
                 .when('/isikuandmete-tootlemine', {
-                    templateUrl: 'views/licenses/licenses.html',
-                    controller: 'licensesController',
+                    templateUrl: 'views/gdprProcess/gdprProcess.html',
+                    controller: 'gdprProcessController',
                     controllerAs: '$ctrl',
                 })
                 .when('/videojuhendid', {

@@ -4,58 +4,58 @@
     class controller extends Controller {
         constructor(...args) {
             super(...args)
-            this.getLicenses()
-            this.initNewLicence()
+            this.getTerms()
+            this.initNewTerm()
             this.$scope.editMode = false
             this.$translate('LICENSES_HEADER').then((translation) => this.$rootScope.tabTitle = translation);
         }
 
-        initNewLicence() {
-            this.$scope.newLicence = {
+        initNewTerm() {
+            this.$scope.newTerm = {
                 titleEst: '',
                 titleEng: '',
                 titleRus: '',
                 contentEst: '',
                 contentEng: '',
                 contentRus: '',
-                licenceLanguages: ['ET', 'EN', 'RU'],
+                termLanguages: ['ET', 'EN', 'RU'],
                 edit: true,
                 new: true
             }
-            this.$scope.newLicence.activeLicenceLanguage = this.$scope.newLicence.licenceLanguages[0]
+            this.$scope.newTerm.activeTermLanguage = this.$scope.newTerm.termLanguages[0]
         }
 
         isAdmin() {
             return this.authenticatedUserService.isAdmin()
         }
 
-        getLicenses() {
-            this.licensesService.getLicenses()
+        getTerms() {
+            this.gdprProcessService.getTerms()
                 .then(({data}) => {
-                    for (const licence of data) {
-                        licence.licenceLanguages = ['ET', 'EN', 'RU'];
-                        licence.activeLicenceLanguage = licence.licenceLanguages[0];
+                    for (const term of data) {
+                        term.termLanguages = ['ET', 'EN', 'RU'];
+                        term.activeTermLanguage = term.termLanguages[0];
                     }
-                    this.$scope.licenses = data
+                    this.$scope.terms = data
                 })
         }
 
-        editLicensesPage() {
+        editGdprProcessPage() {
             this.$scope.editMode = true
         }
 
-        createLicence() {
-            this.$scope.licenses.push(this.$scope.newLicence)
-            this.initNewLicence()
+        createTerm() {
+            this.$scope.terms.push(this.$scope.newTerm)
+            this.initNewTerm()
             this.createDialogOpen = true
             this.$timeout(() => {
                 window.scrollTo(0, document.body.scrollHeight);
             }, 50)
         }
 
-        removeLicence() {
-            this.$scope.licenses.pop()
-            this.initNewLicence()
+        removeTerm() {
+            this.$scope.terms.pop()
+            this.initNewTerm()
         }
 
     }
@@ -65,8 +65,8 @@
         '$rootScope',
         '$translate',
         'authenticatedUserService',
-        'licensesService',
+        'gdprProcessService',
         '$timeout'
     ]
-    angular.module('koolikottApp').controller('licensesController', controller)
+    angular.module('koolikottApp').controller('gdprProcessController', controller)
 }

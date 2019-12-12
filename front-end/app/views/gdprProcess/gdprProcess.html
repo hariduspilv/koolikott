@@ -2,28 +2,28 @@
   <h1 class="md-headline" data-translate="LICENSES_HEADER"></h1>
   <md-button style="min-width: 0px"
              data-ng-if="$ctrl.isAdmin() && !editMode"
-             data-ng-click="$ctrl.editLicensesPage()"
-             id="licenses-edit">
+             data-ng-click="$ctrl.editGdprProcessPage()"
+             id="gdprProcess-edit">
     <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
     <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
   </md-button>
   <md-button class="md-button md-ink-ripple"
-             data-ng-click="$ctrl.createLicence()"
-             aria-label="Add License"
+             data-ng-click="$ctrl.createTerm()"
+             aria-label="Add Term"
              data-ng-if="$ctrl.isAdmin() && editMode"
              ng-disabled="$ctrl.createDialogOpen"
-             id="licensesEditButton"
+             id="gdprProcessEditButton"
   >
     <md-icon>add_circle</md-icon>
     <span data-translate="ADD_LICENSES"></span>
   </md-button>
 </div>
 <div>
-  <dop-licenses-block
+  <dop-gdpr-process-block
     data-create-dialog-open="$ctrl.createDialogOpen"
     data-edit-mode="editMode"
-    data-licenses="licenses"
-    data-remove-licence="$ctrl.removeLicence()"
-    data-get-licenses="$ctrl.getLicenses">
-  </dop-licenses-block>
+    data-terms="terms"
+    data-remove-term="$ctrl.removeTerm()"
+    data-get-terms="$ctrl.getTerms">
+  </dop-gdpr-process-block>
 </div>

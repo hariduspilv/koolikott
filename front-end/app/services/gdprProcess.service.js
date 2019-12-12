@@ -5,21 +5,21 @@
             super(...args)
         }
 
-        saveLicence(licence) {
-            return this.serverCallService.makePost('rest/licenses', licence)
+        saveTerm(term) {
+            return this.serverCallService.makePost('rest/licenses', term)
         }
 
-        getLicenses() {
+        getTerms() {
             return this.serverCallService.makeGet('rest/licenses')
         }
 
-        deleteLicence(licence) {
-            return this.serverCallService.makePost('rest/licenses/delete', licence)
+        deleteTerm(term) {
+            return this.serverCallService.makePost('rest/licenses/delete', term)
         }
     }
 
     controller.$inject = [
         'serverCallService',
     ]
-    factory('licensesService', controller)
+    factory('gdprProcessService', controller)
 }
