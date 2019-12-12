@@ -1,9 +1,7 @@
 package ee.hm.dop.dao;
 
-import ee.hm.dop.model.AdminLearningObject;
-import ee.hm.dop.model.ImproperContent;
-import ee.hm.dop.model.ImproperContentDto;
-import ee.hm.dop.model.User;
+import ee.hm.dop.model.*;
+import ee.hm.dop.model.enums.ReportingReasonEnum;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
@@ -96,9 +94,9 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                 .getResultList();
     }
 
-    public List<ImproperContentDto> findImproperForUser(Long learningObjectId) {
+    public List<ImproperContentDto> findImproperForOwner(Long learningObjectId) {
         List<ImproperContent> improperReports = findByLearningObjectId(learningObjectId);
-        List<ImproperContentDto> improperContentUser = new ArrayList<>();
+        List<ImproperContentDto> improperContentOwner = new ArrayList<>();
 
         for (ImproperContent improperContent : improperReports) {
             ImproperContentDto improperContentDto = new ImproperContentDto();
@@ -106,8 +104,29 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
             improperContentDto.setReportingReasons(improperContent.getReportingReasons());
             improperContentDto.setReportingText(improperContent.getReportingText());
             improperContentDto.setReviewed(improperContent.isReviewed());
-            improperContentUser.add(improperContentDto);
+            improperContentOwner.add(improperContentDto);
         }
-        return improperContentUser;
+        return improperContentOwner;
+    }
+
+    public List<ImproperContentDto> findImproperForUser(Long learningObjectId) {
+        List<ImproperContentDto> allImproperReports = findImproperForOwner(learningObjectId);
+        List<ImproperContentDto> improperReportsUser = new ArrayList<>();
+
+        for (ImproperContentDto report : allImproperReports) {
+            List<ReportingReason> reportsToRemove = new ArrayList<>();
+            for (ReportingReason reason : report.getReportingReasons()) {
+                if (reason.getReason().equals(ReportingReasonEnum.LO_COPYRIGHT)) {
+                    reportsToRemove.add(reason);
+                }
+            }
+            if (!reportsToRemove.isEmpty()) {
+                report.setReportingText(null);
+                report.getReportingReasons().removeAll(reportsToRemove);
+            }
+            improperReportsUser.add(report);
+        }
+
+        return improperReportsUser;
     }
 }

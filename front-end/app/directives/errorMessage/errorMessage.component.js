@@ -204,9 +204,17 @@ class controller extends Controller {
                         this.setFullReason(reports)
                         }
                     )
+            } else if (this.$scope.isOwner) {
+                this.serverCallService
+                    .makeGet('rest/impropers/owner/' + this.data.id)
+                    .then(({data: reports}) => {
+                            this.resizeWindow(reports)
+                            this.setFullReason(reports)
+                        }
+                    )
             } else {
                 this.serverCallService
-                    .makeGet('rest/impropers/' + this.data.id)
+                    .makeGet('rest/impropers/user/' + this.data.id)
                     .then(({data: reports}) => {
                         this.resizeWindow(reports)
                         this.setFullReason(reports)

@@ -7,7 +7,7 @@
             this.getLicenses()
             this.initNewLicence()
             this.$scope.editMode = false
-            this.$translate('LICENSES_HEADER').then((translation) => this.$rootScope.tabTitle = translation);
+            this.$translate('PERSONAL_DATA_TAB').then((translation) => this.$rootScope.tabTitle = translation);
         }
 
         initNewLicence() {

@@ -32,7 +32,14 @@ public class ImproperContentResource extends BaseResource {
     }
 
     @GetMapping
-    @RequestMapping("{learningObjectId}")
+    @RequestMapping("owner/{learningObjectId}")
+    @Secured({RoleString.USER})
+    public List<ImproperContentDto> getImproperContentOwner(@PathVariable("learningObjectId") Long learningObjectId) {
+        return improperContentService.getImproperContentForOwner(learningObjectId, getLoggedInUser());
+    }
+
+    @GetMapping
+    @RequestMapping("user/{learningObjectId}")
     public List<ImproperContentDto> getImproperContentUser(@PathVariable("learningObjectId") Long learningObjectId) {
         return improperContentService.getImproperContentForUser(learningObjectId);
     }
