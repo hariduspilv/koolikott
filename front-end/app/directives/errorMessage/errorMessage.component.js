@@ -150,7 +150,7 @@ class controller extends Controller {
     }
 
     show(cb) {
-        if (!this.$rootScope.learningObjectImproper && (!this.isAdmin || !this.isModerator)) {
+        if (!this.$rootScope.learningObjectImproper && !(this.$scope.isAdmin || this.$scope.isModerator)) {
             return false;
         }
         if (typeof cb === 'boolean') {
@@ -244,7 +244,7 @@ class controller extends Controller {
     getChanges() {
         const { id } = this.data || {}
 
-        if (id)
+        if (id && (this.$scope.isAdmin || this.$scope.isModerator))
             this.serverCallService
                 .makeGet('rest/admin/changed/'+id)
                 .then(({ data: changes }) => {
