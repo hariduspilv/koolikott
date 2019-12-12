@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @AllArgsConstructor
 public class ApplicationInit {
 
-//    private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
+    private SynchronizeMaterialsExecutor synchronizeMaterialsExecutor;
     private AutomaticallyAcceptReviewableChange automaticallyAcceptReviewableChange;
     private AuthenticationStateCleaner authenticationStateCleaner;
     private AuthenticatedUserCleaner authenticatedUserCleaner;
@@ -22,7 +22,7 @@ public class ApplicationInit {
     private GenerateSitemapXmlsExecutor generateSitemapXmlsExecutor;
 
     private EhisInstitutionProperties ehisInstitutionProperties;
-//    private MaterialSyncProperties materialSyncProperties;
+    private MaterialSyncProperties materialSyncProperties;
     private AcceptReviewableChangeProperties acceptReviewableChangeProperties;
     private AuthenticatedUserCleanerProperties authenticatedUserCleanerProperties;
     private AuthenticationStateCleanerProperties authenticationStateCleanerProperties;
@@ -31,9 +31,9 @@ public class ApplicationInit {
 
     @EventListener(ApplicationReadyEvent.class)
     public void doSomethingAfterStartup() {
-        /*if (materialSyncProperties.isEnabled()) {
+        if (materialSyncProperties.isEnabled()) {
             synchronizeMaterialsExecutor.runAsync();
-        }*/
+        }
         if (acceptReviewableChangeProperties.isEnabled()) {
             automaticallyAcceptReviewableChange.runAsync();
         }
