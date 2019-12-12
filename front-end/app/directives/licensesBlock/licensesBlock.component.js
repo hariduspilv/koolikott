@@ -99,7 +99,7 @@
 
         createAgreement() {
             this.serverCallService
-                .makePost('rest/admin/agreement', {url: '/litsentsitingimused', version: 1, validFrom: new Date})
+                .makePost('rest/admin/agreement', {url: '/gdpr-process', version: 1, validFrom: new Date})
                 .then((response) => {
                     if (response.status === 200) {
                         console.log('agreement added')

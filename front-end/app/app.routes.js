@@ -146,7 +146,7 @@ angular.module('koolikottApp')
                     controller: 'termsController',
                     controllerAs: '$ctrl',
                 })
-                .when('/litsentsitingimused', {
+                .when('/isikuandmete-tootlemine', {
                     templateUrl: 'views/licenses/licenses.html',
                     controller: 'licensesController',
                     controllerAs: '$ctrl',

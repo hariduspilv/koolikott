@@ -9,6 +9,9 @@ import java.util.List;
 @Repository
 public class AgreementDao extends AbstractDao<Agreement> {
 
+    private static final String TERMS_AGREEMENT_URL = "/terms";
+    private static final String PERSONAL_DATA_AGREEMENT_URL = "/gdpr-process";
+
     public List<Agreement> getValidAgreements() {
         return getList(entityManager
                 .createQuery("select a from Agreement a " +
@@ -16,14 +19,12 @@ public class AgreementDao extends AbstractDao<Agreement> {
                         "order by a.validFrom desc, a.id desc", entity()));
     }
 
-    public Agreement findLatestAgreement() {
-        return getSingleResult(entityManager
-                .createQuery("select a from Agreement a " +
-                        "where a.validFrom < :validFrom " +
-                        "and a.deleted = false " +
-                        "order by a.validFrom desc, a.id desc", entity())
-                .setParameter("validFrom", LocalDateTime.now())
-                .setMaxResults(1));
+    public Agreement findLatestTermsAgreement() {
+        return findLatestAgreement(TERMS_AGREEMENT_URL);
+    }
+
+    public Agreement findLatestPersonalDataAgreement() {
+        return findLatestAgreement(PERSONAL_DATA_AGREEMENT_URL);
     }
 
     public List<Agreement> findMatchingAgreements(Agreement agreement) {
@@ -68,5 +69,17 @@ public class AgreementDao extends AbstractDao<Agreement> {
                 .setParameter("newId", newAgreement.getId())
                 .setParameter("previousId", previousAgreement.getId())
                 .executeUpdate();
+    }
+
+    private Agreement findLatestAgreement(String url) {
+        return getSingleResult(entityManager
+                .createQuery("select a from Agreement a " +
+                        "where a.url = :url " +
+                        "and a.validFrom < :validFrom " +
+                        "and a.deleted = false " +
+                        "order by a.validFrom desc, a.id desc", entity())
+                .setParameter("url", url)
+                .setParameter("validFrom", LocalDateTime.now())
+                .setMaxResults(1));
     }
 }

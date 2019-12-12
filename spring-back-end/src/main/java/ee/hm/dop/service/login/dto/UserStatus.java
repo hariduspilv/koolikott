@@ -1,5 +1,6 @@
 package ee.hm.dop.service.login.dto;
 
+import ee.hm.dop.model.Agreement;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.LoginFrom;
 
@@ -12,24 +13,47 @@ public class UserStatus {
     private boolean existingUser;
     private boolean userConfirmed;
     private String token;
-    private Long agreementId;
+    private Agreement termsAgreement;
+    private Agreement personalDataAgreement;
     private AuthenticatedUser authenticatedUser;
     private LoginFrom loginFrom;
 
-    public static UserStatus missingPermissionsNewUser(String token, Long agreementId, LoginFrom loginFrom) {
+    public static UserStatus missingPermissionsNewUser(String token, Agreement termsAgreement, Agreement personalDataAgreement, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
-        status.setAgreementId(agreementId);
+        status.setTermsAgreement(termsAgreement);
+        status.setPersonalDataAgreement(personalDataAgreement);
         status.setLoginFrom(loginFrom);
         return status;
     }
 
-    public static UserStatus missingPermissionsExistingUser(String token, Long agreementId, LoginFrom loginFrom) {
+    public static UserStatus missingPermissionsExistingUser(String token, Agreement termsAgreement, Agreement personalDataAgreement, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
-        status.setAgreementId(agreementId);
+        status.setTermsAgreement(termsAgreement);
+        status.setPersonalDataAgreement(personalDataAgreement);
+        status.setExistingUser(true);
+        status.setLoginFrom(loginFrom);
+        return status;
+    }
+
+    public static UserStatus missingTermsAgreement(String token, Agreement termsAgreement, LoginFrom loginFrom) {
+        UserStatus status = new UserStatus();
+        status.setStatusOk(false);
+        status.setToken(token);
+        status.setTermsAgreement(termsAgreement);
+        status.setExistingUser(true);
+        status.setLoginFrom(loginFrom);
+        return status;
+    }
+
+    public static UserStatus missingPersonalDataAgreement(String token, Agreement personalDataAgreement, LoginFrom loginFrom) {
+        UserStatus status = new UserStatus();
+        status.setStatusOk(false);
+        status.setToken(token);
+        status.setPersonalDataAgreement(personalDataAgreement);
         status.setExistingUser(true);
         status.setLoginFrom(loginFrom);
         return status;
@@ -92,12 +116,12 @@ public class UserStatus {
         this.token = token;
     }
 
-    public Long getAgreementId() {
-        return agreementId;
+    public Agreement getTermsAgreement() {
+        return termsAgreement;
     }
 
-    public void setAgreementId(Long agreementId) {
-        this.agreementId = agreementId;
+    public void setTermsAgreement(Agreement termsAgreement) {
+        this.termsAgreement = termsAgreement;
     }
 
     public AuthenticatedUser getAuthenticatedUser() {
@@ -138,5 +162,13 @@ public class UserStatus {
 
     public void setHarIdUserMissingIdCode(boolean harIdUserMissingIdCode) {
         this.harIdUserMissingIdCode = harIdUserMissingIdCode;
+    }
+
+    public Agreement getPersonalDataAgreement() {
+        return personalDataAgreement;
+    }
+
+    public void setPersonalDataAgreement(Agreement personalDataAgreement) {
+        this.personalDataAgreement = personalDataAgreement;
     }
 }
