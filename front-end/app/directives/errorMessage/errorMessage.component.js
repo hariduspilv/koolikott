@@ -198,15 +198,23 @@ class controller extends Controller {
         if (id) {
             if (this.$scope.isAdmin || this.$scope.isModerator) {
                 this.serverCallService
-                    .makeGet('rest/admin/improper/' + this.data.id)
+                    .makeGet('rest/admin/improper/' + id)
                     .then(({data: reports}) => {
                         this.resizeWindow(reports)
                         this.setFullReason(reports)
                         }
                     )
+            } else if (this.$scope.isOwner) {
+                this.serverCallService
+                    .makeGet('rest/impropers/owner/' + id)
+                    .then(({data: reports}) => {
+                            this.resizeWindow(reports)
+                            this.setFullReason(reports)
+                        }
+                    )
             } else {
                 this.serverCallService
-                    .makeGet('rest/impropers/' + this.data.id)
+                    .makeGet('rest/impropers/user/' + id)
                     .then(({data: reports}) => {
                         this.resizeWindow(reports)
                         this.setFullReason(reports)

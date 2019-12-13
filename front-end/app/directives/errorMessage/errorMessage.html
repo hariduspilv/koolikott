@@ -75,7 +75,7 @@
       </div>
       <div class="md-list-item-text">
         <h3><span data-ng-bind="report.fullReason"><span ng-if="$index > 0">, </span></span></h3>
-        <p data-ng-if="report.reportingText && (isAdmin || isModerator || isOwner)" data-ng-bind="report.reportingText"></p>
+        <p data-ng-if="report.reportingText" data-ng-bind="report.reportingText"></p>
       </div>
       <md-divider inset></md-divider>
     </md-list-item>

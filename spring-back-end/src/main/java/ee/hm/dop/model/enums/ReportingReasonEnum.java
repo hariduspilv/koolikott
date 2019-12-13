@@ -6,6 +6,10 @@ import java.util.List;
 public enum ReportingReasonEnum {
     LO_CONTENT, LO_FORM, LO_METADATA, REPORTING_REASON_COMMENT, REPORTING_REASON_TAG, LO_COPYRIGHT, LO_OTHER ;
 
+    public boolean isLoCopyright(){
+        return this == LO_COPYRIGHT;
+    }
+
     public static List<ReportingReasonEnum> learningObjectReportingReasonsModal(){
         return Arrays.asList(LO_CONTENT, LO_COPYRIGHT, LO_FORM, LO_OTHER);
     }
