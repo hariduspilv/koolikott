@@ -22,6 +22,16 @@ public class TermsResource extends BaseResource {
         return termsService.findAllTerms();
     }
 
+    @GetMapping("gdpr")
+    public List<Terms> getGdprTerms() {
+        return termsService.getGdprTerms();
+    }
+
+    @GetMapping("terms")
+    public List<Terms> getTerms() {
+        return termsService.getTerms();
+    }
+
     @PostMapping
     @Secured(RoleString.ADMIN)
     public Terms save(@RequestBody Terms terms) {

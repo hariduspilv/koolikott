@@ -1,10 +1,9 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.Agreement;
-import java.time.LocalDateTime;
+import ee.hm.dop.model.enums.TermType;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
 public class AgreementDao extends AbstractDao<Agreement> {
@@ -12,41 +11,20 @@ public class AgreementDao extends AbstractDao<Agreement> {
     private static final String TERMS_AGREEMENT_URL = "/terms";
     private static final String GDRP_TERM_AGREEMENT_URL = "/gdpr-process";
 
-    public List<Agreement> getValidAgreements() {
-        return getList(entityManager
-                .createQuery("select a from Agreement a " +
-                        "where a.deleted = false " +
-                        "order by a.validFrom desc, a.id desc", entity()));
-    }
-
     public Agreement findLatestTermsAgreement() {
-        return findLatestAgreement(TERMS_AGREEMENT_URL);
+        return findLatestAgreement(TermType.TERM, TERMS_AGREEMENT_URL);
     }
 
     public Agreement findLatestGdprTermsAgreement() {
-        return findLatestAgreement(GDRP_TERM_AGREEMENT_URL);
-    }
-
-    public List<Agreement> findMatchingAgreements(Agreement agreement) {
-        return getList(entityManager
-                .createQuery("select a from Agreement a " +
-                        "where a.validFrom = :validFrom " +
-                        "and a.version = :version " +
-                        "and a.deleted = false", entity())
-                .setParameter("validFrom", agreement.getValidFrom())
-                .setParameter("version", agreement.getVersion()));
+        return findLatestAgreement(TermType.GDPR, GDRP_TERM_AGREEMENT_URL);
     }
 
     public Agreement findMatchingDeletedAgreement(Agreement agreement) {
         return getSingleResult(entityManager
                 .createQuery("select a from Agreement a " +
-                        "where a.validFrom = :validFrom " +
-                        "and a.version = :version " +
-                        "and a.id != :id " +
+                        "where a.id <> :id " +
                         "and a.deleted = true " +
                         "order by a.id desc", entity())
-                .setParameter("validFrom", agreement.getValidFrom())
-                .setParameter("version", agreement.getVersion())
                 .setParameter("id", agreement.getId())
                 .setMaxResults(1));
     }
@@ -71,15 +49,14 @@ public class AgreementDao extends AbstractDao<Agreement> {
                 .executeUpdate();
     }
 
-    private Agreement findLatestAgreement(String url) {
+    private Agreement findLatestAgreement(TermType type, String url) {
         return getSingleResult(entityManager
                 .createQuery("select a from Agreement a " +
-                        "where a.url = :url " +
-                        "and a.validFrom < :validFrom " +
+                        "where (a.type = :type or a.url = :url)" +
                         "and a.deleted = false " +
-                        "order by a.validFrom desc, a.id desc", entity())
+                        "order by a.createdAt desc, a.id desc", entity())
+                .setParameter("type", type)
                 .setParameter("url", url)
-                .setParameter("validFrom", LocalDateTime.now())
                 .setMaxResults(1));
     }
 }

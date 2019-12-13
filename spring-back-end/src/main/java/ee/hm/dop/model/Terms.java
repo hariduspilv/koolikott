@@ -2,6 +2,7 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.TermType;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
 
@@ -33,6 +34,17 @@ public class Terms implements AbstractEntity{
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime createdAt;
+
+    @ManyToOne
+    @JoinColumn(name = "createdBy", nullable = false)
+    private User createdBy;
+
+    @ManyToOne
+    @JoinColumn(name = "agreement", nullable = false)
+    private Agreement agreement;
+
+    @Enumerated(EnumType.STRING)
+    private TermType type;
 
     public Long getId() {
         return id;
@@ -96,5 +108,29 @@ public class Terms implements AbstractEntity{
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public Agreement getAgreement() {
+        return agreement;
+    }
+
+    public void setAgreement(Agreement agreement) {
+        this.agreement = agreement;
+    }
+
+    public TermType getType() {
+        return type;
+    }
+
+    public void setType(TermType type) {
+        this.type = type;
     }
 }

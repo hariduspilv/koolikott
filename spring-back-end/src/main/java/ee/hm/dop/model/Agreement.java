@@ -3,12 +3,12 @@ package ee.hm.dop.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.TermType;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class Agreement implements AbstractEntity{
@@ -18,13 +18,6 @@ public class Agreement implements AbstractEntity{
     private Long id;
 
     @Column(nullable = false)
-
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    private LocalDateTime validFrom;
-
-    @Column(nullable = false)
-
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime createdAt;
@@ -34,14 +27,14 @@ public class Agreement implements AbstractEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User createdBy;
 
-    @Column(nullable = false)
-    private String version;
-
     @Column
     private String url;
 
     @Column(nullable = false)
     private boolean deleted;
+
+    @Enumerated(EnumType.STRING)
+    private TermType type;
 
     @Override
     public Long getId() {
@@ -50,14 +43,6 @@ public class Agreement implements AbstractEntity{
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public LocalDateTime getValidFrom() {
-        return validFrom;
-    }
-
-    public void setValidFrom(LocalDateTime validFrom) {
-        this.validFrom = validFrom;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -76,14 +61,6 @@ public class Agreement implements AbstractEntity{
         this.createdBy = createdBy;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
     public String getUrl() {
         return url;
     }
@@ -98,5 +75,13 @@ public class Agreement implements AbstractEntity{
 
     public void setDeleted(boolean deleted) {
         this.deleted = deleted;
+    }
+
+    public TermType getType() {
+        return type;
+    }
+
+    public void setType(TermType type) {
+        this.type = type;
     }
 }

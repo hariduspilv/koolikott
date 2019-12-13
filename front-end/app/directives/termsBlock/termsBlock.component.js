@@ -22,10 +22,14 @@
             this.$scope.isSaving = true
 
             if (this.$scope.notifyOfGDPRUpdate) {
-                this.createAgreement()
+                this.createAgreement(term)
                 this.$scope.notifyOfGDPRUpdate = false
+            } else {
+                this.saveTerm(term)
             }
+        }
 
+        saveTerm(term) {
             this.termsService.saveTerm(term)
                 .then(response => {
                     if (response.status === 200) {
@@ -97,11 +101,12 @@
 
         }
 
-        createAgreement() {
+        createAgreement(term) {
             this.serverCallService
-                .makePost('rest/admin/agreement', {url: '/terms', version: 1, validFrom: new Date})
+                .makePost('rest/admin/agreement', {type: 'TERM'})
                 .then((response) => {
                     if (response.status === 200) {
+                        this.saveTerm(term)
                         console.log('agreement added')
                     }
                     else {

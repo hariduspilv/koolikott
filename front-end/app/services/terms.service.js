@@ -6,11 +6,12 @@
         }
 
         saveTerm(term) {
+            term.type = 'TERM'
             return this.serverCallService.makePost('rest/terms', term)
         }
 
         getTerm() {
-            return this.serverCallService.makeGet('rest/terms')
+            return this.serverCallService.makeGet('rest/terms/terms')
         }
 
         deleteTerm(term) {

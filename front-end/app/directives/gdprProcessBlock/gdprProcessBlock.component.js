@@ -22,24 +22,11 @@
             this.$scope.isSaving = true
 
             if (this.$scope.notifyOfGDPRUpdate) {
-                this.createAgreement()
+                this.createAgreement(term)
                 this.$scope.notifyOfGDPRUpdate = false
+            } else {
+                this.saveTerm(term)
             }
-
-            this.gdprProcessService.saveTerm(term)
-                .then(response => {
-                    if (response.status === 200) {
-                        this.createDialogOpen = false
-                        this.$scope.isSaving = false
-                        term.edit = !term.edit
-                        this.getTerms()
-                        this.toastService.show('TERMS_SAVED')
-                    } else {
-                        this.$scope.isSaving = false
-                        this.toastService.show('TERMS_SAVE_FAILED')
-                    }
-                })
-            this.$scope.isSaving = false
         }
 
         getCurrentLanguage() {
@@ -97,11 +84,29 @@
 
         }
 
-        createAgreement() {
+        saveTerm(term) {
+            this.gdprProcessService.saveTerm(term)
+                .then(response => {
+                    if (response.status === 200) {
+                        this.createDialogOpen = false
+                        this.$scope.isSaving = false
+                        term.edit = !term.edit
+                        this.getTerms()
+                        this.toastService.show('TERMS_SAVED')
+                    } else {
+                        this.$scope.isSaving = false
+                        this.toastService.show('TERMS_SAVE_FAILED')
+                    }
+                })
+            this.$scope.isSaving = false
+        }
+
+        createAgreement(term) {
             this.serverCallService
-                .makePost('rest/admin/agreement', {url: '/gdpr-process', version: 1, validFrom: new Date})
+                .makePost('rest/admin/agreement', {type: 'GDPR'})
                 .then((response) => {
                     if (response.status === 200) {
+                        this.saveTerm(term)
                         console.log('agreement added')
                     }
                     else {

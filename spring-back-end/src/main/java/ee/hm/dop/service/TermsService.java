@@ -1,10 +1,10 @@
 package ee.hm.dop.service;
 
+import ee.hm.dop.dao.AgreementDao;
 import ee.hm.dop.dao.TermsDao;
-import ee.hm.dop.dao.TermsDao;
-import ee.hm.dop.model.Terms;
 import ee.hm.dop.model.Terms;
 import ee.hm.dop.model.User;
+import ee.hm.dop.model.enums.TermType;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +23,8 @@ public class TermsService {
 
     @Inject
     private TermsDao termsDao;
+    @Inject
+    private AgreementDao agreementDao;
 
     public List<Terms> findAllTerms() {
         return termsDao.findAll();
@@ -31,8 +33,28 @@ public class TermsService {
     public Terms save(Terms terms, User user) {
         mustBeAdmin(user);
         validateTerms(terms);
-        terms.setCreatedAt(LocalDateTime.now());
-        return termsDao.createOrUpdate(terms);
+        Terms termToSave = createNewTerms(terms, user);
+
+        if (terms.getType().equals(TermType.GDPR)) {
+            termToSave.setAgreement(agreementDao.findLatestGdprTermsAgreement());
+        } else if (terms.getType().equals(TermType.TERM)) {
+            termToSave.setAgreement(agreementDao.findLatestTermsAgreement());
+        }
+        return termsDao.createOrUpdate(termToSave);
+    }
+
+    private Terms createNewTerms(Terms terms, User user) {
+        Terms newTerms = new Terms();
+        newTerms.setCreatedBy(user);
+        newTerms.setCreatedAt(LocalDateTime.now());
+        newTerms.setContentEng(terms.getContentEng());
+        newTerms.setContentEst(terms.getContentEst());
+        newTerms.setContentRus(terms.getContentRus());
+        newTerms.setTitleEng(terms.getTitleEng());
+        newTerms.setTitleEst(terms.getTitleEst());
+        newTerms.setTitleRus(terms.getTitleRus());
+        newTerms.setType(terms.getType());
+        return newTerms;
     }
 
     public void delete(Terms terms, User loggedInUser) {
@@ -52,5 +74,13 @@ public class TermsService {
         if (isBlank(terms.getContentEst())) throw badRequest("Content Est is Empty");
         if (isBlank(terms.getContentEng())) throw badRequest("Content Eng is Empty");
         if (isBlank(terms.getContentRus())) throw badRequest("Content Rus is Empty");
+    }
+
+    public List<Terms> getGdprTerms() {
+        return termsDao.getGdprTerms();
+    }
+
+    public List<Terms> getTerms() {
+        return termsDao.getTerms();
     }
 }

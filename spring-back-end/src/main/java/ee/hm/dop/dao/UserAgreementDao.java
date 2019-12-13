@@ -1,6 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.User_Agreement;
+import ee.hm.dop.model.enums.TermType;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -25,20 +26,21 @@ public class UserAgreementDao extends AbstractDao<User_Agreement> {
     }
 
     public User_Agreement getLatestTermsAgreementForUser(Long userId) {
-        return getUserAgreementForUser(userId, TERMS_AGREEMENT_URL);
+        return getUserAgreementForUser(userId, TermType.TERM, TERMS_AGREEMENT_URL);
     }
 
     public User_Agreement getLatestGdprTermsAgreementForUser(Long userId) {
-        return getUserAgreementForUser(userId, PERSONAL_DATA_AGREEMENT_URL);
+        return getUserAgreementForUser(userId, TermType.GDPR, PERSONAL_DATA_AGREEMENT_URL);
     }
 
-    private User_Agreement getUserAgreementForUser(Long userId, String url) {
+    private User_Agreement getUserAgreementForUser(Long userId, TermType type, String url) {
         return getSingleResult(getEntityManager().createQuery("select ua from User_Agreement ua " +
                 "join Agreement a on ua.agreement = a.id " +
-                "where a.url = :url " +
+                "where (a.type = :type or a.url = :url)" +
                 "and ua.user.id = :user order by ua.createdAt desc", entity())
-                .setParameter("user", userId)
+                .setParameter("type", type)
                 .setParameter("url", url)
+                .setParameter("user", userId)
                 .setMaxResults(1));
     }
 }

@@ -6,15 +6,16 @@
         }
 
         saveTerm(term) {
-            return this.serverCallService.makePost('rest/gdprProcessing', term)
+            term.type = 'GDPR'
+            return this.serverCallService.makePost('rest/terms', term)
         }
 
         getTerms() {
-            return this.serverCallService.makeGet('rest/gdprProcessing')
+            return this.serverCallService.makeGet('rest/terms/gdpr')
         }
 
         deleteTerm(term) {
-            return this.serverCallService.makePost('rest/gdprProcessing/delete', term)
+            return this.serverCallService.makePost('rest/terms/delete', term)
         }
     }
 
