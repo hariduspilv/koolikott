@@ -1,12 +1,10 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.*;
-import ee.hm.dop.model.enums.ReportingReasonEnum;
 import org.springframework.stereotype.Repository;
 
 import javax.inject.Inject;
 import java.math.BigInteger;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -96,37 +94,25 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
 
     public List<ImproperContentDto> findImproperForOwner(Long learningObjectId) {
         List<ImproperContent> improperReports = findByLearningObjectId(learningObjectId);
-        List<ImproperContentDto> improperContentOwner = new ArrayList<>();
-
-        for (ImproperContent improperContent : improperReports) {
-            ImproperContentDto improperContentDto = new ImproperContentDto();
-            improperContentDto.setId(improperContent.getId());
-            improperContentDto.setReportingReasons(improperContent.getReportingReasons());
-            improperContentDto.setReportingText(improperContent.getReportingText());
-            improperContentDto.setReviewed(improperContent.isReviewed());
-            improperContentOwner.add(improperContentDto);
-        }
-        return improperContentOwner;
+        return improperReports.stream()
+                .map(r -> new ImproperContentDto(r.getId(), r.isReviewed(), r.getReportingText(), r.getReportingReasons()))
+                .collect(Collectors.toList());
     }
 
     public List<ImproperContentDto> findImproperForUser(Long learningObjectId) {
         List<ImproperContentDto> allImproperReports = findImproperForOwner(learningObjectId);
-        List<ImproperContentDto> improperReportsUser = new ArrayList<>();
 
-        for (ImproperContentDto report : allImproperReports) {
-            List<ReportingReason> reportsToRemove = new ArrayList<>();
-            for (ReportingReason reason : report.getReportingReasons()) {
-                if (reason.getReason().equals(ReportingReasonEnum.LO_COPYRIGHT)) {
-                    reportsToRemove.add(reason);
-                }
-            }
-            if (!reportsToRemove.isEmpty()) {
-                report.setReportingText(null);
-                report.getReportingReasons().removeAll(reportsToRemove);
-            }
-            improperReportsUser.add(report);
-        }
+        allImproperReports.stream()
+                .filter(r-> r.getReportingReasons().stream().anyMatch(this::isCopyRight))
+                .forEach(r -> {
+                    r.setReportingText(null);
+                    r.getReportingReasons().removeIf(this::isCopyRight);
+                });
 
-        return improperReportsUser;
+        return allImproperReports;
+    }
+
+    private boolean isCopyRight(ReportingReason rr) {
+        return rr.getReason().isLoCopyright();
     }
 }
