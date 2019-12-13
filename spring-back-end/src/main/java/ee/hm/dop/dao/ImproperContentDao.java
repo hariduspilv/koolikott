@@ -8,6 +8,8 @@ import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static org.apache.commons.collections4.CollectionUtils.isNotEmpty;
+
 @Repository
 public class ImproperContentDao extends AbstractDao<ImproperContent> {
 
@@ -109,7 +111,9 @@ public class ImproperContentDao extends AbstractDao<ImproperContent> {
                     r.getReportingReasons().removeIf(this::isCopyRight);
                 });
 
-        return allImproperReports;
+        return allImproperReports.stream()
+                .filter(r -> isNotEmpty(r.getReportingReasons()))
+                .collect(Collectors.toList());
     }
 
     private boolean isCopyRight(ReportingReason rr) {
