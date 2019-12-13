@@ -18,9 +18,9 @@
             <span data-translate="AGREEMENT_REQUIRED"></span>
           </md-checkbox>
           <br>
-          <md-checkbox ng-show="notAgreedToGdprTermsAgreement" ng-model="licensesAgreed" value="false">
-            <span data-translate="AGREE_TO"></span>
-              <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, licensesLink)"><strong data-translate="WITH_LICENSES"></strong></a>
+          <md-checkbox ng-show="notAgreedToGdprTermsAgreement" ng-model="gdprProcessAgreed" value="false">
+            <span data-translate="AGREE_TO_GDPR"></span>
+              <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, gdprProcessLink)"><strong data-translate="GDPR_TERMS"></strong></a>
             <span data-translate="AGREEMENT_REQUIRED"></span>
           </md-checkbox>
         </div>
