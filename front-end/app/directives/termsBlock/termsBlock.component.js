@@ -107,7 +107,6 @@
                 .then((response) => {
                     if (response.status === 200) {
                         this.saveTerm(term)
-                        console.log('agreement added')
                     }
                     else {
                         this.toastService.show('GDPR_NOTIFY_FAILED')
