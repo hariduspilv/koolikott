@@ -129,12 +129,6 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
-                .when('/toolaud/gdpr', {
-                    templateUrl: 'views/gdpr/gdpr.html',
-                    controller: 'gdprController',
-                    controllerAs: '$ctrl',
-                    permissions: ['ADMIN']
-                })
                 .when('/toolaud/videojuhendid', {
                     templateUrl: 'views/userManualsAdmin/userManualsAdmin.html',
                     controller: 'userManualsAdminController',

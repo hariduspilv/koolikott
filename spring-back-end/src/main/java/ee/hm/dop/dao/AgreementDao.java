@@ -9,13 +9,6 @@ import java.util.List;
 @Repository
 public class AgreementDao extends AbstractDao<Agreement> {
 
-    public List<Agreement> getValidAgreements() {
-        return getList(entityManager
-                .createQuery("select a from Agreement a " +
-                        "where a.deleted = false " +
-                        "order by a.validFrom desc, a.id desc", entity()));
-    }
-
     public Agreement findLatestAgreement() {
         return getSingleResult(entityManager
                 .createQuery("select a from Agreement a " +
@@ -24,16 +17,6 @@ public class AgreementDao extends AbstractDao<Agreement> {
                         "order by a.validFrom desc, a.id desc", entity())
                 .setParameter("validFrom", LocalDateTime.now())
                 .setMaxResults(1));
-    }
-
-    public List<Agreement> findMatchingAgreements(Agreement agreement) {
-        return getList(entityManager
-                .createQuery("select a from Agreement a " +
-                        "where a.validFrom = :validFrom " +
-                        "and a.version = :version " +
-                        "and a.deleted = false", entity())
-                .setParameter("validFrom", agreement.getValidFrom())
-                .setParameter("version", agreement.getVersion()));
     }
 
     public Agreement findMatchingDeletedAgreement(Agreement agreement) {
