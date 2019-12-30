@@ -11,10 +11,8 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.inject.Inject;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 
 import static ee.hm.dop.utils.UserUtil.mustBeAdmin;
-import static org.apache.commons.collections4.CollectionUtils.isEmpty;
 
 @Service
 @Transactional
@@ -22,20 +20,6 @@ public class AgreementService {
 
     @Inject
     private AgreementDao agreementDao;
-
-    public List<Agreement> findAllValid(User user) {
-        mustBeAdmin(user);
-        return agreementDao.getValidAgreements();
-    }
-
-    public boolean isValid(Agreement agreement, User user) {
-        mustBeAdmin(user);
-        if (agreement.getVersion() == null || agreement.getValidFrom() == null) {
-            return false;
-        }
-        agreement.setValidFrom(agreement.getValidFrom().truncatedTo(ChronoUnit.DAYS));
-        return isEmpty(agreementDao.findMatchingAgreements(agreement));
-    }
 
     public Agreement save(Agreement agreement, User user) {
         mustBeAdmin(user);
@@ -56,12 +40,4 @@ public class AgreementService {
         return newAgreement;
     }
 
-    public void deleteAgreement(Agreement agreement, User user) {
-        mustBeAdmin(user);
-        Agreement dbAgreement = agreementDao.findById(agreement.getId());
-        if (dbAgreement != null) {
-            dbAgreement.setDeleted(true);
-            agreementDao.createOrUpdate(dbAgreement);
-        }
-    }
 }
