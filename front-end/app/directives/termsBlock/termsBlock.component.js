@@ -30,6 +30,7 @@
         }
 
         saveTerm(term) {
+            term.type = 'USAGE'
             this.termsService.saveTerm(term)
                 .then(response => {
                     if (response.status === 200) {

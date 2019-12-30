@@ -13,7 +13,7 @@ public class TermsDao extends AbstractDao<Terms> {
         return getTermsByType(TermType.GDPR);
     }
 
-    public List<Terms> getTerms() {
+    public List<Terms> getUserTerms() {
         return getTermsByType(TermType.USAGE);
     }
 

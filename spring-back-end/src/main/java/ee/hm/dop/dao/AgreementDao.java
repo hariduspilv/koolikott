@@ -8,11 +8,11 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AgreementDao extends AbstractDao<Agreement> {
 
-    private static final String TERMS_AGREEMENT_URL = "/terms";
+    private static final String USER_TERMS_AGREEMENT_URL = "/terms";
     private static final String GDRP_TERM_AGREEMENT_URL = "/gdpr-process";
 
-    public Agreement findLatestTermsAgreement() {
-        return findLatestAgreement(TermType.USAGE, TERMS_AGREEMENT_URL);
+    public Agreement findLatestUserTermsAgreement() {
+        return findLatestAgreement(TermType.USAGE, USER_TERMS_AGREEMENT_URL);
     }
 
     public Agreement findLatestGdprTermsAgreement() {

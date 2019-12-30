@@ -24,6 +24,8 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 @Transactional
 public class UserEmailService {
 
+    private static final int MAXIMUM_MESSAGE_LENGTH = 1000;
+
     @Inject
     private UserEmailDao userEmailDao;
     @Inject
@@ -53,7 +55,7 @@ public class UserEmailService {
 
     public EmailToCreator sendEmailForCreator(EmailToCreator emailToCreator, User userSender) {
         if (isBlank(emailToCreator.getMessage())) throw badRequest("Message is empty");
-        if(emailToCreator.getMessage().length() > 1000){
+        if(emailToCreator.getMessage().length() > MAXIMUM_MESSAGE_LENGTH){
             throw badRequest("Message is too long");
         }
         verifyLOCreator(emailToCreator);
@@ -125,7 +127,7 @@ public class UserEmailService {
     public UserEmail validatePin(UserEmail userEmail) {
         UserEmail dbUserEmail = validateAndActivateEmail(userEmail);
         agreeToAgreement(userAgreementDao.getLatestGdprTermsAgreementForUser(userEmail.getUser().getId()));
-        agreeToAgreement(userAgreementDao.getLatestTermsAgreementForUser(userEmail.getUser().getId()));
+        agreeToAgreement(userAgreementDao.getLatestUserTermsAgreementForUser(userEmail.getUser().getId()));
 
         return userEmailDao.createOrUpdate(dbUserEmail);
     }

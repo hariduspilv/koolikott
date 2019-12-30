@@ -25,7 +25,7 @@ public class UserAgreementDao extends AbstractDao<User_Agreement> {
                 .setMaxResults(1)) != null;
     }
 
-    public User_Agreement getLatestTermsAgreementForUser(Long userId) {
+    public User_Agreement getLatestUserTermsAgreementForUser(Long userId) {
         return getUserAgreementForUser(userId, TermType.USAGE, TERMS_AGREEMENT_URL);
     }
 

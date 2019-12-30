@@ -26,10 +26,6 @@ public class TermsService {
     @Inject
     private AgreementDao agreementDao;
 
-    public List<Terms> findAllTerms() {
-        return termsDao.findAll();
-    }
-
     public Terms save(Terms terms, User user) {
         mustBeAdmin(user);
         validateTerms(terms);
@@ -38,7 +34,7 @@ public class TermsService {
         if (terms.getType().equals(TermType.GDPR)) {
             termToSave.setAgreement(agreementDao.findLatestGdprTermsAgreement());
         } else if (terms.getType().equals(TermType.USAGE)) {
-            termToSave.setAgreement(agreementDao.findLatestTermsAgreement());
+            termToSave.setAgreement(agreementDao.findLatestUserTermsAgreement());
         }
         return termsDao.createOrUpdate(termToSave);
     }
@@ -80,7 +76,16 @@ public class TermsService {
         return termsDao.getGdprTerms();
     }
 
-    public List<Terms> getTerms() {
-        return termsDao.getTerms();
+    public List<Terms> getUserTerms() {
+        return termsDao.getUserTerms();
+    }
+
+    public List<Terms> getTerms(String termType) {
+        if (termType.equals(TermType.USAGE.name())) {
+            return getUserTerms();
+        } else if (termType.equals(TermType.GDPR.name())) {
+            return getGdprTerms();
+        }
+        throw badRequest("Term type does not exist");
     }
 }

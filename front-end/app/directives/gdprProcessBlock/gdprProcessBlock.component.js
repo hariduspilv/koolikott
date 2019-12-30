@@ -61,16 +61,16 @@
             }
             this.createDialogOpen = false
             this.$scope.notifyOfGDPRUpdate = false
-            this.getTerms()
+            this.getGdprTerms()
         }
 
         delete(term) {
             this.dialogService.showDeleteConfirmationDialog(
                 'ARE_YOU_SURE_DELETE',
                 '',
-                () => this.gdprProcessService.deleteTerm(term)
+                () => this.termsService.deleteTerm(term)
                     .then(() => {
-                        this.getTerms()
+                        this.getGdprTerms()
                         this.toastService.show('TERM_DELETED')
                         this.createDialogOpen = false
                     })
@@ -85,13 +85,14 @@
         }
 
         saveTerm(term) {
-            this.gdprProcessService.saveTerm(term)
+            term.type = 'GDPR'
+            this.termsService.saveTerm(term)
                 .then(response => {
                     if (response.status === 200) {
                         this.createDialogOpen = false
                         this.$scope.isSaving = false
                         term.edit = !term.edit
-                        this.getTerms()
+                        this.getGdprTerms()
                         this.toastService.show('TERMS_SAVED')
                     } else {
                         this.$scope.isSaving = false
@@ -123,7 +124,7 @@
         'dialogService',
         'serverCallService',
         'translationService',
-        'gdprProcessService',
+        'termsService',
         'toastService',
     ]
     component('dopGdprProcessBlock', {
@@ -131,7 +132,7 @@
             terms: '<',
             editMode: '<',
             removeTerm: '&',
-            getTerms: '&',
+            getGdprTerms: '&',
             createDialogOpen: '='
 
         },
