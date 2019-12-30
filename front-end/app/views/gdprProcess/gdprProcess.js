@@ -4,7 +4,7 @@
     class controller extends Controller {
         constructor(...args) {
             super(...args)
-            this.getTerms()
+            this.getGdprTerms()
             this.initNewTerm()
             this.$scope.editMode = false
             this.$translate('PERSONAL_DATA_TAB').then((translation) => this.$rootScope.tabTitle = translation);
@@ -26,12 +26,17 @@
         }
 
         isAdmin() {
-            return this.authenticatedUserService.isAdmin()
+            if (this.authenticatedUserService.isAdmin()) {
+                this.$scope.editMode = true
+                return true
+            }
+            return false
         }
 
-        getTerms() {
-            this.gdprProcessService.getTerms()
+        getGdprTerms() {
+            this.termsService.getGdprTerms()
                 .then(({data}) => {
+                    this.gdprTermsBlockExists = data.length;
                     for (const term of data) {
                         term.termLanguages = ['ET', 'EN', 'RU'];
                         term.activeTermLanguage = term.termLanguages[0];
@@ -45,6 +50,7 @@
         }
 
         createTerm() {
+            this.$scope.editMode = true
             this.$scope.terms.push(this.$scope.newTerm)
             this.initNewTerm()
             this.createDialogOpen = true
@@ -65,7 +71,7 @@
         '$rootScope',
         '$translate',
         'authenticatedUserService',
-        'gdprProcessService',
+        'termsService',
         '$timeout'
     ]
     angular.module('koolikottApp').controller('gdprProcessController', controller)

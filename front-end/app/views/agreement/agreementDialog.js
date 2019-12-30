@@ -19,7 +19,7 @@
 
             this.$scope.$watch(
                 () => {
-                    this.$scope.notAgreedToTermsAgreement = this.$rootScope.statusForDuplicateCheck.termsAgreement;
+                    this.$scope.notAgreedToTermsAgreement = this.$rootScope.statusForDuplicateCheck.userTermsAgreement;
                     this.$scope.notAgreedToGdprTermsAgreement = this.$rootScope.statusForDuplicateCheck.gdprTermsAgreement;
                 }
             )

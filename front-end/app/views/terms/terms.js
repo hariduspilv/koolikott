@@ -26,12 +26,17 @@
         }
 
         isAdmin() {
-            return this.authenticatedUserService.isAdmin()
+            if (this.authenticatedUserService.isAdmin()) {
+                this.$scope.editMode = true
+                return true
+            }
+            return false
         }
 
         getTerms() {
             this.termsService.getTerms()
                 .then(({data}) => {
+                    this.termsBlockExists = data.length;
                     for (const term of data) {
                         term.termLanguages = ['ET', 'EN', 'RU'];
                         term.activeTermLanguage = term.termLanguages[0];
@@ -45,6 +50,7 @@
         }
 
         createTerm() {
+            this.$scope.editMode = true
             this.$scope.terms.push(this.$scope.newTerm)
             this.initNewTerm()
             this.createDialogOpen = true

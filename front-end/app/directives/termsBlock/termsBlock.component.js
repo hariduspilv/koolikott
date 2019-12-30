@@ -7,7 +7,7 @@
             this.termLanguages = ['ET', 'EN', 'RU']
             this.$scope.activeTermLanguages = this.termLanguages[0]
             this.getCurrentLanguage()
-            this.$scope.notifyOfGDPRUpdate = false
+            this.$scope.notifyOfGDPRUpdate = !this.blockExists()
         }
 
         notifyOfGDPRUpdate() {
@@ -53,6 +53,10 @@
 
         isTermsEditMode() {
             return this.editMode
+        }
+
+        blockExists() {
+            return this.userTermsBlockExists
         }
 
         isCreateDialogOpen() {
@@ -131,6 +135,7 @@
         bindings: {
             terms: '<',
             editMode: '<',
+            userTermsBlockExists: '<',
             removeTerm: '&',
             getTerms: '&',
             createDialogOpen: '='

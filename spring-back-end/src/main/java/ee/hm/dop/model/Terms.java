@@ -1,5 +1,6 @@
 package ee.hm.dop.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.enums.TermType;
@@ -49,4 +50,8 @@ public class Terms implements AbstractEntity{
 
     @Enumerated(EnumType.STRING)
     private TermType type;
+
+    @JsonIgnore
+    @Column
+    private boolean deleted;
 }

@@ -36,7 +36,12 @@ public class TermsService {
         } else if (terms.getType().equals(TermType.USAGE)) {
             termToSave.setAgreement(agreementDao.findLatestUserTermsAgreement());
         }
+        deletePreviousTerms(termToSave.getType());
         return termsDao.createOrUpdate(termToSave);
+    }
+
+    private void deletePreviousTerms(TermType type) {
+        termsDao.deletePreviousTerms(type);
     }
 
     private Terms createNewTerms(Terms terms, User user) {
@@ -56,7 +61,8 @@ public class TermsService {
     public void delete(Terms terms, User loggedInUser) {
         mustBeAdmin(loggedInUser);
         Terms dbTerms = termsDao.findById(terms.getId());
-        termsDao.remove(dbTerms);
+        dbTerms.setDeleted(true);
+        termsDao.createOrUpdate(dbTerms);
     }
 
     private ResponseStatusException badRequest(String s) {

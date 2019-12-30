@@ -132,8 +132,12 @@ public class LoginService {
         if (user == null) {
             return;
         }
-        rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getUserTermsAgreement().getId()));
-        rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getGdprTermsAgreement().getId()));
+        if (userStatus.getUserTermsAgreement() != null) {
+            rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getUserTermsAgreement().getId()));
+        }
+        if (userStatus.getGdprTermsAgreement() != null) {
+            rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getGdprTermsAgreement().getId()));
+        }
     }
 
     private void rejectAgreementIfDoesntExists(User user, Agreement agreement) {
