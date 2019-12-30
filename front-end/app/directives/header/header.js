@@ -213,8 +213,8 @@ class controller extends Controller {
                 this.dialogService.showConfirmationDialog(
                     "{{'PORTFOLIO_MAKE_PUBLIC' | translate}}",
                     "{{'PORTFOLIO_WARNING' | translate}}",
-                    "{{'PORTFOLIO_YES' | translate}}",
-                    "{{'PORTFOLIO_NO' | translate}}",
+                    "{{'MATERIAL_YES' | translate}}",
+                    "{{'MATERIAL_NO' | translate}}",
                     () => {
                         this.storageService.getPortfolio().visibility = VISIBILITY_PUBLIC
                         this.saveAndExit()
