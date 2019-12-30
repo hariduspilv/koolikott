@@ -8,7 +8,7 @@
             this.$scope.validEmail = VALID_EMAIL
             this.$scope.isSaving = false
             this.$scope.termsLink = '/kasutustingimused'
-            this.$scope.licensesLink = '/litsentsitingimused'
+            this.$scope.gdprProcessLink = '/isikuandmete-tootlemine'
 
             this.unsubscribeRouteChangeSuccess = this.$rootScope.$on('$routeChangeSuccess', () => this.$mdDialog.hide())
             this.$scope.$watch(
@@ -16,6 +16,13 @@
                 (newValue, oldValue) => newValue === true && this.$mdDialog.hide(),
                 false
             );
+
+            this.$scope.$watch(
+                () => {
+                    this.$scope.notAgreedToTermsAgreement = this.$rootScope.statusForDuplicateCheck.termsAgreement;
+                    this.$scope.notAgreedToGdprTermsAgreement = this.$rootScope.statusForDuplicateCheck.gdprTermsAgreement;
+                }
+            )
 
             this.$scope.$watch('agreementDialogEmail', () => {
                 if (!this.$rootScope.userHasEmailOnLogin)
@@ -64,7 +71,9 @@
         }
 
         notAgreedToTerms() {
-            return !this.$scope.licensesAgreed || !this.$scope.termsAgreed
+            return (this.$scope.notAgreedToTermsAgreement && this.$scope.notAgreedToGdprTermsAgreement) ? (!this.$scope.termsAgreed || !this.$scope.gdprProcessAgreed) :
+                this.$scope.notAgreedToTermsAgreement ? !this.$scope.termsAgreed :
+                    this.$scope.notAgreedToGdprTermsAgreement ? !this.$scope.gdprProcessAgreed : false
         }
 
         isSubmitDisabled() {

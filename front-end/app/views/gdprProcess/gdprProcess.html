@@ -1,8 +1,8 @@
 <div data-layout="row" data-layout-align="end">
   <md-button style="min-width: 0px"
              data-ng-if="$ctrl.isAdmin() && !editMode"
-             data-ng-click="$ctrl.editTermsPage()"
-             id="term-edit">
+             data-ng-click="$ctrl.editGdprProcessPage()"
+             id="gdprProcess-edit">
     <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
     <md-tooltip><span data-translate="TERMS_EDIT"></span></md-tooltip>
   </md-button>
@@ -11,18 +11,18 @@
              aria-label="Add Term"
              data-ng-if="$ctrl.isAdmin() && editMode"
              ng-disabled="$ctrl.createDialogOpen"
-             id="termsEditButton"
+             id="gdprProcessEditButton"
   >
     <md-icon>add_circle</md-icon>
-    <span data-translate="ADD_TERMS"></span>
+    <span data-translate="ADD_TERM"></span>
   </md-button>
 </div>
 <div>
-  <dop-terms-block
+  <dop-gdpr-process-block
     data-create-dialog-open="$ctrl.createDialogOpen"
     data-edit-mode="editMode"
     data-terms="terms"
     data-remove-term="$ctrl.removeTerm()"
-    data-get-terms="$ctrl.getTerms()">
-  </dop-terms-block>
+    data-get-gdpr-terms="$ctrl.getGdprTerms()">
+  </dop-gdpr-process-block>
 </div>

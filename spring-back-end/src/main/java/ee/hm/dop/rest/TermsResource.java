@@ -16,10 +16,9 @@ public class TermsResource extends BaseResource {
     @Inject
     private TermsService termsService;
 
-    @GetMapping
-    @RequestMapping
-    public List<Terms> getFaqs() {
-        return termsService.findAllTerms();
+    @GetMapping()
+    public List<Terms> getTerms(@RequestParam("type") String termType) {
+        return termsService.getTerms(termType);
     }
 
     @PostMapping

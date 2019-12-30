@@ -30,7 +30,7 @@
         }
 
         getTerms() {
-            this.termsService.getTerm()
+            this.termsService.getTerms()
                 .then(({data}) => {
                     for (const term of data) {
                         term.termLanguages = ['ET', 'EN', 'RU'];
@@ -64,11 +64,9 @@
         '$scope',
         '$rootScope',
         '$translate',
-        'serverCallService',
         'authenticatedUserService',
         'termsService',
         '$timeout',
-        '$route'
     ]
     angular.module('koolikottApp').controller('termsController', controller)
 }

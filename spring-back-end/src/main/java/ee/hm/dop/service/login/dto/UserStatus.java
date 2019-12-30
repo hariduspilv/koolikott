@@ -1,8 +1,13 @@
 package ee.hm.dop.service.login.dto;
 
+import ee.hm.dop.model.Agreement;
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.model.enums.LoginFrom;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 public class UserStatus {
 
     private boolean eKoolUserMissingIdCode;
@@ -12,24 +17,47 @@ public class UserStatus {
     private boolean existingUser;
     private boolean userConfirmed;
     private String token;
-    private Long agreementId;
+    private Agreement userTermsAgreement;
+    private Agreement gdprTermsAgreement;
     private AuthenticatedUser authenticatedUser;
     private LoginFrom loginFrom;
 
-    public static UserStatus missingPermissionsNewUser(String token, Long agreementId, LoginFrom loginFrom) {
+    public static UserStatus missingPermissionsNewUser(String token, Agreement userTermsAgreement, Agreement gdprTermsAgreement, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
-        status.setAgreementId(agreementId);
+        status.setUserTermsAgreement(userTermsAgreement);
+        status.setGdprTermsAgreement(gdprTermsAgreement);
         status.setLoginFrom(loginFrom);
         return status;
     }
 
-    public static UserStatus missingPermissionsExistingUser(String token, Long agreementId, LoginFrom loginFrom) {
+    public static UserStatus missingPermissionsExistingUser(String token, Agreement userTermsAgreement, Agreement gdprTermsAgreement, LoginFrom loginFrom) {
         UserStatus status = new UserStatus();
         status.setStatusOk(false);
         status.setToken(token);
-        status.setAgreementId(agreementId);
+        status.setUserTermsAgreement(userTermsAgreement);
+        status.setGdprTermsAgreement(gdprTermsAgreement);
+        status.setExistingUser(true);
+        status.setLoginFrom(loginFrom);
+        return status;
+    }
+
+    public static UserStatus missingTermsAgreement(String token, Agreement userTermsAgreement, LoginFrom loginFrom) {
+        UserStatus status = new UserStatus();
+        status.setStatusOk(false);
+        status.setToken(token);
+        status.setUserTermsAgreement(userTermsAgreement);
+        status.setExistingUser(true);
+        status.setLoginFrom(loginFrom);
+        return status;
+    }
+
+    public static UserStatus missingGdprTermsAgreement(String token, Agreement gdprTermsAgreement, LoginFrom loginFrom) {
+        UserStatus status = new UserStatus();
+        status.setStatusOk(false);
+        status.setToken(token);
+        status.setGdprTermsAgreement(gdprTermsAgreement);
         status.setExistingUser(true);
         status.setLoginFrom(loginFrom);
         return status;
@@ -44,7 +72,7 @@ public class UserStatus {
 
     public static UserStatus missingEkoolIdCode() {
         UserStatus userStatus = new UserStatus();
-        userStatus.seteKoolUserMissingIdCode(true);
+        userStatus.setEKoolUserMissingIdCode(true);
         return userStatus;
     }
 
@@ -58,85 +86,5 @@ public class UserStatus {
         UserStatus userStatus = new UserStatus();
         userStatus.setHarIdUserMissingIdCode(true);
         return userStatus;
-    }
-
-    public boolean isStatusOk() {
-        return statusOk;
-    }
-
-    public void setStatusOk(boolean statusOk) {
-        this.statusOk = statusOk;
-    }
-
-    public boolean iseKoolUserMissingIdCode() {
-        return eKoolUserMissingIdCode;
-    }
-
-    public boolean isStuudiumUserMissingIdCode() {
-        return stuudiumUserMissingIdCode;
-    }
-
-    public void seteKoolUserMissingIdCode(boolean eKoolUserMissingIdCode) {
-        this.eKoolUserMissingIdCode = eKoolUserMissingIdCode;
-    }
-
-    public void setStuudiumUserMissingIdCode(boolean stuudiumUserMissingIdCode) {
-        this.stuudiumUserMissingIdCode = stuudiumUserMissingIdCode;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
-    }
-
-    public Long getAgreementId() {
-        return agreementId;
-    }
-
-    public void setAgreementId(Long agreementId) {
-        this.agreementId = agreementId;
-    }
-
-    public AuthenticatedUser getAuthenticatedUser() {
-        return authenticatedUser;
-    }
-
-    public void setAuthenticatedUser(AuthenticatedUser authenticatedUser) {
-        this.authenticatedUser = authenticatedUser;
-    }
-
-    public boolean isUserConfirmed() {
-        return userConfirmed;
-    }
-
-    public void setUserConfirmed(boolean userConfirmed) {
-        this.userConfirmed = userConfirmed;
-    }
-
-    public boolean isExistingUser() {
-        return existingUser;
-    }
-
-    public void setExistingUser(boolean existingUser) {
-        this.existingUser = existingUser;
-    }
-
-    public LoginFrom getLoginFrom() {
-        return loginFrom;
-    }
-
-    public void setLoginFrom(LoginFrom loginFrom) {
-        this.loginFrom = loginFrom;
-    }
-
-    public boolean isHarIdUserMissingIdCode() {
-        return harIdUserMissingIdCode;
-    }
-
-    public void setHarIdUserMissingIdCode(boolean harIdUserMissingIdCode) {
-        this.harIdUserMissingIdCode = harIdUserMissingIdCode;
     }
 }

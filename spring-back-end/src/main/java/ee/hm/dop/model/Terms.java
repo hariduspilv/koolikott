@@ -2,13 +2,18 @@ package ee.hm.dop.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.TermType;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 public class Terms implements AbstractEntity{
 
     @Id
@@ -34,67 +39,14 @@ public class Terms implements AbstractEntity{
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime createdAt;
 
-    public Long getId() {
-        return id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "createdBy", nullable = false)
+    private User createdBy;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    @ManyToOne
+    @JoinColumn(name = "agreement", nullable = false)
+    private Agreement agreement;
 
-    public String getTitleEst() {
-        return titleEst;
-    }
-
-    public void setTitleEst(String titleEst) {
-        this.titleEst = titleEst;
-    }
-
-    public String getTitleRus() {
-        return titleRus;
-    }
-
-    public void setTitleRus(String titleRus) {
-        this.titleRus = titleRus;
-    }
-
-    public String getTitleEng() {
-        return titleEng;
-    }
-
-    public void setTitleEng(String titleEng) {
-        this.titleEng = titleEng;
-    }
-
-    public String getContentEst() {
-        return contentEst;
-    }
-
-    public void setContentEst(String contentEst) {
-        this.contentEst = contentEst;
-    }
-
-    public String getContentRus() {
-        return contentRus;
-    }
-
-    public void setContentRus(String contentRus) {
-        this.contentRus = contentRus;
-    }
-
-    public String getContentEng() {
-        return contentEng;
-    }
-
-    public void setContentEng(String contentEng) {
-        this.contentEng = contentEng;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
+    @Enumerated(EnumType.STRING)
+    private TermType type;
 }

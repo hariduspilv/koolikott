@@ -3,14 +3,18 @@ package ee.hm.dop.model;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import ee.hm.dop.model.enums.TermType;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
+import lombok.Getter;
+import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
+@Getter
+@Setter
 public class Agreement implements AbstractEntity{
 
     @Id
@@ -18,13 +22,6 @@ public class Agreement implements AbstractEntity{
     private Long id;
 
     @Column(nullable = false)
-
-    @JsonSerialize(using = DateTimeSerializer.class)
-    @JsonDeserialize(using = DateTimeDeserializer.class)
-    private LocalDateTime validFrom;
-
-    @Column(nullable = false)
-
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
     private LocalDateTime createdAt;
@@ -34,69 +31,17 @@ public class Agreement implements AbstractEntity{
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private User createdBy;
 
-    @Column(nullable = false)
-    private String version;
-
     @Column
     private String url;
 
     @Column(nullable = false)
     private boolean deleted;
 
+    @Enumerated(EnumType.STRING)
+    private TermType type;
+
     @Override
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public LocalDateTime getValidFrom() {
-        return validFrom;
-    }
-
-    public void setValidFrom(LocalDateTime validFrom) {
-        this.validFrom = validFrom;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
-    }
-
-    public String getVersion() {
-        return version;
-    }
-
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public boolean isDeleted() {
-        return deleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        this.deleted = deleted;
     }
 }

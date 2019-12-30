@@ -9,8 +9,12 @@
             return this.serverCallService.makePost('rest/terms', term)
         }
 
-        getTerm() {
-            return this.serverCallService.makeGet('rest/terms')
+        getTerms() {
+            return this.serverCallService.makeGet('rest/terms?type=USAGE')
+        }
+
+        getGdprTerms() {
+            return this.serverCallService.makeGet('rest/terms?type=GDPR')
         }
 
         deleteTerm(term) {

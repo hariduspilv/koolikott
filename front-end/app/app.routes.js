@@ -140,9 +140,9 @@ angular.module('koolikottApp')
                     controller: 'termsController',
                     controllerAs: '$ctrl',
                 })
-                .when('/litsentsitingimused', {
-                    templateUrl: 'views/licenses/licenses.html',
-                    controller: 'licensesController',
+                .when('/isikuandmete-tootlemine', {
+                    templateUrl: 'views/gdprProcess/gdprProcess.html',
+                    controller: 'gdprProcessController',
                     controllerAs: '$ctrl',
                 })
                 .when('/videojuhendid', {

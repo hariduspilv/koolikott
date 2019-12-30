@@ -1,12 +1,6 @@
 package ee.hm.dop;
 
-import ee.hm.dop.config.cronExecutorsProperties.AcceptReviewableChangeProperties;
-import ee.hm.dop.config.cronExecutorsProperties.AuthenticatedUserCleanerProperties;
-import ee.hm.dop.config.cronExecutorsProperties.AuthenticationStateCleanerProperties;
-import ee.hm.dop.config.cronExecutorsProperties.EhisInstitutionProperties;
-import ee.hm.dop.config.cronExecutorsProperties.GenerateSitemapXmlsExecutorProperties;
-import ee.hm.dop.config.cronExecutorsProperties.MaterialSyncProperties;
-import ee.hm.dop.config.cronExecutorsProperties.PortfolioLogCleanerProperties;
+import ee.hm.dop.config.cronExecutorsProperties.*;
 import ee.hm.dop.service.synchronizer.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -4,8 +4,8 @@
     class controller extends Controller {
         constructor(...args) {
             super(...args)
-            this.licenceLanguages = ['ET', 'EN', 'RU']
-            this.$scope.activeLicenceLanguages = this.licenceLanguages[0]
+            this.termLanguages = ['ET', 'EN', 'RU']
+            this.$scope.activeTermLanguages = this.termLanguages[0]
             this.getCurrentLanguage()
             this.$scope.notifyOfGDPRUpdate = false
         }
@@ -14,25 +14,85 @@
             this.$scope.notifyOfGDPRUpdate = !this.$scope.notifyOfGDPRUpdate
         }
 
-        toggleLicensesLanguageInputs(licence, lang) {
-            licence.activeLicenceLanguage = lang
+        toggleGdprProcessLanguageInputs(term, lang) {
+            term.activeTermLanguage = lang
         }
 
-        save(licence) {
+        save(term) {
             this.$scope.isSaving = true
 
             if (this.$scope.notifyOfGDPRUpdate) {
-                this.createAgreement()
+                this.createAgreement(term)
                 this.$scope.notifyOfGDPRUpdate = false
+            } else {
+                this.saveTerm(term)
             }
+        }
 
-            this.licensesService.saveLicence(licence)
+        getCurrentLanguage() {
+            return this.translationService.getLanguage()
+        }
+
+        isTermsEditMode() {
+            return this.editMode
+        }
+
+        isCreateDialogOpen() {
+            return this.createDialogOpen
+        }
+
+        editTerm(term) {
+            this.createDialogOpen = !this.createDialogOpen
+            term.edit = !term.edit;
+        }
+
+        cancelEdit(term) {
+            this.dialogService.showCancelConfirmationDialog(
+                'ARE_YOU_SURE_CANCEL',
+                '',
+                () => this.cancelConfirmed(term))
+        }
+
+        cancelConfirmed(term) {
+            if (term.new) {
+                this.removeTerm()
+            } else {
+                term.edit = !term.edit;
+            }
+            this.createDialogOpen = false
+            this.$scope.notifyOfGDPRUpdate = false
+            this.getGdprTerms()
+        }
+
+        delete(term) {
+            this.dialogService.showDeleteConfirmationDialog(
+                'ARE_YOU_SURE_DELETE',
+                '',
+                () => this.termsService.deleteTerm(term)
+                    .then(() => {
+                        this.getGdprTerms()
+                        this.toastService.show('TERM_DELETED')
+                        this.createDialogOpen = false
+                    })
+            )
+        }
+
+        isSubmitDisabled(term) {
+            return !(term.titleEst && term.titleEng &&
+                term.titleRus && (term.contentEst && term.contentEst !== '<br>') &&
+                (term.contentEng && term.contentEng !== '<br>') && (term.contentRus && term.contentRus !== '<br>'))
+
+        }
+
+        saveTerm(term) {
+            term.type = 'GDPR'
+            this.termsService.saveTerm(term)
                 .then(response => {
                     if (response.status === 200) {
                         this.createDialogOpen = false
                         this.$scope.isSaving = false
-                        licence.edit = !licence.edit
-                        this.getLicenses()
+                        term.edit = !term.edit
+                        this.getGdprTerms()
                         this.toastService.show('TERMS_SAVED')
                     } else {
                         this.$scope.isSaving = false
@@ -42,66 +102,12 @@
             this.$scope.isSaving = false
         }
 
-        getCurrentLanguage() {
-            return this.translationService.getLanguage()
-        }
-
-        isLicensesEditMode() {
-            return this.editMode
-        }
-
-        isCreateDialogOpen() {
-            return this.createDialogOpen
-        }
-
-        editLicence(licence) {
-            this.createDialogOpen = !this.createDialogOpen
-            licence.edit = !licence.edit;
-        }
-
-        cancelEdit(licence) {
-            this.dialogService.showCancelConfirmationDialog(
-                'ARE_YOU_SURE_CANCEL',
-                '',
-                () => this.cancelConfirmed(licence))
-        }
-
-        cancelConfirmed(licence) {
-            if (licence.new) {
-                this.removeLicence()
-            } else {
-                licence.edit = !licence.edit;
-            }
-            this.createDialogOpen = false
-            this.$scope.notifyOfGDPRUpdate = false
-            this.getLicenses()
-        }
-
-        delete(licence) {
-            this.dialogService.showDeleteConfirmationDialog(
-                'ARE_YOU_SURE_DELETE',
-                '',
-                () => this.licensesService.deleteLicence(licence)
-                    .then(() => {
-                        this.getLicenses()
-                        this.toastService.show('TERM_DELETED')
-                        this.createDialogOpen = false
-                    })
-            )
-        }
-
-        isSubmitDisabled(licence) {
-            return !(licence.titleEst && licence.titleEng &&
-                licence.titleRus && (licence.contentEst && licence.contentEst !== '<br>') &&
-                (licence.contentEng && licence.contentEng !== '<br>') && (licence.contentRus && licence.contentRus !== '<br>'))
-
-        }
-
-        createAgreement() {
+        createAgreement(term) {
             this.serverCallService
-                .makePost('rest/admin/agreement', {url: '/litsentsitingimused', version: 1, validFrom: new Date})
+                .makePost('rest/admin/agreement', {type: 'GDPR'})
                 .then((response) => {
                     if (response.status === 200) {
+                        this.saveTerm(term)
                         console.log('agreement added')
                     }
                     else {
@@ -118,19 +124,19 @@
         'dialogService',
         'serverCallService',
         'translationService',
-        'licensesService',
+        'termsService',
         'toastService',
     ]
-    component('dopLicensesBlock', {
+    component('dopGdprProcessBlock', {
         bindings: {
-            licenses: '<',
+            terms: '<',
             editMode: '<',
-            removeLicence: '&',
-            getLicenses: '&',
+            removeTerm: '&',
+            getGdprTerms: '&',
             createDialogOpen: '='
 
         },
-        templateUrl: 'directives/licensesBlock/licensesBlock.html',
+        templateUrl: 'directives/gdprProcessBlock/gdprProcessBlock.html',
         controller
     })
 }

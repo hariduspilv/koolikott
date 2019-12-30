@@ -1,7 +1,7 @@
 package ee.hm.dop.dao;
 
 import ee.hm.dop.model.Agreement;
-import java.time.LocalDateTime;
+import ee.hm.dop.model.enums.TermType;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -9,26 +9,23 @@ import java.util.List;
 @Repository
 public class AgreementDao extends AbstractDao<Agreement> {
 
-    public Agreement findLatestAgreement() {
-        return getSingleResult(entityManager
-                .createQuery("select a from Agreement a " +
-                        "where a.validFrom < :validFrom " +
-                        "and a.deleted = false " +
-                        "order by a.validFrom desc, a.id desc", entity())
-                .setParameter("validFrom", LocalDateTime.now())
-                .setMaxResults(1));
+    private static final String USER_TERMS_AGREEMENT_URL = "/terms";
+    private static final String GDRP_TERM_AGREEMENT_URL = "/gdpr-process";
+
+    public Agreement findLatestUserTermsAgreement() {
+        return findLatestAgreement(TermType.USAGE, USER_TERMS_AGREEMENT_URL);
+    }
+
+    public Agreement findLatestGdprTermsAgreement() {
+        return findLatestAgreement(TermType.GDPR, GDRP_TERM_AGREEMENT_URL);
     }
 
     public Agreement findMatchingDeletedAgreement(Agreement agreement) {
         return getSingleResult(entityManager
                 .createQuery("select a from Agreement a " +
-                        "where a.validFrom = :validFrom " +
-                        "and a.version = :version " +
-                        "and a.id != :id " +
+                        "where a.id <> :id " +
                         "and a.deleted = true " +
                         "order by a.id desc", entity())
-                .setParameter("validFrom", agreement.getValidFrom())
-                .setParameter("version", agreement.getVersion())
                 .setParameter("id", agreement.getId())
                 .setMaxResults(1));
     }
@@ -51,5 +48,16 @@ public class AgreementDao extends AbstractDao<Agreement> {
                 .setParameter("newId", newAgreement.getId())
                 .setParameter("previousId", previousAgreement.getId())
                 .executeUpdate();
+    }
+
+    private Agreement findLatestAgreement(TermType type, String url) {
+        return getSingleResult(entityManager
+                .createQuery("select a from Agreement a " +
+                        "where (a.type = :type or a.url = :url)" +
+                        "and a.deleted = false " +
+                        "order by a.createdAt desc, a.id desc", entity())
+                .setParameter("type", type)
+                .setParameter("url", url)
+                .setMaxResults(1));
     }
 }
