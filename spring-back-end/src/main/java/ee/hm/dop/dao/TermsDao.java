@@ -14,7 +14,7 @@ public class TermsDao extends AbstractDao<Terms> {
     }
 
     public List<Terms> getTerms() {
-        return getTermsByType(TermType.TERM);
+        return getTermsByType(TermType.USAGE);
     }
 
     public List<Terms> getTermsByType(TermType type) {

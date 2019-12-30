@@ -37,7 +37,7 @@ public class TermsService {
 
         if (terms.getType().equals(TermType.GDPR)) {
             termToSave.setAgreement(agreementDao.findLatestGdprTermsAgreement());
-        } else if (terms.getType().equals(TermType.TERM)) {
+        } else if (terms.getType().equals(TermType.USAGE)) {
             termToSave.setAgreement(agreementDao.findLatestTermsAgreement());
         }
         return termsDao.createOrUpdate(termToSave);

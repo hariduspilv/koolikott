@@ -103,7 +103,7 @@
 
         createAgreement(term) {
             this.serverCallService
-                .makePost('rest/admin/agreement', {type: 'TERM'})
+                .makePost('rest/admin/agreement', {type: 'USAGE'})
                 .then((response) => {
                     if (response.status === 200) {
                         this.saveTerm(term)

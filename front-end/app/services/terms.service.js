@@ -6,7 +6,7 @@
         }
 
         saveTerm(term) {
-            term.type = 'TERM'
+            term.type = 'USAGE'
             return this.serverCallService.makePost('rest/terms', term)
         }
 
