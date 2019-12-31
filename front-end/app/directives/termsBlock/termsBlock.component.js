@@ -7,7 +7,7 @@
             this.termLanguages = ['ET', 'EN', 'RU']
             this.$scope.activeTermLanguages = this.termLanguages[0]
             this.getCurrentLanguage()
-            this.$scope.notifyOfGDPRUpdate = !this.blockExists()
+            this.$scope.notifyOfGDPRUpdate = false
         }
 
         notifyOfGDPRUpdate() {

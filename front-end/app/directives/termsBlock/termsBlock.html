@@ -114,7 +114,7 @@
         </div>
         <div class="md-padding" flex="50" data-ng-if="$index === 0">
           <md-checkbox class="md-primary checkbox--material-author" ng-click="$ctrl.notifyOfGDPRUpdate()"
-                       data-ng-checked="notifyOfGDPRUpdate" aria-label="{{ 'TERM_NOTIFY_GDPR' | translate }}">
+                       data-ng-checked="notifyOfGDPRUpdate || !$ctrl.blockExists()" aria-label="{{ 'TERM_NOTIFY_GDPR' | translate }}">
             <span data-translate="TERM_NOTIFY_GDPR"></span>
           </md-checkbox>
         </div>
