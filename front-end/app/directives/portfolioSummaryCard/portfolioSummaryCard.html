@@ -72,7 +72,7 @@
                 </md-button>
               </md-menu-item>
               <md-menu-item data-ng-if="$root.isViewPortfolioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
-              <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && isPublic() && acceptableLicenses">
+              <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && isPublic() && $root.acceptableLicenses">
                 <md-button data-ng-click="$ctrl.copyPortfolio()">
                   <md-icon md-menu-align-target>file_copy</md-icon>
                   <span data-translate="COPY_PORTFOLIO"></span>
@@ -140,10 +140,10 @@
                   </md-button>
                   <md-button class="text-transform-inherit"
                              data-ng-if="getPortfolioVisibility() != 'PUBLIC'"
-                             data-ng-disabled="portfolioHasMaterialWithUnacceptableLicense"
+                             data-ng-disabled="$root.portfolioHasMaterialWithUnacceptableLicense"
                              aria-label="{{PORTFOLIO_VISIBILITY_MAKE_PUBLIC | translate}}" data-ng-click="makePublic()">
-                    <md-icon data-ng-if="!portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">visibility</md-icon>
-                    <md-icon data-ng-if="portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
+                    <md-icon data-ng-if="!$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">visibility</md-icon>
+                    <md-icon data-ng-if="$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
                     <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
                   </md-button>
                   <md-tooltip data-ng-show="showTooltip1" md-delay="150" md-autohide="true" md-direction="left">
@@ -162,11 +162,11 @@
                   </md-button>
                     <md-button class="text-transform-inherit"
                                data-ng-if="getPortfolioVisibility() != 'NOT_LISTED'"
-                               data-ng-disabled="portfolioHasMaterialWithUnacceptableLicense"
+                               data-ng-disabled="$root.portfolioHasMaterialWithUnacceptableLicense"
                                aria-label="{{PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED | translate}}"
                                data-ng-click="makeNotListed()">
-                      <md-icon data-ng-if="!portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">link</md-icon>
-                      <md-icon data-ng-if="portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
+                      <md-icon data-ng-if="!$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">link</md-icon>
+                      <md-icon data-ng-if="$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
                       <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
                   </md-button>
                   <md-tooltip data-ng-show="showTooltip2" md-delay="150" md-autohide="true" md-direction="left">

@@ -185,6 +185,8 @@ class controller extends Controller {
         }
 
         this.$scope.hasUnacceptableLicenses = () => {
+            if ((this.$rootScope.acceptableLicenses === undefined ||
+                this.$rootScope.portfolioHasMaterialWithUnacceptableLicense === undefined)) {
                 this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
                     {
                         id: this.$scope.portfolio.id,
@@ -196,13 +198,14 @@ class controller extends Controller {
                                 this.$scope.unAcceptableLicenses = data || response.data
                             })
                     })
+            }
         }
 
         this.$scope.saveAndExitPortfolio = () => {
             this.$cookies.put('savedPortfolio', true);
             this.storageService.getPortfolio().saveType = 'MANUAL';
 
-            if(this.$scope.unAcceptableLicenses){
+            if(this.$scope.unAcceptableLicenses || !this.$rootScope.acceptableLicenses || this.$rootScope.portfolioHasMaterialWithUnacceptableLicense){
                 return this.saveAndExit();
             } else if (this.storageService.getPortfolio().visibility === VISIBILITY_PUBLIC) {
                 this.storageService.getPortfolio().publicationConfirmed = true;
@@ -262,7 +265,9 @@ class controller extends Controller {
             this.$scope.path = this.$location.path()
             if(this.$scope.path.startsWith('/kogumik/muuda')){
                 this.$scope.portfolio = this.storageService.getPortfolio()
-                this.$scope.hasUnacceptableLicenses()
+                if (this.$scope.unAcceptableLicenses === undefined) {
+                    this.$scope.hasUnacceptableLicenses()
+                }
             }
         })
     }
