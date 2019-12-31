@@ -30,7 +30,8 @@ public class TermsDao extends AbstractDao<Terms> {
     public void deletePreviousTerms(TermType type) {
         entityManager.createQuery("update Terms " +
                 "set deleted = 1 " +
-                "where type = :type")
+                "where deleted = 0 " +
+                "and type = :type")
                 .setParameter("type", type)
                 .executeUpdate();
     }

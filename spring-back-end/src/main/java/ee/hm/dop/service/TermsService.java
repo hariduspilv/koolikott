@@ -36,12 +36,8 @@ public class TermsService {
         } else if (terms.getType().equals(TermType.USAGE)) {
             termToSave.setAgreement(agreementDao.findLatestUserTermsAgreement());
         }
-        deletePreviousTerms(termToSave.getType());
+        termsDao.deletePreviousTerms(termToSave.getType());
         return termsDao.createOrUpdate(termToSave);
-    }
-
-    private void deletePreviousTerms(TermType type) {
-        termsDao.deletePreviousTerms(type);
     }
 
     private Terms createNewTerms(Terms terms, User user) {
