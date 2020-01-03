@@ -716,6 +716,7 @@ class controller extends Controller {
     }
     isSubmitDisabled() {
         return !this.$scope.addMaterialForm.$valid
+            || !this.hasAtLeastOneTitle()
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.keyCompetences.length === 0)
             || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
             || this.$scope.isSaving
@@ -740,6 +741,12 @@ class controller extends Controller {
                     this.$route.reload()
                 }
             })
+    }
+
+    hasAtLeastOneTitle() {
+        return this.$scope.titlesAndDescriptions.ET.title !== '' ||
+            this.$scope.titlesAndDescriptions.EN.title !== '' ||
+            this.$scope.titlesAndDescriptions.RU.title !== ''
     }
 
     showMakePublicDialog() {
