@@ -21,7 +21,7 @@
         save(term) {
             this.$scope.isSaving = true
 
-            if (this.$scope.notifyOfGDPRUpdate) {
+            if (this.$scope.notifyOfGDPRUpdate || !this.blockExists()) {
                 this.createAgreement(term)
                 this.$scope.notifyOfGDPRUpdate = false
             } else {
