@@ -33,138 +33,140 @@
         </div>
       </md-card-content>
       <md-card-content data-ng-if="term.edit">
-        <div
-          data-ng-repeat="lang in term.termLanguages track by $index"
-          data-ng-if="lang === term.activeTermLanguage && true"
-          layout="row"
-          layout-wrap>
-          <div layout-xs="column" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
-               flex-order-gt-sm="2" flex="100" data-ng-if="true">
-            <div ng-if="lang === 'ET'" data-layout-align="start stretch" layout="column" data-flex="100">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper">
-                <label data-translate="TERM_TITLE"></label>
-                <input
-                  name="title"
-                  id="add-title-est"
-                  ng-model="term.titleEst"
-                  maxlength="100"
-                  required>
-                <div data-ng-messages="gdprProcessForm.title.$error">
-                  <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
+        <div class="edit-terms-container">
+          <div
+            data-ng-repeat="lang in term.termLanguages track by $index"
+            data-ng-if="lang === term.activeTermLanguage && true"
+            layout="row"
+            layout-wrap>
+            <div layout-xs="column" layout-align-xs="start stretch" layout-align="start center" flex-order="2"
+                 flex-order-gt-sm="2" data-ng-if="true" class="width-100">
+              <div ng-if="lang === 'ET'" data-layout-align="start stretch" layout="column" class="max-width-100">
+                <md-input-container class="animate-if remaining-charaters-wrapper">
+                  <label data-translate="TERM_TITLE"></label>
+                  <input
+                    name="title"
+                    id="add-title-est"
+                    ng-model="term.titleEst"
+                    maxlength="100"
+                    required>
+                  <div data-ng-messages="gdprProcessForm.title.$error">
+                    <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
+                  </div>
+                </md-input-container>
+                <div class="animate-if remaining-charaters-wrapper max-width-100">
+                  <trix-editor class="term-block" angular-trix ng-model="term.contentEst"></trix-editor>
                 </div>
-              </md-input-container>
-              <div class="md-block animate-if remaining-charaters-wrapper" flex>
-                <trix-editor class="term-block" angular-trix ng-model="term.contentEst"></trix-editor>
+              </div>
+              <div ng-if="lang === 'EN'" data-layout-align="start stretch" layout="column" class="max-width-100">
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper">
+                  <label data-translate="TERM_TITLE"></label>
+                  <input
+                    name="title"
+                    id="add-title-eng"
+                    ng-model="term.titleEng"
+                    maxlength="100"
+                    required>
+                  <div data-ng-messages="gdprProcessForm.title.$error">
+                    <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
+                  </div>
+                </md-input-container>
+                <div class="animate-if remaining-charaters-wrapper max-width-100">
+                  <trix-editor class="term-block" angular-trix ng-model="term.contentEng"></trix-editor>
+                </div>
+              </div>
+              <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" class="max-width-100">
+                <md-input-container class="md-block animate-if remaining-charaters-wrapper">
+                  <label data-translate="TERM_TITLE"></label>
+                  <input
+                    name="title"
+                    id="add-title-rus"
+                    ng-model="term.titleRus"
+                    maxlength="100"
+                    required>
+                  <div data-ng-messages="gdprProcessForm.title.$error">
+                    <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
+                  </div>
+                </md-input-container>
+                <div class="animate-if remaining-charaters-wrapper max-width-100">
+                  <trix-editor class="term-block" angular-trix ng-model="term.contentRus"></trix-editor>
+                </div>
               </div>
             </div>
-            <div ng-if="lang === 'EN'" data-layout-align="start stretch" layout="column" data-flex="100">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper">
-                <label data-translate="TERM_TITLE"></label>
-                <input
-                  name="title"
-                  id="add-title-eng"
-                  ng-model="term.titleEng"
-                  maxlength="100"
-                  required>
-                <div data-ng-messages="gdprProcessForm.title.$error">
-                  <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
-                </div>
-              </md-input-container>
-              <div class="md-block animate-if remaining-charaters-wrapper" flex>
-                <trix-editor class="term-block" angular-trix ng-model="term.contentEng"></trix-editor>
-              </div>
+            <div layout="column" layout-align="center center" layout-gt-xs="row" flex-gt-sm="50" flex-order="1"
+                 data-ng-if="true">
+              <!-- Landing page language -->
+              <md-button
+                class="button-material-language"
+                data-ng-repeat="_lang in term.termLanguages track by $index"
+                data-ng-class="{'is-selected': lang === _lang}"
+                data-ng-click="$ctrl.toggleGdprProcessLanguageInputs(term, _lang)"
+                flex-gt-xs="{{ term.activeTermLanguage === _lang ? '40' : '30' }}"
+                aria-label="{{ _lang }} button"
+              >
+                <span data-ng-bind-html="_lang"></span>
+                <md-icon class="button-material-language__icon"
+                         data-ng-if="$ctrl.isLangFilled(_lang, term) || term.activeTermLanguage === _lang">done
+                </md-icon>
+              </md-button>
             </div>
-            <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" data-flex="100">
-              <md-input-container class="md-block animate-if remaining-charaters-wrapper">
-                <label data-translate="TERM_TITLE"></label>
-                <input
-                  name="title"
-                  id="add-title-rus"
-                  ng-model="term.titleRus"
-                  maxlength="100"
-                  required>
-                <div data-ng-messages="gdprProcessForm.title.$error">
-                  <div data-ng-message="required" data-translate="TERM_TITLE_REQUIRED"></div>
-                </div>
-              </md-input-container>
-              <div class="md-block animate-if remaining-charaters-wrapper" flex>
-                <trix-editor class="term-block" angular-trix ng-model="term.contentRus"></trix-editor>
-              </div>
+            <div data-flex-order="3" class="flex flex-col">
             </div>
           </div>
-          <div layout="column" layout-align="center center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"
-               data-ng-if="true">
-            <!-- Landing page language -->
-            <md-button
-              class="button-material-language"
-              data-ng-repeat="_lang in term.termLanguages track by $index"
-              data-ng-class="{'is-selected': lang === _lang}"
-              data-ng-click="$ctrl.toggleGdprProcessLanguageInputs(term, _lang)"
-              flex-gt-xs="{{ term.activeTermLanguage === _lang ? '40' : '30' }}"
-              aria-label="{{ _lang }} button"
-            >
-              <span data-ng-bind-html="_lang"></span>
-              <md-icon class="button-material-language__icon"
-                       data-ng-if="$ctrl.isLangFilled(_lang, term) || term.activeTermLanguage === _lang">done
-              </md-icon>
-            </md-button>
+          <div class="md-padding" data-ng-if="$index === 0">
+            <md-checkbox class="md-primary checkbox--material-author" ng-click="$ctrl.notifyOfGDPRUpdate()"
+                         data-ng-checked="notifyOfGDPRUpdate || !$ctrl.blockExists()" aria-label="{{ 'LICENSE_NOTIFY' | translate }}">
+              <span data-translate="LICENSE_NOTIFY"></span>
+            </md-checkbox>
           </div>
-          <div data-flex-order="3" flex="100" class="flex flex-col">
-          </div>
-        </div>
-        <div class="md-padding" flex="50" data-ng-if="$index === 0">
-          <md-checkbox class="md-primary checkbox--material-author" ng-click="$ctrl.notifyOfGDPRUpdate()"
-                       data-ng-checked="notifyOfGDPRUpdate || !$ctrl.blockExists()" aria-label="{{ 'LICENSE_NOTIFY' | translate }}">
-            <span data-translate="LICENSE_NOTIFY"></span>
-          </md-checkbox>
-        </div>
-        <div data-layout="row" data-layout-xs="column" data-layout-align="space-between center">
+          <div data-layout="row" data-layout-xs="column" data-layout-align="space-between center">
 
-          <md-button
-            aria-label="Delete term"
-            id="term-delete-button"
-            data-ng-click="$ctrl.delete(term)"
-            class="md-button md-ink-ripple"
-            data-ng-disabled="term.new"
-          >
-            <span data-translate="BUTTON_REMOVE"></span>
-          </md-button>
-          <div layout="row" data-layout-xs="column" layout-align="end center" class="md-padding md-padding-horizontal-double"
-               data-ng-if="true">
             <md-button
-              aria-label="Cancel term edit"
-              id="term-cancel-edit"
-              data-ng-click="$ctrl.cancelEdit(term)"
+              aria-label="Delete term"
+              id="term-delete-button"
+              data-ng-click="$ctrl.delete(term)"
               class="md-button md-ink-ripple"
+              data-ng-disabled="term.new"
             >
-              <span data-translate="BUTTON_CANCEL"></span>
+              <span data-translate="BUTTON_REMOVE"></span>
             </md-button>
-            <md-button
-              aria-label="{{ 'BUTTON_ADD_TERM' | translate }}"
-              id="term-save"
-              class="md-primary"
-              data-ng-disabled="$ctrl.isSubmitDisabled(term) || isSaving"
-              data-ng-click="$ctrl.save(term)"
-              data-ng-if="term.new"
-            >
-              <span data-translate="{{ 'BUTTON_ADD_TERM' }}"></span>
-            </md-button>
-            <md-button
-              aria-label="{{ 'BUTTON_UPDATE_TERM' | translate }}"
-              id="term-update"
-              class="md-primary"
-              data-ng-disabled="$ctrl.isSubmitDisabled(term) || isSaving"
-              data-ng-click="$ctrl.save(term)"
-              data-ng-if="!term.new"
-            >
-              <span data-translate="{{ 'BUTTON_UPDATE_TERM' }}"></span>
-            </md-button>
-            <md-progress-circular
-              class="md-accent ng-hide"
-              md-mode="indeterminate"
-              md-diameter="40"
-              data-ng-show="isSaving"
-            ></md-progress-circular>
+            <div layout="row" data-layout-xs="column" layout-align="end center" class="md-padding md-padding-horizontal-double"
+                 data-ng-if="true">
+              <md-button
+                aria-label="Cancel term edit"
+                id="term-cancel-edit"
+                data-ng-click="$ctrl.cancelEdit(term)"
+                class="md-button md-ink-ripple"
+              >
+                <span data-translate="BUTTON_CANCEL"></span>
+              </md-button>
+              <md-button
+                aria-label="{{ 'BUTTON_ADD_TERM' | translate }}"
+                id="term-save"
+                class="md-primary"
+                data-ng-disabled="$ctrl.isSubmitDisabled(term) || isSaving"
+                data-ng-click="$ctrl.save(term)"
+                data-ng-if="term.new"
+              >
+                <span data-translate="{{ 'BUTTON_ADD_TERM' }}"></span>
+              </md-button>
+              <md-button
+                aria-label="{{ 'BUTTON_UPDATE_TERM' | translate }}"
+                id="term-update"
+                class="md-primary"
+                data-ng-disabled="$ctrl.isSubmitDisabled(term) || isSaving"
+                data-ng-click="$ctrl.save(term)"
+                data-ng-if="!term.new"
+              >
+                <span data-translate="{{ 'BUTTON_UPDATE_TERM' }}"></span>
+              </md-button>
+              <md-progress-circular
+                class="md-accent ng-hide"
+                md-mode="indeterminate"
+                md-diameter="40"
+                data-ng-show="isSaving"
+              ></md-progress-circular>
+            </div>
           </div>
         </div>
       </md-card-content>
