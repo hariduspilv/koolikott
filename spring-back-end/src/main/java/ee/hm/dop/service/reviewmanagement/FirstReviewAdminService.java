@@ -69,12 +69,11 @@ public class FirstReviewAdminService {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findCountOfUnreviewed();
-        } else {
-            if (taxonDao.getUserTaxons(user).isEmpty()) {
-                return 0L;
-            }
-            return firstReviewDao.findCountOfUnreviewed(user);
         }
+        if (taxonDao.getUserTaxons(user).isEmpty()) {
+            return 0L;
+        }
+        return firstReviewDao.findCountOfUnreviewed(user);
     }
 
     public FirstReview save(LearningObject learningObject) {

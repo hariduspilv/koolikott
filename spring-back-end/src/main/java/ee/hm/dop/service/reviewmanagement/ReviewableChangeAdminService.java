@@ -52,12 +52,11 @@ public class ReviewableChangeAdminService {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return reviewableChangeDao.findCountOfUnreviewed();
-        } else {
-            if (taxonDao.getUserTaxons(user).isEmpty()) {
-                return 0;
-            }
-            return reviewableChangeDao.findCountOfUnreviewed(user);
         }
+        if (taxonDao.getUserTaxons(user).isEmpty()) {
+            return 0;
+        }
+        return reviewableChangeDao.findCountOfUnreviewed(user);
     }
 
     public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {

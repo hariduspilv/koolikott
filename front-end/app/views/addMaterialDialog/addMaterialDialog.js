@@ -744,9 +744,9 @@ class controller extends Controller {
     }
 
     hasAtLeastOneTitle() {
-        return this.$scope.titlesAndDescriptions.ET.title !== '' ||
-            this.$scope.titlesAndDescriptions.EN.title !== '' ||
-            this.$scope.titlesAndDescriptions.RU.title !== ''
+        return !!(this.$scope.titlesAndDescriptions.ET.title ||
+            this.$scope.titlesAndDescriptions.EN.title ||
+            this.$scope.titlesAndDescriptions.RU.title)
     }
 
     showMakePublicDialog() {
