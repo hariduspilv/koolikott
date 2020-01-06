@@ -1,3 +1,21 @@
+## e-Koolikott [1.50.4](https://projektid.hitsa.ee/jira/projects/EK/versions/11118) (Prelive'i paigaldatud 06.01.2020)
+
+### Muutunud
+* "Kui tavakasutaja enda loodud kogumik on ebasobivaks märgitud, siis peaks see kasutaja saama seda avada" [EK-511](https://projektid.hitsa.ee/jira/browse/EK-511)
+* "Litsentsi modaalide tekstide uuendamine" [EK-770](https://projektid.hitsa.ee/jira/browse/EK-770)
+* "Materjali ja kogumiku avalikustamisel modaali teksti muudatused" [EK-771](https://projektid.hitsa.ee/jira/browse/EK-771)
+* "Autoriga ühenduse võtmise modaalil tähemärkide muudatus 1000 peale" [EK-774](https://projektid.hitsa.ee/jira/browse/EK-774)
+* "Autoriga Uus menüüpunkt "Isikuandmete töötlemine"" [EK-785](https://projektid.hitsa.ee/jira/browse/EK-785)
+* "Isikuandmete töötlemise tingimuste ploki lisamine ja olemasoleva muutmine" [EK-786](https://projektid.hitsa.ee/jira/browse/EK-786)
+* "Isikuandmete töötlemise tingimuste nõustumise force'mine adminni poolt" [EK-787](https://projektid.hitsa.ee/jira/browse/EK-787)
+* "Isikuandmete töötlemise tingimuste nõustumise modaal ja kasutajapoolne nõustumine" [EK-788](https://projektid.hitsa.ee/jira/browse/EK-788)
+* "Isikuandmete töötlemise tingimuste lisamine ja nendega nõustumine > Testimine ja automaattestide kirjutamine" [EK-789](https://projektid.hitsa.ee/jira/browse/EK-789)
+* "Ebasobivast õppevarast teavitamise muudatus" [EK-791](https://projektid.hitsa.ee/jira/browse/EK-791)
+* "GDPR tingimuste vaate eemaldamine rakendusest" [EK-801](https://projektid.hitsa.ee/jira/browse/EK-801)
+* "Andmebaasi muudatused seoses isikuandmete töötlemise ja kasutustingimuste lehtede eraldamisega" [EK-802](https://projektid.hitsa.ee/jira/browse/EK-802)
+* "Ülemääraste päringute eemaldamine" [EK-813](https://projektid.hitsa.ee/jira/browse/EK-813)
+* "IE: Kasutustingimuste ja GDPR tingimuste lehe edit mode parandada" [EK-824](https://projektid.hitsa.ee/jira/browse/EK-824)
+
 ## e-Koolikott [1.50.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11114) (Prelive'i paigaldatud 15.10.2019)
 
 ### Muutunud
