@@ -232,7 +232,7 @@
                         if (restUri === 'improper')
                             data.forEach(o => {
                                 o.__reports = o.improperContents.filter(c => !c.reviewed)
-                                o.__reporters = this.getReporters(o)
+                                o.__reporters = this.getReporters(o.__reports)
                                 o.__reportLabelKey = this.getImproperReportLabelKey(o)
                             })
                         this.collection = data;
@@ -378,7 +378,7 @@
             return this.getCreatedBy(reviewableChanges);
         }
 
-        getReporters({improperContents}) {
+        getReporters(improperContents) {
             return this.getCreatedBy(improperContents)
         }
 
