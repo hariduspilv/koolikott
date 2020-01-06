@@ -1,16 +1,18 @@
 package ee.hm.dop.service.reviewmanagement;
 
 import ee.hm.dop.dao.ImproperContentDao;
-import ee.hm.dop.model.*;
+import ee.hm.dop.dao.TaxonDao;
+import ee.hm.dop.model.AdminLearningObject;
+import ee.hm.dop.model.ImproperContent;
+import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.ReviewStatus;
 import ee.hm.dop.utils.UserUtil;
-
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,6 +21,9 @@ public class ImproperContentAdminService {
 
     @Inject
     private ImproperContentDao improperContentDao;
+
+    @Inject
+    private TaxonDao taxonDao;
 
     public List<AdminLearningObject> getImproper(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -32,6 +37,9 @@ public class ImproperContentAdminService {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return improperContentDao.findCountOfUnreviewed();
+        }
+        if (taxonDao.getUserTaxons(user).isEmpty()) {
+            return 0;
         }
         return improperContentDao.findCountOfUnreviewed(user);
     }

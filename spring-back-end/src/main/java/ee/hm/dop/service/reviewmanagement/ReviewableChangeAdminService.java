@@ -3,6 +3,7 @@ package ee.hm.dop.service.reviewmanagement;
 import com.google.common.collect.Lists;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.ReviewableChangeDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.ReviewStatus;
@@ -11,13 +12,11 @@ import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.apache.commons.collections.CollectionUtils;
-
-import java.time.LocalDateTime;
-
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,6 +36,8 @@ public class ReviewableChangeAdminService {
     private LearningObjectDao learningObjectDao;
     @Inject
     private TranslationGroupDao translationGroupDao;
+    @Inject
+    private TaxonDao taxonDao;
 
     public List<AdminLearningObject> getUnReviewed(User user) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -51,9 +52,11 @@ public class ReviewableChangeAdminService {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return reviewableChangeDao.findCountOfUnreviewed();
-        } else {
-            return reviewableChangeDao.findCountOfUnreviewed(user);
         }
+        if (taxonDao.getUserTaxons(user).isEmpty()) {
+            return 0;
+        }
+        return reviewableChangeDao.findCountOfUnreviewed(user);
     }
 
     public void setReviewed(LearningObject learningObject, User user, ReviewStatus reviewStatus) {

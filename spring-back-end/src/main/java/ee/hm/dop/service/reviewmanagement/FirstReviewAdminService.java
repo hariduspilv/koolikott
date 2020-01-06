@@ -1,5 +1,6 @@
 package ee.hm.dop.service.reviewmanagement;
 
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.dao.firstreview.FirstReviewDao;
 import ee.hm.dop.model.*;
@@ -25,6 +26,8 @@ public class FirstReviewAdminService {
     private FirstReviewDao firstReviewDao;
     @Inject
     private TaxonPositionDao taxonPositionDao;
+    @Inject
+    private TaxonDao taxonDao;
 
     public SearchResult getUnReviewed(User user, PageableQueryUnreviewed pageableQuery) {
         UserUtil.mustBeModeratorOrAdmin(user);
@@ -66,9 +69,11 @@ public class FirstReviewAdminService {
         UserUtil.mustBeModeratorOrAdmin(user);
         if (UserUtil.isAdmin(user)) {
             return firstReviewDao.findCountOfUnreviewed();
-        } else {
-            return firstReviewDao.findCountOfUnreviewed(user);
         }
+        if (taxonDao.getUserTaxons(user).isEmpty()) {
+            return 0L;
+        }
+        return firstReviewDao.findCountOfUnreviewed(user);
     }
 
     public FirstReview save(LearningObject learningObject) {
