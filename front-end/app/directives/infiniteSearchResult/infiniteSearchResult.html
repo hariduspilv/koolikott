@@ -106,7 +106,6 @@
 <div class="webkit-flex" data-layout="row" data-layout-align="space-between center">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
 </div>
-<data-dop-startpage-intro data-ng-if="$ctrl.isLandingPage()"></data-dop-startpage-intro>
 <div data-ng-if="sorting || !searching">
   <div class="webkit-flex" data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
     <section class="webkit-flex" data-layout="row" data-layout-xs="column" layout-wrap>
@@ -168,6 +167,7 @@
   </div>
 </div>
 <div>
+  <data-dop-startpage-intro data-ng-if="$ctrl.isLandingPage()"></data-dop-startpage-intro>
   <div data-layout-gt-xs="row" data-layout="column" data-layout-align="space-between center" flex data-ng-if="!editMode && $ctrl.isLandingPage()">
     <h2 class="padding-left-16" data-ng-bind="filteredTitle.text"></h2>
     <md-button style="min-width: 36px" data-ng-click="$ctrl.editFilteredGroup()" data-ng-if="$ctrl.isAdmin()">
