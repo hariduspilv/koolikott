@@ -1431,14 +1431,16 @@ class Controller {
     isLangFilled(lang, licence) {
         let isFilled = false;
 
-        if ((lang === 'ET') && !!(licence.titleEst && licence.contentEst))
-            isFilled = true
+        if (licence) {
+            if ((lang === 'ET') && !!(licence.titleEst && licence.contentEst))
+                isFilled = true
 
-        if ((lang === 'EN') && !!(licence.titleEng && licence.contentEng))
-            isFilled = true
+            if ((lang === 'EN') && !!(licence.titleEng && licence.contentEng))
+                isFilled = true
 
-        if ((lang === 'RU') && !!(licence.titleRus && licence.contentRus))
-            isFilled = true
+            if ((lang === 'RU') && !!(licence.titleRus && licence.contentRus))
+                isFilled = true
+        }
 
         return isFilled;
     }

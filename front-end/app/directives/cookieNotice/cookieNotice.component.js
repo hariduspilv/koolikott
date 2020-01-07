@@ -38,6 +38,12 @@
                     this.$scope.isSubmittButtonEnabled = true;
                 }
             });
+
+            this.$scope.$watch(() => {
+                if (this.$rootScope.showCookieBanner && !this.$scope.isEditMode) {
+                    this.moveNavbarHeaderUp()
+                }
+            })
         }
 
         maintananceLang() {
@@ -185,6 +191,7 @@
             this.moveDetailedSearchTop();
             this.moveNavBarHeaderTop();
             this.moveAddMaterialsToolbarTop();
+            this.$rootScope.showCookieBanner = false
         }
 
         setCookie(ip) {
@@ -200,7 +207,7 @@
         }
 
         showCookieNotice() {
-            return (!this.$scope.hasCookie && !this.$scope.isEditMode) || !this.$scope.isEditMode
+            return (!this.$scope.hasCookie && !this.$scope.isEditMode) || (this.$rootScope.showCookieBanner && !this.$scope.isEditMode) || !this.$scope.isEditMode
         }
 
         isAdmin() {
@@ -237,9 +244,12 @@
         moveNavbarHeaderUp() {
             const headerElement = document.getElementById('md-toolbar-header');
             const sidenavElement = document.getElementById('sidebar-left');
-            sidenavElement.classList.remove('sidenav-cookie-related-upper');
-            headerElement.style.top = 58 + 'px';
-            sidenavElement.style.top = 58 + 'px';
+            if (sidenavElement) {
+                sidenavElement.classList.remove('sidenav-cookie-related-upper');
+                sidenavElement.style.top = 58 + 'px';
+            }
+            if (headerElement)
+                headerElement.style.top = 58 + 'px';
         }
         moveDetailedSearchUp() {
             const detailedSearchElement = document.getElementById('detailedSearch');
