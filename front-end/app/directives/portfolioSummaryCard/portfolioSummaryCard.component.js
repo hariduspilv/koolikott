@@ -52,11 +52,11 @@ class controller extends Controller {
                             this.$rootScope.portfolioHasMaterialWithUnacceptableLicense = response.data
                         })
                 }
-            }
-            if (this.getCorrectLanguageTitle(this.portfolio)) {
-                this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
-            } else {
-                this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
+                if (this.getCorrectLanguageTitle(this.portfolio)) {
+                    this.$scope.portfolioTitle = this.replaceSpaces(this.getCorrectLanguageTitle(this.portfolio))
+                } else {
+                    this.$scope.portfolioTitle = this.replaceSpaces(this.portfolio.titles[0])
+                }
             }
             if (newValue !== oldValue) {
                 this.$rootScope.$broadcast('portfolioHistory:loadHistory');

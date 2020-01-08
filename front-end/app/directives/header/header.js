@@ -186,7 +186,7 @@ class controller extends Controller {
 
         this.$scope.hasUnacceptableLicenses = () => {
             if ((this.$rootScope.acceptableLicenses === undefined ||
-                this.$rootScope.portfolioHasMaterialWithUnacceptableLicense === undefined)) {
+                this.$rootScope.portfolioHasMaterialWithUnacceptableLicense === undefined) && this.$scope.portfolio) {
                 this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
                     {
                         id: this.$scope.portfolio.id,
