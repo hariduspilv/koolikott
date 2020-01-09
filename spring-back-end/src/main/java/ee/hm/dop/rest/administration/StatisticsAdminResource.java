@@ -49,7 +49,7 @@ public class StatisticsAdminResource extends BaseResource {
     }
 
     @GetMapping(value = "export/download/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    @Secured(RoleString.ADMIN)
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
     public String download(@PathVariable("filename") String filename) throws IOException {
         return buildResponse(filename);
     }
