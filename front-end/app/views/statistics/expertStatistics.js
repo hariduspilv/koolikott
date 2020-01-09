@@ -75,18 +75,19 @@ class controller extends Controller {
                 this.serverCallService
                     .makeGet(`/rest/admin/statistics/export/download/${filename}`)
                     .then(({status, data}) => {
-                        let arrayBuffer = this.stringToArrayBuffer(atob(data));
+                        const arrayBuffer = this.stringToArrayBuffer(atob(data));
+                        const filenameWithFormat = 'statistika_aruanne.' + format;
 
                         if (200 <= status && status < 300) {
                             let file = new Blob([arrayBuffer]);
 
                             if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-                                window.navigator.msSaveOrOpenBlob(file);
+                                window.navigator.msSaveOrOpenBlob(file, filenameWithFormat);
                                 return;
                             }
                             let link = document.createElement('a');
                             link.href = window.URL.createObjectURL(file);
-                            link.download = 'statistika_aruanne.' + format;
+                            link.download = filenameWithFormat;
                             document.body.appendChild(link);
                             link.click();
                             document.body.removeChild(link);
