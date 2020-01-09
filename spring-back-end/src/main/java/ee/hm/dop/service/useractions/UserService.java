@@ -6,6 +6,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
+import ee.hm.dop.model.user.UserNameDto;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.PortfolioService;
@@ -60,6 +61,15 @@ public class UserService {
 
     public User getUserByUsername(String username) {
         return userDao.findUserByUsername(username);
+    }
+
+    public UserNameDto getUserName(String username) {
+        User user = userDao.findUserByUsername(username);
+        UserNameDto userNameDto = new UserNameDto();
+        userNameDto.setUsername(user.getUsername());
+        userNameDto.setName(user.getName());
+        userNameDto.setSurname(user.getSurname());
+        return userNameDto;
     }
 
     public User create(String idCode, String name, String surname) {
