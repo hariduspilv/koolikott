@@ -72,13 +72,35 @@ class controller extends Controller {
             .then(({ status, data: filename }) => {
                 this.$scope.fetchingDownload = false
 
-                if (200 <= status && status < 300) {
-                    const downloadLink = document.createElement('a')
-                    let event = this.returnEvent();
-                    downloadLink.href = `/rest/admin/statistics/export/download/${filename}`
-                    downloadLink.dispatchEvent(event)
-                }
+                this.serverCallService
+                    .makeGet(`/rest/admin/statistics/export/download/${filename}`)
+                    .then(({status, data}) => {
+                        const arrayBuffer = this.stringToArrayBuffer(atob(data));
+                        const filenameWithFormat = 'statistika_aruanne.' + format;
+
+                        if (200 <= status && status < 300) {
+                            let file = new Blob([arrayBuffer]);
+
+                            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                                window.navigator.msSaveOrOpenBlob(file, filenameWithFormat);
+                                return;
+                            }
+                            let link = document.createElement('a');
+                            link.href = window.URL.createObjectURL(file);
+                            link.download = filenameWithFormat;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }
+                })
             })
+    }
+    // function from https://stackoverflow.com/questions/34993292/how-to-save-xlsx-data-to-file-as-a-blob
+    stringToArrayBuffer(s) {
+        let buf = new ArrayBuffer(s.length);
+        let view = new Uint8Array(buf);
+        for (let i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+        return buf;
     }
 
     returnEvent() {

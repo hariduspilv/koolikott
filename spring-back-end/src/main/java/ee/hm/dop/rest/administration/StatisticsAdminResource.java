@@ -9,18 +9,18 @@ import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
 import ee.hm.dop.service.statistics.NewStatisticsCsvExporter;
 import ee.hm.dop.service.statistics.NewStatisticsExcelExporter;
 import ee.hm.dop.service.statistics.NewStatisticsService;
-import ee.hm.dop.utils.DOPFileUtils;
 import ee.hm.dop.utils.io.CsvUtil;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Base64;
 
 
 @Slf4j
@@ -49,9 +49,9 @@ public class StatisticsAdminResource extends BaseResource {
     }
 
     @GetMapping(value = "export/download/{filename}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public ResponseEntity<InputStreamResource> download(@PathVariable("filename") String filename) {
-        String[] split = filename.split("\\.");
-        return buildResponse(filename, FileFormat.valueOf(split[1]));
+    @Secured({RoleString.ADMIN, RoleString.MODERATOR})
+    public String download(@PathVariable("filename") String filename) throws IOException {
+        return buildResponse(filename);
     }
 
     @PostMapping(value = "export", produces = MediaType.TEXT_PLAIN_VALUE)
@@ -75,10 +75,8 @@ public class StatisticsAdminResource extends BaseResource {
         return new File(filename).getName();
     }
 
-    private ResponseEntity<InputStreamResource> buildResponse(String filename, FileFormat format) {
-        String mediaType = DOPFileUtils.probeForMediaType(filename);
-        String fileName = "statistika_aruanne." + format.name();
-        File file = FileUtils.getFile(TEMP_FOLDER + "/" + filename);
-        return uploadedFileService.returnFileStream(mediaType, fileName, file);
+    private String buildResponse(String filename) throws IOException {
+        byte[] fileBytes = Files.readAllBytes(Paths.get(TEMP_FOLDER + "/" + filename));
+        return Base64.getEncoder().encodeToString(fileBytes);
     }
 }
