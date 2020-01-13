@@ -202,7 +202,7 @@ public class LoginResource extends BaseResource {
         if (status.isHarIdUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
-        return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getUserTermsAgreement(), status.getGdprTermsAgreement(), status.getUserTermsAgreement().toString(), status.isExistingUser(), status.getLoginFrom().name()));
+        return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.getUserTermsAgreement().toString(), status.isExistingUser(), status.getLoginFrom().name()));
     }
 
     private URI redirectFailure() throws URISyntaxException {
