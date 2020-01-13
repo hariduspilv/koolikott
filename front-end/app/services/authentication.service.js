@@ -231,6 +231,7 @@ angular.module('koolikottApp')
         }
 
         function loginSuccess(userStatus) {
+            console.log(userStatus)
             if (isEmpty(userStatus)) {
                 loginFail();
             } else {
