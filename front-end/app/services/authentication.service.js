@@ -243,8 +243,8 @@ angular.module('koolikottApp')
                         token,
                         userConfirmed,
                         statusOk,
-                        userTermsAgreement,
-                        gdprTermsAgreement,
+                        userTermsAgreement : userTermsAgreement.id,
+                        gdprTermsAgreement : gdprTermsAgreement.id,
                         existingUser,
                         loginFrom
                     }
