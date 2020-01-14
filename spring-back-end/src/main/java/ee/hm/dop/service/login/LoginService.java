@@ -8,6 +8,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.ehis.Person;
 import ee.hm.dop.model.enums.LoginFrom;
 import ee.hm.dop.service.ehis.IEhisSOAPService;
+import ee.hm.dop.service.login.dto.UserAgreementDto;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.useractions.SessionService;
 import ee.hm.dop.service.useractions.UserService;
@@ -82,11 +83,11 @@ public class LoginService {
         return loggedIn(authenticate(user, loginFrom));
     }
 
-    public AuthenticatedUser finalizeLogin(UserStatus userStatus) {
-        if (userStatus.getLoginFrom() == null) {
-            throw new RuntimeException("No login from for token: " + userStatus.getToken());
+    public AuthenticatedUser finalizeLogin(UserAgreementDto userAgreementDto) {
+        if (userAgreementDto.getLoginFrom() == null) {
+            throw new RuntimeException("No login from for token: " + userAgreementDto.getToken());
         }
-        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userStatus.getToken());
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userAgreementDto.getToken());
         if (state == null) {
             return null;
         }
@@ -95,28 +96,28 @@ public class LoginService {
             authenticationStateDao.delete(state);
             return null;
         }
-        if (userStatus.getUserTermsAgreement() == null && userStatus.getGdprTermsAgreement() == null) {
-            throw new RuntimeException("No agreements for token: " + userStatus.getToken());
+        if (userAgreementDto.getUserTermsAgreement() == null && userAgreementDto.getGdprTermsAgreement() == null) {
+            throw new RuntimeException("No agreements for token: " + userAgreementDto.getToken());
         }
 
         User user = getExistingOrNewUser(state);
 
-        if (userStatus.getUserTermsAgreement() != null) {
-            createUserAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getUserTermsAgreement().getId()));
+        if (userAgreementDto.getUserTermsAgreement() != null) {
+            createUserAgreementIfDoesntExists(user, agreementDao.findById(userAgreementDto.getUserTermsAgreement()));
         }
-        if (userStatus.getGdprTermsAgreement() != null) {
-            createUserAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getGdprTermsAgreement().getId()));
+        if (userAgreementDto.getGdprTermsAgreement() != null) {
+            createUserAgreementIfDoesntExists(user, agreementDao.findById(userAgreementDto.getGdprTermsAgreement()));
         }
 
-        AuthenticatedUser authenticate = authenticate(user, userStatus.getLoginFrom());
+        AuthenticatedUser authenticate = authenticate(user, userAgreementDto.getLoginFrom());
         authenticationStateDao.delete(state);
 
         logger.info(format("User with id %s finalized login and logged in", user.getId()));
         return authenticate;
     }
 
-    public void rejectAgreement(UserStatus userStatus) {
-        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userStatus.getToken());
+    public void rejectAgreement(UserAgreementDto userAgreementDto) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userAgreementDto.getToken());
         if (state == null) {
             return;
         }
@@ -125,18 +126,18 @@ public class LoginService {
             authenticationStateDao.delete(state);
             return;
         }
-        if (userStatus.getUserTermsAgreement() == null && userStatus.getGdprTermsAgreement() == null) {
-            throw new RuntimeException("No agreements for token: " + userStatus.getToken());
+        if (userAgreementDto.getUserTermsAgreement() == null && userAgreementDto.getGdprTermsAgreement() == null) {
+            throw new RuntimeException("No agreements for token: " + userAgreementDto.getToken());
         }
         User user = userService.getUserByIdCode(state.getIdCode());
         if (user == null) {
             return;
         }
-        if (userStatus.getUserTermsAgreement() != null) {
-            rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getUserTermsAgreement().getId()));
+        if (userAgreementDto.getUserTermsAgreement() != null) {
+            rejectAgreementIfDoesntExists(user, agreementDao.findById(userAgreementDto.getUserTermsAgreement()));
         }
-        if (userStatus.getGdprTermsAgreement() != null) {
-            rejectAgreementIfDoesntExists(user, agreementDao.findById(userStatus.getGdprTermsAgreement().getId()));
+        if (userAgreementDto.getGdprTermsAgreement() != null) {
+            rejectAgreementIfDoesntExists(user, agreementDao.findById(userAgreementDto.getGdprTermsAgreement()));
         }
     }
 

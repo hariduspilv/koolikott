@@ -6,6 +6,7 @@ import ee.hm.dop.model.mobileid.MobileIDSecurityCodes;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.login.*;
 import ee.hm.dop.service.login.dto.IdCardInfo;
+import ee.hm.dop.service.login.dto.UserAgreementDto;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.metadata.LanguageService;
 import ee.hm.dop.service.useractions.AuthenticatedUserService;
@@ -56,14 +57,14 @@ public class LoginResource extends BaseResource {
     private HaridService haridService;
 
     @PostMapping("/finalizeLogin")
-    public AuthenticatedUser permissionConfirm(@RequestBody UserStatus userStatus) {
-        return confirmed(userStatus) ? loginService.finalizeLogin(userStatus) : null;
+    public AuthenticatedUser permissionConfirm(@RequestBody UserAgreementDto userAgreementDto) {
+        return confirmed(userAgreementDto) ? loginService.finalizeLogin(userAgreementDto) : null;
     }
 
     @PostMapping("/rejectAgreement")
-    public void permissionReject(@RequestBody UserStatus userStatus) {
-        if (userStatus.isExistingUser()) {
-            loginService.rejectAgreement(userStatus);
+    public void permissionReject(@RequestBody UserAgreementDto userAgreementDto) {
+        if (userAgreementDto.isExistingUser()) {
+            loginService.rejectAgreement(userAgreementDto);
         }
     }
 
@@ -209,7 +210,7 @@ public class LoginResource extends BaseResource {
         return new URI(format(LOGIN_REDIRECT_WITHOUT_TOKEN, getServerAddress()));
     }
 
-    private boolean confirmed(UserStatus userStatus) {
-        return userStatus != null && userStatus.isUserConfirmed();
+    private boolean confirmed(UserAgreementDto userAgreementDto) {
+        return userAgreementDto != null && userAgreementDto.isUserConfirmed();
     }
 }

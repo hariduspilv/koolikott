@@ -240,12 +240,12 @@ angular.module('koolikottApp')
                     checkUserPreviousResponse(userStatus.authenticatedUser)
                 } else {
                     const params = {
-                        token,
+                        existingUser,
                         userConfirmed,
                         statusOk,
+                        token,
                         userTermsAgreement : userTermsAgreement.id,
                         gdprTermsAgreement : gdprTermsAgreement.id,
-                        existingUser,
                         loginFrom
                     }
                     console.log(params)
@@ -478,12 +478,12 @@ angular.module('koolikottApp')
                     serverCallService.makeGet("rest/login/getAuthenticatedUser", {token}, authenticateUser, loginFail);
                 } else {
                     const params = {
-                        token,
+                        existingUser : (existingUser === 'true'),
                         userConfirmed : (userConfirmed === 'true'),
                         statusOk : (statusOk === 'true'),
+                        token,
                         userTermsAgreement : agreement,
                         gdprTermsAgreement : gdprAgreement,
-                        existingUser : (existingUser === 'true'),
                         loginFrom
                     }
                     console.log(params)
