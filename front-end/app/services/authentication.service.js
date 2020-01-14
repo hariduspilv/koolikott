@@ -232,14 +232,24 @@ angular.module('koolikottApp')
         }
 
         function loginSuccess(userStatus) {
-            console.log(userStatus)
+            const {token, userConfirmed, statusOk, userTermsAgreement, gdprTermsAgreement, existingUser, loginFrom} = userStatus;
             if (isEmpty(userStatus)) {
                 loginFail();
             } else {
                 if (userStatus.statusOk){
                     checkUserPreviousResponse(userStatus.authenticatedUser)
                 } else {
-                    showGdprModalAndAct(userStatus);
+                    const params = {
+                        token,
+                        userConfirmed,
+                        statusOk,
+                        userTermsAgreement,
+                        gdprTermsAgreement,
+                        existingUser,
+                        loginFrom
+                    }
+                    console.log(params)
+                    showGdprModalAndAct(params);
                 }
             }
         }
@@ -447,7 +457,7 @@ angular.module('koolikottApp')
 
             authenticateUsingOAuth: function(inputParams) {
                 console.log(inputParams)
-                const {token, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                const {token, isUserConfirmed, statusOk, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -469,11 +479,14 @@ angular.module('koolikottApp')
                 } else {
                     const params = {
                         token,
+                        isUserConfirmed,
+                        statusOk,
                         userTermsAgreement : agreement,
                         gdprTermsAgreement : gdprAgreement,
                         existingUser,
                         loginFrom
                     }
+                    console.log(params)
                     showGdprModalAndAct(params);
                 }
             },
