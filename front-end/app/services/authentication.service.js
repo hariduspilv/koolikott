@@ -213,6 +213,7 @@ angular.module('koolikottApp')
                     }
                 } else {
                     userStatus.userConfirmed = true;
+                    console.log(userStatus)
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
                             if ($rootScope.userHasEmailOnLogin) {
