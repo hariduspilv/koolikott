@@ -39,7 +39,7 @@ angular.module('koolikottApp')
         }
 
         function hasEmail(userStatus) {
-            userEmailService.hasEmailOnLogin(userStatus)
+            userEmailService.hasEmailOnLogin(userStatus.token)
                 .then(response => {
                     $rootScope.userHasEmailOnLogin = response.status === 200;
 

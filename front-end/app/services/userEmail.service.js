@@ -10,13 +10,13 @@
                 .makePost('rest/userEmail', {email: userEmail, user: user})
         }
 
-        checkDuplicateEmail(userEmail, userState) {
+        checkDuplicateEmail(userEmail, userToken) {
             return this.serverCallService
-                .makePost('rest/userEmail/check', {email: userEmail, userStatus: userState})
+                .makePost('rest/userEmail/check?userEmail=' + userEmail + '&token=' + userToken)
         }
 
-        hasEmailOnLogin(userState) {
-            return this.serverCallService.makePost('rest/userEmail/getEmailOnLogin', {userStatus: userState})
+        hasEmailOnLogin(userToken) {
+            return this.serverCallService.makePost('rest/userEmail/getEmailOnLogin?token=' + userToken)
         }
 
         checkDuplicateEmailForProfile(userEmail) {

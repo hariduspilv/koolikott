@@ -115,12 +115,12 @@ public class UserEmailService {
         return userEmailDao.createOrUpdate(setUserAndSendMail(userEmail));
     }
 
-    public boolean hasDuplicateEmail(UserEmail userEmail) {
-        if (isBlank(userEmail.getEmail()))
+    public boolean hasDuplicateEmail(String userEmail, String token) {
+        if (isBlank(userEmail))
             throw badRequest("Email Empty");
-        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userEmail.getUserStatus().getToken());
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(token);
         User user = userDao.findUserByIdCode(state.getIdCode());
-        UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail.getEmail());
+        UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail);
         return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
     }
 
@@ -165,8 +165,8 @@ public class UserEmailService {
         return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
     }
 
-    public Boolean hasEmail(UserEmail userEmail) {
-        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userEmail.getUserStatus().getToken());
+    public Boolean hasEmail(String token) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(token);
         User user = userDao.findUserByIdCode(state.getIdCode());
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
         return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());
