@@ -234,7 +234,7 @@ angular.module('koolikottApp')
         }
 
         function loginSuccess(userStatus) {
-            const {token, userConfirmed, statusOk, userTermsAgreement, gdprTermsAgreement, existingUser, loginFrom} = userStatus;
+            const {token, statusOk, userTermsAgreement, gdprTermsAgreement, existingUser, loginFrom} = userStatus;
             if (isEmpty(userStatus)) {
                 loginFail();
             } else {
@@ -242,8 +242,7 @@ angular.module('koolikottApp')
                     checkUserPreviousResponse(userStatus.authenticatedUser)
                 } else {
                     const params = {
-                        existingUser,
-                        userConfirmed,
+                        existingUser : existingUser ? existingUser : null,
                         statusOk,
                         token,
                         userTermsAgreement : userTermsAgreement ? userTermsAgreement.id : null,
@@ -457,15 +456,7 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                console.log(inputParams)
                 const {token, userConfirmed, statusOk, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
-                console.log(token)
-                console.log(userConfirmed)
-                console.log(statusOk)
-                console.log(agreement)
-                console.log(gdprAgreement)
-                console.log(existingUser)
-                console.log(loginFrom)
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -493,10 +484,9 @@ angular.module('koolikottApp')
                         statusOk : (statusOk === 'true'),
                         token,
                         userTermsAgreement : agreement ? agreement : null,
-                        gdprTermsAgreement : gdprAgreement ? agreement : null,
+                        gdprTermsAgreement : gdprAgreement ? gdprAgreement : null,
                         loginFrom
                     }
-                    console.log(params)
                     showGdprModalAndAct(params);
                 }
             },
