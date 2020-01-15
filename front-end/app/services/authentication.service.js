@@ -39,6 +39,8 @@ angular.module('koolikottApp')
         }
 
         function hasEmail(userStatus) {
+            console.log('hasemail')
+            console.log(userStatus)
             userEmailService.hasEmailOnLogin(userStatus.token)
                 .then(response => {
                     $rootScope.userHasEmailOnLogin = response.status === 200;
@@ -490,6 +492,7 @@ angular.module('koolikottApp')
                         gdprTermsAgreement : gdprAgreement ? gdprAgreement : null,
                         loginFrom
                     }
+                    console.log(params)
                     showGdprModalAndAct(params);
                 }
             },
