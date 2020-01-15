@@ -192,6 +192,7 @@ public class UserService {
                     if (learningObject instanceof Portfolio) {
                         Portfolio portfolio = portfolioService.findById(learningObject.getId());
                         if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
+                            logger.info(String.format("Portfolio with id %d has invalid materials", portfolio.getId()));
                             portfoliosToReturn.add(portfolio);
                         }
                     }
