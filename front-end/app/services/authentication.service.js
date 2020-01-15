@@ -235,6 +235,7 @@ angular.module('koolikottApp')
 
         function loginSuccess(userStatus) {
             const {token, statusOk, userTermsAgreement, gdprTermsAgreement, existingUser, loginFrom} = userStatus;
+            console.log(userStatus)
             if (isEmpty(userStatus)) {
                 loginFail();
             } else {
@@ -457,6 +458,8 @@ angular.module('koolikottApp')
 
             authenticateUsingOAuth: function(inputParams) {
                 const {token, userConfirmed, statusOk, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                console.log('2');
+                console.log(inputParams);
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
