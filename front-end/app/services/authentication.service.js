@@ -471,14 +471,14 @@ angular.module('koolikottApp')
                     return;
                 }
                 isOAuthAuthentication = true;
-                if (!(agreement || gdprAgreement || existingUser)){
+                if (statusOk === 'true') {
                     serverCallService.makeGet('rest/login/getAuthenticatedUser?token=' + token)
                         .then(({data}) => {
                         checkUserPreviousResponse(data)
                         })
                 } else {
                     const params = {
-                        existingUser : (existingUser === 'true'),
+                        existingUser : existingUser ? existingUser : null,
                         userConfirmed : (userConfirmed === 'true'),
                         statusOk : (statusOk === 'true'),
                         token,
