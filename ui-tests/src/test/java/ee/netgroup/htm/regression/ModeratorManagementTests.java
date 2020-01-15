@@ -3,10 +3,13 @@ package ee.netgroup.htm.regression;
 import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.api.EkoolikottApi;
 import ee.netgroup.htm.components.LeftMenu;
+import ee.netgroup.htm.helpers.Constants;
 import ee.netgroup.htm.page.LandingPage;
 import ee.netgroup.htm.page.MyPortfoliosPage;
 import ee.netgroup.htm.page.PortfolioPage;
 import org.testng.annotations.Test;
+
+import java.awt.*;
 
 import static ee.netgroup.htm.api.UserRole.MODERATOR;
 import static ee.netgroup.htm.api.UserRole.USER;
@@ -17,7 +20,7 @@ import static org.testng.Assert.assertTrue;
 
 public class ModeratorManagementTests extends DriverConf {
 
-    private static final String USER_USERNAME = "peeter.paan";
+    private static final String USER_USERNAME = Constants.eSchoolUser;
     private static final String USER_ID_CODE = "38011550077";
     private static final String ADMIN_ID_CODE = "89898989898";
 
