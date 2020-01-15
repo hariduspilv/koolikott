@@ -183,6 +183,7 @@ angular.module('koolikottApp')
         function checkUserPreviousResponse(authenticatedUser) {
             serverCallService.makeGet('rest/userLicenceAgreement?id=' + authenticatedUser.user.id)
                 .then((response => {
+                    console.log(response)
                     if (!response.data.hasLearningObjects) {
                         return authenticateUser(authenticatedUser)
                     }
