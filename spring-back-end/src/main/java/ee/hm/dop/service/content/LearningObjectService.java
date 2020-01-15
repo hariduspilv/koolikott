@@ -11,7 +11,10 @@ import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.service.permission.PermissionFactory;
 import ee.hm.dop.service.permission.PermissionItem;
+import ee.hm.dop.service.synchronizer.PortfolioLogCleaner;
 import ee.hm.dop.utils.ValidatorUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -41,6 +44,8 @@ public class LearningObjectService {
     private TaxonPositionDao taxonPositionDao;
     @Inject
     private PortfolioService portfolioService;
+
+    private static final Logger logger = LoggerFactory.getLogger(PortfolioLogCleaner.class);
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
@@ -133,6 +138,7 @@ public class LearningObjectService {
     }
 
     public boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
+        logger.info(String.format("Checking learningobject with id: %d", lo.getId()));
         if (lo instanceof Portfolio) {
             portfolioService.portfolioHasAcceptableLicenses(lo.getId());
         }
