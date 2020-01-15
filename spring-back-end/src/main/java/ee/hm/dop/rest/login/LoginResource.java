@@ -210,11 +210,11 @@ public class LoginResource extends BaseResource {
         if (status.getGdprTermsAgreement() != null) {
             stringBuilder.append(format("&gdprAgreement=%s", status.getGdprTermsAgreement().getId().toString()));
         }
-        System.out.println("Existing user?");
-        System.out.println(status.isExistingUser());
+        logger.info("Existing user?");
+        logger.info(String.valueOf(status.isExistingUser()));
         if (status.isExistingUser()) {
-            System.out.println("Existing user?");
-            System.out.println(status.isExistingUser());
+            logger.info("Existing user?");
+            logger.info(String.valueOf(status.isExistingUser()));
             stringBuilder.append(format("&existingUser=%s", status.isExistingUser()));
         }
         return new URI(stringBuilder.toString());
