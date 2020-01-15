@@ -184,13 +184,13 @@ angular.module('koolikottApp')
                     if (!response.data.hasLearningObjects) {
                         return authenticateUser(authenticatedUser)
                     }
-                    if (!response.data.licenceAgreement) {
+                    if (!response.data.userLicenceAgreement.licenceAgreement) {
                         showLicenceMigrationAgreementModal(authenticatedUser)
                     }
                     serverCallService.makeGet('rest/licenceAgreement/latest')
                         .then((res) => {
                             if (userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
-                                analyzeUserLatestResponse(response.data.licenceAgreement, authenticatedUser)
+                                analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
                             } else {
                                 showLicenceMigrationAgreementModal(authenticatedUser)
                             }
