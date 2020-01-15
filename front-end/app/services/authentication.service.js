@@ -470,8 +470,7 @@ angular.module('koolikottApp')
                     return;
                 }
                 isOAuthAuthentication = true;
-                console.log(statusOk)
-                if (statusOk === 'true'){
+                if (!(agreement || gdprAgreement || existingUser)){
                     serverCallService.makeGet("rest/login/getAuthenticatedUser", {token})
                         .then(({data}) => {
                         checkUserPreviousResponse(data)
