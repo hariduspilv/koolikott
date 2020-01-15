@@ -62,6 +62,14 @@ public class LearningObjectDao extends AbstractDao<LearningObject> {
                 .getResultList();
     }
 
+    public Long countAllNotDeletedByCreator(User creator) {
+        return (Long) getEntityManager()
+                .createQuery("SELECT count(lo) FROM LearningObject lo WHERE lo.deleted = false " +
+                "AND lo.creator = :creator")
+                .setParameter("creator", creator)
+                .getSingleResult();
+    }
+
     public List<LearningObject> findNewestLearningObjects(int numberOfLearningObjects, int startPosition) {
         return getEntityManager()
                 .createQuery("FROM LearningObject lo WHERE lo.deleted = false ORDER BY added DESC, id DESC", entity())
