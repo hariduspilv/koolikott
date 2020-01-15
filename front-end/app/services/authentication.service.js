@@ -469,10 +469,13 @@ angular.module('koolikottApp')
                     idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');
                     return;
                 }
-
                 isOAuthAuthentication = true;
-                if (!(agreement || existingUser)){
-                    serverCallService.makeGet("rest/login/getAuthenticatedUser", {token}, authenticateUser, loginFail);
+                console.log(statusOk)
+                if (statusOk === 'true'){
+                    serverCallService.makeGet("rest/login/getAuthenticatedUser", {token})
+                        .then(({data}) => {
+                        checkUserPreviousResponse(data)
+                        })
                 } else {
                     const params = {
                         existingUser : (existingUser === 'true'),
