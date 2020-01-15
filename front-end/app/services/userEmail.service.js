@@ -20,7 +20,6 @@
         }
 
         checkDuplicateEmailForProfile(userEmail) {
-            console.log(userEmail)
             return this.serverCallService.makePost('rest/userEmail/checkForProfile', {email: userEmail})
         }
 

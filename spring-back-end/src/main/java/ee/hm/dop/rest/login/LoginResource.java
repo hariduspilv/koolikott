@@ -191,36 +191,26 @@ public class LoginResource extends BaseResource {
     }
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
-        logger.info("Siin");
         if (status.isStatusOk()) {
-            logger.info("Siin2");
             return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
         }
         if (status.isEKoolUserMissingIdCode()) {
-            logger.info("Siin3");
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL, getServerAddress(), true));
         }
         if (status.isStuudiumUserMissingIdCode()) {
-            logger.info("Siin4");
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM, getServerAddress(), true));
         }
         if (status.isHarIdUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
-        logger.info("Siin5");
         StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.isStatusOk(),status.getLoginFrom().name()));
-        logger.info("Siin6");
         if (status.getUserTermsAgreement() != null) {
             stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));
         }
         if (status.getGdprTermsAgreement() != null) {
             stringBuilder.append(format("&gdprAgreement=%s", status.getGdprTermsAgreement().getId().toString()));
         }
-        logger.info("Existing user?");
-        logger.info(String.valueOf(status.isExistingUser()));
         if (status.isExistingUser()) {
-            logger.info("Existing user?");
-            logger.info(String.valueOf(status.isExistingUser()));
             stringBuilder.append(format("&existingUser=%s", status.isExistingUser()));
         }
         return new URI(stringBuilder.toString());
