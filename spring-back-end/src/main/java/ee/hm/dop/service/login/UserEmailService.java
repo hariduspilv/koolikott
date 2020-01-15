@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @Transactional
@@ -47,9 +46,9 @@ public class UserEmailService {
         User user = userDao.findUserById(id);
         UserEmail userEmail = userEmailDao.findByUser(user);
 
-        if (user != null && userEmail != null && userEmail.isActivated())
+        if (user != null && userEmail != null && emailIsNotEmpty(userEmail) && userEmail.isActivated())
             return userEmail;
-         else
+        else
             throw badRequest("User or user email not found or e-mail not activated");
     }
 
@@ -225,5 +224,9 @@ public class UserEmailService {
 
     public Long getSentEmailsCount(User loggedInUser) {
         return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
+    }
+
+    private boolean emailIsNotEmpty(UserEmail email) {
+        return email.getEmail() != null && isNotBlank(email.getEmail());
     }
 }
