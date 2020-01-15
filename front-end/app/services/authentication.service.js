@@ -459,6 +459,13 @@ angular.module('koolikottApp')
             authenticateUsingOAuth: function(inputParams) {
                 console.log(inputParams)
                 const {token, userConfirmed, statusOk, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                console.log(token)
+                console.log(userConfirmed)
+                console.log(statusOk)
+                console.log(agreement)
+                console.log(gdprAgreement)
+                console.log(existingUser)
+                console.log(loginFrom)
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -489,6 +496,7 @@ angular.module('koolikottApp')
                         gdprTermsAgreement : gdprAgreement ? agreement : null,
                         loginFrom
                     }
+                    console.log(params)
                     showGdprModalAndAct(params);
                 }
             },
