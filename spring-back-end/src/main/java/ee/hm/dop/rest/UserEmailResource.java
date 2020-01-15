@@ -26,7 +26,8 @@ public class UserEmailResource extends BaseResource {
     }
 
     @PostMapping("getEmailOnLogin")
-    public ResponseEntity<?> getEmailOnLogin(@RequestParam String token) {
+    public ResponseEntity<?> getEmailOnLogin(@RequestBody String token) {
+        System.out.println("token is: " + token);
         if (userEmailService.hasEmail(token)) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
