@@ -39,6 +39,8 @@ angular.module('koolikottApp')
         }
 
         function hasEmail(userStatus) {
+            console.log('hasemail')
+            console.log(userStatus)
             userEmailService.hasEmailOnLogin(userStatus.token)
                 .then(response => {
                     $rootScope.userHasEmailOnLogin = response.status === 200;
@@ -234,7 +236,8 @@ angular.module('koolikottApp')
         }
 
         function loginSuccess(userStatus) {
-            const {token, userConfirmed, statusOk, userTermsAgreement, gdprTermsAgreement, existingUser, loginFrom} = userStatus;
+            const {token, statusOk, userTermsAgreement, gdprTermsAgreement, existingUser, loginFrom} = userStatus;
+            console.log(userStatus)
             if (isEmpty(userStatus)) {
                 loginFail();
             } else {
@@ -242,8 +245,7 @@ angular.module('koolikottApp')
                     checkUserPreviousResponse(userStatus.authenticatedUser)
                 } else {
                     const params = {
-                        existingUser,
-                        userConfirmed,
+                        existingUser : existingUser ? existingUser : null,
                         statusOk,
                         token,
                         userTermsAgreement : userTermsAgreement ? userTermsAgreement.id : null,
@@ -457,8 +459,9 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                console.log(inputParams)
                 const {token, userConfirmed, statusOk, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                console.log('2');
+                console.log(inputParams);
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -474,21 +477,22 @@ angular.module('koolikottApp')
                     return;
                 }
                 isOAuthAuthentication = true;
-                if (!(agreement || gdprAgreement || existingUser)){
+                if (statusOk === 'true') {
                     serverCallService.makeGet('rest/login/getAuthenticatedUser?token=' + token)
                         .then(({data}) => {
                         checkUserPreviousResponse(data)
                         })
                 } else {
                     const params = {
-                        existingUser : (existingUser === 'true'),
+                        existingUser : existingUser ? existingUser : null,
                         userConfirmed : (userConfirmed === 'true'),
                         statusOk : (statusOk === 'true'),
                         token,
                         userTermsAgreement : agreement ? agreement : null,
-                        gdprTermsAgreement : gdprAgreement ? agreement : null,
+                        gdprTermsAgreement : gdprAgreement ? gdprAgreement : null,
                         loginFrom
                     }
+                    console.log(params)
                     showGdprModalAndAct(params);
                 }
             },

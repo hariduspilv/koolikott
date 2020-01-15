@@ -34,7 +34,7 @@ public class LoginResource extends BaseResource {
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+personal_code&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
-    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&userConfirmed=%s&statusOk=%s&agreement=%s&gdprAgreement=%s&existingUser=%s&loginFrom=%s";
+    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&statusOk=%s&loginFrom=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
@@ -203,7 +203,17 @@ public class LoginResource extends BaseResource {
         if (status.isHarIdUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
-        return new URI(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.isUserConfirmed(), status.isStatusOk(), status.getUserTermsAgreement().getId().toString(), status.getGdprTermsAgreement().getId().toString(), status.isExistingUser(), status.getLoginFrom().name()));
+        StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.isStatusOk(),status.getLoginFrom().name()));
+        if (status.getUserTermsAgreement() != null) {
+            stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));
+        }
+        if (status.getGdprTermsAgreement() != null) {
+            stringBuilder.append(format("&gdprAgreement=%s", status.getGdprTermsAgreement().getId().toString()));
+        }
+        if (status.isExistingUser()) {
+            stringBuilder.append(format("&existingUser=%s", status.isExistingUser()));
+        }
+        return new URI(stringBuilder.toString());
     }
 
     private URI redirectFailure() throws URISyntaxException {
