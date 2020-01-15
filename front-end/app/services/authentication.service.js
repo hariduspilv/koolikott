@@ -185,7 +185,8 @@ angular.module('koolikottApp')
                         return authenticateUser(authenticatedUser)
                     }
                     if (!response.data.userLicenceAgreement.licenceAgreement) {
-                        showLicenceMigrationAgreementModal(authenticatedUser)
+                        checkLicencesAndAct(authenticatedUser)
+                        // showLicenceMigrationAgreementModal(authenticatedUser)
                     }
                     serverCallService.makeGet('rest/licenceAgreement/latest')
                         .then((res) => {
