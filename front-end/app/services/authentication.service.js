@@ -145,7 +145,7 @@ angular.module('koolikottApp')
                 if (!res)
                     loginFail()
                 else {
-                    showLicenceMigrationAgreementModal(response.data)
+                    checkUserPreviousResponse(response.data)
                 }
             })
         }
