@@ -174,7 +174,7 @@ angular.module('koolikottApp')
                 $rootScope.canCloseWaitingDialog = true
                 checkLicencesAndAct(authenticatedUser)
             }  else {
-                showLicenceMigrationAgreementModal(authenticatedUser)
+                checkLicencesAndAct(authenticatedUser)
             }
         }
 
