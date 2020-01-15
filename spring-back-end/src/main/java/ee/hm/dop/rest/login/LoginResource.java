@@ -191,19 +191,25 @@ public class LoginResource extends BaseResource {
     }
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
+        logger.info("Siin");
         if (status.isStatusOk()) {
+            logger.info("Siin2");
             return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
         }
         if (status.isEKoolUserMissingIdCode()) {
+            logger.info("Siin3");
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL, getServerAddress(), true));
         }
         if (status.isStuudiumUserMissingIdCode()) {
+            logger.info("Siin4");
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_STUUDIUM, getServerAddress(), true));
         }
         if (status.isHarIdUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
+        logger.info("Siin5");
         StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.isStatusOk(),status.getLoginFrom().name()));
+        logger.info("Siin6");
         if (status.getUserTermsAgreement() != null) {
             stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));
         }
