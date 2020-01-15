@@ -213,7 +213,6 @@ angular.module('koolikottApp')
                     }
                 } else {
                     userStatus.userConfirmed = true;
-                    console.log(userStatus)
                     serverCallService.makePost('rest/login/finalizeLogin', userStatus)
                         .then((response) => {
                             if ($rootScope.userHasEmailOnLogin) {
@@ -244,11 +243,10 @@ angular.module('koolikottApp')
                         userConfirmed,
                         statusOk,
                         token,
-                        userTermsAgreement : userTermsAgreement.id,
-                        gdprTermsAgreement : gdprTermsAgreement.id,
+                        userTermsAgreement : userTermsAgreement ? userTermsAgreement.id : null,
+                        gdprTermsAgreement : gdprTermsAgreement ? gdprTermsAgreement.id : null,
                         loginFrom
                     }
-                    console.log(params)
                     showGdprModalAndAct(params);
                 }
             }
@@ -456,7 +454,6 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                console.log(inputParams)
                 const {token, userConfirmed, statusOk, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
@@ -482,11 +479,10 @@ angular.module('koolikottApp')
                         userConfirmed : (userConfirmed === 'true'),
                         statusOk : (statusOk === 'true'),
                         token,
-                        userTermsAgreement : agreement,
-                        gdprTermsAgreement : gdprAgreement,
+                        userTermsAgreement : agreement ? agreement : null,
+                        gdprTermsAgreement : gdprAgreement ? agreement : null,
                         loginFrom
                     }
-                    console.log(params)
                     showGdprModalAndAct(params);
                 }
             },
