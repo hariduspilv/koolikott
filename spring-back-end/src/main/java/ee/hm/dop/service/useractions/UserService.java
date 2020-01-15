@@ -262,6 +262,7 @@ public class UserService {
     }
 
     private boolean portfolioHasInvalidMaterialCreatedByAnotherAuthor(Portfolio portfolio, User user) {
+        logger.info(String.format("Portfolio with ID %d", portfolio.getId()));
         return materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
                 .anyMatch(material -> material.getCreator() != null && !material.getCreator().getId().equals(user.getId())) &&
                 portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
