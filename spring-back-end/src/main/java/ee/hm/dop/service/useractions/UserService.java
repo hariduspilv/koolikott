@@ -181,13 +181,18 @@ public class UserService {
     }
 
     public List<Portfolio> setLearningObjectsPrivate(User user) {
+        logger.info(String.format("Setting LearningObjects private for user %d", user.getId()));
         List<Portfolio> portfoliosToReturn = new ArrayList<>();
+        learningObjectService.getAllByCreator(user).forEach(l -> {
+            logger.info(String.format("Setting LearningObject %d private", l.getId()));
+        });
         learningObjectService.getAllByCreator(user)
                 .stream()
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
                     learningObject.setVisibility(Visibility.PRIVATE);
+                    logger.info(String.format("Private learningobject %d", learningObject.getId()));
 
                     if (learningObject instanceof Portfolio) {
                         Portfolio portfolio = portfolioService.findById(learningObject.getId());
