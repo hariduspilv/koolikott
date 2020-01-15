@@ -12,11 +12,11 @@
 
         checkDuplicateEmail(userEmail, userToken) {
             return this.serverCallService
-                .makePost('rest/userEmail/check' + {userEmail: userEmail, token:  userToken})
+                .makePost('rest/userEmail/check', {userEmail: userEmail, token:  userToken})
         }
 
         hasEmailOnLogin(userToken) {
-            return this.serverCallService.makePost('rest/userEmail/getEmailOnLogin' + {token: userToken})
+            return this.serverCallService.makePost('rest/userEmail/getEmailOnLogin', {token: userToken})
         }
 
         checkDuplicateEmailForProfile(userEmail) {
