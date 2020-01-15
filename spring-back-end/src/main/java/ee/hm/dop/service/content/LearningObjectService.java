@@ -3,6 +3,7 @@ package ee.hm.dop.service.content;
 import ee.hm.dop.dao.LearningObjectDao;
 import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.LearningObject;
+import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.TaxonLevel;
@@ -38,6 +39,8 @@ public class LearningObjectService {
     private LearningObjectServiceCache learningObjectServiceCache;
     @Inject
     private TaxonPositionDao taxonPositionDao;
+    @Inject
+    private PortfolioService portfolioService;
 
     public LearningObject get(long learningObjectId, User user) {
         LearningObject learningObject = learningObjectDao.findById(learningObjectId);
@@ -130,6 +133,9 @@ public class LearningObjectService {
     }
 
     public boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
+        if (lo instanceof Portfolio) {
+            portfolioService.portfolioHasAcceptableLicenses(lo.getId());
+        }
         return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals(CCBYSA30.name());
     }
 }
