@@ -69,12 +69,17 @@ angular.module('koolikottApp')
         }
 
         function setAllLearningObjectsToPrivate(authenticatedUser) {
+            console.log('siin')
             $timeout(() => {
                 showPleaseWaitDialog()
             }, 100)
+            console.log($rootScope.previouslyDisagreed)
             if (!$rootScope.previouslyDisagreed) {
+                console.log('siin 2')
                 serverCallService.makePost('rest/user/setLearningObjectsPrivate', authenticatedUser.user)
                     .then((response) => {
+                        console.log('siin 3')
+                        console.log(response.data)
                         $rootScope.rejectedPortfolios = response.data
                         $rootScope.canCloseWaitingDialog = true
                         authenticateUser(authenticatedUser)
