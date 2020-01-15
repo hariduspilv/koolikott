@@ -177,12 +177,14 @@ angular.module('koolikottApp')
 
         function analyzeUserLatestResponse(response, authenticatedUser) {
             if (response.agreed) {
+                $rootScope.previouslyDisagreed = false
                 authenticateUser(authenticatedUser)
             } else if (response.disagreed) {
                 $rootScope.previouslyDisagreed = true
                 $rootScope.canCloseWaitingDialog = true
                 checkLicencesAndAct(authenticatedUser)
             }  else {
+                $rootScope.previouslyDisagreed = false
                 checkLicencesAndAct(authenticatedUser)
             }
         }
