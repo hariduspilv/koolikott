@@ -5,8 +5,11 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.MailBuilder;
-import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.MailSender;
+import ee.hm.dop.service.PinGeneratorService;
+import ee.hm.dop.service.synchronizer.AuthenticatedUserCleaner;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -41,6 +44,8 @@ public class UserEmailService {
     private EmailToCreatorDao emailToCreatorDao;
     @Inject
     private LearningObjectDao learningObjectDao;
+
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticatedUserCleaner.class);
 
     public UserEmail getUserEmail(long id) {
         User user = userDao.findUserById(id);
@@ -166,6 +171,7 @@ public class UserEmailService {
 
     public Boolean hasEmail(String token) {
         AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(token);
+        logger.info(String.format("Hasemail? user idCode: %s", state.getIdCode()));
         User user = userDao.findUserByIdCode(state.getIdCode());
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
         return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());

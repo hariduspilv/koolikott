@@ -16,7 +16,7 @@
         }
 
         hasEmailOnLogin(userToken) {
-            return this.serverCallService.makePost('rest/userEmail/getEmailOnLogin', {userEmail: null, token: userToken})
+            return this.serverCallService.makePost('rest/userEmail/getEmailOnLogin', {token: userToken})
         }
 
         checkDuplicateEmailForProfile(userEmail) {
