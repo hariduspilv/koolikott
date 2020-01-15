@@ -106,6 +106,7 @@ angular.module('koolikottApp')
         }
 
         function saveResponseAndSetLearningObjectsToPrivate(authenticatedUser) {
+            console.log('setting private')
             setAllLearningObjectsToPrivate(authenticatedUser)
             serverCallService.makePost('rest/userLicenceAgreement',
                 createLicenceAgreementResponse(authenticatedUser.user.id, false, true))
@@ -118,9 +119,12 @@ angular.module('koolikottApp')
         }
 
         function checkMigrationAgreementResponse(migrationResponse, authenticatedUser) {
+            console.log('Checking')
+            console.log(migrationResponse)
             if (migrationResponse.agreed) {
                 saveResponseAndMigrateLicences(authenticatedUser)
             } else if (migrationResponse.disagreed) {
+                console.log('disagreed')
                 saveResponseAndSetLearningObjectsToPrivate(authenticatedUser)
             } else {
                 saveResponseAndLogOut(authenticatedUser)
