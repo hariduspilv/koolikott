@@ -140,7 +140,7 @@ public class LearningObjectService {
     public boolean learningObjectHasUnAcceptableLicence(LearningObject lo) {
         logger.info(String.format("Checking learningobject with id: %d", lo.getId()));
         if (lo instanceof Portfolio) {
-            portfolioService.portfolioHasAcceptableLicenses(lo.getId());
+            return !portfolioService.portfolioHasAcceptableLicenses(lo.getId());
         }
         return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals(CCBYSA30.name());
     }
