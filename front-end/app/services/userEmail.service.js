@@ -20,8 +20,8 @@
         }
 
         checkDuplicateEmailForProfile(userEmail) {
-            return this.serverCallService
-                .makePost('rest/userEmail/checkForProfile', {email: userEmail})
+            console.log(userEmail)
+            return this.serverCallService.makePost('rest/userEmail/checkForProfile', {email: userEmail})
         }
 
         validatePin(user, pin, email, location) {
