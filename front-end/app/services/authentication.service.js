@@ -189,7 +189,7 @@ angular.module('koolikottApp')
                     if (!response.data.hasLearningObjects) {
                         return authenticateUser(authenticatedUser)
                     }
-                    if (!response.data.userLicenceAgreement.licenceAgreement) {
+                    if (response.data.userLicenceAgreement && !response.data.userLicenceAgreement.licenceAgreement) {
                         checkLicencesAndAct(authenticatedUser)
                     }
                     serverCallService.makeGet('rest/licenceAgreement/latest')
