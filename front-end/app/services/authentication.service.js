@@ -184,6 +184,8 @@ angular.module('koolikottApp')
         function checkUserPreviousResponse(authenticatedUser) {
             serverCallService.makeGet('rest/userLicenceAgreement?id=' + authenticatedUser.user.id)
                 .then((response => {
+                    console.log('1')
+                    console.log(response)
                     if (!response.data.hasLearningObjects) {
                         return authenticateUser(authenticatedUser)
                     }
@@ -192,6 +194,8 @@ angular.module('koolikottApp')
                     }
                     serverCallService.makeGet('rest/licenceAgreement/latest')
                         .then((res) => {
+                            console.log('2')
+                            console.log(res)
                             if (userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
                                 analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
                             } else {
@@ -320,6 +324,7 @@ angular.module('koolikottApp')
                 mobileIdLoginSuccessCallback();
             }
 
+            console.log($rootScope.rejectedPortfolios)
             if ($rootScope.rejectedPortfolios.length > 0 && !$rootScope.previouslyDisagreed) {
                 $timeout(() => { $mdDialog.show({
                     templateUrl: 'views/notMigratedPortfoliosDialog/notMigratedPortfoliosDialog.html',
