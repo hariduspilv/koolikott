@@ -185,7 +185,6 @@ public class PortfolioService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Portfolio is required.");
         }
         List<Material> portfolioMaterials = materialService.getAllMaterialIfLearningObjectIsPortfolio(portfolio);
-        logger.info(String.format("Checking portfolio with id %d. Materials size %d", portfolio.getId(), portfolioMaterials.size()));
         return portfolioMaterials.stream()
                 .anyMatch(material -> materialService.materialHasUnacceptableLicense(material));
     }

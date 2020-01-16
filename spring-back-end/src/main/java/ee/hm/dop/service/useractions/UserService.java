@@ -181,23 +181,17 @@ public class UserService {
     }
 
     public List<Portfolio> setLearningObjectsPrivate(User user) {
-        logger.info(String.format("Setting LearningObjects private for user %d", user.getId()));
         List<Portfolio> portfoliosToReturn = new ArrayList<>();
-        learningObjectService.getAllByCreator(user).forEach(l -> {
-            logger.info(String.format("Setting LearningObject %d private", l.getId()));
-        });
         learningObjectService.getAllByCreator(user)
                 .stream()
                 .filter(lo -> learningObjectHasUnAcceptableLicence(lo) ||
                         (lo.getPicture() != null && pictureHasUnAcceptableLicence(lo.getPicture())))
                 .forEach(learningObject -> {
                     learningObject.setVisibility(Visibility.PRIVATE);
-                    logger.info(String.format("Private learningobject %d", learningObject.getId()));
 
                     if (learningObject instanceof Portfolio) {
                         Portfolio portfolio = portfolioService.findById(learningObject.getId());
                         if (portfolioHasInvalidMaterialCreatedByAnotherAuthor(portfolio, user)) {
-                            logger.info(String.format("Portfolio with id %d has invalid materials", portfolio.getId()));
                             portfoliosToReturn.add(portfolio);
                         }
                     }
@@ -267,17 +261,23 @@ public class UserService {
     }
 
     private boolean portfolioHasInvalidMaterialCreatedByAnotherAuthor(Portfolio portfolio, User user) {
-        logger.info(String.format("Portfolio with ID %d", portfolio.getId()));
-        return (materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
-                .anyMatch(material -> material.getCreator() != null && !material.getCreator().getId().equals(user.getId())) &&
-                portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio)) ||
-                (materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
-                .anyMatch(material -> material.getCreator() == null) && portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio));
+        return (portfolioMaterialInvalidAndCreatorNotUser(portfolio, user)) || portfolioMaterialInvalidAndCreatorMissing(portfolio);
     }
 
     private void migrateLearningObjectLicense(LearningObject learningObject, LicenseType licenseType) {
         learningObject.setLicenseType(licenseType);
         if (learningObject.getPicture() != null)
             setPictureLicenseType(learningObject, licenseType);
+    }
+
+    private boolean portfolioMaterialInvalidAndCreatorMissing(Portfolio portfolio) {
+        return materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
+                .anyMatch(material -> material.getCreator() == null) && portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
+    }
+
+    private boolean portfolioMaterialInvalidAndCreatorNotUser(Portfolio portfolio, User user) {
+        return materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
+                .anyMatch(material -> material.getCreator() != null && !material.getCreator().getId().equals(user.getId())) &&
+                portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
     }
 }

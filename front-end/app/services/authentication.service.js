@@ -69,17 +69,12 @@ angular.module('koolikottApp')
         }
 
         function setAllLearningObjectsToPrivate(authenticatedUser) {
-            console.log('siin')
             $timeout(() => {
                 showPleaseWaitDialog()
             }, 100)
-            console.log($rootScope.previouslyDisagreed)
             if (!$rootScope.previouslyDisagreed) {
-                console.log('siin 2')
                 serverCallService.makePost('rest/user/setLearningObjectsPrivate', authenticatedUser.user)
                     .then((response) => {
-                        console.log('siin 3')
-                        console.log(response.data)
                         $rootScope.rejectedPortfolios = response.data
                         $rootScope.canCloseWaitingDialog = true
                         authenticateUser(authenticatedUser)
@@ -106,7 +101,6 @@ angular.module('koolikottApp')
         }
 
         function saveResponseAndSetLearningObjectsToPrivate(authenticatedUser) {
-            console.log('setting private')
             setAllLearningObjectsToPrivate(authenticatedUser)
             serverCallService.makePost('rest/userLicenceAgreement',
                 createLicenceAgreementResponse(authenticatedUser.user.id, false, true))
@@ -119,12 +113,9 @@ angular.module('koolikottApp')
         }
 
         function checkMigrationAgreementResponse(migrationResponse, authenticatedUser) {
-            console.log('Checking')
-            console.log(migrationResponse)
             if (migrationResponse.agreed) {
                 saveResponseAndMigrateLicences(authenticatedUser)
             } else if (migrationResponse.disagreed) {
-                console.log('disagreed')
                 saveResponseAndSetLearningObjectsToPrivate(authenticatedUser)
             } else {
                 saveResponseAndLogOut(authenticatedUser)

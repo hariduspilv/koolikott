@@ -363,7 +363,6 @@ public class MaterialService {
         if (licenseType == null) {
             return true;
         }
-        logger.info(String.format("Checking material with id %d. License type is %s", material.getId(), material.getLicenseType().getName()));
         return !licenseType.getName().equals(CCBYSA30.name()) ||
                 materialPictureHasInvalidLicense(material);
 
