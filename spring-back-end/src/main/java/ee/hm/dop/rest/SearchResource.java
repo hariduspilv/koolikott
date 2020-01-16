@@ -71,7 +71,9 @@ public class SearchResource extends BaseResource {
                                @RequestParam(value = "isGrouped", required = false) boolean isGrouped) {
 
         SearchFilter searchFilter = new SearchFilter();
+        System.out.println("enne taxoneid");
         searchFilter.setTaxons(taxonService.getTaxonById(taxonIds));
+        System.out.println("p'rast taxoneid");
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(languageService.getLanguage(languageCode));
