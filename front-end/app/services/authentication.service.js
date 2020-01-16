@@ -196,7 +196,7 @@ angular.module('koolikottApp')
                         .then((res) => {
                             console.log('2')
                             console.log(res)
-                            if (userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
+                            if (response.data.userLicenceAgreement && userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
                                 analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
                             } else {
                                 showLicenceMigrationAgreementModal(authenticatedUser)
