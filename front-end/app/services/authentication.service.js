@@ -153,12 +153,16 @@ angular.module('koolikottApp')
         }
 
         function checkLicencesAndAct(authenticatedUser) {
+            console.log('checking licences');
             serverCallService.makeGet('/rest/user/areLicencesAcceptable?id=' + authenticatedUser.user.id)
                 .then((response) => {
                         if (response) {
+                            console.log(response)
                             if (response.data) {
+                                console.log('checking licences 1');
                                 authenticateUser(authenticatedUser)
                             } else {
+                                console.log('checking licences 2');
                                 showLicenceMigrationAgreementModal(authenticatedUser)
                             }
                         }
@@ -191,17 +195,18 @@ angular.module('koolikottApp')
                     }
                     if (!response.data.userLicenceAgreement || !response.data.userLicenceAgreement.licenceAgreement) {
                         checkLicencesAndAct(authenticatedUser)
+                    } else {
+                        serverCallService.makeGet('rest/licenceAgreement/latest')
+                            .then((res) => {
+                                console.log('2')
+                                console.log(res)
+                                if (response.data.userLicenceAgreement && userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
+                                    analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
+                                } else {
+                                    showLicenceMigrationAgreementModal(authenticatedUser)
+                                }
+                            })
                     }
-                    serverCallService.makeGet('rest/licenceAgreement/latest')
-                        .then((res) => {
-                            console.log('2')
-                            console.log(res)
-                            if (response.data.userLicenceAgreement && userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
-                                analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
-                            } else {
-                                showLicenceMigrationAgreementModal(authenticatedUser)
-                            }
-                        })
                 }))
         }
 
