@@ -1,19 +1,12 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.SortDirection;
-import ee.hm.dop.model.SortType;
-import ee.hm.dop.service.metadata.CrossCurricularThemeService;
-import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.ResourceTypeService;
-import ee.hm.dop.service.metadata.TargetGroupService;
-import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.model.*;
+import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -45,6 +38,8 @@ public class SearchResource extends BaseResource {
     @Inject
     private TargetGroupService targetGroupService;
 
+    private static final Logger logger = LoggerFactory.getLogger(SearchResource.class);
+
     @GetMapping
     public SearchResult search(@RequestParam(value = "q", required = false) String query,
                                @RequestParam(value = "start", required = false) Long start,
@@ -71,9 +66,10 @@ public class SearchResource extends BaseResource {
                                @RequestParam(value = "isGrouped", required = false) boolean isGrouped) {
 
         SearchFilter searchFilter = new SearchFilter();
-        System.out.println("enne taxoneid");
+        logger.info("enne taxonit " + taxonIds);
         searchFilter.setTaxons(taxonService.getTaxonById(taxonIds));
-        System.out.println("p'rast taxoneid");
+        logger.info("taxonService vastus: " + taxonService.getTaxonById(taxonIds));
+        logger.info("p'rast taxonit " + taxonIds);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(languageService.getLanguage(languageCode));
