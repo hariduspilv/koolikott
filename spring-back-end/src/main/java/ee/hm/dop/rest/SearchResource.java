@@ -5,8 +5,6 @@ import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -38,7 +36,6 @@ public class SearchResource extends BaseResource {
     @Inject
     private TargetGroupService targetGroupService;
 
-    private static final Logger logger = LoggerFactory.getLogger(SearchResource.class);
 
     @GetMapping
     public SearchResult search(@RequestParam(value = "q", required = false) String query,
@@ -66,10 +63,7 @@ public class SearchResource extends BaseResource {
                                @RequestParam(value = "isGrouped", required = false) boolean isGrouped) {
 
         SearchFilter searchFilter = new SearchFilter();
-        logger.info("enne taxonit " + taxonIds);
         searchFilter.setTaxons(taxonService.getTaxonById(taxonIds));
-        logger.info("taxonService vastus: " + taxonService.getTaxonById(taxonIds));
-        logger.info("p'rast taxonit " + taxonIds);
         searchFilter.setPaid(paid);
         searchFilter.setType(type);
         searchFilter.setLanguage(languageService.getLanguage(languageCode));

@@ -8,6 +8,8 @@ import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SolrSearchResponse;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +49,8 @@ public class SearchService {
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private LearningObjectDao learningObjectDao;
+
+    private static final Logger logger = LoggerFactory.getLogger(SearchService.class);
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         User user = searchFilter.getRequestingUser();
@@ -170,7 +174,9 @@ public class SearchService {
     private List<Searchable> retrieveSearchedItems(List<Document> documents, User
             loggedInUser, List<Long> idsForOrder) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
+        logger.info("enne queryt idga: " + learningObjectIds.toString());
         List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(learningObjectIds);
+        logger.info("peale queryt: " + learningObjectIds.toString());
         if (loggedInUser != null) {
             List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(learningObjectIds, loggedInUser);
             reducedLOs.forEach(e -> e.setFavorite(favored.contains(e.getId())));
