@@ -211,7 +211,7 @@ public class LoginResource extends BaseResource {
     private URI getUri(UserStatus status) throws URISyntaxException {
         logger.info(String.format("Server address: %s", getServerAddress()));
         StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.isStatusOk()));
-        if (status.getAuthenticatedUser().getToken() != null) {
+        if (status.getAuthenticatedUser() != null) {
             stringBuilder.append(format("token=%s", status.getAuthenticatedUser().getToken()));
         }
         if (status.getUserTermsAgreement() != null) {
