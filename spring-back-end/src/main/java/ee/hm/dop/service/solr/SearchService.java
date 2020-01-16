@@ -174,8 +174,9 @@ public class SearchService {
     private List<Searchable> retrieveSearchedItems(List<Document> documents, User
             loggedInUser, List<Long> idsForOrder) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
-        logger.info(learningObjectIds.toString());
+        logger.info("enne queryt idga: " + learningObjectIds.toString());
         List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(learningObjectIds);
+        logger.info("peale queryt: " + learningObjectIds.toString());
         if (loggedInUser != null) {
             List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(learningObjectIds, loggedInUser);
             reducedLOs.forEach(e -> e.setFavorite(favored.contains(e.getId())));
