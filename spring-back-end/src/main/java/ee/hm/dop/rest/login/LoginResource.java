@@ -191,19 +191,11 @@ public class LoginResource extends BaseResource {
     }
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
+        logger.info(String.format("UserStatus status ok: %s", status.isStatusOk()));
         if (status.isStatusOk()) {
-            StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.isStatusOk(),status.getLoginFrom().name()));
-            if (status.getUserTermsAgreement() != null) {
-                stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));
-            }
-            if (status.getGdprTermsAgreement() != null) {
-                stringBuilder.append(format("&gdprAgreement=%s", status.getGdprTermsAgreement().getId().toString()));
-            }
-            if (status.isExistingUser()) {
-                stringBuilder.append(format("&existingUser=%s", status.isExistingUser()));
-            }
-            return new URI(stringBuilder.toString());
+            return getUri(status);
         }
+        logger.info(String.format("missing harId Id code: %s", status.isHarIdUserMissingIdCode()));
         if (status.isEKoolUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL, getServerAddress(), true));
         }
@@ -213,6 +205,10 @@ public class LoginResource extends BaseResource {
         if (status.isHarIdUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
+        return getUri(status);
+    }
+
+    private URI getUri(UserStatus status) throws URISyntaxException {
         StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.isStatusOk(),status.getLoginFrom().name()));
         if (status.getUserTermsAgreement() != null) {
             stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));
