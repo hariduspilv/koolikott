@@ -34,7 +34,7 @@ public class LoginResource extends BaseResource {
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+personal_code&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
-    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&statusOk=%s&loginFrom=%s";
+    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&statusOk=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
@@ -211,8 +211,7 @@ public class LoginResource extends BaseResource {
     private URI getUri(UserStatus status) throws URISyntaxException {
         logger.info(String.format("Server address: %s", getServerAddress()));
         logger.info(String.format("Token: %s", status.getAuthenticatedUser().getToken()));
-        logger.info(String.format("Login from: %s", status.getLoginFrom().name()));
-        StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getAuthenticatedUser().getToken(), status.isStatusOk(),status.getLoginFrom().name()));
+        StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getAuthenticatedUser().getToken(), status.isStatusOk()));
         if (status.getUserTermsAgreement() != null) {
             stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));
         }
@@ -221,6 +220,9 @@ public class LoginResource extends BaseResource {
         }
         if (status.isExistingUser()) {
             stringBuilder.append(format("&existingUser=%s", status.isExistingUser()));
+        }
+        if (status.getLoginFrom() != null) {
+            stringBuilder.append(format("&loginFrom=%s", status.getLoginFrom()));
         }
         return new URI(stringBuilder.toString());
     }
