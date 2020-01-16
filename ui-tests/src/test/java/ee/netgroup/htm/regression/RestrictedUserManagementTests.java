@@ -3,6 +3,7 @@ package ee.netgroup.htm.regression;
 import ee.netgroup.htm.DriverConf;
 import ee.netgroup.htm.api.EkoolikottApi;
 import ee.netgroup.htm.components.LeftMenu;
+import ee.netgroup.htm.helpers.Constants;
 import ee.netgroup.htm.page.LandingPage;
 import ee.netgroup.htm.page.MyPortfoliosPage;
 import org.testng.annotations.Test;
@@ -12,7 +13,7 @@ import static org.testng.Assert.assertFalse;
 
 public class RestrictedUserManagementTests extends DriverConf {
 
-    private static final String USER_USERNAME = "peeter.paan";
+    private static final String USER_USERNAME = Constants.eSchoolUser;
     private static final String USER_ID_CODE = "38011550077";
     private static final String ADMIN_ID_CODE = "89898989898";
 
@@ -36,7 +37,7 @@ public class RestrictedUserManagementTests extends DriverConf {
     }
 
     @Test
-    public void canCreateNewLearningObjectAfterChangingUserRoleToUser(){
+    public void canCreateNewLearningObjectAfterChangingUserRoleToUser() {
         EkoolikottApi.setUserRole(USER_ID_CODE, USER);
 
         LandingPage.goToLandingPage().loginUsingDev(USER_ID_CODE);
