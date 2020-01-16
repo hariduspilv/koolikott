@@ -34,7 +34,7 @@ public class LoginResource extends BaseResource {
     private static final String STUUDIUM_AUTHENTICATION_URL = "%sclient_id=%s";
     private static final String HARID_AUTHENTICATION_URL = "%s?client_id=%s&redirect_uri=%s&scope=openid+profile+personal_code&response_type=code";
     private static final String HARID_AUTHENTICATION_SUCCESS_URL = "/rest/login/harid/success";
-    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?token=%s&statusOk=%s&loginFrom=%s";
+    public static final String LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT = "%s/#!/loginRedirect?statusOk=%s";
     public static final String LOGIN_REDIRECT_WITH_TOKEN = "%s/#!/loginRedirect?token=%s";
     public static final String LOGIN_REDIRECT_WITHOUT_TOKEN = "%s/#!/loginRedirect";
     public static final String LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL = "%s/#!/loginRedirect?eKoolUserMissingIdCode=%s";
@@ -191,9 +191,11 @@ public class LoginResource extends BaseResource {
     }
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
+        logger.info(String.format("UserStatus status ok: %s", status.isStatusOk()));
         if (status.isStatusOk()) {
-            return new URI(format(LOGIN_REDIRECT_WITH_TOKEN, getServerAddress(), status.getAuthenticatedUser().getToken()));
+            return new URI(getUri(status).append(format("&token=%s", status.getAuthenticatedUser().getToken())).toString());
         }
+        logger.info(String.format("missing harId Id code: %s", status.isHarIdUserMissingIdCode()));
         if (status.isEKoolUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL, getServerAddress(), true));
         }
@@ -203,7 +205,12 @@ public class LoginResource extends BaseResource {
         if (status.isHarIdUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_HARID, getServerAddress(), true));
         }
-        StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.getToken(), status.isStatusOk(),status.getLoginFrom().name()));
+        return new URI(getUri(status).append(format("&token=%s", status.getToken())).toString());
+    }
+
+    private StringBuilder getUri(UserStatus status) throws URISyntaxException {
+        logger.info(String.format("Server address: %s", getServerAddress()));
+        StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.isStatusOk()));
         if (status.getUserTermsAgreement() != null) {
             stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));
         }
@@ -213,7 +220,10 @@ public class LoginResource extends BaseResource {
         if (status.isExistingUser()) {
             stringBuilder.append(format("&existingUser=%s", status.isExistingUser()));
         }
-        return new URI(stringBuilder.toString());
+        if (status.getLoginFrom() != null) {
+            stringBuilder.append(format("&loginFrom=%s", status.getLoginFrom()));
+        }
+        return stringBuilder;
     }
 
     private URI redirectFailure() throws URISyntaxException {

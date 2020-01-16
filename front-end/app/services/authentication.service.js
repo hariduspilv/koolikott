@@ -169,6 +169,7 @@ angular.module('koolikottApp')
         function analyzeUserLatestResponse(response, authenticatedUser) {
             if (response.agreed) {
                 $rootScope.previouslyDisagreed = false
+                $rootScope.rejectedPortfolios = []
                 authenticateUser(authenticatedUser)
             } else if (response.disagreed) {
                 $rootScope.previouslyDisagreed = true
@@ -183,16 +184,19 @@ angular.module('koolikottApp')
         function checkUserPreviousResponse(authenticatedUser) {
             serverCallService.makeGet('rest/userLicenceAgreement?id=' + authenticatedUser.user.id)
                 .then((response => {
+                    console.log('1')
+                    console.log(response)
                     if (!response.data.hasLearningObjects) {
                         return authenticateUser(authenticatedUser)
                     }
-                    if (!response.data.userLicenceAgreement.licenceAgreement) {
+                    if (response.data.userLicenceAgreement && !response.data.userLicenceAgreement.licenceAgreement) {
                         checkLicencesAndAct(authenticatedUser)
-                        // showLicenceMigrationAgreementModal(authenticatedUser)
                     }
                     serverCallService.makeGet('rest/licenceAgreement/latest')
                         .then((res) => {
-                            if (userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
+                            console.log('2')
+                            console.log(res)
+                            if (response.data.userLicenceAgreement && userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
                                 analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
                             } else {
                                 showLicenceMigrationAgreementModal(authenticatedUser)
@@ -320,6 +324,7 @@ angular.module('koolikottApp')
                 mobileIdLoginSuccessCallback();
             }
 
+            console.log($rootScope.rejectedPortfolios)
             if ($rootScope.rejectedPortfolios.length > 0 && !$rootScope.previouslyDisagreed) {
                 $timeout(() => { $mdDialog.show({
                     templateUrl: 'views/notMigratedPortfoliosDialog/notMigratedPortfoliosDialog.html',
