@@ -169,6 +169,7 @@ angular.module('koolikottApp')
         function analyzeUserLatestResponse(response, authenticatedUser) {
             if (response.agreed) {
                 $rootScope.previouslyDisagreed = false
+                $rootScope.rejectedPortfolios = []
                 authenticateUser(authenticatedUser)
             } else if (response.disagreed) {
                 $rootScope.previouslyDisagreed = true
@@ -188,7 +189,6 @@ angular.module('koolikottApp')
                     }
                     if (!response.data.userLicenceAgreement.licenceAgreement) {
                         checkLicencesAndAct(authenticatedUser)
-                        // showLicenceMigrationAgreementModal(authenticatedUser)
                     }
                     serverCallService.makeGet('rest/licenceAgreement/latest')
                         .then((res) => {
