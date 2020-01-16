@@ -321,7 +321,6 @@ angular.module('koolikottApp')
                 mobileIdLoginSuccessCallback();
             }
 
-            console.log($rootScope.rejectedPortfolios)
             if ($rootScope.rejectedPortfolios.length > 0 && !$rootScope.previouslyDisagreed) {
                 $timeout(() => { $mdDialog.show({
                     templateUrl: 'views/notMigratedPortfoliosDialog/notMigratedPortfoliosDialog.html',

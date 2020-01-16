@@ -170,7 +170,6 @@ public class UserService {
     }
 
     public boolean areLicencesAcceptable(Long userId) {
-        logger.info("Starting license check for user " + userId);
         User user = userDao.findUserById(userId);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
 
