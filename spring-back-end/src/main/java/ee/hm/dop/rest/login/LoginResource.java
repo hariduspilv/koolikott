@@ -191,11 +191,9 @@ public class LoginResource extends BaseResource {
     }
 
     private URI redirectSuccess(UserStatus status) throws URISyntaxException {
-        logger.info(String.format("UserStatus status ok: %s", status.isStatusOk()));
         if (status.isStatusOk()) {
             return new URI(getUri(status).append(format("&token=%s", status.getAuthenticatedUser().getToken())).toString());
         }
-        logger.info(String.format("missing harId Id code: %s", status.isHarIdUserMissingIdCode()));
         if (status.isEKoolUserMissingIdCode()) {
             return new URI(format(LOGIN_REDIRECT_WITHOUT_IDCODE_EKOOL, getServerAddress(), true));
         }
@@ -208,8 +206,7 @@ public class LoginResource extends BaseResource {
         return new URI(getUri(status).append(format("&token=%s", status.getToken())).toString());
     }
 
-    private StringBuilder getUri(UserStatus status) throws URISyntaxException {
-        logger.info(String.format("Server address: %s", getServerAddress()));
+    private StringBuilder getUri(UserStatus status) {
         StringBuilder stringBuilder = new StringBuilder(format(LOGIN_REDIRECT_WITH_TOKEN_AGREEMENT, getServerAddress(), status.isStatusOk()));
         if (status.getUserTermsAgreement() != null) {
             stringBuilder.append(format("&agreement=%s", status.getUserTermsAgreement().getId().toString()));

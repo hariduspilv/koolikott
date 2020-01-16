@@ -153,16 +153,12 @@ angular.module('koolikottApp')
         }
 
         function checkLicencesAndAct(authenticatedUser) {
-            console.log('checking licences');
             serverCallService.makeGet('/rest/user/areLicencesAcceptable?id=' + authenticatedUser.user.id)
                 .then((response) => {
                         if (response) {
-                            console.log(response)
                             if (response.data) {
-                                console.log('checking licences 1');
                                 authenticateUser(authenticatedUser)
                             } else {
-                                console.log('checking licences 2');
                                 showLicenceMigrationAgreementModal(authenticatedUser)
                             }
                         }
@@ -188,8 +184,6 @@ angular.module('koolikottApp')
         function checkUserPreviousResponse(authenticatedUser) {
             serverCallService.makeGet('rest/userLicenceAgreement?id=' + authenticatedUser.user.id)
                 .then((response => {
-                    console.log('1')
-                    console.log(response)
                     if (!response.data.hasLearningObjects) {
                         return authenticateUser(authenticatedUser)
                     }
@@ -198,8 +192,6 @@ angular.module('koolikottApp')
                     } else {
                         serverCallService.makeGet('rest/licenceAgreement/latest')
                             .then((res) => {
-                                console.log('2')
-                                console.log(res)
                                 if (response.data.userLicenceAgreement && userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
                                     analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
                                 } else {
