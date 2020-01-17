@@ -70,8 +70,11 @@ public class TestConstants {
     public static final Long PORTFOLIO_17 = 117L;
 
     public static final TestUser USER_MATI = new TestUser(1L, "39011220011", "mati.maasikas", "Mati", "Maasikas");
+    public static final TestUser USER_MATI_DTO = new TestUser("Mati", "Maasikas", "mati.maasikas");
     public static final TestUser USER_PEETER = new TestUser(2L, "38011550077", "peeter.paan", "Peeter", "Paan");
+    public static final TestUser USER_PEETER_DTO = new TestUser("Peeter", "Paan", "peeter.paan");
     public static final TestUser USER_VOLDERMAR = new TestUser(3L, "37066990099", "voldemar.vapustav", "Voldemar", "Vapustav");
+    public static final TestUser USER_VOLDERMAR_DTO = new TestUser("Voldemar", "Vapustav", "voldemar.vapustav");
     public static final TestUser USER_VOLDERMAR2 = new TestUser(4L, "15066990099", "voldemar.vapustav2");
     public static final TestUser USER_MAASIKAS_VAARIKAS = new TestUser(6L, "39011220013", "mati.maasikas-vaarikas");
     public static final TestUser USER_MYTESTUSER = new TestUser(7L, "78912378912", "my.testuser");

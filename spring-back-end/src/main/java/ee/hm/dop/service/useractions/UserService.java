@@ -65,6 +65,9 @@ public class UserService {
 
     public UserNameDto getUserName(String username) {
         User user = userDao.findUserByUsername(username);
+        if (user == null) {
+            return null;
+        }
         UserNameDto userNameDto = new UserNameDto();
         userNameDto.setUsername(user.getUsername());
         userNameDto.setName(user.getName());

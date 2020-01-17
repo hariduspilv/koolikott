@@ -8,6 +8,12 @@ public class TestUser {
         this.username = username;
     }
 
+    public TestUser(String firstName, String lastName, String username) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.username = username;
+    }
+
     public TestUser(Long id, String idCode, String username, String firstName, String lastName) {
         this.id = id;
         this.idCode = idCode;

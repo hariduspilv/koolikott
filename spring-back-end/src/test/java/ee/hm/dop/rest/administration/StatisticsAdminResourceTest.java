@@ -2,19 +2,17 @@ package ee.hm.dop.rest.administration;
 
 import com.google.common.collect.Lists;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
+import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Domain;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.service.reviewmanagement.dto.FileFormat;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
 import ee.hm.dop.service.reviewmanagement.newdto.NewStatisticsResult;
-import org.apache.commons.io.FileUtils;
-import java.time.LocalDateTime;
 import org.junit.Test;
 
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.IOException;
+import java.time.LocalDateTime;
 
 import static ee.hm.dop.rest.useractions.UserResourceTest.GET_TAXON_URL;
 import static org.apache.commons.collections.CollectionUtils.isNotEmpty;
@@ -92,7 +90,9 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
     public void admin_user_search_doesnt_fail() throws Exception {
         login(USER_ADMIN);
         StatisticsFilterDto dto = new StatisticsFilterDto();
-        dto.setUsers(Lists.newArrayList(getUser(USER_MODERATOR)));
+        User user = getUser(USER_MODERATOR);
+        user.setId(12L);
+        dto.setUsers(Lists.newArrayList(user));
         NewStatisticsResult result = doPost(SEARCH_STATISTICS, dto, NewStatisticsResult.class);
         assertEquals(result.getFilter().getFrom(), dto.getFrom());
         assertEquals(result.getFilter().getTo(), dto.getTo());
@@ -156,7 +156,9 @@ public class StatisticsAdminResourceTest extends ResourceIntegrationTestBase {
         dto.setFrom(FROM);
         dto.setTo(TO);
         if (userSearch) {
-            dto.setUsers(Lists.newArrayList(getUser(USER_MODERATOR)));
+            User user = getUser(USER_MODERATOR);
+            user.setId(12L);
+            dto.setUsers(Lists.newArrayList(user));
         } else {
             Domain taxon = (Domain) doGet(String.format(GET_TAXON_URL, TAXON_MATHEMATICS_DOMAIN.id), Taxon.class);
             dto.setTaxons(Lists.newArrayList(taxon));

@@ -7,26 +7,19 @@ import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.user.UserSession;
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.httpclient.HttpClient;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.http.HttpStatus;
-import sun.security.provider.certpath.OCSPResponse;
 
-import javax.ws.rs.core.GenericType;
-import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.MultivaluedHashMap;
-import javax.ws.rs.core.MultivaluedMap;
-import javax.ws.rs.core.Response;
+import javax.ws.rs.core.*;
 import javax.ws.rs.core.Response.Status;
 import java.util.ArrayList;
 import java.util.List;
 
+import static ee.hm.dop.common.test.TestConstants.*;
 import static java.lang.String.format;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UserResourceTest extends ResourceIntegrationTestBase {
 
@@ -41,10 +34,10 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     public static final String REMOVE_USER_RESTRICTION = "user/removeRestriction";
 
     @Test
-    public void getUser_returns_user() {
-        validateUser(getUser(USER_MATI), USER_MATI, TestLayer.REST);
-        validateUser(getUser(USER_PEETER), USER_PEETER, TestLayer.REST);
-        validateUser(getUser(USER_VOLDERMAR), USER_VOLDERMAR, TestLayer.REST);
+    public void getUser_returns_username_dto() {
+        validateUser(getUser(USER_MATI), USER_MATI_DTO, TestLayer.REST);
+        validateUser(getUser(USER_PEETER), USER_PEETER_DTO, TestLayer.REST);
+        validateUser(getUser(USER_VOLDERMAR), USER_VOLDERMAR_DTO, TestLayer.REST);
     }
 
     @Test
@@ -192,6 +185,7 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
 
         User user = getUser(USER_MYTESTUSER);
         user.setUserTaxons(taxons);
+        user.setRole(Role.USER);
         User updatedUser = doPost("user", user, User.class);
 
         assertEquals(updatedUser.getUserTaxons(), taxons);
