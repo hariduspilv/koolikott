@@ -39,7 +39,7 @@ angular.module('koolikottApp')
         }
 
         function hasEmail(userStatus) {
-            userEmailService.hasEmailOnLogin(userStatus)
+            userEmailService.hasEmailOnLogin(userStatus.token)
                 .then(response => {
                     $rootScope.userHasEmailOnLogin = response.status === 200;
 
@@ -143,7 +143,7 @@ angular.module('koolikottApp')
                 if (!res)
                     loginFail()
                 else {
-                    showLicenceMigrationAgreementModal(response.data)
+                    checkUserPreviousResponse(response.data)
                 }
             })
         }
@@ -168,30 +168,37 @@ angular.module('koolikottApp')
 
         function analyzeUserLatestResponse(response, authenticatedUser) {
             if (response.agreed) {
+                $rootScope.previouslyDisagreed = false
+                $rootScope.rejectedPortfolios = []
                 authenticateUser(authenticatedUser)
             } else if (response.disagreed) {
                 $rootScope.previouslyDisagreed = true
                 $rootScope.canCloseWaitingDialog = true
                 checkLicencesAndAct(authenticatedUser)
             }  else {
-                showLicenceMigrationAgreementModal(authenticatedUser)
+                $rootScope.previouslyDisagreed = false
+                checkLicencesAndAct(authenticatedUser)
             }
         }
 
         function checkUserPreviousResponse(authenticatedUser) {
             serverCallService.makeGet('rest/userLicenceAgreement?id=' + authenticatedUser.user.id)
                 .then((response => {
-                    if (!response.data) {
-                        showLicenceMigrationAgreementModal(authenticatedUser)
+                    if (!response.data.hasLearningObjects) {
+                        return authenticateUser(authenticatedUser)
                     }
-                    serverCallService.makeGet('rest/licenceAgreement/latest')
-                        .then((res) => {
-                            if (userHasRespondToLatestLicenceAgreement(response.data.licenceAgreement.version, res.data.version)) {
-                                analyzeUserLatestResponse(response.data, authenticatedUser)
-                            } else {
-                                showLicenceMigrationAgreementModal(authenticatedUser)
-                            }
-                        })
+                    if (!response.data.userLicenceAgreement || !response.data.userLicenceAgreement.licenceAgreement) {
+                        checkLicencesAndAct(authenticatedUser)
+                    } else {
+                        serverCallService.makeGet('rest/licenceAgreement/latest')
+                            .then((res) => {
+                                if (response.data.userLicenceAgreement && userHasRespondToLatestLicenceAgreement(response.data.userLicenceAgreement.licenceAgreement.version, res.data.version)) {
+                                    analyzeUserLatestResponse(response.data.userLicenceAgreement, authenticatedUser)
+                                } else {
+                                    showLicenceMigrationAgreementModal(authenticatedUser)
+                                }
+                            })
+                    }
                 }))
         }
 
@@ -223,7 +230,7 @@ angular.module('koolikottApp')
                                 $rootScope.userFromAuthentication = response.data.user
                             }
                             }, () => {
-                                loginFail();
+                            loginFail();
                             }
                         )
                 }
@@ -231,14 +238,22 @@ angular.module('koolikottApp')
         }
 
         function loginSuccess(userStatus) {
-            console.log(userStatus)
+            const {token, statusOk, userTermsAgreement, gdprTermsAgreement, existingUser, loginFrom} = userStatus;
             if (isEmpty(userStatus)) {
                 loginFail();
             } else {
                 if (userStatus.statusOk){
                     checkUserPreviousResponse(userStatus.authenticatedUser)
                 } else {
-                    showGdprModalAndAct(userStatus);
+                    const params = {
+                        existingUser : existingUser ? existingUser : null,
+                        statusOk,
+                        token,
+                        userTermsAgreement : userTermsAgreement ? userTermsAgreement.id : null,
+                        gdprTermsAgreement : gdprTermsAgreement ? gdprTermsAgreement.id : null,
+                        loginFrom
+                    }
+                    showGdprModalAndAct(params);
                 }
             }
         }
@@ -445,8 +460,7 @@ angular.module('koolikottApp')
             },
 
             authenticateUsingOAuth: function(inputParams) {
-                console.log(inputParams)
-                const {token, agreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
+                const {token, userConfirmed, statusOk, agreement, gdprAgreement, existingUser, eKoolUserMissingIdCode, stuudiumUserMissingIdCode, harIdUserMissingIdCode, loginFrom} = inputParams;
                 if (eKoolUserMissingIdCode) {
                     idCodeLoginFail('ERROR_LOGIN_FAILED_EKOOL');
                     return;
@@ -461,15 +475,20 @@ angular.module('koolikottApp')
                     idCodeLoginFail('ERROR_LOGIN_FAILED_HARID');
                     return;
                 }
-
                 isOAuthAuthentication = true;
-                if (!(agreement || existingUser)){
-                    serverCallService.makeGet("rest/login/getAuthenticatedUser", {token}, authenticateUser, loginFail);
+                if (!(agreement || gdprAgreement || existingUser)) {
+                    serverCallService.makeGet('rest/login/getAuthenticatedUser?token=' + token)
+                        .then(({data}) => {
+                        checkUserPreviousResponse(data)
+                        })
                 } else {
                     const params = {
+                        existingUser : existingUser ? existingUser : null,
+                        userConfirmed : (userConfirmed === 'true'),
+                        statusOk : (statusOk === 'true'),
                         token,
-                        agreementId : agreement,
-                        existingUser,
+                        userTermsAgreement : agreement ? agreement : null,
+                        gdprTermsAgreement : gdprAgreement ? gdprAgreement : null,
                         loginFrom
                     }
                     showGdprModalAndAct(params);

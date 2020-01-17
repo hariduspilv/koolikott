@@ -1,16 +1,7 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.SearchFilter;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.SortDirection;
-import ee.hm.dop.model.SortType;
-import ee.hm.dop.service.metadata.CrossCurricularThemeService;
-import ee.hm.dop.service.metadata.KeyCompetenceService;
-import ee.hm.dop.service.metadata.LanguageService;
-import ee.hm.dop.service.metadata.ResourceTypeService;
-import ee.hm.dop.service.metadata.TargetGroupService;
-import ee.hm.dop.service.metadata.TaxonService;
+import ee.hm.dop.model.*;
+import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.solr.SearchService;
 import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
@@ -44,6 +35,7 @@ public class SearchResource extends BaseResource {
     private UserLikeService userLikeService;
     @Inject
     private TargetGroupService targetGroupService;
+
 
     @GetMapping
     public SearchResult search(@RequestParam(value = "q", required = false) String query,

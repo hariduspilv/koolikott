@@ -183,7 +183,6 @@ public class UserService {
     }
 
     public boolean areLicencesAcceptable(Long userId) {
-        logger.info("Starting license check for user " + userId);
         User user = userDao.findUserById(userId);
         List<LearningObject> allUserLearningObjects = learningObjectService.getAllByCreator(user);
 
@@ -274,14 +273,23 @@ public class UserService {
     }
 
     private boolean portfolioHasInvalidMaterialCreatedByAnotherAuthor(Portfolio portfolio, User user) {
-        return materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
-                .anyMatch(material -> material.getCreator() != null && !material.getCreator().getId().equals(user.getId())) &&
-                portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
+        return (portfolioMaterialInvalidAndCreatorNotUser(portfolio, user)) || portfolioMaterialInvalidAndCreatorMissing(portfolio);
     }
 
     private void migrateLearningObjectLicense(LearningObject learningObject, LicenseType licenseType) {
         learningObject.setLicenseType(licenseType);
         if (learningObject.getPicture() != null)
             setPictureLicenseType(learningObject, licenseType);
+    }
+
+    private boolean portfolioMaterialInvalidAndCreatorMissing(Portfolio portfolio) {
+        return materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
+                .anyMatch(material -> material.getCreator() == null) && portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
+    }
+
+    private boolean portfolioMaterialInvalidAndCreatorNotUser(Portfolio portfolio, User user) {
+        return materialService.getAllMaterialsByPortfolio(portfolio.getId()).stream()
+                .anyMatch(material -> material.getCreator() != null && !material.getCreator().getId().equals(user.getId())) &&
+                portfolioService.portfolioHasAnyMaterialWithUnacceptableLicense(portfolio);
     }
 }

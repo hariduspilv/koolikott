@@ -5,8 +5,8 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.administration.DopPage;
 import ee.hm.dop.model.administration.PageableQuerySentEmails;
 import ee.hm.dop.service.MailBuilder;
-import ee.hm.dop.service.PinGeneratorService;
 import ee.hm.dop.service.MailSender;
+import ee.hm.dop.service.PinGeneratorService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,8 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import static ee.hm.dop.utils.UserDataValidationUtil.validateEmail;
-import static org.apache.commons.lang3.StringUtils.isBlank;
-import static org.apache.commons.lang3.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.*;
 
 @Service
 @Transactional
@@ -47,9 +46,9 @@ public class UserEmailService {
         User user = userDao.findUserById(id);
         UserEmail userEmail = userEmailDao.findByUser(user);
 
-        if (user != null && userEmail != null && userEmail.isActivated())
+        if (user != null && userEmail != null && emailIsNotEmpty(userEmail) && userEmail.isActivated())
             return userEmail;
-         else
+        else
             throw badRequest("User or user email not found or e-mail not activated");
     }
 
@@ -115,12 +114,12 @@ public class UserEmailService {
         return userEmailDao.createOrUpdate(setUserAndSendMail(userEmail));
     }
 
-    public boolean hasDuplicateEmail(UserEmail userEmail) {
-        if (isBlank(userEmail.getEmail()))
+    public boolean hasDuplicateEmail(String userEmail, String token) {
+        if (isBlank(userEmail))
             throw badRequest("Email Empty");
-        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userEmail.getUserStatus().getToken());
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(token);
         User user = userDao.findUserByIdCode(state.getIdCode());
-        UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail.getEmail());
+        UserEmail dbUserEmail = userEmailDao.findByEmail(userEmail);
         return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
     }
 
@@ -165,8 +164,8 @@ public class UserEmailService {
         return dbUserEmail != null && !user.equals(dbUserEmail.getUser());
     }
 
-    public Boolean hasEmail(UserEmail userEmail) {
-        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(userEmail.getUserStatus().getToken());
+    public Boolean hasEmail(String token) {
+        AuthenticationState state = authenticationStateDao.findAuthenticationStateByToken(token);
         User user = userDao.findUserByIdCode(state.getIdCode());
         UserEmail dbUserEmail = userEmailDao.findByUser(user);
         return dbUserEmail != null && !isEmpty(dbUserEmail.getEmail());
@@ -225,5 +224,9 @@ public class UserEmailService {
 
     public Long getSentEmailsCount(User loggedInUser) {
         return emailToCreatorDao.getSenderSentEmailsCount(loggedInUser);
+    }
+
+    private boolean emailIsNotEmpty(UserEmail email) {
+        return email.getEmail() != null && isNotBlank(email.getEmail());
     }
 }

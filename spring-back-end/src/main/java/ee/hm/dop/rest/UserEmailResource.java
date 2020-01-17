@@ -26,16 +26,16 @@ public class UserEmailResource extends BaseResource {
     }
 
     @PostMapping("getEmailOnLogin")
-    public ResponseEntity<?> getEmailOnLogin(@RequestBody UserEmail userEmail) {
-        if (userEmailService.hasEmail(userEmail)) {
+    public ResponseEntity<?> getEmailOnLogin(@RequestBody UserEmailDto userEmailDto) {
+        if (userEmailService.hasEmail(userEmailDto.getToken())) {
             return ResponseEntity.status(HttpStatus.OK).build();
         }
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
     }
 
     @PostMapping("check")
-    public ResponseEntity<?> validateEmail(@RequestBody UserEmail userEmail) {
-        if (userEmailService.hasDuplicateEmail(userEmail)) {
+    public ResponseEntity<?> validateEmail(@RequestBody UserEmailDto userEmailDto) {
+        if (userEmailService.hasDuplicateEmail(userEmailDto.getUserEmail(), userEmailDto.getToken())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).build();
         }
         return ResponseEntity.status(HttpStatus.OK).build();

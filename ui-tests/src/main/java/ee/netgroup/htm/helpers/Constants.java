@@ -7,12 +7,11 @@ public class Constants {
     public static final String EKOOLIKOTT_HOME_PAGE_URL = "https://oxygen.netgroupdigital.com/";
     public static String materialWithCommentsUrl = "https://oxygen.netgroupdigital.com/material?id=11632";
 
-    public static String eSchoolUser = "peeter.paan";
-    public static String eSchoolPswd = "parool";
-    public static String eSchoolUserName = "Peeter Paan";
+    public static String eSchoolUser = System.getProperty("ekool.username");
+    public static String eSchoolPswd = System.getProperty("ekool.password");
 
-    public static String stuudiumUser = "Netgroup Test Kaks";
-    public static String stuudiumPswd = "o5PoubBA6TK3xMBe";
+    public static String stuudiumUser = System.getProperty("stuudium.username");
+    public static String stuudiumPswd = System.getProperty("stuudium.password");
 
     public static String mobileIdCode = "60001019906";
     public static String mobilePhoneNumber = "+37200000766";
