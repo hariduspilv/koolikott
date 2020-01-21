@@ -68,19 +68,6 @@
             this.getGdprTerms()
         }
 
-        delete(term) {
-            this.dialogService.showDeleteConfirmationDialog(
-                'ARE_YOU_SURE_DELETE',
-                '',
-                () => this.termsService.deleteTerm(term)
-                    .then(() => {
-                        this.getGdprTerms()
-                        this.toastService.show('TERM_DELETED')
-                        this.createDialogOpen = false
-                    })
-            )
-        }
-
         isSubmitDisabled(term) {
             return !(term.titleEst && term.titleEng &&
                 term.titleRus && (term.contentEst && term.contentEst !== '<br>') &&
