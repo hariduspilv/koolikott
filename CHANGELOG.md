@@ -1,3 +1,13 @@
+## e-Koolikott [1.50.5](https://projektid.hitsa.ee/jira/projects/EK/versions/11176) (Prelive'i paigaldatud 16.01.2020)
+
+### Muutunud
+* "Viimaste tingimustega veel mitte nõustunud kasutajale peaks tingimuste modaalil mõlemad checkboxid kuvatud olema" [EK-843](https://projektid.hitsa.ee/jira/browse/EK-843)
+* "Emaili puudumisel peaks autoriga kontakteerumise modaalil sellest teavitama" [EK-844](https://projektid.hitsa.ee/jira/browse/EK-844)
+* "Uue kasutaja esmakordsel sisselogimine kasutajale litsentside migra modaali mitte kuvada" [EK-845](https://projektid.hitsa.ee/jira/browse/EK-845)
+* "Litsenti kinnituse modaalil teksti muudatus" [EK-847](https://projektid.hitsa.ee/jira/browse/EK-847)
+* "Kasutaja peaks saama alati peale autentimist rakendusse sisse logitud" [EK-853](https://projektid.hitsa.ee/jira/browse/EK-853)
+* "Failide üleslaadimine ja väljakuvamine peaks töötama" [EK-861](https://projektid.hitsa.ee/jira/browse/EK-861)
+
 ## e-Koolikott [1.50.4](https://projektid.hitsa.ee/jira/projects/EK/versions/11118) (Prelive'i paigaldatud 06.01.2020)
 
 ### Muutunud
