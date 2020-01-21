@@ -1,3 +1,10 @@
+## e-Koolikott [1.50.6](https://projektid.hitsa.ee/jira/projects/EK/versions/11177) (Prelive'i paigaldatud 21.01.2020)
+
+### Muutunud
+* "Juba sisestatud kasutustingimuste plokki ei pea saama kustutada" [EK-865](https://projektid.hitsa.ee/jira/browse/EK-865)
+* "E-maili valideerimise koodiakna modaalil teksti täiendamine" [EK-863](https://projektid.hitsa.ee/jira/browse/EK-863)
+* "Litsentsi migreerimise modaali teksti muudatused" [EK-856](https://projektid.hitsa.ee/jira/browse/EK-856)
+
 ## e-Koolikott [1.50.5](https://projektid.hitsa.ee/jira/projects/EK/versions/11176) (Prelive'i paigaldatud 16.01.2020)
 
 ### Muutunud
