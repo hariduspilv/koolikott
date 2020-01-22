@@ -13,13 +13,13 @@
         <p><span id="gdpr-agreement-text" data-translate="AGREEMENT_DIALOG_TEXT"></span></p>
         <div>
           <md-checkbox ng-show="notAgreedToTermsAgreement" ng-model="termsAgreed" value="false">
-            <span data-translate="AGREE_TO"></span>
+            <span id="terms-tick" data-translate="AGREE_TO"></span>
               <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, termsLink)"><strong data-translate="WITH_TERMS"></strong></a>
             <span data-translate="AGREEMENT_REQUIRED"></span>
           </md-checkbox>
           <br>
           <md-checkbox ng-show="notAgreedToGdprTermsAgreement" ng-model="gdprProcessAgreed" value="false">
-            <span data-translate="AGREE_TO_GDPR"></span>
+            <span id="gdpr-tick" data-translate="AGREE_TO_GDPR"></span>
               <a href="" data-ng-click="$ctrl.goToLinkWithoutCheckingBox($event, gdprProcessLink)"><strong data-translate="GDPR_TERMS"></strong></a>
             <span data-translate="AGREEMENT_REQUIRED"></span>
           </md-checkbox>
