@@ -16,10 +16,6 @@
         getGdprTerms() {
             return this.serverCallService.makeGet('rest/terms?type=GDPR')
         }
-
-        deleteTerm(term) {
-            return this.serverCallService.makePost('rest/terms/delete', term)
-        }
     }
 
     controller.$inject = [

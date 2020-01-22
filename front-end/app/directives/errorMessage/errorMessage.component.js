@@ -150,7 +150,7 @@ class controller extends Controller {
     }
 
     show(cb) {
-        if (!this.$rootScope.learningObjectImproper && !(this.$scope.isAdmin || this.$scope.isModerator)) {
+        if (!(this.$rootScope.learningObjectImproper || this.$rootScope.learningObjectUnreviewed) && !(this.$scope.isAdmin || this.$scope.isModerator)) {
             return false;
         }
         if (typeof cb === 'boolean') {

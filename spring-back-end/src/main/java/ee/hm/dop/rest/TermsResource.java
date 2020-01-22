@@ -27,11 +27,4 @@ public class TermsResource extends BaseResource {
         return termsService.save(terms, getLoggedInUser());
     }
 
-    @PostMapping
-    @RequestMapping("delete")
-    @Secured(RoleString.ADMIN)
-    public void delete(@RequestBody Terms terms) {
-         termsService.delete(terms, getLoggedInUser());
-    }
-
 }
