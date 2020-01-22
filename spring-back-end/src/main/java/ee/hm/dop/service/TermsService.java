@@ -54,13 +54,6 @@ public class TermsService {
         return newTerms;
     }
 
-    public void delete(Terms terms, User loggedInUser) {
-        mustBeAdmin(loggedInUser);
-        Terms dbTerms = termsDao.findById(terms.getId());
-        dbTerms.setDeleted(true);
-        termsDao.createOrUpdate(dbTerms);
-    }
-
     private ResponseStatusException badRequest(String s) {
         return new ResponseStatusException(HttpStatus.BAD_REQUEST, s);
     }
