@@ -14,7 +14,15 @@ angular.module('koolikottApp')
             },
             showConfirmationDialog: function(title, content, ok, cancel, onConfirm, onCancel) {
                 let confirm = $mdDialog.confirm({
-                    escapeToClose: false
+                    escapeToClose: false,
+                    onComplete: function setIdsForButtons() {
+                        let $dialog = angular.element(document.querySelector('md-dialog'));
+                        let $actionsSection = $dialog.find('md-dialog-actions');
+                        let $cancelButton = $actionsSection.children()[0];
+                        let $confirmButton = $actionsSection.children()[1];
+                        $cancelButton.id = 'cancel-button'
+                        $confirmButton.id = 'confirm-button'
+                    }
                 })
                 .title($filter('translate')(title))
                 .content($filter('translate')(content))
