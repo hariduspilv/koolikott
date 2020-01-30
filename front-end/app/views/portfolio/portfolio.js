@@ -20,6 +20,15 @@ class controller extends Controller {
             this.handleScroll(e);
         });
 
+        //Open all external links in new tab
+        window.addEventListener('click', function(event) {
+            let el = event.target
+
+            if (el.tagName === 'A' && !el.isContentEditable && el.host !== window.location.host) {
+                el.setAttribute('target', '_blank')
+            }
+        }, true)
+
         document.addEventListener('keyup', (e) => {
             if (e.code === "Escape" && this.$rootScope.isFullScreen) {
                 this.$rootScope.isFullScreen = !this.$rootScope.isFullScreen

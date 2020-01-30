@@ -339,12 +339,14 @@ angular.module('koolikottApp')
                     })
                 }, 100)
             } else {
-                userLocatorService.getUserLocation().then((response) => {
-                    if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
-                        showLocationDialog()
-                        $rootScope.locationDialogIsOpen = true
-                    }
-                });
+                $timeout(() => {
+                    userLocatorService.getUserLocation().then((response) => {
+                        if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
+                            showLocationDialog()
+                            $rootScope.locationDialogIsOpen = true
+                        }
+                    });
+                }, 100)
             }
 
             $rootScope.justLoggedIn = true;
