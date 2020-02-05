@@ -1,7 +1,6 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.config.Configuration;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +23,6 @@ public class PublicUrlTests {
     @Autowired
     private Configuration configuration;
 
-    @Ignore
     @Test
     public void can_get_response_from_ehis_institutions(){
         String ehisSchoolUrl = configuration.getString(XROAD_EHIS_INSTITUTIONS_LIST);
