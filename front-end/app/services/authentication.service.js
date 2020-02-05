@@ -134,6 +134,7 @@ angular.module('koolikottApp')
         }
 
         function showEmailValidationModal(response) {
+            $rootScope.emailDialogShown = true
             $mdDialog.show({
                 templateUrl: 'views/emailValidation/emailValidationDialog.html',
                 controller: 'emailValidationController',
@@ -295,8 +296,13 @@ angular.module('koolikottApp')
 
         function finishLogin(authenticatedUser) {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-            if ($rootScope.afterAuthRedirectURL) {
 
+            if (!authenticatedUser.firstLogin && $rootScope.emailDialogShown) {
+                $location.url('/profiil');
+                $rootScope.emailDialogShown = false;
+                $rootScope.showLocationDialog = false;
+            }
+            else if ($rootScope.afterAuthRedirectURL) {
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/profiil');
