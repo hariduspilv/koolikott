@@ -170,14 +170,19 @@
           </md-menu-content>
         </md-menu>
       </div>
-      <div class="button-container" ng-class="{'padding-left-52': $root.isEditPortfolioMode}"
+      <div class="button-container" ng-class="{'padding-left-22': $root.isEditPortfolioMode}"
            data-ng-if="$root.isEditPortfolioMode">
-        <!--<md-button aria-label="Ava abi" class="md-icon-button" id="header-help-icon"
-                   data-ng-click="openTour(true)">
-          <md-tooltip><span data-translate="HEADER_EDIT_TOOLTIP_HELP"></span></md-tooltip>
-          <md-icon>help</md-icon>
-        </md-button>-->
-        <md-button data-ng-click="saveAndExitPortfolio()" aria-label="Salvesta ja välju"
+        <md-button
+          aria-label="Salvesta kogumik"
+          data-ng-show="!isMobileView"
+          data-ng-click="saveAndExitPortfolio()"
+          class="md-raised header-save-button portfolio-save-button"
+        >
+          <span data-translate="BUTTON_SAVE"></span>
+        </md-button>
+        <md-button aria-label="Salvesta kogumik"
+                   data-ng-show="isMobileView"
+                   data-ng-click="saveAndExitPortfolio()"
                    class="md-icon-button header-save-button">
           <md-tooltip><span data-translate="HEADER_TOOLTIP_EXIT_PORTFOLIO_MODE"></span></md-tooltip>
           <md-icon>done</md-icon>

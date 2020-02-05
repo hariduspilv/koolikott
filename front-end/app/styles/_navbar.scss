@@ -79,8 +79,8 @@ md-toolbar.navbar.md-gray {
     display: inline-block;
 
     @media (min-width: $layout-breakpoint-xs) {
-      &.padding-left-52 {
-        padding-left: 52px;
+      &.padding-left-22 {
+        margin-left: 22px;
       }
     }
 
@@ -210,4 +210,9 @@ md-toolbar.navbar.md-gray {
 .navbar-search-filter-text {
   align-self: center;
   font-size: medium;
+}
+
+.portfolio-save-button {
+  background-color: #ffffff;
+  color: #9C27B0 !important;
 }
