@@ -4,7 +4,7 @@
     <md-card-content data-ng-if="!$ctrl.isFaqEditMode()" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
       <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.questionEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.questionEng : faq.questionRus"></h2>
       <div>
-        <span data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
+        <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
       </div>
     </md-card-content>
     </md-card>
@@ -26,7 +26,7 @@
           </md-button>
         </div>
           <div>
-          <span data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
+          <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
         </div>
       </md-card-content>
         <md-card-content data-ng-if="faq.edit" >
@@ -50,18 +50,9 @@
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                  <label data-translate="FAQ_ANSWER"></label>
-                  <textarea name="answer"
-                            ng-model="faq.answerEst"
-                            id="add-answer-est"
-                            rows="2"
-                            required
-                            maxlength="500"></textarea>
-                  <div data-ng-messages="faqForm.answer.$error">
-                    <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
-                  </div>
-                </md-input-container>
+                <div class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor">
+                  <trix-editor class="term-block" angular-trix ng-model="faq.answerEst"></trix-editor>
+                </div>
               </div>
               <div ng-if="lang === 'EN'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
@@ -76,18 +67,9 @@
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                  <label data-translate="FAQ_ANSWER"></label>
-                  <textarea name="answer"
-                            ng-model="faq.answerEng"
-                            id="add-answer-eng"
-                            rows="2"
-                            required
-                            maxlength="500"></textarea>
-                  <div data-ng-messages="faqForm.answer.$error">
-                    <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
-                  </div>
-                </md-input-container>
+                <div class="animate-if remaining-charaters-wrapper max-width-100">
+                  <trix-editor class="term-block" angular-trix ng-model="faq.answerEng"></trix-editor>
+                </div>
               </div>
               <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
@@ -102,18 +84,9 @@
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                  <label data-translate="FAQ_ANSWER"></label>
-                  <textarea name="answer"
-                            ng-model="faq.answerRus"
-                            id="add-answer-rus"
-                            rows="2"
-                            required
-                            maxlength="500"></textarea>
-                  <div data-ng-messages="faqForm.answer.$error">
-                    <div data-ng-message="required" data-translate="FAQ_ANSWER_IS_MANDATORY"></div>
-                  </div>
-                </md-input-container>
+                <div class="animate-if remaining-charaters-wrapper max-width-100">
+                  <trix-editor class="term-block" angular-trix ng-model="faq.answerRus"></trix-editor>
+                </div>
               </div>
             </div>
             <div layout="column" layout-align="center center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1"

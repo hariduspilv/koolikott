@@ -82,12 +82,9 @@
       ></dop-target-group-selector>
 
       <!-- Description -->
-      <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1"
-           flex-order-gt-sm="2" flex="100">
-        <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-          <label data-translate="PORTFOLIO_SUMMARY"></label>
-          <textarea ng-model="newPortfolio.summary" id="add-portfolio-description-input"></textarea>
-        </md-input-container>
+      <h5 class="no-margin" data-translate="PORTFOLIO_SUMMARY"></h5>
+      <div class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor reduced-editor-margin">
+        <trix-editor class="term-block" angular-trix ng-model="newPortfolio.summary"></trix-editor>
       </div>
 
       <!-- Illustration (cover image) -->
