@@ -51,7 +51,8 @@ public class EhisInstitutionParser {
         int removeCounter = 0;
 
         for (InstitutionEhis ie : institutionsFromXml) {
-            if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) == null
+            InstitutionEhis dbEntity = institutionEhisDao.findByField("ehisId", ie.getEhisId());
+            if (dbEntity == null
                     && checkAreaExists(ie)
                     && checkStatusIsNotClosed(ie)
                     && checkInstTypeIsNotPreSchool(ie)) {
@@ -64,9 +65,9 @@ public class EhisInstitutionParser {
                 }
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
-            } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null
+            } else if (dbEntity != null
                     && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie) || !checkInstTypeIsNotPreSchool(ie))) {
-                institutionEhisDao.remove(ie);
+                institutionEhisDao.remove(dbEntity);
                 logger.info("Eemaldati EHIS institution: " + ie.getName());
                 removeCounter++;
             }
