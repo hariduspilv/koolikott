@@ -134,13 +134,6 @@
               </div>
             </md-input-container>
           </div>
-          <!-- Description -->
-          <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex-order="1" flex-order-gt-sm="2" flex="100">
-            <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-              <label data-translate="CONTENT_SUMMARY"></label>
-              <textarea ng-model="titlesAndDescriptions[lang].description" id="add-material-description-input"></textarea>
-            </md-input-container>
-          </div>
           <div layout="column" layout-align="center center" layout-gt-xs="row" flex="100" flex-gt-sm="50" flex-order="1">
             <!-- Material language -->
             <md-button
@@ -155,6 +148,11 @@
               <md-icon class="button-material-language__icon" data-ng-if="$ctrl.isLangFilled(_lang) || activeTitleAndDescriptionLanguage === _lang">done</md-icon>
             </md-button>
           </div>
+        </div>
+        <!-- Description -->
+        <h5 class="no-margin" data-translate="CONTENT_SUMMARY"></h5>
+        <div class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor reduced-editor-margin">
+          <trix-editor class="term-block" angular-trix ng-model="titlesAndDescriptions[activeTitleAndDescriptionLanguage].description"></trix-editor>
         </div>
 
         <div layout="row" layout-align="start center" layout-wrap>

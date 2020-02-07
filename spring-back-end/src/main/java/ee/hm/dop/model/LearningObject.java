@@ -41,7 +41,7 @@ import static javax.persistence.FetchType.LAZY;
 public abstract class LearningObject implements Searchable, ILearningObject {
 
     static PolicyFactory LO_ALLOWED_HTML_TAGS_POLICY = new HtmlPolicyBuilder().allowStandardUrlProtocols()
-            .allowElements("a", "b", "blockquote", "br", "div", "i", "li", "ol", "p", "pre", "ul")
+            .allowElements("a", "b", "blockquote", "br", "div", "i", "li", "ol", "p", "pre", "ul", "strong", "em")
             .allowAttributes("href", "target")
             .onElements("a")
             .toFactory();

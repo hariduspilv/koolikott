@@ -27,6 +27,9 @@ class controller extends Controller {
             }
         }, false)
     }
+    isMobileView(){
+        return this.isNVP();
+    }
     loadUserPortfolios() {
         const fail = () => {
             this.toastService.show('LOADING_PORTFOLIOS_FAIL')

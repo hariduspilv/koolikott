@@ -551,5 +551,14 @@ angular.module('koolikottApp')
             $scope.captureOutboundLink = function(url) {
                 window.captureOutboundLink(url);
             };
+
+            //Open all external links in new tab
+            window.addEventListener('click', function(event) {
+                let el = event.target
+
+                if (el.tagName === 'A' && !el.isContentEditable && el.host !== window.location.host) {
+                    el.setAttribute('target', '_blank')
+                }
+            }, true)
         }
     ]);

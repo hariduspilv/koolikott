@@ -134,6 +134,7 @@ angular.module('koolikottApp')
         }
 
         function showEmailValidationModal(response) {
+            $rootScope.emailDialogShown = true
             $mdDialog.show({
                 templateUrl: 'views/emailValidation/emailValidationDialog.html',
                 controller: 'emailValidationController',
@@ -295,8 +296,13 @@ angular.module('koolikottApp')
 
         function finishLogin(authenticatedUser) {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
-            if ($rootScope.afterAuthRedirectURL) {
 
+            if (!authenticatedUser.firstLogin && $rootScope.emailDialogShown) {
+                $location.url('/profiil');
+                $rootScope.emailDialogShown = false;
+                $rootScope.showLocationDialog = false;
+            }
+            else if ($rootScope.afterAuthRedirectURL) {
                 $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
             } else if (authenticatedUser.firstLogin) {
                 $location.url('/profiil');
@@ -339,12 +345,14 @@ angular.module('koolikottApp')
                     })
                 }, 100)
             } else {
-                userLocatorService.getUserLocation().then((response) => {
-                    if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
-                        showLocationDialog()
-                        $rootScope.locationDialogIsOpen = true
-                    }
-                });
+                $timeout(() => {
+                    userLocatorService.getUserLocation().then((response) => {
+                        if (response.data && $rootScope.showLocationDialog && (response.data !== $location.url())) {
+                            showLocationDialog()
+                            $rootScope.locationDialogIsOpen = true
+                        }
+                    });
+                }, 100)
             }
 
             $rootScope.justLoggedIn = true;

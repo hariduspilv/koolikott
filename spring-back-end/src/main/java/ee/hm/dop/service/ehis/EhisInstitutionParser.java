@@ -90,6 +90,7 @@ public class EhisInstitutionParser {
         return IntStream.range(0, institutionsNode.getLength())
                 .mapToObj(institutionsNode::item)
                 .map(this::getInstitution)
+                .filter(this::institutionHasNecessaryAttributes)
                 .collect(Collectors.toList());
     }
 
@@ -102,7 +103,16 @@ public class EhisInstitutionParser {
     }
 
     private String getInstitutionAttr(Node institutionElement, String attr) {
-        return ((Element)institutionElement).getElementsByTagName(attr).item(0).getTextContent();
+        NodeList institutionAttribute = ((Element)institutionElement).getElementsByTagName(attr);
+        if (institutionAttribute.getLength() == 0) {
+            return null;
+        } else {
+            return institutionAttribute.item(0).getTextContent();
+        }
+    }
+
+    private boolean institutionHasNecessaryAttributes(InstitutionEhis institutionEhis) {
+        return institutionEhis.getEhisId() != null && institutionEhis.getName() != null && institutionEhis.getArea() != null;
     }
 
     private NodeList getNodeList(Object item, String path) {
