@@ -67,6 +67,7 @@ public class EhisInstitutionParser {
             } else if (institutionEhisDao.findByField("ehisId", ie.getEhisId()) != null
                     && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie) || !checkInstTypeIsNotPreSchool(ie))) {
                 institutionEhisDao.remove(ie);
+                logger.info("Eemaldati EHIS institution: " + ie.getName());
                 removeCounter++;
             }
         }
