@@ -26,12 +26,6 @@ class controller extends Controller {
         this.$scope.gotoChapter = (slug, title, evt) => {
             evt.preventDefault()
 
-            if (this.$location.url().includes('#alapeatukk') || (!title && this.$location.url().includes('#alapeatukk'))) {
-                history.pushState({}, '', this.$location.url().split('#alapeatukk')[0] + '#' + slug)
-            } else {
-                history.pushState({}, '',`${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${slug}`)
-            }
-
             this.scrollToElement('#'+slug, 500, 80)
 
             if (window.innerWidth < BREAK_LG)

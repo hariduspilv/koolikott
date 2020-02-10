@@ -2,6 +2,7 @@ package ee.hm.dop.service.ehis;
 
 import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.InstitutionEhisDao;
+import ee.hm.dop.dao.UserInstitutionDao;
 import ee.hm.dop.model.ehis.InstitutionEhis;
 import ee.hm.dop.utils.ConfigurationProperties;
 import org.dom4j.DocumentException;
@@ -33,6 +34,8 @@ public class EhisInstitutionParser {
     private static XPath xpath = XPathFactory.newInstance().newXPath();
     @Autowired
     private InstitutionEhisDao institutionEhisDao;
+    @Autowired
+    private UserInstitutionDao userInstitutionDao;
     @Autowired
     private Configuration configuration;
 
@@ -67,8 +70,9 @@ public class EhisInstitutionParser {
                 addCounter++;
             } else if (dbEntity != null
                     && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie) || !checkInstTypeIsNotPreSchool(ie))) {
+                int removedUserInstitutions = userInstitutionDao.removeExpiredUserInstitutions(dbEntity.getId());
                 institutionEhisDao.remove(dbEntity);
-                logger.info("Eemaldati EHIS institution: " + ie.getName());
+                logger.info("EHIS institution removed: " + dbEntity.getName() + " with " + removedUserInstitutions + " UserInstitution occurrences");
                 removeCounter++;
             }
         }

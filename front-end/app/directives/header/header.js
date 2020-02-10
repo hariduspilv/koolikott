@@ -415,7 +415,7 @@ class controller extends Controller {
                 if (portfolio) {
                     this.toastService.show('PORTFOLIO_SAVED')
                     this.storageService.setPortfolio(null)
-                    this.$location.url('/kogumik/' + portfolio.id)
+                    this.$location.url('/kogumik/' + portfolio.id + '-' + this.replaceSpacesAndCharacters(portfolio.title))
                     this.searchService.setIsFavorites(false)
                     this.searchService.setIsRecommended(false)
                     this.dontSearch = true // otherwise reload will trigger search if search has values

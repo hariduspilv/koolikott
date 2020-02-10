@@ -134,14 +134,6 @@ class controller extends Controller {
                         item.eq(i).css("background-color", id === el.id ? "rgba(158, 158, 158, 0.2)" : "transparent")
                     }
                 }
-                let title = $(el).find('h2').text()
-                title = this.replaceSpacesAndCharacters(title)
-                let url = `${this.$location.url().split('-')[0]}-${this.replaceSpacesAndCharacters(this.$scope.portfolio.title)}#${el.id}`.replace(/(-)\1+/g, '-')
-
-                if (!window.location.href.includes(title) && this.$location.path().startsWith('/kogumik')) {
-                    this.$location.url(url)
-                    history.pushState({}, '', url)
-                }
             }
         })
     }
