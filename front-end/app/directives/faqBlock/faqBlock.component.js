@@ -7,6 +7,7 @@
             this.faqLanguages = ['ET', 'EN', 'RU']
             this.$scope.activeFaqLanguage = this.faqLanguages[0]
             this.getCurrentLanguage()
+            this.$scope.isIE = super.isIE();
 
         }
 

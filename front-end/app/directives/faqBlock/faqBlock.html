@@ -50,7 +50,7 @@
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <div class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor">
+                <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor">
                   <trix-editor class="term-block" angular-trix ng-model="faq.answerEst"></trix-editor>
                 </div>
               </div>
