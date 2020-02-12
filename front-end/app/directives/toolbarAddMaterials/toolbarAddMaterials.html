@@ -87,8 +87,8 @@
     </div>
     <div class="toolbar-add-materials__right" layout="row" layout-align="end center">
       <md-button
-        class="md-primary toolbar-add-materials__button"
-        data-ng-if="!$ctrl.isSaving && !$ctrl.isMobileView()"
+        class="md-primary toolbar-add-materials__button add-to-portfolio-button"
+        data-ng-if="!$ctrl.isSaving && !$ctrl.isSmallScreen()"
         data-ng-disabled="!$ctrl.portfolio || !$ctrl.chapter && $ctrl.portfolio !== '-1'"
         data-ng-click="$ctrl.addMaterialsToChapter($ctrl.chapter, $ctrl.portfolio)"
         aria-label="Lisa"
@@ -96,7 +96,7 @@
         <span data-translate="TOOLBAR_ADD_PORTFOLIO"></span>
       </md-button>
       <md-button class="md-primary toolbar-add-materials__button"
-        data-ng-if="!$ctrl.isSaving && $ctrl.isMobileView()"
+        data-ng-if="!$ctrl.isSaving && $ctrl.isSmallScreen()"
         data-ng-disabled="!$ctrl.portfolio || !$ctrl.chapter && $ctrl.portfolio !== '-1'"
         data-ng-click="$ctrl.addMaterialsToChapter($ctrl.chapter, $ctrl.portfolio)"
         aria-label="Lisa"

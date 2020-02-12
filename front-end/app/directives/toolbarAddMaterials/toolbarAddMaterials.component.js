@@ -27,8 +27,8 @@ class controller extends Controller {
             }
         }, false)
     }
-    isMobileView(){
-        return this.isNVP();
+    isSmallScreen(){
+        return window.innerWidth < 960
     }
     loadUserPortfolios() {
         const fail = () => {
