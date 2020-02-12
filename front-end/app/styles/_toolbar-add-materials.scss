@@ -125,6 +125,24 @@
   padding-left: 25px;
 }
 
+@mixin for-small-screens {
+  @media (max-width: 960px) { @content; }
+}
+
+@mixin for-large-screens {
+  @media (min-width: 961px) { @content; }
+}
+
 .add-to-portfolio-button {
-  min-width: 150px
+  min-width: 150px;
+
+  @include for-small-screens {
+    display: none;
+  }
+}
+
+.hide-button {
+  @include for-large-screens {
+    display: none;
+  }
 }

@@ -27,9 +27,7 @@ class controller extends Controller {
             }
         }, false)
     }
-    isSmallScreen(){
-        return window.innerWidth < 960
-    }
+
     loadUserPortfolios() {
         const fail = () => {
             this.toastService.show('LOADING_PORTFOLIOS_FAIL')
