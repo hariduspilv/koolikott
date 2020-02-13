@@ -67,7 +67,7 @@
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <div class="animate-if remaining-charaters-wrapper max-width-100">
+                <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100">
                   <trix-editor class="term-block" angular-trix ng-model="faq.answerEng"></trix-editor>
                 </div>
               </div>
@@ -84,7 +84,7 @@
                     <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <div class="animate-if remaining-charaters-wrapper max-width-100">
+                <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100">
                   <trix-editor class="term-block" angular-trix ng-model="faq.answerRus"></trix-editor>
                 </div>
               </div>
