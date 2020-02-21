@@ -15,6 +15,7 @@ back-end/dop.iml
 /solr-indexer/.idea/
 solr-indexer/DOP-Solr-indexer.iml
 /solr-indexer/logs/
+/solr-indexer/target/
 
 /front-end/node_modules
 /front-end/dist
