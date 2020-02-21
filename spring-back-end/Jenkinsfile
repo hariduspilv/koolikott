@@ -12,7 +12,9 @@ properties([
 
 node {
     git branch: env.BRANCH_NAME,
-            url: 'https://github.com/hariduspilv/koolikott.git'
+    credentialsId: '00371305-231a-41e5-94b6-4a7070208d7d',
+    url: 'https://bitbucket.org:ekoolikott/koolikott.git'
+
     def solrOxygenUrl = 'solr@oxygen.netgroupdigital.com'
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
     def adminOxygenUrl = 'netgroup@oxygen.netgroupdigital.com'
