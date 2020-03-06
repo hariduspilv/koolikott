@@ -1,1 +1,0 @@
-ALTER TABLE Material MODIFY source TEXT;

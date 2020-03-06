@@ -1,1 +1,0 @@
-ALTER TABLE UploadedFile ADD url VARCHAR(255) NULL;
