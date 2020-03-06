@@ -22,7 +22,7 @@
           <!--Material source-->
           <div layout="column" layout-gt-xs="row" layout-align="start center">
             <span data-ng-if="!material.uploadedFile && !uploadingFile">
-              <span data-translate="ADD_MATERIAL_LINK"></span> *
+              <span data-translate="ADD_MATERIAL_LINK"></span>
             </span>
             <div class="md-padding" data-ng-hide="material.uploadedFile || uploadingFile">
               <md-input-container layout-fill>
@@ -67,6 +67,7 @@
                 <span data-translate="IS_FILE"></span>
                 <span data-translate="FOR_MATERIAL"></span>
               </span>
+              <span data-ng-if="!material.uploadedFile && !uploadingFile" data-translate="OR"></span>
               <span name="fileToBeUploaded" ngf-select ng-model="newFile" data-accept="*" data-ngf-pattern="'*'" data-ngf-max-size="{{maxFileSize + 'MB'}}" ngf-model-invalid="invalidFile">
                 <a href="javascript:void(0);" class="md-raised md-primary" data-ng-if="!uploadingFile">
                   <span data-ng-if="!material.uploadedFile" data-translate="FILE_WORD"></span>
@@ -75,7 +76,7 @@
               </span>
               <span data-ng-if="!material.uploadedFile && !uploadingFile">
                 <span data-translate="FOR_MATERIAL"></span>
-                <span data-ng-if="!material.source">*</span>.
+                <span data-ng-if="!material.source"></span>.*
               </span>
             </div>
           </div>
