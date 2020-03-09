@@ -36,7 +36,7 @@ node {
         if (env.BRANCH_NAME == 'develop') {
             sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
             sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
-        } else if (env.BRANCH_NAME == 'EK-920-update-solr') {
+        } else if (env.BRANCH_NAME == 'EK-930') {
             sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
             sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
         } else {

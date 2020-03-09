@@ -173,6 +173,8 @@ class controller extends Controller {
         this.$scope.showExpandableReports = false
         this.$scope.showExpandableChanges = false
 
+        this.setMarginForIE();
+
         if (typeof cb === 'function')
             cb(this)
     }
@@ -184,6 +186,11 @@ class controller extends Controller {
                     : this[condition],
             false
         )
+    }
+
+    setMarginForIE() {
+        let messageKey = this.$scope.messageKey
+        this.$scope.marginIE = !!(super.isIE() && (messageKey === 'ERROR_MSG_DELETED' || messageKey === 'ERROR_MSG_UNREVIEWED'));
     }
 
     setOwner(data) {
