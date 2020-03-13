@@ -1,4 +1,4 @@
-## e-Koolikott [1.51.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Prelive'i paigaldatud 13.03.2020)
+## e-Koolikott [1.51.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Toodangusse paigaldatud 13.03.2020)
 
 ### Muutunud
 * "Nn vale litsentsiga avalikku materjali peab saama kogumikust avada" [EK-981](https://projektid.hitsa.ee/jira/browse/EK-981)
@@ -7,7 +7,7 @@
 * "Kogumiku detailvaade > silma menüüst lingi kopeerimise nupp ära kaotada" [EK-946](https://projektid.hitsa.ee/jira/browse/EK-946)
 * "Kogumiku jagamise nupp ümber tõsta ja peatükkidele jagamise nupu lisamine" [EK-939](https://projektid.hitsa.ee/jira/browse/EK-939)
 
-## e-Koolikott [1.51.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Prelive'i paigaldatud 18.02.2020)
+## e-Koolikott [1.51.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Toodangusse paigaldatud 13.03.2020)
 
 ### Muutunud
 * "EHISe õppeasutuste päringu täiendus" [EK-868](https://projektid.hitsa.ee/jira/browse/EK-868)
