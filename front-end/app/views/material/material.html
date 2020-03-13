@@ -80,7 +80,6 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                       <span data-translate="MATERIAL_DELETE"></span>
                     </md-button>
                   </md-menu-item>
-                  <md-menu-item dop-copy-permalink data-url="pageUrl"></md-menu-item>
                   <md-menu-divider data-ng-if="isAdmin()"></md-menu-divider>
                   <md-menu-item
                     dop-recommend
@@ -88,7 +87,6 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                     data-on-change="setRecommendation(recommendation)"
                     data-ng-if="isAdmin()"
                   ></md-menu-item>
-                  <md-menu-divider data-ng-if="!isAdmin() && !isOwner()"></md-menu-divider>
                   <md-menu-item dop-report-improper data-ng-if="!isAdmin() && !isOwner()"
                                 data-learning-object="material"></md-menu-item>
                   <md-menu-item data-ng-if="material.creator && isAdmin() && !isOwner()" dop-restrict

@@ -36,6 +36,12 @@ class controller extends Controller {
        this.$scope.makeChapterUrl = (slug) => {
             return this.$location.absUrl().split('#')[0] + '-' + this.replaceSpacesAndCharacters(this.$scope.portfolio.title) + '#' + slug
         }
+
+        this.$scope.$watch(() => document.getElementById(this.$location.hash()), (documentState) => {
+            if (documentState !== null) {
+                this.setScrollPositionBasedOnLocationHash()
+            }
+        })
     }
 
     setScrollPositionBasedOnLocationHash() {
@@ -45,7 +51,7 @@ class controller extends Controller {
 
             if (el) {
                 const { top } = el.getBoundingClientRect()
-                window.scrollTo(0, top + window.scrollY - 80)
+                window.scrollTo(0, top + window.pageYOffset - 80)
             }
         }
         document.readyState === 'complete'

@@ -13,6 +13,8 @@
     <div>
       <div data-ng-repeat="chapter in portfolio.chapters">
         <dop-chapter
+          data-title="portfolio.title"
+          data-object="portfolio"
           data-chapter="chapter"
           data-index="$index"
         ></dop-chapter>
