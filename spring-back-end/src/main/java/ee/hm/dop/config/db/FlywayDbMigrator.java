@@ -13,6 +13,7 @@ public class FlywayDbMigrator implements FlywayMigrationStrategy {
 
     @Override
     public void migrate(Flyway flyway) {
+        flyway.setIgnoreMissingMigrations(true);
         try {
             flyway.repair();
             flyway.migrate();

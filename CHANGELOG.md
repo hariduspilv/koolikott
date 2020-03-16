@@ -1,11 +1,25 @@
-## e-Koolikott [1.50.6](https://projektid.hitsa.ee/jira/projects/EK/versions/11177) (Prelive'i paigaldatud 21.01.2020)
+## e-Koolikott [1.51.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Prelive'i paigaldatud 18.02.2020)
+
+### Muutunud
+* "EHISe õppeasutuste päringu täiendus" [EK-868](https://projektid.hitsa.ee/jira/browse/EK-868)
+* "Kui olemasolev kasutaja sisestab esmakordselt e-maili, siis pärast edukat autenti suunata ta "Minu profiil" vaatesse" [EK-864](https://projektid.hitsa.ee/jira/browse/EK-864)
+* "Kogumiku muutmisel linnukese asemel konkreetne "Salvesta" nupp" [EK-834](https://projektid.hitsa.ee/jira/browse/EK-834)
+* "Materjali lisamisel kogumikku linnukese asemele nupp "LISA KOGUMIKKU"" [EK-833](https://projektid.hitsa.ee/jira/browse/EK-833)
+* "Kogumiku loomise modaalil võtta kasutusele vähendatud võimalusega text editor" [EK-873](https://projektid.hitsa.ee/jira/browse/EK-873)
+* "KKK lehel võtta kasutusele vähendatud võimalusega text editor" [EK-267](https://projektid.hitsa.ee/jira/browse/EK-267)
+* "Materjali lisamise modaalil võtta kasutusele vähendatud võimalusega text editor" [EK-874](https://projektid.hitsa.ee/jira/browse/EK-874)
+* "Safaris esilehe layoudi parandus" [EK-630](https://projektid.hitsa.ee/jira/browse/EK-630)
+* "'Kas soovid jätkata..' modaali peaks kasutajale kuvama kuni ta sellele reageerib" [EK-859](https://projektid.hitsa.ee/jira/browse/EK-859)
+* "Raporteeritud õppevara 'Raporteeris' veerus kõikide raporteerijate nimede kuvamine" [EK-819](https://projektid.hitsa.ee/jira/browse/EK-819)
+
+## e-Koolikott [1.50.6](https://projektid.hitsa.ee/jira/projects/EK/versions/11177) (Toodangusse paigaldatud 28.01.2020)
 
 ### Muutunud
 * "Juba sisestatud kasutustingimuste plokki ei pea saama kustutada" [EK-865](https://projektid.hitsa.ee/jira/browse/EK-865)
 * "E-maili valideerimise koodiakna modaalil teksti täiendamine" [EK-863](https://projektid.hitsa.ee/jira/browse/EK-863)
 * "Litsentsi migreerimise modaali teksti muudatused" [EK-856](https://projektid.hitsa.ee/jira/browse/EK-856)
 
-## e-Koolikott [1.50.5](https://projektid.hitsa.ee/jira/projects/EK/versions/11176) (Prelive'i paigaldatud 16.01.2020)
+## e-Koolikott [1.50.5](https://projektid.hitsa.ee/jira/projects/EK/versions/11176) (Toodangusse paigaldatud 28.01.2020)
 
 ### Muutunud
 * "Viimaste tingimustega veel mitte nõustunud kasutajale peaks tingimuste modaalil mõlemad checkboxid kuvatud olema" [EK-843](https://projektid.hitsa.ee/jira/browse/EK-843)
@@ -15,7 +29,7 @@
 * "Kasutaja peaks saama alati peale autentimist rakendusse sisse logitud" [EK-853](https://projektid.hitsa.ee/jira/browse/EK-853)
 * "Failide üleslaadimine ja väljakuvamine peaks töötama" [EK-861](https://projektid.hitsa.ee/jira/browse/EK-861)
 
-## e-Koolikott [1.50.4](https://projektid.hitsa.ee/jira/projects/EK/versions/11118) (Prelive'i paigaldatud 06.01.2020)
+## e-Koolikott [1.50.4](https://projektid.hitsa.ee/jira/projects/EK/versions/11118) (Toodangusse paigaldatud 28.01.2020)
 
 ### Muutunud
 * "Kui tavakasutaja enda loodud kogumik on ebasobivaks märgitud, siis peaks see kasutaja saama seda avada" [EK-511](https://projektid.hitsa.ee/jira/browse/EK-511)
@@ -33,14 +47,14 @@
 * "Ülemääraste päringute eemaldamine" [EK-813](https://projektid.hitsa.ee/jira/browse/EK-813)
 * "IE: Kasutustingimuste ja GDPR tingimuste lehe edit mode parandada" [EK-824](https://projektid.hitsa.ee/jira/browse/EK-824)
 
-## e-Koolikott [1.50.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11114) (Prelive'i paigaldatud 15.10.2019)
+## e-Koolikott [1.50.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11114) (Toodangusse paigaldatud 28.01.2020)
 
 ### Muutunud
 * "Kogumiku avalikustamise menüü tooltip ei tohiks lehele kinni jääda" [EK-762](https://projektid.hitsa.ee/jira/browse/EK-762)
 * "Paluda solrit kenasti end peale migratsioon uuendama" [EK-763](https://projektid.hitsa.ee/jira/browse/EK-763)
 * "Litsentsinduse teksti muudatused" [EK-768](https://projektid.hitsa.ee/jira/browse/EK-768)
 
-## e-Koolikott [1.50.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11113) (Prelive'i paigaldatud 08.10.2019)
+## e-Koolikott [1.50.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11113) (Toodangusse paigaldatud 28.01.2020)
 
 ### Muutunud
 * "Kasutajad ei tohi saada kopeerida kogumikke, milles on vale litsentsiga materjale" [EK-757](https://projektid.hitsa.ee/jira/browse/EK-757)
@@ -48,7 +62,7 @@
 * "Materjali ei tohi saada lisada ilma kohustuslikke välju täitmata - illustratsiooni litsents" [EK-760](https://projektid.hitsa.ee/jira/browse/EK-760)
 * "Litsentside migreerimise 'Oota' modaal peaks olema kuvatud vaid reaalselt vajaliku aja" [EK-761](https://projektid.hitsa.ee/jira/browse/EK-761)
 
-## e-Koolikott [1.50.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11107) (Prelive'i paigaldatud 01.10.2019)
+## e-Koolikott [1.50.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11107) (Toodangusse paigaldatud 28.01.2020)
 
 ### Muutunud
 * "Ebasobiva litsentsiga materjali omavat kogumikku on võimalik avalikustada" [EK-753](https://projektid.hitsa.ee/jira/browse/EK-753)
@@ -57,7 +71,7 @@
 * "Tahvelarvuti resolutsioonidel peaks litsentsi modaali nuppude tekst olema korrektselt kuvatud" [EK-754](https://projektid.hitsa.ee/jira/browse/EK-754)
 * "Litsents> Olemasolev kasutaja, kelle kogumikes on vana litsentsiga materjale, logib e-Koolikotti pärast muudatuste jõustumist" [EK-728](https://projektid.hitsa.ee/jira/browse/EK-728)
 
-## e-Koolikott [1.50.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11022) (Prelive'i paigaldatud 26.09.2019)
+## e-Koolikott [1.50.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11022) (Toodangusse paigaldatud 28.01.2020)
 
 ### Muutunud
 * "Kogumiku kopeerimise funktsionaalsus" [EK-683](https://projektid.hitsa.ee/jira/browse/EK-683)

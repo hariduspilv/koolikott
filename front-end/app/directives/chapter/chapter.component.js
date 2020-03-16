@@ -28,6 +28,9 @@ class controller extends Controller {
                 this.$translate('PORTFOLIO_ENTER_CHAPTER_TITLE').then(missingTitle => this.$scope.chapterTitle = missingTitle)
             }
 
+            this.$scope.learningObject = this.object
+            this.$scope.title = this.title
+
             // make sure there's always at least one empty block
             if (!Array.isArray(this.$scope.chapter.blocks))
                 this.$scope.chapter.blocks = []
@@ -987,7 +990,9 @@ component('dopChapter', {
         onMoveDown: '&',
         onDelete: '&',
         onAddExistingMaterial: '&',
-        isEditMode: '<'
+        isEditMode: '<',
+        title: '<',
+        object: '<'
     },
     templateUrl: 'directives/chapter/chapter.html',
     controller

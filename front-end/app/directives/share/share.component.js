@@ -4,9 +4,13 @@
 class controller extends Controller {
     $onInit() {
         this.isOpen = false
-        this.pageUrl = this.$location.absUrl()
+        this.pageUrl = window.location.origin + window.location.pathname
+        if (this.slug) {
+            this.pageUrl += '#' + this.slug
+        }
         this.pictureName = ''
         this.shareMediaPlaces = [
+            { provider: 'url' },
             { provider: 'email', icon: 'icon-mail-squared' },
             { provider: 'twitter', icon: 'icon-twitter-squared' },
             { provider: 'facebook', icon: 'icon-facebook-squared' }
@@ -117,7 +121,7 @@ class controller extends Controller {
                     }
                 })
 
-                if(this.pageUrl.contains('kogumik')){
+                if (this.pageUrl.contains('kogumik')){
                     gTagCaptureEventWithLabel('share', 'teaching portfolio', 'Twitter')
                 } else if (this.pageUrl.contains('oppematerjal')){
                     gTagCaptureEventWithLabel('share', 'teaching material', 'Twitter')
@@ -133,15 +137,40 @@ class controller extends Controller {
                     }
                 })
 
-                if(this.pageUrl.contains('kogumik')){
+                if (this.pageUrl.contains('kogumik')){
                     gTagCaptureEventWithLabel('share', 'teaching portfolio', 'E-mail')
                 } else if (this.pageUrl.contains('oppematerjal')){
                     gTagCaptureEventWithLabel('share', 'teaching material', 'E-mail')
                 }
 
                 break
+            case 'url':
+                this.copyToClipboard()
+                if (!this.slug) {
+                    this.toastService.show('COPY_PERMALINK_SUCCESS')
+                } else {
+                    this.toastService.show('COPY_CHAPTER_LINK')
+                }
+
+                if (this.pageUrl.contains('kogumik')){
+                    gTagCaptureEventWithLabel('copy', 'teaching portfolio', 'link')
+                } else if (this.pageUrl.contains('oppematerjal')){
+                    gTagCaptureEventWithLabel('copy', 'teaching material', 'link')
+                }
+
+                break
         }
     }
+
+    copyToClipboard() {
+        const el = document.createElement('textarea');
+        el.value = this.pageUrl;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+    }
+
     addStyle() {
         const element = document.getElementsByClassName('card-menus')
         element[0].style.cssText = "z-index: 10"
@@ -162,12 +191,14 @@ controller.$inject = [
     'authenticatedUserService',
     'Socialshare',
     'FB_APP_ID',
+    'toastService'
 ]
 
 component('dopShare', {
     bindings: {
         title: '<',
-        object: '<'
+        object: '<',
+        slug: '<'
     },
     templateUrl: 'directives/share/share.html',
     controller
