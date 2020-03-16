@@ -11,8 +11,7 @@ properties([
 
 
 node {
-    git branch: env.BRANCH_NAME,
-            url: 'https://github.com/hariduspilv/koolikott.git'
+    git branch: env.BRANCH_NAME, credentialsId: '00371305-231a-41e5-94b6-4a7070208d7d', url: 'https://Oleg_Pahhomov@bitbucket.org/ekoolikott/koolikott.git'
     def solrOxygenUrl = 'solr@oxygen.netgroupdigital.com'
     def dopOxygenUrl = 'dop@oxygen.netgroupdigital.com'
     def adminOxygenUrl = 'netgroup@oxygen.netgroupdigital.com'
@@ -37,7 +36,7 @@ node {
             sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
             sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
         }
-        else if (env.BRANCH_NAME == '1.50.6_hotfix') {
+        else if (env.BRANCH_NAME == '1.51.1') {
             sh "scp -r spring-back-end/misc/solr/dop ${solrOxygenUrl}:/opt/solr/server/solr/"
             sh "ssh -t ${solrOxygenUrl} sh /home/solr/solr.sh"
         }
@@ -50,7 +49,7 @@ node {
         if (env.BRANCH_NAME == 'develop') {
             sh "scp -r spring-back-end/target/spring-kott.jar ${dopOxygenUrl}:app/"
             sh "ssh -t ${adminOxygenUrl} sh /home/netgroup/dop.sh"
-        } else if (env.BRANCH_NAME == '1.50.6_hotfix') {
+        } else if (env.BRANCH_NAME == '1.51.1') {
             sh "scp -r spring-back-end/target/spring-kott.jar ${dopOxygenUrl}:app/"
             sh "ssh -t ${adminOxygenUrl} sh /home/netgroup/dop.sh"
         }

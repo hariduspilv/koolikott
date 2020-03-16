@@ -24,7 +24,9 @@ pipeline {
                 docker { image 'node:8' }
             }
             steps {
-                git branch: env.BRANCH_NAME, url: 'https://github.com/hariduspilv/koolikott.git'
+                git branch: env.BRANCH_NAME,
+                credentialsId: '00371305-231a-41e5-94b6-4a7070208d7d',
+                url: 'https://Oleg_Pahhomov@bitbucket.org/ekoolikott/koolikott.git'
                 sh 'cd front-end && npm install'
                 sh 'cd front-end && npm run bower install'
                 script {
@@ -47,7 +49,7 @@ pipeline {
                         sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
                     }
-                    else if (env.BRANCH_NAME == '1.50.6_hotfix') {
+                    else if (env.BRANCH_NAME == '1.51.1') {
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
                         sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"

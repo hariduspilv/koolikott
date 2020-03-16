@@ -25,6 +25,10 @@
         data-ng-click="$ctrl.share($event, item)"
         >
         <span class="share__icon {{item.icon}}"></span>
+        <div data-ng-if="item.provider === 'url'">
+          <md-icon>content_copy</md-icon>
+          <md-tooltip md-direction="top"><span data-translate="COPY_URL"></span></md-tooltip>
+        </div>
       </md-button>
     </div>
   </md-fab-actions>

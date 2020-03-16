@@ -1,7 +1,19 @@
 <md-card class="portfolio-chapter card-lg" data-ng-class="$ctrl.getChapterClassNames()" id="{{slug}}">
   <!--View-->
   <md-card-content data-ng-if="!$ctrl.isEditMode">
-    <h2 class="chapter-title" data-ng-class="{'placeholder-title': !chapter.title}" data-ng-bind="chapterTitle"></h2>
+    <div layout="row" layout-align="space-between start">
+      <div data-flex="90">
+        <h2 class="chapter-title title-share-align" data-ng-class="{'placeholder-title': !chapter.title}" data-ng-bind="chapterTitle"></h2>
+      </div>
+      <div class="share-position">
+        <dop-share
+          id="share"
+          data-title="title"
+          data-object="learningObject"
+          data-slug="slug"
+        ></dop-share>
+      </div>
+    </div>
     <div class="chapter-blocks">
       <div
         class="chapter-block word-break-all"

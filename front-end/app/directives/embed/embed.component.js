@@ -20,6 +20,11 @@ class controller extends Controller {
 
         this.$scope.isAdminOrModerator = this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator()
 
+        this.$scope.isOwner = isMaterial ? this.authenticatedUserService.isOwner(this.data) : false
+
+        this.$scope.cannotOpenMaterial = (!this.$scope.isAdminOrModerator && this.data.deleted) ||
+            (!(this.$scope.isAdminOrModerator || this.$scope.isOwner) && this.data.visibility === 'PRIVATE')
+
         switch (type) {
             case 'YOUTUBE':
             case 'PICTURE':

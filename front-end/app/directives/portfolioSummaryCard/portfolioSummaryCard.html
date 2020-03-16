@@ -71,7 +71,6 @@
                   <span data-translate="BUTTON_RESTORE"></span>
                 </md-button>
               </md-menu-item>
-              <md-menu-item data-ng-if="$root.isViewPortfolioPage" dop-copy-permalink data-url="pageUrl"></md-menu-item>
               <md-menu-item data-ng-if="isLoggedIn() && !isRestricted() && isPublic() && $root.acceptableLicenses">
                 <md-button data-ng-click="$ctrl.copyPortfolio()">
                   <md-icon md-menu-align-target>file_copy</md-icon>
@@ -85,7 +84,7 @@
                 data-on-change="setRecommendation(recommendation)"
                 data-ng-if="isAdmin() && showRecommendButton"
               ></md-menu-item>
-              <md-menu-divider data-ng-if="!isAdminOrModerator() && !isOwner()"></md-menu-divider>
+              <md-menu-divider data-ng-if="!isAdminOrModerator() && !isOwner() && isLoggedIn()"></md-menu-divider>
               <md-menu-item
                 dop-report-improper
                 data-ng-if="!isAdminOrModerator() && !isOwner() && showReportImproperButton"
@@ -128,8 +127,6 @@
               <md-icon data-ng-if="getPortfolioVisibility() === 'PRIVATE'">visibility_off</md-icon>
             </md-button>
             <md-menu-content>
-              <md-menu-item dop-copy-permalink data-url="getShareUrl"></md-menu-item>
-              <md-menu-divider></md-menu-divider>
               <md-menu-item>
                 <div class="no-padding" ng-mousemove="$ctrl.onDivAction1()" ng-mouseenter="$ctrl.onDivAction1()" ng-mouseleave="$ctrl.onDivLeave1();">
                   <md-button class="text-transform-inherit"
