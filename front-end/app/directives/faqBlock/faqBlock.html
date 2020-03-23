@@ -180,6 +180,7 @@
         aria-label="{{ 'FAQ_ORDER_UPDATE' | translate }}"
         id="faq-order-update"
         class="md-primary"
+        data-ng-hide="$ctrl.faqs.length < 2"
         data-ng-disabled="$ctrl.createDialogOpen"
         data-ng-click="$ctrl.saveAllFaqs($ctrl.faqs)"
         data-ng-if="$ctrl.isFaqEditMode()"
