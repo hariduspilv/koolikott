@@ -3,16 +3,13 @@ package ee.hm.dop.rest;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.model.Faq;
 import org.apache.commons.collections.CollectionUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class FaqResourceTest extends ResourceIntegrationTestBase {
 
@@ -39,12 +36,12 @@ public class FaqResourceTest extends ResourceIntegrationTestBase {
         Faq faq = make("Test?", "Test Eng?", "Test Rus?", "Jah", "Yes", "Da");
         Faq savedFaq = doPost(SAVE_FAQ, faq, Faq.class);
         validate(savedFaq);
-        assertEquals("Yes", savedFaq.getAnswerEng());
-        assertEquals("Test?", savedFaq.getQuestionEst());
-        savedFaq.setAnswerEng("Yes Again");
+        assertEquals("Yes", savedFaq.getContentEng());
+        assertEquals("Test?", savedFaq.getTitleEst());
+        savedFaq.setContentEng("Yes Again");
         Faq updatedFaq = doPost(SAVE_FAQ, savedFaq, Faq.class);
-        assertEquals("Yes Again", updatedFaq.getAnswerEng());
-        assertEquals("Test?", updatedFaq.getQuestionEst());
+        assertEquals("Yes Again", updatedFaq.getContentEng());
+        assertEquals("Test?", updatedFaq.getTitleEst());
     }
 
     @Test
@@ -90,23 +87,23 @@ public class FaqResourceTest extends ResourceIntegrationTestBase {
         assertEquals(Response.Status.BAD_REQUEST.getStatusCode(), response6.getStatus());
     }
 
-   public Faq make(String questionEst, String questionEng, String questionRus, String answerEst, String answerEng, String answerRus) {
+   public Faq make(String titleEst, String titleEng, String titleRus, String contentEst, String contentEng, String contentRus) {
        Faq faq = new Faq();
-       faq.setQuestionEst(questionEst);
-       faq.setQuestionEng(questionEng);
-       faq.setQuestionRus(questionRus);
-       faq.setAnswerEst(answerEst);
-       faq.setAnswerEng(answerEng);
-       faq.setAnswerRus(answerRus);
+       faq.setTitleEst(titleEst);
+       faq.setTitleEng(titleEng);
+       faq.setTitleRus(titleRus);
+       faq.setTitleEst(contentEst);
+       faq.setTitleEng(contentEng);
+       faq.setTitleRus(contentRus);
        return faq;
    }
 
     public void validate(Faq savedFaq) {
-        assertNotNull(savedFaq.getQuestionEst());
-        assertNotNull(savedFaq.getQuestionEng());
-        assertNotNull(savedFaq.getQuestionRus());
-        assertNotNull(savedFaq.getAnswerEst());
-        assertNotNull(savedFaq.getAnswerEng());
-        assertNotNull(savedFaq.getAnswerRus());
+        assertNotNull(savedFaq.getTitleEst());
+        assertNotNull(savedFaq.getTitleEng());
+        assertNotNull(savedFaq.getTitleRus());
+        assertNotNull(savedFaq.getContentEst());
+        assertNotNull(savedFaq.getContentEng());
+        assertNotNull(savedFaq.getContentRus());
     }
 }

@@ -12,12 +12,12 @@
 
         initNewFaq() {
             this.$scope.newFaq = {
-                questionEst: '',
-                questionEng: '',
-                questionRus: '',
-                answerEst: '',
-                answerEng: '',
-                answerRus: '',
+                titleEst: '',
+                titleEng: '',
+                titleRus: '',
+                contentEst: '',
+                contentEng: '',
+                contentRus: '',
                 faqLanguages: ['ET', 'EN', 'RU'],
                 edit: true,
                 new: true
@@ -49,6 +49,13 @@
             this.$scope.faqs.push(this.$scope.newFaq)
             this.initNewFaq()
             this.createDialogOpen = true
+
+            this.$scope.unwatch = this.$scope.$watch(() => document.getElementById('trix-toolbar-1'), (selectedValue) => {
+                if (selectedValue) {
+                    window.scrollTo(0,document.body.scrollHeight);
+                    this.$scope.unwatch();
+                }
+            })
         }
 
         removeFaq() {

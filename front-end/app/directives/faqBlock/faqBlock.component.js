@@ -18,7 +18,9 @@
         save(faq) {
 
             this.$scope.isSaving = true
-
+            if (faq.faqOrder === undefined) {
+                faq.faqOrder = this.faqs.length
+            }
             this.faqService.saveFaq(faq)
                 .then(response => {
                     if (response.status === 200) {
@@ -35,9 +37,32 @@
             this.$scope.isSaving = false
         }
 
+        saveAllFaqs(faqs) {
+            this.$scope.isSaving = true
+            this.$scope.saveSuccessful = true
+            let i = 0;
+            for (const faq of faqs) {
+                faq.faqOrder = i
+                this.faqService.saveFaq(faq)
+                    .then(response => {
+                        if (response.status !== 200) {
+                            this.$scope.saveSuccessful = false
+                        }
+                    })
+                i++;
+                if (i === faqs.length) {
+                    if (this.$scope.saveSuccessful) {
+                        this.toastService.show('FAQ_ORDER_CHANGED')
+                    } else {
+                        this.toastService.show('FAQ_ORDER_CHANGE_FAIL')
+                    }
+                }
+            }
+            this.$scope.isSaving = false
+        }
+
         getCurrentLanguage() {
             return this.translationService.getLanguage()
-            console.log(lang)
         }
 
         isFaqEditMode() {
@@ -51,6 +76,7 @@
         editFaq(faq) {
             this.createDialogOpen = !this.createDialogOpen
             faq.edit = !faq.edit;
+            this.$scope.isEditFaq = true;
         }
 
         cancelEdit(faq) {
@@ -77,10 +103,19 @@
         }
 
         isSubmitDisabled(faq) {
-            return !(faq.questionEst && faq.answerEst &&
-                faq.questionEng && faq.answerEng &&
-                faq.questionRus && faq.answerRus)
+            return !(faq.titleEst && faq.contentEst &&
+                faq.titleEng && faq.contentEng &&
+                faq.titleRus && faq.contentRus)
 
+        }
+
+        move(idx, up = false) {
+            this.faqs.splice(
+                up ? idx - 1
+                    : idx + 1,
+                0,
+                this.faqs.splice(idx, 1)[0]
+            )
         }
     }
 

@@ -1,10 +1,10 @@
 
     <!--View-->
     <md-card class=" card-lg">
-    <md-card-content data-ng-if="!$ctrl.isFaqEditMode()" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
-      <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.questionEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.questionEng : faq.questionRus"></h2>
+    <md-card-content data-ng-if="!$ctrl.isFaqEditMode()" data-ng-repeat="faq in $ctrl.faqs.reverse() | orderBy: '+' : true">
+      <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.titleEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.titleEng : faq.titleRus"></h2>
       <div>
-        <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
+        <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
       </div>
     </md-card-content>
     </md-card>
@@ -12,11 +12,11 @@
 
     <!-- Edit mode -->
     <form name="faqForm">
-    <md-card data-ng-if="$ctrl.isFaqEditMode()" class="portfolio-chapter card-lg faq-font" data-ng-repeat="faq in $ctrl.faqs | orderBy: '+' : true">
+    <md-card data-ng-if="$ctrl.isFaqEditMode()" class="portfolio-chapter card-lg faq-font" data-ng-repeat="faq in $ctrl.faqs.reverse() track by $index">
       <div>
       <md-card-content data-ng-if="!faq.edit">
         <div data-layout="row" data-layout-align="space-between center">
-          <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.questionEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.questionEng : faq.questionRus"></h2>
+          <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.titleEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.titleEng : faq.titleRus"></h2>
           <md-button class="md-icon-button chapter-pencil-button"
                      data-ng-click="$ctrl.editFaq(faq)"
                      id="faq-edit"
@@ -26,7 +26,7 @@
           </md-button>
         </div>
           <div>
-          <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.answerEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.answerEng : faq.answerRus"></span>
+          <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
         </div>
       </md-card-content>
         <md-card-content data-ng-if="faq.edit" >
@@ -39,53 +39,53 @@
                  flex-order-gt-sm="2" flex="100" data-ng-if="true">
               <div ng-if="lang === 'ET'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                  <label data-translate="FAQ_QUESTION"></label>
+                  <label data-translate="FAQ_TITLE"></label>
                   <input
-                    name="question"
-                    id="add-question-est"
-                    ng-model="faq.questionEst"
+                    name="title"
+                    id="add-title-est"
+                    ng-model="faq.titleEst"
                     maxlength="100"
                     required>
-                  <div data-ng-messages="faqForm.question.$error">
-                    <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
+                  <div data-ng-messages="faqForm.title.$error">
+                    <div data-ng-message="required" data-translate="FAQ_TITLE_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
                 <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor">
-                  <trix-editor class="term-block" angular-trix ng-model="faq.answerEst"></trix-editor>
+                  <trix-editor class="term-block" angular-trix ng-model="faq.contentEst"></trix-editor>
                 </div>
               </div>
               <div ng-if="lang === 'EN'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                  <label data-translate="FAQ_QUESTION"></label>
+                  <label data-translate="FAQ_TITLE"></label>
                   <input
-                    name="question"
-                    id="add-question-eng"
-                    ng-model="faq.questionEng"
+                    name="title"
+                    id="add-title-eng"
+                    ng-model="faq.titleEng"
                     maxlength="100"
                     required>
-                  <div data-ng-messages="faqForm.question.$error">
-                    <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
+                  <div data-ng-messages="faqForm.title.$error">
+                    <div data-ng-message="required" data-translate="FAQ_TITLE_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100">
-                  <trix-editor class="term-block" angular-trix ng-model="faq.answerEng"></trix-editor>
+                <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor">
+                  <trix-editor class="term-block" angular-trix ng-model="faq.contentEng"></trix-editor>
                 </div>
               </div>
               <div ng-if="lang === 'RU'" data-layout-align="start stretch" layout="column" data-flex="100">
                 <md-input-container class="md-block animate-if remaining-charaters-wrapper" flex>
-                  <label data-translate="FAQ_QUESTION"></label>
+                  <label data-translate="FAQ_TITLE"></label>
                   <input
-                    name="question"
-                    id="add-question-rus"
-                    ng-model="faq.questionRus"
+                    name="title"
+                    id="add-title-rus"
+                    ng-model="faq.titleRus"
                     maxlength="100"
                     required>
-                  <div data-ng-messages="faqForm.question.$error">
-                    <div data-ng-message="required" data-translate="FAQ_QUESTION_IS_MANDATORY"></div>
+                  <div data-ng-messages="faqForm.title.$error">
+                    <div data-ng-message="required" data-translate="FAQ_TITLE_IS_MANDATORY"></div>
                   </div>
                 </md-input-container>
-                <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100">
-                  <trix-editor class="term-block" angular-trix ng-model="faq.answerRus"></trix-editor>
+                <div data-ng-class="{'editor-margin-IE': isIE}" class="animate-if remaining-charaters-wrapper max-width-100 reduced-editor">
+                  <trix-editor class="term-block" angular-trix ng-model="faq.contentRus"></trix-editor>
                 </div>
               </div>
             </div>
@@ -160,7 +160,32 @@
           </div>
         </md-card-content>
       </div>
+      <div
+        data-ng-if="$ctrl.isFaqEditMode"
+        class="organize-chapters"
+      >
+        <div>
+          <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.move($index, true)" data-ng-if="$index !== 0 && !$ctrl.createDialogOpen">
+            <md-icon>arrow_upward</md-icon>
+          </md-button>
+          <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.move($index)" data-ng-if="$index + 1 !== $ctrl.faqs.length && !$ctrl.createDialogOpen">
+            <md-icon>arrow_downward</md-icon>
+          </md-button>
+        </div>
+      </div>
     </md-card>
     </form>
+    <div layout="row" layout-align="end center">
+      <md-button
+        aria-label="{{ 'FAQ_ORDER_UPDATE' | translate }}"
+        id="faq-order-update"
+        class="md-primary"
+        data-ng-disabled="$ctrl.createDialogOpen"
+        data-ng-click="$ctrl.saveAllFaqs($ctrl.faqs)"
+        data-ng-if="$ctrl.isFaqEditMode()"
+      >
+        <span data-translate="{{ 'FAQ_ORDER_UPDATE' }}"></span>
+      </md-button>
+    </div>
 
   <!--Edit -->
