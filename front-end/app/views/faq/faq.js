@@ -74,10 +74,10 @@
             this.initNewFaq()
             this.createDialogOpen = true
 
-            this.$scope.unwatch = this.$scope.$watch(() => document.getElementById('trix-toolbar-1'), (selectedValue) => {
+            this.$scope.unwatch = this.$scope.$watch(() => document.getElementById('faq-save'), (selectedValue) => {
                 if (selectedValue) {
                     window.scrollTo(0,document.body.scrollHeight);
-                    this.$scope.unwatch();
+                    this.$scope.unwatch()
                 }
             })
         }
