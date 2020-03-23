@@ -1,7 +1,7 @@
 
     <!--View-->
-    <md-card class=" card-lg">
-    <md-card-content data-ng-if="!$ctrl.isFaqEditMode()" data-ng-repeat="faq in $ctrl.faqs.reverse() | orderBy: '+' : true">
+    <md-card class="portfolio-chapter card-lg faq-font" data-ng-repeat="faq in $ctrl.faqs.reverse() | orderBy: '+' : true">
+    <md-card-content data-ng-if="!$ctrl.isFaqEditMode()">
       <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.titleEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.titleEng : faq.titleRus"></h2>
       <div>
         <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
