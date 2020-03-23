@@ -92,9 +92,9 @@ public class FaqResourceTest extends ResourceIntegrationTestBase {
        faq.setTitleEst(titleEst);
        faq.setTitleEng(titleEng);
        faq.setTitleRus(titleRus);
-       faq.setTitleEst(contentEst);
-       faq.setTitleEng(contentEng);
-       faq.setTitleRus(contentRus);
+       faq.setContentEst(contentEst);
+       faq.setContentEng(contentEng);
+       faq.setContentRus(contentRus);
        return faq;
    }
 
