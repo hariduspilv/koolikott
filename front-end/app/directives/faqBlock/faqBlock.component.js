@@ -37,30 +37,6 @@
             this.$scope.isSaving = false
         }
 
-        saveAllFaqs(faqs) {
-            this.$scope.isSaving = true
-            this.$scope.saveSuccessful = true
-            let i = 0;
-            for (const faq of faqs) {
-                faq.faqOrder = i
-                this.faqService.saveFaq(faq)
-                    .then(response => {
-                        if (response.status !== 200) {
-                            this.$scope.saveSuccessful = false
-                        }
-                    })
-                i++;
-                if (i === faqs.length) {
-                    if (this.$scope.saveSuccessful) {
-                        this.toastService.show('FAQ_ORDER_CHANGED')
-                    } else {
-                        this.toastService.show('FAQ_ORDER_CHANGE_FAIL')
-                    }
-                }
-            }
-            this.$scope.isSaving = false
-        }
-
         getCurrentLanguage() {
             return this.translationService.getLanguage()
         }

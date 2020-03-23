@@ -7,16 +7,35 @@
     <md-icon class="icon-blue" md-menu-align-target>edit</md-icon>
     <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
   </md-button>
-  <md-button class="md-button md-ink-ripple"
-             data-ng-click="$ctrl.createFaq()"
-             aria-label="Add FAQ"
-             data-ng-if="$ctrl.isAdmin() && editMode"
-             ng-disabled="$ctrl.createDialogOpen"
-             id="customerSupportButton"
-  >
-    <md-icon>add_circle</md-icon>
-    <span data-translate="ADD_FAQ"></span>
-  </md-button>
+
+  <div data-ng-if="$ctrl.isAdmin() && editMode" data-layout="row">
+    <div>
+      <md-button
+        aria-label="{{ 'FAQ_ORDER_UPDATE' | translate }}"
+        id="faq-order-update"
+        class="md-button md-ink-ripple"
+        data-ng-hide="faqs.length < 2"
+        data-ng-disabled="$ctrl.createDialogOpen"
+        data-ng-click="$ctrl.saveAllFaqs(faqs)"
+
+      >
+        <span data-translate="{{ 'FAQ_ORDER_UPDATE' }}"></span>
+      </md-button>
+    </div>
+
+    <div>
+      <md-button class="md-button md-ink-ripple"
+                 data-ng-click="$ctrl.createFaq()"
+                 aria-label="Add FAQ"
+                 ng-disabled="$ctrl.createDialogOpen"
+                 id="customerSupportButton"
+      >
+        <md-icon>add_circle</md-icon>
+        <span data-translate="ADD_FAQ"></span>
+      </md-button>
+    </div>
+  </div>
+
 </div>
 <div>
   <dop-faq-block
