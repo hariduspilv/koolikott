@@ -49,7 +49,7 @@ pipeline {
                         sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
                     }
-                    else if (env.BRANCH_NAME == '1.51.1') {
+                    else if (env.BRANCH_NAME == 'FAQ') {
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontremove.sh"
                         sh "scp -r front-end/dist/kott.tar.gz ${dopOxygenUrl}:./"
                         sh "ssh -t ${dopOxygenUrl} sh /home/dop/frontsetup.sh"
