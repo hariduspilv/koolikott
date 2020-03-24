@@ -1,0 +1,22 @@
+.move-button-sm {
+  @media (max-width: $layout-breakpoint-sm){
+    margin-bottom: -2.7rem;
+    margin-right: 3rem;
+  }
+}
+
+.heading-width {
+  @media (min-width: $layout-breakpoint-sm) {
+    max-width: 85% !important;
+  }
+}
+
+.block-padding-top {
+  @media (max-width: $layout-breakpoint-sm) {
+    padding-top: 3rem !important;
+  }
+}
+
+.edit-button-opacity {
+  opacity: 1;
+}

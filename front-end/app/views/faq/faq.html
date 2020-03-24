@@ -1,4 +1,4 @@
-<div data-layout="row" data-layout-align="space-between center">
+<div data-layout="row" data-layout-align="space-between center" data-ng-class="{'heading-width': editMode}">
   <h1 class="md-headline" data-translate="FAQ_PAGE"></h1>
   <md-button style="min-width: 0px"
              data-ng-if="$ctrl.isAdmin() && !editMode"
@@ -8,7 +8,7 @@
     <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
   </md-button>
 
-  <div data-ng-if="$ctrl.isAdmin() && editMode" data-layout="row">
+  <div data-ng-if="$ctrl.isAdmin() && editMode" data-layout="column" data-layout-gt-sm="row">
     <div>
       <md-button
         aria-label="{{ 'FAQ_ORDER_UPDATE' | translate }}"
