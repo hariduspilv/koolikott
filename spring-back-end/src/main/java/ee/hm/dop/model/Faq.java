@@ -4,14 +4,8 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import org.hibernate.annotations.Type;
+import javax.persistence.*;
 import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
 public class Faq implements AbstractEntity{
@@ -20,20 +14,22 @@ public class Faq implements AbstractEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String questionEst;
+    private String titleEst;
 
-    private String questionRus;
+    private String titleRus;
 
-    private String questionEng;
-
-    @Column(columnDefinition = "TEXT")
-    private String answerEst;
+    private String titleEng;
 
     @Column(columnDefinition = "TEXT")
-    private String answerRus;
+    private String contentEst;
 
     @Column(columnDefinition = "TEXT")
-    private String answerEng;
+    private String contentRus;
+
+    @Column(columnDefinition = "TEXT")
+    private String contentEng;
+
+    private Long faqOrder;
 
     @JsonSerialize(using = DateTimeSerializer.class)
     @JsonDeserialize(using = DateTimeDeserializer.class)
@@ -47,53 +43,57 @@ public class Faq implements AbstractEntity{
         this.id = id;
     }
 
-    public String getQuestionEst() {
-        return questionEst;
+    public String getTitleEst() {
+        return titleEst;
     }
 
-    public void setQuestionEst(String questionEst) {
-        this.questionEst = questionEst;
+    public void setTitleEst(String titleEst) {
+        this.titleEst = titleEst;
     }
 
-    public String getQuestionRus() {
-        return questionRus;
+    public String getTitleRus() {
+        return titleRus;
     }
 
-    public void setQuestionRus(String questionRus) {
-        this.questionRus = questionRus;
+    public void setTitleRus(String titleRus) {
+        this.titleRus = titleRus;
     }
 
-    public String getQuestionEng() {
-        return questionEng;
+    public String getTitleEng() {
+        return titleEng;
     }
 
-    public void setQuestionEng(String questionEng) {
-        this.questionEng = questionEng;
+    public void setTitleEng(String titleEng) {
+        this.titleEng = titleEng;
     }
 
-    public String getAnswerEst() {
-        return answerEst;
+    public String getContentEst() {
+        return contentEst;
     }
 
-    public void setAnswerEst(String answerEst) {
-        this.answerEst = answerEst;
+    public void setContentEst(String contentEst) {
+        this.contentEst = contentEst;
     }
 
-    public String getAnswerRus() {
-        return answerRus;
+    public String getContentRus() {
+        return contentRus;
     }
 
-    public void setAnswerRus(String answerRus) {
-        this.answerRus = answerRus;
+    public void setContentRus(String contentRus) {
+        this.contentRus = contentRus;
     }
 
-    public String getAnswerEng() {
-        return answerEng;
+    public String getContentEng() {
+        return contentEng;
     }
 
-    public void setAnswerEng(String answerEng) {
-        this.answerEng = answerEng;
+    public void setContentEng(String contentEng) {
+        this.contentEng = contentEng;
     }
+
+    public Long getFaqOrder() { return faqOrder; }
+
+    public void setFaqOrder(Long faqOrder) { this.faqOrder = faqOrder; }
 
     public LocalDateTime getCreatedAt() {
         return createdAt;

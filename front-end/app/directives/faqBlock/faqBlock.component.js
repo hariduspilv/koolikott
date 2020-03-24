@@ -18,7 +18,9 @@
         save(faq) {
 
             this.$scope.isSaving = true
-
+            if (faq.faqOrder === undefined) {
+                faq.faqOrder = this.faqs.length
+            }
             this.faqService.saveFaq(faq)
                 .then(response => {
                     if (response.status === 200) {
@@ -37,7 +39,6 @@
 
         getCurrentLanguage() {
             return this.translationService.getLanguage()
-            console.log(lang)
         }
 
         isFaqEditMode() {
@@ -51,6 +52,7 @@
         editFaq(faq) {
             this.createDialogOpen = !this.createDialogOpen
             faq.edit = !faq.edit;
+            this.$scope.isEditFaq = true;
         }
 
         cancelEdit(faq) {
@@ -77,10 +79,19 @@
         }
 
         isSubmitDisabled(faq) {
-            return !(faq.questionEst && faq.answerEst &&
-                faq.questionEng && faq.answerEng &&
-                faq.questionRus && faq.answerRus)
+            return !(faq.titleEst && faq.contentEst &&
+                faq.titleEng && faq.contentEng &&
+                faq.titleRus && faq.contentRus)
 
+        }
+
+        move(idx, up = false) {
+            this.faqs.splice(
+                up ? idx - 1
+                    : idx + 1,
+                0,
+                this.faqs.splice(idx, 1)[0]
+            )
         }
     }
 
