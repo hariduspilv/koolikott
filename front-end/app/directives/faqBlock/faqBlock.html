@@ -4,7 +4,7 @@
     <md-card-content data-ng-if="!$ctrl.isFaqEditMode()">
       <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.titleEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.titleEng : faq.titleRus"></h2>
       <div>
-        <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
+        <span class="textangular-view" data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
       </div>
     </md-card-content>
     </md-card>
@@ -27,7 +27,7 @@
               </md-button>
             </div>
               <div>
-              <span data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
+              <span class="textangular-view" data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
             </div>
           </md-card-content>
             <md-card-content data-ng-if="faq.edit" >
