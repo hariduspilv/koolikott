@@ -172,6 +172,7 @@ md-input-container.chapter-title {
   }
 }
 .organize-chapter-btn {
+  z-index: 2;
   background-color: #e0e0e0 !important; // gray-300
 
   &:hover,

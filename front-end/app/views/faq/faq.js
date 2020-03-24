@@ -12,12 +12,12 @@
 
         initNewFaq() {
             this.$scope.newFaq = {
-                questionEst: '',
-                questionEng: '',
-                questionRus: '',
-                answerEst: '',
-                answerEng: '',
-                answerRus: '',
+                titleEst: '',
+                titleEng: '',
+                titleRus: '',
+                contentEst: '',
+                contentEng: '',
+                contentRus: '',
                 faqLanguages: ['ET', 'EN', 'RU'],
                 edit: true,
                 new: true
@@ -41,6 +41,30 @@
                 })
         }
 
+        saveAllFaqs(faqs) {
+            this.$scope.isSaving = true
+            this.$scope.saveSuccessful = true
+            let i = 0;
+            for (const faq of faqs) {
+                faq.faqOrder = i
+                this.faqService.saveFaq(faq)
+                    .then(response => {
+                        if (response.status !== 200) {
+                            this.$scope.saveSuccessful = false
+                        }
+                    })
+                i++;
+                if (i === faqs.length) {
+                    if (this.$scope.saveSuccessful) {
+                        this.toastService.show('FAQ_ORDER_CHANGED')
+                    } else {
+                        this.toastService.show('FAQ_ORDER_CHANGE_FAIL')
+                    }
+                }
+            }
+            this.$scope.isSaving = false
+        }
+
         editFaqPage() {
             this.$scope.editMode = true
         }
@@ -49,6 +73,13 @@
             this.$scope.faqs.push(this.$scope.newFaq)
             this.initNewFaq()
             this.createDialogOpen = true
+
+            this.$scope.unwatch = this.$scope.$watch(() => document.getElementById('faq-save'), (selectedValue) => {
+                if (selectedValue) {
+                    window.scrollTo(0,document.body.scrollHeight);
+                    this.$scope.unwatch()
+                }
+            })
         }
 
         removeFaq() {
@@ -66,6 +97,7 @@
         'serverCallService',
         'authenticatedUserService',
         'faqService',
+        'toastService',
     ]
     angular.module('koolikottApp').controller('faqController', controller)
 }
