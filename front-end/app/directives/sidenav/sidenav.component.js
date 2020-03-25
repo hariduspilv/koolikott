@@ -6,7 +6,6 @@ class controller extends Controller {
         this.$rootScope.sideNavOpen = window.innerWidth > BREAK_LG
 
         this.$scope.isAuthenticated = this.authenticatedUserService.isAuthenticated()
-        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.$scope.toggleSidenav = () => this.$mdSidenav('left').toggle()
@@ -33,6 +32,16 @@ class controller extends Controller {
             '/toolaud/saadetud-teated',
         ];
 
+        this.publicLocations = [
+            '/kkk',
+            '/videojuhendid',
+            '/kasutustingimused',
+            '/isikuandmete-tootlemine'
+        ]
+
+        this.$rootScope.isAboutTabOpen = this.publicLocations.includes(this.$location.path())
+        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated() &&
+            !this.publicLocations.includes(this.$location.path())
         this.$scope.isLocationActive = this.isLocationActive.bind(this)
         this.$scope.checkUser = this.checkUser.bind(this)
         this.$scope.updateCount = this.updateCount.bind(this)
@@ -70,7 +79,8 @@ class controller extends Controller {
         this.$scope.user = this.authenticatedUserService.getUser();
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin();
         this.$scope.isModerator = this.authenticatedUserService.isModerator();
-        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated();
+        this.$rootScope.isTaxonomyOpen = !this.authenticatedUserService.isAuthenticated() &&
+            !this.publicLocations.includes(this.$location.path())
         this.$scope.updateUserCounts();
 
         if (!this.$scope.isAuthenticated) {
@@ -79,8 +89,6 @@ class controller extends Controller {
         }
     }
     isLocationActive(menuLocation) {
-        if (!this.$scope.user)
-            return false
 
         const currentLocation = this.$location.path()
 
@@ -90,7 +98,8 @@ class controller extends Controller {
         if (!this.$scope.isAdmin && !this.$scope.isModerator)
             return menuLocation === currentLocation
 
-        const isInMenu = this.adminLocations.includes(currentLocation) || this.isUserLocation(currentLocation)
+        const isInMenu = this.adminLocations.includes(currentLocation) || this.isUserLocation(currentLocation) ||
+            this.publicLocations.includes(currentLocation)
 
         return isInMenu
             ? menuLocation === currentLocation
