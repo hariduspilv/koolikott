@@ -106,8 +106,9 @@
 <div>
   <data-dop-startpage-intro data-ng-if="$ctrl.isLandingPage()"></data-dop-startpage-intro>
 </div>
-<div class="webkit-flex" data-layout="row" data-layout-align="space-between center">
+<div class="webkit-flex" data-layout="column">
   <h2 data-ng-if="!searching && items.length === 0" data-translate="{{subtitle}}"></h2>
+  <h2 data-ng-if="!searching && items.length === 0" data-translate="{{guide}}"></h2>
 </div>
 <div data-ng-if="sorting || !searching">
   <div class="webkit-flex" data-ng-if="$ctrl.showExactGroupButtons()" id="exact-grouping-selection-buttons" data-layout="row">
