@@ -98,8 +98,6 @@ class controller extends Controller {
                     provider,
                     attrs: {
                         socialshareUrl: this.pageUrl,
-                        socialshareTitle: this.$translate.instant('READING_RECOMMENDATION') + ': ' + this.title,
-                        socialshareMedia: this.$location.$$protocol + '://' + this.$location.$$host + '/rest/picture/thumbnail/lg/' + this.pictureName,
                         socialshareType: 'share',
                         socialshareVia: this.FB_APP_ID
                     }
