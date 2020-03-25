@@ -1,4 +1,4 @@
-## e-Koolikott [1.52.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11182)
+## e-Koolikott [1.52.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11182) (Toodangusse paigaldatud 24.03.2020)
 
 ### Muutunud
 * "KKK lehel sisuplokkide järjekorra muutmine" [EK-984](https://projektid.hitsa.ee/jira/browse/EK-984)
