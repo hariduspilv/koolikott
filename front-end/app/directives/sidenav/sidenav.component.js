@@ -30,6 +30,7 @@ class controller extends Controller {
             '/toolaud/kustutatud-oppevara',
             '/toolaud/ekspertide-statistika',
             '/toolaud/saadetud-teated',
+            '/toolaud/videojuhendid'
         ];
 
         this.publicLocations = [
