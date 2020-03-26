@@ -4,10 +4,6 @@
 class controller extends Controller {
     $onInit() {
         this.isOpen = false
-        this.pageUrl = window.location.origin + window.location.pathname
-        if (this.slug) {
-            this.pageUrl += '#' + this.slug
-        }
         this.pictureName = ''
         this.shareMediaPlaces = [
             { provider: 'url' },
@@ -92,6 +88,10 @@ class controller extends Controller {
         })
     }
     setShareParams({ provider } = {}) {
+        this.pageUrl = window.location.origin + window.location.pathname
+        if (this.slug) {
+            this.pageUrl += '#' + this.slug
+        }
         switch (provider) {
             case 'facebook':
                 this.Socialshare.share({
@@ -143,7 +143,7 @@ class controller extends Controller {
 
                 break
             case 'url':
-                this.copyToClipboard()
+                this.copyToClipboard(this.pageUrl)
                 if (!this.slug) {
                     this.toastService.show('COPY_PERMALINK_SUCCESS')
                 } else {
@@ -160,9 +160,9 @@ class controller extends Controller {
         }
     }
 
-    copyToClipboard() {
+    copyToClipboard(pageUrl) {
         const el = document.createElement('textarea');
-        el.value = this.pageUrl;
+        el.value = pageUrl;
         document.body.appendChild(el);
         el.select();
         document.execCommand('copy');
