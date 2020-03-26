@@ -1,3 +1,12 @@
+## e-Koolikott [1.53.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11222)
+
+### Muutunud
+* "Materjali ja kogumiku ning kogumiku peatükkide FB-s jagamine korda teha, sh SEO: root.applicationDescription viga" [EK-947](https://projektid.hitsa.ee/jira/browse/EK-947)
+* "Minu kogumikud ja minu materjalid lehele videojuhendi lisamine" [EK-839](https://projektid.hitsa.ee/jira/browse/EK-839)
+* "Sisselogimise modaalil ID-kaardi ja HarID nuppude asukohad vahetada" [EK-945](https://projektid.hitsa.ee/jira/browse/EK-945)
+* "Kasutustingimuste modaalil ja kas vajad abi lingile klikkides uue tabi all õige menüü punkti avamine" [EK-829](https://projektid.hitsa.ee/jira/browse/EK-829)
+* "Kõikjal "Lisa kogumik" ümber nimetamine "Loo kogumik"" [EK-1001](https://projektid.hitsa.ee/jira/browse/EK-1001)
+
 ## e-Koolikott [1.52.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11182) (Toodangusse paigaldatud 24.03.2020)
 
 ### Muutunud
