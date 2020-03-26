@@ -37,11 +37,12 @@
         }
 
 
-        $onChanges({title, subtitle, filter, params, exactTitle, similarTitle, description, notice, home, searchpage}) {
+        $onChanges({title, subtitle, guide, filter, params, exactTitle, similarTitle, description, notice, home, searchpage}) {
             if (title && title.currentValue !== title.previousValue) this.setTitle()
             if (exactTitle && exactTitle.currentValue !== exactTitle.previousValue) this.setPhraseTitleExact()
             if (similarTitle && similarTitle.currentValue !== similarTitle.previousValue) this.setPhraseTitleSimilar()
             if (subtitle && subtitle.currentValue !== subtitle.previousValue) this.$scope.subtitle = subtitle.currentValue
+            if (guide && guide.currentValue !== guide.previousValue) this.$scope.guide = guide.currentValue
             if (filter && filter.currentValue !== filter.previousValue) this.$scope.filter = filter.currentValue
             if (description && description.currentValue !== description.previousValue) this.$scope.description = description.currentValue
             if (notice && notice.currentValue !== notice.previousValue) this.$scope.notice = notice.currentValue
@@ -738,7 +739,8 @@
             exactTitle: '<',
             similarTitle: '<',
             home: '<',
-            searchpage: '<'
+            searchpage: '<',
+            guide: '<'
         },
         templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
         controller
