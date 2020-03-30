@@ -58,10 +58,7 @@ class controller extends Controller {
             return this.object.creator.id === this.authenticatedUserService.getUser().id
     }
     share($event, item) {
-        if (this.isMaterial(this.object))
-            this.setShareParams(item)
-        else
-        if (this.isPortfolio(this.object)) {
+        if (this.isPortfolio(this.object) || this.isMaterial(this.object)) {
             if (
                 (!this.isOwner() && !this.isPublic()) ||
                 (this.isOwner() && this.isPrivate())
@@ -77,13 +74,8 @@ class controller extends Controller {
             templateUrl: 'directives/share/modal/share.modal.html',
             controller: 'shareModalController',
             controllerAs: '$ctrl',
-            targetEvent,
             locals: {
-                item,
-                portfolio: this.object,
-                setShareParams: this.setShareParams.bind(this),
-                isOwner: this.isOwner.bind(this),
-                isPrivate: this.isPrivate.bind(this)
+                learningObject: this.object
             }
         })
     }

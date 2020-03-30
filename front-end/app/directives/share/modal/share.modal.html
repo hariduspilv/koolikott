@@ -4,7 +4,7 @@
       <div class="md-dialog-content">
         <h2 class="md-title share__title" data-ng-bind="$ctrl.title"></h2>
         <div class="md-dialog-content-body">
-          <p data-ng-bind="$ctrl.context"></p>
+          <span data-ng-bind="$ctrl.context"></span><span>&nbsp;(<md-icon>visibility_off</md-icon>).</span>
         </div>
       </div>
     </md-dialog-content>
@@ -13,29 +13,8 @@
       <md-button
         class="md-primary md-cancel-button"
         data-ng-click="$ctrl.back()"
-        aria-label="Tagasi"
-        data-translate="BUTTON_CANCEL"
-      ></md-button>
-      <md-button
-        data-ng-if="!$ctrl.showButtons"
-        class="md-primary md-confirm-button"
-        aria-label="Jaga"
-        data-ng-click="$ctrl.success()"
-        data-translate="BUTTON_SHARE"
-      ></md-button>
-      <md-button
-        data-ng-if="$ctrl.showButtons"
-        class="md-primary md-confirm-button"
-        aria-label="Ainult lingiga"
-        data-ng-click="$ctrl.updatePortfolio('NOT_LISTED')"
-        data-translate="PORTFOLIO_VISIBILITY_NOT_LISTED"
-      ></md-button>
-      <md-button
-        data-ng-if="$ctrl.showButtons"
-        class="md-primary md-confirm-button"
-        aria-label="Avalik"
-        data-ng-click="$ctrl.updatePortfolio('PUBLIC')"
-        data-translate="PORTFOLIO_VISIBILITY_PUBLIC"
+        aria-label="Sulge"
+        data-translate="CUSTOMER_SUPPORT_CLOSE"
       ></md-button>
     </md-dialog-actions>
   </form>
