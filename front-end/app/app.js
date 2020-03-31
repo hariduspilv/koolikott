@@ -36,14 +36,14 @@ app.config([
         $httpProvider.useApplyAsync(true);
         provideProvider = $provide;
 
-        // Fixes empty datepicker
-        // https://github.com/angular/material/issues/10168
-        $compileProvider.preAssignBindingsEnabled(true);
-
         configureTranslationService($translateProvider);
         configureTheme($mdThemingProvider);
         configureDateLocale($mdDateLocaleProvider);
         $sceProvider.enabled(false);
+
+        //angular.lowercase is no longer supported from angularJS 1.7
+        //https://stackoverflow.com/questions/50448326/uncaught-typeerror-angular-lowercase-is-not-a-function
+        angular.lowercase = angular.$$lowercase
 
         if (!$httpProvider.defaults.headers.get) {
             $httpProvider.defaults.headers.get = {};

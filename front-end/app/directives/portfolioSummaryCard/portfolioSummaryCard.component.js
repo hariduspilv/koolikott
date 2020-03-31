@@ -25,6 +25,9 @@ class controller extends Controller {
         this.deletePortfolio = this.deletePortfolio.bind(this)
         this.restorePortfolio = this.restorePortfolio.bind(this)
 
+        this.$rootScope.acceptableLicenses = undefined
+        this.$rootScope.portfolioHasMaterialWithUnacceptableLicense = undefined
+
         this.eventService.notify('portfolio:reloadTaxonObject')
 
         // Main purpose of this watch is to handle situations
