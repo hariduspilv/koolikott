@@ -199,6 +199,7 @@ md-input-container.chapter-title {
   top: .3rem;
   width: $wvp-chapter-toolbar-width;
   display: flex;
+  z-index: 0;
 
   > div {
     margin-left: 2rem;
@@ -207,10 +208,11 @@ md-input-container.chapter-title {
   @media (max-width: $layout-breakpoint-sm) {
     left: auto;
     right: 0;
-    top: auto;
     bottom: 100%;
     width: auto;
-    margin-bottom: 1rem;
+    margin-top: 1rem;
+    margin-right: 0.5rem;
+    z-index: 3;
 
     .md-button {
       width: 2rem;
@@ -226,6 +228,10 @@ md-input-container.chapter-title {
       }
     }
   }
+}
+
+.chapter-buttons-margin {
+  margin-bottom: 1rem;
 }
 
 // toolbar: manage blocks & embeds

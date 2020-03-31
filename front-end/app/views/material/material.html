@@ -48,6 +48,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                   data-location="{{location}}"></dop-qr>
               </div>
               <md-button style="min-width: 0px"
+                         ng-show="!material.deleted"
                          data-ng-click="toggleFullScreen()"
                          id="full-screen"
                          class="md-icon-button hide-on-mobile">
@@ -210,7 +211,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               </a>
             </p>
             <!-- Creator -->
-            <p class="md-body-2 card-lg__link" data-ng-if="false">
+            <p class="md-body-2 card-lg__link" data-ng-if="isAdminOrModerator()">
               <span class="md-caption caption-light">
                 <span data-translate="CREATOR"></span>:
               </span>

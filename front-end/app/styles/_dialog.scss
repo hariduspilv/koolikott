@@ -273,10 +273,6 @@ body > .md-dialog-container {
     height: 100px
   }
 
-  .sent-email-color-black {
-    color: black;
-  }
-
   .label-top-ie {
     margin-top: 30px;
   }
@@ -317,6 +313,9 @@ body > .md-dialog-container {
   overflow: auto;
 }
 
+.sent-email-color-white h1{
+  color: rgba(255,255,255,0.87);
+}
 
 
 

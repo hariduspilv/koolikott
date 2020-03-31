@@ -4,6 +4,7 @@
 class controller extends Controller {
     isVisible() {
         return (
+            localStorage.userPortfoliosCount > 0 &&
             this.learningObject &&
             this.isMaterial(this.learningObject) &&
             this.authenticatedUserService.isAuthenticated() &&
