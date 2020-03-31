@@ -5,54 +5,25 @@ class controller extends Controller {
     constructor(...args) {
         super(...args)
 
-        if (this.locals.isPrivate() && (
-                this.locals.isOwner() ||
-                this.authenticatedUserService.isAdmin() ||
-                this.authenticatedUserService.isModerator()
-            )
-        ) {
-            this.showButtons = true
+        if(this.isMaterial(this.locals.learningObject)) {
+            this.title = this.$translate.instant('THIS_MATERIAL_IS_PRIVATE')
+            this.context = this.$translate.instant('SHARE_PRIVATE_MATERIAL')
+            this.ariaLabel = this.$translate.instant('THIS_MATERIAL_IS_PRIVATE')
+        } else if (this.isPortfolio(this.locals.learningObject)) {
             this.title = this.$translate.instant('THIS_IS_PRIVATE')
             this.context = this.$translate.instant('SHARE_PRIVATE_PORTFOLIO')
             this.ariaLabel = this.$translate.instant('THIS_IS_PRIVATE')
-        } else {
-            this.title = this.$translate.instant('THIS_IS_UNLISTED')
-            this.context = this.$translate.instant('THINK_AND_SHARE')
-            this.ariaLabel = this.$translate.instant('THIS_IS_UNLISTED')
         }
     }
-    updatePortfolio(state) {
-        const portfolioClone = angular.copy(this.locals.portfolio)
-        portfolioClone.visibility = state
-        this.locals.portfolio.saveType = 'MANUAL';
-        this.serverCallService
-            .makePost(`rest/portfolio/update`, portfolioClone)
-            .then(({ data }) => {
-                if (data) {
-                    this.locals.portfolio.visibility = data.visibility
-                    this.toastService.show('PORTFOLIO_SAVED')
-                }
-            })
-            .catch(() => this.toastService.show('PORTFOLIO_SAVE_FAILED',15000))
 
-        this.locals.setShareParams(this.locals.item)
-        this.$mdDialog.cancel()
-    }
     back() {
-        this.$mdDialog.cancel()
-    }
-    success() {
-        this.locals.setShareParams(this.locals.item)
         this.$mdDialog.cancel()
     }
 }
 controller.$inject = [
     '$mdDialog',
     '$translate',
-    'locals',
-    'authenticatedUserService',
-    'serverCallService',
-    'toastService'
+    'locals'
 ]
 angular.module('koolikottApp').controller('shareModalController', controller)
 }
