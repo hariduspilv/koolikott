@@ -1,4 +1,13 @@
-## e-Koolikott [1.53.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11222)
+## e-Koolikott [1.54.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11225)
+
+### Muutunud
+* "Skript: Puudulikud ENG tõlked LIVE baasist välja võtta" [EK-858](https://projektid.hitsa.ee/jira/browse/EK-858)
+* "AngularJS versiooni uuendamine (1.64->1.79)" [EK-930](https://projektid.hitsa.ee/jira/browse/EK-930)
+* "Tehnilised tööd > solr versioonilt 8.1 viia 8.4 peale" [EK-920](https://projektid.hitsa.ee/jira/browse/EK-920)
+* "Materjali muutmise modaalil puudub tõlkest 'or'" [EK-942](https://projektid.hitsa.ee/jira/browse/EK-942)
+* "IE: Bänneri tekstisuurus" [EK-917](https://projektid.hitsa.ee/jira/browse/EK-917)
+
+## e-Koolikott [1.53.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11222) (Toodangusse paigaldatud 26.03.2020)
 
 ### Muutunud
 * "Materjali ja kogumiku ning kogumiku peatükkide FB-s jagamine korda teha, sh SEO: root.applicationDescription viga" [EK-947](https://projektid.hitsa.ee/jira/browse/EK-947)
