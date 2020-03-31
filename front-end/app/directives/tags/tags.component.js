@@ -58,6 +58,10 @@ class controller extends Controller {
 
     }
 
+    isSmallScreen() {
+        return window.innerWidth < 700
+    }
+
     onLoginSuccess() {
         if (
             window.location.hash.includes(SHOW_TAG_REPORT_MODAL_HASH) &&
