@@ -84,7 +84,6 @@
                 data-on-change="setRecommendation(recommendation)"
                 data-ng-if="isAdmin() && showRecommendButton"
               ></md-menu-item>
-              <md-menu-divider data-ng-if="!isAdminOrModerator() && !isOwner() && isLoggedIn()"></md-menu-divider>
               <md-menu-item
                 dop-report-improper
                 data-ng-if="!isAdminOrModerator() && !isOwner() && showReportImproperButton"
