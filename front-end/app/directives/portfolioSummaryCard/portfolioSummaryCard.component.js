@@ -331,7 +331,7 @@ class controller extends Controller {
         )
     }
     dotsAreShowing () {
-        return this.$rootScope.learningObjectDeleted === false || this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator();
+        return !this.portfolio.deleted;
     };
     setRecommendation(recommendation) {
         if (this.portfolio)

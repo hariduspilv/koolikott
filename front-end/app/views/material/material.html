@@ -48,6 +48,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                   data-location="{{location}}"></dop-qr>
               </div>
               <md-button style="min-width: 0px"
+                         ng-show="!material.deleted"
                          data-ng-click="toggleFullScreen()"
                          id="full-screen"
                          class="md-icon-button hide-on-mobile">
