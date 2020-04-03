@@ -1,11 +1,12 @@
 ## e-Koolikott [1.54.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11225)
 
 ### Muutunud
-* "Skript: Puudulikud ENG tõlked LIVE baasist välja võtta" [EK-858](https://projektid.hitsa.ee/jira/browse/EK-858)
 * "AngularJS versiooni uuendamine (1.64->1.79)" [EK-930](https://projektid.hitsa.ee/jira/browse/EK-930)
-* "Tehnilised tööd > solr versioonilt 8.1 viia 8.4 peale" [EK-920](https://projektid.hitsa.ee/jira/browse/EK-920)
-* "Materjali muutmise modaalil puudub tõlkest 'or'" [EK-942](https://projektid.hitsa.ee/jira/browse/EK-942)
-* "IE: Bänneri tekstisuurus" [EK-917](https://projektid.hitsa.ee/jira/browse/EK-917)
+* "solr versiooni uuendamine 8.1 pealt 8.4 peale" [EK-920](https://projektid.hitsa.ee/jira/browse/EK-920)
+* "Privaatsete kogumike staatust ei saa share modaali kaudu muuta" [EK-1003](https://projektid.hitsa.ee/jira/browse/EK-1003)
+* "Kogumikku ei saa kopeerida kui kogumikul on vale litsents või see sisaldab mõnda vale litsentsiga materjali" [EK-980](https://projektid.hitsa.ee/jira/browse/EK-980)
+* "Eemaldada koodist Plumbri skript" [EK-888](https://projektid.hitsa.ee/jira/browse/EK-888)
+
 
 ## e-Koolikott [1.53.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11222) (Toodangusse paigaldatud 26.03.2020)
 
