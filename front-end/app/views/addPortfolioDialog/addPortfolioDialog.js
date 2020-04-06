@@ -202,6 +202,7 @@ angular.module('koolikottApp')
                 }
 
                 function savePortfolioFinally() {
+                    $rootScope.userHasCreatedPortfolio = true;
                     $scope.isSaving = false;
                 }
 
