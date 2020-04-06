@@ -334,8 +334,10 @@ class controller extends Controller {
         )
     }
     dotsAreShowing () {
-        return !this.portfolio.deleted;
-    };
+        if (this.portfolio) {
+            return !this.portfolio.deleted;
+        }
+    }
     setRecommendation(recommendation) {
         if (this.portfolio)
             this.portfolio.recommendation = recommendation
