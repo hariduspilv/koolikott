@@ -372,11 +372,17 @@ class controller extends Controller {
     }
 
     onDivAction1() {
-        this.$scope.showTooltip1 = this.$scope.portfolioHasMaterialWithUnacceptableLicense;
+        if (this.portfolio) {
+            this.$scope.showTooltip1 = this.$rootScope.portfolioHasMaterialWithUnacceptableLicense &&
+            this.portfolio.visibility === 'PRIVATE';
+        }
     }
 
     onDivAction2() {
-        this.$scope.showTooltip2 = this.$scope.portfolioHasMaterialWithUnacceptableLicense;
+        if (this.portfolio) {
+            this.$scope.showTooltip2 = this.$rootScope.portfolioHasMaterialWithUnacceptableLicense &&
+            this.portfolio.visibility === 'PRIVATE';
+        }
     }
 
     onDivLeave1() {

@@ -142,8 +142,8 @@
                     <md-icon data-ng-if="$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
                     <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
                   </md-button>
-                  <md-tooltip data-ng-show="showTooltip1" md-delay="150" md-autohide="true" md-direction="left">
-                    <span data-translate="UNABLE_TO_SET_PRIVACY_LEVEL"></span>
+                  <md-tooltip data-ng-class="{'tt-multiline': $ctrl.isNVP()}" data-ng-show="showTooltip1" md-delay="150" md-autohide="true" md-direction="top">
+                    <span data-translate="{{$ctrl.isNVP() ? 'PUBLICATION_TOOLTIP_MOBILE' : 'PUBLICATION_TOOLTIP'}}"></span>
                   </md-tooltip>
                 </div>
               </md-menu-item>
@@ -165,8 +165,8 @@
                       <md-icon data-ng-if="$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
                       <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
                   </md-button>
-                  <md-tooltip data-ng-show="showTooltip2" md-delay="150" md-autohide="true" md-direction="left">
-                    <span data-translate="UNABLE_TO_SET_PRIVACY_LEVEL"></span>
+                  <md-tooltip data-ng-class="{'tt-multiline': $ctrl.isNVP()}" data-ng-show="showTooltip2" md-delay="150" md-autohide="true" md-direction="top">
+                    <span data-translate="{{$ctrl.isNVP() ? 'PUBLICATION_TOOLTIP_MOBILE' : 'PUBLICATION_TOOLTIP'}}"></span>
                   </md-tooltip>
                 </div>
               </md-menu-item>
