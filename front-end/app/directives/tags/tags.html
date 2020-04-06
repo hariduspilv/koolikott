@@ -88,7 +88,7 @@
         </md-item-template>
       </md-autocomplete>
     </form>
-    <div>
+    <div data-ng-if="$ctrl.isAllowedToAdd()">
       <md-icon class="tag-icon-margin">info_outline</md-icon><md-tooltip data-ng-class="{'tt-multiline': $ctrl.isSmallScreen()}" md-direction="top"><span data-translate="{{$ctrl.isSmallScreen() ? 'TAG_TOOLTIP_MOBILE' : 'TAG_TOOLTIP'}}"></span></md-tooltip>
     </div>
   </div>
