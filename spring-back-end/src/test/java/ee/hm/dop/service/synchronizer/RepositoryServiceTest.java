@@ -1,12 +1,7 @@
 package ee.hm.dop.service.synchronizer;
 
 import ee.hm.dop.dao.RepositoryDao;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.OriginalPicture;
-import ee.hm.dop.model.Picture;
-import ee.hm.dop.model.Repository;
-import ee.hm.dop.model.RepositoryURL;
+import ee.hm.dop.model.*;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
 import ee.hm.dop.service.files.PictureSaver;
@@ -15,31 +10,18 @@ import ee.hm.dop.service.solr.SolrEngineService;
 import ee.hm.dop.service.synchronizer.oaipmh.MaterialIterator;
 import ee.hm.dop.service.synchronizer.oaipmh.RepositoryManager;
 import ee.hm.dop.service.synchronizer.oaipmh.SynchronizationAudit;
-import org.easymock.EasyMock;
-import org.easymock.EasyMockRunner;
-import org.easymock.LogicalOperator;
-import org.easymock.Mock;
-import org.easymock.TestSubject;
-import java.time.LocalDateTime;
+import org.easymock.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.easymock.EasyMock.cmp;
-import static org.easymock.EasyMock.createMock;
-import static org.easymock.EasyMock.expect;
-import static org.easymock.EasyMock.expectLastCall;
-import static org.easymock.EasyMock.replay;
-import static org.easymock.EasyMock.verify;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.easymock.EasyMock.*;
+import static org.junit.Assert.*;
 
 @RunWith(EasyMockRunner.class)
 public class RepositoryServiceTest {
@@ -470,10 +452,6 @@ public class RepositoryServiceTest {
         material.setChanged(0);
         expectLastCall();
         material.setDeleted(false);
-        expectLastCall();
-        material.setDislikes(0);
-        expectLastCall();
-        material.setLikes(0);
         expectLastCall();
         material.setImproper(0);
         expectLastCall();

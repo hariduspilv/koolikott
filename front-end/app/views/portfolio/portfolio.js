@@ -52,7 +52,6 @@ class controller extends Controller {
         } else
             this.getPortfolio()
 
-        this.$scope.newComment = {}
         this.$scope.isModerator = this.authenticatedUserService.isModerator()
         this.$scope.isAdmin = this.authenticatedUserService.isAdmin()
 

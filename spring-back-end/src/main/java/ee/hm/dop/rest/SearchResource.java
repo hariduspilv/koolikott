@@ -1,9 +1,11 @@
 package ee.hm.dop.rest;
 
-import ee.hm.dop.model.*;
+import ee.hm.dop.model.SearchFilter;
+import ee.hm.dop.model.SearchResult;
+import ee.hm.dop.model.SortDirection;
+import ee.hm.dop.model.SortType;
 import ee.hm.dop.service.metadata.*;
 import ee.hm.dop.service.solr.SearchService;
-import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.utils.NumberUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,8 +33,6 @@ public class SearchResource extends BaseResource {
     private CrossCurricularThemeService crossCurricularThemeService;
     @Inject
     private KeyCompetenceService keyCompetenceService;
-    @Inject
-    private UserLikeService userLikeService;
     @Inject
     private TargetGroupService targetGroupService;
 
@@ -92,10 +92,4 @@ public class SearchResource extends BaseResource {
         return queryInput != null && UNIQUE_KEYS.stream().anyMatch((group) -> queryInput.startsWith(group + ":"));
     }
 
-    @GetMapping
-    @RequestMapping("mostLiked")
-
-    public List<Searchable> getMostLiked(@RequestParam("maxResults") int maxResults) {
-        return userLikeService.getMostLiked(maxResults);
-    }
 }

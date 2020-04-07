@@ -11,7 +11,6 @@ angular.module('koolikottApp')
 
             $scope.showMaterialContent = false;
             $rootScope.isFullScreen = false;
-            $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
             $scope.path = $location.url()
             $scope.getMaterialSuccess = getMaterialSuccess;
