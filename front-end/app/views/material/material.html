@@ -195,6 +195,15 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
           </div>
           <!-- Metadata 1 -->
           <md-content class="card-lg__container">
+            <!-- Creator -->
+            <p class="md-body-2 card-lg__link" data-ng-if="isAdminOrModerator()">
+              <span class="md-caption caption-light">
+                <span data-translate="ADDED_BY"></span>:
+              </span>
+              <a data-ng-href="/{{material.creator.username}}">
+                {{material.creator.name}} {{material.creator.surname}}
+              </a>
+            </p>
             <!-- Author(s) -->
             <p class="md-body-2 card-lg__link" data-ng-if="!isNullOrZeroLength(material.authors)">
               <span class="md-caption caption-light">
@@ -208,15 +217,6 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               <a data-ng-href="{{getAuthorSearchURL(author.name, author.surname)}}"
                  data-ng-repeat="author in material.authors">
                 {{author.name}} {{author.surname}}{{$last ? '' : ', '}}
-              </a>
-            </p>
-            <!-- Creator -->
-            <p class="md-body-2 card-lg__link" data-ng-if="isAdminOrModerator()">
-              <span class="md-caption caption-light">
-                <span data-translate="ADDED_BY"></span>:
-              </span>
-              <a data-ng-href="/{{material.creator.username}}">
-                {{material.creator.name}} {{material.creator.surname}}
               </a>
             </p>
             <!-- Publisher -->
