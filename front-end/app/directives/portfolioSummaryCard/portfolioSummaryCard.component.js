@@ -374,14 +374,14 @@ class controller extends Controller {
     onDivAction1() {
         if (this.portfolio) {
             this.$scope.showTooltip1 = this.$rootScope.portfolioHasMaterialWithUnacceptableLicense &&
-            this.portfolio.visibility === 'PRIVATE';
+                (this.portfolio.visibility === 'PRIVATE' || this.portfolio.visibility === 'NOT_LISTED');
         }
     }
 
     onDivAction2() {
         if (this.portfolio) {
             this.$scope.showTooltip2 = this.$rootScope.portfolioHasMaterialWithUnacceptableLicense &&
-            this.portfolio.visibility === 'PRIVATE';
+                (this.portfolio.visibility === 'PRIVATE' || this.portfolio.visibility === 'PUBLIC');
         }
     }
 
