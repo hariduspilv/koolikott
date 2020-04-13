@@ -68,8 +68,8 @@ public class PortfolioMaterialService {
 
     private void saveNew(Portfolio portfolio, List<Long> newToSave) {
         for (Long materialId : newToSave) {
-            System.out.println(portfolio.getId());
-            System.out.println(materialId);
+            logger.info(portfolio.getId().toString());
+            logger.info(materialId.toString());
             Material material = materialDao.findById(materialId);
             portfolioMaterialDao.createOrUpdate(new PortfolioMaterial(portfolio, material));
         }
