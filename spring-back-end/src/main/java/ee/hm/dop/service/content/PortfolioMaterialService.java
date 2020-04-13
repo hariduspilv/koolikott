@@ -80,6 +80,8 @@ public class PortfolioMaterialService {
         Pattern materialPattern = Pattern.compile(MATERIAL_REGEX);
         Pattern deletedMaterialPattern = Pattern.compile(DELETED_MATERIAL_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
+        logger.info(portfolio.getId().toString());
+        logger.info(portfolio.getChapters().toArray().toString());
 
         for (Chapter chapter : portfolio.getChapters()) {
             if (chapter.getBlocks() != null) {
