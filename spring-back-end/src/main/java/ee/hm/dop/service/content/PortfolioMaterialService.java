@@ -23,6 +23,7 @@ public class PortfolioMaterialService {
     private static final Logger logger = LoggerFactory.getLogger(PortfolioMaterialService.class);
 
     public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
+    public static final String DELETED_MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material is-deleted\" data-id=\"[0-9]*\"";
     public static final String NUMBER_REGEX = "\\d+";
 
     @Inject
@@ -74,22 +75,32 @@ public class PortfolioMaterialService {
 
     private List<Long> frontMaterialIds(Portfolio portfolio) {
         Set<Long> frontIds = new HashSet<>();
-        Pattern chapterPattern = Pattern.compile(MATERIAL_REGEX);
+        Pattern materialPattern = Pattern.compile(MATERIAL_REGEX);
+        Pattern deletedMaterialPattern = Pattern.compile(DELETED_MATERIAL_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
         for (Chapter chapter : portfolio.getChapters()) {
             if (chapter.getBlocks() != null) {
                 for (ChapterBlock block : chapter.getBlocks()) {
                     if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                        Matcher matcher = chapterPattern.matcher(block.getHtmlContent());
-                        while (matcher.find()) {
-                            Matcher numberMatcher = numberPattern.matcher(matcher.group());
+                        Matcher materialMatcher = materialPattern.matcher(block.getHtmlContent());
+                        while (materialMatcher.find()) {
+                            Matcher numberMatcher = numberPattern.matcher(materialMatcher.group());
                             if (numberMatcher.find()) {
                                 frontIds.add(Long.valueOf(numberMatcher.group()));
-                            } else {
-                                logger.info("Did not find material");
                             }
                         }
+                        Matcher deletedMaterialMatcher = deletedMaterialPattern.matcher(block.getHtmlContent());
+                        while (deletedMaterialMatcher.find()) {
+                            Matcher deletedNumberMatcher = numberPattern.matcher(deletedMaterialMatcher.group());
+                            if (deletedNumberMatcher.find()) {
+                                frontIds.add(Long.valueOf(deletedNumberMatcher.group()));
+                            }
+                        }
+                    }
+                    if (frontIds.isEmpty()) {
+                        System.out.println(portfolio.getTitle() + " no material");
+                        logger.info("Did not find material");
                     }
                 }
             }
