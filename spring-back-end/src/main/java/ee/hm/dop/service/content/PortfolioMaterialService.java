@@ -24,6 +24,8 @@ public class PortfolioMaterialService {
 
     public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
     public static final String DELETED_MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material is-deleted\" data-id=\"[0-9]*\"";
+    public static final String MATERIAL_FLOAT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right\" data-id=\"[0-9]*\"";
+    public static final String MATERIAL_DELETED_FLOAT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right is-deleted\" data-id=\"[0-9]*\"";
     public static final String NUMBER_REGEX = "\\d+";
 
     @Inject
@@ -71,7 +73,9 @@ public class PortfolioMaterialService {
             logger.info("Portfolio id:" + portfolio.getId().toString());
             logger.info("Material id:" + materialId.toString());
             Material material = materialDao.findById(materialId);
-            portfolioMaterialDao.createOrUpdate(new PortfolioMaterial(portfolio, material));
+            if (material != null) {
+                portfolioMaterialDao.createOrUpdate(new PortfolioMaterial(portfolio, material));
+            }
         }
     }
 
@@ -79,44 +83,67 @@ public class PortfolioMaterialService {
         Set<Long> frontIds = new HashSet<>();
         Pattern materialPattern = Pattern.compile(MATERIAL_REGEX);
         Pattern deletedMaterialPattern = Pattern.compile(DELETED_MATERIAL_REGEX);
+        Pattern floatedMaterialPattern = Pattern.compile(MATERIAL_FLOAT_REGEX);
+        Pattern floatedDeletedMaterialPattern = Pattern.compile(MATERIAL_DELETED_FLOAT_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
+
         if (portfolio.getId() != null) {
-            logger.info(portfolio.getId().toString());
-        } else {
-            logger.info("Portfolio id is missing");
-        }
-        if (portfolio.getChapters().toArray().toString() != null) {
-            logger.info(portfolio.getChapters().toArray().toString());
-        } else {
-            logger.info("Chapters are missing");
+            logger.info("Portfolio being added to PortfolioMaterials: " + portfolio.getId().toString());
         }
 
-        for (Chapter chapter : portfolio.getChapters()) {
-            if (chapter.getBlocks() != null) {
-                for (ChapterBlock block : chapter.getBlocks()) {
-                    if (StringUtils.isNotBlank(block.getHtmlContent())) {
-                        Matcher materialMatcher = materialPattern.matcher(block.getHtmlContent());
-                        while (materialMatcher.find()) {
-                            Matcher numberMatcher = numberPattern.matcher(materialMatcher.group());
-                            if (numberMatcher.find()) {
-                                frontIds.add(Long.valueOf(numberMatcher.group()));
-                            }
-                        }
-                        Matcher deletedMaterialMatcher = deletedMaterialPattern.matcher(block.getHtmlContent());
-                        while (deletedMaterialMatcher.find()) {
-                            Matcher deletedNumberMatcher = numberPattern.matcher(deletedMaterialMatcher.group());
-                            if (deletedNumberMatcher.find()) {
-                                frontIds.add(Long.valueOf(deletedNumberMatcher.group()));
-                            }
-                        }
-                    }
-                    if (frontIds.isEmpty()) {
-                        System.out.println(portfolio.getTitle() + " no material");
-                        logger.info("Did not find material");
-                    }
-                }
-            }
+        if (portfolio.getChapters() != null) {
+            portfolio.getChapters().stream()
+                    .filter(chapter -> chapter.getBlocks() != null)
+                    .forEach(chapter -> chapter.getBlocks().stream()
+                            .filter(block -> StringUtils.isNotBlank(block.getHtmlContent()))
+                            .forEach(block -> {
+                                findMaterialsNotDeleted(frontIds, materialPattern, numberPattern, block);
+                                findMaterialsDeleted(frontIds, deletedMaterialPattern, numberPattern, block);
+                                findMaterialsFloatedRight(frontIds, floatedMaterialPattern, numberPattern, block);
+                                findMaterialsDeletedFloatedRight(frontIds, floatedDeletedMaterialPattern, numberPattern, block);
+                            }));
         }
         return new ArrayList<>(frontIds);
     }
+
+    private void findMaterialsNotDeleted(Set<Long> frontIds, Pattern materialPattern, Pattern numberPattern, ChapterBlock block) {
+        Matcher materialMatcher = materialPattern.matcher(block.getHtmlContent());
+        while (materialMatcher.find()) {
+            Matcher numberMatcher = numberPattern.matcher(materialMatcher.group());
+            if (numberMatcher.find()) {
+                frontIds.add(Long.valueOf(numberMatcher.group()));
+            }
+        }
+    }
+
+    private void findMaterialsDeleted(Set<Long> frontIds, Pattern deletedMaterialPattern, Pattern numberPattern, ChapterBlock block) {
+        Matcher deletedMaterialMatcher = deletedMaterialPattern.matcher(block.getHtmlContent());
+        while (deletedMaterialMatcher.find()) {
+            Matcher deletedNumberMatcher = numberPattern.matcher(deletedMaterialMatcher.group());
+            if (deletedNumberMatcher.find()) {
+                frontIds.add(Long.valueOf(deletedNumberMatcher.group()));
+            }
+        }
+    }
+
+    private void findMaterialsFloatedRight(Set<Long> frontIds, Pattern floatedMaterialPattern, Pattern numberPattern, ChapterBlock block) {
+        Matcher floatedMaterialMatcher = floatedMaterialPattern.matcher(block.getHtmlContent());
+        while (floatedMaterialMatcher.find()) {
+            Matcher floatedNumberMatcher = numberPattern.matcher(floatedMaterialMatcher.group());
+            if (floatedNumberMatcher.find()) {
+                frontIds.add(Long.valueOf(floatedNumberMatcher.group()));
+            }
+        }
+    }
+
+    private void findMaterialsDeletedFloatedRight(Set<Long> frontIds, Pattern floatedDeletedMaterialPattern, Pattern numberPattern, ChapterBlock block) {
+        Matcher floatedDeletedMaterialMatcher = floatedDeletedMaterialPattern.matcher(block.getHtmlContent());
+        while (floatedDeletedMaterialMatcher.find()) {
+            Matcher floatedDeletedNumberMatcher = numberPattern.matcher(floatedDeletedMaterialMatcher.group());
+            if (floatedDeletedNumberMatcher.find()) {
+                frontIds.add(Long.valueOf(floatedDeletedNumberMatcher.group()));
+            }
+        }
+    }
+
 }
