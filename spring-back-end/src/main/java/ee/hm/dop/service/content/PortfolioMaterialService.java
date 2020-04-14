@@ -70,8 +70,6 @@ public class PortfolioMaterialService {
 
     private void saveNew(Portfolio portfolio, List<Long> newToSave) {
         for (Long materialId : newToSave) {
-            logger.info("Portfolio id:" + portfolio.getId().toString());
-            logger.info("Material id:" + materialId.toString());
             Material material = materialDao.findById(materialId);
             if (material != null) {
                 portfolioMaterialDao.createOrUpdate(new PortfolioMaterial(portfolio, material));
@@ -86,10 +84,6 @@ public class PortfolioMaterialService {
         Pattern floatedMaterialPattern = Pattern.compile(MATERIAL_FLOAT_REGEX);
         Pattern floatedDeletedMaterialPattern = Pattern.compile(MATERIAL_DELETED_FLOAT_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
-
-        if (portfolio.getId() != null) {
-            logger.info("Portfolio being added to PortfolioMaterials: " + portfolio.getId().toString());
-        }
 
         if (portfolio.getChapters() != null) {
             portfolio.getChapters().stream()
