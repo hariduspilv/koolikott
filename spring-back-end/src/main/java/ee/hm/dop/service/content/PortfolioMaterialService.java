@@ -24,8 +24,11 @@ public class PortfolioMaterialService {
 
     public static final String MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material\" data-id=\"[0-9]*\"";
     public static final String DELETED_MATERIAL_REGEX = "class=\"chapter-embed-card chapter-embed-card--material is-deleted\" data-id=\"[0-9]*\"";
-    public static final String MATERIAL_FLOAT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right\" data-id=\"[0-9]*\"";
-    public static final String MATERIAL_DELETED_FLOAT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right is-deleted\" data-id=\"[0-9]*\"";
+    public static final String MATERIAL_FLOAT_RIGHT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right\" data-id=\"[0-9]*\"";
+    public static final String MATERIAL_DELETED_FLOAT_RIGHT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-right is-deleted\" data-id=\"[0-9]*\"";
+    public static final String MATERIAL_FLOAT_LEFT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-left\" data-id=\"[0-9]*\"";
+    public static final String MATERIAL_DELETED_FLOAT_LEFT_REGEX = "class=\"chapter-embed-card chapter-embed-card--material chapter-embed-card--float-left is-deleted\" data-id=\"[0-9]*\"";
+
     public static final String NUMBER_REGEX = "\\d+";
 
     @Inject
@@ -81,8 +84,10 @@ public class PortfolioMaterialService {
         Set<Long> frontIds = new HashSet<>();
         Pattern materialPattern = Pattern.compile(MATERIAL_REGEX);
         Pattern deletedMaterialPattern = Pattern.compile(DELETED_MATERIAL_REGEX);
-        Pattern floatedMaterialPattern = Pattern.compile(MATERIAL_FLOAT_REGEX);
-        Pattern floatedDeletedMaterialPattern = Pattern.compile(MATERIAL_DELETED_FLOAT_REGEX);
+        Pattern floatedMaterialRightPattern = Pattern.compile(MATERIAL_FLOAT_RIGHT_REGEX);
+        Pattern floatedDeletedMaterialRightPattern = Pattern.compile(MATERIAL_DELETED_FLOAT_RIGHT_REGEX);
+        Pattern floatedMaterialLeftPattern = Pattern.compile(MATERIAL_FLOAT_LEFT_REGEX);
+        Pattern floatedDeletedMaterialLeftPattern = Pattern.compile(MATERIAL_DELETED_FLOAT_LEFT_REGEX);
         Pattern numberPattern = Pattern.compile(NUMBER_REGEX);
 
         if (portfolio.getChapters() != null) {
@@ -93,8 +98,10 @@ public class PortfolioMaterialService {
                             .forEach(block -> {
                                 findMaterialsNotDeleted(frontIds, materialPattern, numberPattern, block);
                                 findMaterialsDeleted(frontIds, deletedMaterialPattern, numberPattern, block);
-                                findMaterialsFloatedRight(frontIds, floatedMaterialPattern, numberPattern, block);
-                                findMaterialsDeletedFloatedRight(frontIds, floatedDeletedMaterialPattern, numberPattern, block);
+                                findMaterialsFloatedRight(frontIds, floatedMaterialRightPattern, numberPattern, block);
+                                findMaterialsDeletedFloatedRight(frontIds, floatedDeletedMaterialRightPattern, numberPattern, block);
+                                findMaterialsFloatedLeft(frontIds, floatedMaterialLeftPattern, numberPattern, block);
+                                findMaterialsDeletedFloatedLeft(frontIds, floatedDeletedMaterialLeftPattern, numberPattern, block);
                             }));
         }
         return new ArrayList<>(frontIds);
@@ -121,21 +128,41 @@ public class PortfolioMaterialService {
     }
 
     private void findMaterialsFloatedRight(Set<Long> frontIds, Pattern floatedMaterialPattern, Pattern numberPattern, ChapterBlock block) {
-        Matcher floatedMaterialMatcher = floatedMaterialPattern.matcher(block.getHtmlContent());
-        while (floatedMaterialMatcher.find()) {
-            Matcher floatedNumberMatcher = numberPattern.matcher(floatedMaterialMatcher.group());
-            if (floatedNumberMatcher.find()) {
-                frontIds.add(Long.valueOf(floatedNumberMatcher.group()));
+        Matcher floatedMaterialRightMatcher = floatedMaterialPattern.matcher(block.getHtmlContent());
+        while (floatedMaterialRightMatcher.find()) {
+            Matcher floatedRightNumberMatcher = numberPattern.matcher(floatedMaterialRightMatcher.group());
+            if (floatedRightNumberMatcher.find()) {
+                frontIds.add(Long.valueOf(floatedRightNumberMatcher.group()));
             }
         }
     }
 
     private void findMaterialsDeletedFloatedRight(Set<Long> frontIds, Pattern floatedDeletedMaterialPattern, Pattern numberPattern, ChapterBlock block) {
-        Matcher floatedDeletedMaterialMatcher = floatedDeletedMaterialPattern.matcher(block.getHtmlContent());
-        while (floatedDeletedMaterialMatcher.find()) {
-            Matcher floatedDeletedNumberMatcher = numberPattern.matcher(floatedDeletedMaterialMatcher.group());
-            if (floatedDeletedNumberMatcher.find()) {
-                frontIds.add(Long.valueOf(floatedDeletedNumberMatcher.group()));
+        Matcher floatedDeletedMaterialRightMatcher = floatedDeletedMaterialPattern.matcher(block.getHtmlContent());
+        while (floatedDeletedMaterialRightMatcher.find()) {
+            Matcher floatedDeletedRightNumberMatcher = numberPattern.matcher(floatedDeletedMaterialRightMatcher.group());
+            if (floatedDeletedRightNumberMatcher.find()) {
+                frontIds.add(Long.valueOf(floatedDeletedRightNumberMatcher.group()));
+            }
+        }
+    }
+
+    private void findMaterialsFloatedLeft(Set<Long> frontIds, Pattern floatedMaterialLeftPattern, Pattern numberPattern, ChapterBlock block) {
+        Matcher floatedMaterialLeftMatcher = floatedMaterialLeftPattern.matcher(block.getHtmlContent());
+        while (floatedMaterialLeftMatcher.find()) {
+            Matcher floatedMaterialLeftNumberMatcher = numberPattern.matcher(floatedMaterialLeftMatcher.group());
+            if (floatedMaterialLeftNumberMatcher.find()) {
+                frontIds.add(Long.valueOf(floatedMaterialLeftNumberMatcher.group()));
+            }
+        }
+    }
+
+    private void findMaterialsDeletedFloatedLeft(Set<Long> frontIds, Pattern floatedDeletedMaterialLeftPattern, Pattern numberPattern, ChapterBlock block) {
+        Matcher floatedDeletedMaterialLeftMatcher = floatedDeletedMaterialLeftPattern.matcher(block.getHtmlContent());
+        while (floatedDeletedMaterialLeftMatcher.find()) {
+            Matcher floatedDeletedMaterialLeftNumberMatcher = numberPattern.matcher(floatedDeletedMaterialLeftMatcher.group());
+            if (floatedDeletedMaterialLeftNumberMatcher.find()) {
+                frontIds.add(Long.valueOf(floatedDeletedMaterialLeftNumberMatcher.group()));
             }
         }
     }
