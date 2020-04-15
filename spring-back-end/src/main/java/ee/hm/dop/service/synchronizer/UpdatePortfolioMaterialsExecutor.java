@@ -34,7 +34,10 @@ public class UpdatePortfolioMaterialsExecutor {
                 return;
             }
             logger.info("Portfolio materials updating started");
-            for (Portfolio portfolio : portfolioDao.getAllPortfoliosDeletedExcluded()) {
+            for (Portfolio portfolio : portfolioDao.getAllPortfolios()) {
+                if (portfolio != null) {
+                    logger.info("Portfolio being added to PortfolioMaterial: " + portfolio.getId());
+                }
                 portfolioMaterialService.save(portfolio);
             }
             logger.info("Portfolio materials updating ended");

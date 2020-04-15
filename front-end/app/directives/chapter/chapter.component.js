@@ -420,6 +420,7 @@ class controller extends Controller {
         if (this.isTouchDevice())
             embed.addEventListener('contextmenu', (evt) => evt.preventDefault())
 
+        // NB! If embedded material div changes, then PortfolioMaterialService regex needs to be updated!
         const setContents = (embed, data) => {
             const fragment = document.createDocumentFragment()
             const onDoubleClick = embed.classList.contains('chapter-embed-card--media')
