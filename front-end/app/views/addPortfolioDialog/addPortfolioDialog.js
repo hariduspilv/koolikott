@@ -125,12 +125,12 @@ angular.module('koolikottApp')
                 }
 
                 $scope.update = function () {
-                    if (typeof $rootScope.portfolioLicenseTypeChanged === 'undefined') {
-                        updateOrCopy(`rest/portfolio/update`, $scope.update)
-                    } else if ($rootScope.portfolioLicenseTypeChanged === true){
-                        $scope.portfolio.visibility = 'PUBLIC'
-                        $rootScope.portfolioLicenseTypeChanged = false
+                    if ($rootScope.setPortfolioVisibility && $scope.portfolio.id){
+                        $scope.portfolio.visibility = $rootScope.setPortfolioVisibility === 'PUBLIC' ? 'PUBLIC' : 'NOT_LISTED';
                         updateOrCopy(`rest/portfolio/update`, $scope.update);
+                        $rootScope.setPortfolioVisibility = undefined
+                    } else {
+                        updateOrCopy(`rest/portfolio/update`, $scope.update)
                     }
                 };
 

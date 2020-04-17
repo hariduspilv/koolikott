@@ -111,12 +111,11 @@ class controller extends Controller {
         this.$scope.getPortfolioVisibility = () => (this.storageService.getPortfolio() || {}).visibility
 
         this.$scope.makePublic = () => {
-            this.checkUnacceptableLicensesAndUpdate()
+            this.checkUnacceptableLicensesAndUpdate(VISIBILITY_PUBLIC)
         }
 
         this.$scope.makeNotListed = () => {
-            this.storageService.getPortfolio().visibility = VISIBILITY_NOT_LISTED
-            this.updatePortfolio()
+            this.checkUnacceptableLicensesAndUpdate(VISIBILITY_NOT_LISTED)
         }
 
         this.$scope.makePrivate = () => {
@@ -238,7 +237,8 @@ class controller extends Controller {
         })
     }
 
-    checkUnacceptableLicensesAndUpdate(){
+    checkUnacceptableLicensesAndUpdate(visibility){
+        this.$rootScope.setPortfolioVisibility = undefined
         this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense',
             {
                 id: this.$scope.portfolio.id,
@@ -250,12 +250,12 @@ class controller extends Controller {
                         controller: 'learningObjectLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {
-                            this.$rootScope.portfolioLicenseTypeChanged = true
+                            this.$rootScope.setPortfolioVisibility = visibility === VISIBILITY_PUBLIC ? VISIBILITY_PUBLIC : VISIBILITY_NOT_LISTED;
                             this.showEditMetadataDialog()
                         }
                     })
                 } else {
-                    this.$scope.portfolio.visibility = VISIBILITY_PUBLIC
+                    this.$scope.portfolio.visibility = visibility === VISIBILITY_PUBLIC ? VISIBILITY_PUBLIC : VISIBILITY_NOT_LISTED;
                     this.updatePortfolio()
                 }
             })
