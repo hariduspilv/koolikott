@@ -4,14 +4,18 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table
 public class Media implements AbstractEntity{
+
+    static PolicyFactory NO_ALLOWED_HTML_TAGS = new HtmlPolicyBuilder()
+            .toFactory();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,7 +70,7 @@ public class Media implements AbstractEntity{
     }
 
     public void setAuthor(String author) {
-        this.author = author;
+        this.author = getSanitizedText(author);
     }
 
     public String getSource() {
@@ -99,5 +103,12 @@ public class Media implements AbstractEntity{
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    private String getSanitizedText(String text) {
+        if (text != null) {
+            text = NO_ALLOWED_HTML_TAGS.sanitize(text);
+        }
+        return text;
     }
 }

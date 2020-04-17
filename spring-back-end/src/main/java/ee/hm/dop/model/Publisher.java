@@ -1,5 +1,8 @@
 package ee.hm.dop.model;
 
+import org.owasp.html.HtmlPolicyBuilder;
+import org.owasp.html.PolicyFactory;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -8,6 +11,9 @@ import javax.persistence.Id;
 
 @Entity
 public class Publisher implements AbstractEntity {
+
+    static PolicyFactory NO_ALLOWED_HTML_TAGS = new HtmlPolicyBuilder()
+            .toFactory();
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,7 +38,7 @@ public class Publisher implements AbstractEntity {
     }
 
     public void setName(String name) {
-        this.name = name;
+        this.name = getSanitizedText(name);
     }
 
     public String getWebsite() {
@@ -41,5 +47,12 @@ public class Publisher implements AbstractEntity {
 
     public void setWebsite(String website) {
         this.website = website;
+    }
+
+    private String getSanitizedText(String text) {
+        if (text != null) {
+            text = NO_ALLOWED_HTML_TAGS.sanitize(text);
+        }
+        return text;
     }
 }
