@@ -29,6 +29,8 @@ public class MaterialGetter {
     private MaterialPermission materialPermission;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private ReducedUserService reducedUserService;
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -42,12 +44,15 @@ public class MaterialGetter {
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
         }
+        material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
         learningObjectService.setTaxonPosition(material);
         return material;
     }
 
     public Material getWithoutValidation(Long materialId) {
-        return materialDao.findById(materialId);
+        Material material = materialDao.findById(materialId);
+        material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
+        return material;
     }
 
     public List<Material> getBySource(String initialMaterialSource, GetMaterialStrategy getMaterialStrategy) {

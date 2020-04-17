@@ -7,6 +7,7 @@ import ee.hm.dop.model.*;
 import ee.hm.dop.model.solr.Document;
 import ee.hm.dop.model.solr.Response;
 import ee.hm.dop.model.solr.SolrSearchResponse;
+import ee.hm.dop.service.content.ReducedUserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -47,6 +48,8 @@ public class SearchService {
     private ReducedLearningObjectDao reducedLearningObjectDao;
     @Inject
     private LearningObjectDao learningObjectDao;
+    @Inject
+    private ReducedUserService reducedUserService;
 
     public SearchResult search(String query, long start, Long limit, SearchFilter searchFilter) {
         User user = searchFilter.getRequestingUser();
@@ -171,6 +174,7 @@ public class SearchService {
             loggedInUser, List<Long> idsForOrder) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
         List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(learningObjectIds);
+        reducedLOs.forEach(lo -> lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class)));
         if (loggedInUser != null) {
             List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(learningObjectIds, loggedInUser);
             reducedLOs.forEach(e -> e.setFavorite(favored.contains(e.getId())));

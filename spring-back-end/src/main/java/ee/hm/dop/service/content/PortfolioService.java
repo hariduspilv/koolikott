@@ -58,6 +58,8 @@ public class PortfolioService {
     private PortfolioGetter portfolioGetter;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private ReducedUserService reducedUserService;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -93,7 +95,7 @@ public class PortfolioService {
         portfolioGetter.findCopiedRelated(updatedPortfolio);
 
         solrEngineService.updateIndex();
-
+        updatedPortfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(updatedPortfolio.getOriginalCreator(), User.class));
         return updatedPortfolio;
     }
 

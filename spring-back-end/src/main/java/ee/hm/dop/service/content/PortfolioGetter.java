@@ -36,6 +36,8 @@ public class PortfolioGetter {
     private LearningObjectService learningObjectService;
     @Inject
     private LearningObjectDao learningObjectDao;
+    @Inject
+    private ReducedUserService reducedUserService;
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -55,6 +57,7 @@ public class PortfolioGetter {
         if (portfolio.isCopy()) {
             return findCopiedRelated(portfolio);
         }
+        hideSensitiveInfoPortfolio(portfolio);
         return portfolio;
     }
 
@@ -109,6 +112,16 @@ public class PortfolioGetter {
                 portfolio.setCopiedLOStatus(getDeletedOrNotPublic(loCopiedFromDirectly));
             }
         }
+        return portfolio;
+    }
+
+    private Portfolio hideSensitiveInfoPortfolio(Portfolio portfolio) {
+        portfolio.setCreator(reducedUserService.getMapper().convertValue(portfolio.getCreator(), User.class));
+        portfolio.getChapters()
+                .forEach(chapter -> chapter.getContentRows()
+                        .forEach(cr -> cr.getLearningObjects()
+                                .forEach(lo -> lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class)))));
+        portfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(portfolio.getOriginalCreator(), User.class));
         return portfolio;
     }
 }
