@@ -6,7 +6,6 @@ import ee.hm.dop.model.PortfolioMaterial;
 import org.apache.commons.collections.CollectionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.math.BigInteger;
 import java.util.List;
 
 @Repository
@@ -45,8 +44,8 @@ public class PortfolioMaterialDao extends AbstractDao<PortfolioMaterial> {
     }
 
     public boolean hasData() {
-        BigInteger portfolioList = (BigInteger) getEntityManager()
-                .createNativeQuery("select exists(select * from PortfolioMaterial) as exi")
+        Number portfolioList = (Number) getEntityManager()
+                .createNativeQuery("SELECT EXISTS (SELECT 1 FROM PortfolioMaterial)")
                 .getSingleResult();
         return portfolioList.intValue() > 0;
     }
