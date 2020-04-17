@@ -150,9 +150,7 @@ public class PortfolioService {
         firstReviewAdminService.save(createdPortfolio);
         solrEngineService.updateIndex();
 
-        if (!portfolio.isCopy()) {
-            portfolioMaterialService.save(portfolio);
-        }
+        portfolioMaterialService.save(createdPortfolio);
         return createdPortfolio;
     }
 

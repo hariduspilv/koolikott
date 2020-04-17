@@ -112,6 +112,12 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
                 .getResultList();
     }
 
+    public List<Portfolio> getAllPortfolios() {
+        return getEntityManager()
+                .createQuery("SELECT p FROM Portfolio p", entity())
+                .getResultList();
+    }
+
     public List<Portfolio> getAllPortfoliosDeletedExcluded() {
         return getEntityManager()
                 .createQuery("SELECT p FROM Portfolio p WHERE p.deleted = false", entity())
