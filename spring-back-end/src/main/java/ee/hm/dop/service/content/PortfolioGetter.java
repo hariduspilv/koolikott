@@ -115,13 +115,31 @@ public class PortfolioGetter {
         return portfolio;
     }
 
-    private Portfolio hideSensitiveInfoPortfolio(Portfolio portfolio) {
-        portfolio.setCreator(reducedUserService.getMapper().convertValue(portfolio.getCreator(), User.class));
-        portfolio.getChapters()
-                .forEach(chapter -> chapter.getContentRows()
-                        .forEach(cr -> cr.getLearningObjects()
-                                .forEach(lo -> lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class)))));
-        portfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(portfolio.getOriginalCreator(), User.class));
-        return portfolio;
+    private void hideSensitiveInfoPortfolio(Portfolio portfolio) {
+        if (portfolio.getCreator() != null) {
+            portfolio.setCreator(reducedUserService.getMapper().convertValue(portfolio.getCreator(), User.class));
+        }
+        if (portfolio.getChapters() != null) {
+            portfolio.getChapters()
+                    .forEach(chapter ->  {
+                        if (chapter.getContentRows() != null) {
+                            chapter.getContentRows()
+                                    .forEach(cr -> {
+                                        if (cr.getLearningObjects() != null) {
+                                            cr.getLearningObjects()
+                                                    .forEach(lo -> {
+                                                        if (lo.getCreator() != null) {
+                                                            lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+                                                        }
+                                                    });
+                                        }
+                                    });
+                        }
+
+                    });
+        }
+        if (portfolio.getOriginalCreator() != null) {
+            portfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(portfolio.getOriginalCreator(), User.class));
+        }
     }
 }

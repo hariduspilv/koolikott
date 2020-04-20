@@ -44,14 +44,18 @@ public class MaterialGetter {
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
         }
-        material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
+        if (material.getCreator() != null) {
+            material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
+        }
         learningObjectService.setTaxonPosition(material);
         return material;
     }
 
     public Material getWithoutValidation(Long materialId) {
         Material material = materialDao.findById(materialId);
-        material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
+        if (material.getCreator() != null) {
+            material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
+        }
         return material;
     }
 

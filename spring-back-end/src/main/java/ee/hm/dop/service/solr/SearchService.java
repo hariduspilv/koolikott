@@ -174,7 +174,11 @@ public class SearchService {
             loggedInUser, List<Long> idsForOrder) {
         List<Long> learningObjectIds = documents.stream().map(Document::getId).collect(Collectors.toList());
         List<ReducedLearningObject> reducedLOs = reducedLearningObjectDao.findAllById(learningObjectIds);
-        reducedLOs.forEach(lo -> lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class)));
+        reducedLOs.forEach(lo ->  {
+            if (lo.getCreator() != null) {
+                lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+            }
+        });
         if (loggedInUser != null) {
             List<Long> favored = userFavoriteDao.returnFavoredLearningObjects(learningObjectIds, loggedInUser);
             reducedLOs.forEach(e -> e.setFavorite(favored.contains(e.getId())));

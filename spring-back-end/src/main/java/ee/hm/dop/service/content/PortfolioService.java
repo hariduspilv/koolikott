@@ -95,7 +95,9 @@ public class PortfolioService {
         portfolioGetter.findCopiedRelated(updatedPortfolio);
 
         solrEngineService.updateIndex();
-        updatedPortfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(updatedPortfolio.getOriginalCreator(), User.class));
+        if (updatedPortfolio.getOriginalCreator() != null) {
+            updatedPortfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(updatedPortfolio.getOriginalCreator(), User.class));
+        }
         return updatedPortfolio;
     }
 
