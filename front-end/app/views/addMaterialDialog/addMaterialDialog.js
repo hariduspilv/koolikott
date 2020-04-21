@@ -366,9 +366,6 @@ class controller extends Controller {
         angular.element(input).controller('mdAutocomplete').hidden = true
         input.blur()
     }
-    isBasicOrSecondaryEducation () {
-        return this.$scope.educationalContextName === 'BASICEDUCATION'|| this.$scope.educationalContextName === 'SECONDARYEDUCATION'
-    }
     isURLInvalid() {
         if (this.$scope.addMaterialForm && this.$scope.addMaterialForm.source && this.$scope.addMaterialForm.source.$viewValue) {
             this.$scope.addMaterialForm.source.$setTouched();
@@ -717,8 +714,8 @@ class controller extends Controller {
     isSubmitDisabled() {
         return !this.$scope.addMaterialForm.$valid
             || !this.hasAtLeastOneTitle()
-            || (this.isBasicOrSecondaryEducation() && this.$scope.material.keyCompetences.length === 0)
-            || (this.isBasicOrSecondaryEducation() && this.$scope.material.crossCurricularThemes.length === 0)
+            || (this.$scope.isBasicOrSecondaryEducation && this.$scope.material.keyCompetences.length === 0)
+            || (this.$scope.isBasicOrSecondaryEducation && this.$scope.material.crossCurricularThemes.length === 0)
             || this.$scope.isSaving
             || this.$scope.uploadingFile
             || !this.$scope.addMaterialForm.licenseType.$viewValue
