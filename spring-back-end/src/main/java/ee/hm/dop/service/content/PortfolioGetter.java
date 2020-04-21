@@ -112,6 +112,7 @@ public class PortfolioGetter {
                 portfolio.setCopiedLOStatus(getDeletedOrNotPublic(loCopiedFromDirectly));
             }
         }
+        hideSensitiveInfoPortfolio(portfolio);
         return portfolio;
     }
 
