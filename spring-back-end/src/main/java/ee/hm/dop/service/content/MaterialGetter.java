@@ -83,7 +83,14 @@ public class MaterialGetter {
     }
 
     private List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
-        return reducedLearningObjectDao.findMaterialByCreator(creator, start, maxResults);
+        List<ReducedLearningObject> reducedLearningObjects = reducedLearningObjectDao.findMaterialByCreator(creator, start, maxResults);
+        reducedLearningObjects
+                .forEach(lo -> {
+                    if (lo.getCreator() != null) {
+                        lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+                    }
+                });
+        return reducedLearningObjects;
     }
 
     public long getByCreatorSize(User creator) {

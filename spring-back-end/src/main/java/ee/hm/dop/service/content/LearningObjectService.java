@@ -1,9 +1,11 @@
 package ee.hm.dop.service.content;
 
 import ee.hm.dop.dao.LearningObjectDao;
+import ee.hm.dop.dao.ReducedLearningObjectDao;
 import ee.hm.dop.dao.TaxonPositionDao;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
+import ee.hm.dop.model.ReducedLearningObject;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.taxon.TaxonLevel;
@@ -41,6 +43,10 @@ public class LearningObjectService {
     private TaxonPositionDao taxonPositionDao;
     @Inject
     private PortfolioService portfolioService;
+    @Inject
+    private ReducedLearningObjectDao reducedLearningObjectDao;
+    @Inject
+    private ReducedUserService reducedUserService;
 
 
     public LearningObject get(long learningObjectId, User user) {
@@ -138,5 +144,16 @@ public class LearningObjectService {
             return !portfolioService.portfolioHasAcceptableLicenses(lo.getId());
         }
         return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals(CCBYSA30.name());
+    }
+
+    public List<ReducedLearningObject> getReducedLOsByCreator(User creator, int start, int maxResults) {
+        List <ReducedLearningObject> reducedLOsByCreator = reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults);
+        reducedLOsByCreator
+                .forEach(lo -> {
+                    if (lo.getCreator() != null) {
+                        lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+                    }
+                });
+        return reducedLOsByCreator;
     }
 }

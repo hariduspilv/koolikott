@@ -80,9 +80,16 @@ public class PortfolioGetter {
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
+        List<ReducedLearningObject> learningObjectsByCreator = reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
                 .filter(p -> portfolioPermission.canInteract(loggedInUser, p))
                 .collect(toList());
+        learningObjectsByCreator
+                .forEach(lo -> {
+                    if (lo.getCreator() != null) {
+                        lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+                    }
+                });
+        return learningObjectsByCreator;
     }
 
     public Long getCountByCreator(User creator) {

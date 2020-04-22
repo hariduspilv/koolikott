@@ -41,6 +41,7 @@ public class Terms implements AbstractEntity{
     private LocalDateTime createdAt;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "createdBy", nullable = false)
     private User createdBy;
 

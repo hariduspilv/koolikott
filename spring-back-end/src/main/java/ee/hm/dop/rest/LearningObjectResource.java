@@ -109,7 +109,7 @@ LearningObjectResource extends BaseResource {
 
         int size = (int) (materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator));
 
-        List<Searchable> searchableList = new ArrayList<>(reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults));
+        List<Searchable> searchableList = new ArrayList<>(learningObjectService.getReducedLOsByCreator(creator, start, maxResults));
 
         return new SearchResult(searchableList, size, start);
     }
