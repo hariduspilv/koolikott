@@ -1,3 +1,22 @@
+## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253)
+
+### Muutunud
+* "Ebasobivast õppevarast teatamise modaalil selgituse väli punaseks" [EK-841](https://projektid.hitsa.ee/jira/browse/EK-841)
+* "'Minu saadetud teated' lehel kirja modaali headeri värv muuta valgeks" [EK-1005](https://projektid.hitsa.ee/jira/browse/EK-1005)
+* "Mobiilivaade: kogumiku Edit modes peaks peatüki liigutamise ja kustutamise nupud nähtaval olema" [EK-913](https://projektid.hitsa.ee/jira/browse/EK-913)
+* "Kustutatud kogumiku ikoonide muudatused" [EK-1004](https://projektid.hitsa.ee/jira/browse/EK-1004)
+* "Materjali detailvaade > võtmesõna sisestamise juurde lisada tooltip" [EK-831](https://projektid.hitsa.ee/jira/browse/EK-831)
+* "Kogumiku detailvaade > võtmesõna sisestamise juurde lisada tooltip" [EK-940](https://projektid.hitsa.ee/jira/browse/EK-940)
+* "Muudatus: Materjali lisamine kogumikku kui kasutajal ühtegi kogumikku loodud ei ole" [EK-832](https://projektid.hitsa.ee/jira/browse/EK-832)
+* "Õppevara peaks olema võimalik taastada peale kustutamist" [EK-900](https://projektid.hitsa.ee/jira/browse/EK-900)
+* "Tingimuste lehtedel teavitamise checkboxide tekstid" [EK-898](https://projektid.hitsa.ee/jira/browse/EK-898)
+* "Minu saadetud teated lehel peaks otsing kuvama õigeid tulemusi" [EK-1006](https://projektid.hitsa.ee/jira/browse/EK-1006)
+* "Privaatne õppevara, mida ei saa X põhjusel avalikustada või lingiga jagada, peavad vastava nupu tooltippi omama" [EK-886](https://projektid.hitsa.ee/jira/browse/EK-886)
+* "Õppevara detailvaatel kuvada litsentsi info" [EK-1007](https://projektid.hitsa.ee/jira/browse/EK-1007)
+* "Kõikidele Koolielust imporditud materjalidele lisada tag "koolielu"" [EK-1035](https://projektid.hitsa.ee/jira/browse/EK-1035)
+* "Materjali detailvaatel kuvada materjali lisajat adminnidele ja ekspertidele" [EK-875](https://projektid.hitsa.ee/jira/browse/EK-875)
+* "Vale litsentsiga kogumik ei ole "Privaatsest" staatusest "Jaga lingiga" staatusesse muudetav" [EK-1050](https://projektid.hitsa.ee/jira/browse/EK-1050)
+
 ## e-Koolikott [1.54.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11225)
 
 ### Muutunud
