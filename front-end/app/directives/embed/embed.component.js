@@ -84,10 +84,6 @@ class controller extends Controller {
                 this.$scope.embedSource = embedSource
                 break
             case 'SOUNDCLOUD':
-            default:
-                if (!isMaterial && type !== 'SOUNDCLOUD')
-                    return console.error('This url is not embeddable as media file', url)
-
                 this.$http
                     .get('https://noembed.com/embed?url=' + url)
                     .then(({ data: { html } }) => {
@@ -114,6 +110,7 @@ class controller extends Controller {
                                     )
                         }
                     })
+                break
         }
     }
     getExtension(url) {

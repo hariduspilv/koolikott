@@ -27,7 +27,7 @@
   <!--Edit-->
   <div
     data-ng-if="$ctrl.isEditMode"
-    class="chapter-toolbar"
+    class="chapter-toolbar block-padding-top"
     data-ng-click="$ctrl.onClickEmptyChapterArea($event)"
     tabindex="-1"
     >
@@ -152,14 +152,6 @@
     data-ng-click="$ctrl.onClickEmptyChapterArea($event)"
     tabindex="-1"
     >
-    <md-button
-      class="md-icon-button chapter-pencil-button"
-      data-ng-if="$ctrl.isEditMode"
-      data-ng-click="$ctrl.focusTitle(true)"
-      tabindex="-1"
-      >
-      <md-icon class="material-icons">edit</md-icon>
-    </md-button>
     <md-input-container
       class="md-block chapter-title"
       data-ng-click="$ctrl.focusTitle(true)"
@@ -188,16 +180,23 @@
     class="organize-chapters"
     data-ng-hide="$ctrl.numChapters < 2"
     >
-    <div>
-      <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-if="$ctrl.index !== 0">
-        <md-icon>arrow_upward</md-icon>
-      </md-button>
-      <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveDown()" data-ng-if="$ctrl.index !== $ctrl.numChapters - 1">
-        <md-icon>arrow_downward</md-icon>
-      </md-button>
-      <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onDelete()">
-        <md-icon>delete</md-icon>
-      </md-button>
+    <div data-layout-gt-sm="column" data-layout="row">
+      <div data-layout="row" class="chapter-buttons-margin">
+        <md-button class="organize-chapter-btn md-icon-button" data-ng-if="$ctrl.isEditMode" data-ng-click="$ctrl.focusTitle(true)">
+          <md-icon>edit</md-icon>
+        </md-button>
+        <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onDelete()">
+          <md-icon>delete</md-icon>
+        </md-button>
+      </div>
+      <div data-layout="row">
+        <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveUp()" data-ng-if="$ctrl.index !== 0">
+          <md-icon>arrow_upward</md-icon>
+        </md-button>
+        <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.onMoveDown()" data-ng-if="$ctrl.index !== $ctrl.numChapters - 1">
+          <md-icon>arrow_downward</md-icon>
+        </md-button>
+      </div>
     </div>
   </div>
 </md-card>

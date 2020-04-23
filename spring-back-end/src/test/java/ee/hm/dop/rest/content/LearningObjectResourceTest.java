@@ -1,14 +1,7 @@
 package ee.hm.dop.rest.content;
 
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.UserFavorite;
-import ee.hm.dop.model.UserLike;
-import ee.hm.dop.service.content.dto.TagDTO;
+import ee.hm.dop.model.*;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -18,11 +11,7 @@ import javax.ws.rs.core.Response.Status;
 import static ee.hm.dop.rest.content.MaterialResourceTest.GET_MATERIAL_URL;
 import static java.lang.String.format;
 import static org.apache.commons.collections.CollectionUtils.isEmpty;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
 
@@ -34,10 +23,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
     public static final String DELETE_FAVOURITE_URL = "learningObject/favorite/delete";
     public static final String USERS_FAVOURITE_URL = "learningObject/usersFavorite?start=0";
     public static final String GET_FAVOURITE_COUNT_URL = "learningObject/usersFavorite/count";
-    public static final String LIKE_URL = "learningObject/like";
-    public static final String DISLIKE_URL = "learningObject/dislike";
-    public static final String GET_USER_LIKE_URL = "learningObject/getUserLike";
-    public static final String REMOVE_USER_LIKE_URL = "learningObject/removeUserLike";
     public static final String TEST_TAG = "timshel";
     public static final String TEST_TAG_2 = "timshel2";
 
@@ -114,73 +99,6 @@ public class LearningObjectResourceTest extends ResourceIntegrationTestBase {
         SearchResult searchResult = doGet(USERS_FAVOURITE_URL, SearchResult.class);
         assertTrue("User favourites doesn't exist", isEmpty(searchResult.getItems()));
     }
-
-    @Test
-    public void likeMaterial_sets_it_as_liked()  {
-        login(USER_PEETER);
-        Material material = getMaterial(MATERIAL_5);
-
-        doPost(LIKE_URL, material);
-        UserLike userLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
-        assertNotNull("User like exist", userLike);
-        assertEquals("Material is liked by user", true, userLike.isLiked());
-    }
-
-    @Test
-    public void dislikeMaterial_sets_it_as_not_liked()  {
-        login(USER_PEETER);
-        Material material = getMaterial(MATERIAL_6);
-
-        doPost(DISLIKE_URL, material);
-        UserLike userDislike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
-        assertNotNull("User dislike exist", userDislike);
-        assertEquals("Material is disliked by user", false, userDislike.isLiked());
-    }
-
-    @Test
-    public void removeUserLike_removes_like_from_material()  {
-        login(USER_PEETER);
-        Material material = getMaterial(MATERIAL_7);
-
-        doPost(LIKE_URL, material);
-        doPost(REMOVE_USER_LIKE_URL, material);
-        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, material, UserLike.class);
-        assertNull("User removed like does not exist", userRemoveLike);
-    }
-
-    @Test
-    public void likePortfolio_sets_it_as_liked()  {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-
-        doPost(LIKE_URL, portfolio);
-        UserLike userLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
-        assertNotNull("User like exist", userLike);
-        assertTrue("Portfolio is liked by user", userLike.isLiked());
-    }
-
-    @Test
-    public void dislikePortfolio_sets_it_as_not_liked()  {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-
-        doPost(DISLIKE_URL, portfolio);
-        UserLike userDislike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
-        assertNotNull("User dislike exist", userDislike);
-        assertEquals("Portfolio is disliked by user", false, userDislike.isLiked());
-    }
-
-    @Test
-    public void removeUserLike_removes_like_from_portfolio()  {
-        login(USER_PEETER);
-        Portfolio portfolio = getPortfolio(PORTFOLIO_3);
-
-        doPost(LIKE_URL, portfolio);
-        doPost(REMOVE_USER_LIKE_URL, portfolio);
-        UserLike userRemoveLike = doPost(GET_USER_LIKE_URL, portfolio, UserLike.class);
-        assertNull("User removed like does not exist", userRemoveLike);
-    }
-
 
     @Test
     public void increaseViewCount_material() {

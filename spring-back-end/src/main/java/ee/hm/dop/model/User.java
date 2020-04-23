@@ -3,6 +3,7 @@ package ee.hm.dop.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.model.ehis.InstitutionEhis;
@@ -22,16 +23,20 @@ import static javax.persistence.FetchType.LAZY;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class User implements AbstractEntity {
 
+    @JsonView(Views.publicUser.class)
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @JsonView(Views.publicUser.class)
     @Column(unique = true, nullable = false)
     private String username;
 
+    @JsonView(Views.publicUser.class)
     @Column(nullable = false)
     private String name;
 
+    @JsonView(Views.publicUser.class)
     @Column(nullable = false)
     private String surname;
 

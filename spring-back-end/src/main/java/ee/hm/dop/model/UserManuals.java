@@ -1,15 +1,13 @@
 package ee.hm.dop.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import ee.hm.dop.rest.jackson.map.DateTimeDeserializer;
 import ee.hm.dop.rest.jackson.map.DateTimeSerializer;
-import org.hibernate.annotations.Type;
-import java.time.LocalDateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 public class UserManuals implements AbstractEntity{
@@ -38,7 +36,6 @@ public class UserManuals implements AbstractEntity{
     @ManyToOne
     @JoinColumn(name = "createdBy")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
-    @JsonIgnore
     private User createdBy;
 
     @Column(nullable = false)

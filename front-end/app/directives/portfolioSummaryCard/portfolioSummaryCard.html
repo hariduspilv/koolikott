@@ -17,12 +17,12 @@
             id="send-email"
             data-learning-object="portfolio">
           </dop-send-email>
-          <div data-ng-if="!$root.isEditPortfolioMode">
+          <div data-ng-if="!$root.isEditPortfolioMode && !portfolio.deleted">
             <dop-qr
               id="qr-code"
               data-location="{{pageUrl}}"></dop-qr>
           </div>
-          <md-button ng-if="!$root.isEditPortfolioMode && !$root.isFullScreen"
+          <md-button ng-if="!$root.isEditPortfolioMode && !portfolio.deleted && !$root.isFullScreen"
                      data-ng-click="toggleFullScreen()"
                      id="faq-edit"
                      class="md-icon-button hide-on-mobile">
@@ -142,8 +142,8 @@
                     <md-icon data-ng-if="$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
                     <span data-translate="PORTFOLIO_VISIBILITY_MAKE_PUBLIC"></span>
                   </md-button>
-                  <md-tooltip data-ng-show="showTooltip1" md-delay="150" md-autohide="true" md-direction="left">
-                    <span data-translate="UNABLE_TO_SET_PRIVACY_LEVEL"></span>
+                  <md-tooltip data-ng-class="{'tt-multiline': $ctrl.isNVP()}" data-ng-show="showTooltip1" md-delay="150" md-autohide="true" md-direction="top">
+                    <span data-translate="{{$ctrl.isNVP() ? 'PUBLICATION_TOOLTIP_MOBILE' : 'PUBLICATION_TOOLTIP'}}"></span>
                   </md-tooltip>
                 </div>
               </md-menu-item>
@@ -165,8 +165,8 @@
                       <md-icon data-ng-if="$root.portfolioHasMaterialWithUnacceptableLicense" class="margin-right-16">warning</md-icon>
                       <span data-translate="PORTFOLIO_VISIBILITY_MAKE_NOT_LISTED"></span>
                   </md-button>
-                  <md-tooltip data-ng-show="showTooltip2" md-delay="150" md-autohide="true" md-direction="left">
-                    <span data-translate="UNABLE_TO_SET_PRIVACY_LEVEL"></span>
+                  <md-tooltip data-ng-class="{'tt-multiline': $ctrl.isNVP()}" data-ng-show="showTooltip2" md-delay="150" md-autohide="true" md-direction="top">
+                    <span data-translate="{{$ctrl.isNVP() ? 'PUBLICATION_TOOLTIP_MOBILE' : 'PUBLICATION_TOOLTIP'}}"></span>
                   </md-tooltip>
                 </div>
               </md-menu-item>
@@ -331,6 +331,7 @@
                 <span data-ng-if="!portfolio.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
               </span>
         </p>
+        <p class="md-caption caption-light" data-translate="LICENSE_INFO"></p>
       </md-content>
     </div>
   </div>

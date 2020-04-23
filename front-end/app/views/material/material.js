@@ -11,7 +11,6 @@ angular.module('koolikottApp')
 
             $scope.showMaterialContent = false;
             $rootScope.isFullScreen = false;
-            $scope.newComment = {};
             $scope.pageUrl = $location.absUrl();
             $scope.path = $location.url()
             $scope.getMaterialSuccess = getMaterialSuccess;
@@ -395,7 +394,9 @@ angular.module('koolikottApp')
             };
 
             $scope.dotsAreShowing = function () {
-                return $rootScope.learningObjectDeleted === false || $scope.isAdmin();
+                if ($scope.material) {
+                    return !$scope.material.deleted;
+                }
             };
 
             function getSignedUserData() {

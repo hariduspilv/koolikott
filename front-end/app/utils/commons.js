@@ -1028,11 +1028,12 @@ class Controller {
         return url && youtubeUrlRegex.test(url)
     }
     isSoundcloudLink(url) {
-        return url && /^https?:\/\/(soundcloud\.com)\/(.*)$/.test(url)
+        const soundCloudUrlRegex = /^(https?:\/\/)?(www.)?(m\.)?soundcloud\.com\/[\w\-\.]+(\/)+[\w\-\.]+\/?$/
+        return url && soundCloudUrlRegex.test(url)
     }
     isSlideshareLink(url) {
         const slideshareUrlRegex = /^https?\:\/\/www\.slideshare\.net\/[a-zA-Z0-9\-]+\/[a-zA-Z0-9\-]+$/
-        return url && url.match(slideshareUrlRegex)
+        return url && slideshareUrlRegex.test(url)
     }
     isVideoLink(url) {
         return url && ["mp4", "ogv", "webm"].includes(url.split('.').pop().toLowerCase())
@@ -1057,6 +1058,7 @@ class Controller {
         switch (true) {
             case this.isYoutubeLink(url): return 'YOUTUBE'
             case this.isSlideshareLink(url): return 'SLIDESHARE'
+            case this.isSoundcloudLink(url): return 'SOUNDCLOUD'
             case this.isVideoLink(url): return 'VIDEO'
             case this.isAudioLink(url): return 'AUDIO'
             case this.isPictureLink(url): return 'PICTURE'

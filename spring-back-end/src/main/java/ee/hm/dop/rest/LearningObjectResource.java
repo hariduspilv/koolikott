@@ -1,34 +1,17 @@
 package ee.hm.dop.rest;
 
 import ee.hm.dop.dao.ReducedLearningObjectDao;
-import ee.hm.dop.model.LearningObject;
-import ee.hm.dop.model.LearningObjectMiniDto;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.User;
-import ee.hm.dop.model.UserFavorite;
-import ee.hm.dop.model.UserLike;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.RoleString;
-import ee.hm.dop.service.Like;
 import ee.hm.dop.service.content.LearningObjectService;
 import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.PortfolioGetter;
 import ee.hm.dop.service.metadata.TagService;
 import ee.hm.dop.service.useractions.UserFavoriteService;
-import ee.hm.dop.service.useractions.UserLikeService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -47,8 +30,6 @@ LearningObjectResource extends BaseResource {
     private TagService tagService;
     @Inject
     private UserFavoriteService userFavoriteService;
-    @Inject
-    private UserLikeService userLikeService;
     @Inject
     private LearningObjectService learningObjectService;
     @Inject
@@ -108,28 +89,6 @@ LearningObjectResource extends BaseResource {
         return userFavoriteService.getUserFavoritesSize(getLoggedInUser());
     }
 
-    @PostMapping("getUserLike")
-    public UserLike getUserLike(@RequestBody LearningObjectMiniDto learningObjectMiniDto) {
-        return userLikeService.getUserLike(learningObjectMiniDto.convert(), getLoggedInUser());
-    }
-
-    @PostMapping("removeUserLike")
-    public void removeUserLike(@RequestBody LearningObjectMiniDto learningObjectMiniDto) {
-        userLikeService.removeUserLike(learningObjectMiniDto.convert(), getLoggedInUser());
-    }
-
-    @PostMapping("like")
-    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void likeMaterial(@RequestBody LearningObjectMiniDto learningObjectMiniDto) {
-        userLikeService.addUserLike(learningObjectMiniDto.convert(), getLoggedInUser(), Like.LIKE);
-    }
-
-    @PostMapping("dislike")
-    @Secured({RoleString.USER, RoleString.ADMIN, RoleString.MODERATOR})
-    public void dislikeMaterial(@RequestBody LearningObjectMiniDto learningObjectMiniDto) {
-        userLikeService.addUserLike(learningObjectMiniDto.convert(), getLoggedInUser(), Like.DISLIKE);
-    }
-
     @PostMapping("increaseViewCount")
     public void increaseViewCount(@RequestBody LearningObjectMiniDto learningObjectMiniDto) {
         learningObjectService.incrementViewCount(learningObjectMiniDto.convert());
@@ -150,7 +109,7 @@ LearningObjectResource extends BaseResource {
 
         int size = (int) (materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator));
 
-        List<Searchable> searchableList = new ArrayList<>(reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults));
+        List<Searchable> searchableList = new ArrayList<>(learningObjectService.getReducedLOsByCreator(creator, start, maxResults));
 
         return new SearchResult(searchableList, size, start);
     }

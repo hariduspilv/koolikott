@@ -8,7 +8,13 @@ class controller extends Controller {
                 !this.authenticatedUserService.isOwner(this.$scope.learningObject)
             )
                 this.$scope.toggleRestrict = this.toggleRestrict.bind(this)
-            this.setState(this.$scope.learningObject.creator)
+
+            this.serverCallService.makeGet('rest/user/getUser',
+                {id: this.$scope.learningObject.creator.id}).then(({ data: user }) => {
+                if (user) {
+                    this.setState(user)
+                }
+            })
         } else
             this.$scope.noCreator = true
     }

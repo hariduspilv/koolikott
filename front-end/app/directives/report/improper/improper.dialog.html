@@ -38,11 +38,12 @@
         <label data-translate="IMPROPER_REPORT_DESCRIPTION"></label>
         <textarea
           data-ng-model="data.reportingText"
+          required
           rows="1"
           maxlength="255"
           data-md-select-on-focus
         ></textarea>
-        <div class="hint" data-ng-bind="characters.used+'/'+characters.remaining"></div>
+        <div class="hint" data-ng-bind="characters.used+'/255'"></div>
       </md-input-container>
     </div>
   </md-dialog-content>

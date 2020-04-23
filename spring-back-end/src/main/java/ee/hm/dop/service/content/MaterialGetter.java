@@ -29,6 +29,8 @@ public class MaterialGetter {
     private MaterialPermission materialPermission;
     @Inject
     private LearningObjectService learningObjectService;
+    @Inject
+    private ReducedUserService reducedUserService;
 
     public Material get(Long materialId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -42,12 +44,19 @@ public class MaterialGetter {
         if (!materialPermission.canView(loggedInUser, material)) {
             throw ValidatorUtil.permissionError();
         }
+        if (material.getCreator() != null) {
+            material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
+        }
         learningObjectService.setTaxonPosition(material);
         return material;
     }
 
     public Material getWithoutValidation(Long materialId) {
-        return materialDao.findById(materialId);
+        Material material = materialDao.findById(materialId);
+        if (material.getCreator() != null) {
+            material.setCreator(reducedUserService.getMapper().convertValue(material.getCreator(), User.class));
+        }
+        return material;
     }
 
     public List<Material> getBySource(String initialMaterialSource, GetMaterialStrategy getMaterialStrategy) {
@@ -74,7 +83,14 @@ public class MaterialGetter {
     }
 
     private List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
-        return reducedLearningObjectDao.findMaterialByCreator(creator, start, maxResults);
+        List<ReducedLearningObject> reducedLearningObjects = reducedLearningObjectDao.findMaterialByCreator(creator, start, maxResults);
+        reducedLearningObjects
+                .forEach(lo -> {
+                    if (lo.getCreator() != null) {
+                        lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+                    }
+                });
+        return reducedLearningObjects;
     }
 
     public long getByCreatorSize(User creator) {

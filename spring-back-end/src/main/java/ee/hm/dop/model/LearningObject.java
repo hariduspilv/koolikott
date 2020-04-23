@@ -94,12 +94,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @JoinColumn(name = "recommendation")
     private Recommendation recommendation;
 
-    @OneToMany(fetch = EAGER, cascade = {MERGE, PERSIST})
-    @Fetch(FetchMode.SELECT)
-    @JoinColumn(name = "learningObject")
-    @OrderBy("added DESC")
-    private List<Comment> comments;
-
     @ManyToOne
     @JoinColumn(name = "creator")
     private User creator;
@@ -147,12 +141,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
     @OneToMany(mappedBy = "learningObject", fetch = LAZY)
     @JsonBackReference("reviewableChange")
     private List<ReviewableChange> reviewableChanges;
-
-    @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
-    private int likes;
-
-    @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 0)")
-    private int dislikes;
 
     @Formula(value = "(SELECT COUNT(*) FROM ImproperContent ic WHERE ic.learningObject = id AND ic.reviewed = 0)")
     private int improper;
@@ -257,14 +245,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
         this.recommendation = recommendation;
     }
 
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
-    }
-
     public User getCreator() {
         return creator;
     }
@@ -303,22 +283,6 @@ public abstract class LearningObject implements Searchable, ILearningObject {
 
     public void setViews(Long views) {
         this.views = views;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getDislikes() {
-        return dislikes;
-    }
-
-    public void setDislikes(int dislikes) {
-        this.dislikes = dislikes;
     }
 
     public LocalDateTime getLastInteraction() {

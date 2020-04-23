@@ -48,6 +48,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                   data-location="{{location}}"></dop-qr>
               </div>
               <md-button style="min-width: 0px"
+                         ng-show="!material.deleted"
                          data-ng-click="toggleFullScreen()"
                          id="full-screen"
                          class="md-icon-button hide-on-mobile">
@@ -194,6 +195,16 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
           </div>
           <!-- Metadata 1 -->
           <md-content class="card-lg__container">
+            <!-- Creator -->
+            <p class="md-body-2 card-lg__link" data-ng-if="isAdminOrModerator()">
+              <span class="md-caption caption-light">
+                <span data-translate="ADDED_BY"></span>:
+              </span>
+              <a data-ng-if="material.creator" data-ng-href="/{{material.creator.username}}">
+                {{material.creator.name}} {{material.creator.surname}}
+              </a>
+              <span data-ng-if="!material.creator" data-translate="IMPORTED"></span>
+            </p>
             <!-- Author(s) -->
             <p class="md-body-2 card-lg__link" data-ng-if="!isNullOrZeroLength(material.authors)">
               <span class="md-caption caption-light">
@@ -207,15 +218,6 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               <a data-ng-href="{{getAuthorSearchURL(author.name, author.surname)}}"
                  data-ng-repeat="author in material.authors">
                 {{author.name}} {{author.surname}}{{$last ? '' : ', '}}
-              </a>
-            </p>
-            <!-- Creator -->
-            <p class="md-body-2 card-lg__link" data-ng-if="false">
-              <span class="md-caption caption-light">
-                <span data-translate="CREATOR"></span>:
-              </span>
-              <a data-ng-href="/{{material.creator.username}}">
-                {{material.creator.name}} {{material.creator.surname}}
               </a>
             </p>
             <!-- Publisher -->
@@ -321,6 +323,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                 <span data-ng-if="!material.licenseType" data-translate="LICENSETYPE_ALLRIGHTSRESERVED"></span>
               </span>
             </p>
+            <p class="md-caption caption-light" data-translate="LICENSE_INFO"></p>
           </md-content>
         </div>
       </div>

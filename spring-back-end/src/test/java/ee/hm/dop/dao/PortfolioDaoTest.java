@@ -2,22 +2,17 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.common.test.DatabaseTestBase;
 import ee.hm.dop.common.test.TestLayer;
-import ee.hm.dop.model.Comment;
 import ee.hm.dop.model.LearningObject;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.User;
-import java.time.LocalDateTime;
 import org.junit.Test;
 
 import javax.inject.Inject;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class PortfolioDaoTest extends DatabaseTestBase {
 
@@ -166,22 +161,6 @@ public class PortfolioDaoTest extends DatabaseTestBase {
         assertSame(14L, newPortfolio.getViews());
 
         newPortfolio.setViews(14L);
-        portfolioDao.createOrUpdate(newPortfolio);
-    }
-
-    @Test
-    public void addComment() {
-        User user = userDao.findUserByIdCode("37066990099");
-        String unique_comment = "UNIQUE" + System.currentTimeMillis();
-
-        Comment comment = new Comment();
-        comment.setText(unique_comment);
-        comment.setCreator(user);
-        comment.setAdded(LocalDateTime.now());
-
-        Portfolio newPortfolio = portfolioDao.findByIdNotDeleted(PORTFOLIO_2);
-        newPortfolio.getComments().add(comment);
-
         portfolioDao.createOrUpdate(newPortfolio);
     }
 

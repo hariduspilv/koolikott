@@ -1,8 +1,9 @@
 <p class="md-caption caption-light tags" data-ng-if="!$ctrl.isLoggedOutAndHasNoTags()">
   <span data-translate="DETAIL_VIEW_TAGS"></span>:
 </p>
-<div layout="row" layout-xs="column">
+<div layout="row" layout-xs="column" class="tag-new-margin">
   <md-chips
+    class="tag-existing-margin"
     data-ng-model="upvotes"
     readonly="true"
   >
@@ -60,32 +61,37 @@
       </md-button>
     </md-chip-template>
   </md-chips>
-  <form
-    name="addTagForm"
-    id="addTagForm"
-    data-ng-if="$ctrl.isAllowedToAdd()"
-    data-ng-submit="$ctrl.addTag()"
+  <div data-layout="row" data-ng-class="{'tags-add-mobile': $ctrl.isNVP()}" >
+    <form
+      name="addTagForm"
+      id="addTagForm"
+      data-ng-if="$ctrl.isAllowedToAdd()"
+      data-ng-submit="$ctrl.addTag()"
     >
-    <md-autocomplete
-      class="upvotes"
-      data-md-selected-item="$ctrl.newTag.selectedItem"
-      data-md-floating-label="{{'ADD_TAG' | translate}}"
-      data-md-item-text="tag"
-      data-md-items="tag in $ctrl.doSuggest($ctrl.newTag.tagName)"
-      data-md-search-text="$ctrl.newTag.tagName"
-      data-md-search-text-change="$ctrl.limitTextLength()"
-      data-md-input-maxlength="100"
-      data-md-input-minlength="0"
-      data-md-no-cache="true"
-      data-md-menu-class="suggest-dropdown"
-      data-md-selected-item-change="$ctrl.tagSelected(tag)"
-      data-ng-model-options="{debounce: 100}"
+      <md-autocomplete
+        class="upvotes"
+        data-md-selected-item="$ctrl.newTag.selectedItem"
+        data-md-floating-label="{{'ADD_TAG' | translate}}"
+        data-md-item-text="tag"
+        data-md-items="tag in $ctrl.doSuggest($ctrl.newTag.tagName)"
+        data-md-search-text="$ctrl.newTag.tagName"
+        data-md-search-text-change="$ctrl.limitTextLength()"
+        data-md-input-maxlength="100"
+        data-md-input-minlength="0"
+        data-md-no-cache="true"
+        data-md-menu-class="suggest-dropdown"
+        data-md-selected-item-change="$ctrl.tagSelected(tag)"
+        data-ng-model-options="{debounce: 100}"
       >
-      <md-item-template>
-        <span md-highlight-text="$ctrl.newTag.tagName">{{ tag }}</span>
-      </md-item-template>
-    </md-autocomplete>
-  </form>
+        <md-item-template>
+          <span md-highlight-text="$ctrl.newTag.tagName">{{ tag }}</span>
+        </md-item-template>
+      </md-autocomplete>
+    </form>
+    <div data-ng-if="$ctrl.isAllowedToAdd()">
+      <md-icon class="tag-icon-margin">info_outline</md-icon><md-tooltip data-ng-class="{'tt-multiline': $ctrl.isSmallScreen()}" md-direction="top"><span data-translate="{{$ctrl.isSmallScreen() ? 'TAG_TOOLTIP_MOBILE' : 'TAG_TOOLTIP'}}"></span></md-tooltip>
+    </div>
+  </div>
 </div>
 <div layout="row">
   <md-button data-ng-show="$ctrl.showMoreTags" ng-click="$ctrl.showMore()">

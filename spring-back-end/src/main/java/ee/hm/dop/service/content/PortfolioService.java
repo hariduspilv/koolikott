@@ -56,6 +56,10 @@ public class PortfolioService {
     private MaterialService materialService;
     @Inject
     private PortfolioGetter portfolioGetter;
+    @Inject
+    private LearningObjectService learningObjectService;
+    @Inject
+    private ReducedUserService reducedUserService;
 
     public Portfolio create(Portfolio portfolio, User creator) {
         TextFieldUtil.cleanTextFields(portfolio);
@@ -78,6 +82,7 @@ public class PortfolioService {
         Portfolio updatedPortfolio = portfolioDao.createOrUpdate(originalPortfolio);
 
         updatedPortfolio.setSaveType(portfolio.getSaveType());
+        learningObjectService.setTaxonPosition(updatedPortfolio);
 
         PortfolioLog portfolioLogUpdated = savePortfolioLog(portfolioConverter.setFieldsToNewPortfolioLog(updatedPortfolio));
         logger.info("Portfolio with id: " + portfolio.getId() + " ,history log with id:" + portfolioLogUpdated.getId() + " added");
@@ -90,7 +95,9 @@ public class PortfolioService {
         portfolioGetter.findCopiedRelated(updatedPortfolio);
 
         solrEngineService.updateIndex();
-
+        if (updatedPortfolio.getOriginalCreator() != null) {
+            updatedPortfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(updatedPortfolio.getOriginalCreator(), User.class));
+        }
         return updatedPortfolio;
     }
 

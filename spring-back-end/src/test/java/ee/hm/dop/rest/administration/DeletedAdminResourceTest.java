@@ -5,7 +5,6 @@ import ee.hm.dop.model.AdminLearningObject;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.Portfolio;
 import ee.hm.dop.model.Recommendation;
-import ee.hm.dop.model.User;
 import ee.hm.dop.service.content.MaterialGetter;
 import org.junit.Test;
 
@@ -14,10 +13,7 @@ import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
 
@@ -108,7 +104,6 @@ public class DeletedAdminResourceTest extends ResourceIntegrationTestBase {
 
         Recommendation recommendation = doPost(ADD_RECOMMENDATION_URL, material, Recommendation.class);
         assertNotNull(recommendation);
-        assertEquals(Long.valueOf(8), recommendation.getCreator().getId());
     }
 
     @Test

@@ -18,13 +18,6 @@
           <md-card-content data-ng-if="!faq.edit" class="block-padding-top">
             <div data-layout="row" data-layout-align="space-between center">
               <h2 class="chapter-title" data-ng-bind="$ctrl.getCurrentLanguage() === 'est' ? faq.titleEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.titleEng : faq.titleRus"></h2>
-              <md-button class="md-icon-button chapter-pencil-button edit-button-opacity"
-                         data-ng-click="$ctrl.editFaq(faq)"
-                         id="faq-edit"
-                         data-ng-if="$ctrl.isFaqEditMode() && !$ctrl.isCreateDialogOpen()">
-                <md-icon  class="material-icons">edit</md-icon>
-                <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
-              </md-button>
             </div>
               <div>
               <span class="textangular-view" data-ng-bind-html="$ctrl.getCurrentLanguage() === 'est' ? faq.contentEst : $ctrl.getCurrentLanguage() === 'eng' ? faq.contentEng : faq.contentRus"></span>
@@ -163,15 +156,26 @@
           </div>
           <div
             data-ng-if="$ctrl.isFaqEditMode"
-            class="organize-chapters move-button-sm"
+            class="organize-chapters"
           >
-            <div>
-              <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.move($index, true)" data-ng-if="$index !== 0 && !$ctrl.createDialogOpen">
-                <md-icon>arrow_upward</md-icon>
-              </md-button>
-              <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.move($index)" data-ng-if="$index + 1 !== $ctrl.faqs.length && !$ctrl.createDialogOpen">
-                <md-icon>arrow_downward</md-icon>
-              </md-button>
+            <div data-layout-gt-sm="column" data-layout="row">
+              <div class="chapter-buttons-margin">
+                <md-button class="organize-chapter-btn md-icon-button"
+                           data-ng-click="$ctrl.editFaq(faq)"
+                           id="faq-edit"
+                           data-ng-if="$ctrl.isFaqEditMode() && !$ctrl.isCreateDialogOpen()">
+                  <md-icon  class="material-icons">edit</md-icon>
+                  <md-tooltip><span data-translate="FAQ_EDIT"></span></md-tooltip>
+                </md-button>
+              </div>
+              <div data-layout="row">
+                <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.move($index, true)" data-ng-if="$index !== 0 && !$ctrl.createDialogOpen">
+                  <md-icon>arrow_upward</md-icon>
+                </md-button>
+                <md-button class="organize-chapter-btn md-icon-button" data-ng-click="$ctrl.move($index)" data-ng-if="$index + 1 !== $ctrl.faqs.length && !$ctrl.createDialogOpen">
+                  <md-icon>arrow_downward</md-icon>
+                </md-button>
+              </div>
             </div>
           </div>
         </md-card>

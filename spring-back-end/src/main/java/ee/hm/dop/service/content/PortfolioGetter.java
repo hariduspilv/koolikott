@@ -36,6 +36,8 @@ public class PortfolioGetter {
     private LearningObjectService learningObjectService;
     @Inject
     private LearningObjectDao learningObjectDao;
+    @Inject
+    private ReducedUserService reducedUserService;
 
     public Portfolio get(Long portfolioId, User loggedInUser) {
         if (UserUtil.isAdminOrModerator(loggedInUser)) {
@@ -55,6 +57,7 @@ public class PortfolioGetter {
         if (portfolio.isCopy()) {
             return findCopiedRelated(portfolio);
         }
+        hideSensitiveInfoPortfolio(portfolio);
         return portfolio;
     }
 
@@ -77,9 +80,16 @@ public class PortfolioGetter {
     }
 
     public List<ReducedLearningObject> getByCreator(User creator, User loggedInUser, int start, int maxResults) {
-        return reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
+        List<ReducedLearningObject> learningObjectsByCreator = reducedLearningObjectDao.findPortfolioByCreator(creator, start, maxResults).stream()
                 .filter(p -> portfolioPermission.canInteract(loggedInUser, p))
                 .collect(toList());
+        learningObjectsByCreator
+                .forEach(lo -> {
+                    if (lo.getCreator() != null) {
+                        lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+                    }
+                });
+        return learningObjectsByCreator;
     }
 
     public Long getCountByCreator(User creator) {
@@ -109,6 +119,35 @@ public class PortfolioGetter {
                 portfolio.setCopiedLOStatus(getDeletedOrNotPublic(loCopiedFromDirectly));
             }
         }
+        hideSensitiveInfoPortfolio(portfolio);
         return portfolio;
+    }
+
+    private void hideSensitiveInfoPortfolio(Portfolio portfolio) {
+        if (portfolio.getCreator() != null) {
+            portfolio.setCreator(reducedUserService.getMapper().convertValue(portfolio.getCreator(), User.class));
+        }
+        if (portfolio.getChapters() != null) {
+            portfolio.getChapters()
+                    .forEach(chapter ->  {
+                        if (chapter.getContentRows() != null) {
+                            chapter.getContentRows()
+                                    .forEach(cr -> {
+                                        if (cr.getLearningObjects() != null) {
+                                            cr.getLearningObjects()
+                                                    .forEach(lo -> {
+                                                        if (lo.getCreator() != null) {
+                                                            lo.setCreator(reducedUserService.getMapper().convertValue(lo.getCreator(), User.class));
+                                                        }
+                                                    });
+                                        }
+                                    });
+                        }
+
+                    });
+        }
+        if (portfolio.getOriginalCreator() != null) {
+            portfolio.setOriginalCreator(reducedUserService.getMapper().convertValue(portfolio.getOriginalCreator(), User.class));
+        }
     }
 }

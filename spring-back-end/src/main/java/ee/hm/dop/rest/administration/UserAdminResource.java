@@ -1,15 +1,12 @@
 package ee.hm.dop.rest.administration;
 
+import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.RoleString;
 import ee.hm.dop.rest.BaseResource;
 import ee.hm.dop.service.useractions.UserService;
 import org.springframework.security.access.annotation.Secured;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.inject.Inject;
 import java.util.List;
@@ -20,6 +17,8 @@ public class UserAdminResource extends BaseResource {
 
     @Inject
     private UserService userService;
+    @Inject
+    private UserDao userDao;
 
     @GetMapping
     @RequestMapping("all")
@@ -49,6 +48,13 @@ public class UserAdminResource extends BaseResource {
     public User removeRestriction(@RequestBody User user) {
         mustHaveUser(user);
         return userService.removeRestriction(user);
+    }
+
+    @GetMapping
+    @RequestMapping("getUser")
+    @Secured({RoleString.ADMIN})
+    public User getUser (@RequestParam("id") Long userId) {
+        return userDao.findUserById(userId);
     }
 
     private void mustHaveUser(User user) {

@@ -19,6 +19,10 @@
 	}
 }
 
+.tags-add-mobile {
+	margin-top: 7px;
+}
+
 .md-chips md-chip ._md-chip-remove {
 	height: 28px;
 	width: 28px;
@@ -157,4 +161,20 @@ md-chip.new {
 
 .chips-container {
 	padding: 9px 8px;
+}
+
+.tag-icon-margin {
+	margin-top: 16px
+}
+
+.tag-existing-margin {
+	margin-top: 6px
+}
+
+.tag-new-margin {
+	margin-top: 4px
+}
+
+.tt-multiline {
+	height: auto;
 }
