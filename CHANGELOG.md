@@ -5,7 +5,7 @@
 * "E-Koolikoti LIVE keskkonna Cache probleem" [EK-1059](https://projektid.hitsa.ee/jira/browse/EK-1059)
 
 
-## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253)
+## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253) (Prelivesse paigaldatud 23.04.2020)
 
 ### Muutunud
 * "Ebasobivast õppevarast teatamise modaalil selgituse väli punaseks" [EK-841](https://projektid.hitsa.ee/jira/browse/EK-841)
