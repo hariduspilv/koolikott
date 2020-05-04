@@ -17,6 +17,21 @@
 * "Materjali detailvaatel kuvada materjali lisajat adminnidele ja ekspertidele" [EK-875](https://projektid.hitsa.ee/jira/browse/EK-875)
 * "Vale litsentsiga kogumik ei ole "Privaatsest" staatusest "Jaga lingiga" staatusesse muudetav" [EK-1050](https://projektid.hitsa.ee/jira/browse/EK-1050)
 
+## e-Koolikott [1.54.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11260) (Toodangusse paigaldatud 21.04.2020)
+
+### Muutunud
+* "Materjali ei tohi saada lisada ilma kohustuslikke välju täitmata" [EK-1055](https://projektid.hitsa.ee/jira/browse/EK-1055)
+
+## e-Koolikott [1.54.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11258) (Toodangusse paigaldatud 16.04.2020)
+
+### Muutunud
+* "andmetüüp BigInteger vs Integer" [EK-1053](https://projektid.hitsa.ee/jira/browse/EK-1053)
+
+## e-Koolikott [1.54.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11256) (Toodangusse paigaldatud 16.04.2020)
+
+### Muutunud
+* "Enne PortfolioMaterials tabeli loomist olemasolevate kogumike-materjalide seoste lisamine tabelisse" [EK-1043](https://projektid.hitsa.ee/jira/browse/EK-1043)
+
 ## e-Koolikott [1.54.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11225)
 
 ### Muutunud
@@ -25,7 +40,6 @@
 * "Privaatsete kogumike staatust ei saa share modaali kaudu muuta" [EK-1003](https://projektid.hitsa.ee/jira/browse/EK-1003)
 * "Kogumikku ei saa kopeerida kui kogumikul on vale litsents või see sisaldab mõnda vale litsentsiga materjali" [EK-980](https://projektid.hitsa.ee/jira/browse/EK-980)
 * "Eemaldada koodist Plumbri skript" [EK-888](https://projektid.hitsa.ee/jira/browse/EK-888)
-
 
 ## e-Koolikott [1.53.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11222) (Toodangusse paigaldatud 26.03.2020)
 
