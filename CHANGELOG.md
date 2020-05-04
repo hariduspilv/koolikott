@@ -1,3 +1,9 @@
+## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263)
+
+### Muutunud
+* "Lisada Index.html faili Cache-control meta tag" [EK-1061](https://projektid.hitsa.ee/jira/browse/EK-1061)
+
+
 ## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253)
 
 ### Muutunud
