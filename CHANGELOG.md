@@ -38,7 +38,7 @@
 ### Muutunud
 * "Enne PortfolioMaterials tabeli loomist olemasolevate kogumike-materjalide seoste lisamine tabelisse" [EK-1043](https://projektid.hitsa.ee/jira/browse/EK-1043)
 
-## e-Koolikott [1.54.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11225)
+## e-Koolikott [1.54.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11225) (Toodangusse paigaldatud 16.04.2020)
 
 ### Muutunud
 * "AngularJS versiooni uuendamine (1.64->1.79)" [EK-930](https://projektid.hitsa.ee/jira/browse/EK-930)
