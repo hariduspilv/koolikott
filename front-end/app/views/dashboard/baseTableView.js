@@ -182,7 +182,7 @@
 
                 this.$mdDialog
                     .show({
-                        templateUrl: 'views/editUserDialog/editUser.html',
+                        templateUrl: '/views/editUserDialog/editUser.html',
                         controller: 'editUserController',
                         scope
                     })
@@ -478,7 +478,7 @@
 
         showDialog() {
             this.$mdDialog.show({
-                templateUrl: 'directives/sendEmail/sendEmail.html',
+                templateUrl: '/directives/sendEmail/sendEmail.html',
                 controller: 'sendEmailDialogController',
                 controllerAs: '$ctrl',
                 locals: {
@@ -492,7 +492,7 @@
                 const scope = this.$scope.$new(true);
                 scope.learningObject = learningObject;
                 this.$mdDialog.show({
-                    templateUrl: 'views/sentEmail/sentEmail.html',
+                    templateUrl: '/views/sentEmail/sentEmail.html',
                     controller: 'sentEmailController',
                     controllerAs: '$ctrl',
                     scope,

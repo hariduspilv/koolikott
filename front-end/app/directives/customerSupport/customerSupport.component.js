@@ -306,7 +306,7 @@
         '$timeout'
     ]
     component('dopCustomerSupport', {
-        templateUrl: 'directives/customerSupport/customerSupport.html',
+        templateUrl: '/directives/customerSupport/customerSupport.html',
         controller
     })
 }

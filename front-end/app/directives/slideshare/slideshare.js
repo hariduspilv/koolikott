@@ -27,7 +27,7 @@ angular.module('koolikottApp').component('dopSlideshare', {
         height: '<',
         failCallback: '&'
     },
-    templateUrl: 'directives/slideshare/slideshare.html',
+    templateUrl: '/directives/slideshare/slideshare.html',
     controller
 })
 }

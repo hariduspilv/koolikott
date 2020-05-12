@@ -7,9 +7,6 @@
 
             this.landingPageLanguages = ['ET', 'EN', 'RU']
             this.initEmptyLandingPageEdit()
-            if (this.isLandingPage()) {
-                this.getNoticeAndTranslationString()
-            }
 
             this.$scope.currentLanguage = this.translationService.getLanguage();
             this.$scope.filteredTitle = {}
@@ -90,6 +87,9 @@
             this.search(true)
             this.$scope.isEditMode = false
             this.$scope.showNoticeEdit = false
+            if (this.isLandingPage()) {
+                this.getNoticeAndTranslationString()
+            }
         }
 
         showExactGroupButtons() {
@@ -742,7 +742,7 @@
             searchpage: '<',
             guide: '<'
         },
-        templateUrl: 'directives/infiniteSearchResult/infiniteSearchResult.html',
+        templateUrl: '/directives/infiniteSearchResult/infiniteSearchResult.html',
         controller
     })
 }

@@ -380,7 +380,7 @@ component('dopDetailedSearch', {
         accessor: '=',
         isVisible: '<'
     },
-    templateUrl: 'directives/detailedSearch/detailedSearch.html',
+    templateUrl: '/directives/detailedSearch/detailedSearch.html',
     controller
 })
 }

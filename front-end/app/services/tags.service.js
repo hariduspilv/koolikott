@@ -45,7 +45,7 @@ function TagsService(serverCallService, searchService, $location, $mdDialog, $tr
                             $scope.characters = { used, remaining: 255 - used }
                         })
                     }],
-                    templateUrl: 'directives/report/improper/improper.dialog.html',
+                    templateUrl: '/directives/report/improper/improper.dialog.html',
                     clickOutsideToClose: true,
                     escapeToClose: true,
                     targetEvent,

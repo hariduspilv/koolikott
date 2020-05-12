@@ -12,7 +12,7 @@
                                     if (!this.sessionDialogIsOpen) {
                                         this.sessionDialogIsOpen = true
                                         this.$mdDialog.show({
-                                            templateUrl: 'views/sessionDialog/sessionDialog.html',
+                                            templateUrl: '/views/sessionDialog/sessionDialog.html',
                                             controller: 'sessionDialogController',
                                             clickOutsideToClose: false,
                                             escapeToClose: false,
@@ -25,7 +25,7 @@
                                     this.sessionDialogIsOpen = false;
                                     this.$rootScope.$broadcast("sessionService:terminateSession");
                                     this.$mdDialog.show({
-                                        templateUrl: 'views/sessionDialog/sessionExpiredDialog.html',
+                                        templateUrl: '/views/sessionDialog/sessionExpiredDialog.html',
                                         controller: 'sessionExpiredDialogController',
                                         clickOutsideToClose: true,
                                         escapeToClose: true,

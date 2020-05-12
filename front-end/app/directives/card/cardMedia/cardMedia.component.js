@@ -34,7 +34,7 @@ component('dopCardMedia', {
         disablePick: '<',
         showPrivacy: '<'
     },
-    templateUrl: 'directives/card/cardMedia/cardMedia.html',
+    templateUrl: '/directives/card/cardMedia/cardMedia.html',
     controller
 })
 }

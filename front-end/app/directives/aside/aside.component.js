@@ -91,7 +91,7 @@ component('dopAside', {
     bindings: {
         learningObject: '<'
     },
-    templateUrl: 'directives/aside/aside.html',
+    templateUrl: '/directives/aside/aside.html',
     controller
 })
 }

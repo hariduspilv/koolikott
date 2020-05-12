@@ -114,7 +114,7 @@ component('dopSidenavTaxon', {
         taxon: '<',
         icon: '<'
     },
-    templateUrl: 'directives/sidenavTaxon/sidenavTaxon.html',
+    templateUrl: '/directives/sidenavTaxon/sidenavTaxon.html',
     controller
 })
 }

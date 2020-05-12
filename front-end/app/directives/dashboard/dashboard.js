@@ -5,12 +5,12 @@
  */
 {
 const lists = {
-    dopUnreviewed: 'directives/dashboard/unreviewed.html',
-    dopImproper: 'directives/dashboard/improper.html',
-    dopChanged: 'directives/dashboard/changed.html',
-    dopDeleted: 'directives/dashboard/deleted.html',
-    dopUsers: 'directives/dashboard/users.html',
-    dopSentemails: 'directives/dashboard/sentemails.html'
+    dopUnreviewed: '/directives/dashboard/unreviewed.html',
+    dopImproper: '/directives/dashboard/improper.html',
+    dopChanged: '/directives/dashboard/changed.html',
+    dopDeleted: '/directives/dashboard/deleted.html',
+    dopUsers: '/directives/dashboard/users.html',
+    dopSentemails: '/directives/dashboard/sentemails.html'
 }
 Object.keys(lists).forEach(key =>
     directive(key, {
@@ -40,7 +40,7 @@ component('dopDashboardTypeIcon', {
     bindings: {
         learningObject: '<'
     },
-    templateUrl: 'directives/dashboard/typeIcon.html',
+    templateUrl: '/directives/dashboard/typeIcon.html',
     controller
 })
 }

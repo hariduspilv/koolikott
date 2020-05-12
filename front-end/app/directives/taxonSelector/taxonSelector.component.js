@@ -177,7 +177,7 @@ component('dopTaxonSelector', {
         selectDisabled: '<',
         isUserEdit: '<'
     },
-    templateUrl: 'directives/taxonSelector/taxonSelector.html',
+    templateUrl: '/directives/taxonSelector/taxonSelector.html',
     controller
 })
 }

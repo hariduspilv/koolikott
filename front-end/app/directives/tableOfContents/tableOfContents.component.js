@@ -99,7 +99,7 @@ controller.$inject = [
     'authenticatedUserService'
 ]
 component('dopTableOfContents', {
-    templateUrl: 'directives/tableOfContents/tableOfContents.html',
+    templateUrl: '/directives/tableOfContents/tableOfContents.html',
     controller
 })
 }

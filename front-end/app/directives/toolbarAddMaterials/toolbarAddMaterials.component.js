@@ -89,7 +89,7 @@ class controller extends Controller {
             insertAfterLocationChange(0)
             this.$mdDialog
                 .show({
-                    templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                    templateUrl: '/views/addPortfolioDialog/addPortfolioDialog.html',
                     controller: 'addPortfolioDialogController',
                     locals: {
                         mode: 'EDIT'
@@ -144,7 +144,7 @@ controller.$inject = [
     'portfolioService'
 ]
 component('dopToolbarAddMaterials', {
-    templateUrl: 'directives/toolbarAddMaterials/toolbarAddMaterials.html',
+    templateUrl: '/directives/toolbarAddMaterials/toolbarAddMaterials.html',
     controller
 })
 }

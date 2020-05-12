@@ -7,206 +7,206 @@ angular.module('koolikottApp')
 
             $routeProvider
                 .when('/', {
-                    templateUrl: 'views/home/home.html',
+                    templateUrl: '/views/home/home.html',
                     controller: 'homeController',
                     controllerAs: '$ctrl'
                 })
                 .when('/404', {
-                    templateUrl: 'views/404/404.html',
+                    templateUrl: '/views/404/404.html',
                     controller: '404Controller',
                     controllerAs: '$ctrl'
                 })
                 .when('/search/result', {
-                    templateUrl: 'views/search/result/searchResult.html',
+                    templateUrl: '/views/search/result/searchResult.html',
                     controller: 'searchResultController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false,
                 })
                 .when('/oppematerjal/:id', {
-                    templateUrl: 'views/material/material.html',
+                    templateUrl: '/views/material/material.html',
                     controller: 'materialController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
                 })
                 .when('/oppematerjal/:id-:name', {
-                    templateUrl: 'views/material/material.html',
+                    templateUrl: '/views/material/material.html',
                     controller: 'materialController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
                 })
                 .when('/oppematerjal', {
-                    templateUrl: 'views/material/material.html',
+                    templateUrl: '/views/material/material.html',
                     controller: 'materialController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
                 })
                 .when('/help', {
-                    templateUrl: 'views/static/abstractStaticPage.html',
+                    templateUrl: '/views/static/abstractStaticPage.html',
                     controller: 'helpController',
                     controllerAs: '$ctrl'
                 })
                 .when('/kogumik/muuda/:id', {
-                    templateUrl: 'views/editPortfolio/editPortfolio.html',
+                    templateUrl: '/views/editPortfolio/editPortfolio.html',
                     controller: 'editPortfolioController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
                 })
                 .when('/kogumik/:id', {
-                    templateUrl: 'views/portfolio/portfolio.html',
+                    templateUrl: '/views/portfolio/portfolio.html',
                     controller: 'portfolioController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
                 })
                 .when('/kogumik/:id-:name', {
-                    templateUrl: 'views/portfolio/portfolio.html',
+                    templateUrl: '/views/portfolio/portfolio.html',
                     controller: 'portfolioController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false
                 })
                 .when('/kogumik', {
-                    templateUrl: 'views/portfolio/portfolio.html',
+                    templateUrl: '/views/portfolio/portfolio.html',
                     controller: 'portfolioController',
                     controllerAs: '$ctrl',
                     reloadOnSearch: false,
                 })
                 .when('/toolaud', {
-                    templateUrl: 'views/dashboard/dashboard.html',
+                    templateUrl: '/views/dashboard/dashboard.html',
                     controller: 'dashboardController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/toolaud/teatatud-oppevara', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/dashboard/improperPortfolios', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/toolaud/kustutatud-oppevara', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
                 .when('/toolaud/aineeksperdid', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
                 .when('/toolaud/piiratud-kasutajad', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
                 .when('/toolaud/muudetud-oppevara', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/toolaud/uus-oppevara', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/toolaud/saadetud-teated', {
-                    templateUrl: 'views/dashboard/baseTableView.html',
+                    templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/toolaud/ekspertide-statistika', {
-                    templateUrl: 'views/statistics/expertStatistics.html',
+                    templateUrl: '/views/statistics/expertStatistics.html',
                     controller: 'statisticsController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR']
                 })
                 .when('/toolaud/videojuhendid', {
-                    templateUrl: 'views/userManualsAdmin/userManualsAdmin.html',
+                    templateUrl: '/views/userManualsAdmin/userManualsAdmin.html',
                     controller: 'userManualsAdminController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
                 .when('/kasutustingimused', {
-                    templateUrl: 'views/terms/terms.html',
+                    templateUrl: '/views/terms/terms.html',
                     controller: 'termsController',
                     controllerAs: '$ctrl',
                 })
                 .when('/isikuandmete-tootlemine', {
-                    templateUrl: 'views/gdprProcess/gdprProcess.html',
+                    templateUrl: '/views/gdprProcess/gdprProcess.html',
                     controller: 'gdprProcessController',
                     controllerAs: '$ctrl',
                 })
                 .when('/videojuhendid', {
-                    templateUrl: 'views/userManual/userManual.html',
+                    templateUrl: '/views/userManual/userManual.html',
                     controller: 'userManualsController',
                     controllerAs: '$ctrl',
                 })
                 .when('/kkk', {
-                    templateUrl: 'views/faq/faq.html',
+                    templateUrl: '/views/faq/faq.html',
                     controller: 'faqController',
                     controllerAs: '$ctrl',
                 })
                 .when('/profiil', {
-                    templateUrl: 'views/userProfile/userProfile.html',
+                    templateUrl: '/views/userProfile/userProfile.html',
                     controller: 'userProfileController',
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN', 'MODERATOR', 'USER', 'RESTRICTED']
                 })
                 .when('/loginRedirect', {
-                    templateUrl: 'views/loginRedirect/loginRedirect.html',
+                    templateUrl: '/views/loginRedirect/loginRedirect.html',
                     controller: 'loginRedirectController',
                     controllerAs: '$ctrl'
                 })
                 .when('/:username', {
-                    templateUrl: 'views/profile/profile.html',
+                    templateUrl: '/views/profile/profile.html',
                     controller: 'profileController',
                     controllerAs: '$ctrl',
                 })
                 .when('/:username/oppematerjalid', {
-                    templateUrl: 'views/profile/materials/materials.html',
+                    templateUrl: '/views/profile/materials/materials.html',
                     controller: 'userMaterialsController',
                     controllerAs: '$ctrl',
                     resolve: UserPathResolver,
                 })
                 .when('/:username/kogumikud', {
-                    templateUrl: 'views/profile/portfolios/portfolios.html',
+                    templateUrl: '/views/profile/portfolios/portfolios.html',
                     controller: 'userPortfoliosController',
                     controllerAs: '$ctrl',
                 })
                 .when('/:username/lemmikud', {
-                    templateUrl: 'views/profile/favorites/favorites.html',
+                    templateUrl: '/views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
                     controllerAs: '$ctrl',
                     resolve: UserPathResolver,
                 })
                 .when('/:username/materials', {
-                    templateUrl: 'views/profile/materials/materials.html',
+                    templateUrl: '/views/profile/materials/materials.html',
                     controller: 'userMaterialsController',
                     controllerAs: '$ctrl',
                     resolve: UserPathResolver,
                 })
                 .when('/:username/portfolios', {
-                    templateUrl: 'views/profile/portfolios/portfolios.html',
+                    templateUrl: '/views/profile/portfolios/portfolios.html',
                     controller: 'userPortfoliosController',
                     controllerAs: '$ctrl',
                 })
                 .when('/:username/favorites', {
-                    templateUrl: 'views/profile/favorites/favorites.html',
+                    templateUrl: '/views/profile/favorites/favorites.html',
                     controller: 'userFavoritesController',
                     controllerAs: '$ctrl',
                     resolve: UserPathResolver,
                 })
                 .when('/dev/login/:idCode', {
-                    templateUrl: 'views/dev/login/login.html',
+                    templateUrl: '/views/dev/login/login.html',
                     controller: 'devLoginController',
                     controllerAs: '$ctrl'
                 })

@@ -44,7 +44,7 @@ component('dopCardXs', {
     bindings: {
         learningObject: '<'
     },
-    templateUrl: 'directives/card/cardXS/cardXS.html',
+    templateUrl: '/directives/card/cardXS/cardXS.html',
     controller
 })
 }

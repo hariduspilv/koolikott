@@ -38,6 +38,6 @@
             learningObject: '<'
         },
         controller,
-        templateUrl: 'directives/taxonMeta/taxonMeta.html'
+        templateUrl: '/directives/taxonMeta/taxonMeta.html'
     })
 }

@@ -192,7 +192,7 @@
         'toastService'
     ]
     component('dopStartpageIntro', {
-        templateUrl: 'directives/startpageIntro/startpageIntro.html',
+        templateUrl: '/directives/startpageIntro/startpageIntro.html',
         controller
     })
 }

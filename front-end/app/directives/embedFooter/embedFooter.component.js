@@ -101,7 +101,7 @@ component('dopEmbedFooter', {
         isEditMode: '<',
         onDoubleClick: '&',
     },
-    templateUrl: 'directives/embedFooter/embedFooter.html',
+    templateUrl: '/directives/embedFooter/embedFooter.html',
     controller
 })
 }

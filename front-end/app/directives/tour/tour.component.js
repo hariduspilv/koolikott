@@ -88,7 +88,7 @@ controller.$inject = [
 ]
 component('dopTour', {
     bindings: {},
-    templateUrl: 'directives/tour/tour.html',
+    templateUrl: '/directives/tour/tour.html',
     controller
 })
 }

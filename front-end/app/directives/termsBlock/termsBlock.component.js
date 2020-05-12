@@ -127,7 +127,7 @@
             createDialogOpen: '='
 
         },
-        templateUrl: 'directives/termsBlock/termsBlock.html',
+        templateUrl: '/directives/termsBlock/termsBlock.html',
         controller
     })
 }

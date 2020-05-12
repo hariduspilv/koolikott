@@ -128,7 +128,7 @@
             createDialogOpen: '='
 
         },
-        templateUrl: 'directives/gdprProcessBlock/gdprProcessBlock.html',
+        templateUrl: '/directives/gdprProcessBlock/gdprProcessBlock.html',
         controller
     })
 }

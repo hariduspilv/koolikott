@@ -478,7 +478,7 @@ component('dopErrorMessage', {
     bindings: {
         data: '<'
     },
-    templateUrl: 'directives/errorMessage/errorMessage.html',
+    templateUrl: '/directives/errorMessage/errorMessage.html',
     controller
 })
 }

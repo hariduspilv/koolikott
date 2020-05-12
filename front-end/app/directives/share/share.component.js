@@ -71,7 +71,7 @@ class controller extends Controller {
     }
     showWarningDialog(targetEvent, item) {
         this.$mdDialog.show({
-            templateUrl: 'directives/share/modal/share.modal.html',
+            templateUrl: '/directives/share/modal/share.modal.html',
             controller: 'shareModalController',
             controllerAs: '$ctrl',
             locals: {
@@ -190,7 +190,7 @@ component('dopShare', {
         object: '<',
         slug: '<'
     },
-    templateUrl: 'directives/share/share.html',
+    templateUrl: '/directives/share/share.html',
     controller
 })
 }

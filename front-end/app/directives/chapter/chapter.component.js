@@ -830,7 +830,7 @@ class controller extends Controller {
          * @todo Restore caret position when cancelling the dialog
          */
         const options = {
-            templateUrl: 'views/addMediaDialog/addMediaDialog.html',
+            templateUrl: '/views/addMediaDialog/addMediaDialog.html',
             controller: 'addMediaDialogController',
             controllerAs: '$ctrl',
             locals: {
@@ -995,7 +995,7 @@ component('dopChapter', {
         title: '<',
         object: '<'
     },
-    templateUrl: 'directives/chapter/chapter.html',
+    templateUrl: '/directives/chapter/chapter.html',
     controller
 })
 }

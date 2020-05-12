@@ -112,7 +112,7 @@
             getFaqs: '&',
             createDialogOpen: '='
         },
-        templateUrl: 'directives/faqBlock/faqBlock.html',
+        templateUrl: '/directives/faqBlock/faqBlock.html',
         controller
     })
 }

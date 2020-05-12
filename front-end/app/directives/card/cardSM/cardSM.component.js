@@ -79,7 +79,7 @@ component('dopCardSm', {
     bindings: {
         learningObject: '<'
     },
-    templateUrl: 'directives/card/cardSM/cardSM.html',
+    templateUrl: '/directives/card/cardSM/cardSM.html',
     controller
 })
 }

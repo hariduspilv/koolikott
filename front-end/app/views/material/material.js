@@ -332,7 +332,7 @@ angular.module('koolikottApp')
                     ($scope.material.picture &&
                     $scope.material.picture.licenseType.name !== 'CCBYSA30')){
                     $mdDialog.show({
-                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
+                        templateUrl: '/views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
                         controller: 'learningObjectLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {

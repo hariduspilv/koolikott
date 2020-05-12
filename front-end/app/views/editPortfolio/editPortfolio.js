@@ -6,7 +6,7 @@ class controller extends Controller {
         super(...args)
         const listener = () => {
             this.$mdDialog.show({
-                templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
+                templateUrl: '/directives/leavePageDialog/leavePageDialog.html',
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
