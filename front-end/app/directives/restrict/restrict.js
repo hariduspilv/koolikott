@@ -56,7 +56,7 @@ directive('dopRestrict', {
     scope: {
         learningObject: '<'
     },
-    templateUrl: 'directives/restrict/restrict.html',
+    templateUrl: '/directives/restrict/restrict.html',
     controller
 })
 }

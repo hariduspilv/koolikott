@@ -307,7 +307,7 @@
         '$timeout'
     ]
     component('dopCookieNotice', {
-        templateUrl: 'directives/cookieNotice/cookieNotice.html',
+        templateUrl: '/directives/cookieNotice/cookieNotice.html',
         controller
     })
 }

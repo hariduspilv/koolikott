@@ -203,7 +203,7 @@ component('dopTargetGroupSelector', {
         markRequired: '<',
         onChange: '&',
     },
-    templateUrl: 'directives/targetGroupSelector/targetGroupSelector.html',
+    templateUrl: '/directives/targetGroupSelector/targetGroupSelector.html',
     controller
 })
 }

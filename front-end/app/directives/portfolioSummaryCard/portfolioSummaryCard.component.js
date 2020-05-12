@@ -229,7 +229,7 @@ class controller extends Controller {
     showEditMetadataDialog() {
         this.storageService.setPortfolio(this.portfolio)
         this.$mdDialog.show({
-            templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+            templateUrl: '/views/addPortfolioDialog/addPortfolioDialog.html',
             controller: 'addPortfolioDialogController',
             locals: {
                 mode: 'EDIT'
@@ -246,7 +246,7 @@ class controller extends Controller {
             .then(({ data }) => {
                 if(data){
                     this.$mdDialog.show({
-                        templateUrl: 'views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
+                        templateUrl: '/views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
                         controller: 'learningObjectLicenseAgreementController',
                     }).then((res) => {
                         if (res.accept) {
@@ -302,7 +302,7 @@ class controller extends Controller {
         if (!portfolio) console.log('copying failed')
         this.storageService.setEmptyPortfolio(portfolio)
         this.$mdDialog.show({
-            templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+            templateUrl: '/views/addPortfolioDialog/addPortfolioDialog.html',
             controller: 'addPortfolioDialogController',
             fullscreen: false,
             locals: {
@@ -416,7 +416,7 @@ component('dopPortfolioSummaryCard', {
     bindings: {
         portfolio: '=',
     },
-    templateUrl: 'directives/portfolioSummaryCard/portfolioSummaryCard.html',
+    templateUrl: '/directives/portfolioSummaryCard/portfolioSummaryCard.html',
     controller
 })
 }

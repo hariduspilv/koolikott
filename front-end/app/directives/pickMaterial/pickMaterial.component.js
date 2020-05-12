@@ -54,7 +54,7 @@ component('dopPickMaterial', {
         learningObject: '<',
         disable: '<'
     },
-    templateUrl: 'directives/pickMaterial/pickMaterial.html',
+    templateUrl: '/directives/pickMaterial/pickMaterial.html',
     controller
 })
 }

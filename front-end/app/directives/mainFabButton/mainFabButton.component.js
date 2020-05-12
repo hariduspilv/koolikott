@@ -42,7 +42,7 @@ class controller extends Controller {
 
             this.storageService.setEmptyPortfolio(emptyPortfolio)
             this.$mdDialog.show({
-                templateUrl: 'views/addPortfolioDialog/addPortfolioDialog.html',
+                templateUrl: '/views/addPortfolioDialog/addPortfolioDialog.html',
                 controller: 'addPortfolioDialogController',
                 fullscreen: false,
                 locals: {
@@ -80,7 +80,7 @@ controller.$inject = [
     'toastService'
 ]
 component('dopMainFabButton', {
-    templateUrl: 'directives/mainFabButton/mainFabButton.html',
+    templateUrl: '/directives/mainFabButton/mainFabButton.html',
     controller
 })
 }

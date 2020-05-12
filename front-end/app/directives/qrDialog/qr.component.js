@@ -14,7 +14,7 @@
                 }
 
                 this.$mdDialog.show({
-                    templateUrl: 'directives/qrDialog/qrDialog.html',
+                    templateUrl: '/directives/qrDialog/qrDialog.html',
                     controller: 'qrDialogController',
                     fullscreen: true,
                     locals: {

@@ -16,7 +16,7 @@ component('dopRating', {
         likeMessage: '@',
         dislikeMessage: '@'
     },
-    templateUrl: 'directives/rating/rating.html',
+    templateUrl: '/directives/rating/rating.html',
     controller
 })
 }

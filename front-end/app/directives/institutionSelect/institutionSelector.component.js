@@ -89,7 +89,7 @@ component('dopInstitutionSelector', {
         institution: '=',
         clearSelection: '<'
     },
-    templateUrl: 'directives/institutionSelect/institutionSelector.html',
+    templateUrl: '/directives/institutionSelect/institutionSelector.html',
     controller
 })
 }

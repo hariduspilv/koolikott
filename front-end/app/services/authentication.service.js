@@ -31,7 +31,7 @@ angular.module('koolikottApp')
 
         function showLocationDialog() {
             $mdDialog.show({
-                templateUrl: 'views/locationDialog/locationDialog.html',
+                templateUrl: '/views/locationDialog/locationDialog.html',
                 controller: 'locationDialogController',
                 clickOutsideToClose: true
             })
@@ -49,7 +49,7 @@ angular.module('koolikottApp')
 
         function showPleaseWaitDialog() {
             $mdDialog.show({
-                templateUrl: 'views/pleaseWaitDialog/pleaseWaitDialog.html',
+                templateUrl: '/views/pleaseWaitDialog/pleaseWaitDialog.html',
                 controller: 'pleaseWaitDialogController',
                 controllerAs: '$ctrl',
                 clickOutsideToClose: $rootScope.canCloseWaitingDialog,
@@ -124,7 +124,7 @@ angular.module('koolikottApp')
 
         function showLicenceMigrationAgreementModal(authenticatedUser) {
             $mdDialog.show({
-                templateUrl: 'views/agreement/migrationAgreementDialog.html',
+                templateUrl: '/views/agreement/migrationAgreementDialog.html',
                 controller: 'migrationAgreementController',
                 controllerAs: '$ctrl',
                 escapeToClose: false
@@ -136,7 +136,7 @@ angular.module('koolikottApp')
         function showEmailValidationModal(response) {
             $rootScope.emailDialogShown = true
             $mdDialog.show({
-                templateUrl: 'views/emailValidation/emailValidationDialog.html',
+                templateUrl: '/views/emailValidation/emailValidationDialog.html',
                 controller: 'emailValidationController',
                 clickOutsideToClose: false,
                 escapeToClose: false,
@@ -207,7 +207,7 @@ angular.module('koolikottApp')
             hasEmail(userStatus)
             $rootScope.statusForDuplicateCheck = userStatus
             $mdDialog.show({
-                templateUrl: 'views/agreement/agreementDialog.html',
+                templateUrl: '/views/agreement/agreementDialog.html',
                 controller: 'agreementDialogController',
                 controllerAs: '$ctrl',
                 escapeToClose: false
@@ -329,7 +329,7 @@ angular.module('koolikottApp')
 
             if ($rootScope.rejectedPortfolios.length > 0 && !$rootScope.previouslyDisagreed) {
                 $timeout(() => { $mdDialog.show({
-                    templateUrl: 'views/notMigratedPortfoliosDialog/notMigratedPortfoliosDialog.html',
+                    templateUrl: '/views/notMigratedPortfoliosDialog/notMigratedPortfoliosDialog.html',
                     controller: 'notMigratedPortfoliosController',
                     controllerAs: '$ctrl',
                     clickOutsideToClose: false,

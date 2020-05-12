@@ -134,7 +134,7 @@ class controller extends Controller {
         this.$rootScope.afterAuthRedirectURL = redirectURL
         this.$rootScope.sidenavLogin = redirectURL
         this.$mdDialog.show({
-            templateUrl: 'views/loginDialog/loginDialog.html',
+            templateUrl: '/views/loginDialog/loginDialog.html',
             controller: 'loginDialogController',
             targetEvent: evt,
             clickOutsideToClose: true,
@@ -236,7 +236,7 @@ class controller extends Controller {
     confirm(href) {
         if (this.$rootScope.isEditPortfolioMode) {
             this.$mdDialog.show({
-                templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
+                templateUrl: '/directives/leavePageDialog/leavePageDialog.html',
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
@@ -263,7 +263,7 @@ component('dopSidenav', {
     bindings: {
         isEditPortfolio: '<'
     },
-    templateUrl: 'directives/sidenav/sidenav.html',
+    templateUrl: '/directives/sidenav/sidenav.html',
     controller
 })
 }

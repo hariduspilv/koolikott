@@ -91,7 +91,7 @@ component('dopFavorite', {
         learningObject: '<',
         hover: '<'
     },
-    templateUrl: 'directives/favorite/favorite.html',
+    templateUrl: '/directives/favorite/favorite.html',
     controller
 })
 }

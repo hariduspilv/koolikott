@@ -19,7 +19,7 @@ class controller extends Controller {
     countOccurrences(value, text) {
         let count = 0
         let index = text.indexOf(value)
-        
+
         while (index !== -1) {
             count++
             index = text.indexOf(value, index + 1)
@@ -33,7 +33,7 @@ component('dopRemainingCharacters', {
     bindings: {
         text: '<',
     },
-    templateUrl: 'directives/remainingCharacters/remaining-char.html',
+    templateUrl: '/directives/remainingCharacters/remaining-char.html',
     controller
 })
 }

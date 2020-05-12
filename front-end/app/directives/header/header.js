@@ -54,7 +54,7 @@ class controller extends Controller {
 
         this.$scope.showLogin = (targetEvent) =>
             this.$mdDialog.show({
-                templateUrl: 'views/loginDialog/loginDialog.html',
+                templateUrl: '/views/loginDialog/loginDialog.html',
                 controller: 'loginDialogController',
                 targetEvent
             })
@@ -340,7 +340,7 @@ class controller extends Controller {
         if ((this.$rootScope.isEditPortfolioMode && location.href.includes('/portfolio/edit')) ||
             this.$rootScope.isEditPortfolioMode && location.href.includes('/kogumik/muuda')) {
             this.$mdDialog.show({
-                templateUrl: 'directives/leavePageDialog/leavePageDialog.html',
+                templateUrl: '/directives/leavePageDialog/leavePageDialog.html',
                 controller: 'leavePageDialogController',
                 controllerAs: '$ctrl',
             }).then(() => {
@@ -483,7 +483,7 @@ controller.$inject = [
 ]
 directive('dopHeader', {
     scope: true,
-    templateUrl: 'directives/header/header.html',
+    templateUrl: '/directives/header/header.html',
     link($scope, $element, $attr, $ctrl) {
         let  isSuggestVisible = false
 

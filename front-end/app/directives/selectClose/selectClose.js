@@ -4,7 +4,7 @@ directive('dopSelectClose', ['$compile', ($compile) => ({
     restrict: 'A',
     link($scope, $element) {
         $compile(
-            `<div data-ng-include="'directives/selectClose/selectClose.html'"></div>`
+            `<div data-ng-include="'/directives/selectClose/selectClose.html'"></div>`
         )($scope).appendTo(
             $element.find('md-select-menu[multiple]').parent()
         )

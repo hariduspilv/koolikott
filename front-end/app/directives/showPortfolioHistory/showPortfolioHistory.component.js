@@ -30,7 +30,7 @@
             scope.showlogselect = this.$scope.showlogselect;
 
             this.$mdDialog.show({
-                templateUrl: 'directives/showPortfolioHistory/showPortfolioLogConfirm.html',
+                templateUrl: '/directives/showPortfolioHistory/showPortfolioLogConfirm.html',
                 controller: 'showPortfolioLogController',
                 scope,
                 controllerAs: '$ctrl',
@@ -83,7 +83,7 @@
             portfolio: '=',
             showlogselect: '=',
         },
-        templateUrl: 'directives/showPortfolioHistory/showPortfolioHistory.html',
+        templateUrl: '/directives/showPortfolioHistory/showPortfolioHistory.html',
         controller
     })
 }

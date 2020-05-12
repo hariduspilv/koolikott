@@ -386,14 +386,14 @@ app.run(['$rootScope', 'authenticatedUserService', '$route', '$location', '$mdDi
 }]);
 
 app.run(['$templateCache', '$sce', '$templateRequest', function ($templateCache, $sce, $templateRequest) {
-    var addMaterialDialog = $sce.getTrustedResourceUrl('views/addMaterialDialog/addMaterialDialog.html');
+    var addMaterialDialog = $sce.getTrustedResourceUrl('/views/addMaterialDialog/addMaterialDialog.html');
     $templateRequest(addMaterialDialog).then(function (template) {
         $templateCache.put('addMaterialDialog.html', template);
     }, function () {
         console.log("Failed to load addMaterialDialog.html template")
     });
 
-    var detailedSearch = $sce.getTrustedResourceUrl('directives/detailedSearch/detailedSearch.html');
+    var detailedSearch = $sce.getTrustedResourceUrl('/directives/detailedSearch/detailedSearch.html');
     $templateRequest(detailedSearch).then(function (template) {
         $templateCache.put('detailedSearch.html', template);
     }, function () {

@@ -126,7 +126,7 @@ class controller extends Controller {
             })
     }
     isAllowedToAdd() {
-        return this.authenticatedUserService.isUserPlus() && !this.$scope.isPortfolioLog
+        return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject) && !this.$scope.isPortfolioLog
     }
     isAllowedToRemove() {
         return this.authenticatedUserService.isModeratorOrAdminOrCreator(this.learningObject) && !this.$scope.isPortfolioLog;
@@ -224,7 +224,7 @@ class controller extends Controller {
     showLoginDialog(targetEvent) {
         this.addHash()
         this.loginDialog = this.$mdDialog.show({
-            templateUrl: 'views/loginDialog/loginDialog.html',
+            templateUrl: '/views/loginDialog/loginDialog.html',
             controller: 'loginDialogController',
             bindToController: true,
             locals: {
@@ -278,7 +278,7 @@ component('dopTags', {
     bindings: {
         learningObject: '='
     },
-    templateUrl: 'directives/tags/tags.html',
+    templateUrl: '/directives/tags/tags.html',
     controller
 })
 /**

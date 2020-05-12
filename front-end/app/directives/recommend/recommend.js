@@ -45,7 +45,7 @@ directive('dopRecommend', {
         portfolio: '<',
         onChange: '&?'
     },
-    templateUrl: 'directives/recommend/recommend.html',
+    templateUrl: '/directives/recommend/recommend.html',
     controller
 })
 }

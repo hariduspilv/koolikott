@@ -123,7 +123,7 @@
 
         showEmailValidationModal() {
             this.$mdDialog.show({
-                templateUrl: 'views/emailValidation/emailValidationDialog.html',
+                templateUrl: '/views/emailValidation/emailValidationDialog.html',
                 controller: 'emailValidationController',
                 clickOutsideToClose: false,
                 escapeToClose: false,

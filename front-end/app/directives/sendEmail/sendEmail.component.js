@@ -63,7 +63,7 @@
         showDialog() {
 
             this.$mdDialog.show({
-                templateUrl: 'directives/sendEmail/sendEmail.html',
+                templateUrl: '/directives/sendEmail/sendEmail.html',
                 controller: 'sendEmailDialogController',
                 controllerAs: '$ctrl',
                 clickOutsideToClose: false,

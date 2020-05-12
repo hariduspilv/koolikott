@@ -13,6 +13,7 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-postcss');
     grunt.loadNpmTasks('grunt-shell-spawn');
     grunt.loadNpmTasks('grunt-env');
+    grunt.loadNpmTasks('grunt-cache-bust');
 
     // Configurable paths for the application
     var appConfig = {
@@ -237,14 +238,36 @@ module.exports = function (grunt) {
             }
         },
 
-        // Renames files for browser caching purposes
-        filerev: {
-            dist: {
+        //CacheBust renames files, then looks for references to those files and changes those as well
+        //Libs and folders in utils are excluded because CacheBust is unable to change those references automatically
+        //Fonts are excluded as well (changing the filenames caused errors)
+        //ekoolikott.png has to stay the same in the root folder due to being referenced via URL by og:image etc
+
+        cacheBust: {
+            options: {
+                assets: [
+                    'views/**/*',
+                    'js/*',
+                    'directives/**/*',
+                    'images/*',
+                    'styles/*',
+                    '*.{js,png,ico}',
+                    '!ekoolikott.png',
+                    'utils/*.*',
+                ],
+                baseDir: './<%= yeoman.dist.app %>/',
+                deleteOriginals: true
+            },
+            taskName: {
+                expand: true,
+                cwd: '<%= yeoman.dist.app %>/',
                 src: [
-                    '<%= yeoman.dist.app %>/styles/{,*/}*.css',
-                    '<%= yeoman.dist.app %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
-                    '<%= yeoman.dist.app %>/fonts/*',
-                    '<%= yeoman.dist.app %>/js/*'
+                    '*.{js,html}',
+                    'js/*',
+                    'directives/**/*.*',
+                    'styles/*',
+                    'views/**/*.*',
+                    'utils/*.*'
                 ]
             }
         },
@@ -536,9 +559,9 @@ module.exports = function (grunt) {
         'cdnify',
         'cssmin',
         'uglify',
-        'filerev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'cacheBust'
     ]);
 
     grunt.registerTask('servemin', 'Compile, minify and then start a connect web server', function (target) {
@@ -565,9 +588,9 @@ module.exports = function (grunt) {
         'cdnify',
         'cssmin',
         'uglify',
-        'filerev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'cacheBust'
     ]);
 
     grunt.registerTask('default', [

@@ -31,7 +31,7 @@ controller.$inject = [
     'storageService'
 ]
 component('dopColumnLayout', {
-    templateUrl: 'directives/pageStructure/columnLayout/columnLayout.html',
+    templateUrl: '/directives/pageStructure/columnLayout/columnLayout.html',
     controller
 })
 }

@@ -105,7 +105,7 @@ class controller extends Controller {
                             }
                         });
                     }],
-                    templateUrl: 'directives/report/improper/improper.dialog.html',
+                    templateUrl: '/directives/report/improper/improper.dialog.html',
                     clickOutsideToClose: true,
                     escapeToClose: true,
                     targetEvent,
@@ -131,7 +131,7 @@ class controller extends Controller {
     showLoginDialogAfterDelay(targetEvent) {
         loginDialogController.$inject.push('title')
         this.loginDialog = this.$mdDialog.show({
-            templateUrl: 'views/loginDialog/loginDialog.html',
+            templateUrl: '/views/loginDialog/loginDialog.html',
             controller: loginDialogController,
             bindToController: true,
             locals: {
@@ -209,7 +209,7 @@ directive('dopReportImproper', {
     scope: {
         learningObject: '<'
     },
-    templateUrl: 'directives/report/improper/improper.html',
+    templateUrl: '/directives/report/improper/improper.html',
     controller
 })
 }
