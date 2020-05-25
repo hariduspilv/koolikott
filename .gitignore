@@ -22,6 +22,8 @@ solr-indexer/DOP-Solr-indexer.iml
 /front-end/.tmp
 /front-end/.sass-cache
 /front-end/app/libs
+/front-end/app/node_modules
+/front-end/app/bundle.js
 /front-end/.DS_Store
 /front-end/.idea/
 /front-end/.project

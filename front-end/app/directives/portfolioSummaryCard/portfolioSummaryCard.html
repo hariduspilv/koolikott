@@ -362,10 +362,7 @@
       class="card-lg__container card-lg__container--border-left"
     >
       <!-- Ratings area -->
-      <dop-rating
-        data-ng-if="!$root.isEditPortfolioMode && portfolio.type"
-        data-portfolio="portfolio"
-      ></dop-rating>
+      <vue-component data-ng-if="!$root.isEditPortfolioMode && portfolio.type" name="Rating" v-props-portfolio="portfolio"></vue-component>
     </div>
   </md-card-actions>
 </md-card>

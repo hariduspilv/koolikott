@@ -348,8 +348,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
         <div flex flex-gt-xs="25" class="card-lg__container card-lg__container--border-left" layout="column"
              layout-align="center stretch">
           <!-- Ratings area -->
-          <dop-rating data-ng-if="material.type" data-material="material"
-                      ></dop-rating>
+          <vue-component data-ng-if="material.type" name="Rating" v-props-material="material"></vue-component>
         </div>
       </md-card-actions>
     </md-card>

@@ -23,8 +23,13 @@ let app = angular.module('koolikottApp', [
     'auto-tab',
     'ngCookies',
     'updateMeta',
-    'angularTrix'
+    'angularTrix',
+    'ngVue',
 ]);
+
+import Rating from './directives/rating/Rating';
+
+app.value('Rating', Rating);
 
 let provideProvider = null;
 
