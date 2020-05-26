@@ -28,8 +28,10 @@ let app = angular.module('koolikottApp', [
 ]);
 
 import Rating from './directives/rating/Rating';
+import Favorite from './directives/favorite/Favorite';
 
 app.value('Rating', Rating);
+app.value('Favorite', Favorite);
 
 let provideProvider = null;
 

@@ -163,8 +163,11 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               </md-menu>
             </div>
             <dop-pick-material data-learning-object="material"></dop-pick-material>
-            <dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted"
-                          data-learning-object="material"></dop-favorite>
+
+            <vue-component data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted"
+                           name="Favorite" v-props-learning-object="material"></vue-component>
+            <!--<dop-favorite data-ng-if="isLoggedIn() && !isRestricted() && !material.deleted"
+                          data-learning-object="material"></dop-favorite>-->
             <!-- Image / Patter -->
             <div class="card-cover {{getType()}}">
               <!-- Image -->
