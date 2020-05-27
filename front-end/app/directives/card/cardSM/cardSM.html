@@ -8,11 +8,8 @@
     data-ng-mouseenter="$ctrl.hoverEnter()"
     data-ng-mouseleave="$ctrl.hoverLeave()">
 
-    <dop-favorite
-      data-ng-if="$ctrl.isAuthenticated()"
-      data-learning-object="learningObject"
-      hover="$ctrl.cardHover"
-    ></dop-favorite>
+    <vue-component data-ng-if="$ctrl.isAuthenticated()"
+                   name="Favorite" v-props-learning-object="learningObject" v-props-hover="$ctrl.cardHover"></vue-component>
     <!-- media -->
     <dop-card-media
       data-learning-object="learningObject"

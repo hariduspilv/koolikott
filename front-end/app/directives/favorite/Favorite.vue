@@ -1,16 +1,16 @@
 <template>
-    <div class="md-icon-button md-button favorite" v-on:click="toggleFavorite($event)">
-        <!--<v-tooltip md-direction="bottom">
-            <span v-if="!hasFavorited">Lisa lemmikuks</span>
-            <span v-if="hasFavorited">Eelmalda lemmikutest</span>
-        </v-tooltip>-->
-STAR
-       <!-- <v-icon
-                class="favorite__icon"
-                v-if="!hasFavorited && (isEditPortfolioMode || isViewMaterialOrPortfolioPage || hover)"
-                v-on:click="favorite($event)"
-        >star_outline</v-icon>-->
-<!--        <v-icon class="favorite__icon" v-if="hasFavorited" v-on:click="removeFavorite($event)">star</v-icon>-->
+    <div>
+        <div class="md-icon-button md-button favorite" v-bind:class="{'has-favorited': hasFavorited}">
+            <md-tooltip md-direction="bottom">
+                <span v-if="!hasFavorited">Lisa lemmikuks</span>
+                <span v-if="hasFavorited">Eemalda lemmikutest</span>
+            </md-tooltip>
+            <md-icon
+                    class="favorite__icon"
+                    v-if="!hasFavorited && (isEditPortfolioMode || isViewMaterialOrPortfolioPage || hover)"
+                    v-on:click="favorite($event)">star_outline</md-icon>
+            <md-icon class="favorite__icon" v-if="hasFavorited" v-on:click="removeFavorite($event)">star</md-icon>
+        </div>
     </div>
 </template>
 
@@ -25,9 +25,9 @@ STAR
         props: ['learningObject', 'hover'],
         data: function () {
             return {
-                hasFavorited: true,
-                isEditPortfolioMode: null,
-                isViewMaterialOrPortfolioPage: null,
+                hasFavorited: false,
+                isEditPortfolioMode: false,
+                isViewMaterialOrPortfolioPage: true,
             }
         },
         methods: {
@@ -91,10 +91,6 @@ STAR
 
                     this.hasFavorited = false;
                 }
-            },
-            toggleFavorite: function ($event) {
-                if (this.hasFavorited) this.removeFavorite($event);
-                // if (!this.hasFavorited) this.favorite($event)
             }
         },
         beforeUpdate() {

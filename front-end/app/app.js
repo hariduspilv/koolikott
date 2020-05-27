@@ -27,6 +27,10 @@ let app = angular.module('koolikottApp', [
     'ngVue',
 ]);
 
+import VueMaterial from 'vue-material';
+import 'vue-material/dist/vue-material.min.css'
+Vue.use(VueMaterial);
+
 import Rating from './directives/rating/Rating';
 import Favorite from './directives/favorite/Favorite';
 

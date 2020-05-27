@@ -186,10 +186,8 @@
             </md-menu-content>
           </md-menu>
         </div>
-        <dop-favorite
-          data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted"
-          data-learning-object="portfolio"
-        ></dop-favorite>
+        <vue-component data-ng-if="isLoggedIn() && !isRestricted() && !portfolio.deleted"
+                       name="Favorite" v-props-learning-object="portfolio"></vue-component>
         <!-- image -->
         <div data-ng-if="portfolio.picture" class="card-cover imaged">
           <img
