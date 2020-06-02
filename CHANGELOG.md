@@ -9,6 +9,8 @@
 * "Väikeses mobiilivaates materjali lisamise flows ikoon parandada" [EK-1016](https://projektid.hitsa.ee/jira/browse/EK-1016)
 * "EHIS'e õppeasutuste nimekirjast ka koolieelsed lasteasutused Koolikotti tõmmata" [EK-1040](https://projektid.hitsa.ee/jira/browse/EK-1040)
 * "Vimeot embeditakse kummaliselt välja" [EK-1091](https://projektid.hitsa.ee/jira/browse/EK-1091)
+* "Esilehele lisatud soovitatud materjali muutmine ebaõnnestub" [EK-1094](https://projektid.hitsa.ee/jira/browse/EK-1094)
+
 
 ## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263) (Toodangusse paigaldatud 14.05.2020)
 
