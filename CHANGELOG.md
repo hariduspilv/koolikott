@@ -13,8 +13,7 @@
 ## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263) (Toodangusse paigaldatud 14.05.2020)
 
 ### Muutunud
-* "Lisada Index.html faili Cache-control meta tag" [EK-1061](https://projektid.hitsa.ee/jira/browse/EK-1061)
-* "E-Koolikoti LIVE keskkonna Cache probleem" [EK-1059](https://projektid.hitsa.ee/jira/browse/EK-1059)
+* "frondi paki ehitamisel cache bustingu kasutamine" [EK-1059](https://projektid.hitsa.ee/jira/browse/EK-1059)
 
 
 ## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253) (Toodangusse paigaldatud 14.05.2020)
