@@ -1,4 +1,4 @@
-## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)
+## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)  (Prelivesse paigaldatud 02.06.2020)
 
 ### Muutunud
 * "Mobiilivaates nuppude paigutus" [EK-1017](https://projektid.hitsa.ee/jira/browse/EK-1017)
@@ -10,14 +10,14 @@
 * "EHIS'e õppeasutuste nimekirjast ka koolieelsed lasteasutused Koolikotti tõmmata" [EK-1040](https://projektid.hitsa.ee/jira/browse/EK-1040)
 * "Vimeot embeditakse kummaliselt välja" [EK-1091](https://projektid.hitsa.ee/jira/browse/EK-1091)
 
-## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263)
+## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263) (Toodangusse paigaldatud 14.05.2020)
 
 ### Muutunud
 * "Lisada Index.html faili Cache-control meta tag" [EK-1061](https://projektid.hitsa.ee/jira/browse/EK-1061)
 * "E-Koolikoti LIVE keskkonna Cache probleem" [EK-1059](https://projektid.hitsa.ee/jira/browse/EK-1059)
 
 
-## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253) (Prelivesse paigaldatud 23.04.2020)
+## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253) (Toodangusse paigaldatud 14.05.2020)
 
 ### Muutunud
 * "Ebasobivast õppevarast teatamise modaalil selgituse väli punaseks" [EK-841](https://projektid.hitsa.ee/jira/browse/EK-841)
