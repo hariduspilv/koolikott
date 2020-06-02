@@ -63,6 +63,9 @@
     padding-left: 0;
     min-width: 48px;
   }
+  @media (max-width: 374px) {
+    margin: 0;
+  }
 }
 
 .logo-red {

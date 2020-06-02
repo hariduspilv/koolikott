@@ -12,7 +12,6 @@ import ee.hm.dop.rest.jackson.map.TaxonDeserializer;
 import ee.hm.dop.rest.jackson.map.TaxonSerializer;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
-import org.hibernate.annotations.Formula;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -73,15 +72,6 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
     @JsonIgnore
     private List<UserFavorite> userFavorites;
 
-    @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 1)")
-    private int likes;
-
-    @Formula(value = "(SELECT COUNT(*) FROM UserLike ul WHERE ul.learningObject = id AND ul.isLiked = 0)")
-    private int dislikes;
-
-    @Formula(value = "(SELECT COUNT(*) FROM Comment c WHERE c.learningObject = id)")
-    private int commentCount;
-
     private Long views;
 
     private boolean deleted = false;
@@ -126,30 +116,6 @@ public abstract class ReducedLearningObject implements Searchable, ILearningObje
 
     public void setTaxons(List<Taxon> taxons) {
         this.taxons = taxons;
-    }
-
-    public int getLikes() {
-        return likes;
-    }
-
-    public void setLikes(int likes) {
-        this.likes = likes;
-    }
-
-    public int getDislikes() {
-        return dislikes;
-    }
-
-    public void setDislikes(int dislikes) {
-        this.dislikes = dislikes;
-    }
-
-    public int getCommentCount() {
-        return commentCount;
-    }
-
-    public void setCommentCount(int commentCount) {
-        this.commentCount = commentCount;
     }
 
     public Long getViews() {

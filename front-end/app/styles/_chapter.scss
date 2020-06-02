@@ -67,6 +67,7 @@ $wvp-chapter-toolbar-width: 33.33%; // what's 25% of 75%
 
     @media (max-width: $layout-breakpoint-sm) {
       box-shadow: none;
+      padding-top: 1rem;
     }
   }
 
@@ -205,7 +206,7 @@ md-input-container.chapter-title {
     margin-left: 2rem;
   }
 
-  @media (max-width: $layout-breakpoint-sm) {
+  @media (max-width: 959px) {
     left: auto;
     right: 0;
     bottom: 100%;
@@ -850,4 +851,26 @@ md-input-container.chapter-title {
 
 .share-position {
   margin-left: -200px;
+  padding-left: 5px;
+}
+
+.heading-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  @media (max-width: $layout-breakpoint-sm) {
+    flex-direction: column;
+  }
+}
+
+.share-block {
+  @media (max-width: $layout-breakpoint-sm) {
+    order: -1;
+    justify-content: flex-end;
+  }
+}
+
+.share-button {
+  margin-top: 1px;
 }

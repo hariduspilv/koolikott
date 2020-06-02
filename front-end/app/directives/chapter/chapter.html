@@ -1,17 +1,24 @@
 <md-card class="portfolio-chapter card-lg" data-ng-class="$ctrl.getChapterClassNames()" id="{{slug}}">
   <!--View-->
   <md-card-content data-ng-if="!$ctrl.isEditMode">
-    <div layout="row" layout-align="space-between start">
-      <div data-flex="90">
+    <div class="heading-container">
+      <div>
         <h2 class="chapter-title title-share-align" data-ng-class="{'placeholder-title': !chapter.title}" data-ng-bind="chapterTitle"></h2>
       </div>
-      <div class="share-position">
-        <dop-share
-          id="share"
-          data-title="title"
-          data-object="learningObject"
-          data-slug="slug"
-        ></dop-share>
+      <div data-layout="row" class="share-position share-block">
+        <div class="share-button">
+          <dop-share
+            id="share"
+            data-title="title"
+            data-object="learningObject"
+            data-slug="slug"
+          ></dop-share>
+        </div>
+        <div>
+          <dop-qr
+            id="qr-code"
+            data-location="$ctrl.pageUrl"></dop-qr>
+        </div>
       </div>
     </div>
     <div class="chapter-blocks">

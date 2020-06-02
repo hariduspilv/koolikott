@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public enum ReportingReasonEnum {
-    LO_CONTENT, LO_FORM, LO_METADATA, REPORTING_REASON_COMMENT, REPORTING_REASON_TAG, LO_COPYRIGHT, LO_OTHER ;
+    LO_CONTENT, LO_FORM, LO_METADATA, REPORTING_REASON_TAG, LO_COPYRIGHT, LO_OTHER ;
 
     public boolean isLoCopyright(){
         return this == LO_COPYRIGHT;
@@ -18,7 +18,4 @@ public enum ReportingReasonEnum {
         return Arrays.asList(REPORTING_REASON_TAG);
     }
 
-    public static List<ReportingReasonEnum> commentReportingReasons(){
-        return Arrays.asList(REPORTING_REASON_COMMENT);
-    }
 }

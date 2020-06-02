@@ -4,6 +4,10 @@ md-dialog md-dialog-actions {
   .md-button.md-raised {
     padding: 0 $md-padding;
   }
+  @media (max-width: $layout-breakpoint-xs) {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 .login-display-flex {

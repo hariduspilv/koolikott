@@ -77,7 +77,7 @@ class controller extends Controller {
 
         this.$scope.portfolio = this.portfolio
         this.$scope.showlogselect = this.showlogselect
-        this.$scope.pageUrl = this.$location.absUrl()
+        this.pageUrl = window.location.origin + window.location.pathname
 
         this.$scope.isAutoSaving = false;
         this.$scope.showLogButton = true;
@@ -158,10 +158,11 @@ class controller extends Controller {
     }
 
     canEdit() {
-        return this.isOwner() ||
-            this.authenticatedUserService.isAdmin() ||
-            this.authenticatedUserService.isModerator()
-
+        if (this.portfolio) {
+            return ((this.isOwner() ||
+                this.authenticatedUserService.isAdmin() ||
+                this.authenticatedUserService.isModerator()) && !this.portfolio.deleted)
+        }
     }
     isOwner() {
         return !this.authenticatedUserService.isAuthenticated()
@@ -292,7 +293,6 @@ class controller extends Controller {
                 this.portfolio.deleted = false
                 this.$rootScope.learningObjectDeleted = false
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                this.$rootScope.$broadcast('portfolioHistory:show')
                 this.$scope.showEditModeButton = true;
                 this.$scope.showLogButton = true;
             })
@@ -334,9 +334,7 @@ class controller extends Controller {
         )
     }
     dotsAreShowing () {
-        if (this.portfolio) {
-            return !this.portfolio.deleted;
-        }
+        return this.$rootScope.learningObjectDeleted === false || this.authenticatedUserService.isAdmin() || this.authenticatedUserService.isModerator();
     }
     setRecommendation(recommendation) {
         if (this.portfolio)

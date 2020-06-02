@@ -57,19 +57,15 @@ public class EhisInstitutionParser {
             InstitutionEhis dbEntity = institutionEhisDao.findByField("ehisId", ie.getEhisId());
             if (dbEntity == null
                     && checkAreaExists(ie)
-                    && checkStatusIsNotClosed(ie)
-                    && checkInstTypeIsNotPreSchool(ie)) {
+                    && checkStatusIsNotClosed(ie)) {
                 ie.setArea(ie.getArea().trim());
-                if (ie.getType().equalsIgnoreCase("koolieelne lasteasutus")) {
-                    logger.info("VIGA: ei filtreeri lasteaedu");
-                }
                 if (ie.getStatus().equalsIgnoreCase("Suletud")) {
                     logger.info("VIGA: ei filtreeri suletud");
                 }
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
             } else if (dbEntity != null
-                    && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie) || !checkInstTypeIsNotPreSchool(ie))) {
+                    && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie))) {
                 int removedUserInstitutions = userInstitutionDao.removeExpiredUserInstitutions(dbEntity.getId());
                 institutionEhisDao.remove(dbEntity);
                 logger.info("EHIS institution removed: " + dbEntity.getName() + " with " + removedUserInstitutions + " UserInstitution occurrences");
@@ -87,9 +83,6 @@ public class EhisInstitutionParser {
     }
     private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
         return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS)));
-    }
-    private boolean checkInstTypeIsNotPreSchool(InstitutionEhis institutionEhis){
-        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_TYPE)));
     }
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
         NodeList institutionsNode = getNodeList(document, "//*[local-name()='oppeasutus']");

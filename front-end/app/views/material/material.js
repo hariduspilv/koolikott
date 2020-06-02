@@ -394,9 +394,7 @@ angular.module('koolikottApp')
             };
 
             $scope.dotsAreShowing = function () {
-                if ($scope.material) {
-                    return !$scope.material.deleted;
-                }
+                return $rootScope.learningObjectDeleted === false || $scope.isAdmin();
             };
 
             function getSignedUserData() {
@@ -498,8 +496,9 @@ angular.module('koolikottApp')
             };
 
             $scope.restoreMaterial = () => {
-                materialService.restoreMaterial($scope.material)
-                    .then(restoreSuccess, restoreFail);
+                serverCallService
+                    .makePost('rest/admin/deleted/restore', $scope.material)
+                    .then(restoreSuccess, restoreFail)
             };
 
             function restoreSuccess() {
@@ -538,6 +537,15 @@ angular.module('koolikottApp')
                         authenticatedUserService.isModerator() ||
                         $scope.isUsersMaterial()
                 )
+            }
+
+            $scope.canChangeMaterialVisibility = function () {
+                if ($scope.material) {
+                    return (
+                        $scope.isAdminOrModeratorOrCreator &&
+                            !$scope.material.deleted
+                    )
+                }
             }
 
             $scope.setRecommendation = (recommendation) => {

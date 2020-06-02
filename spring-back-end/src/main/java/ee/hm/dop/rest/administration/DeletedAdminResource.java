@@ -32,14 +32,14 @@ public class DeletedAdminResource extends BaseResource {
 
     @GetMapping
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public List<AdminLearningObject> getDeletedPortfolios() {
+    public List<AdminLearningObject> getDeletedLearningObjects() {
         return learningObjectAdministrationService.findByIdDeleted();
     }
 
     @GetMapping
     @RequestMapping("count")
     @Secured({RoleString.ADMIN, RoleString.MODERATOR})
-    public Long getDeletedPortfoliosCount() {
+    public Long getDeletedLearningObjectsCount() {
         return learningObjectAdministrationService.findCountByIdDeleted();
     }
 }

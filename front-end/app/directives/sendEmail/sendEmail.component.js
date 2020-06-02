@@ -34,9 +34,13 @@
     showNoCreatorEmailDialog() {
 
     this.$mdDialog.show({
-        template: `<md-dialog aria-label="Ekirja saatmise lõpu modaalaken" class="login-dialog">
+        template: `<md-dialog aria-label="Ekirja saatmise lõpu modaalaken" flex-gt-sm="75" flex id="send-email-modal"
+                        class=" creator-email-dialog creator-email-full-screen">
                     <md-toolbar class="md-accent">
                       <div class="md-toolbar-tools" flex>
+                        <div>
+                            <h2 data-translate="SEND_EMAIL_SPECIFY_QUESTION"></h2>
+                        </div>
                         <span flex></span>
                         <md-button ng-click="cancel()" id="email-send-close" class="md-icon-button"
                                    aria-label="Sulge ekirja saatmise modaalaken">

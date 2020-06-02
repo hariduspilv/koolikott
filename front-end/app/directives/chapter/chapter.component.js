@@ -45,9 +45,12 @@ class controller extends Controller {
 
     $onInit() {
         this.$scope.location = this.$location.absUrl()
-        this.$scope.$watch('chapter.title', (title) =>
-            this.$scope.slug = this.getSlug(`peatukk-${this.index + 1}`)
-        )
+        this.$scope.$watch('chapter.title', (title) => {
+            this.$scope.slug = this.getSlug(`peatukk-${this.index + 1}`);
+            if (this.$scope.slug) {
+                this.pageUrl = window.location.origin + window.location.pathname + '#' +this.$scope.slug;
+            }
+        })
         this.currentLanguage = this.translationService.getLanguage()
 
         if (this.isEditMode) {
