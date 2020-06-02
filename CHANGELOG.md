@@ -11,7 +11,7 @@
 * "Vimeot embeditakse kummaliselt välja" [EK-1091](https://projektid.hitsa.ee/jira/browse/EK-1091)
 * "Esilehele lisatud soovitatud materjali muutmine ebaõnnestub" [EK-1094](https://projektid.hitsa.ee/jira/browse/EK-1094)
 * "eTrainingu liidestus katkestada ja vastav loogika kustutada" [EK-1021](https://projektid.hitsa.ee/jira/browse/EK-1021)
-* "Baasist comments, likes ja dislikes tabelid ja seosed kustutada" [EK-1039(https://projektid.hitsa.ee/jira/browse/EK-1039)
+* "Baasist comments, likes ja dislikes tabelid ja seosed kustutada" [EK-1039](https://projektid.hitsa.ee/jira/browse/EK-1039)
 
 
 ## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263) (Toodangusse paigaldatud 14.05.2020)
