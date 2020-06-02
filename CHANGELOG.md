@@ -39,6 +39,9 @@
 * "Materjali detailvaatel kuvada materjali lisajat adminnidele ja ekspertidele" [EK-875](https://projektid.hitsa.ee/jira/browse/EK-875)
 * "Vale litsentsiga kogumik ei ole "Privaatsest" staatusest "Jaga lingiga" staatusesse muudetav" [EK-1050](https://projektid.hitsa.ee/jira/browse/EK-1050)
 * "Pealehel peab rakendus kuvama admini poolt sisestatud keskkonna uuendamise teavitust" [EK-1072](https://projektid.hitsa.ee/jira/browse/EK-1072)
+* "materialObject JSON korda teha/täiendada" [EK-982](https://projektid.hitsa.ee/jira/browse/EK-982)
+* "Turvalisuse täiendused" [EK-998](https://projektid.hitsa.ee/jira/browse/EK-998)
+
 
 ## e-Koolikott [1.54.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11260) (Toodangusse paigaldatud 21.04.2020)
 
