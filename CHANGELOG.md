@@ -1,3 +1,15 @@
+## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)
+
+### Muutunud
+* "Mobiilivaates nuppude paigutus" [EK-1017](https://projektid.hitsa.ee/jira/browse/EK-1017)
+* "Kui puudub õppevara looja/koostaja e-post, siis modaal võiks ka pealkirja omada" [EK-993](https://projektid.hitsa.ee/jira/browse/EK-993)
+* "Kogumiku peatükkidele QR koodid > Kogumiku peatükkidele QR koodi genereerimine ja kuvamine" [EK-18](https://projektid.hitsa.ee/jira/browse/EK-18)
+* "Materjali ja kogumiku pealkirja pikkustele lisada piirang" [EK-977](https://projektid.hitsa.ee/jira/browse/EK-977)
+* "Pädevuste ja teemade metaandmed peaksid täielikult näha olema" [EK-1024](https://projektid.hitsa.ee/jira/browse/EK-1024)
+* "Väikeses mobiilivaates materjali lisamise flows ikoon parandada" [EK-1016](https://projektid.hitsa.ee/jira/browse/EK-1016)
+* "EHIS'e õppeasutuste nimekirjast ka koolieelsed lasteasutused Koolikotti tõmmata" [EK-1040](https://projektid.hitsa.ee/jira/browse/EK-1040)
+* "Vimeot embeditakse kummaliselt välja" [EK-1091](https://projektid.hitsa.ee/jira/browse/EK-1091)
+
 ## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263)
 
 ### Muutunud
