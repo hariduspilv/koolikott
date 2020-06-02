@@ -123,6 +123,7 @@ md-toolbar.navbar.md-gray {
 
   .nav-search__autocomplete {
     background-color: transparent;
+    min-width: 100px;
 
     & > md-autocomplete-wrap {
       box-shadow: none;

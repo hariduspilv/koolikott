@@ -25,8 +25,10 @@ import ee.hm.dop.utils.*;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -131,9 +133,7 @@ public class MaterialService {
         material.setVisibility(material.getVisibility());
 
         cleanPeerReviewUrls(material);
-        if (!UserUtil.isAdmin(changer)) {
-            material.setRecommendation(originalMaterial.getRecommendation());
-        }
+        material.setRecommendation(originalMaterial.getRecommendation());
         material.setId(originalMaterial.getId());
         material.setRepository(originalMaterial.getRepository());
         material.setViews(originalMaterial.getViews());
@@ -210,6 +210,7 @@ public class MaterialService {
             logger.info("Updating material, id: " + materialId);
         }
         TextFieldUtil.cleanTextFields(material);
+        validateTitle(material);
         checkKeyCompetences(material);
         checkCrossCurricularThemes(material);
         setAuthors(material);
@@ -370,5 +371,16 @@ public class MaterialService {
 
     private boolean materialPictureHasInvalidLicense(Material material) {
         return material.getPicture() != null && pictureService.pictureHasUnAcceptableLicence(material.getPicture());
+    }
+
+    private void validateTitle(Material material) {
+        if (material.getTitles() != null) {
+            material.getTitles()
+                    .forEach(title -> {
+                        if (title.getText().length() > 255) {
+                            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title cannot be over 255 characters");
+                        }
+                    });
+        }
     }
 }

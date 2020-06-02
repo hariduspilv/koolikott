@@ -183,6 +183,9 @@ public class PortfolioService {
         if (isEmpty(portfolio.getTitle())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Required field title must be filled.");
         }
+        if (portfolio.getTitle().length() > 255) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Title cannot be over 255 characters");
+        }
     }
 
     public boolean portfolioHasAnyMaterialWithUnacceptableLicense(Portfolio portfolio) {

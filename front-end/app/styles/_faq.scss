@@ -13,3 +13,22 @@
 .edit-button-opacity {
   opacity: 1;
 }
+
+.faq-buttons {
+  display: flex;
+  flex-direction: row;;
+  margin-top: 10px;
+
+  @media (max-width: $layout-breakpoint-xs) {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+.button-delete {
+    flex: 5 0 0;
+}
+
+.buttons-add-cancel {
+    flex: 1 0 0;
+}

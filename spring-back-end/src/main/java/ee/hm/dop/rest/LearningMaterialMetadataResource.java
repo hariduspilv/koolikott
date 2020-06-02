@@ -118,8 +118,4 @@ public class LearningMaterialMetadataResource extends BaseResource{
         return ReportingReasonEnum.tagReportingReasons();
     }
 
-    @GetMapping("commentReportingReasons")
-    public List<ReportingReasonEnum> commentReportingReasons() {
-        return ReportingReasonEnum.commentReportingReasons();
-    }
 }

@@ -2,7 +2,7 @@
 
   position: relative;
   padding-bottom: 56.25%;
-  padding-top: 10%; height: 0; overflow: hidden;
+  height: 0; overflow: hidden;
 
   iframe,
   object,
@@ -75,6 +75,10 @@
     white-space: normal;
     word-break: break-word;
   }
+}
+
+.embed-video-guide {
+  padding-top: 10%;
 }
 
 .embedded-material__picture {

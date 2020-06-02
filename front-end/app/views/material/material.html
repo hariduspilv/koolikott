@@ -45,7 +45,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               <div data-ng-if="!material.deleted">
                 <dop-qr
                   id="qr-code"
-                  data-location="{{location}}"></dop-qr>
+                  data-location="pageUrl"></dop-qr>
               </div>
               <md-button style="min-width: 0px"
                          ng-show="!material.deleted"
@@ -64,12 +64,12 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                 <md-menu-content width="4" class="material-menu-icon">
                   <md-menu-item
                     data-ng-if="isAdmin() || isUsersMaterial() || isModerator()">
-                    <md-button data-ng-click="edit()">
+                    <md-button data-ng-click="edit()" data-ng-disabled="material.deleted">
                       <md-icon md-menu-align-target>edit</md-icon>
                       <span data-translate="MATERIAL_EDIT"></span>
                     </md-button>
                   </md-menu-item>
-                  <md-menu-item data-ng-if="isAdmin() && material.deleted && !isAdminButtonsShowing()">
+                  <md-menu-item data-ng-if="isAdmin() && material.deleted && isAdminButtonsShowing()">
                     <md-button data-ng-click="restoreMaterial()">
                       <md-icon md-menu-align-target>undo</md-icon>
                       <span data-translate="BUTTON_RESTORE"></span>
@@ -128,10 +128,10 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
                 <md-button id="change-visibility" aria-label="Jaga"
                            class="md-icon-button no-margin no-padding card-cover-menu-button"
                            ng-click="$mdMenu.open($event)"
-                           data-ng-disabled="!isAdminOrModeratorOrCreator()">
+                           data-ng-disabled="!canChangeMaterialVisibility()">
                   <md-tooltip><span data-translate="HEADER_TOOLTIP_CHANGE_VISIBILITY"></span></md-tooltip>
-                  <md-icon data-ng-if="isAdminOrModeratorOrCreator() && material.visibility === 'PUBLIC'">visibility</md-icon>
-                  <md-icon data-ng-if="material.visibility === 'PRIVATE'">visibility_off</md-icon>
+                  <md-icon data-ng-if="canChangeMaterialVisibility() && material.visibility === 'PUBLIC'">visibility</md-icon>
+                  <md-icon data-ng-if="canChangeMaterialVisibility() && material.visibility === 'PRIVATE'">visibility_off</md-icon>
                 </md-button>
                 <md-menu-content>
                   <md-menu-item>
@@ -279,7 +279,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               </p>
             </div>
             <!-- Key competences -->
-            <p class="md-body-2 ellipsis ellipsis--4 ellipsis--medium-4" data-ng-if="material.keyCompetences.length">
+            <p class="md-body-2 ellipsis ellipsis--4 ellipsis--medium-4 key-competence-height" data-ng-if="material.keyCompetences.length">
               <span class="md-caption caption-light">
                 <span data-translate="MATERIAL_KEY_COMPETENCES"></span>:
               </span>
@@ -289,7 +289,7 @@ data-ng-style="{ 'padding-top' : ($root.showCookieBanner) ? '45px' : '0px' }">
               </span>
             </p>
             <!-- Cross-curricular themes -->
-            <p class="md-body-2 ellipsis ellipsis--2 ellipsis--medium" data-ng-if="material.crossCurricularThemes.length">
+            <p class="md-body-2 ellipsis ellipsis--2 ellipsis--medium key-competence-height" data-ng-if="material.crossCurricularThemes.length">
               <span class="md-caption caption-light">
                 <span data-translate="MATERIAL_CROSS_CURRICULAR_THEMES"></span>:
               </span>

@@ -10,7 +10,7 @@
   data-click-outside="clickOutside()"
   outside-if-not="header-show-detailed-search-icon, detailed-search, suggest-dropdown"
 >
-  <div class="md-toolbar-tools" layout="row" layout-align="start center">
+  <div class="md-toolbar-tools small-screen-width" layout="row" layout-align="start center">
     <!-- logo and menu button -->
     <div class="navbar-logo-area" data-ng-if="!mobileSearch.isVisible">
       <div flex layout="row" layout-align="start center">
@@ -148,7 +148,7 @@
 
         <!-- logged in user menu -->
         <md-menu data-ng-show="user">
-          <md-button aria-label="Ava kasutajamenüü" class="md-icon-button" id="header-user-menu-icon"
+          <md-button aria-label="Ava kasutajamenüü" class="md-icon-button icon-min-width" id="header-user-menu-icon"
                      ng-click="$mdMenu.open($event)">
             <md-tooltip><span data-translate="HEADER_TOOLTIP_PROFILE"></span></md-tooltip>
             <!--<md-icon>account_circle</md-icon>-->

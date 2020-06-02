@@ -46,7 +46,6 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
     private static final String GET_KEY_COMPETENCES_URL = BASE + "keyCompetence";
     private static final String GET_LO_REPORTING_REASONS_URL = BASE + "learningObjectReportingReasons";
     private static final String GET_TAG_REPORTING_REASONS_URL = BASE + "tagReportingReasons";
-    private static final String GET_COMMENT_REPORTING_REASONS_URL = BASE + "commentReportingReasons";
     public static final String MATHEMATICS = "Mathematics";
     public static final String ALGEBRA = "Algebra";
     public static final String TRIGONOMETRIA = "Trigonometria";
@@ -185,14 +184,6 @@ public class LearningMaterialMetadataResourceTest extends ResourceIntegrationTes
         List<ReportingReasonEnum> actual = doGet(GET_LO_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
         });
         List<ReportingReasonEnum> expected = ReportingReasonEnum.learningObjectReportingReasonsModal();
-        assertEquals(expected, actual);
-    }
-
-    @Test
-    public void comment_reportingreasons_returns_comment_reasons() throws Exception {
-        List<ReportingReasonEnum> actual = doGet(GET_COMMENT_REPORTING_REASONS_URL, new GenericType<List<ReportingReasonEnum>>() {
-        });
-        List<ReportingReasonEnum> expected = ReportingReasonEnum.commentReportingReasons();
         assertEquals(expected, actual);
     }
 

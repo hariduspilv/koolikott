@@ -4,14 +4,7 @@
 const VIEW_STATE_MAP = {
     showDeleted: [
         'delete_forever', // icon
-        'ERROR_MSG_DELETED', // message translation key
-        // array of buttons
-        [{
-            icon: () => 'restore_page', // button icon
-            label: 'BUTTON_RESTORE', // button tooltip translation key
-            onClick: ($ctrl) => $ctrl.setNotDeleted(),
-            show: ($ctrl) => $ctrl.$scope.isAdmin // to show or not to show this button
-        }]
+        'ERROR_MSG_DELETED' // message translation key
     ],
     showChanged: [
         'autorenew',
@@ -368,29 +361,6 @@ class controller extends Controller {
                 this.toastService.showOnRouteChange(isPortfolio ? 'PORTFOLIO_DELETED' : 'MATERIAL_DELETED')
                 this.$rootScope.learningObjectDeleted = true
                 this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-            })
-        }
-    }
-    setNotDeleted() {
-        const { id, type } = this.data
-
-        if (id && this.$scope.isAdmin) {
-            const isPortfolio = this.isPortfolio(this.data)
-            const url = 'rest/admin/deleted/restore';
-
-            this.serverCallService.makePost(url, { id, type }).then(({ status, data }) => {
-                this.data.deleted = false
-                this.data.improper = false
-                this.data.unReviewed = false
-                this.data.broken = false
-                this.data.changed = false
-                this.toastService.show(isPortfolio ? 'PORTFOLIO_RESTORED' : 'MATERIAL_RESTORED')
-                this.$rootScope.learningObjectDeleted = false
-                this.$rootScope.learningObjectImproper = false
-                this.$rootScope.learningObjectUnreviewed = false
-                this.$rootScope.learningObjectChanged = false
-                this.$rootScope.$broadcast('dashboard:adminCountsUpdated')
-                this.$rootScope.$broadcast('portfolioHistory:hide');
             })
         }
     }

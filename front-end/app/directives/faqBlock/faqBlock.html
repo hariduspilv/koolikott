@@ -103,18 +103,19 @@
                 <div data-flex-order="3" flex="100" class="flex flex-col">
                 </div>
               </div>
-              <div data-layout="row" data-layout-align="space-between center">
-                <md-button
-                  aria-label="Delete faq"
-                  id="faq-delete-button"
-                  data-ng-click="$ctrl.delete(faq)"
-                  class="md-button md-ink-ripple"
-                  data-ng-disabled="faq.new"
-                >
-                  <span data-translate="BUTTON_REMOVE"></span>
-                </md-button>
-                <div layout="row" layout-align="end center" class="md-padding md-padding-horizontal-double"
-                     data-ng-if="true">
+              <div class="faq-buttons">
+                <div class="button-delete">
+                  <md-button
+                    aria-label="Delete faq"
+                    id="faq-delete-button"
+                    data-ng-click="$ctrl.delete(faq)"
+                    class="md-button md-ink-ripple"
+                    data-ng-disabled="faq.new"
+                  >
+                    <span data-translate="BUTTON_REMOVE"></span>
+                  </md-button>
+                </div>
+                <div class="buttons-add-cancel">
                   <md-button
                     aria-label="Cancel faq edit"
                     id="faq-cancel-edit"
@@ -123,6 +124,8 @@
                   >
                     <span data-translate="BUTTON_CANCEL"></span>
                   </md-button>
+                </div>
+                <div class="buttons-add-cancel">
                   <md-button
                     aria-label="{{ 'BUTTON_ADD_FAQ' | translate }}"
                     id="faq-save"
@@ -150,7 +153,6 @@
                     data-ng-show="isSaving"
                   ></md-progress-circular>
                 </div>
-
               </div>
             </md-card-content>
           </div>

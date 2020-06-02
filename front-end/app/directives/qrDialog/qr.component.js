@@ -18,9 +18,7 @@
                     controller: 'qrDialogController',
                     fullscreen: true,
                     locals: {
-                        location,
-                        slug: this.slug,
-                        title: this.title
+                        url: this.location
                     },
                     clickOutsideToClose: true,
                 })
@@ -36,9 +34,7 @@
 
     component('dopQr', {
         bindings: {
-            location: '@',
-            slug: '@',
-            title: '@'
+            location: '='
         },
         controller,
         template: `

@@ -129,7 +129,7 @@
           <div layout-xs="column" layout="row" layout-align-xs="start stretch" layout-align="start center" flex="100" flex-gt-sm="50">
             <md-input-container flex>
               <label data-translate="MATERIAL_TITLE"></label>
-              <input data-ng-model="titlesAndDescriptions[lang].title" name="title" data-ng-required="$index === 0">
+              <input data-ng-model="titlesAndDescriptions[lang].title" name="title" maxlength="255" data-ng-required="$index === 0">
               <div data-ng-messages="addMaterialForm.title.$error">
                 <div data-ng-message="required" data-translate="MATERIAL_TITLE_IS_MANDATORY"></div>
               </div>
