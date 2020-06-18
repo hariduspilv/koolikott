@@ -54,9 +54,11 @@ public interface ConfigurationProperties {
     String XROAD_EHIS_TIMEOUT_CONNECT = "xroad.ehis.timeout.connect";
     String XROAD_EHIS_TIMEOUT_READ = "xroad.ehis.timeout.read";
 
-    String XROAD_EHIS_INSTITUTIONS_LIST = "xroad.ehis.institutions.list";
-    String XROAD_EHIS_INSTITUTIONS_STATUS = "xroad.ehis.institutions.status";
-    String XROAD_EHIS_INSTITUTIONS_TYPE = "xroad.ehis.institutions.type";
+    String XROAD_EHIS_INSTITUTIONS_LIST = "institutions.list";
+    String XROAD_EHIS_INSTITUTIONS_CLOSED = "institutions.closed";
+    String XROAD_EHIS_INSTITUTIONS_SUPPLEMENTTRAINING = "institutions.supplementtraining";
+    String XROAD_EHIS_INSTITUTIONS_YOUTHCAMP = "institutions.youthcamp";
+    String XROAD_EHIS_INSTITUTIONS_EXTRAACTIVITY = "institutions.extraactivity";
 
     // EKool
     String EKOOL_EXTRA_LOGGING = "ekool.extra.logging";

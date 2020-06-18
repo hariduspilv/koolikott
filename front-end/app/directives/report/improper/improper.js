@@ -141,7 +141,6 @@ class controller extends Controller {
             escapeToClose: true,
             targetEvent
         })
-            .catch(this.removeHash)
 
         setTimeout(() =>
             setTimeout(() =>

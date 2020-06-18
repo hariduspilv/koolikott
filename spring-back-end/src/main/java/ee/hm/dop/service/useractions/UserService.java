@@ -1,9 +1,15 @@
 package ee.hm.dop.service.useractions;
 
 import com.google.common.collect.Lists;
+import ee.hm.dop.dao.AuthenticatedUserDao;
+import ee.hm.dop.dao.LanguageDao;
+import ee.hm.dop.dao.TaxonDao;
 import ee.hm.dop.dao.UserDao;
 import ee.hm.dop.model.*;
+import ee.hm.dop.model.administration.DopPage;
+import ee.hm.dop.model.administration.PageableQueryUsers;
 import ee.hm.dop.model.enums.Role;
+import ee.hm.dop.model.enums.UserRole;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.user.UserNameDto;
@@ -23,8 +29,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.inject.Inject;
+import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.text.Normalizer;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -40,6 +49,12 @@ public class UserService {
 
     @Inject
     private UserDao userDao;
+    @Inject
+    private TaxonDao taxonDao;
+    @Inject
+    private LanguageDao languageDao;
+    @Inject
+    private AuthenticatedUserDao authenticatedUserDao;
     @Inject
     private TaxonService taxonService;
     @Inject
@@ -129,8 +144,47 @@ public class UserService {
         return UserUtil.isAdmin(loggedInUser) ? userDao.getUsersCountByRole(Role.RESTRICTED) : null;
     }
 
-    public List<User> getAllUsers(User loggedInUser) {
-        return UserUtil.isAdmin(loggedInUser) ? userDao.findAll() : null;
+    public Long getAllUsersCount() {
+        return userDao.getAllUsersCount();
+    }
+
+    public DopPage getAllUsers(User loggedInUser, PageableQueryUsers pageableQuery) {
+        if (!UserUtil.isAdmin(loggedInUser)) {
+            return null;
+        }
+        Long usersCount = userDao.getUsersCount(pageableQuery);
+        List<UserDto> userDtoList = getUserDtos(pageableQuery);
+
+        DopPage page = new DopPage();
+        page.setPage(pageableQuery.getPage());
+        page.setSize(pageableQuery.getSize());
+        page.setContent(userDtoList);
+        page.setTotalElements(usersCount);
+        page.setTotalPages((int) (usersCount / pageableQuery.getSize()));
+        return page;
+    }
+
+    public List<UserDto> getUserDtos(PageableQueryUsers pageableQuery) {
+        List<Object[]> users = userDao.findAllUsers(pageableQuery);
+        return users.stream()
+                .map(object -> new UserDto(((BigInteger) object[0]).longValue(), (String) object[1], (String) object[2], (String) object[3], (Boolean) object[4], (String) object[5], (String) object[6], (String) object[7], (Timestamp) object[8], stringToList((String) object[9]), stringToList((String) object[10])))
+                .collect(Collectors.toList());
+    }
+
+    private List<String> stringToList(String string) {
+        if (string != null) {
+            return new ArrayList<>(Arrays.asList(string.split(";")));
+        } else {
+            return null;
+        }
+    }
+
+    public List<Role> getUserRoles() {
+        return Arrays.asList(Role.values());
+    }
+
+    public List<UserRole> getUserSelectedRoles() {
+        return Arrays.asList(UserRole.values());
     }
 
     public String generateUsername(String name, String surname) {
@@ -173,7 +227,7 @@ public class UserService {
         return userDao.createOrUpdate(existingUser);
     }
 
-    private User getUserById(Long id) {
+    public User getUserById(Long id) {
         return userDao.findById(id);
     }
 

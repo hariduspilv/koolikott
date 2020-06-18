@@ -43,8 +43,7 @@ public class SitemapService {
     private static final String CHANGES = "toolaud/muudetud-oppevara";
     private static final String SENTEMAILS = "toolaud/saadetud-teated";
 
-    private static final String MODERATORS = "toolaud/aineeksperdid";
-    private static final String RESTRICTED_USERS = "toolaud/piiratud-kasutajad";
+    private static final String USERS = "toolaud/kasutajad";
     private static final String DELETED = "toolaud/kustutatud-oppevara";
     private static final String STATS_EXPERT = "toolaud/ekspertide-statistika";
     private static final String GDPR = "toolaud/gdpr";
@@ -55,7 +54,7 @@ public class SitemapService {
 
     public static final String REST_SITEMAP = "/sitemapFile";
 
-    private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS, PROFILE, IMPROPER, UNREVIEWED, CHANGES, SENTEMAILS, MODERATORS, RESTRICTED_USERS, DELETED, STATS_EXPERT, GDPR, USER_MANUALS_ADMIN);
+    private static final List<String> URLS = Arrays.asList(FAQ, USER_MANUALS, TERMS, PROFILE, IMPROPER, UNREVIEWED, CHANGES, SENTEMAILS, USERS, DELETED, STATS_EXPERT, GDPR, USER_MANUALS_ADMIN);
 
     @Inject
     private Configuration configuration;

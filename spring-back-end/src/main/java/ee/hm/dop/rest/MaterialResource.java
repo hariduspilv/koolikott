@@ -7,6 +7,7 @@ import ee.hm.dop.service.content.MaterialGetter;
 import ee.hm.dop.service.content.MaterialService;
 import ee.hm.dop.service.content.enums.GetMaterialStrategy;
 import ee.hm.dop.service.content.enums.SearchIndexStrategy;
+import ee.hm.dop.service.metadata.LdJson.MaterialLdJsonService;
 import ee.hm.dop.service.useractions.UserService;
 import ee.hm.dop.utils.NumberUtils;
 import org.springframework.security.access.annotation.Secured;
@@ -30,10 +31,17 @@ public class MaterialResource extends BaseResource {
     private LearningObjectAdministrationService learningObjectAdministrationService;
     @Inject
     private MaterialGetter materialGetter;
+    @Inject
+    private MaterialLdJsonService materialLdJsonService;
 
     @GetMapping
     public Material get(@RequestParam("id") long materialId) {
         return materialGetter.get(materialId, getLoggedInUser());
+    }
+
+    @GetMapping("ldJson")
+    public String getLdJson(@RequestParam("id") long materialId) {
+        return materialLdJsonService.getMaterialLdJson(materialId);
     }
 
     @GetMapping("chapter")

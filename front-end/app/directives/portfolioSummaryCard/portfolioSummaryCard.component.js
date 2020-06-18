@@ -43,18 +43,7 @@ class controller extends Controller {
                 if (this.portfolio.copiedFromDirectName)
                     this.$scope.copiedFromDirectName = this.portfolio.copiedFromDirectName
 
-                if (this.portfolio.type === '.Portfolio' &&
-                    (this.$rootScope.acceptableLicenses === undefined || this.$rootScope.portfolioHasMaterialWithUnacceptableLicense === undefined)) {
-                    this.serverCallService
-                    .makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense', {id: this.portfolio.id})
-                    .then((response) => {
-                        this.$rootScope.acceptableLicenses = !response.data
-                    })
-                    this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyMaterialWithUnacceptableLicense', {id: this.$scope.portfolio.id})
-                        .then((response) => {
-                            this.$rootScope.portfolioHasMaterialWithUnacceptableLicense = response.data
-                        })
-                }
+                this.getLearningObjectLicenses(this.portfolio)
             }
             if (newValue !== oldValue) {
                 this.$rootScope.$broadcast('portfolioHistory:loadHistory');
@@ -140,6 +129,21 @@ class controller extends Controller {
         this.$scope.showSendEmailButton = true;
         this.$scope.showRecommendButton = true;
         this.$scope.showReportImproperButton = true;
+    }
+
+    getLearningObjectLicenses(portfolio) {
+        if (portfolio.type === '.Portfolio' &&
+            (this.$rootScope.acceptableLicenses === undefined || this.$rootScope.portfolioHasMaterialWithUnacceptableLicense === undefined)) {
+            this.serverCallService
+                .makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense', {id: portfolio.id})
+                .then((response) => {
+                    this.$rootScope.acceptableLicenses = !response.data
+                })
+            this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyMaterialWithUnacceptableLicense', {id: portfolio.id})
+                .then((response) => {
+                    this.$rootScope.portfolioHasMaterialWithUnacceptableLicense = response.data
+                })
+        }
     }
 
     showPortfolioHistoryDialog() {

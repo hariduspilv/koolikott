@@ -9,6 +9,8 @@ import ee.hm.dop.utils.DateUtils;
 import java.time.LocalDateTime;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,19 @@ public class StatisticsUtil {
             "Avalikustatud kogumikke",
             "Lisatud materjale"
     };
+
+    static final ArrayList<String> USER_TABLE_HEADERS = new ArrayList<>(
+            Arrays.asList(
+                    "USER",
+                    "EMAIL",
+                    "APP_ROLE",
+                    "USER_ROLE_PICKED",
+                    "EDU_LEVEL",
+                    "DOMAIN_LEVEL",
+                    "LAST_LOGIN"
+            )
+    );
+
     static final String NO_USER_FOUND = "Ei leitud ühtegi eksperti";
     static final String EMPTY_ROW = "-";
 

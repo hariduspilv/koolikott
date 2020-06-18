@@ -16,6 +16,7 @@
                                             controller: 'sessionDialogController',
                                             clickOutsideToClose: false,
                                             escapeToClose: false,
+                                            multiple: true
                                         }).then((data) => {
                                             this.updateSession(data);
                                             this.sessionDialogIsOpen = false;

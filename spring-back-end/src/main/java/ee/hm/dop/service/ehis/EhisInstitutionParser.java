@@ -57,15 +57,17 @@ public class EhisInstitutionParser {
             InstitutionEhis dbEntity = institutionEhisDao.findByField("ehisId", ie.getEhisId());
             if (dbEntity == null
                     && checkAreaExists(ie)
-                    && checkStatusIsNotClosed(ie)) {
+                    && checkStatusIsNotClosed(ie)
+                    && checkTypeIsNotSupplementaryTraining(ie)
+                    && checkTypeIsNotYouthCamp(ie)
+                    && checkTypeIsNotExtracurricularActivity(ie)) {
                 ie.setArea(ie.getArea().trim());
-                if (ie.getStatus().equalsIgnoreCase("Suletud")) {
-                    logger.info("VIGA: ei filtreeri suletud");
-                }
                 institutionEhisDao.createOrUpdate(ie);
                 addCounter++;
             } else if (dbEntity != null
-                    && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie))) {
+                    && (!checkAreaExists(ie) || !checkStatusIsNotClosed(ie)
+                    || !checkTypeIsNotSupplementaryTraining(ie) || !checkTypeIsNotYouthCamp(ie)
+                    || !checkTypeIsNotExtracurricularActivity(ie))) {
                 int removedUserInstitutions = userInstitutionDao.removeExpiredUserInstitutions(dbEntity.getId());
                 institutionEhisDao.remove(dbEntity);
                 logger.info("EHIS institution removed: " + dbEntity.getName() + " with " + removedUserInstitutions + " UserInstitution occurrences");
@@ -81,9 +83,23 @@ public class EhisInstitutionParser {
     private boolean checkAreaExists(InstitutionEhis institutionEhis){
         return (isNotBlank(institutionEhis.getArea()) && institutionEhis.getArea() != null);
     }
+
     private boolean checkStatusIsNotClosed(InstitutionEhis institutionEhis){
-        return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_STATUS)));
+        return !(institutionEhis.getStatus().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_CLOSED)));
     }
+
+    private boolean checkTypeIsNotSupplementaryTraining(InstitutionEhis institutionEhis) {
+        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_SUPPLEMENTTRAINING)));
+    }
+
+    private boolean checkTypeIsNotYouthCamp(InstitutionEhis institutionEhis){
+        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_YOUTHCAMP)));
+    }
+
+    private boolean checkTypeIsNotExtracurricularActivity(InstitutionEhis institutionEhis) {
+        return !(institutionEhis.getType().equalsIgnoreCase(configuration.getString(ConfigurationProperties.XROAD_EHIS_INSTITUTIONS_EXTRAACTIVITY)));
+    }
+
     private List<InstitutionEhis> getEhisInstitutions(Document document) {
         NodeList institutionsNode = getNodeList(document, "//*[local-name()='oppeasutus']");
         return IntStream.range(0, institutionsNode.getLength())

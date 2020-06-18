@@ -296,25 +296,8 @@ angular.module('koolikottApp')
 
         function finishLogin(authenticatedUser) {
             authenticatedUserService.setAuthenticatedUser(authenticatedUser);
+            redirectUser(authenticatedUser);
 
-            if (!authenticatedUser.firstLogin && $rootScope.emailDialogShown) {
-                $location.url('/profiil');
-                $rootScope.emailDialogShown = false;
-                $rootScope.showLocationDialog = false;
-            }
-            else if ($rootScope.afterAuthRedirectURL) {
-                $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
-            } else if (authenticatedUser.firstLogin) {
-                $location.url('/profiil');
-                $rootScope.userFirstLogin = true
-            } else if (isOAuthAuthentication) {
-                let loginOrigin = localStorage.getItem(LOGIN_ORIGIN)
-                if (loginOrigin.contains('oppematerjalid') || loginOrigin.contains('kogumikud') || loginOrigin.contains('lemmikud')) {
-                    $location.url(authenticatedUser.user.username + loginOrigin);
-                } else {
-                    $location.url(loginOrigin)
-                }
-            }
             enableLogin();
 
             localStorage.removeItem(LOGIN_ORIGIN);
@@ -376,6 +359,28 @@ angular.module('koolikottApp')
                 case 'mID':
                     gTagCaptureEvent('login', 'user', 'Mobile-ID')
                     break;
+            }
+        }
+
+        function redirectUser(authenticatedUser) {
+            if (!authenticatedUser.firstLogin && $rootScope.emailDialogShown) {
+                $location.url('/profiil');
+                $rootScope.emailDialogShown = false;
+                $rootScope.showLocationDialog = false;
+            } else if (window.location.href.includes('#dialog-report-general')) {
+                return;
+            } else if ($rootScope.afterAuthRedirectURL) {
+                $location.url('/' + authenticatedUser.user.username + $rootScope.afterAuthRedirectURL);
+            } else if (authenticatedUser.firstLogin) {
+                $location.url('/profiil');
+                $rootScope.userFirstLogin = true
+            } else if (isOAuthAuthentication) {
+                let loginOrigin = localStorage.getItem(LOGIN_ORIGIN)
+                if (loginOrigin.contains('oppematerjalid') || loginOrigin.contains('kogumikud') || loginOrigin.contains('lemmikud')) {
+                    $location.url(authenticatedUser.user.username + loginOrigin);
+                } else {
+                    $location.url(loginOrigin)
+                }
             }
         }
 

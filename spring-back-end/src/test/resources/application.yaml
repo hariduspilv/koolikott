@@ -129,14 +129,18 @@ xroad:
           code: 10585438
     use:
       v6: false
-    institutions:
-      list: http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/-/0/0/XML
-      status: Suletud
-      type: koolieelne lasteasutus
   # timeouts are in ms
   timeout:
     connect: 5000
     read: 10000
+
+institutions:
+  list: http://enda.ehis.ee/avaandmed/rest/oppeasutused/-/-/-/-/-/-/-/-/-/-/0/0/XML
+  closed: Suletud
+  supplementtraining: täienduskoolitusasutus
+  youthcamp: noortelaager
+  extraactivity: huvikool
+
 ekool:
   extra:
     logging: false

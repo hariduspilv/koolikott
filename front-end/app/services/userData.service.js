@@ -13,6 +13,7 @@ angular.module('koolikottApp')
         var userMaterialsCountCallbacks = [];
         var userPortfoliosCountCallbacks = [];
         var moderatorsCountCallbacks = [];
+        var allUsersCountCallbacks = [];
         var restrictedUsersCountCallbacks = [];
         var changedLearningObjectCountCallbacks = [];
         var unReviewedLearningObjectCountCallbacks = [];
@@ -89,6 +90,15 @@ angular.module('koolikottApp')
             });
             moderatorsCountCallbacks = [];
             localStorage.setItem("moderatorsCount", data);
+
+        }
+
+        function getAllUsersCountSuccess(data) {
+            allUsersCountCallbacks.forEach(function (callback) {
+                callback(data);
+            });
+            allUsersCountCallbacks = [];
+            localStorage.setItem("allUsersCount", data);
 
         }
 
@@ -175,6 +185,14 @@ angular.module('koolikottApp')
                 }
                 moderatorsCountCallbacks.push(callback);
                 serverCallService.makeGet("rest/admin/moderator/count", {}, getModeratorsCountSuccess, getItemsFail);
+            },
+            loadAllUsersCount: function (callback) {
+                var data = localStorage.getItem("allUsersCount");
+                if (data) {
+                    callback(data);
+                }
+                allUsersCountCallbacks.push(callback);
+                serverCallService.makeGet("rest/user/allUsers/count", {}, getAllUsersCountSuccess, getItemsFail);
             },
             loadRestrictedUsersCount: function (callback) {
                 var data = localStorage.getItem("restrictedUsersCount");

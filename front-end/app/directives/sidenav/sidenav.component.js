@@ -25,8 +25,7 @@ class controller extends Controller {
             '/toolaud/teatatud-oppevara',
             '/toolaud/uus-oppevara',
             '/toolaud/muudetud-oppevara',
-            '/toolaud/aineeksperdid',
-            '/toolaud/piiratud-kasutajad',
+            '/toolaud/kasutajad',
             '/toolaud/kustutatud-oppevara',
             '/toolaud/ekspertide-statistika',
             '/toolaud/saadetud-teated',
@@ -204,6 +203,7 @@ class controller extends Controller {
         if (this.authenticatedUserService.isAdmin()) {
             this.updateCount('moderators')
             this.updateCount('restrictedUsers')
+            this.updateCount('allUsers')
         }
     }
     closeOtherTabs(evt) {

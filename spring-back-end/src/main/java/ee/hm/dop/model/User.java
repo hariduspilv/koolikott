@@ -93,6 +93,12 @@ public class User implements AbstractEntity {
     @OneToMany(mappedBy = "user", fetch = LAZY)
     private List<UserLicenceAgreement> userLicenceAgreements;
 
+    @OneToOne(mappedBy = "user")
+    private UserEmail userEmail;
+
+    @OneToOne(mappedBy = "user")
+    private UserProfile userProfile;
+
     @Transient
     @JsonIgnore
     private boolean newUser;
@@ -215,5 +221,21 @@ public class User implements AbstractEntity {
 
     public void setInstitutions(List<InstitutionEhis> institutions) {
         this.institutions = institutions;
+    }
+
+    public UserEmail getUserEmail() {
+        return userEmail;
+    }
+
+    public void setUserEmail(UserEmail userEmail) {
+        this.userEmail = userEmail;
+    }
+
+    public UserProfile getUserProfile() {
+        return userProfile;
+    }
+
+    public void setUserProfile(UserProfile userProfile) {
+        this.userProfile = userProfile;
     }
 }

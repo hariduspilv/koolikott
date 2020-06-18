@@ -9,8 +9,15 @@ class controller extends Controller {
             });
     }
 
-    getRelatedPortfolios(id){
-        return this.serverCallService.makeGet("rest/material/getRelatedPortfolios",{'id':id})
+    getMaterialLdJsonById(id) {
+        return this.serverCallService.makeGet('rest/material/ldJson', {'id': id})
+            .then((response) => {
+                if (response.data) return response.data;
+            });
+    }
+
+    getRelatedPortfolios(id) {
+        return this.serverCallService.makeGet("rest/material/getRelatedPortfolios", {'id': id})
     }
 
     increaseViewCount(material) {

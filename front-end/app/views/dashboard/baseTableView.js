@@ -37,18 +37,11 @@
             false,
             false
         ],
-        'aineeksperdid': [
-            'MODERATORS_TAB',
-            'moderator',
-            'byUsername',
-            false,
-            true
-        ],
-        'piiratud-kasutajad': [
-            'RESTRICTED_USERS_TAB',
-            'restrictedUser',
-            'byUsername',
-            false,
+        'kasutajad': [
+            'USERS',
+            'user/all',
+            'byRole',
+            true,
             true
         ]
     };
@@ -78,26 +71,40 @@
 
             this.$scope.$watch('filter.educationalContext', this.onEducationalContextChange.bind(this), true);
             this.$scope.$watch('query.filter', (newValue, oldValue) => {
-                if (newValue !== oldValue && (newValue.length >= 3 || !newValue))
-                    this.filterItems()
+                if (newValue !== oldValue && (newValue.length >= 3 || !newValue)) {
+                    this.$scope.query.page = 1;
+                    this.filterItems();
+                }
             });
 
-            this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true)
+            this.$scope.$watch('filter.taxons', this.onFilterChange.bind(this), true);
 
             this.$scope.filter = {};
             this.$scope.filter.materialType = 'All';
 
-            this.$scope.query = {
-                filter: '',
-                order: this.sortedBy,
-                limit: 20,
-                page: 1
-            };
+            if (this.userPage) {
+                this.$scope.query = {
+                    filter: '',
+                    order: this.sortedBy,
+                    limit: 25,
+                    page: 1
+                }
+                this.getUserRoles();
+                this.getUserSelectedRoles();
+            } else {
+                this.$scope.query = {
+                    filter: '',
+                    order: this.sortedBy,
+                    limit: 20,
+                    page: 1
+                };
+            }
 
             this.$scope.onPaginate = this.onPaginate.bind(this);
             this.$scope.onSort = this.onSort.bind(this);
 
             this.getModeratorsAndAllUsers();
+            this.loadEducationalContexts();
 
             url
                 ? this.getData(url, sort)
@@ -114,23 +121,22 @@
         }
 
         selectType(type) {
-            this.$scope.filter.materialType = type
+            this.$scope.filter.materialType = type;
             if (type !== 'All' && this.$scope.sortByType) {
                 this.sortedBy = DASHBOARD_VIEW_STATE_MAP[this.viewPath][2];
             }
         }
 
         onFilterChange(filter) {
-            const params = Object.assign({}, filter)
+            const params = Object.assign({}, filter);
             if (params.taxons && !this.$scope.isPaginating) {
                 this.$scope.filter.taxons = params.taxons;
             }
         }
 
         getFilterResults() {
-            this.$scope.query.filter = ''
-            this.$scope.isFiltering = true
-            this.$scope.query.page = 1
+            this.$scope.isFiltering = true;
+            this.$scope.query.page = 1;
             this.getData(this.restUri, this.sortedBy);
             this.$scope.sortByType = this.$scope.filter.materialType === 'All';
         }
@@ -141,21 +147,21 @@
         }
 
         clearFields() {
-            this.$scope.educationalContext = undefined
-            this.$scope.isSubmitButtonEnabled = false
-            this.$scope.filter = {}
-            this.$scope.clearFields = true
-            this.$scope.query.filter = ''
+            this.$scope.educationalContext = undefined;
+            this.$scope.isSubmitButtonEnabled = false;
+            this.$scope.filter = {};
+            this.$scope.clearFields = true;
+            this.$scope.query.filter = '';
             this.$route.reload()
         }
 
         clearFilter() {
-            this.$scope.query.filter = ''
+            this.$scope.query.filter = '';
 
-            this.$scope.itemsCount = this.collection.length
-            this.filteredCollection = null
+            this.$scope.itemsCount = this.collection.length;
+            this.filteredCollection = null;
 
-            this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
+            this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit);
 
             if (this.$scope.filter.form.$dirty)
                 this.$scope.filter.form.$setPristine()
@@ -167,7 +173,7 @@
         }
 
         onEducationalContextChange(educationalContext) {
-            this.$scope.filter.taxons = undefined
+            this.$scope.filter.taxons = undefined;
             this.onParamsChange({});
         }
 
@@ -175,18 +181,19 @@
             return this.$filter('translate')(key)
         }
 
-        editUser(user) {
-            if (user) {
-                const scope = this.$scope.$new(true)
-                scope.user = user
-
-                this.$mdDialog
-                    .show({
-                        templateUrl: '/views/editUserDialog/editUser.html',
-                        controller: 'editUserController',
-                        scope
+        editUser(id) {
+            if (id) {
+                const scope = this.$scope.$new(true);
+                this.serverCallService.makeGet("rest/user/id", {id : id})
+                    .then(({data: user}) => {
+                        scope.user = user;
+                        this.$mdDialog
+                            .show({
+                                templateUrl: '/views/editUserDialog/editUser.html',
+                                controller: 'editUserController',
+                                scope
+                            })
                     })
-                    .then(() => this.$route.reload())
             }
         }
 
@@ -212,6 +219,8 @@
                 query = this.getUnreviewed(restUri, sortBy);
             } else if (this.restUri === 'sentEmails') {
                 query = this.getSentEmails(restUri, sortBy);
+            } else if (this.restUri === 'user/all') {
+                query = this.getAllUsers(restUri);
             } else {
                 query = this.serverCallService.makeGet('rest/admin/' + restUri)
             }
@@ -226,15 +235,15 @@
 
                         if (restUri === 'changed')
                             data.forEach(o => {
-                                o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length
+                                o.__numChanges = o.reviewableChanges.filter(c => !c.reviewed).length;
                                 o.__changers = this.getChangers(o)
-                            })
+                            });
                         if (restUri === 'improper')
                             data.forEach(o => {
-                                o.__reports = o.improperContents.filter(c => !c.reviewed)
-                                o.__reporters = this.getReporters(o.__reports)
+                                o.__reports = o.improperContents.filter(c => !c.reviewed);
+                                o.__reporters = this.getReporters(o.__reports);
                                 o.__reportLabelKey = this.getImproperReportLabelKey(o)
-                            })
+                            });
                         this.collection = data;
 
                         if (this.restUri === 'firstReview/unReviewed') {
@@ -244,6 +253,9 @@
                         } else if (this.restUri === 'sentEmails') {
                             this.$scope.data = data.content;
                             this.$scope.itemsCount = data.totalElements;
+                        } else if (this.restUri === 'user/all') {
+                            this.$scope.itemsCount = data.totalElements;
+                            this.$scope.data = data.content;
                         } else {
                             this.$scope.itemsCount = data.length;
                             this.$scope.data = data.slice(0, this.$scope.query.limit)
@@ -275,6 +287,99 @@
             return this.serverCallService.makeGet(url);
         }
 
+        getAllUsers(restUri) {
+            if (restUri) {
+                let url = this.usersTableUrlBuilder(restUri);
+                return this.serverCallService.makeGet(url);
+            }
+        }
+
+        usersTableUrlBuilder(restUri) {
+            let url = 'rest/' + restUri +
+                '?page=' + this.$scope.query.page +
+                '&itemSortedBy=' + this.$scope.query.order;
+            if (this.$scope.query) url += '&query=' + this.$scope.query.filter.toLowerCase();
+            if (this.$scope.filter.userRole && this.allOptionNotSelected(this.$scope.filter.userRole)) url += '&userRole=' + this.$scope.filter.userRole;
+            if (this.$scope.filter.role && this.allOptionNotSelected(this.$scope.filter.role)) url += '&role=' + this.$scope.filter.role;
+            if (this.$scope.filter.userEducationalContext && this.allOptionNotSelected(this.$scope.filter.userEducationalContext)) url += '&userEducationalContext=' + this.$scope.filter.userEducationalContext;
+            if (this.$scope.filter.withEmail) url += '&withEmail=' + this.$scope.filter.withEmail;
+            if (this.$scope.filter.withoutEmail) url += '&withoutEmail=' + this.$scope.filter.withoutEmail;
+            if (localStorage.getItem('userPreferredLanguage')) url += '&language=' + localStorage.getItem('userPreferredLanguage');
+            return url;
+        }
+
+        generateFile(fileType) {
+            if (fileType) {
+                this.$scope.fetchingDownload = true;
+                let url = this.usersTableUrlBuilder('admin/userStatistics/export');
+                url += '&fileType=' + fileType;
+                this.serverCallService
+                    .makePost(url)
+                    .then(({ status, data: filename }) => {
+                        this.$scope.fetchingDownload = false;
+
+                        this.serverCallService
+                            .makeGet(`/rest/admin/statistics/export/download/${filename}`)
+                            .then(({status, data}) => {
+                                const arrayBuffer = this.stringToArrayBuffer(atob(data));
+                                const formattedDate = moment(new Date()).format('YYYY-MM-DDThh:mmTZD');
+                                const filenameWithFormat = 'E-koolikoti_kasutajad_' + formattedDate + '.' + fileType;
+
+                                if (200 <= status && status < 300) {
+                                    let file = new Blob([arrayBuffer]);
+
+                                    if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                                        window.navigator.msSaveOrOpenBlob(file, filenameWithFormat);
+                                        return;
+                                    }
+                                    let link = document.createElement('a');
+                                    link.href = window.URL.createObjectURL(file);
+                                    link.download = filenameWithFormat;
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                }
+                            })
+                    })
+            }
+        }
+
+        // function from https://stackoverflow.com/questions/34993292/how-to-save-xlsx-data-to-file-as-a-blob
+        stringToArrayBuffer(s) {
+            let buf = new ArrayBuffer(s.length);
+            let view = new Uint8Array(buf);
+            for (let i=0; i!=s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        addAllOption(options) {
+            if (options) {
+                let array = options;
+                if (!array.includes('GROUPS_ALL')) {
+                    array.unshift('GROUPS_ALL');
+                }
+                return array;
+            }
+        }
+
+        addAllOptionToEduContext(options) {
+            let eduList = ['GROUPS_ALL'];
+            if (options) {
+                options.forEach(e => eduList.push(e.name))
+            }
+            return eduList;
+        }
+
+        allOptionNotSelected(option) {
+            return option !== 'GROUPS_ALL'
+        }
+
+        loadEducationalContexts() {
+            this.metadataService.loadEducationalContexts((educationalContext) => {
+                this.$scope.educationalContext = educationalContext;
+            });
+        }
+
         isModerator() {
             return this.authenticatedUserService.isModerator();
         }
@@ -301,10 +406,20 @@
                 .then(res => this.$scope.moderators = res.data)
         }
 
-        getAllUsers() {
+        getUserRoles() {
             this.serverCallService
-                .makeGet('rest/user/all')
-                .then(r => this.$scope.users = r.data);
+                .makeGet('rest/user/roles')
+                .then(res => {
+                    this.$scope.userRoles = res.data
+                })
+        }
+
+        getUserSelectedRoles() {
+            this.serverCallService
+                .makeGet('rest/user/selectedRoles')
+                .then(res => {
+                    this.$scope.userSelectedRoles = res.data
+                })
         }
 
         openLearningObject(learningObject) {
@@ -332,20 +447,20 @@
                         : this.collection,
                     order,
                     this.unmergedData
-                )
+                );
                 this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
             }
         }
 
         getTaxonTranslation(taxon) {
             if (!taxon)
-                return
+                return;
 
             if (taxon.level === '.TaxonDTO')
-                taxon = this.taxonService.getFullTaxon(taxon.id)
+                taxon = this.taxonService.getFullTaxon(taxon.id);
 
             if (!taxon)
-                return
+                return;
 
             return taxon.level !== '.EducationalContext'
                 ? taxon.level.toUpperCase().substr(1) + '_' + taxon.name.toUpperCase()
@@ -369,7 +484,7 @@
 
         getCommaSeparatedCreators(item) {
             return item.__creators.reduce((str, creator) => {
-                const {name, surname} = creator
+                const {name, surname} = creator;
                 return `${str}${str ? ', ' : ''}${name} ${surname}`
             }, '')
         }
@@ -383,9 +498,9 @@
         }
 
         getCreatedBy(items) {
-            const ids = []
+            const ids = [];
             return items.reduce((creators, {reviewed, createdBy}) => {
-                const {id} = createdBy || {id: 'UNKNOWN'}
+                const {id} = createdBy || {id: 'UNKNOWN'};
                 return ids.includes(id)
                     ? creators
                     : ids.push(id) && creators.concat(createdBy || 'UNKNOWN')
@@ -401,7 +516,7 @@
 
                 this.filteredCollection = this.collection.filter(data => {
                     if (data) {
-                        const query = this.$scope.query.filter.toLowerCase()
+                        const query = this.$scope.query.filter.toLowerCase();
 
                         if (this.userPage)
                             return (
@@ -418,7 +533,7 @@
                     }
                 });
 
-                this.$scope.itemsCount = this.filteredCollection.length
+                this.$scope.itemsCount = this.filteredCollection.length;
                 this.$scope.data = this.paginate(this.$scope.query.page, this.$scope.query.limit)
             }
         }
@@ -440,10 +555,10 @@
 
         getImproperReportLabelKey(item) {
             if (!Array.isArray(item.__reports))
-                return ''
+                return '';
 
             if (item.__reports.length === 1) {
-                let {reportingReasons} = item.__reports[0]
+                let {reportingReasons} = item.__reports[0];
 
                 return !Array.isArray(reportingReasons)
                     ? ''
@@ -455,9 +570,9 @@
         }
 
         getAllReasons(item) {
-            let reasonArray = []
+            let reasonArray = [];
             for (const report of item.__reports) {
-                let {reportingReasons} = report
+                let {reportingReasons} = report;
                 for (let singleReason of reportingReasons) {
                     if (!reasonArray.includes(singleReason.reason)) {
                         reasonArray.push(singleReason.reason)
@@ -470,7 +585,7 @@
         capitalizeAndTranslateReason(reasonKey) {
             let fullReason = this.getTranslation(reasonKey[0]);
             for (const singleReason of reasonKey.slice(1)) {
-                let appendReason = ', ' + this.getTranslation(singleReason)
+                let appendReason = ', ' + this.getTranslation(singleReason);
                 fullReason += appendReason.toLowerCase()
             }
             return fullReason
@@ -500,6 +615,10 @@
                 })
             }
         }
+
+        openDownloadMenu($mdMenu, evt) {
+            $mdMenu.open(evt)
+        }
     }
 
     controller.$inject = [
@@ -517,7 +636,8 @@
         'iconService',
         'translationService',
         'authenticatedUserService',
-        '$window'
-    ]
+        '$window',
+        'metadataService'
+    ];
     angular.module('koolikottApp').controller('baseTableViewController', controller)
 }

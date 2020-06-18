@@ -6,7 +6,6 @@ import ee.hm.dop.model.User;
 import ee.hm.dop.model.enums.Role;
 import ee.hm.dop.model.taxon.Taxon;
 import ee.hm.dop.model.user.UserSession;
-import org.apache.commons.collections.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -162,9 +161,8 @@ public class UserResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void database_has_some_users() {
         login(USER_ADMIN);
-        List<User> allUsers = doGet("user/all", new GenericType<List<User>>() {
-        });
-        assertTrue(CollectionUtils.isNotEmpty(allUsers));
+        Long allUsersCount = doGet("user/allUsers/count", Long.class);
+        assertTrue(allUsersCount.intValue() > 0);
     }
 
     @Ignore

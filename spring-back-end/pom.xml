@@ -4,7 +4,7 @@
     <groupId>ee.hm</groupId>
     <artifactId>spring-kott</artifactId>
     <packaging>jar</packaging>
-    <version>1.56.0</version>
+    <version>1.57.0</version>
 
     <properties>
         <java.version>1.8</java.version>
@@ -187,6 +187,11 @@
             <artifactId>commons-text</artifactId>
             <version>1.4</version>
         </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-collections4</artifactId>
+            <version>4.4</version>
+        </dependency>
 
         <!-- Others -->
 
@@ -242,13 +247,26 @@
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
-        <!-- https://mvnrepository.com/artifact/com.github.dfabulich/sitemapgen4j -->
         <dependency>
             <groupId>com.github.dfabulich</groupId>
             <artifactId>sitemapgen4j</artifactId>
             <version>1.1.2</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.google.code.gson</groupId>
+            <artifactId>gson</artifactId>
+            <version>2.8.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.skyscreamer</groupId>
+            <artifactId>jsonassert</artifactId>
+            <version>1.5.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jayway.jsonpath</groupId>
+            <artifactId>json-path</artifactId>
+            <version>2.4.0</version>
+        </dependency>
         <!-- Testing -->
 
         <dependency>
