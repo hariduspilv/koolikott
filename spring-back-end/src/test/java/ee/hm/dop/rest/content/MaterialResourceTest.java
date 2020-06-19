@@ -3,18 +3,10 @@ package ee.hm.dop.rest.content;
 import ee.hm.dop.common.test.ResourceIntegrationTestBase;
 import ee.hm.dop.common.test.TestLayer;
 import ee.hm.dop.dao.TaxonDao;
-import ee.hm.dop.model.CrossCurricularTheme;
-import ee.hm.dop.model.KeyCompetence;
-import ee.hm.dop.model.LanguageString;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.SearchResult;
-import ee.hm.dop.model.Searchable;
+import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.LanguageC;
 import ee.hm.dop.model.taxon.Subject;
 import ee.hm.dop.model.taxon.Taxon;
-import java.time.LocalDateTime;
-
-import org.junit.Ignore;
 import org.junit.Test;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,19 +19,10 @@ import java.io.InputStream;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static ee.hm.dop.model.taxon.TaxonLevel.DOMAIN;
-import static ee.hm.dop.model.taxon.TaxonLevel.EDUCATIONAL_CONTEXT;
-import static ee.hm.dop.model.taxon.TaxonLevel.MODULE;
-import static ee.hm.dop.model.taxon.TaxonLevel.SPECIALIZATION;
-import static ee.hm.dop.model.taxon.TaxonLevel.SUBJECT;
-import static ee.hm.dop.model.taxon.TaxonLevel.SUBTOPIC;
-import static ee.hm.dop.model.taxon.TaxonLevel.TOPIC;
+import static ee.hm.dop.model.taxon.TaxonLevel.*;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 @Transactional
 public class MaterialResourceTest extends ResourceIntegrationTestBase {
@@ -57,6 +40,7 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     public static final String SOURCE_NOT_EXISTING = "https://www.youtube.com/watch?v=5_Ar7VXXsro";
     public static final String SOURCE_MULTIPLE_MATERIALS = "https://en.wikipedia.org/wiki/Power_Architecture";
     public static final String MATERIAL_DELETE = "material/delete";
+    public static final String GET_MATERIAL_LD_JSON_URL = "material/ldJson?id=%s";
 
     @Inject
     private TaxonDao taxonDao;
@@ -64,6 +48,11 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
     @Test
     public void getMaterial() {
         assertMaterial1(getMaterial(MATERIAL_1), TestLayer.REST);
+    }
+
+    @Test
+    public void getAndValidateMaterialLdJson() {
+        assertMaterialLdJson(getMaterialLdJson(MATERIAL_1), getMaterial(MATERIAL_1));
     }
 
     @Test
@@ -374,8 +363,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(EDUCATIONAL_CONTEXT, taxons.get(0).getTaxonLevel());
         assertEquals(DOMAIN, taxons.get(1).getTaxonLevel());
         assertEquals(SUBJECT, taxons.get(2).getTaxonLevel());
-        assertEquals(TOPIC,taxons.get(3).getTaxonLevel());
-        assertEquals(SUBTOPIC,taxons.get(4).getTaxonLevel());
+        assertEquals(TOPIC, taxons.get(3).getTaxonLevel());
+        assertEquals(SUBTOPIC, taxons.get(4).getTaxonLevel());
     }
 
     public void validate_ALL_THE_TAXONLEVELS(Material material) {
@@ -385,8 +374,8 @@ public class MaterialResourceTest extends ResourceIntegrationTestBase {
         assertEquals(EDUCATIONAL_CONTEXT, taxons.get(i++).getTaxonLevel());
         assertEquals(DOMAIN, taxons.get(i++).getTaxonLevel());
         assertEquals(TOPIC, taxons.get(i++).getTaxonLevel());
-        assertEquals(SPECIALIZATION,taxons.get(i++).getTaxonLevel());
-        assertEquals(MODULE,taxons.get(i++).getTaxonLevel());
-        assertEquals(SUBTOPIC,taxons.get(i++).getTaxonLevel());
+        assertEquals(SPECIALIZATION, taxons.get(i++).getTaxonLevel());
+        assertEquals(MODULE, taxons.get(i++).getTaxonLevel());
+        assertEquals(SUBTOPIC, taxons.get(i++).getTaxonLevel());
     }
 }

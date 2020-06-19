@@ -93,13 +93,7 @@ angular.module('koolikottApp')
                     controllerAs: '$ctrl',
                     permissions: ['ADMIN']
                 })
-                .when('/toolaud/aineeksperdid', {
-                    templateUrl: '/views/dashboard/baseTableView.html',
-                    controller: 'baseTableViewController',
-                    controllerAs: '$ctrl',
-                    permissions: ['ADMIN']
-                })
-                .when('/toolaud/piiratud-kasutajad', {
+                .when('/toolaud/kasutajad', {
                     templateUrl: '/views/dashboard/baseTableView.html',
                     controller: 'baseTableViewController',
                     controllerAs: '$ctrl',

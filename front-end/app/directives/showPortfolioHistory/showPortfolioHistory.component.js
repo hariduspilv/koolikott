@@ -41,6 +41,7 @@
                         this.showlogselect = false;
                         this.$scope.selectedPortfolioLog = undefined;
                         this.$rootScope.$broadcast('portfolioHistory:hide');
+                        this.getLearningObjectLicenses(this.portfolio)
                     }
                 })
         }
@@ -67,6 +68,20 @@
                         this.$scope.data = data;
                     }
                 });
+        }
+
+        getLearningObjectLicenses(portfolio) {
+            if (portfolio.type === '.Portfolio'){
+                this.serverCallService
+                    .makeGet('rest/portfolio/portfolioHasAnyUnAcceptableLicense', {id: portfolio.id})
+                    .then((response) => {
+                        this.$rootScope.acceptableLicenses = !response.data
+                    })
+                this.serverCallService.makeGet('rest/portfolio/portfolioHasAnyMaterialWithUnacceptableLicense', {id: portfolio.id})
+                    .then((response) => {
+                        this.$rootScope.portfolioHasMaterialWithUnacceptableLicense = response.data
+                    })
+            }
         }
     }
 

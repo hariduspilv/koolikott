@@ -1,15 +1,11 @@
 package ee.hm.dop.common.test;
 
-import ee.hm.dop.model.AuthenticatedUser;
-import ee.hm.dop.model.Material;
-import ee.hm.dop.model.Portfolio;
-import ee.hm.dop.model.Tag;
-import ee.hm.dop.model.User;
+import ee.hm.dop.config.Configuration;
+import ee.hm.dop.model.*;
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
-import ee.hm.dop.config.Configuration;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -23,12 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.inject.Inject;
-import javax.ws.rs.client.Client;
-import javax.ws.rs.client.ClientBuilder;
-import javax.ws.rs.client.ClientRequestContext;
-import javax.ws.rs.client.ClientRequestFilter;
-import javax.ws.rs.client.Entity;
-import javax.ws.rs.client.WebTarget;
+import javax.ws.rs.client.*;
 import javax.ws.rs.core.GenericType;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
@@ -97,6 +88,10 @@ public abstract class ResourceIntegrationTestBase implements BaseClassForTests {
 
     public Material getMaterial(long id) {
         return doGet(format(MaterialResourceTest.GET_MATERIAL_URL, id), Material.class);
+    }
+
+    public String getMaterialLdJson(long id) {
+        return doGet(format(MaterialResourceTest.GET_MATERIAL_LD_JSON_URL, id), String.class);
     }
 
     public Material createOrUpdateMaterial(Material updatedMaterial) {

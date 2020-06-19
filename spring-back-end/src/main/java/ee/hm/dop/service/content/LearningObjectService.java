@@ -133,6 +133,41 @@ public class LearningObjectService {
                     taxonPositionDTOList.add(tpdEduContext);
                     taxonPositionDTOList.add(tpdDomain);
                 }
+                if (tp.getSubject() != null) {
+                    TaxonPositionDTO tpdSubjet = new TaxonPositionDTO();
+                    tpdSubjet.setTaxonLevelId(tp.getSubject().getId());
+                    tpdSubjet.setTaxonLevelName(tp.getSubject().getName());
+                    tpdSubjet.setTaxonLevel(TaxonLevel.SUBJECT);
+                    taxonPositionDTOList.add(tpdSubjet);
+                }
+                if (tp.getTopic() != null) {
+                    TaxonPositionDTO tpdTopic = new TaxonPositionDTO();
+                    tpdTopic.setTaxonLevelId(tp.getTopic().getId());
+                    tpdTopic.setTaxonLevelName(tp.getTopic().getName());
+                    tpdTopic.setTaxonLevel(TaxonLevel.TOPIC);
+                    taxonPositionDTOList.add(tpdTopic);
+                }
+                if (tp.getSubtopic() != null) {
+                    TaxonPositionDTO tpdSubTopic = new TaxonPositionDTO();
+                    tpdSubTopic.setTaxonLevelId(tp.getSubtopic().getId());
+                    tpdSubTopic.setTaxonLevelName(tp.getSubtopic().getName());
+                    tpdSubTopic.setTaxonLevel(TaxonLevel.SUBTOPIC);
+                    taxonPositionDTOList.add(tpdSubTopic);
+                }
+                if (tp.getModule() != null) {
+                    TaxonPositionDTO tpdModule = new TaxonPositionDTO();
+                    tpdModule.setTaxonLevelId(tp.getModule().getId());
+                    tpdModule.setTaxonLevelName(tp.getModule().getName());
+                    tpdModule.setTaxonLevel(TaxonLevel.MODULE);
+                    taxonPositionDTOList.add(tpdModule);
+                }
+                if (tp.getSpecialization() != null) {
+                    TaxonPositionDTO tpdSpecialization = new TaxonPositionDTO();
+                    tpdSpecialization.setTaxonLevelId(tp.getSpecialization().getId());
+                    tpdSpecialization.setTaxonLevelName(tp.getSpecialization().getName());
+                    tpdSpecialization.setTaxonLevel(TaxonLevel.SPECIALIZATION);
+                    taxonPositionDTOList.add(tpdSpecialization);
+                }
             }
         });
 
@@ -147,7 +182,7 @@ public class LearningObjectService {
     }
 
     public List<ReducedLearningObject> getReducedLOsByCreator(User creator, int start, int maxResults) {
-        List <ReducedLearningObject> reducedLOsByCreator = reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults);
+        List<ReducedLearningObject> reducedLOsByCreator = reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults);
         reducedLOsByCreator
                 .forEach(lo -> {
                     if (lo.getCreator() != null) {

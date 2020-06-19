@@ -3,7 +3,7 @@
   <!-- BEGIN Search learning objects -->
   <md-toolbar
     class="md-table-toolbar md-default"
-    data-ng-if="$ctrl.viewPath != 'aineeksperdid' && $ctrl.viewPath != 'piiratud-kasutajad'"
+    data-ng-if="$ctrl.viewPath != 'kasutajad'"
   >
     <div class="md-toolbar-tools custom-table-padding" data-layout-xs="column" data-layout-align-xs="start start">
       <h1 class="md-headline" data-translate="{{titleTranslationKey}}"></h1>
@@ -34,32 +34,108 @@
   <!-- BEGIN Search users -->
   <md-toolbar
     class="md-table-toolbar md-default"
-    data-ng-if="$ctrl.viewPath == 'aineeksperdid' || $ctrl.viewPath == 'piiratud-kasutajad'"
+    data-ng-if="$ctrl.viewPath == 'kasutajad'"
   >
     <div layout-margin>
-      <h1 class="md-title" data-translate="SEARCH_USERS"></h1>
+      <h1 class="md-title" data-translate="FILTER_RESULTS"></h1>
     </div>
-    <div class="md-toolbar-tools">
-      <md-autocomplete
-        flex
-        md-min-length="0"
-        md-input-name="autocompleteField"
-        md-selected-item="selectedUser"
-        md-search-text="filterUsersInput"
-        md-items="user in $ctrl.filterUsers(filterUsersInput)"
-        md-item-text="user.username"
-        placeholder="{{$ctrl.getUsernamePlaceholder()}}"
+    <div layout-margin layout="row" data-layout-xs="column" style="font-size: 14px">
+      <md-input-container class="statistics-filter__experts-container"
+                          data-flex data-layout="column"
       >
-        <md-item-template>
-          <span md-highlight-text="filterUsersInput">{{user.username}}</span>
-        </md-item-template>
-      </md-autocomplete>
-      <md-button
-        aria-label="Ava kasutaja"
-        class="md-raised md-default"
-        data-ng-click="$ctrl.editUser(selectedUser)"
-        data-translate="BUTTON_OPEN"
-      ></md-button>
+        <label data-translate="USER_ROLE_APP"></label>
+        <md-select id="role-select"
+                   data-ng-model="filter.role"
+                   aria-label="Vali kasutaja roll rakenduses"
+                   data-ng-change="$ctrl.getFilterResults() && query.page === 1"
+        >
+          <md-option
+            data-ng-repeat="role in $ctrl.addAllOption(userRoles)"
+            data-ng-value="role"
+          >{{role | translate}}</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container class="statistics-filter__experts-container"
+                          data-flex data-layout="column"
+      >
+        <label data-translate="USER_ROLE_PICKED"></label>
+        <md-select id="userRole-select"
+                   data-ng-model="filter.userRole"
+                   aria-label="Vali kasutaja määratud roll"
+                   data-ng-change="$ctrl.getFilterResults() && query.page === 1"
+        >
+          <md-option
+            data-ng-repeat="role in $ctrl.addAllOption(userSelectedRoles)"
+            data-ng-value="role"
+          >{{ role !== 'GROUPS_ALL' ? 'PROFILE_' + role : role | translate }}</md-option>
+        </md-select>
+      </md-input-container>
+      <md-input-container class="statistics-filter__experts-container"
+                          data-flex data-layout="column"
+      >
+        <label data-translate="USER_INTEREST"></label>
+        <md-select id="educationalContext-select"
+                   data-ng-model="filter.userEducationalContext"
+                   aria-label="Vali kasutajale huvipakkuv haridustase"
+                   data-ng-change="$ctrl.getFilterResults() && query.page === 1"
+        >
+          <md-option
+            data-ng-repeat="e in $ctrl.addAllOptionToEduContext(educationalContext)"
+            data-ng-value="e"
+          >{{e | translate}}</md-option>
+        </md-select>
+      </md-input-container>
+      <div layout="column">
+        <md-checkbox
+          ng-model="filter.withEmail"
+          data-ng-disabled="filter.withoutEmail"
+          data-ng-change="$ctrl.getFilterResults() && query.page === 1"
+        ><span data-translate="USERS_WITH_EMAIL"></span></md-checkbox>
+        <md-checkbox
+          ng-model="filter.withoutEmail"
+          data-ng-disabled="filter.withEmail"
+          data-ng-change="$ctrl.getFilterResults() && query.page === 1"
+        ><span data-translate="USERS_WITHOUT_EMAIL"></span></md-checkbox>
+      </div>
+    </div>
+    <div data-layout="row" data-layout-xs="column">
+      <div class="md-toolbar-tools" style="padding-left: 0" data-layout-xs="center center">
+        <form data-flex name="filter.form">
+          <md-input-container>
+            <md-icon data-md-colors="{ color: 'grey-400' }">search</md-icon>
+            <input id="user-search-input"
+                   type="text"
+                   data-ng-model="query.filter"
+                   data-ng-model-options="filter.options"
+                   placeholder = "{{ 'SEARCH_USER' | translate }}"
+                   class="search-learning-objects"
+            >
+          </md-input-container>
+        </form>
+      </div>
+      <div data-layout="row" data-layout-xs="column">
+        <md-button id="clear-user-button"
+                   class=""
+                   data-translate="CLEAR_FORM"
+                   data-ng-click="$ctrl.clearFields()"
+                   data-ng-show="filter.user || filter.taxons || educationalContext || filter.materialType || true"
+                   aria-label="Tühjenda filtriväljad"
+        ></md-button>
+        <md-menu>
+          <md-button
+            data-ng-click="$ctrl.openDownloadMenu($mdMenu, $event)"
+            md-menu-origin
+          >
+            <span data-translate="DO_DOWNLOAD"></span>
+            <md-tooltip md-direction="top"><span data-translate="DOWNLOAD_STATISTICS_TOOLTIP"></span></md-tooltip>
+          </md-button>
+          <md-menu-content>
+            <md-menu-item><md-button data-ng-click="$ctrl.generateFile('xlsx')">xlsx</md-button></md-menu-item>
+            <md-menu-item><md-button data-ng-click="$ctrl.generateFile('xls')">xls</md-button></md-menu-item>
+            <md-menu-item><md-button data-ng-click="$ctrl.generateFile('csv')">csv</md-button></md-menu-item>
+          </md-menu-content>
+        </md-menu>
+      </div>
     </div>
   </md-toolbar>
   <!-- END Search users -->
@@ -141,8 +217,7 @@
       <dop-improper data-ng-if="$ctrl.viewPath == 'teatatud-oppevara'"></dop-improper>
       <dop-changed data-ng-if="$ctrl.viewPath == 'muudetud-oppevara'"></dop-changed>
       <dop-deleted data-ng-if="$ctrl.viewPath == 'kustutatud-oppevara'"></dop-deleted>
-      <dop-users data-ng-if="$ctrl.viewPath == 'aineeksperdid'"></dop-users>
-      <dop-users data-ng-if="$ctrl.viewPath == 'piiratud-kasutajad'"></dop-users>
+      <dop-users data-ng-if="$ctrl.viewPath == 'kasutajad'"></dop-users>
       <dop-sentemails data-ng-if="$ctrl.viewPath == 'saadetud-teated'"></dop-sentemails>
     </div>
     <!-- BEGIN Not found message after data is loaded but contains 0 items -->
@@ -153,7 +228,7 @@
       data-layout-padding
     >
       <h2 class="md-body-2" data-translate="{{
-        $ctrl.viewPath == 'aineeksperdid' || $ctrl.viewPath == 'piiratud-kasutajad'
+        $ctrl.viewPath == 'kasutajad'
           ? 'ERROR_USERS_NOT_FOUND' : $ctrl.viewPath == 'saadetud-teated' ? 'EMAIL_SENT_EMAIL_NOT_FOUND'  : 'ERROR_LEARNING_OBJECTS_NOT_FOUND'}}"
       ></h2>
     </div>

@@ -18,12 +18,14 @@ angular.module('koolikottApp')
             $scope.location = $location.absUrl()
             $scope.isActive = false;
 
+            $scope.materialMetaData = {};
+
             document.addEventListener('keyup', (e) => {
                 if (e.code === "Escape" && $rootScope.isFullScreen)
                     $scope.toggleFullScreen();
             });
 
-            window.addEventListener('popstate',() => {
+            window.addEventListener('popstate', () => {
                 if ($rootScope.isFullScreen) {
                     $rootScope.isFullScreen = !$rootScope.isFullScreen;
                     $scope.toggleFullScreen();
@@ -136,7 +138,15 @@ angular.module('koolikottApp')
             }
 
             function getMaterial(success, fail) {
-                materialService.getMaterialById($route.current.params.id.split('-')[0]).then(success, fail)
+                materialService.getMaterialById($route.current.params.id.split('-')[0]).then(success, fail);
+            }
+
+            function getMaterialLdJson(id, success) {
+                materialService.getMaterialLdJsonById(id).then(success);
+            }
+
+            function getMaterialLdJsonByIdSuccess(ldJson) {
+                $scope.materialMetaData = ldJson;
             }
 
             function getMaterialSuccess(material) {
@@ -151,103 +161,11 @@ angular.module('koolikottApp')
 
                     }
                     init();
-
-                    //metaandmete lisamine
-
-                    $scope.materialMetaData = createMetaData(material);
-
-                    addAuthors(material);
-
-                    if (material.peerReviews.length > 0) return addPeerReview(material);
-
                 }
             }
 
-            function createMetaData(material) {
-                return [
-                    {
-                        '@context': 'http://schema.org/',
-                        '@type': 'CreativeWork',
-                        'url': $scope.pageUrl,
-                        'publisher': {
-                            '@type': 'Organization',
-                            'name': 'e-koolikott.ee'
-                        },
-                        'audience': {
-                            '@type': 'Audience',
-                            'audienceType': audienceType(material)
-                        },
-                        'thumbnailUrl': 'https://e-koolikott.ee/ekoolikott.png',
-                        'dateCreated': material.added,
-                        'datePublished': formatIssueDateTime(material.issueDate),
-                        'license': addLicense(material.licenseType),
-                        'typicalAgeRange': convertToClassGroup(material.targetGroups),
-                        'interactionCount': material.views,
-                        'headline': material.titles.map(title => title.text),
-                        'keywords': material.tags,
-                        'inLanguage': convertLanguage(material.language),
-                        'text': material.descriptions.map(description => description.text)
-                    },
-                    {
-                        '@context': 'https://schema.org',
-                        '@type': 'Organization',
-                        'url': 'https://e-koolikott.ee',
-                        'logo': 'https://e-koolikott.ee/ekoolikott.png'
-                    },
-                    {
-                        '@context': 'https://schema.org',
-                        '@type': 'WebSite',
-                        'url': 'https://www.e-koolikott.ee/',
-                        'potentialAction': {
-                            '@type': 'SearchAction',
-                            'target': 'https://e-koolikott.ee/search/result?q={search_term_string}',
-                            'query-input': 'required name=search_term_string'
-                        }
-                    },
-                    {
-                        '@context': 'https://schema.org',
-                        '@type': 'BreadcrumbList',
-                        'itemListElement': [{
-                            '@type': 'ListItem',
-                            'position': 1,
-                            'name': $translate.instant(material.taxonPositionDto[0].taxonLevelName),
-                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[0].taxonLevelId}`//TODO at the moment 1st taxonroute taken
-                        }, {
-                            '@type': 'ListItem',
-                            'position': 2,
-                            'name': $translate.instant((`DOMAIN_${material.taxonPositionDto[1].taxonLevelName}`).toUpperCase()),
-                            'item': `https://e-koolikott.ee/search/result/?taxon=${material.taxonPositionDto[1].taxonLevelId}`
-                        }]
-                    }
-                ]
-            }
-
-            function addPeerReview() {
-                $scope.materialMetaData[0].review = {
-                    '@type': 'Review',
-                    'reviewRating': {
-                        '@type': 'Rating',
-                        'ratingValue': '5',
-                        'bestRating': '5'
-                    },
-                    'reviewBody': 'Vastab nõuetele',
-                    'publisher': {
-                        '@type': 'Organization',
-                        'name': 'e-koolikott.ee'
-                    }
-                }
-            }
-
-            function addAuthors(material) {
-                let authorsNames = [];
-
-                material.authors.map(materialAuthor => {
-                    const author = {};
-                    author['@type'] = 'Person';
-                    author[`name`] = `${materialAuthor.name} ${materialAuthor.surname}`;
-                    authorsNames.push(author);
-                });
-                $scope.materialMetaData[0].author = authorsNames;
+            function createLdJson() {
+                getMaterialLdJson($scope.material.id, getMaterialLdJsonByIdSuccess);
             }
 
             function getMaterialFail() {
@@ -283,6 +201,7 @@ angular.module('koolikottApp')
                 getContentType();
                 processMaterial();
                 showUnreviewedMessage();
+                createLdJson();
 
                 $scope.getCorrectLanguageString = (languageStringList) => {
                     if (languageStringList) {
@@ -310,10 +229,10 @@ angular.module('koolikottApp')
 
             }
 
-            $scope.updateMaterialVisibility = () =>{
+            $scope.updateMaterialVisibility = () => {
                 serverCallService
                     .makePost('rest/material/update', $scope.material)
-                    .then(({ data: material }) => {
+                    .then(({data: material}) => {
                         if (material) {
                             storageService.setMaterial(null)
                             $location.url('/oppematerjal/' + $scope.material.id)
@@ -330,7 +249,7 @@ angular.module('koolikottApp')
             $scope.makePublic = () => {
                 if (!$scope.material.licenseType || $scope.material.licenseType.name !== 'CCBYSA30' ||
                     ($scope.material.picture &&
-                    $scope.material.picture.licenseType.name !== 'CCBYSA30')){
+                        $scope.material.picture.licenseType.name !== 'CCBYSA30')) {
                     $mdDialog.show({
                         templateUrl: '/views/learningObjectAgreementDialog/learningObjectLicenseAgreementDialog.html',
                         controller: 'learningObjectLicenseAgreementController',
@@ -367,7 +286,7 @@ angular.module('koolikottApp')
             $scope.isAdmin = () => authenticatedUserService.isAdmin();
             $scope.isModerator = () => authenticatedUserService.isModerator();
             $scope.isRestricted = () => authenticatedUserService.isRestricted();
-            $scope.isOwner= () => authenticatedUserService.isOwner($scope.material);
+            $scope.isOwner = () => authenticatedUserService.isOwner($scope.material);
             $scope.showImproper = () => $rootScope.learningObjectImproper;
 
             $scope.modUser = () => !!(authenticatedUserService.isModerator() || authenticatedUserService.isAdmin());
@@ -389,7 +308,7 @@ angular.module('koolikottApp')
                 updateMaterial(value, $scope.material);
             });
 
-            $scope.isAdminButtonsShowing = function(){
+            $scope.isAdminButtonsShowing = function () {
                 return $rootScope.learningObjectDeleted === true || $rootScope.learningObjectImproper === true;
             };
 
@@ -415,11 +334,10 @@ angular.module('koolikottApp')
             $scope.toggleFullScreen = () => {
                 $rootScope.isFullScreen = !$rootScope.isFullScreen;
                 toggleFullScreen();
-                if ($rootScope.isFullScreen){
+                if ($rootScope.isFullScreen) {
                     toastService.show('YOU_CAN_LEAVE_PAGE_WITH_ESC', 15000, 'user-missing-id');
                     gTagCaptureEvent('full-screen', 'teaching material')
-                }
-                else {
+                } else {
                     toastService.hide()
                 }
             }
@@ -435,7 +353,7 @@ angular.module('koolikottApp')
                     controller: 'addMaterialDialogController',
                     controllerAs: '$ctrl',
                     scope: editMaterialScope,
-                    locals: { isEditMode: true }
+                    locals: {isEditMode: true}
                 }).then((material) => {
                     if (material) {
                         $scope.material = material;
@@ -477,7 +395,7 @@ angular.module('koolikottApp')
 
             function deleteMaterial(serverCallService, toastService, $scope, $rootScope) {
                 serverCallService
-                    .makePost('rest/material/delete', { id: $scope.material.id, type: $scope.material.type })
+                    .makePost('rest/material/delete', {id: $scope.material.id, type: $scope.material.type})
                     .then(() => {
                         toastService.show('MATERIAL_DELETED');
                         $scope.material.deleted = true
@@ -534,8 +452,8 @@ angular.module('koolikottApp')
             $scope.isAdminOrModeratorOrCreator = function () {
                 return (
                     authenticatedUserService.isAdmin() ||
-                        authenticatedUserService.isModerator() ||
-                        $scope.isUsersMaterial()
+                    authenticatedUserService.isModerator() ||
+                    $scope.isUsersMaterial()
                 )
             }
 
@@ -557,12 +475,12 @@ angular.module('koolikottApp')
                 storageService.setMaterial(null)
             )
 
-            $scope.captureOutboundLink = function(url) {
+            $scope.captureOutboundLink = function (url) {
                 window.captureOutboundLink(url);
             };
 
             //Open all external links in new tab
-            window.addEventListener('click', function(event) {
+            window.addEventListener('click', function (event) {
                 let el = event.target
 
                 if (el.tagName === 'A' && !el.isContentEditable && el.host !== window.location.host) {

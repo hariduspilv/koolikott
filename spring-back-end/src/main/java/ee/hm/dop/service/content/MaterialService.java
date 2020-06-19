@@ -4,7 +4,6 @@ import ee.hm.dop.config.Configuration;
 import ee.hm.dop.dao.MaterialDao;
 import ee.hm.dop.dao.OriginalPictureDao;
 import ee.hm.dop.dao.PortfolioDao;
-import ee.hm.dop.dao.PortfolioMaterialDao;
 import ee.hm.dop.model.*;
 import ee.hm.dop.model.enums.EducationalContextC;
 import ee.hm.dop.model.enums.Visibility;
@@ -74,12 +73,7 @@ public class MaterialService {
     @Inject
     private PortfolioDao portfolioDao;
     @Inject
-    private PortfolioService portfolioService;
-    @Inject
     private PictureService pictureService;
-    @Inject
-    private PortfolioMaterialDao portfolioMaterialDao;
-
 
     public Material findByRepository(Repository repository, String repositoryIdentifier) {
         return materialDao.findByRepository(repository, repositoryIdentifier);

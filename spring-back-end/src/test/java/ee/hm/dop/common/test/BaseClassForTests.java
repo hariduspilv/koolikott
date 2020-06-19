@@ -111,6 +111,10 @@ public interface BaseClassForTests {
         Material1Validation.assertMaterial1(material, testLayer);
     }
 
+    default void assertMaterialLdJson(String ldJson, Material material) {
+        Material1LdJsonValidation.assertMaterial1(ldJson, material);
+    }
+
     default void assertPortfolio1(Portfolio portfolio, TestLayer testLayer) {
         Portfolio1Validator.assertPortfolio1(portfolio, testLayer);
     }

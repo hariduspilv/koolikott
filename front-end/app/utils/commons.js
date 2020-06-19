@@ -659,12 +659,13 @@ function addLicense(license) {
 }
 
 function audienceType(lo) {
-    return [...new Set(
-        lo.taxonPositionDto
-            .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
-            .map(x => x.taxonLevelName))]
-        .map(eduContext => translateEducationalContext(eduContext));
-
+    if (lo) {
+        return [...new Set(
+            lo.taxonPositionDto
+                .filter(tp => tp.taxonLevel === 'EDUCATIONAL_CONTEXT')
+                .map(x => x.taxonLevelName))]
+            .map(eduContext => translateEducationalContext(eduContext));
+    }
 }
 
 function getLoginFrom(authBy){

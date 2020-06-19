@@ -225,10 +225,7 @@ md-dialog.login-dialog {
 }
 
 .paginator-left {
-  @media (max-width: $layout-breakpoint-xs) {
-    justify-content: flex-start;
-  }
-  @media (max-width: $layout-breakpoint-ipad) {
+  @media (max-width: 1680px) {
     justify-content: flex-start;
   }
 }

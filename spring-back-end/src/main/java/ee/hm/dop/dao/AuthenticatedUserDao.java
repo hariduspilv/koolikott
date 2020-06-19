@@ -2,11 +2,12 @@ package ee.hm.dop.dao;
 
 import ee.hm.dop.model.AuthenticatedUser;
 import ee.hm.dop.utils.exceptions.DuplicateTokenException;
-import java.time.LocalDateTime;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.PersistenceException;
 import java.math.BigInteger;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -50,5 +51,13 @@ public class AuthenticatedUserDao extends AbstractDao<AuthenticatedUser> {
                 .setParameter("sessionTime", Date.from(sessionTime.atZone(ZoneId.systemDefault()).toInstant()))
                 .getSingleResult())
                 .longValue();
+    }
+
+    public Timestamp getLatestUserLogin(Long userId) {
+        return ((Timestamp) getEntityManager().createNativeQuery("" +
+                "SELECT max(au.loginDate) from AuthenticatedUser au " +
+                "WHERE au.user_id = :userId")
+                .setParameter("userId", userId)
+                .getSingleResult());
     }
 }

@@ -1,8 +1,8 @@
 'use strict'
 
 angular.module('koolikottApp').controller('editUserController', [
-    '$scope', '$mdDialog', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter', 'taxonService', 'authenticatedUserService', '$location',
-    function ($scope, $mdDialog, serverCallService, translationService, toastService, $rootScope, $filter, taxonService, authenticatedUserService, $location) {
+    '$scope', '$mdDialog', '$route', 'serverCallService', 'translationService', 'toastService', '$rootScope', '$filter', 'taxonService', 'authenticatedUserService', '$location',
+    function ($scope, $mdDialog, $route, serverCallService, translationService, toastService, $rootScope, $filter, taxonService, authenticatedUserService, $location) {
         var ROLE_MODERATOR = "MODERATOR";
 
         function init() {
@@ -64,6 +64,7 @@ angular.module('koolikottApp').controller('editUserController', [
                 }
                 $mdDialog.hide();
                 toastService.show('USER_UPDATED');
+                $route.reload()
             }
         }
 

@@ -1,5 +1,6 @@
 package ee.hm.dop.dao;
 
+import ee.hm.dop.model.Language;
 import ee.hm.dop.model.User;
 import ee.hm.dop.model.taxon.EducationalContext;
 import ee.hm.dop.model.taxon.Taxon;
@@ -9,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.NoResultException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,7 +33,6 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .setParameter("taxonId",taxon.getId())
                 .getResultList();
     }
-
 
     public List<EducationalContext> findAllEducationalContext() {
         return getEntityManager()
@@ -178,5 +179,39 @@ public class TaxonDao extends AbstractDao<Taxon> {
                 .setParameter("users", users)
                 .getResultList();
         return resultList.stream().map(BigInteger::longValue).collect(Collectors.toList());
+    }
+
+    public String findEducationalContextWithTranslation(Taxon taxon, Language language) {
+        try {
+            return (String) getEntityManager()
+                    .createNativeQuery("SELECT t.translation from Translation t " +
+                            "JOIN Taxon tx on t.translationKey = tx.name " +
+                            "JOIN TaxonPosition tp on tx.id = tp.educationalContext " +
+                            "WHERE tp.taxon = :taxonId " +
+                            "AND t.translationGroup = :lang ")
+                    .setParameter("taxonId", taxon.getId())
+                    .setParameter("lang", language.getId())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
+    public String findDomainWithTranslation(Taxon taxon, Language language) {
+        try {
+            return (String) getEntityManager()
+                    .createNativeQuery("SELECT t.translation from Translation t " +
+                            "JOIN Taxon tx on t.translationKey = tx.translationKey " +
+                            "JOIN TaxonPosition tp on tx.id = tp.domain " +
+                            "WHERE tp.taxon = :taxonId " +
+                            "AND t.translationGroup = :lang")
+                    .setParameter("taxonId", taxon.getId())
+                    .setParameter("lang", language.getId())
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

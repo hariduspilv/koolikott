@@ -99,26 +99,14 @@
       <ul class="sidenav__list">
         <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
           <a id="moderators" class="sidenav__header" md-ink-ripple layout="row" layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/toolaud/aineeksperdid')}"
-             data-ng-href="/toolaud/aineeksperdid"
+             data-ng-class="{'is-active': isLocationActive('/toolaud/kasutajad')}"
+             data-ng-href="/toolaud/kasutajad"
              data-ng-click="updateCount('moderators')">
             <div layout="row" layout-align="center center">
               <md-icon class="material-icons sidenav__icon">face</md-icon>
-              <span data-translate="MODERATORS_TAB" class="sidenav__name"></span>
+              <span data-translate="USERS" class="sidenav__name"></span>
             </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="moderatorsCount"></span>
-          </a>
-        </li>
-        <li class="sidenav__item" layout="column" data-ng-show="isAdminUser()">
-          <a id="restrictedUsers" class="sidenav__header" md-ink-ripple layout="row"
-             layout-align="space-between center"
-             data-ng-class="{'is-active': isLocationActive('/toolaud/piiratud-kasutajad')}"
-             data-ng-href="/toolaud/piiratud-kasutajad" data-ng-click="updateCount('restrictedUsers')">
-            <div layout="row" layout-align="center center">
-              <md-icon class="material-icons sidenav__icon">block</md-icon>
-              <span data-translate="RESTRICTED_USERS_TAB" class="sidenav__name"></span>
-            </div>
-            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="restrictedUsersCount"></span>
+            <span class="sidenav__count" data-ng-if="isAuthenticated" data-ng-bind="allUsersCount"></span>
           </a>
         </li>
         <li class="sidenav__item" layout="column" ng-if="isAdminUser()">
