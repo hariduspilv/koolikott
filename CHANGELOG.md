@@ -1,3 +1,20 @@
+## E-koolikott [1.58.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11470)
+
+### Muutunud
+* "Õppevara emailiga jagamise muudatused" [EK-1099](https://projektid.hitsa.ee/jira/browse/EK-1099)
+* "KKK tekstide sees olevad lingid võiks avaneda uues aknas" [EK-1100](https://projektid.hitsa.ee/jira/browse/EK-1100)
+
+
+## E-koolikott [1.57.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11482)  (Prelivesse paigaldatud 18.06.2020)
+
+### Muutunud
+* "E-koolikoti sessiooni lõppedes katkestatakse kasutaja eelnev tegevus" [EK-1090](https://projektid.hitsa.ee/jira/browse/EK-1090)
+* "EstCore2 implementatsioon" [EK-1076](https://projektid.hitsa.ee/jira/browse/EK-1076)
+* "Minu profiili all koolide nimekirjas kuvada ainult koolid" [EK-452](https://projektid.hitsa.ee/jira/browse/EK-452)
+* "Kogumiku ajaloo taastamine vale litsentsiga materjaliga" [EK-1079](https://projektid.hitsa.ee/jira/browse/EK-1079)
+* "Anonüümsena õppevarast teavitamisel sisselogimine ebaõnnestub" [EK-1080](https://projektid.hitsa.ee/jira/browse/EK-1080)
+
+
 ## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)  (Prelivesse paigaldatud 02.06.2020)
 
 ### Muutunud
