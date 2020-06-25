@@ -77,9 +77,9 @@ public class MaterialGetter {
         }
     }
 
-    public SearchResult getByCreatorResult(User creator, int start, int maxResults) {
+    public SearchResult getByCreatorResult(User creator, User loggedInUser, int start, int maxResults) {
         List<Searchable> userFavorites = new ArrayList<>(getByCreator(creator, start, maxResults));
-        return new SearchResult(userFavorites, getByCreatorSize(creator), start);
+        return new SearchResult(userFavorites, getByCreatorSize(creator, loggedInUser), start);
     }
 
     private List<ReducedLearningObject> getByCreator(User creator, int start, int maxResults) {
@@ -93,8 +93,14 @@ public class MaterialGetter {
         return reducedLearningObjects;
     }
 
-    public long getByCreatorSize(User creator) {
-        return materialDao.findByCreatorSize(creator);
+    public long getByCreatorSize(User creator, User loggedInUser) {
+        if (loggedInUser == null) {
+            return materialDao.findByCreatorNotDeletedOrNotPrivateSize(creator);
+        } else if (UserUtil.isAdmin(loggedInUser) || creator.getId().equals(loggedInUser.getId())) {
+            return materialDao.findByCreatorSize(creator);
+        } else {
+            return materialDao.findByCreatorNotDeletedOrNotPrivateSize(creator);
+        }
     }
 
 }

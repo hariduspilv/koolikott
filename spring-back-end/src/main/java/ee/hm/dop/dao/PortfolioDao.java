@@ -71,6 +71,14 @@ public class PortfolioDao extends AbstractDao<Portfolio> {
         return (Long) query.getSingleResult();
     }
 
+    public Long findCountByCreatorNotDeletedAndNotPrivate(User creator) {
+        Query query = getEntityManager()
+                .createQuery("SELECT count(*) FROM Portfolio p WHERE p.creator = :creator AND p.deleted = false " +
+                        "AND p.visibility != 'PRIVATE' AND p.visibility != 'NOT_LISTED'")
+                .setParameter("creator", creator);
+        return (Long) query.getSingleResult();
+    }
+
     /**
      * Finds all portfolios contained in the idList. There is no guarantee about
      * in which order the portfolios will be in the result list.

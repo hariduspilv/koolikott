@@ -13,6 +13,7 @@ import ee.hm.dop.model.taxon.TaxonPosition;
 import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.service.permission.PermissionFactory;
 import ee.hm.dop.service.permission.PermissionItem;
+import ee.hm.dop.utils.UserUtil;
 import ee.hm.dop.utils.ValidatorUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -181,8 +182,8 @@ public class LearningObjectService {
         return lo.getLicenseType() == null || !lo.getLicenseType().getName().equals(CCBYSA30.name());
     }
 
-    public List<ReducedLearningObject> getReducedLOsByCreator(User creator, int start, int maxResults) {
-        List<ReducedLearningObject> reducedLOsByCreator = reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults);
+    public List<ReducedLearningObject> getReducedLOsByCreator(User creator, User loggedInUser, int start, int maxResults) {
+        List<ReducedLearningObject> reducedLOsByCreator = getReducedLOsAccordingToRole(creator, loggedInUser, start, maxResults);
         reducedLOsByCreator
                 .forEach(lo -> {
                     if (lo.getCreator() != null) {
@@ -190,5 +191,15 @@ public class LearningObjectService {
                     }
                 });
         return reducedLOsByCreator;
+    }
+
+    private List <ReducedLearningObject> getReducedLOsAccordingToRole(User creator, User loggedInUser, int start, int maxResults) {
+        if (loggedInUser == null) {
+            return reducedLearningObjectDao.findReducedLOSByCreatorNotPrivate(creator, start, maxResults);
+        } else if (UserUtil.isAdmin(loggedInUser) || creator.getId().equals(loggedInUser.getId())) {
+            return reducedLearningObjectDao.findReducedLOSByCreator(creator, start, maxResults);
+        } else {
+            return reducedLearningObjectDao.findReducedLOSByCreatorNotPrivate(creator, start, maxResults);
+        }
     }
 }

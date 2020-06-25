@@ -107,9 +107,9 @@ LearningObjectResource extends BaseResource {
         User creator = getValidCreator(username);
         if (creator == null) throw notFound();
 
-        int size = (int) (materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator));
+        int size = (int) (materialGetter.getByCreatorSize(creator, getLoggedInUser()) + portfolioGetter.getCountByCreator(creator, getLoggedInUser()));
 
-        List<Searchable> searchableList = new ArrayList<>(learningObjectService.getReducedLOsByCreator(creator, start, maxResults));
+        List<Searchable> searchableList = new ArrayList<>(learningObjectService.getReducedLOsByCreator(creator, getLoggedInUser(), start, maxResults));
 
         return new SearchResult(searchableList, size, start);
     }
@@ -119,7 +119,7 @@ LearningObjectResource extends BaseResource {
         User creator = getValidCreator(username);
         if (creator == null) throw notFound();
 
-        return materialGetter.getByCreatorSize(creator) + portfolioGetter.getCountByCreator(creator);
+        return materialGetter.getByCreatorSize(creator, getLoggedInUser()) + portfolioGetter.getCountByCreator(creator, getLoggedInUser());
     }
 
     @GetMapping("getAllLearningObjectsByCreator")

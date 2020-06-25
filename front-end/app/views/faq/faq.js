@@ -8,6 +8,15 @@
             this.initNewFaq()
             this.$scope.editMode = false
             this.$translate('KKK_TAB').then((translation) => this.$rootScope.tabTitle = translation);
+
+            //Open all external links in new tab
+            window.addEventListener('click', function(event) {
+                let el = event.target
+
+                if (el.tagName === 'A') {
+                    el.setAttribute('target', '_blank')
+                }
+            }, true)
         }
 
         initNewFaq() {

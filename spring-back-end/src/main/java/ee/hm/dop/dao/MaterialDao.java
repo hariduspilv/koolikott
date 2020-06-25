@@ -141,6 +141,17 @@ public class MaterialDao extends AbstractDao<Material> {
         return query.longValue();
     }
 
+    public long findByCreatorNotDeletedOrNotPrivateSize(User creator) {
+        BigInteger query = (BigInteger) getEntityManager()
+                .createNativeQuery("SELECT Count(lo.id) FROM LearningObject lo " +
+                        "INNER JOIN Material m ON lo.id=m.id " +
+                        "WHERE lo.creator = :creator AND lo.deleted = FALSE " +
+                        "AND lo.visibility != 'PRIVATE' and lo.visibility != 'NOT_LISTED'")
+                .setParameter("creator", creator)
+                .getSingleResult();
+        return query.longValue();
+    }
+
     public List<Material> findNewestMaterials(int numberOfMaterials, int startPosition) {
         return getEntityManager()
                 .createQuery("FROM Material mat WHERE mat.deleted = false ORDER BY added DESC, id DESC", entity())

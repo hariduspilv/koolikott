@@ -54,7 +54,7 @@ public class PortfolioResource extends BaseResource {
         User creator = getValidCreator(username);
         if (creator == null) throw notFound();
 
-        return portfolioGetter.getCountByCreator(creator);
+        return portfolioGetter.getCountByCreator(creator, getLoggedInUser());
     }
 
     @PostMapping("create")
