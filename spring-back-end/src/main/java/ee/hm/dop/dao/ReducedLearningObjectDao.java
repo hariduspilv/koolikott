@@ -38,6 +38,15 @@ public class ReducedLearningObjectDao extends AbstractDao<ReducedLearningObject>
         return findByCreator(query, creator, start, maxResults);
     }
 
+    public List<ReducedLearningObject> findReducedLOSByCreatorNotPrivate(User creator, int start, int maxResults) {
+        Query query = getEntityManager()
+                .createQuery("select rlo FROM ReducedLearningObject rlo " +
+                        "WHERE rlo.creator.id = :creatorId AND rlo.deleted = false " +
+                        "AND rlo.visibility != 'PRIVATE' AND rlo.visibility != 'NOT_LISTED' " +
+                        "order by rlo.class asc, rlo.views desc, rlo.added desc ", ReducedLearningObject.class);
+        return findByCreator(query, creator, start, maxResults);
+    }
+
     private List<ReducedLearningObject> findByCreator(Query query, User creator, int start, int maxResults) {
         query.setParameter("creatorId", creator.getId()).setFirstResult(start);
         if (maxResults > 0) {

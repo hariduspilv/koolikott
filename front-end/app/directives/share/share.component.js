@@ -122,8 +122,8 @@ class controller extends Controller {
                 this.Socialshare.share({
                     provider,
                     attrs: {
-                        socialshareSubject: this.$translate.instant('READING_RECOMMENDATION') + ': ' + this.title,
-                        socialshareBody: this.$translate.instant('WELCOME_READ_HERE') + ': ' + this.pageUrl
+                        socialshareSubject: this.title,
+                        socialshareBody: this.pageUrl
                     }
                 })
 

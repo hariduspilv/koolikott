@@ -54,13 +54,13 @@ public class MaterialResource extends BaseResource {
                                      @RequestParam(value = "start", defaultValue = "0") int start,
                                      @RequestParam(value = "maxResults", defaultValue = "0") int maxResults) {
         User creator = getValidCreator(username);
-        return (creator != null) ? materialGetter.getByCreatorResult(creator, start, NumberUtils.zvl(maxResults, 12)) : null;
+        return (creator != null) ? materialGetter.getByCreatorResult(creator, getLoggedInUser(), start, NumberUtils.zvl(maxResults, 12)) : null;
     }
 
     @GetMapping("getByCreator/count")
     public Long getByCreatorCount(@RequestParam("username") String username) {
         User creator = getValidCreator(username);
-        return (creator != null) ? materialGetter.getByCreatorSize(creator) : null;
+        return (creator != null) ? materialGetter.getByCreatorSize(creator, getLoggedInUser()) : null;
     }
 
     @GetMapping("getBySource")

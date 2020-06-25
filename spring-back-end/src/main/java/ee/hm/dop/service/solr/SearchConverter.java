@@ -93,8 +93,6 @@ public class SearchConverter {
             if (loggedInUser.getRole() == Role.ADMIN) {
                 visibilities.add(Visibility.NOT_LISTED);
                 visibilities.add(Visibility.PRIVATE);
-            } else if (loggedInUser.getRole() == Role.MODERATOR) {
-                visibilities.add(Visibility.NOT_LISTED);
             }
         }
         return visibilities;

@@ -63,7 +63,7 @@ public class PortfolioGetter {
 
     public SearchResult getByCreatorResult(User creator, User loggedInUser, int start, int maxResults) {
         List<Searchable> searchables = new ArrayList<>(getByCreator(creator, loggedInUser, start, maxResults));
-        Long size = getCountByCreator(creator);
+        Long size = getCountByCreator(creator, loggedInUser);
         return new SearchResult(searchables, size, start);
     }
 
@@ -92,8 +92,14 @@ public class PortfolioGetter {
         return learningObjectsByCreator;
     }
 
-    public Long getCountByCreator(User creator) {
-        return portfolioDao.findCountByCreator(creator);
+    public Long getCountByCreator(User creator, User loggedInUser) {
+        if (loggedInUser == null) {
+            return portfolioDao.findCountByCreatorNotDeletedAndNotPrivate(creator);
+        } else if (UserUtil.isAdmin(loggedInUser) || creator.getId().equals(loggedInUser.getId())) {
+            return portfolioDao.findCountByCreator(creator);
+        } else {
+            return portfolioDao.findCountByCreatorNotDeletedAndNotPrivate(creator);
+        }
     }
 
     public Portfolio findValid(Portfolio portfolio) {
