@@ -9,7 +9,6 @@ import ee.hm.dop.dao.TranslationGroupDao;
 import ee.hm.dop.model.Material;
 import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.Visibility;
-import ee.hm.dop.model.taxon.TaxonLevel;
 import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.service.content.LearningObjectService;
 import org.springframework.stereotype.Service;
@@ -57,8 +56,8 @@ public class MaterialLdJsonService {
     public static final String EDUCATIONAL_FRAMEWORK = "educationalFramework";
     public static final String ALIGNMENT_OBJECT = "AlignmentObject";
     public static final String ALIGNMENT_TYPE = "alignmentType";
-    public static final String _TYPE = "type";
-    public static final String DOMAIN = "DOMAIN_";
+    public static final String TYPE_ = "type";
+    public static final String DOMAIN_ = "DOMAIN_";
     public static final String EKOOLIKOTT_PNG = "https://e-koolikott.ee/ekoolikott.png";
     public static final String LOGO = "logo";
     public static final String E_KOOLIKOTT_EE = "https://www.e-koolikott.ee/";
@@ -76,6 +75,9 @@ public class MaterialLdJsonService {
     public static final String P = "P";
     public static final String REQUIRED_NAME_SEARCH_TERM_STRING = "required name=search_term_string";
     public static final String NA = "NA";
+    public static final String EMPTY_STRING = "";
+    public static final String SPACE_STRING = " ";
+    public static final String HTTPS_E_KOOLIKOTT_EE_SEARCH_RESULT_TAXON = "https://e-koolikott.ee/search/result/?taxon=";
 
     private final LearningObjectService learningObjectService;
     private final MaterialDao materialDao;
@@ -94,17 +96,19 @@ public class MaterialLdJsonService {
     public String getMaterialLdJson(long materialId) {
         Material material = findAndSetTaxonPosition(materialId);
 
-        if (showMaterialLdJson(material)) {
+        if (material != null && showMaterialLdJson(material)) {
             JsonArray jsonArray = new JsonArray();
             jsonArray.add(createCreativeWork(material));
             jsonArray.add(createWebSite());
             jsonArray.add(createOrganisation());
-            if (isNotEmpty(material.getTaxonPositionDto())) jsonArray.add(createBreadCrumbList(material));
+            if (isNotEmpty(material.getTaxonPositionDto()) && createBreadCrumbList(material) != null) {
+                jsonArray.add(createBreadCrumbList(material));
+            }
             if (isNotEmpty(material.getPeerReviews())) jsonArray.add(createPeerReview());
 
             return jsonArray.toString();
         }
-        return "";
+        return EMPTY_STRING;
     }
 
     private JsonObject createOrganisation() {
@@ -127,19 +131,27 @@ public class MaterialLdJsonService {
         JsonObject itemList_1 = new JsonObject();
         String listItem_1 = translationGroupDao.getTranslationByKeyAndLangcode(material.getTaxonPositionDto().get(0).getTaxonLevelName(), languageDao.findByCode(material.getLanguage().getCode()).getId());
 
+        if (listItem_1 == null) {
+            return null;
+        }
+
         itemList_1.addProperty(TYPE, LIST_ITEM);
         itemList_1.addProperty(POSITION, 1);
         itemList_1.addProperty(NAME, listItem_1);
-        itemList_1.addProperty(ITEM, "https://e-koolikott.ee/search/result/?taxon=" + material.getTaxonPositionDto().get(0).getTaxonLevelId());
+        itemList_1.addProperty(ITEM, HTTPS_E_KOOLIKOTT_EE_SEARCH_RESULT_TAXON + material.getTaxonPositionDto().get(0).getTaxonLevelId());
         itemListElement.add(itemList_1);
 
         JsonObject itemList_2 = new JsonObject();
-        String listItem_2 = translationGroupDao.getTranslationByKeyAndLangcode(DOMAIN + (material.getTaxonPositionDto().get(1).getTaxonLevelName()).toUpperCase(), languageDao.findByCode(material.getLanguage().getCode()).getId());
+        String listItem_2 = translationGroupDao.getTranslationByKeyAndLangcode(DOMAIN_ + (material.getTaxonPositionDto().get(1).getTaxonLevelName()).toUpperCase(), languageDao.findByCode(material.getLanguage().getCode()).getId());
+
+        if (listItem_2 == null) {
+            return null;
+        }
 
         itemList_2.addProperty(TYPE, LIST_ITEM);
         itemList_2.addProperty(POSITION, 2);
         itemList_2.addProperty(NAME, listItem_2);
-        itemList_2.addProperty(ITEM, "https://e-koolikott.ee/search/result/?taxon=" + material.getTaxonPositionDto().get(1).getTaxonLevelId());
+        itemList_2.addProperty(ITEM, HTTPS_E_KOOLIKOTT_EE_SEARCH_RESULT_TAXON + material.getTaxonPositionDto().get(1).getTaxonLevelId());
         itemListElement.add(itemList_2);
         breadCrumbList.add("itemListElement", itemListElement);
 
@@ -186,8 +198,7 @@ public class MaterialLdJsonService {
     private JsonObject createCreativeWork(Material material) {
 
         JsonObject jsonMaterial = new JsonObject();
-
-        jsonMaterial.addProperty("@id", material.getSource());
+        jsonMaterial.addProperty("@id", material.getSource() != null ? material.getSource() : NA);
         jsonMaterial.addProperty(CONTEXT, HTTP_SCHEMA_ORG);
         jsonMaterial.addProperty(TYPE, CREATIVE_WORK);
         jsonMaterial.add("learningResourceType", createResourceType(material));
@@ -197,7 +208,7 @@ public class MaterialLdJsonService {
         jsonMaterial.addProperty("thumbnailUrl", createThumbnailUrl(material));
         jsonMaterial.addProperty("license", createLicence(material));
         jsonMaterial.add("typicalAgeRange", createTypicalAgeRange(material));
-        jsonMaterial.addProperty("interactionCount", material.getViews() + USER_PAGE_VISITS);
+        jsonMaterial.addProperty("interactionCount", material.getViews() != null ? material.getViews() + USER_PAGE_VISITS : NA);
         jsonMaterial.add("headline", createHeadlines(material));
         jsonMaterial.add("keywords", createKeywords(material));
         jsonMaterial.add("abstract", createAbstract(material));
@@ -212,7 +223,7 @@ public class MaterialLdJsonService {
     }
 
     private String createLicence(Material material) {
-        return findLicenseType(material.getLicenseType().getName());
+        return material.getLicenseType() != null && material.getLicenseType().getName() != null ? findLicenseType(material.getLicenseType().getName()) : NA;
     }
 
     private JsonObject createAudiences(Material material) {
@@ -248,7 +259,7 @@ public class MaterialLdJsonService {
         JsonArray descriptions = new JsonArray();
         if (isNotEmpty(material.getDescriptions())) {
             material.getDescriptions().forEach(description -> {
-                String descriptionWithoutTags = description.getText().replaceAll(REGEX_TAG, "");
+                String descriptionWithoutTags = description.getText().replaceAll(REGEX_TAG, EMPTY_STRING);
                 descriptions.add(descriptionWithoutTags);
             });
         }
@@ -274,9 +285,7 @@ public class MaterialLdJsonService {
     private JsonArray createResourceType(Material material) {
         JsonArray resources = new JsonArray();
         if (isNotEmpty(material.getResourceTypes())) {
-            material.getResourceTypes().forEach(resourceType -> {
-                resources.add(translateLearningResourceType(resourceType.getName()));
-            });
+            material.getResourceTypes().forEach(resourceType -> resources.add(translateLearningResourceType(resourceType.getName())));
         }
         return resources;
     }
@@ -286,15 +295,17 @@ public class MaterialLdJsonService {
         List<TaxonPositionDTO> taxonsPositions = findTaxonPositionDtoForTypes(material, newArrayList(SUBTOPIC));
         if (taxonsPositions.isEmpty()) taxonsPositions = findTaxonPositionDtoForTypes(material, newArrayList(TOPIC));
 
-        taxonsPositions.stream().
-                map(taxon -> taxon.getTaxonLevelName().
-                        replaceAll(REGEX_UNDERSCORE, " ")).
-                forEach(aboutNotes::add);
+        if (isNotEmpty(taxonsPositions)) {
+            taxonsPositions.stream().
+                    map(taxon -> taxon.getTaxonLevelName().
+                            replaceAll(REGEX_UNDERSCORE, SPACE_STRING)).
+                    forEach(aboutNotes::add);
+        }
 
         if (isNotEmpty(material.getTaxons())) {
             material.getTaxons().stream().
                     filter(taxon -> taxon.getTaxonLevel().equalsIgnoreCase(SUBTOPIC)).
-                    map(taxon -> taxon.getName().replaceAll(REGEX_UNDERSCORE, " ")).
+                    map(taxon -> taxon.getName().replaceAll(REGEX_UNDERSCORE, SPACE_STRING)).
                     forEach(aboutNotes::add);
         }
         return aboutNotes;
@@ -304,7 +315,7 @@ public class MaterialLdJsonService {
         JsonArray alignmentObjects = new JsonArray();
         alignmentObjects.add(createEducationalSubject(material, newArrayList(SUBTOPIC), EDUCATIONAL_SUBJECT));
         alignmentObjects.add(createEducationalSubject(material, newArrayList(TOPIC), EDUCATIONAL_SUBJECT));
-        alignmentObjects.add(createEducationalSubject(material, newArrayList(TaxonLevel.DOMAIN), EDUCATIONAL_SUBJECT_AREA));
+        alignmentObjects.add(createEducationalSubject(material, newArrayList(DOMAIN), EDUCATIONAL_SUBJECT_AREA));
 
         JsonArray educationalLevels = createSchoolLevelAlignment(material);
         educationalLevels.forEach(alignmentObjects::add);
@@ -319,7 +330,7 @@ public class MaterialLdJsonService {
         if (isNotEmpty(material.getTaxons())) {
             taxonLevels.forEach(taxonLevel -> material.getTaxons().stream().
                     filter(taxon -> taxon.getTaxonLevel().equalsIgnoreCase(taxonLevel)).
-                    map(taxon -> taxon.getName().replaceAll(" ", REGEX_UNDERSCORE)).
+                    map(taxon -> taxon.getName().replaceAll(SPACE_STRING, REGEX_UNDERSCORE)).
                     forEach(finalUniqueTaxonStrings::add));
         }
 
@@ -328,7 +339,7 @@ public class MaterialLdJsonService {
         Set<String> taxonsSet = foundTaxons.stream().
                 map(TaxonPositionDTO::getTaxonLevelName).
                 distinct().
-                map(levelName -> levelName.replaceAll(" ", REGEX_UNDERSCORE)).
+                map(levelName -> levelName.replaceAll(SPACE_STRING, REGEX_UNDERSCORE)).
                 collect(Collectors.toSet());
 
         finalUniqueTaxonStrings.addAll(taxonsSet);
@@ -349,45 +360,57 @@ public class MaterialLdJsonService {
         JsonArray educationalLevels = new JsonArray();
         List<String> realGradesGroups = findIsItAllGroupOrSingle(material);
 
-        realGradesGroups.forEach(gradeGroup -> classValues.add(gradeGroup.startsWith(GR) ? translateClassesLimit(gradeGroup) : translateGradeLimits(gradeGroup)));
-
-        classValues.forEach(classLevel -> {
-            JsonObject educationalLevel = new JsonObject();
-            educationalLevel.addProperty(_TYPE, ALIGNMENT_OBJECT);
-            educationalLevel.addProperty(ALIGNMENT_TYPE, EDUCATIONAL_LEVEL);
-            educationalLevel.addProperty(EDUCATIONAL_FRAMEWORK, ESTONIAN_NATIONAL_CURRICULUM);
-            educationalLevel.addProperty(TARGET_NAME, classLevel);
-            educationalLevel.addProperty(TARGET_URL, OPPEKAVA_EDU_EE_A + classLevel);
-            educationalLevels.add(educationalLevel);
-        });
+        if (isNotEmpty(realGradesGroups)) {
+            realGradesGroups.forEach(gradeGroup -> classValues.add(gradeGroup.startsWith(GR) ? translateClassesLimit(gradeGroup) : translateGradeLimits(gradeGroup)));
+            if (isNotEmpty(classValues)) {
+                classValues.forEach(classLevel -> {
+                    JsonObject educationalLevel = new JsonObject();
+                    educationalLevel.addProperty(TYPE_, ALIGNMENT_OBJECT);
+                    educationalLevel.addProperty(ALIGNMENT_TYPE, EDUCATIONAL_LEVEL);
+                    educationalLevel.addProperty(EDUCATIONAL_FRAMEWORK, ESTONIAN_NATIONAL_CURRICULUM);
+                    educationalLevel.addProperty(TARGET_NAME, classLevel);
+                    educationalLevel.addProperty(TARGET_URL, OPPEKAVA_EDU_EE_A + classLevel);
+                    educationalLevels.add(educationalLevel);
+                });
+            }
+        }
         return educationalLevels;
     }
 
     private List<String> findIsItAllGroupOrSingle(Material material) {
-        List<String> realGradesGroups = material.getTargetGroups().stream().
-                map(TargetGroup::getName).
-                collect(toList());
+        if (isNotEmpty(material.getTargetGroups())) {
+            List<String> realGradesGroups = material.getTargetGroups().stream().
+                    map(TargetGroup::getName).
+                    collect(toList());
 
-        definedGradeGroups.forEach((key, values) -> {
-            if (realGradesGroups.containsAll(values)) {
-                realGradesGroups.add(key);
-                ArrayList<String> valuesToRemove = definedGradeGroups.get(key);
-                valuesToRemove.forEach(realGradesGroups::remove);
-            }
-        });
-        return realGradesGroups;
+            definedGradeGroups.forEach((key, values) -> {
+                if (realGradesGroups.containsAll(values)) {
+                    realGradesGroups.add(key);
+                    ArrayList<String> valuesToRemove = definedGradeGroups.get(key);
+                    valuesToRemove.forEach(realGradesGroups::remove);
+                }
+            });
+            return realGradesGroups;
+        }
+        return emptyList();
     }
+
 
     private JsonArray createAuthors(Material material) {
         JsonObject jsonAuthor = new JsonObject();
         JsonArray authors = new JsonArray();
-        material.getAuthors().forEach(author -> {
-            jsonAuthor.addProperty(TYPE, PERSON);
-            jsonAuthor.addProperty(GIVEN_NAME, author.getName());
-            jsonAuthor.addProperty(FAMILY_NAME, author.getSurname());
-            jsonAuthor.addProperty(NAME, format(NAME_FORMAT, author.getName(), author.getSurname()));
-            authors.add(jsonAuthor);
-        });
+        if (isNotEmpty(material.getAuthors())) {
+            material.getAuthors().forEach(author -> {
+                String name = author.getName() != null ? author.getName() : NA;
+                String familyName = author.getSurname() != null ? author.getSurname() : NA;
+
+                jsonAuthor.addProperty(TYPE, PERSON);
+                jsonAuthor.addProperty(GIVEN_NAME, name);
+                jsonAuthor.addProperty(FAMILY_NAME, familyName);
+                jsonAuthor.addProperty(NAME, format(NAME_FORMAT, name, familyName));
+                authors.add(jsonAuthor);
+            });
+        }
         return authors;
     }
 
@@ -400,22 +423,30 @@ public class MaterialLdJsonService {
     }
 
     private String createThumbnailUrl(Material material) {
-        return material.getPicture() != null ? configuration.getString(SERVER_ADDRESS) + REST_PICTURE_THUMBNAIL_LG + material.getPicture().getName() : "";
+        try {
+            return material.getPicture() != null && material.getPicture().getName() != null ? configuration.getString(SERVER_ADDRESS) + REST_PICTURE_THUMBNAIL_LG + material.getPicture().getName() : NA;
+        } catch (Exception e) {
+            return NA;
+        }
     }
 
     private void findAndTranslateAudience(Material material, JsonArray audiences) {
-        material.getTaxonPositionDto().stream().
-                filter(taxonPosition -> taxonPosition.getTaxonLevel().equalsIgnoreCase(EDUCATIONAL_CONTEXT)).
-                map(taxonPosition -> translateEducationalContext(taxonPosition.getTaxonLevelName())).
-                distinct().
-                forEach(audiences::add);
+        if (isNotEmpty(material.getTaxonPositionDto())) {
+            material.getTaxonPositionDto().stream().
+                    filter(taxonPosition -> taxonPosition.getTaxonLevel().equalsIgnoreCase(EDUCATIONAL_CONTEXT)).
+                    map(taxonPosition -> translateEducationalContext(taxonPosition.getTaxonLevelName())).
+                    distinct().
+                    forEach(audiences::add);
+        }
     }
 
     private JsonArray createTypicalAgeRange(Material material) {
         JsonArray ageValues = new JsonArray();
         List<String> realGradesGroups = findIsItAllGroupOrSingle(material);
 
-        realGradesGroups.forEach(gradeGroup -> ageValues.add(gradeGroup.startsWith(L) || gradeGroup.startsWith(P) ? generalGradeLimits(gradeGroup) : typicalAgeRanges(gradeGroup)));
+        if (isNotEmpty(realGradesGroups)) {
+            realGradesGroups.forEach(gradeGroup -> ageValues.add(gradeGroup.startsWith(L) || gradeGroup.startsWith(P) ? generalGradeLimits(gradeGroup) : typicalAgeRanges(gradeGroup)));
+        }
         return ageValues;
     }
 
@@ -440,6 +471,6 @@ public class MaterialLdJsonService {
     }
 
     private boolean showMaterialLdJson(Material material) {
-        return material != null && (material.getVisibility() != Visibility.NOT_LISTED && material.getVisibility() != Visibility.PRIVATE);
+        return material != null && material.getVisibility() != null && (material.getVisibility() != Visibility.NOT_LISTED && material.getVisibility() != Visibility.PRIVATE);
     }
 }
