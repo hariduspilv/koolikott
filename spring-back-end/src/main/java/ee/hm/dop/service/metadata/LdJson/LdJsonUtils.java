@@ -16,6 +16,10 @@ public class LdJsonUtils {
     public static final String KLASS = ".klass";
     public static final String RUSSIAN = "Russian";
     public static final String REGEX_ONLY_LETTERS = "[^A-Za-z]+";
+    public static final String EN = "en";
+    public static final String RU = "ru";
+    public static final String ET = "et";
+    public static final String EMPTY_STRING = "";
 
     static {
         definedGradeGroups.put("PRESCHOOL", newArrayList("ZERO_FIVE", "SIX_SEVEN"));
@@ -25,17 +29,19 @@ public class LdJsonUtils {
     }
 
     static String convertLanguages(Material material) {
-        if (material.getLanguage().getName().equalsIgnoreCase(ENGLISH)) {
-            return "en";
+        if (material.getLanguage() != null && material.getLanguage().getName() != null) {
+            if (material.getLanguage().getName().equalsIgnoreCase(ENGLISH)) {
+                return EN;
+            }
+            if (material.getLanguage().getName().equalsIgnoreCase(RUSSIAN)) {
+                return RU;
+            }
         }
-        if (material.getLanguage().getName().equalsIgnoreCase(RUSSIAN)) {
-            return "ru";
-        }
-        return "et";
+        return ET;
     }
 
     static String createDateCreated(Material material) {
-        return material.getAdded().toLocalDate().toString();
+        return material.getAdded() != null ? material.getAdded().toLocalDate().toString() : EMPTY_STRING;
     }
 
     static LocalDate convertIssueDateToLocalDate(IssueDate issueDate) {
@@ -145,12 +151,12 @@ public class LdJsonUtils {
     }
 
     static String translateClassesLimit(String level) {
-        return level.replaceAll("\\D+", "") + KLASS;
+        return level.replaceAll("\\D+", EMPTY_STRING) + KLASS;
     }
 
     static String findLicenseType(String license) {
-        String licenseLink = null;
-        String licenceWithoutNumbers = license.replaceAll(REGEX_ONLY_LETTERS, "");
+        String licenseLink;
+        String licenceWithoutNumbers = license.replaceAll(REGEX_ONLY_LETTERS, EMPTY_STRING);
 
         switch (licenceWithoutNumbers) {
             case ("CCBY"):
@@ -177,12 +183,15 @@ public class LdJsonUtils {
             case ("allRightsReserved"):
                 licenseLink = "Kõik õigused kaitstud";
                 break;
+            default:
+                licenseLink = EMPTY_STRING;
+                break;
         }
         return licenseLink;
     }
 
     static String typicalAgeRanges(String grade) {
-        String ageRange = "";
+        String ageRange = EMPTY_STRING;
         switch (grade) {
             case ("ZERO_FIVE"):
                 ageRange = "0-5";

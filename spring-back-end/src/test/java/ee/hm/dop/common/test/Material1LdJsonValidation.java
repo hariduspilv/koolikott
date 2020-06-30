@@ -36,12 +36,6 @@ public class Material1LdJsonValidation {
                 forEach(jsonObject -> assertJson(jsonObject, material));
     }
 
-    private static void assertReview(JSONObject jsonObject) {
-    }
-
-    private static void assertBreadCrumbList(JSONObject jsonObject) {
-    }
-
     private static void assertOrganization(JSONObject jsonObject) {
         String expected = "{\n" +
                 "    \"@context\": \"http://schema.org/\",\n" +
@@ -101,12 +95,6 @@ public class Material1LdJsonValidation {
         }
         if (jsonObject.get("@type").equals("Organization")) {
             assertOrganization(jsonObject);
-        }
-        if (jsonObject.get("@type").equals("BreadcrumbList")) {
-            assertBreadCrumbList(jsonObject);
-        }
-        if (jsonObject.get("@type").equals("Review")) {
-            assertReview(jsonObject);
         }
     }
 }
