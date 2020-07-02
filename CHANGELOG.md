@@ -1,4 +1,14 @@
-## E-koolikott [1.58.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11470)
+## E-koolikott [1.58.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Prelivesse paigaldatud 02.07.2020)
+
+### Muutunud
+* "EstCore loogika täiendamine" [EK-1114](https://projektid.hitsa.ee/jira/browse/EK-1114)
+
+## E-koolikott [1.58.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Prelivesse paigaldatud 30.06.2020)
+
+### Muutunud
+* "EstCore loogika täiendamine" [EK-1113](https://projektid.hitsa.ee/jira/browse/EK-1113)
+
+## E-koolikott [1.58.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Prelivesse paigaldatud 25.06.2020)
 
 ### Muutunud
 * "Õppevara emailiga jagamise muudatused" [EK-1099](https://projektid.hitsa.ee/jira/browse/EK-1099)
@@ -15,7 +25,7 @@
 * "Anonüümsena õppevarast teavitamisel sisselogimine ebaõnnestub" [EK-1080](https://projektid.hitsa.ee/jira/browse/EK-1080)
 
 
-## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)  (Prelivesse paigaldatud 02.06.2020)
+## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)  (Toodangusse paigaldatud 04.06.2020)
 
 ### Muutunud
 * "Mobiilivaates nuppude paigutus" [EK-1017](https://projektid.hitsa.ee/jira/browse/EK-1017)
