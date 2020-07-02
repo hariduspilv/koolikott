@@ -59,6 +59,6 @@ node {
     }
 
     stage('Cleanup') {
-        sh 'docker volume rm \$(docker volume ls -q | awk \'{print $2}\') || true'
+        sh 'docker volume rm \$(docker volume ls -qf dangling=true) || true'
     }
 }

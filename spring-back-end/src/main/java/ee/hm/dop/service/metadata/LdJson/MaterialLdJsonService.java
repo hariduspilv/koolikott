@@ -11,6 +11,7 @@ import ee.hm.dop.model.TargetGroup;
 import ee.hm.dop.model.enums.Visibility;
 import ee.hm.dop.model.taxon.TaxonPositionDTO;
 import ee.hm.dop.service.content.LearningObjectService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -197,33 +198,63 @@ public class MaterialLdJsonService {
 
     private JsonObject createCreativeWork(Material material) {
 
+        String language = convertLanguages(material);
+
         JsonObject jsonMaterial = new JsonObject();
-        jsonMaterial.addProperty("@id", material.getSource() != null ? material.getSource() : NA);
+        if (material.getSource() != null) {
+            jsonMaterial.addProperty("@id", material.getSource());
+        }
         jsonMaterial.addProperty(CONTEXT, HTTP_SCHEMA_ORG);
         jsonMaterial.addProperty(TYPE, CREATIVE_WORK);
-        jsonMaterial.add("learningResourceType", createResourceType(material));
-        jsonMaterial.add("about", createAbout(material));
-        jsonMaterial.addProperty("dateCreated", createDateCreated(material));
-        jsonMaterial.addProperty("datePublished", material.getIssueDate() != null ? convertIssueDateToLocalDate(material.getIssueDate()).toString() : NA);
-        jsonMaterial.addProperty("thumbnailUrl", createThumbnailUrl(material));
-        jsonMaterial.addProperty("license", createLicence(material));
-        jsonMaterial.add("typicalAgeRange", createTypicalAgeRange(material));
-        jsonMaterial.addProperty("interactionCount", material.getViews() != null ? material.getViews() + USER_PAGE_VISITS : NA);
-        jsonMaterial.add("headline", createHeadlines(material));
-        jsonMaterial.add("keywords", createKeywords(material));
-        jsonMaterial.add("abstract", createAbstract(material));
-        jsonMaterial.addProperty("inLanguage", convertLanguages(material));
-        jsonMaterial.add("author", createAuthors(material));
+        if (createResourceType(material).size() > 0) {
+            jsonMaterial.add("learningResourceType", createResourceType(material));
+        }
+        if (createAbout(material).size() > 0) {
+            jsonMaterial.add("about", createAbout(material));
+        }
+        if (createDateCreated(material) != null) {
+            jsonMaterial.addProperty("datePublished", createDateCreated(material));
+        }
+        if (material.getIssueDate() != null) {
+            jsonMaterial.addProperty("dateCreated", convertIssueDateToLocalDate(material.getIssueDate()).toString());
+        }
+        if (createThumbnailUrl(material) != null) {
+            jsonMaterial.addProperty("thumbnailUrl", createThumbnailUrl(material));
+        }
+        if (createLicence(material) != null) {
+            jsonMaterial.addProperty("license", createLicence(material));
+        }
+        if (createTypicalAgeRange(material).size() > 0) {
+            jsonMaterial.add("typicalAgeRange", createTypicalAgeRange(material));
+        }
+        if (material.getViews() != null) {
+            jsonMaterial.addProperty("interactionCount", material.getViews() + USER_PAGE_VISITS);
+        }
+        if (createHeadline(material, language) != null) {
+            jsonMaterial.addProperty("headline", createHeadline(material, language));
+        }
+        if (createKeywords(material).size() > 0) {
+            jsonMaterial.add("keywords", createKeywords(material));
+        }
+        if (createAbstract(material, language) != null) {
+            jsonMaterial.addProperty("abstract", createAbstract(material, language));
+        }
+        jsonMaterial.addProperty("inLanguage", language);
+        if (createAuthors(material).size() > 0) {
+            jsonMaterial.add("author", createAuthors(material));
+        }
         jsonMaterial.add("publisher", createPublisher(material));
         jsonMaterial.add("sdPublisher", createSdPublisher());
-        jsonMaterial.add("audience", createAudiences(material));
+        if (createAudience(material).size() > 0) {
+            jsonMaterial.add("audience", createAudiences(material));
+        }
         jsonMaterial.add("educationalAlignment", createEducationalAlignment(material));
 
         return jsonMaterial;
     }
 
     private String createLicence(Material material) {
-        return material.getLicenseType() != null && material.getLicenseType().getName() != null ? findLicenseType(material.getLicenseType().getName()) : NA;
+        return material.getLicenseType() != null && material.getLicenseType().getName() != null ? findLicenseType(material.getLicenseType().getName()) : null;
     }
 
     private JsonObject createAudiences(Material material) {
@@ -255,23 +286,47 @@ public class MaterialLdJsonService {
         return jsonPublisher;
     }
 
-    private JsonArray createAbstract(Material material) {
-        JsonArray descriptions = new JsonArray();
+    private String createAbstract(Material material, String language) {
+        String description = null;
         if (isNotEmpty(material.getDescriptions())) {
-            material.getDescriptions().forEach(description -> {
-                String descriptionWithoutTags = description.getText().replaceAll(REGEX_TAG, EMPTY_STRING);
-                descriptions.add(descriptionWithoutTags);
-            });
+            switch (language.toLowerCase()) {
+                case (ET):
+                    description = material.getDescriptions().get(0).getText().replaceAll(REGEX_TAG, EMPTY_STRING);
+                    break;
+                case (RU):
+                    description = material.getDescriptions().get(2).getText().replaceAll(REGEX_TAG, EMPTY_STRING);
+                    break;
+                case (EN):
+                    description = material.getDescriptions().get(1).getText().replaceAll(REGEX_TAG, EMPTY_STRING);
+                    break;
+                default:
+                    description = material.getDescriptions().get(0).getText().replaceAll(REGEX_TAG, EMPTY_STRING);
+                    break;
+            }
         }
-        return descriptions;
+        return description;
     }
 
-    private JsonArray createHeadlines(Material material) {
-        JsonArray titles = new JsonArray();
+    private String createHeadline(Material material, String language) {
+
+        String headline = null;
         if (isNotEmpty(material.getTitles())) {
-            material.getTitles().forEach(title -> titles.add(title.getText()));
+            switch (language.toLowerCase()) {
+                case (ET):
+                    headline = material.getTitles().get(0).getText();
+                    break;
+                case (RU):
+                    headline = material.getTitles().get(2).getText();
+                    break;
+                case (EN):
+                    headline = material.getTitles().get(1).getText();
+                    break;
+                default:
+                    headline = material.getTitles().get(0).getText();
+                    break;
+            }
         }
-        return titles;
+        return headline;
     }
 
     private JsonArray createKeywords(Material material) {
@@ -313,10 +368,16 @@ public class MaterialLdJsonService {
 
     private JsonArray createEducationalAlignment(Material material) {
         JsonArray alignmentObjects = new JsonArray();
-        alignmentObjects.add(createEducationalSubject(material, newArrayList(SUBTOPIC), EDUCATIONAL_SUBJECT));
-        alignmentObjects.add(createEducationalSubject(material, newArrayList(TOPIC), EDUCATIONAL_SUBJECT));
-        alignmentObjects.add(createEducationalSubject(material, newArrayList(DOMAIN), EDUCATIONAL_SUBJECT_AREA));
 
+        if (createEducationalSubject(material, newArrayList(SUBTOPIC), EDUCATIONAL_SUBJECT) != null) {
+            alignmentObjects.add(createEducationalSubject(material, newArrayList(SUBTOPIC), EDUCATIONAL_SUBJECT));
+        }
+        if (createEducationalSubject(material, newArrayList(TOPIC), EDUCATIONAL_SUBJECT) != null) {
+            alignmentObjects.add(createEducationalSubject(material, newArrayList(TOPIC), EDUCATIONAL_SUBJECT));
+        }
+        if (createEducationalSubject(material, newArrayList(DOMAIN), EDUCATIONAL_SUBJECT_AREA) != null) {
+            alignmentObjects.add(createEducationalSubject(material, newArrayList(DOMAIN), EDUCATIONAL_SUBJECT_AREA));
+        }
         JsonArray educationalLevels = createSchoolLevelAlignment(material);
         educationalLevels.forEach(alignmentObjects::add);
 
@@ -330,7 +391,7 @@ public class MaterialLdJsonService {
         if (isNotEmpty(material.getTaxons())) {
             taxonLevels.forEach(taxonLevel -> material.getTaxons().stream().
                     filter(taxon -> taxon.getTaxonLevel().equalsIgnoreCase(taxonLevel)).
-                    map(taxon -> taxon.getName().replaceAll(SPACE_STRING, REGEX_UNDERSCORE)).
+                    map(taxon -> taxon.getName()).
                     forEach(finalUniqueTaxonStrings::add));
         }
 
@@ -346,10 +407,14 @@ public class MaterialLdJsonService {
 
         String targetUrl = join(",", finalUniqueTaxonStrings);
 
+        if (targetUrl == null || targetUrl.equals(SPACE_STRING) || targetUrl.equals(EMPTY_STRING)) {
+            return null;
+        }
+
         taxonLevelAlignment.addProperty(TYPE, ALIGNMENT_OBJECT);
         taxonLevelAlignment.addProperty(ALIGNMENT_TYPE, alignmentType);
         taxonLevelAlignment.addProperty(EDUCATIONAL_FRAMEWORK, ESTONIAN_NATIONAL_CURRICULUM);
-        taxonLevelAlignment.addProperty(TARGET_NAME, targetUrl);
+        taxonLevelAlignment.addProperty(TARGET_NAME, StringUtils.capitalize(targetUrl.replaceAll("_", SPACE_STRING)));
         taxonLevelAlignment.addProperty(TARGET_URL, OPPEKAVA_EDU_EE_A + targetUrl);
 
         return taxonLevelAlignment;
@@ -368,7 +433,7 @@ public class MaterialLdJsonService {
                     educationalLevel.addProperty(TYPE_, ALIGNMENT_OBJECT);
                     educationalLevel.addProperty(ALIGNMENT_TYPE, EDUCATIONAL_LEVEL);
                     educationalLevel.addProperty(EDUCATIONAL_FRAMEWORK, ESTONIAN_NATIONAL_CURRICULUM);
-                    educationalLevel.addProperty(TARGET_NAME, classLevel);
+                    educationalLevel.addProperty(TARGET_NAME, classLevel.replaceAll("_", SPACE_STRING));
                     educationalLevel.addProperty(TARGET_URL, OPPEKAVA_EDU_EE_A + classLevel);
                     educationalLevels.add(educationalLevel);
                 });
@@ -424,9 +489,9 @@ public class MaterialLdJsonService {
 
     private String createThumbnailUrl(Material material) {
         try {
-            return material.getPicture() != null && material.getPicture().getName() != null ? configuration.getString(SERVER_ADDRESS) + REST_PICTURE_THUMBNAIL_LG + material.getPicture().getName() : NA;
+            return material.getPicture() != null && material.getPicture().getName() != null ? configuration.getString(SERVER_ADDRESS) + REST_PICTURE_THUMBNAIL_LG + material.getPicture().getName() : null;
         } catch (Exception e) {
-            return NA;
+            return null;
         }
     }
 
