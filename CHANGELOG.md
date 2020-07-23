@@ -1,21 +1,21 @@
-## E-koolikott [1.58.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Prelivesse paigaldatud 02.07.2020)
+## E-koolikott [1.58.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11497) (Toodangusse paigaldatud 09.07.2020)
 
 ### Muutunud
 * "EstCore loogika täiendamine" [EK-1114](https://projektid.hitsa.ee/jira/browse/EK-1114)
 
-## E-koolikott [1.58.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Prelivesse paigaldatud 30.06.2020)
+## E-koolikott [1.58.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11496) (Toodangusse paigaldatud 09.07.2020)
 
 ### Muutunud
 * "EstCore loogika täiendamine" [EK-1113](https://projektid.hitsa.ee/jira/browse/EK-1113)
 
-## E-koolikott [1.58.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Prelivesse paigaldatud 25.06.2020)
+## E-koolikott [1.58.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Toodangusse paigaldatud 25.06.2020)
 
 ### Muutunud
 * "Õppevara emailiga jagamise muudatused" [EK-1099](https://projektid.hitsa.ee/jira/browse/EK-1099)
 * "KKK tekstide sees olevad lingid võiks avaneda uues aknas" [EK-1100](https://projektid.hitsa.ee/jira/browse/EK-1100)
 
 
-## E-koolikott [1.57.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11482)  (Prelivesse paigaldatud 18.06.2020)
+## E-koolikott [1.57.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11482)  (Toodangusse paigaldatud 18.06.2020)
 
 ### Muutunud
 * "E-koolikoti sessiooni lõppedes katkestatakse kasutaja eelnev tegevus" [EK-1090](https://projektid.hitsa.ee/jira/browse/EK-1090)
