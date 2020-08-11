@@ -23,7 +23,10 @@
 * "Minu profiili all koolide nimekirjas kuvada ainult koolid" [EK-452](https://projektid.hitsa.ee/jira/browse/EK-452)
 * "Kogumiku ajaloo taastamine vale litsentsiga materjaliga" [EK-1079](https://projektid.hitsa.ee/jira/browse/EK-1079)
 * "Anonüümsena õppevarast teavitamisel sisselogimine ebaõnnestub" [EK-1080](https://projektid.hitsa.ee/jira/browse/EK-1080)
-
+* "Kasutajate haldus > Menüüpunktide korrastamine" [EK-951](https://projektid.hitsa.ee/jira/browse/EK-951)
+* "Kasutajate haldus > Otsing" [EK-952](https://projektid.hitsa.ee/jira/browse/EK-952)
+* "Kasutajate haldus > Kasutajate filtreerimine" [EK-953](https://projektid.hitsa.ee/jira/browse/EK-953)
+* "Kasutajate haldus > Allalaadimine" [EK-961](https://projektid.hitsa.ee/jira/browse/EK-961)
 
 ## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)  (Toodangusse paigaldatud 04.06.2020)
 
