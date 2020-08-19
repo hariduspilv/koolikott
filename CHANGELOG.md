@@ -13,7 +13,7 @@
 ### Muutunud
 * "Õppevara emailiga jagamise muudatused" [EK-1099](https://projektid.hitsa.ee/jira/browse/EK-1099)
 * "KKK tekstide sees olevad lingid võiks avaneda uues aknas" [EK-1100](https://projektid.hitsa.ee/jira/browse/EK-1100)
-
+* "Kasutaja üldisel Minu asjade lehel peaks privaatsed õppevarad olema leitavad ainult adminile" [EK-1098](https://projektid.hitsa.ee/jira/browse/EK-1098)
 
 ## E-koolikott [1.57.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11482)  (Toodangusse paigaldatud 18.06.2020)
 
