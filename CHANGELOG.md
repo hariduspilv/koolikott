@@ -1,3 +1,8 @@
+## E-koolikott [1.58.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11497) (Toodangusse paigaldatud 25.08.2020)
+
+### Muutunud
+* "Materjali detailvaatel taksonoomia kuvamise UI parandus" [EK-1121](https://projektid.hitsa.ee/jira/browse/EK-1121)
+
 ## E-koolikott [1.58.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11497) (Toodangusse paigaldatud 09.07.2020)
 
 ### Muutunud
