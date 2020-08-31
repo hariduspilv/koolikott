@@ -51,8 +51,8 @@ public class Material1LdJsonValidation {
         assertEquals(jsonObject.get("@id"), "https://www.youtube.com/watch?v=gSWbx3CvVUk");
         assertEquals(jsonObject.get("@context"), "http://schema.org/");
         assertEquals(jsonObject.get("@type"), "CreativeWork");
-        assertEquals(jsonObject.get("dateCreated"), "1999-01-01");
-        assertEquals(jsonObject.get("datePublished"), "1983-02-02");
+        assertEquals(jsonObject.get("datePublished"), "1999-01-01");
+        assertEquals(jsonObject.get("dateCreated"), "1983-02-02");
         assertEquals(jsonObject.get("interactionCount"), "100 UserPageVisits");
         assertEquals(jsonObject.get("inLanguage"), "et");
         assertEquals(jsonObject.get("license"), "http://creativecommons.org/licenses/by/4.0/");
@@ -64,10 +64,9 @@ public class Material1LdJsonValidation {
         JSONAssert.assertEquals(authorExpected, ((JSONArray) jsonObject.get("author")).get(0).toString(), JSONCompareMode.LENIENT);
 
         assertEquals(((JSONArray) jsonObject.get("learningResourceType")).length(), material.getResourceTypes().size());
-        assertEquals(((JSONArray) jsonObject.get("about")).length(), material.getTaxonPositionDto().size());//TODO
         assertEquals(((JSONArray) jsonObject.get("keywords")).length(), material.getTags().size());
-        assertEquals(((JSONArray) jsonObject.get("abstract")).length(), material.getDescriptions().size());
-        assertEquals(((JSONArray) jsonObject.get("headline")).length(), material.getTitles().size());
+        assertEquals(( jsonObject.get("abstract").toString()), material.getDescriptions().get(0).getText());
+        assertEquals(( jsonObject.get("headline").toString()), material.getTitles().get(0).getText());
         assertEquals(((JSONArray) jsonObject.get("author")).length(), material.getAuthors().size());
     }
 

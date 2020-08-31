@@ -41,7 +41,7 @@ public class LdJsonUtils {
     }
 
     static String createDateCreated(Material material) {
-        return material.getAdded() != null ? material.getAdded().toLocalDate().toString() : EMPTY_STRING;
+        return material.getAdded() != null ? material.getAdded().toLocalDate().toString() : null;
     }
 
     static LocalDate convertIssueDateToLocalDate(IssueDate issueDate) {
@@ -155,7 +155,7 @@ public class LdJsonUtils {
     }
 
     static String findLicenseType(String license) {
-        String licenseLink;
+        String licenseLink = null;
         String licenceWithoutNumbers = license.replaceAll(REGEX_ONLY_LETTERS, EMPTY_STRING);
 
         switch (licenceWithoutNumbers) {
@@ -182,9 +182,6 @@ public class LdJsonUtils {
                 break;
             case ("allRightsReserved"):
                 licenseLink = "Kõik õigused kaitstud";
-                break;
-            default:
-                licenseLink = EMPTY_STRING;
                 break;
         }
         return licenseLink;
