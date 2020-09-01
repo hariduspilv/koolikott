@@ -10,7 +10,7 @@ public class VersionResource {
 
     @GetMapping
     public String getVersion() {
-        return "1.58.3";
+        return "1.58.4";
     }
 
 }
