@@ -1,4 +1,132 @@
-## e-Koolikott [1.51.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Prelive'i paigaldatud 18.02.2020)
+## E-koolikott [1.58.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11497) (Toodangusse paigaldatud 25.08.2020)
+
+### Muutunud
+* "Materjali detailvaatel taksonoomia kuvamise UI parandus" [EK-1121](https://projektid.hitsa.ee/jira/browse/EK-1121)
+
+## E-koolikott [1.58.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11497) (Toodangusse paigaldatud 09.07.2020)
+
+### Muutunud
+* "EstCore loogika täiendamine" [EK-1114](https://projektid.hitsa.ee/jira/browse/EK-1114)
+
+## E-koolikott [1.58.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11496) (Toodangusse paigaldatud 09.07.2020)
+
+### Muutunud
+* "EstCore loogika täiendamine" [EK-1113](https://projektid.hitsa.ee/jira/browse/EK-1113)
+
+## E-koolikott [1.58.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11470) (Toodangusse paigaldatud 25.06.2020)
+
+### Muutunud
+* "Õppevara emailiga jagamise muudatused" [EK-1099](https://projektid.hitsa.ee/jira/browse/EK-1099)
+* "KKK tekstide sees olevad lingid võiks avaneda uues aknas" [EK-1100](https://projektid.hitsa.ee/jira/browse/EK-1100)
+* "Kasutaja üldisel Minu asjade lehel peaks privaatsed õppevarad olema leitavad ainult adminile" [EK-1098](https://projektid.hitsa.ee/jira/browse/EK-1098)
+
+## E-koolikott [1.57.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11482)  (Toodangusse paigaldatud 18.06.2020)
+
+### Muutunud
+* "E-koolikoti sessiooni lõppedes katkestatakse kasutaja eelnev tegevus" [EK-1090](https://projektid.hitsa.ee/jira/browse/EK-1090)
+* "EstCore2 implementatsioon" [EK-1076](https://projektid.hitsa.ee/jira/browse/EK-1076)
+* "Minu profiili all koolide nimekirjas kuvada ainult koolid" [EK-452](https://projektid.hitsa.ee/jira/browse/EK-452)
+* "Kogumiku ajaloo taastamine vale litsentsiga materjaliga" [EK-1079](https://projektid.hitsa.ee/jira/browse/EK-1079)
+* "Anonüümsena õppevarast teavitamisel sisselogimine ebaõnnestub" [EK-1080](https://projektid.hitsa.ee/jira/browse/EK-1080)
+* "Kasutajate haldus > Menüüpunktide korrastamine" [EK-951](https://projektid.hitsa.ee/jira/browse/EK-951)
+* "Kasutajate haldus > Otsing" [EK-952](https://projektid.hitsa.ee/jira/browse/EK-952)
+* "Kasutajate haldus > Kasutajate filtreerimine" [EK-953](https://projektid.hitsa.ee/jira/browse/EK-953)
+* "Kasutajate haldus > Allalaadimine" [EK-961](https://projektid.hitsa.ee/jira/browse/EK-961)
+
+## E-koolikott [1.56.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11257)  (Toodangusse paigaldatud 04.06.2020)
+
+### Muutunud
+* "Mobiilivaates nuppude paigutus" [EK-1017](https://projektid.hitsa.ee/jira/browse/EK-1017)
+* "Kui puudub õppevara looja/koostaja e-post, siis modaal võiks ka pealkirja omada" [EK-993](https://projektid.hitsa.ee/jira/browse/EK-993)
+* "Kogumiku peatükkidele QR koodid > Kogumiku peatükkidele QR koodi genereerimine ja kuvamine" [EK-18](https://projektid.hitsa.ee/jira/browse/EK-18)
+* "Materjali ja kogumiku pealkirja pikkustele lisada piirang" [EK-977](https://projektid.hitsa.ee/jira/browse/EK-977)
+* "Pädevuste ja teemade metaandmed peaksid täielikult näha olema" [EK-1024](https://projektid.hitsa.ee/jira/browse/EK-1024)
+* "Väikeses mobiilivaates materjali lisamise flows ikoon parandada" [EK-1016](https://projektid.hitsa.ee/jira/browse/EK-1016)
+* "EHIS'e õppeasutuste nimekirjast ka koolieelsed lasteasutused Koolikotti tõmmata" [EK-1040](https://projektid.hitsa.ee/jira/browse/EK-1040)
+* "Vimeot embeditakse kummaliselt välja" [EK-1091](https://projektid.hitsa.ee/jira/browse/EK-1091)
+* "Esilehele lisatud soovitatud materjali muutmine ebaõnnestub" [EK-1094](https://projektid.hitsa.ee/jira/browse/EK-1094)
+* "eTrainingu liidestus katkestada ja vastav loogika kustutada" [EK-1021](https://projektid.hitsa.ee/jira/browse/EK-1021)
+* "Baasist comments, likes ja dislikes tabelid ja seosed kustutada" [EK-1039](https://projektid.hitsa.ee/jira/browse/EK-1039)
+
+
+## E-koolikott [1.55.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11263) (Toodangusse paigaldatud 14.05.2020)
+
+### Muutunud
+* "frondi paki ehitamisel cache bustingu kasutamine" [EK-1059](https://projektid.hitsa.ee/jira/browse/EK-1059)
+
+
+## E-koolikott [1.55.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11253) (Toodangusse paigaldatud 14.05.2020)
+
+### Muutunud
+* "Ebasobivast õppevarast teatamise modaalil selgituse väli punaseks" [EK-841](https://projektid.hitsa.ee/jira/browse/EK-841)
+* "'Minu saadetud teated' lehel kirja modaali headeri värv muuta valgeks" [EK-1005](https://projektid.hitsa.ee/jira/browse/EK-1005)
+* "Mobiilivaade: kogumiku Edit modes peaks peatüki liigutamise ja kustutamise nupud nähtaval olema" [EK-913](https://projektid.hitsa.ee/jira/browse/EK-913)
+* "Kustutatud kogumiku ikoonide muudatused" [EK-1004](https://projektid.hitsa.ee/jira/browse/EK-1004)
+* "Materjali detailvaade > võtmesõna sisestamise juurde lisada tooltip" [EK-831](https://projektid.hitsa.ee/jira/browse/EK-831)
+* "Kogumiku detailvaade > võtmesõna sisestamise juurde lisada tooltip" [EK-940](https://projektid.hitsa.ee/jira/browse/EK-940)
+* "Muudatus: Materjali lisamine kogumikku kui kasutajal ühtegi kogumikku loodud ei ole" [EK-832](https://projektid.hitsa.ee/jira/browse/EK-832)
+* "Õppevara peaks olema võimalik taastada peale kustutamist" [EK-900](https://projektid.hitsa.ee/jira/browse/EK-900)
+* "Tingimuste lehtedel teavitamise checkboxide tekstid" [EK-898](https://projektid.hitsa.ee/jira/browse/EK-898)
+* "Minu saadetud teated lehel peaks otsing kuvama õigeid tulemusi" [EK-1006](https://projektid.hitsa.ee/jira/browse/EK-1006)
+* "Privaatne õppevara, mida ei saa X põhjusel avalikustada või lingiga jagada, peavad vastava nupu tooltippi omama" [EK-886](https://projektid.hitsa.ee/jira/browse/EK-886)
+* "Õppevara detailvaatel kuvada litsentsi info" [EK-1007](https://projektid.hitsa.ee/jira/browse/EK-1007)
+* "Kõikidele Koolielust imporditud materjalidele lisada tag "koolielu"" [EK-1035](https://projektid.hitsa.ee/jira/browse/EK-1035)
+* "Materjali detailvaatel kuvada materjali lisajat adminnidele ja ekspertidele" [EK-875](https://projektid.hitsa.ee/jira/browse/EK-875)
+* "Vale litsentsiga kogumik ei ole "Privaatsest" staatusest "Jaga lingiga" staatusesse muudetav" [EK-1050](https://projektid.hitsa.ee/jira/browse/EK-1050)
+* "Pealehel peab rakendus kuvama admini poolt sisestatud keskkonna uuendamise teavitust" [EK-1072](https://projektid.hitsa.ee/jira/browse/EK-1072)
+* "materialObject JSON korda teha/täiendada" [EK-982](https://projektid.hitsa.ee/jira/browse/EK-982)
+* "Turvalisuse täiendused" [EK-998](https://projektid.hitsa.ee/jira/browse/EK-998)
+
+
+## e-Koolikott [1.54.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11260) (Toodangusse paigaldatud 21.04.2020)
+
+### Muutunud
+* "Materjali ei tohi saada lisada ilma kohustuslikke välju täitmata" [EK-1055](https://projektid.hitsa.ee/jira/browse/EK-1055)
+
+## e-Koolikott [1.54.2](https://projektid.hitsa.ee/jira/projects/EK/versions/11258) (Toodangusse paigaldatud 16.04.2020)
+
+### Muutunud
+* "andmetüüp BigInteger vs Integer" [EK-1053](https://projektid.hitsa.ee/jira/browse/EK-1053)
+
+## e-Koolikott [1.54.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11256) (Toodangusse paigaldatud 16.04.2020)
+
+### Muutunud
+* "Enne PortfolioMaterials tabeli loomist olemasolevate kogumike-materjalide seoste lisamine tabelisse" [EK-1043](https://projektid.hitsa.ee/jira/browse/EK-1043)
+
+## e-Koolikott [1.54.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11225) (Toodangusse paigaldatud 16.04.2020)
+
+### Muutunud
+* "AngularJS versiooni uuendamine (1.64->1.79)" [EK-930](https://projektid.hitsa.ee/jira/browse/EK-930)
+* "solr versiooni uuendamine 8.1 pealt 8.4 peale" [EK-920](https://projektid.hitsa.ee/jira/browse/EK-920)
+* "Privaatsete kogumike staatust ei saa share modaali kaudu muuta" [EK-1003](https://projektid.hitsa.ee/jira/browse/EK-1003)
+* "Kogumikku ei saa kopeerida kui kogumikul on vale litsents või see sisaldab mõnda vale litsentsiga materjali" [EK-980](https://projektid.hitsa.ee/jira/browse/EK-980)
+* "Eemaldada koodist Plumbri skript" [EK-888](https://projektid.hitsa.ee/jira/browse/EK-888)
+
+## e-Koolikott [1.53.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11222) (Toodangusse paigaldatud 26.03.2020)
+
+### Muutunud
+* "Materjali ja kogumiku ning kogumiku peatükkide FB-s jagamine korda teha, sh SEO: root.applicationDescription viga" [EK-947](https://projektid.hitsa.ee/jira/browse/EK-947)
+* "Minu kogumikud ja minu materjalid lehele videojuhendi lisamine" [EK-839](https://projektid.hitsa.ee/jira/browse/EK-839)
+* "Sisselogimise modaalil ID-kaardi ja HarID nuppude asukohad vahetada" [EK-945](https://projektid.hitsa.ee/jira/browse/EK-945)
+* "Kasutustingimuste modaalil ja kas vajad abi lingile klikkides uue tabi all õige menüü punkti avamine" [EK-829](https://projektid.hitsa.ee/jira/browse/EK-829)
+* "Kõikjal "Lisa kogumik" ümber nimetamine "Loo kogumik"" [EK-1001](https://projektid.hitsa.ee/jira/browse/EK-1001)
+
+## e-Koolikott [1.52.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11182) (Toodangusse paigaldatud 24.03.2020)
+
+### Muutunud
+* "KKK lehel sisuplokkide järjekorra muutmine" [EK-984](https://projektid.hitsa.ee/jira/browse/EK-984)
+* "KKK lehel sisuplokkide loomise funktsionaalsed muudatused" [EK-264](https://projektid.hitsa.ee/jira/browse/EK-264)
+
+## e-Koolikott [1.51.1](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Toodangusse paigaldatud 13.03.2020)
+
+### Muutunud
+* "Nn vale litsentsiga avalikku materjali peab saama kogumikust avada" [EK-981](https://projektid.hitsa.ee/jira/browse/EK-981)
+* "Materjali ja kogumiku loomine > Litsentsi checkboxi juurde lisainfo kuvamine" [EK-973](https://projektid.hitsa.ee/jira/browse/EK-973)
+* "Materjali jagamise nupp ümber tõsta" [EK-948](https://projektid.hitsa.ee/jira/browse/EK-948)
+* "Kogumiku detailvaade > silma menüüst lingi kopeerimise nupp ära kaotada" [EK-946](https://projektid.hitsa.ee/jira/browse/EK-946)
+* "Kogumiku jagamise nupp ümber tõsta ja peatükkidele jagamise nupu lisamine" [EK-939](https://projektid.hitsa.ee/jira/browse/EK-939)
+
+## e-Koolikott [1.51.0](https://projektid.hitsa.ee/jira/projects/EK/versions/11164) (Toodangusse paigaldatud 13.03.2020)
 
 ### Muutunud
 * "EHISe õppeasutuste päringu täiendus" [EK-868](https://projektid.hitsa.ee/jira/browse/EK-868)
