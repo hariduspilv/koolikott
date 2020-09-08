@@ -1,3 +1,8 @@
+## E-koolikott [1.58.4](https://projektid.hitsa.ee/jira/projects/EK/versions/11512) (Toodangusse paigaldatud 01.09.2020)
+
+### Muutunud
+* "pom.xml dependency versiooni uuendamine" [EK-1123](https://projektid.hitsa.ee/jira/browse/EK-1123)
+
 ## E-koolikott [1.58.3](https://projektid.hitsa.ee/jira/projects/EK/versions/11497) (Toodangusse paigaldatud 25.08.2020)
 
 ### Muutunud
