@@ -23,7 +23,7 @@ spring:
     outOfOrder: true
     baselineOnMigrate: true
     placeholderReplacement: false
-    locations: classpath:db/migration
+    locations: classpath:db/initdb, classpath:db/initdata, classpath:db/migration, classpath:db/users
   jackson:
     deserialization:
       fail-on-unknown-properties: false
