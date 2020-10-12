@@ -1,3 +1,9 @@
+## E-koolikott [1.58.5](https://projektid.hitsa.ee/jira/projects/EK/versions/11623) (Toodangusse paigaldatud 02.10.2020)
+
+### Muutunud
+* "E-koolikotis ESF logo vahetamine" [EK-1131](https://projektid.hitsa.ee/jira/browse/EK-1131)
+* "mobiil-ID autentimine rakendusest eemaldada" [EK-1134](https://projektid.hitsa.ee/jira/browse/EK-1134)
+
 ## E-koolikott [1.58.4](https://projektid.hitsa.ee/jira/projects/EK/versions/11512) (Toodangusse paigaldatud 01.09.2020)
 
 ### Muutunud
