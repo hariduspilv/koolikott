@@ -1,11 +1,13 @@
 package ee.hm.dop.common.test;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.hm.dop.config.Configuration;
 import ee.hm.dop.model.*;
 import ee.hm.dop.rest.content.MaterialResourceTest;
 import ee.hm.dop.rest.content.PortfolioResourceTest;
 import ee.hm.dop.service.login.dto.UserStatus;
 import ee.hm.dop.service.reviewmanagement.dto.StatisticsFilterDto;
+import lombok.SneakyThrows;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.client.ClientProperties;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -13,6 +15,7 @@ import org.glassfish.jersey.logging.LoggingFeature;
 import org.glassfish.jersey.media.multipart.MultiPartFeature;
 import org.junit.After;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpStatus;
@@ -49,6 +52,14 @@ public abstract class ResourceIntegrationTestBase implements BaseClassForTests {
     @Inject
     protected Configuration configuration;
     protected AuthenticationFilter authenticationFilter;
+
+    @Autowired
+    protected ObjectMapper objectMapper;
+
+    @SneakyThrows
+    protected String toJson(Object object) {
+        return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(object);
+    }
 
     protected User login(TestUser testUser) {
         return login(testUser.idCode);
