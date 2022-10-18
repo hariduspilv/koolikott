@@ -13,7 +13,7 @@
 		<testng.version>6.14.3</testng.version>
 		<zxing.version>3.3.3</zxing.version>
 		<restassured.version>3.2.0</restassured.version>
-		<jackson.version>2.10.1</jackson.version>
+		<jackson.version>2.13.4.1</jackson.version>
 		<slf4j.version>1.7.25</slf4j.version>
 		<!-- test data properties -->
 		<ekool.username/>
